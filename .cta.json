@@ -1,0 +1,23 @@
+{
+  "projectName": "client",
+  "mode": "file-router",
+  "typescript": true,
+  "tailwind": true,
+  "packageManager": "pnpm",
+  "addOnOptions": {},
+  "git": true,
+  "version": 1,
+  "framework": "react-cra",
+  "chosenAddOns": [
+    "eslint",
+    "nitro",
+    "start",
+    "clerk",
+    "compiler",
+    "form",
+    "shadcn",
+    "t3env",
+    "table",
+    "tanstack-query"
+  ]
+}
