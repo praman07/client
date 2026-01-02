@@ -9,50 +9,898 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthRouteImport } from './routes/_auth'
+import { Route as SplatRouteImport } from './routes/$'
+import { Route as MarketingRouteRouteImport } from './routes/_marketing/route'
+import { Route as AppRouteRouteImport } from './routes/_app/route'
+import { Route as MarketingIndexRouteImport } from './routes/_marketing/index'
+import { Route as MarketingPricingRouteImport } from './routes/_marketing/pricing'
+import { Route as MarketingContactRouteImport } from './routes/_marketing/contact'
+import { Route as MarketingAboutRouteImport } from './routes/_marketing/about'
+import { Route as AuthSignUpRouteImport } from './routes/_auth/sign-up'
+import { Route as AuthSignInRouteImport } from './routes/_auth/sign-in'
+import { Route as AppUserSettingsRouteImport } from './routes/_app/user-settings'
+import { Route as AppOnboardingRouteImport } from './routes/_app/onboarding'
+import { Route as AuthInviteInviteIdRouteImport } from './routes/_auth/invite.$inviteId'
+import { Route as AppWorkspaceWorkspaceSlugRouteRouteImport } from './routes/_app/workspace/$workspaceSlug/route'
+import { Route as AppWorkspaceWorkspaceSlugMainRouteRouteImport } from './routes/_app/workspace/$workspaceSlug/_main/route'
+import { Route as AppWorkspaceWorkspaceSlugMainIndexRouteImport } from './routes/_app/workspace/$workspaceSlug/_main/index'
+import { Route as AppWorkspaceWorkspaceSlugMainSettingsRouteImport } from './routes/_app/workspace/$workspaceSlug/_main/settings'
+import { Route as AppWorkspaceWorkspaceSlugMainProjectsRouteImport } from './routes/_app/workspace/$workspaceSlug/_main/projects'
+import { Route as AppWorkspaceWorkspaceSlugMainMembersRouteImport } from './routes/_app/workspace/$workspaceSlug/_main/members'
+import { Route as AppWorkspaceWorkspaceSlugProjectProjectIdRouteRouteImport } from './routes/_app/workspace/$workspaceSlug/project.$projectId/route'
+import { Route as AppWorkspaceWorkspaceSlugProjectProjectIdIndexRouteImport } from './routes/_app/workspace/$workspaceSlug/project.$projectId/index'
+import { Route as AppWorkspaceWorkspaceSlugProjectProjectIdVaultRouteRouteImport } from './routes/_app/workspace/$workspaceSlug/project.$projectId/vault/route'
+import { Route as AppWorkspaceWorkspaceSlugProjectProjectIdTimelineRouteRouteImport } from './routes/_app/workspace/$workspaceSlug/project.$projectId/timeline/route'
+import { Route as AppWorkspaceWorkspaceSlugProjectProjectIdListRouteRouteImport } from './routes/_app/workspace/$workspaceSlug/project.$projectId/list/route'
+import { Route as AppWorkspaceWorkspaceSlugProjectProjectIdDocsRouteRouteImport } from './routes/_app/workspace/$workspaceSlug/project.$projectId/docs/route'
+import { Route as AppWorkspaceWorkspaceSlugProjectProjectIdChatRouteRouteImport } from './routes/_app/workspace/$workspaceSlug/project.$projectId/chat/route'
+import { Route as AppWorkspaceWorkspaceSlugProjectProjectIdBoardRouteRouteImport } from './routes/_app/workspace/$workspaceSlug/project.$projectId/board/route'
+import { Route as AppWorkspaceWorkspaceSlugProjectProjectIdVaultIndexRouteImport } from './routes/_app/workspace/$workspaceSlug/project.$projectId/vault/index'
+import { Route as AppWorkspaceWorkspaceSlugProjectProjectIdTimelineIndexRouteImport } from './routes/_app/workspace/$workspaceSlug/project.$projectId/timeline/index'
+import { Route as AppWorkspaceWorkspaceSlugProjectProjectIdListIndexRouteImport } from './routes/_app/workspace/$workspaceSlug/project.$projectId/list/index'
+import { Route as AppWorkspaceWorkspaceSlugProjectProjectIdChatIndexRouteImport } from './routes/_app/workspace/$workspaceSlug/project.$projectId/chat/index'
+import { Route as AppWorkspaceWorkspaceSlugProjectProjectIdBoardIndexRouteImport } from './routes/_app/workspace/$workspaceSlug/project.$projectId/board/index'
+import { Route as AppWorkspaceWorkspaceSlugProjectProjectIdDocsPageIdRouteImport } from './routes/_app/workspace/$workspaceSlug/project.$projectId/docs/$pageId'
+import { Route as AppWorkspaceWorkspaceSlugProjectProjectIdChatChannelIdRouteImport } from './routes/_app/workspace/$workspaceSlug/project.$projectId/chat/$channelId'
 
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const AuthRoute = AuthRouteImport.update({
+  id: '/_auth',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SplatRoute = SplatRouteImport.update({
+  id: '/$',
+  path: '/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MarketingRouteRoute = MarketingRouteRouteImport.update({
+  id: '/_marketing',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppRouteRoute = AppRouteRouteImport.update({
+  id: '/_app',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MarketingIndexRoute = MarketingIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => MarketingRouteRoute,
+} as any)
+const MarketingPricingRoute = MarketingPricingRouteImport.update({
+  id: '/pricing',
+  path: '/pricing',
+  getParentRoute: () => MarketingRouteRoute,
+} as any)
+const MarketingContactRoute = MarketingContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => MarketingRouteRoute,
+} as any)
+const MarketingAboutRoute = MarketingAboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => MarketingRouteRoute,
+} as any)
+const AuthSignUpRoute = AuthSignUpRouteImport.update({
+  id: '/sign-up',
+  path: '/sign-up',
+  getParentRoute: () => AuthRoute,
+} as any)
+const AuthSignInRoute = AuthSignInRouteImport.update({
+  id: '/sign-in',
+  path: '/sign-in',
+  getParentRoute: () => AuthRoute,
+} as any)
+const AppUserSettingsRoute = AppUserSettingsRouteImport.update({
+  id: '/user-settings',
+  path: '/user-settings',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+const AppOnboardingRoute = AppOnboardingRouteImport.update({
+  id: '/onboarding',
+  path: '/onboarding',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+const AuthInviteInviteIdRoute = AuthInviteInviteIdRouteImport.update({
+  id: '/invite/$inviteId',
+  path: '/invite/$inviteId',
+  getParentRoute: () => AuthRoute,
+} as any)
+const AppWorkspaceWorkspaceSlugRouteRoute =
+  AppWorkspaceWorkspaceSlugRouteRouteImport.update({
+    id: '/workspace/$workspaceSlug',
+    path: '/workspace/$workspaceSlug',
+    getParentRoute: () => AppRouteRoute,
+  } as any)
+const AppWorkspaceWorkspaceSlugMainRouteRoute =
+  AppWorkspaceWorkspaceSlugMainRouteRouteImport.update({
+    id: '/_main',
+    getParentRoute: () => AppWorkspaceWorkspaceSlugRouteRoute,
+  } as any)
+const AppWorkspaceWorkspaceSlugMainIndexRoute =
+  AppWorkspaceWorkspaceSlugMainIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AppWorkspaceWorkspaceSlugMainRouteRoute,
+  } as any)
+const AppWorkspaceWorkspaceSlugMainSettingsRoute =
+  AppWorkspaceWorkspaceSlugMainSettingsRouteImport.update({
+    id: '/settings',
+    path: '/settings',
+    getParentRoute: () => AppWorkspaceWorkspaceSlugMainRouteRoute,
+  } as any)
+const AppWorkspaceWorkspaceSlugMainProjectsRoute =
+  AppWorkspaceWorkspaceSlugMainProjectsRouteImport.update({
+    id: '/projects',
+    path: '/projects',
+    getParentRoute: () => AppWorkspaceWorkspaceSlugMainRouteRoute,
+  } as any)
+const AppWorkspaceWorkspaceSlugMainMembersRoute =
+  AppWorkspaceWorkspaceSlugMainMembersRouteImport.update({
+    id: '/members',
+    path: '/members',
+    getParentRoute: () => AppWorkspaceWorkspaceSlugMainRouteRoute,
+  } as any)
+const AppWorkspaceWorkspaceSlugProjectProjectIdRouteRoute =
+  AppWorkspaceWorkspaceSlugProjectProjectIdRouteRouteImport.update({
+    id: '/project/$projectId',
+    path: '/project/$projectId',
+    getParentRoute: () => AppWorkspaceWorkspaceSlugRouteRoute,
+  } as any)
+const AppWorkspaceWorkspaceSlugProjectProjectIdIndexRoute =
+  AppWorkspaceWorkspaceSlugProjectProjectIdIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AppWorkspaceWorkspaceSlugProjectProjectIdRouteRoute,
+  } as any)
+const AppWorkspaceWorkspaceSlugProjectProjectIdVaultRouteRoute =
+  AppWorkspaceWorkspaceSlugProjectProjectIdVaultRouteRouteImport.update({
+    id: '/vault',
+    path: '/vault',
+    getParentRoute: () => AppWorkspaceWorkspaceSlugProjectProjectIdRouteRoute,
+  } as any)
+const AppWorkspaceWorkspaceSlugProjectProjectIdTimelineRouteRoute =
+  AppWorkspaceWorkspaceSlugProjectProjectIdTimelineRouteRouteImport.update({
+    id: '/timeline',
+    path: '/timeline',
+    getParentRoute: () => AppWorkspaceWorkspaceSlugProjectProjectIdRouteRoute,
+  } as any)
+const AppWorkspaceWorkspaceSlugProjectProjectIdListRouteRoute =
+  AppWorkspaceWorkspaceSlugProjectProjectIdListRouteRouteImport.update({
+    id: '/list',
+    path: '/list',
+    getParentRoute: () => AppWorkspaceWorkspaceSlugProjectProjectIdRouteRoute,
+  } as any)
+const AppWorkspaceWorkspaceSlugProjectProjectIdDocsRouteRoute =
+  AppWorkspaceWorkspaceSlugProjectProjectIdDocsRouteRouteImport.update({
+    id: '/docs',
+    path: '/docs',
+    getParentRoute: () => AppWorkspaceWorkspaceSlugProjectProjectIdRouteRoute,
+  } as any)
+const AppWorkspaceWorkspaceSlugProjectProjectIdChatRouteRoute =
+  AppWorkspaceWorkspaceSlugProjectProjectIdChatRouteRouteImport.update({
+    id: '/chat',
+    path: '/chat',
+    getParentRoute: () => AppWorkspaceWorkspaceSlugProjectProjectIdRouteRoute,
+  } as any)
+const AppWorkspaceWorkspaceSlugProjectProjectIdBoardRouteRoute =
+  AppWorkspaceWorkspaceSlugProjectProjectIdBoardRouteRouteImport.update({
+    id: '/board',
+    path: '/board',
+    getParentRoute: () => AppWorkspaceWorkspaceSlugProjectProjectIdRouteRoute,
+  } as any)
+const AppWorkspaceWorkspaceSlugProjectProjectIdVaultIndexRoute =
+  AppWorkspaceWorkspaceSlugProjectProjectIdVaultIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () =>
+      AppWorkspaceWorkspaceSlugProjectProjectIdVaultRouteRoute,
+  } as any)
+const AppWorkspaceWorkspaceSlugProjectProjectIdTimelineIndexRoute =
+  AppWorkspaceWorkspaceSlugProjectProjectIdTimelineIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () =>
+      AppWorkspaceWorkspaceSlugProjectProjectIdTimelineRouteRoute,
+  } as any)
+const AppWorkspaceWorkspaceSlugProjectProjectIdListIndexRoute =
+  AppWorkspaceWorkspaceSlugProjectProjectIdListIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () =>
+      AppWorkspaceWorkspaceSlugProjectProjectIdListRouteRoute,
+  } as any)
+const AppWorkspaceWorkspaceSlugProjectProjectIdChatIndexRoute =
+  AppWorkspaceWorkspaceSlugProjectProjectIdChatIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () =>
+      AppWorkspaceWorkspaceSlugProjectProjectIdChatRouteRoute,
+  } as any)
+const AppWorkspaceWorkspaceSlugProjectProjectIdBoardIndexRoute =
+  AppWorkspaceWorkspaceSlugProjectProjectIdBoardIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () =>
+      AppWorkspaceWorkspaceSlugProjectProjectIdBoardRouteRoute,
+  } as any)
+const AppWorkspaceWorkspaceSlugProjectProjectIdDocsPageIdRoute =
+  AppWorkspaceWorkspaceSlugProjectProjectIdDocsPageIdRouteImport.update({
+    id: '/$pageId',
+    path: '/$pageId',
+    getParentRoute: () =>
+      AppWorkspaceWorkspaceSlugProjectProjectIdDocsRouteRoute,
+  } as any)
+const AppWorkspaceWorkspaceSlugProjectProjectIdChatChannelIdRoute =
+  AppWorkspaceWorkspaceSlugProjectProjectIdChatChannelIdRouteImport.update({
+    id: '/$channelId',
+    path: '/$channelId',
+    getParentRoute: () =>
+      AppWorkspaceWorkspaceSlugProjectProjectIdChatRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
+  '/$': typeof SplatRoute
+  '/onboarding': typeof AppOnboardingRoute
+  '/user-settings': typeof AppUserSettingsRoute
+  '/sign-in': typeof AuthSignInRoute
+  '/sign-up': typeof AuthSignUpRoute
+  '/about': typeof MarketingAboutRoute
+  '/contact': typeof MarketingContactRoute
+  '/pricing': typeof MarketingPricingRoute
+  '/': typeof MarketingIndexRoute
+  '/workspace/$workspaceSlug': typeof AppWorkspaceWorkspaceSlugMainRouteRouteWithChildren
+  '/invite/$inviteId': typeof AuthInviteInviteIdRoute
+  '/workspace/$workspaceSlug/project/$projectId': typeof AppWorkspaceWorkspaceSlugProjectProjectIdRouteRouteWithChildren
+  '/workspace/$workspaceSlug/members': typeof AppWorkspaceWorkspaceSlugMainMembersRoute
+  '/workspace/$workspaceSlug/projects': typeof AppWorkspaceWorkspaceSlugMainProjectsRoute
+  '/workspace/$workspaceSlug/settings': typeof AppWorkspaceWorkspaceSlugMainSettingsRoute
+  '/workspace/$workspaceSlug/': typeof AppWorkspaceWorkspaceSlugMainIndexRoute
+  '/workspace/$workspaceSlug/project/$projectId/board': typeof AppWorkspaceWorkspaceSlugProjectProjectIdBoardRouteRouteWithChildren
+  '/workspace/$workspaceSlug/project/$projectId/chat': typeof AppWorkspaceWorkspaceSlugProjectProjectIdChatRouteRouteWithChildren
+  '/workspace/$workspaceSlug/project/$projectId/docs': typeof AppWorkspaceWorkspaceSlugProjectProjectIdDocsRouteRouteWithChildren
+  '/workspace/$workspaceSlug/project/$projectId/list': typeof AppWorkspaceWorkspaceSlugProjectProjectIdListRouteRouteWithChildren
+  '/workspace/$workspaceSlug/project/$projectId/timeline': typeof AppWorkspaceWorkspaceSlugProjectProjectIdTimelineRouteRouteWithChildren
+  '/workspace/$workspaceSlug/project/$projectId/vault': typeof AppWorkspaceWorkspaceSlugProjectProjectIdVaultRouteRouteWithChildren
+  '/workspace/$workspaceSlug/project/$projectId/': typeof AppWorkspaceWorkspaceSlugProjectProjectIdIndexRoute
+  '/workspace/$workspaceSlug/project/$projectId/chat/$channelId': typeof AppWorkspaceWorkspaceSlugProjectProjectIdChatChannelIdRoute
+  '/workspace/$workspaceSlug/project/$projectId/docs/$pageId': typeof AppWorkspaceWorkspaceSlugProjectProjectIdDocsPageIdRoute
+  '/workspace/$workspaceSlug/project/$projectId/board/': typeof AppWorkspaceWorkspaceSlugProjectProjectIdBoardIndexRoute
+  '/workspace/$workspaceSlug/project/$projectId/chat/': typeof AppWorkspaceWorkspaceSlugProjectProjectIdChatIndexRoute
+  '/workspace/$workspaceSlug/project/$projectId/list/': typeof AppWorkspaceWorkspaceSlugProjectProjectIdListIndexRoute
+  '/workspace/$workspaceSlug/project/$projectId/timeline/': typeof AppWorkspaceWorkspaceSlugProjectProjectIdTimelineIndexRoute
+  '/workspace/$workspaceSlug/project/$projectId/vault/': typeof AppWorkspaceWorkspaceSlugProjectProjectIdVaultIndexRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
+  '/$': typeof SplatRoute
+  '/onboarding': typeof AppOnboardingRoute
+  '/user-settings': typeof AppUserSettingsRoute
+  '/sign-in': typeof AuthSignInRoute
+  '/sign-up': typeof AuthSignUpRoute
+  '/about': typeof MarketingAboutRoute
+  '/contact': typeof MarketingContactRoute
+  '/pricing': typeof MarketingPricingRoute
+  '/': typeof MarketingIndexRoute
+  '/workspace/$workspaceSlug': typeof AppWorkspaceWorkspaceSlugMainIndexRoute
+  '/invite/$inviteId': typeof AuthInviteInviteIdRoute
+  '/workspace/$workspaceSlug/members': typeof AppWorkspaceWorkspaceSlugMainMembersRoute
+  '/workspace/$workspaceSlug/projects': typeof AppWorkspaceWorkspaceSlugMainProjectsRoute
+  '/workspace/$workspaceSlug/settings': typeof AppWorkspaceWorkspaceSlugMainSettingsRoute
+  '/workspace/$workspaceSlug/project/$projectId/docs': typeof AppWorkspaceWorkspaceSlugProjectProjectIdDocsRouteRouteWithChildren
+  '/workspace/$workspaceSlug/project/$projectId': typeof AppWorkspaceWorkspaceSlugProjectProjectIdIndexRoute
+  '/workspace/$workspaceSlug/project/$projectId/chat/$channelId': typeof AppWorkspaceWorkspaceSlugProjectProjectIdChatChannelIdRoute
+  '/workspace/$workspaceSlug/project/$projectId/docs/$pageId': typeof AppWorkspaceWorkspaceSlugProjectProjectIdDocsPageIdRoute
+  '/workspace/$workspaceSlug/project/$projectId/board': typeof AppWorkspaceWorkspaceSlugProjectProjectIdBoardIndexRoute
+  '/workspace/$workspaceSlug/project/$projectId/chat': typeof AppWorkspaceWorkspaceSlugProjectProjectIdChatIndexRoute
+  '/workspace/$workspaceSlug/project/$projectId/list': typeof AppWorkspaceWorkspaceSlugProjectProjectIdListIndexRoute
+  '/workspace/$workspaceSlug/project/$projectId/timeline': typeof AppWorkspaceWorkspaceSlugProjectProjectIdTimelineIndexRoute
+  '/workspace/$workspaceSlug/project/$projectId/vault': typeof AppWorkspaceWorkspaceSlugProjectProjectIdVaultIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
+  '/_app': typeof AppRouteRouteWithChildren
+  '/_marketing': typeof MarketingRouteRouteWithChildren
+  '/$': typeof SplatRoute
+  '/_auth': typeof AuthRouteWithChildren
+  '/_app/onboarding': typeof AppOnboardingRoute
+  '/_app/user-settings': typeof AppUserSettingsRoute
+  '/_auth/sign-in': typeof AuthSignInRoute
+  '/_auth/sign-up': typeof AuthSignUpRoute
+  '/_marketing/about': typeof MarketingAboutRoute
+  '/_marketing/contact': typeof MarketingContactRoute
+  '/_marketing/pricing': typeof MarketingPricingRoute
+  '/_marketing/': typeof MarketingIndexRoute
+  '/_app/workspace/$workspaceSlug': typeof AppWorkspaceWorkspaceSlugRouteRouteWithChildren
+  '/_auth/invite/$inviteId': typeof AuthInviteInviteIdRoute
+  '/_app/workspace/$workspaceSlug/_main': typeof AppWorkspaceWorkspaceSlugMainRouteRouteWithChildren
+  '/_app/workspace/$workspaceSlug/project/$projectId': typeof AppWorkspaceWorkspaceSlugProjectProjectIdRouteRouteWithChildren
+  '/_app/workspace/$workspaceSlug/_main/members': typeof AppWorkspaceWorkspaceSlugMainMembersRoute
+  '/_app/workspace/$workspaceSlug/_main/projects': typeof AppWorkspaceWorkspaceSlugMainProjectsRoute
+  '/_app/workspace/$workspaceSlug/_main/settings': typeof AppWorkspaceWorkspaceSlugMainSettingsRoute
+  '/_app/workspace/$workspaceSlug/_main/': typeof AppWorkspaceWorkspaceSlugMainIndexRoute
+  '/_app/workspace/$workspaceSlug/project/$projectId/board': typeof AppWorkspaceWorkspaceSlugProjectProjectIdBoardRouteRouteWithChildren
+  '/_app/workspace/$workspaceSlug/project/$projectId/chat': typeof AppWorkspaceWorkspaceSlugProjectProjectIdChatRouteRouteWithChildren
+  '/_app/workspace/$workspaceSlug/project/$projectId/docs': typeof AppWorkspaceWorkspaceSlugProjectProjectIdDocsRouteRouteWithChildren
+  '/_app/workspace/$workspaceSlug/project/$projectId/list': typeof AppWorkspaceWorkspaceSlugProjectProjectIdListRouteRouteWithChildren
+  '/_app/workspace/$workspaceSlug/project/$projectId/timeline': typeof AppWorkspaceWorkspaceSlugProjectProjectIdTimelineRouteRouteWithChildren
+  '/_app/workspace/$workspaceSlug/project/$projectId/vault': typeof AppWorkspaceWorkspaceSlugProjectProjectIdVaultRouteRouteWithChildren
+  '/_app/workspace/$workspaceSlug/project/$projectId/': typeof AppWorkspaceWorkspaceSlugProjectProjectIdIndexRoute
+  '/_app/workspace/$workspaceSlug/project/$projectId/chat/$channelId': typeof AppWorkspaceWorkspaceSlugProjectProjectIdChatChannelIdRoute
+  '/_app/workspace/$workspaceSlug/project/$projectId/docs/$pageId': typeof AppWorkspaceWorkspaceSlugProjectProjectIdDocsPageIdRoute
+  '/_app/workspace/$workspaceSlug/project/$projectId/board/': typeof AppWorkspaceWorkspaceSlugProjectProjectIdBoardIndexRoute
+  '/_app/workspace/$workspaceSlug/project/$projectId/chat/': typeof AppWorkspaceWorkspaceSlugProjectProjectIdChatIndexRoute
+  '/_app/workspace/$workspaceSlug/project/$projectId/list/': typeof AppWorkspaceWorkspaceSlugProjectProjectIdListIndexRoute
+  '/_app/workspace/$workspaceSlug/project/$projectId/timeline/': typeof AppWorkspaceWorkspaceSlugProjectProjectIdTimelineIndexRoute
+  '/_app/workspace/$workspaceSlug/project/$projectId/vault/': typeof AppWorkspaceWorkspaceSlugProjectProjectIdVaultIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/$'
+    | '/onboarding'
+    | '/user-settings'
+    | '/sign-in'
+    | '/sign-up'
+    | '/about'
+    | '/contact'
+    | '/pricing'
+    | '/'
+    | '/workspace/$workspaceSlug'
+    | '/invite/$inviteId'
+    | '/workspace/$workspaceSlug/project/$projectId'
+    | '/workspace/$workspaceSlug/members'
+    | '/workspace/$workspaceSlug/projects'
+    | '/workspace/$workspaceSlug/settings'
+    | '/workspace/$workspaceSlug/'
+    | '/workspace/$workspaceSlug/project/$projectId/board'
+    | '/workspace/$workspaceSlug/project/$projectId/chat'
+    | '/workspace/$workspaceSlug/project/$projectId/docs'
+    | '/workspace/$workspaceSlug/project/$projectId/list'
+    | '/workspace/$workspaceSlug/project/$projectId/timeline'
+    | '/workspace/$workspaceSlug/project/$projectId/vault'
+    | '/workspace/$workspaceSlug/project/$projectId/'
+    | '/workspace/$workspaceSlug/project/$projectId/chat/$channelId'
+    | '/workspace/$workspaceSlug/project/$projectId/docs/$pageId'
+    | '/workspace/$workspaceSlug/project/$projectId/board/'
+    | '/workspace/$workspaceSlug/project/$projectId/chat/'
+    | '/workspace/$workspaceSlug/project/$projectId/list/'
+    | '/workspace/$workspaceSlug/project/$projectId/timeline/'
+    | '/workspace/$workspaceSlug/project/$projectId/vault/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/$'
+    | '/onboarding'
+    | '/user-settings'
+    | '/sign-in'
+    | '/sign-up'
+    | '/about'
+    | '/contact'
+    | '/pricing'
+    | '/'
+    | '/workspace/$workspaceSlug'
+    | '/invite/$inviteId'
+    | '/workspace/$workspaceSlug/members'
+    | '/workspace/$workspaceSlug/projects'
+    | '/workspace/$workspaceSlug/settings'
+    | '/workspace/$workspaceSlug/project/$projectId/docs'
+    | '/workspace/$workspaceSlug/project/$projectId'
+    | '/workspace/$workspaceSlug/project/$projectId/chat/$channelId'
+    | '/workspace/$workspaceSlug/project/$projectId/docs/$pageId'
+    | '/workspace/$workspaceSlug/project/$projectId/board'
+    | '/workspace/$workspaceSlug/project/$projectId/chat'
+    | '/workspace/$workspaceSlug/project/$projectId/list'
+    | '/workspace/$workspaceSlug/project/$projectId/timeline'
+    | '/workspace/$workspaceSlug/project/$projectId/vault'
+  id:
+    | '__root__'
+    | '/_app'
+    | '/_marketing'
+    | '/$'
+    | '/_auth'
+    | '/_app/onboarding'
+    | '/_app/user-settings'
+    | '/_auth/sign-in'
+    | '/_auth/sign-up'
+    | '/_marketing/about'
+    | '/_marketing/contact'
+    | '/_marketing/pricing'
+    | '/_marketing/'
+    | '/_app/workspace/$workspaceSlug'
+    | '/_auth/invite/$inviteId'
+    | '/_app/workspace/$workspaceSlug/_main'
+    | '/_app/workspace/$workspaceSlug/project/$projectId'
+    | '/_app/workspace/$workspaceSlug/_main/members'
+    | '/_app/workspace/$workspaceSlug/_main/projects'
+    | '/_app/workspace/$workspaceSlug/_main/settings'
+    | '/_app/workspace/$workspaceSlug/_main/'
+    | '/_app/workspace/$workspaceSlug/project/$projectId/board'
+    | '/_app/workspace/$workspaceSlug/project/$projectId/chat'
+    | '/_app/workspace/$workspaceSlug/project/$projectId/docs'
+    | '/_app/workspace/$workspaceSlug/project/$projectId/list'
+    | '/_app/workspace/$workspaceSlug/project/$projectId/timeline'
+    | '/_app/workspace/$workspaceSlug/project/$projectId/vault'
+    | '/_app/workspace/$workspaceSlug/project/$projectId/'
+    | '/_app/workspace/$workspaceSlug/project/$projectId/chat/$channelId'
+    | '/_app/workspace/$workspaceSlug/project/$projectId/docs/$pageId'
+    | '/_app/workspace/$workspaceSlug/project/$projectId/board/'
+    | '/_app/workspace/$workspaceSlug/project/$projectId/chat/'
+    | '/_app/workspace/$workspaceSlug/project/$projectId/list/'
+    | '/_app/workspace/$workspaceSlug/project/$projectId/timeline/'
+    | '/_app/workspace/$workspaceSlug/project/$projectId/vault/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
+  AppRouteRoute: typeof AppRouteRouteWithChildren
+  MarketingRouteRoute: typeof MarketingRouteRouteWithChildren
+  SplatRoute: typeof SplatRoute
+  AuthRoute: typeof AuthRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
+    '/_auth': {
+      id: '/_auth'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/$': {
+      id: '/$'
+      path: '/$'
+      fullPath: '/$'
+      preLoaderRoute: typeof SplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_marketing': {
+      id: '/_marketing'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof MarketingRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_app': {
+      id: '/_app'
+      path: ''
+      fullPath: ''
+      preLoaderRoute: typeof AppRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_marketing/': {
+      id: '/_marketing/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
+      preLoaderRoute: typeof MarketingIndexRouteImport
+      parentRoute: typeof MarketingRouteRoute
+    }
+    '/_marketing/pricing': {
+      id: '/_marketing/pricing'
+      path: '/pricing'
+      fullPath: '/pricing'
+      preLoaderRoute: typeof MarketingPricingRouteImport
+      parentRoute: typeof MarketingRouteRoute
+    }
+    '/_marketing/contact': {
+      id: '/_marketing/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof MarketingContactRouteImport
+      parentRoute: typeof MarketingRouteRoute
+    }
+    '/_marketing/about': {
+      id: '/_marketing/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof MarketingAboutRouteImport
+      parentRoute: typeof MarketingRouteRoute
+    }
+    '/_auth/sign-up': {
+      id: '/_auth/sign-up'
+      path: '/sign-up'
+      fullPath: '/sign-up'
+      preLoaderRoute: typeof AuthSignUpRouteImport
+      parentRoute: typeof AuthRoute
+    }
+    '/_auth/sign-in': {
+      id: '/_auth/sign-in'
+      path: '/sign-in'
+      fullPath: '/sign-in'
+      preLoaderRoute: typeof AuthSignInRouteImport
+      parentRoute: typeof AuthRoute
+    }
+    '/_app/user-settings': {
+      id: '/_app/user-settings'
+      path: '/user-settings'
+      fullPath: '/user-settings'
+      preLoaderRoute: typeof AppUserSettingsRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/_app/onboarding': {
+      id: '/_app/onboarding'
+      path: '/onboarding'
+      fullPath: '/onboarding'
+      preLoaderRoute: typeof AppOnboardingRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/_auth/invite/$inviteId': {
+      id: '/_auth/invite/$inviteId'
+      path: '/invite/$inviteId'
+      fullPath: '/invite/$inviteId'
+      preLoaderRoute: typeof AuthInviteInviteIdRouteImport
+      parentRoute: typeof AuthRoute
+    }
+    '/_app/workspace/$workspaceSlug': {
+      id: '/_app/workspace/$workspaceSlug'
+      path: '/workspace/$workspaceSlug'
+      fullPath: '/workspace/$workspaceSlug'
+      preLoaderRoute: typeof AppWorkspaceWorkspaceSlugRouteRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/_app/workspace/$workspaceSlug/_main': {
+      id: '/_app/workspace/$workspaceSlug/_main'
+      path: ''
+      fullPath: '/workspace/$workspaceSlug'
+      preLoaderRoute: typeof AppWorkspaceWorkspaceSlugMainRouteRouteImport
+      parentRoute: typeof AppWorkspaceWorkspaceSlugRouteRoute
+    }
+    '/_app/workspace/$workspaceSlug/_main/': {
+      id: '/_app/workspace/$workspaceSlug/_main/'
+      path: '/'
+      fullPath: '/workspace/$workspaceSlug/'
+      preLoaderRoute: typeof AppWorkspaceWorkspaceSlugMainIndexRouteImport
+      parentRoute: typeof AppWorkspaceWorkspaceSlugMainRouteRoute
+    }
+    '/_app/workspace/$workspaceSlug/_main/settings': {
+      id: '/_app/workspace/$workspaceSlug/_main/settings'
+      path: '/settings'
+      fullPath: '/workspace/$workspaceSlug/settings'
+      preLoaderRoute: typeof AppWorkspaceWorkspaceSlugMainSettingsRouteImport
+      parentRoute: typeof AppWorkspaceWorkspaceSlugMainRouteRoute
+    }
+    '/_app/workspace/$workspaceSlug/_main/projects': {
+      id: '/_app/workspace/$workspaceSlug/_main/projects'
+      path: '/projects'
+      fullPath: '/workspace/$workspaceSlug/projects'
+      preLoaderRoute: typeof AppWorkspaceWorkspaceSlugMainProjectsRouteImport
+      parentRoute: typeof AppWorkspaceWorkspaceSlugMainRouteRoute
+    }
+    '/_app/workspace/$workspaceSlug/_main/members': {
+      id: '/_app/workspace/$workspaceSlug/_main/members'
+      path: '/members'
+      fullPath: '/workspace/$workspaceSlug/members'
+      preLoaderRoute: typeof AppWorkspaceWorkspaceSlugMainMembersRouteImport
+      parentRoute: typeof AppWorkspaceWorkspaceSlugMainRouteRoute
+    }
+    '/_app/workspace/$workspaceSlug/project/$projectId': {
+      id: '/_app/workspace/$workspaceSlug/project/$projectId'
+      path: '/project/$projectId'
+      fullPath: '/workspace/$workspaceSlug/project/$projectId'
+      preLoaderRoute: typeof AppWorkspaceWorkspaceSlugProjectProjectIdRouteRouteImport
+      parentRoute: typeof AppWorkspaceWorkspaceSlugRouteRoute
+    }
+    '/_app/workspace/$workspaceSlug/project/$projectId/': {
+      id: '/_app/workspace/$workspaceSlug/project/$projectId/'
+      path: '/'
+      fullPath: '/workspace/$workspaceSlug/project/$projectId/'
+      preLoaderRoute: typeof AppWorkspaceWorkspaceSlugProjectProjectIdIndexRouteImport
+      parentRoute: typeof AppWorkspaceWorkspaceSlugProjectProjectIdRouteRoute
+    }
+    '/_app/workspace/$workspaceSlug/project/$projectId/vault': {
+      id: '/_app/workspace/$workspaceSlug/project/$projectId/vault'
+      path: '/vault'
+      fullPath: '/workspace/$workspaceSlug/project/$projectId/vault'
+      preLoaderRoute: typeof AppWorkspaceWorkspaceSlugProjectProjectIdVaultRouteRouteImport
+      parentRoute: typeof AppWorkspaceWorkspaceSlugProjectProjectIdRouteRoute
+    }
+    '/_app/workspace/$workspaceSlug/project/$projectId/timeline': {
+      id: '/_app/workspace/$workspaceSlug/project/$projectId/timeline'
+      path: '/timeline'
+      fullPath: '/workspace/$workspaceSlug/project/$projectId/timeline'
+      preLoaderRoute: typeof AppWorkspaceWorkspaceSlugProjectProjectIdTimelineRouteRouteImport
+      parentRoute: typeof AppWorkspaceWorkspaceSlugProjectProjectIdRouteRoute
+    }
+    '/_app/workspace/$workspaceSlug/project/$projectId/list': {
+      id: '/_app/workspace/$workspaceSlug/project/$projectId/list'
+      path: '/list'
+      fullPath: '/workspace/$workspaceSlug/project/$projectId/list'
+      preLoaderRoute: typeof AppWorkspaceWorkspaceSlugProjectProjectIdListRouteRouteImport
+      parentRoute: typeof AppWorkspaceWorkspaceSlugProjectProjectIdRouteRoute
+    }
+    '/_app/workspace/$workspaceSlug/project/$projectId/docs': {
+      id: '/_app/workspace/$workspaceSlug/project/$projectId/docs'
+      path: '/docs'
+      fullPath: '/workspace/$workspaceSlug/project/$projectId/docs'
+      preLoaderRoute: typeof AppWorkspaceWorkspaceSlugProjectProjectIdDocsRouteRouteImport
+      parentRoute: typeof AppWorkspaceWorkspaceSlugProjectProjectIdRouteRoute
+    }
+    '/_app/workspace/$workspaceSlug/project/$projectId/chat': {
+      id: '/_app/workspace/$workspaceSlug/project/$projectId/chat'
+      path: '/chat'
+      fullPath: '/workspace/$workspaceSlug/project/$projectId/chat'
+      preLoaderRoute: typeof AppWorkspaceWorkspaceSlugProjectProjectIdChatRouteRouteImport
+      parentRoute: typeof AppWorkspaceWorkspaceSlugProjectProjectIdRouteRoute
+    }
+    '/_app/workspace/$workspaceSlug/project/$projectId/board': {
+      id: '/_app/workspace/$workspaceSlug/project/$projectId/board'
+      path: '/board'
+      fullPath: '/workspace/$workspaceSlug/project/$projectId/board'
+      preLoaderRoute: typeof AppWorkspaceWorkspaceSlugProjectProjectIdBoardRouteRouteImport
+      parentRoute: typeof AppWorkspaceWorkspaceSlugProjectProjectIdRouteRoute
+    }
+    '/_app/workspace/$workspaceSlug/project/$projectId/vault/': {
+      id: '/_app/workspace/$workspaceSlug/project/$projectId/vault/'
+      path: '/'
+      fullPath: '/workspace/$workspaceSlug/project/$projectId/vault/'
+      preLoaderRoute: typeof AppWorkspaceWorkspaceSlugProjectProjectIdVaultIndexRouteImport
+      parentRoute: typeof AppWorkspaceWorkspaceSlugProjectProjectIdVaultRouteRoute
+    }
+    '/_app/workspace/$workspaceSlug/project/$projectId/timeline/': {
+      id: '/_app/workspace/$workspaceSlug/project/$projectId/timeline/'
+      path: '/'
+      fullPath: '/workspace/$workspaceSlug/project/$projectId/timeline/'
+      preLoaderRoute: typeof AppWorkspaceWorkspaceSlugProjectProjectIdTimelineIndexRouteImport
+      parentRoute: typeof AppWorkspaceWorkspaceSlugProjectProjectIdTimelineRouteRoute
+    }
+    '/_app/workspace/$workspaceSlug/project/$projectId/list/': {
+      id: '/_app/workspace/$workspaceSlug/project/$projectId/list/'
+      path: '/'
+      fullPath: '/workspace/$workspaceSlug/project/$projectId/list/'
+      preLoaderRoute: typeof AppWorkspaceWorkspaceSlugProjectProjectIdListIndexRouteImport
+      parentRoute: typeof AppWorkspaceWorkspaceSlugProjectProjectIdListRouteRoute
+    }
+    '/_app/workspace/$workspaceSlug/project/$projectId/chat/': {
+      id: '/_app/workspace/$workspaceSlug/project/$projectId/chat/'
+      path: '/'
+      fullPath: '/workspace/$workspaceSlug/project/$projectId/chat/'
+      preLoaderRoute: typeof AppWorkspaceWorkspaceSlugProjectProjectIdChatIndexRouteImport
+      parentRoute: typeof AppWorkspaceWorkspaceSlugProjectProjectIdChatRouteRoute
+    }
+    '/_app/workspace/$workspaceSlug/project/$projectId/board/': {
+      id: '/_app/workspace/$workspaceSlug/project/$projectId/board/'
+      path: '/'
+      fullPath: '/workspace/$workspaceSlug/project/$projectId/board/'
+      preLoaderRoute: typeof AppWorkspaceWorkspaceSlugProjectProjectIdBoardIndexRouteImport
+      parentRoute: typeof AppWorkspaceWorkspaceSlugProjectProjectIdBoardRouteRoute
+    }
+    '/_app/workspace/$workspaceSlug/project/$projectId/docs/$pageId': {
+      id: '/_app/workspace/$workspaceSlug/project/$projectId/docs/$pageId'
+      path: '/$pageId'
+      fullPath: '/workspace/$workspaceSlug/project/$projectId/docs/$pageId'
+      preLoaderRoute: typeof AppWorkspaceWorkspaceSlugProjectProjectIdDocsPageIdRouteImport
+      parentRoute: typeof AppWorkspaceWorkspaceSlugProjectProjectIdDocsRouteRoute
+    }
+    '/_app/workspace/$workspaceSlug/project/$projectId/chat/$channelId': {
+      id: '/_app/workspace/$workspaceSlug/project/$projectId/chat/$channelId'
+      path: '/$channelId'
+      fullPath: '/workspace/$workspaceSlug/project/$projectId/chat/$channelId'
+      preLoaderRoute: typeof AppWorkspaceWorkspaceSlugProjectProjectIdChatChannelIdRouteImport
+      parentRoute: typeof AppWorkspaceWorkspaceSlugProjectProjectIdChatRouteRoute
     }
   }
 }
 
+interface AppWorkspaceWorkspaceSlugMainRouteRouteChildren {
+  AppWorkspaceWorkspaceSlugMainMembersRoute: typeof AppWorkspaceWorkspaceSlugMainMembersRoute
+  AppWorkspaceWorkspaceSlugMainProjectsRoute: typeof AppWorkspaceWorkspaceSlugMainProjectsRoute
+  AppWorkspaceWorkspaceSlugMainSettingsRoute: typeof AppWorkspaceWorkspaceSlugMainSettingsRoute
+  AppWorkspaceWorkspaceSlugMainIndexRoute: typeof AppWorkspaceWorkspaceSlugMainIndexRoute
+}
+
+const AppWorkspaceWorkspaceSlugMainRouteRouteChildren: AppWorkspaceWorkspaceSlugMainRouteRouteChildren =
+  {
+    AppWorkspaceWorkspaceSlugMainMembersRoute:
+      AppWorkspaceWorkspaceSlugMainMembersRoute,
+    AppWorkspaceWorkspaceSlugMainProjectsRoute:
+      AppWorkspaceWorkspaceSlugMainProjectsRoute,
+    AppWorkspaceWorkspaceSlugMainSettingsRoute:
+      AppWorkspaceWorkspaceSlugMainSettingsRoute,
+    AppWorkspaceWorkspaceSlugMainIndexRoute:
+      AppWorkspaceWorkspaceSlugMainIndexRoute,
+  }
+
+const AppWorkspaceWorkspaceSlugMainRouteRouteWithChildren =
+  AppWorkspaceWorkspaceSlugMainRouteRoute._addFileChildren(
+    AppWorkspaceWorkspaceSlugMainRouteRouteChildren,
+  )
+
+interface AppWorkspaceWorkspaceSlugProjectProjectIdBoardRouteRouteChildren {
+  AppWorkspaceWorkspaceSlugProjectProjectIdBoardIndexRoute: typeof AppWorkspaceWorkspaceSlugProjectProjectIdBoardIndexRoute
+}
+
+const AppWorkspaceWorkspaceSlugProjectProjectIdBoardRouteRouteChildren: AppWorkspaceWorkspaceSlugProjectProjectIdBoardRouteRouteChildren =
+  {
+    AppWorkspaceWorkspaceSlugProjectProjectIdBoardIndexRoute:
+      AppWorkspaceWorkspaceSlugProjectProjectIdBoardIndexRoute,
+  }
+
+const AppWorkspaceWorkspaceSlugProjectProjectIdBoardRouteRouteWithChildren =
+  AppWorkspaceWorkspaceSlugProjectProjectIdBoardRouteRoute._addFileChildren(
+    AppWorkspaceWorkspaceSlugProjectProjectIdBoardRouteRouteChildren,
+  )
+
+interface AppWorkspaceWorkspaceSlugProjectProjectIdChatRouteRouteChildren {
+  AppWorkspaceWorkspaceSlugProjectProjectIdChatChannelIdRoute: typeof AppWorkspaceWorkspaceSlugProjectProjectIdChatChannelIdRoute
+  AppWorkspaceWorkspaceSlugProjectProjectIdChatIndexRoute: typeof AppWorkspaceWorkspaceSlugProjectProjectIdChatIndexRoute
+}
+
+const AppWorkspaceWorkspaceSlugProjectProjectIdChatRouteRouteChildren: AppWorkspaceWorkspaceSlugProjectProjectIdChatRouteRouteChildren =
+  {
+    AppWorkspaceWorkspaceSlugProjectProjectIdChatChannelIdRoute:
+      AppWorkspaceWorkspaceSlugProjectProjectIdChatChannelIdRoute,
+    AppWorkspaceWorkspaceSlugProjectProjectIdChatIndexRoute:
+      AppWorkspaceWorkspaceSlugProjectProjectIdChatIndexRoute,
+  }
+
+const AppWorkspaceWorkspaceSlugProjectProjectIdChatRouteRouteWithChildren =
+  AppWorkspaceWorkspaceSlugProjectProjectIdChatRouteRoute._addFileChildren(
+    AppWorkspaceWorkspaceSlugProjectProjectIdChatRouteRouteChildren,
+  )
+
+interface AppWorkspaceWorkspaceSlugProjectProjectIdDocsRouteRouteChildren {
+  AppWorkspaceWorkspaceSlugProjectProjectIdDocsPageIdRoute: typeof AppWorkspaceWorkspaceSlugProjectProjectIdDocsPageIdRoute
+}
+
+const AppWorkspaceWorkspaceSlugProjectProjectIdDocsRouteRouteChildren: AppWorkspaceWorkspaceSlugProjectProjectIdDocsRouteRouteChildren =
+  {
+    AppWorkspaceWorkspaceSlugProjectProjectIdDocsPageIdRoute:
+      AppWorkspaceWorkspaceSlugProjectProjectIdDocsPageIdRoute,
+  }
+
+const AppWorkspaceWorkspaceSlugProjectProjectIdDocsRouteRouteWithChildren =
+  AppWorkspaceWorkspaceSlugProjectProjectIdDocsRouteRoute._addFileChildren(
+    AppWorkspaceWorkspaceSlugProjectProjectIdDocsRouteRouteChildren,
+  )
+
+interface AppWorkspaceWorkspaceSlugProjectProjectIdListRouteRouteChildren {
+  AppWorkspaceWorkspaceSlugProjectProjectIdListIndexRoute: typeof AppWorkspaceWorkspaceSlugProjectProjectIdListIndexRoute
+}
+
+const AppWorkspaceWorkspaceSlugProjectProjectIdListRouteRouteChildren: AppWorkspaceWorkspaceSlugProjectProjectIdListRouteRouteChildren =
+  {
+    AppWorkspaceWorkspaceSlugProjectProjectIdListIndexRoute:
+      AppWorkspaceWorkspaceSlugProjectProjectIdListIndexRoute,
+  }
+
+const AppWorkspaceWorkspaceSlugProjectProjectIdListRouteRouteWithChildren =
+  AppWorkspaceWorkspaceSlugProjectProjectIdListRouteRoute._addFileChildren(
+    AppWorkspaceWorkspaceSlugProjectProjectIdListRouteRouteChildren,
+  )
+
+interface AppWorkspaceWorkspaceSlugProjectProjectIdTimelineRouteRouteChildren {
+  AppWorkspaceWorkspaceSlugProjectProjectIdTimelineIndexRoute: typeof AppWorkspaceWorkspaceSlugProjectProjectIdTimelineIndexRoute
+}
+
+const AppWorkspaceWorkspaceSlugProjectProjectIdTimelineRouteRouteChildren: AppWorkspaceWorkspaceSlugProjectProjectIdTimelineRouteRouteChildren =
+  {
+    AppWorkspaceWorkspaceSlugProjectProjectIdTimelineIndexRoute:
+      AppWorkspaceWorkspaceSlugProjectProjectIdTimelineIndexRoute,
+  }
+
+const AppWorkspaceWorkspaceSlugProjectProjectIdTimelineRouteRouteWithChildren =
+  AppWorkspaceWorkspaceSlugProjectProjectIdTimelineRouteRoute._addFileChildren(
+    AppWorkspaceWorkspaceSlugProjectProjectIdTimelineRouteRouteChildren,
+  )
+
+interface AppWorkspaceWorkspaceSlugProjectProjectIdVaultRouteRouteChildren {
+  AppWorkspaceWorkspaceSlugProjectProjectIdVaultIndexRoute: typeof AppWorkspaceWorkspaceSlugProjectProjectIdVaultIndexRoute
+}
+
+const AppWorkspaceWorkspaceSlugProjectProjectIdVaultRouteRouteChildren: AppWorkspaceWorkspaceSlugProjectProjectIdVaultRouteRouteChildren =
+  {
+    AppWorkspaceWorkspaceSlugProjectProjectIdVaultIndexRoute:
+      AppWorkspaceWorkspaceSlugProjectProjectIdVaultIndexRoute,
+  }
+
+const AppWorkspaceWorkspaceSlugProjectProjectIdVaultRouteRouteWithChildren =
+  AppWorkspaceWorkspaceSlugProjectProjectIdVaultRouteRoute._addFileChildren(
+    AppWorkspaceWorkspaceSlugProjectProjectIdVaultRouteRouteChildren,
+  )
+
+interface AppWorkspaceWorkspaceSlugProjectProjectIdRouteRouteChildren {
+  AppWorkspaceWorkspaceSlugProjectProjectIdBoardRouteRoute: typeof AppWorkspaceWorkspaceSlugProjectProjectIdBoardRouteRouteWithChildren
+  AppWorkspaceWorkspaceSlugProjectProjectIdChatRouteRoute: typeof AppWorkspaceWorkspaceSlugProjectProjectIdChatRouteRouteWithChildren
+  AppWorkspaceWorkspaceSlugProjectProjectIdDocsRouteRoute: typeof AppWorkspaceWorkspaceSlugProjectProjectIdDocsRouteRouteWithChildren
+  AppWorkspaceWorkspaceSlugProjectProjectIdListRouteRoute: typeof AppWorkspaceWorkspaceSlugProjectProjectIdListRouteRouteWithChildren
+  AppWorkspaceWorkspaceSlugProjectProjectIdTimelineRouteRoute: typeof AppWorkspaceWorkspaceSlugProjectProjectIdTimelineRouteRouteWithChildren
+  AppWorkspaceWorkspaceSlugProjectProjectIdVaultRouteRoute: typeof AppWorkspaceWorkspaceSlugProjectProjectIdVaultRouteRouteWithChildren
+  AppWorkspaceWorkspaceSlugProjectProjectIdIndexRoute: typeof AppWorkspaceWorkspaceSlugProjectProjectIdIndexRoute
+}
+
+const AppWorkspaceWorkspaceSlugProjectProjectIdRouteRouteChildren: AppWorkspaceWorkspaceSlugProjectProjectIdRouteRouteChildren =
+  {
+    AppWorkspaceWorkspaceSlugProjectProjectIdBoardRouteRoute:
+      AppWorkspaceWorkspaceSlugProjectProjectIdBoardRouteRouteWithChildren,
+    AppWorkspaceWorkspaceSlugProjectProjectIdChatRouteRoute:
+      AppWorkspaceWorkspaceSlugProjectProjectIdChatRouteRouteWithChildren,
+    AppWorkspaceWorkspaceSlugProjectProjectIdDocsRouteRoute:
+      AppWorkspaceWorkspaceSlugProjectProjectIdDocsRouteRouteWithChildren,
+    AppWorkspaceWorkspaceSlugProjectProjectIdListRouteRoute:
+      AppWorkspaceWorkspaceSlugProjectProjectIdListRouteRouteWithChildren,
+    AppWorkspaceWorkspaceSlugProjectProjectIdTimelineRouteRoute:
+      AppWorkspaceWorkspaceSlugProjectProjectIdTimelineRouteRouteWithChildren,
+    AppWorkspaceWorkspaceSlugProjectProjectIdVaultRouteRoute:
+      AppWorkspaceWorkspaceSlugProjectProjectIdVaultRouteRouteWithChildren,
+    AppWorkspaceWorkspaceSlugProjectProjectIdIndexRoute:
+      AppWorkspaceWorkspaceSlugProjectProjectIdIndexRoute,
+  }
+
+const AppWorkspaceWorkspaceSlugProjectProjectIdRouteRouteWithChildren =
+  AppWorkspaceWorkspaceSlugProjectProjectIdRouteRoute._addFileChildren(
+    AppWorkspaceWorkspaceSlugProjectProjectIdRouteRouteChildren,
+  )
+
+interface AppWorkspaceWorkspaceSlugRouteRouteChildren {
+  AppWorkspaceWorkspaceSlugMainRouteRoute: typeof AppWorkspaceWorkspaceSlugMainRouteRouteWithChildren
+  AppWorkspaceWorkspaceSlugProjectProjectIdRouteRoute: typeof AppWorkspaceWorkspaceSlugProjectProjectIdRouteRouteWithChildren
+}
+
+const AppWorkspaceWorkspaceSlugRouteRouteChildren: AppWorkspaceWorkspaceSlugRouteRouteChildren =
+  {
+    AppWorkspaceWorkspaceSlugMainRouteRoute:
+      AppWorkspaceWorkspaceSlugMainRouteRouteWithChildren,
+    AppWorkspaceWorkspaceSlugProjectProjectIdRouteRoute:
+      AppWorkspaceWorkspaceSlugProjectProjectIdRouteRouteWithChildren,
+  }
+
+const AppWorkspaceWorkspaceSlugRouteRouteWithChildren =
+  AppWorkspaceWorkspaceSlugRouteRoute._addFileChildren(
+    AppWorkspaceWorkspaceSlugRouteRouteChildren,
+  )
+
+interface AppRouteRouteChildren {
+  AppOnboardingRoute: typeof AppOnboardingRoute
+  AppUserSettingsRoute: typeof AppUserSettingsRoute
+  AppWorkspaceWorkspaceSlugRouteRoute: typeof AppWorkspaceWorkspaceSlugRouteRouteWithChildren
+}
+
+const AppRouteRouteChildren: AppRouteRouteChildren = {
+  AppOnboardingRoute: AppOnboardingRoute,
+  AppUserSettingsRoute: AppUserSettingsRoute,
+  AppWorkspaceWorkspaceSlugRouteRoute:
+    AppWorkspaceWorkspaceSlugRouteRouteWithChildren,
+}
+
+const AppRouteRouteWithChildren = AppRouteRoute._addFileChildren(
+  AppRouteRouteChildren,
+)
+
+interface MarketingRouteRouteChildren {
+  MarketingAboutRoute: typeof MarketingAboutRoute
+  MarketingContactRoute: typeof MarketingContactRoute
+  MarketingPricingRoute: typeof MarketingPricingRoute
+  MarketingIndexRoute: typeof MarketingIndexRoute
+}
+
+const MarketingRouteRouteChildren: MarketingRouteRouteChildren = {
+  MarketingAboutRoute: MarketingAboutRoute,
+  MarketingContactRoute: MarketingContactRoute,
+  MarketingPricingRoute: MarketingPricingRoute,
+  MarketingIndexRoute: MarketingIndexRoute,
+}
+
+const MarketingRouteRouteWithChildren = MarketingRouteRoute._addFileChildren(
+  MarketingRouteRouteChildren,
+)
+
+interface AuthRouteChildren {
+  AuthSignInRoute: typeof AuthSignInRoute
+  AuthSignUpRoute: typeof AuthSignUpRoute
+  AuthInviteInviteIdRoute: typeof AuthInviteInviteIdRoute
+}
+
+const AuthRouteChildren: AuthRouteChildren = {
+  AuthSignInRoute: AuthSignInRoute,
+  AuthSignUpRoute: AuthSignUpRoute,
+  AuthInviteInviteIdRoute: AuthInviteInviteIdRoute,
+}
+
+const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
+  AppRouteRoute: AppRouteRouteWithChildren,
+  MarketingRouteRoute: MarketingRouteRouteWithChildren,
+  SplatRoute: SplatRoute,
+  AuthRoute: AuthRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
