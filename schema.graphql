@@ -1,0 +1,38 @@
+type Query {
+  health: String!
+  me: User
+  myWorkspaces: [Workspace!]!
+  onboardingStatus: OnboardingStatus!
+}
+
+type Mutation {
+  _health: String
+  syncUser(clerkId: String!, email: String!, fullName: String, avatarUrl: String): User!
+  createOnboardingWorkspace: Workspace!
+}
+
+type User {
+  id: ID!
+  email: String!
+  fullName: String
+  avatarUrl: String
+  status: String!
+  createdAt: String!
+  updatedAt: String!
+}
+
+type Workspace {
+  id: ID!
+  slug: String!
+  name: String!
+  logoUrl: String
+  createdAt: String!
+  updatedAt: String!
+}
+
+type OnboardingStatus {
+  hasUser: Boolean!
+  hasWorkspace: Boolean!
+  hasProject: Boolean!
+  workspaceSlug: String
+}

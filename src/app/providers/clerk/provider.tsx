@@ -2,7 +2,7 @@ import { ClerkProvider } from '@clerk/clerk-react'
 import { Provider as ReduxProvider } from 'react-redux'
 import { store } from '@/app/store'
 
-import { env } from '@/env'
+import { env } from '@/shared/config/env'
 
 const PUBLISHABLE_KEY = env.VITE_CLERK_PUBLISHABLE_KEY
 if (!PUBLISHABLE_KEY) {

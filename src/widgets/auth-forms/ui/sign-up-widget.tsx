@@ -4,6 +4,7 @@ export function SignUpWidget() {
   return (
     <SignUp
       signInUrl="/sign-in"
+      forceRedirectUrl="/onboarding"
     />
   )
 }

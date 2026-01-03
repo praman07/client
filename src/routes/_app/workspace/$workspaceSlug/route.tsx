@@ -1,21 +1,35 @@
-import { createFileRoute, Outlet } from '@tanstack/react-router'
+import { createFileRoute, Outlet, useNavigate } from '@tanstack/react-router'
+import { z } from 'zod'
+import { CreateProjectModal } from '@/features/project/create-project-modal'
+
+const workspaceSearchSchema = z.object({
+  action: z.enum(['create-project']).optional(),
+})
 
 export const Route = createFileRoute('/_app/workspace/$workspaceSlug')({
   component: WorkspaceRailLayout,
+  validateSearch: (search) => workspaceSearchSchema.parse(search),
 })
 
 function WorkspaceRailLayout() {
   const { workspaceSlug } = Route.useParams()
+  const search = Route.useSearch()
+  const navigate = useNavigate()
+
+  const isCreateProjectOpen = search.action === 'create-project'
+
+  const handleCloseModal = () => {
+    // Remove the action param
+    navigate({
+        to: '.',
+        params: { workspaceSlug },
+        search: {},
+        replace: true
+    })
+  }
   
   return (
     <div className="flex h-screen w-full overflow-hidden bg-background">
-      {/* Visual Placeholder: Navigation Rail */}
-      <aside className="fixed left-0 top-0 z-30 h-full w-16 border-r bg-muted flex flex-col items-center py-4">
-         <div className="h-10 w-10 rounded-lg bg-primary/20 text-xs flex items-center justify-center font-bold">
-            WS
-         </div>
-         <div className="mt-auto h-8 w-8 rounded-full bg-accent"></div>
-      </aside>
 
       {/* Main Content Area (Pushed over by rail) */}
       <div className="ml-16 flex flex-1 flex-col overflow-hidden">
@@ -24,6 +38,11 @@ function WorkspaceRailLayout() {
         </div>
         <Outlet />
       </div>
+      
+      <CreateProjectModal 
+        isOpen={isCreateProjectOpen} 
+        onClose={handleCloseModal} 
+      />
     </div>
   )
 }

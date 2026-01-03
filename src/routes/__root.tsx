@@ -6,9 +6,9 @@ import {
 } from '@tanstack/react-router'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 import { TanStackDevtools } from '@tanstack/react-devtools'
-import ClerkProvider from '../integrations/clerk/provider'
-import TanStackQueryDevtools from '../integrations/tanstack-query/devtools'
-import appCss from '../styles.css?url'
+import ClerkProvider from '@/app/providers/clerk/provider'
+import TanStackQueryDevtools from '@/app/providers/tanstack-query/devtools'
+import appCss from '@/app/styles/globals.css?url'
 import type { QueryClient } from '@tanstack/react-query'
 import { NotFoundPage } from '../shared/ui/not-found-page'
 
