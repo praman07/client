@@ -5,7 +5,7 @@ export const Route = createFileRoute('/_app/workspace/$workspaceSlug/project/$pr
 })
 
 function ProjectBaseLayout() {
-  const { projectId } = Route.useParams()
+  Route.useParams()
   return (
     <>
       {/* Logic Layer: Project Context Provider would go here */}
