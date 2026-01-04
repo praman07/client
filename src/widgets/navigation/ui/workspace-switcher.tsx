@@ -2,6 +2,7 @@ import { Link } from '@tanstack/react-router'
 import { ChevronsUpDown, Plus } from 'lucide-react'
 import { useAuth } from '@clerk/clerk-react'
 import { useQuery } from '@tanstack/react-query'
+import { ErrorBoundary } from 'react-error-boundary'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -18,8 +19,17 @@ import { useAppSelector } from '@/app/store'
 import { selectCurrentWorkspace } from '@/entities/session/model/selectors'
 import { authenticatedGraphQLRequest } from '@/shared/api/graphql-client'
 import { GET_MY_WORKSPACES_QUERY } from '@/features/workspace/api/documents'
+import { WidgetError } from '@/shared/ui/error/widget-error'
 
 export function WorkspaceSwitcher() {
+  return (
+    <ErrorBoundary FallbackComponent={WidgetError}>
+      <WorkspaceSwitcherContent />
+    </ErrorBoundary>
+  )
+}
+
+function WorkspaceSwitcherContent() {
   const currentWorkspace = useAppSelector(selectCurrentWorkspace)
   console.log(currentWorkspace?.name)
   // Use this purely for list data
@@ -30,6 +40,7 @@ export function WorkspaceSwitcher() {
       const token = await getToken()
       return authenticatedGraphQLRequest(GET_MY_WORKSPACES_QUERY, token)
     },
+    throwOnError: true, // Ensure errors bubble to ErrorBoundary
   })
 
   // We can still get the slug from the URL for the first link if we want,

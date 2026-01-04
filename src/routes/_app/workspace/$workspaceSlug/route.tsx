@@ -1,5 +1,6 @@
 import { Outlet, createFileRoute } from '@tanstack/react-router'
 import { z } from 'zod'
+import { RouteError } from '@/shared/ui/error/route-error'
 import { DashboardHeader } from '@/widgets/navigation/ui/dashboard-header'
 import { WorkspaceSwitcher } from '@/widgets/navigation/ui/workspace-switcher'
 
@@ -14,14 +15,18 @@ const workspaceSearchSchema = z.object({
 })
 
 export const Route = createFileRoute('/_app/workspace/$workspaceSlug')({
-  component: RouteComponent,
+  component: WorkspaceLayout,
+  errorComponent: RouteError,
   validateSearch: (search) => workspaceSearchSchema.parse(search),
+  loader: async () => {
+    return null
+  },
   staticData: {
     breadcrumb: () => <WorkspaceSwitcher />,
   },
 })
 
-function RouteComponent() {
+function WorkspaceLayout() {
   const { workspaceSlug } = Route.useParams()
   const { data, isLoading, error } = useSyncCurrentWorkspace(workspaceSlug)
 
