@@ -3,6 +3,7 @@ type Query {
   me: User
   myWorkspaces: [Workspace!]!
   onboardingStatus: OnboardingStatus!
+  workspaceBySlug(slug: String!): Workspace!
 }
 
 type Mutation {
@@ -31,6 +32,7 @@ type Workspace {
   slug: String!
   name: String!
   logoUrl: String
+  domainWhitelist: String
   createdAt: String!
   updatedAt: String!
 }

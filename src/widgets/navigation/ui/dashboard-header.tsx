@@ -13,7 +13,9 @@ export function DashboardHeader({ children }: { children?: React.ReactNode }) {
   const matches = useRouterState({ select: (s) => s.matches })
 
   const breadcrumbs = matches
-    .filter((match) => (match.staticData as unknown as RouteStaticData)?.breadcrumb)
+    .filter(
+      (match) => (match.staticData as unknown as RouteStaticData)?.breadcrumb,
+    )
     .map((match) => ({
       id: match.id,
       component: (match.staticData as unknown as RouteStaticData).breadcrumb!,
@@ -49,7 +51,11 @@ export function DashboardHeader({ children }: { children?: React.ReactNode }) {
             <Bell className="h-5 w-5" />
           </Button>
           <div className="h-8 w-8 rounded-full bg-muted overflow-hidden">
-            <UserButton afterSignOutUrl="/sign-in" userProfileUrl="/user-settings"  userProfileMode="navigation"   />
+            <UserButton
+              afterSignOutUrl="/sign-in"
+              userProfileUrl="/user-settings"
+              userProfileMode="navigation"
+            />
           </div>
         </div>
       </div>

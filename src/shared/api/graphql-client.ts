@@ -1,5 +1,6 @@
 import { request } from 'graphql-request'
 import type { RequestDocument, Variables } from 'graphql-request'
+import type { TypedDocumentNode } from '@graphql-typed-document-node/core'
 import { env } from '@/shared/config/env'
 
 /**
@@ -10,11 +11,11 @@ import { env } from '@/shared/config/env'
  * @param variables Optional variables for the operation
  * @returns The result of the GraphQL operation
  */
-export async function authenticatedGraphQLRequest<T>(
-  document: RequestDocument,
+export async function authenticatedGraphQLRequest<TResult, TVariables>(
+  document: TypedDocumentNode<TResult, TVariables> | RequestDocument,
   token: string | null | undefined,
-  variables?: Variables,
-) {
+  variables?: TVariables,
+): Promise<TResult> {
   if (!token) {
     const error = new Error(
       'No session token provided for authenticated request',
@@ -29,7 +30,7 @@ export async function authenticatedGraphQLRequest<T>(
     (typeof window !== 'undefined' ? window.location.origin : '')
   const endpoint = `${baseUrl}/graphql`
 
-  return request<T>(endpoint, document, variables, {
+  return request<TResult>(endpoint, document, variables as Variables, {
     Authorization: `Bearer ${token}`,
   })
 }

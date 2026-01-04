@@ -1,4 +1,5 @@
-import { Link, LinkProps } from '@tanstack/react-router'
+import { Link } from '@tanstack/react-router'
+import type { LinkProps } from '@tanstack/react-router'
 
 interface NavItem {
   label: string

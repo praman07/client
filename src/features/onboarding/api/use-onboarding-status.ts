@@ -9,8 +9,8 @@ import {
   SYNC_USER_MUTATION,
 } from './documents'
 
-import { authenticatedGraphQLRequest } from '@/shared/api/graphql-client'
 import type { RequestDocument, Variables } from 'graphql-request'
+import { authenticatedGraphQLRequest } from '@/shared/api/graphql-client'
 
 // ... (imports remain)
 
@@ -52,7 +52,7 @@ export function useOnboardingOrchestrator() {
     variables?: Variables,
   ) => {
     const token = await getToken()
-    return authenticatedGraphQLRequest<T>(document, token, variables)
+    return authenticatedGraphQLRequest<T, Variables>(document, token, variables)
   }
 
   // 1. Fetch Composite Status
