@@ -2,11 +2,11 @@ import { Link } from '@tanstack/react-router'
 import { AlertCircle } from 'lucide-react'
 import {
   Empty,
+  EmptyContent,
+  EmptyDescription,
   EmptyHeader,
   EmptyMedia,
   EmptyTitle,
-  EmptyDescription,
-  EmptyContent,
 } from './empty'
 
 export function NotFoundPage() {

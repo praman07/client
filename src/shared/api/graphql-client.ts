@@ -1,4 +1,5 @@
 import { request } from 'graphql-request'
+import type { RequestDocument, Variables } from 'graphql-request'
 import { env } from '@/shared/config/env'
 
 /**
@@ -10,12 +11,16 @@ import { env } from '@/shared/config/env'
  * @returns The result of the GraphQL operation
  */
 export async function authenticatedGraphQLRequest<T>(
-  document: any,
+  document: RequestDocument,
   token: string | null | undefined,
-  variables?: any,
+  variables?: Variables,
 ) {
   if (!token) {
-    throw new Error('No session token provided for authenticated request')
+    const error = new Error(
+      'No session token provided for authenticated request',
+    )
+    ;(error as any).code = 'UNAUTHENTICATED'
+    throw error
   }
 
   // Use environment variable from strict env config, fallback to window origin

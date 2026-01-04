@@ -17,19 +17,19 @@ export function MarketingNavbar() {
       navigationLinks={NAV_LINKS}
       actions={
         <>
-            <SignedIn>
-                <UserButton afterSignOutUrl="/" />
-            </SignedIn>
-            <SignedOut>
-                <div className="flex items-center gap-2">
-                    <Button variant="ghost" size="sm" render={<Link to="/sign-in" />}>
-                        Sign In
-                    </Button>
-                    <Button size="sm" render={<Link to="/sign-up" />}>
-                        Sign Up
-                    </Button>
-                </div>
-            </SignedOut>
+          <SignedIn>
+            <UserButton afterSignOutUrl="/" />
+          </SignedIn>
+          <SignedOut>
+            <div className="flex items-center gap-2">
+              <Button variant="ghost" size="sm" render={<Link to="/sign-in" />}>
+                Sign In
+              </Button>
+              <Button size="sm" render={<Link to="/sign-up" />}>
+                Sign Up
+              </Button>
+            </div>
+          </SignedOut>
         </>
       }
     />

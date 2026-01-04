@@ -7,7 +7,12 @@ type Query {
 
 type Mutation {
   _health: String
-  syncUser(clerkId: String!, email: String!, fullName: String, avatarUrl: String): User!
+  syncUser(
+    clerkId: String!
+    email: String!
+    fullName: String
+    avatarUrl: String
+  ): User!
   createOnboardingWorkspace: Workspace!
 }
 

@@ -5,6 +5,6 @@ export const Route = createFileRoute('/_auth/invite/$inviteId')({
 })
 
 function InvitePage() {
-    const { inviteId } = Route.useParams()
-    return <div className="text-center">Accepting Invite: {inviteId}</div>
+  const { inviteId } = Route.useParams()
+  return <div className="text-center">Accepting Invite: {inviteId}</div>
 }

@@ -1,28 +1,20 @@
-import { createFileRoute, Outlet, Link } from '@tanstack/react-router'
+import { Outlet, createFileRoute } from '@tanstack/react-router'
+import { NavTabs } from '@/widgets/navigation/ui/nav-tabs'
+import { WORKSPACE_TABS } from '@/shared/config/navigation'
 
 export const Route = createFileRoute('/_app/workspace/$workspaceSlug/_main')({
   component: WorkspaceMainLayout,
 })
 
 function WorkspaceMainLayout() {
-  const { workspaceSlug } = Route.useParams()
-  
   return (
-    <div className="flex h-full">
-      {/* Visual Placeholder: Workspace Sidebar */}
-      <aside className="w-64 border-r bg-card p-4">
-        <h3 className="mb-4 font-bold px-2">Workspace Main</h3>
-        <nav className="space-y-1">
-            <Link to="/workspace/$workspaceSlug" params={{ workspaceSlug }} className="block rounded-md px-3 py-2 text-sm font-medium hover:bg-accent">Dashboard</Link>
-            <Link to="/workspace/$workspaceSlug/projects" params={{ workspaceSlug }} className="block rounded-md px-3 py-2 text-sm font-medium hover:bg-accent">Projects</Link>
-            <Link to="/workspace/$workspaceSlug/members" params={{ workspaceSlug }} className="block rounded-md px-3 py-2 text-sm font-medium hover:bg-accent">Members</Link>
-            <Link to="/workspace/$workspaceSlug/settings" params={{ workspaceSlug }} className="block rounded-md px-3 py-2 text-sm font-medium hover:bg-accent">Settings</Link>
-        </nav>
-      </aside>
-
-      <main className="flex-1 overflow-auto bg-background p-8">
+    <>
+      <div className="border-b bg-background px-6">
+        <NavTabs items={WORKSPACE_TABS as any} from={Route.fullPath} />
+      </div>
+      <main className="flex-1 overflow-auto bg-background p-6">
         <Outlet />
       </main>
-    </div>
+    </>
   )
 }

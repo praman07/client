@@ -1,15 +1,16 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { useClerk, useAuth } from '@clerk/clerk-react'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useAuth, useClerk } from '@clerk/clerk-react'
 import { useEffect, useState } from 'react'
 import { useNavigate } from '@tanstack/react-router'
 
 import {
+  CREATE_ONBOARDING_WORKSPACE_MUTATION,
   ONBOARDING_STATUS_QUERY,
   SYNC_USER_MUTATION,
-  CREATE_ONBOARDING_WORKSPACE_MUTATION,
-} from '@/features/onboarding/api/documents'
+} from './documents'
 
 import { authenticatedGraphQLRequest } from '@/shared/api/graphql-client'
+import type { RequestDocument, Variables } from 'graphql-request'
 
 // ... (imports remain)
 
@@ -23,8 +24,33 @@ export function useOnboardingOrchestrator() {
     'loading' | 'syncing' | 'creating_workspace' | 'redirecting' | 'error'
   >('loading')
 
-  // Helper wrapper to get token and call shared client
-  const performRequest = async <T>(document: any, variables?: any) => {
+  interface OnboardingStatusResponse {
+    onboardingStatus: {
+      hasUser: boolean
+      hasWorkspace: boolean
+      hasProject: boolean
+      workspaceSlug: string | null
+    }
+  }
+
+  interface SyncUserResponse {
+    syncUser: {
+      id: string
+    }
+  }
+
+  interface CreateWorkspaceResponse {
+    createOnboardingWorkspace: {
+      id: string
+      slug: string
+    }
+  }
+
+  // Low-level helper for this specific hook
+  const typedPerformRequest = async <T>(
+    document: RequestDocument,
+    variables?: Variables,
+  ) => {
     const token = await getToken()
     return authenticatedGraphQLRequest<T>(document, token, variables)
   }
@@ -34,9 +60,10 @@ export function useOnboardingOrchestrator() {
     data: statusData,
     isLoading: isStatusLoading,
     error: statusError,
-  } = useQuery({
+  } = useQuery<OnboardingStatusResponse>({
     queryKey: ['onboardingStatus'],
-    queryFn: () => performRequest(ONBOARDING_STATUS_QUERY),
+    queryFn: () =>
+      typedPerformRequest<OnboardingStatusResponse>(ONBOARDING_STATUS_QUERY),
     // Only run if we have a user loaded in Clerk client
     enabled: !!user,
     // ...
@@ -44,7 +71,6 @@ export function useOnboardingOrchestrator() {
     refetchInterval: (query) => {
       // Build-in polling if we are waiting for webhook
       const data = query.state.data
-      // @ts-ignore - Generated types might be tricky with raw request return
       if (data && !data.onboardingStatus.hasUser) return 1000
       return false
     },
@@ -58,13 +84,16 @@ export function useOnboardingOrchestrator() {
       email: string
       fullName?: string
       avatarUrl?: string
-    }) => performRequest(SYNC_USER_MUTATION, variables),
+    }) => typedPerformRequest<SyncUserResponse>(SYNC_USER_MUTATION, variables),
     onSuccess: () =>
       queryClient.invalidateQueries({ queryKey: ['onboardingStatus'] }),
   })
 
   const { mutateAsync: createWorkspace } = useMutation({
-    mutationFn: () => performRequest(CREATE_ONBOARDING_WORKSPACE_MUTATION),
+    mutationFn: () =>
+      typedPerformRequest<CreateWorkspaceResponse>(
+        CREATE_ONBOARDING_WORKSPACE_MUTATION,
+      ),
     onSuccess: () =>
       queryClient.invalidateQueries({ queryKey: ['onboardingStatus'] }),
   })
@@ -77,7 +106,6 @@ export function useOnboardingOrchestrator() {
       return
     }
 
-    // @ts-ignore
     const status = statusData?.onboardingStatus
     if (!status) return
 

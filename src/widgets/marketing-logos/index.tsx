@@ -1,4 +1,3 @@
-
 export function MarketingLogos() {
   const logos = [
     { name: 'Acme Corp', initial: 'AC' },
@@ -17,11 +16,14 @@ export function MarketingLogos() {
         </p>
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 items-center justify-items-center opacity-60 grayscale hover:grayscale-0 transition-all duration-500">
           {logos.map((logo) => (
-            <div key={logo.name} className="flex items-center gap-2 font-bold text-xl">
-                 <div className="h-8 w-8 rounded bg-primary/20 flex items-center justify-center text-primary text-xs">
-                    {logo.initial}
-                 </div>
-                 <span>{logo.name}</span>
+            <div
+              key={logo.name}
+              className="flex items-center gap-2 font-bold text-xl"
+            >
+              <div className="h-8 w-8 rounded bg-primary/20 flex items-center justify-center text-primary text-xs">
+                {logo.initial}
+              </div>
+              <span>{logo.name}</span>
             </div>
           ))}
         </div>

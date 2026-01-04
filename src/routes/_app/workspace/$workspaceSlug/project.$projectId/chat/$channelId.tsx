@@ -8,6 +8,8 @@ export const Route = createFileRoute(
 
 function RouteComponent() {
   return (
-    <div>Hello "/_app/workspace/$workspaceSlug/project/$projectId/chat/$channelId"!</div>
+    <div>
+      Hello "/_app/workspace/$workspaceSlug/project/$projectId/chat/$channelId"!
+    </div>
   )
 }

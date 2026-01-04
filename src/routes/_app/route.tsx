@@ -1,5 +1,5 @@
-import { createFileRoute, Outlet } from '@tanstack/react-router'
-import { SignedIn, SignedOut, RedirectToSignIn } from '@clerk/clerk-react'
+import { Outlet, createFileRoute } from '@tanstack/react-router'
+import { RedirectToSignIn, SignedIn, SignedOut } from '@clerk/clerk-react'
 
 export const Route = createFileRoute('/_app')({
   component: AppLayout,
@@ -9,8 +9,7 @@ function AppLayout() {
   return (
     <>
       <SignedIn>
-          {/* Logic Shell - No Visuals */}
-          <Outlet />
+        <Outlet />
       </SignedIn>
       <SignedOut>
         <RedirectToSignIn />

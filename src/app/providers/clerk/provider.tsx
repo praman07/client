@@ -5,9 +5,6 @@ import { store } from '@/app/store'
 import { env } from '@/shared/config/env'
 
 const PUBLISHABLE_KEY = env.VITE_CLERK_PUBLISHABLE_KEY
-if (!PUBLISHABLE_KEY) {
-  throw new Error('Add your Clerk Publishable Key to the .env.local file')
-}
 
 export default function AppClerkProvider({
   children,

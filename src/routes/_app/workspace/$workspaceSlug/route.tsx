@@ -1,48 +1,32 @@
-import { createFileRoute, Outlet, useNavigate } from '@tanstack/react-router'
+import { Outlet, createFileRoute } from '@tanstack/react-router'
 import { z } from 'zod'
-import { CreateProjectModal } from '@/features/project/create-project-modal'
+import { DashboardHeader } from '@/widgets/navigation/ui/dashboard-header'
+import { WorkspaceSwitcher } from '@/widgets/navigation/ui/workspace-switcher'
 
 const workspaceSearchSchema = z.object({
   action: z.enum(['create-project']).optional(),
 })
 
 export const Route = createFileRoute('/_app/workspace/$workspaceSlug')({
-  component: WorkspaceRailLayout,
+  component: RouteComponent,
   validateSearch: (search) => workspaceSearchSchema.parse(search),
+  staticData: {
+    breadcrumb: () => <WorkspaceSwitcher />,
+  },
 })
 
-function WorkspaceRailLayout() {
-  const { workspaceSlug } = Route.useParams()
-  const search = Route.useSearch()
-  const navigate = useNavigate()
+function RouteComponent() {
+  // Removed unused params extraction
 
-  const isCreateProjectOpen = search.action === 'create-project'
-
-  const handleCloseModal = () => {
-    // Remove the action param
-    navigate({
-        to: '.',
-        params: { workspaceSlug },
-        search: {},
-        replace: true
-    })
-  }
-  
   return (
-    <div className="flex h-screen w-full overflow-hidden bg-background">
+    <div className="min-h-screen bg-background flex flex-col">
+      {/* TIER 1: GLOBAL HEADER */}
+      <DashboardHeader/>
 
-      {/* Main Content Area (Pushed over by rail) */}
-      <div className="ml-16 flex flex-1 flex-col overflow-hidden">
-        <div className="p-2 border-b bg-muted/10 text-xs text-muted-foreground">
-            Current Workspace: {workspaceSlug}
-        </div>
+      {/* CONTENT AREA */}
+      <main className="flex-1 flex flex-col">
         <Outlet />
-      </div>
-      
-      <CreateProjectModal 
-        isOpen={isCreateProjectOpen} 
-        onClose={handleCloseModal} 
-      />
+      </main>
     </div>
   )
 }

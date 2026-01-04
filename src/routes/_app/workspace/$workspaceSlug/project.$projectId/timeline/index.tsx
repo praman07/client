@@ -7,5 +7,9 @@ export const Route = createFileRoute(
 })
 
 function RouteComponent() {
-  return <div>Hello "/_app/workspace/$workspaceSlug/project/$projectId/timeline/"!</div>
+  return (
+    <div>
+      Hello "/_app/workspace/$workspaceSlug/project/$projectId/timeline/"!
+    </div>
+  )
 }
