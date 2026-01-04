@@ -49,7 +49,7 @@ export function DashboardHeader({ children }: { children?: React.ReactNode }) {
             <Bell className="h-5 w-5" />
           </Button>
           <div className="h-8 w-8 rounded-full bg-muted overflow-hidden">
-            <UserButton afterSignOutUrl="/" />
+            <UserButton afterSignOutUrl="/sign-in" userProfileUrl="/user-settings"  userProfileMode="navigation"   />
           </div>
         </div>
       </div>
