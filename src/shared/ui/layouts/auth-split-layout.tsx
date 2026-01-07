@@ -1,6 +1,6 @@
 import { Check, Shield, Zap } from 'lucide-react'
 import type { ReactNode } from 'react'
-import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/avatar'
+import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/primitives/avatar'
 
 interface AuthSplitLayoutProps {
   children: ReactNode

@@ -1,4 +1,3 @@
-import { SESSION_USER_FRAGMENT, SESSION_WORKSPACE_FRAGMENT } from './fragments'
 import { graphql } from '@/shared/api/graphql/generated'
 
 export const GET_ME_QUERY = graphql(`

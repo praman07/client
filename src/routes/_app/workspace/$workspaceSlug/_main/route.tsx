@@ -1,5 +1,5 @@
 import { Outlet, createFileRoute } from '@tanstack/react-router'
-import { NavTabs } from '@/widgets/navigation/ui/nav-tabs'
+import { NavTabs } from '@/widgets/navigation/nav-tabs'
 import { WORKSPACE_TABS } from '@/shared/config/navigation'
 
 export const Route = createFileRoute('/_app/workspace/$workspaceSlug/_main')({

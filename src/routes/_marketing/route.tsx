@@ -1,5 +1,5 @@
 import { Outlet, createFileRoute } from '@tanstack/react-router'
-import { MarketingNavbar } from '@/widgets/marketing-navbar'
+import { MarketingNavbar } from '@/widgets/marketing/navbar'
 
 export const Route = createFileRoute('/_marketing')({
   component: MarketingLayout,

@@ -1,6 +1,6 @@
 import { AlertTriangleIcon, RefreshCwIcon } from 'lucide-react'
 import { useRouter } from '@tanstack/react-router'
-import { Button } from '../button'
+import { Button } from '@/shared/ui/primitives/button'
 import {
   Card,
   CardContent,
@@ -8,7 +8,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from '../card'
+} from '@/shared/ui/primitives/card'
 
 interface RouteErrorProps {
   error: unknown

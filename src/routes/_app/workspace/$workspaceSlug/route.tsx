@@ -1,14 +1,14 @@
 import { Outlet, createFileRoute } from '@tanstack/react-router'
 import { z } from 'zod'
 import { RouteError } from '@/shared/ui/error/route-error'
-import { DashboardHeader } from '@/widgets/navigation/ui/dashboard-header'
-import { WorkspaceSwitcher } from '@/widgets/navigation/ui/workspace-switcher'
+import { DashboardHeader } from '@/widgets/navigation/dashboard-header'
+import { WorkspaceSwitcher } from '@/widgets/navigation/workspace-switcher'
 
 import { useSyncCurrentWorkspace } from '@/entities/session/lib/use-session-sync'
 import {
   WorkspaceErrorState,
   WorkspaceLoadingState,
-} from '@/widgets/workspace/ui/workspace-layout-states'
+} from '@/widgets/workspace/workspace-layout-states'
 
 const workspaceSearchSchema = z.object({
   action: z.enum(['create-project']).optional(),
