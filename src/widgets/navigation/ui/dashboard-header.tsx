@@ -14,7 +14,7 @@ export function DashboardHeader({ children }: { children?: React.ReactNode }) {
 
   const breadcrumbs = matches
     .filter(
-      (match) => (match.staticData as unknown as RouteStaticData)?.breadcrumb,
+      (match) => (match.staticData as unknown as RouteStaticData).breadcrumb,
     )
     .map((match) => ({
       id: match.id,

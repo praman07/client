@@ -66,7 +66,7 @@ function WorkspaceSwitcherContent() {
         <Avatar className="h-5 w-5 rounded-md">
           <AvatarImage src={currentWorkspace?.logoUrl || undefined} />
           <AvatarFallback className="rounded-md">
-            {currentWorkspace?.name?.[0] || 'W'}
+            {currentWorkspace?.name[0] || 'W'}
           </AvatarFallback>
         </Avatar>
         <span>{currentWorkspace?.name || 'Select Workspace'}</span>

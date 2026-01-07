@@ -56,6 +56,7 @@ export function useSyncCurrentWorkspace(slug?: string) {
           SESSION_WORKSPACE_FRAGMENT,
           data.workspaceBySlug,
         )
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         if (workspace) {
           dispatch(setCurrentWorkspace(workspace))
         } else {

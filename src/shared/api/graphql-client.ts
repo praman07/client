@@ -11,10 +11,15 @@ import { env } from '@/shared/config/env'
  * @param variables Optional variables for the operation
  * @returns The result of the GraphQL operation
  */
+export interface RequestConfig {
+  headers?: Record<string, string>
+}
+
 export async function authenticatedGraphQLRequest<TResult, TVariables>(
   document: TypedDocumentNode<TResult, TVariables> | RequestDocument,
   token: string | null | undefined,
   variables?: TVariables,
+  config?: RequestConfig,
 ): Promise<TResult> {
   if (!token) {
     const error = new Error(
@@ -32,5 +37,6 @@ export async function authenticatedGraphQLRequest<TResult, TVariables>(
 
   return request<TResult>(endpoint, document, variables as Variables, {
     Authorization: `Bearer ${token}`,
+    ...config?.headers,
   })
 }

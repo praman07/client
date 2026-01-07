@@ -18,9 +18,6 @@ export const Route = createFileRoute('/_app/workspace/$workspaceSlug')({
   component: WorkspaceLayout,
   errorComponent: RouteError,
   validateSearch: (search) => workspaceSearchSchema.parse(search),
-  loader: async () => {
-    return null
-  },
   staticData: {
     breadcrumb: () => <WorkspaceSwitcher />,
   },
