@@ -3,7 +3,7 @@ import type { PayloadAction } from '@reduxjs/toolkit'
 import type {
   SessionUserFragment,
   SessionWorkspaceFragment,
-} from '@/shared/api/graphql/generated/graphql'
+} from '@/gql/graphql'
 
 interface SessionState {
   currentUser: SessionUserFragment | null

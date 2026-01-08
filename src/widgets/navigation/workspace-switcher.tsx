@@ -13,13 +13,29 @@ import {
   DropdownMenuTrigger,
 } from '@/shared/ui/primitives/dropdown-menu'
 import { buttonVariants } from '@/shared/ui/primitives/button'
-import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/primitives/avatar'
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from '@/shared/ui/primitives/avatar'
 import { cn } from '@/shared/lib/utils'
 import { useAppSelector } from '@/app/store'
 import { selectCurrentWorkspace } from '@/entities/session/model/selectors'
-import { authenticatedGraphQLRequest } from '@/shared/api/graphql-client'
-import { GET_MY_WORKSPACES_QUERY } from '@/features/workspace/api/documents'
+import { createGqlClient } from '@/shared/api/graphql-client'
 import { WidgetError } from '@/shared/ui/error/widget-error'
+import { gql } from '@/gql'
+import { workspaceKeys } from '@/entities/workspace/api/query-keys'
+
+const GET_MY_WORKSPACES_QUERY = gql(`
+  query GetMyWorkspaces {
+    myWorkspaces {
+      id
+      slug
+      name
+      logoUrl
+    }
+  }
+`)
 
 export function WorkspaceSwitcher() {
   return (
@@ -31,22 +47,16 @@ export function WorkspaceSwitcher() {
 
 function WorkspaceSwitcherContent() {
   const currentWorkspace = useAppSelector(selectCurrentWorkspace)
-  console.log(currentWorkspace?.name)
-  // Use this purely for list data
   const { getToken } = useAuth()
   const { data } = useQuery({
-    queryKey: ['GetMyWorkspaces'],
+    queryKey: workspaceKeys.my(),
     queryFn: async () => {
       const token = await getToken()
-      return authenticatedGraphQLRequest(GET_MY_WORKSPACES_QUERY, token)
+      const client = createGqlClient(token)
+      return client.request(GET_MY_WORKSPACES_QUERY)
     },
     throwOnError: true, // Ensure errors bubble to ErrorBoundary
   })
-
-  // We can still get the slug from the URL for the first link if we want,
-  // or just trust Redux. Let's trust Redux for the active context visualization,
-  // but if Redux is null (loading/error), fall back to URL or props if needed.
-  // Actually, for the "Home" link, using the slug from the workspace object is safest.
 
   const workspaceSlug = currentWorkspace?.slug
 

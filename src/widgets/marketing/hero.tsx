@@ -2,8 +2,17 @@ import { ArrowRight, FileText, MessageSquare } from 'lucide-react'
 import { Button } from '@/shared/ui/primitives/button'
 import { Badge } from '@/shared/ui/primitives/badge'
 import { Input } from '@/shared/ui/primitives/input'
-import { Card, CardContent, CardHeader, CardTitle } from '@/shared/ui/primitives/card'
-import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/primitives/avatar'
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from '@/shared/ui/primitives/card'
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from '@/shared/ui/primitives/avatar'
 
 export function MarketingHero() {
   return (

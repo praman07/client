@@ -5,20 +5,38 @@ import {
   SESSION_USER_FRAGMENT,
   SESSION_WORKSPACE_FRAGMENT,
 } from '../api/fragments'
-import { GET_ME_QUERY, GET_WORKSPACE_BY_SLUG_QUERY } from '../api/documents'
-import { authenticatedGraphQLRequest } from '@/shared/api/graphql-client'
+import { createGqlClient } from '@/shared/api/graphql-client'
 import { useAppDispatch } from '@/app/store'
-import { useFragment } from '@/shared/api/graphql/generated'
+import { gql, useFragment } from '@/gql'
+import { sessionKeys } from '@/entities/session/api/query-keys'
+import { workspaceKeys } from '@/entities/workspace/api/query-keys'
+
+const GET_ME_QUERY = gql(`
+  query GetMe {
+    me {
+      ...SessionUser
+    }
+  }
+`)
+
+const GET_WORKSPACE_BY_SLUG_QUERY = gql(`
+  query GetWorkspaceBySlug($slug: String!) {
+    workspaceBySlug(slug: $slug) {
+      ...SessionWorkspace
+    }
+  }
+`)
 
 export function useSyncCurrentUser() {
   const { getToken } = useAuth()
   const dispatch = useAppDispatch()
 
   return useQuery({
-    queryKey: ['GetMe'],
+    queryKey: sessionKeys.me(),
     queryFn: async () => {
       const token = await getToken()
-      const data = await authenticatedGraphQLRequest(GET_ME_QUERY, token)
+      const client = createGqlClient(token)
+      const data = await client.request(GET_ME_QUERY)
 
       // Sync User to Redux immediately upon fetch
       const user = useFragment(SESSION_USER_FRAGMENT, data.me)
@@ -37,19 +55,17 @@ export function useSyncCurrentWorkspace(slug?: string) {
   const dispatch = useAppDispatch()
 
   return useQuery({
-    queryKey: ['GetWorkspaceBySlug', slug],
+    queryKey: workspaceKeys.detail(slug || ''),
     queryFn: async () => {
       if (!slug) return null
 
       const token = await getToken()
+      const client = createGqlClient(token)
+
       try {
-        const data = await authenticatedGraphQLRequest(
-          GET_WORKSPACE_BY_SLUG_QUERY,
-          token,
-          {
-            slug,
-          },
-        )
+        const data = await client.request(GET_WORKSPACE_BY_SLUG_QUERY, {
+          slug,
+        })
 
         // Sync Workspace to Redux immediately upon fetch
         const workspace = useFragment(
@@ -71,9 +87,11 @@ export function useSyncCurrentWorkspace(slug?: string) {
     enabled: !!slug,
     staleTime: 1000 * 60 * 5, // 5 minutes stale time for workspace context
     refetchOnWindowFocus: false,
-    retry: (failureCount, error: any) => {
+    retry: (failureCount, error: unknown) => {
       // Don't retry on Auth/Permissions errors
-      if (error?.response?.status === 401 || error?.response?.status === 403) {
+      // Use unknown type and safe checking
+      const status = (error as any)?.response?.status
+      if (status === 401 || status === 403) {
         return false
       }
       return failureCount < 3

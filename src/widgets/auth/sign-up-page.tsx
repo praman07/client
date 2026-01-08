@@ -4,7 +4,7 @@ export function AuthSignupPage() {
   return (
     <>
       <title>Sign Up - Collabify</title>
-      <meta name="description" content="Create your Collabify account" />
+      <meta name="description" content="Sign up for a Collabify account" />
       <SignUpWidget />
     </>
   )

@@ -1,6 +1,6 @@
-import { graphql } from '@/shared/api/graphql/generated'
+import { gql } from '@/gql'
 
-export const SESSION_USER_FRAGMENT = graphql(`
+export const SESSION_USER_FRAGMENT = gql(`
   fragment SessionUser on User {
     id
     email
@@ -9,7 +9,7 @@ export const SESSION_USER_FRAGMENT = graphql(`
   }
 `)
 
-export const SESSION_WORKSPACE_FRAGMENT = graphql(`
+export const SESSION_WORKSPACE_FRAGMENT = gql(`
   fragment SessionWorkspace on Workspace {
     id
     slug

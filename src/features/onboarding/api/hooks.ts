@@ -1,50 +1,60 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { useAuth, useClerk } from '@clerk/clerk-react'
-import {
-  CREATE_ONBOARDING_WORKSPACE_MUTATION,
-  ONBOARDING_STATUS_QUERY,
-  SYNC_USER_MUTATION,
-} from './documents'
-import type {
-  CreateWorkspaceResponse,
-  OnboardingStatusResponse,
-  SyncUserResponse,
-} from '../model/types'
+import { createGqlClient } from '@/shared/api/graphql-client'
+import { gql } from '@/gql'
+import { onboardingKeys } from '@/features/onboarding/api/query-keys'
 
-import type { RequestDocument, Variables } from 'graphql-request'
-import { authenticatedGraphQLRequest } from '@/shared/api/graphql-client'
-
-// Helper for type-safe requests
-/**
- * A wrapper around `authenticatedGraphQLRequest` that automatically injects the Clerk token.
- * Generics: <T> = Response Type.
- */
-const useTypedRequest = () => {
-  const { getToken } = useAuth()
-  return async <T>(
-    document: RequestDocument,
-    variables?: Variables,
-    headers?: Record<string, string>,
-  ) => {
-    const token = await getToken()
-    return authenticatedGraphQLRequest<T, Variables>(
-      document,
-      token,
-      variables,
-      {
-        headers,
-      },
-    )
+// Inline Queries
+const ONBOARDING_STATUS_QUERY = gql(`
+  query OnboardingStatus {
+    onboardingStatus {
+      hasUser
+      hasWorkspace
+      hasProject
+      workspaceSlug
+    }
   }
-}
+`)
+
+const SYNC_USER_MUTATION = gql(`
+  mutation SyncUser(
+    $clerkId: String!
+    $email: String!
+    $fullName: String
+    $avatarUrl: String
+  ) {
+    syncUser(
+      clerkId: $clerkId
+      email: $email
+      fullName: $fullName
+      avatarUrl: $avatarUrl
+    ) {
+      id
+    }
+  }
+`)
+
+const CREATE_ONBOARDING_WORKSPACE_MUTATION = gql(`
+  mutation CreateOnboardingWorkspace {
+    createOnboardingWorkspace {
+      id
+      slug
+    }
+  }
+`)
 
 export const useOnboardingStatusQuery = () => {
   const { user } = useClerk()
-  const request = useTypedRequest()
+  // We need the token. useClerk doesn't give it directly in a convenient way for queries compared to useAuth
+  const { getToken } = useAuth()
 
-  return useQuery<OnboardingStatusResponse>({
-    queryKey: ['onboardingStatus'],
-    queryFn: () => request<OnboardingStatusResponse>(ONBOARDING_STATUS_QUERY),
+  return useQuery({
+    queryKey: onboardingKeys.status(),
+    queryFn: async () => {
+      const token = await getToken()
+      const client = createGqlClient(token)
+      return client.request(ONBOARDING_STATUS_QUERY)
+    },
     enabled: !!user,
     refetchInterval: (query) => {
       const data = query.state.data
@@ -57,34 +67,45 @@ export const useOnboardingStatusQuery = () => {
 
 export const useSyncUserMutation = () => {
   const queryClient = useQueryClient()
-  const request = useTypedRequest()
+  const { getToken } = useAuth()
 
   return useMutation({
-    mutationFn: (variables: {
+    mutationFn: async (variables: {
       clerkId: string
       email: string
       fullName?: string
       avatarUrl?: string
-    }) => request<SyncUserResponse>(SYNC_USER_MUTATION, variables),
+    }) => {
+      const token = await getToken()
+      const client = createGqlClient(token)
+      return client.request(SYNC_USER_MUTATION, variables)
+    },
     onSuccess: () =>
-      queryClient.invalidateQueries({ queryKey: ['onboardingStatus'] }),
+      queryClient.invalidateQueries({ queryKey: onboardingKeys.status() }),
   })
 }
 
 export const useCreateOnboardingWorkspaceMutation = () => {
   const queryClient = useQueryClient()
-  const request = useTypedRequest()
+  const { getToken } = useAuth()
 
   return useMutation({
-    mutationFn: (variables?: { idempotencyKey?: string }) =>
-      request<CreateWorkspaceResponse>(
+    mutationFn: async (variables?: { idempotencyKey?: string }) => {
+      const token = await getToken()
+      const client = createGqlClient(token)
+      const headers = variables?.idempotencyKey
+        ? { 'X-Idempotency-Key': variables.idempotencyKey }
+        : undefined
+
+      // Header handling needs to be done via client config or request wrapper if internal client doesn't support per-request headers easily
+      // GraphQLClient request method accepts headers as 3rd arg
+      return client.request(
         CREATE_ONBOARDING_WORKSPACE_MUTATION,
         undefined,
-        variables?.idempotencyKey
-          ? { 'X-Idempotency-Key': variables.idempotencyKey }
-          : undefined,
-      ),
+        headers,
+      )
+    },
     onSuccess: () =>
-      queryClient.invalidateQueries({ queryKey: ['onboardingStatus'] }),
+      queryClient.invalidateQueries({ queryKey: onboardingKeys.status() }),
   })
 }

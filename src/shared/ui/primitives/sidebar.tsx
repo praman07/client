@@ -18,7 +18,11 @@ import {
   SheetTitle,
 } from '@/shared/ui/primitives/sheet'
 import { Skeleton } from '@/shared/ui/primitives/skeleton'
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/shared/ui/primitives/tooltip'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/shared/ui/primitives/tooltip'
 import { useIsMobile } from '@/shared/lib/hooks/use-mobile'
 
 const SIDEBAR_COOKIE_NAME = 'sidebar_state'

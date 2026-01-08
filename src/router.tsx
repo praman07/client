@@ -1,11 +1,11 @@
 import { createRouter } from '@tanstack/react-router'
 import { setupRouterSsrQueryIntegration } from '@tanstack/react-router-ssr-query'
 import * as TanstackQuery from './app/providers/tanstack-query/root-provider'
-import { NotFoundPage } from './pages/not-found'
 import { RouteError } from './shared/ui/error/route-error'
 
 // Import the generated route tree
 import { routeTree } from './routeTree.gen'
+import { NotFoundPage } from '@/widgets/not-found'
 
 // Create a new router instance
 export const getRouter = () => {
@@ -15,6 +15,7 @@ export const getRouter = () => {
     routeTree,
     context: {
       ...rqContext,
+      auth: undefined!, // Auth will be injected by the provider/server
     },
 
     defaultPreload: 'intent',

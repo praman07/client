@@ -6,14 +6,15 @@ import {
 } from '@tanstack/react-router'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 import { TanStackDevtools } from '@tanstack/react-devtools'
-import { NotFoundPage } from '@/pages/not-found'
 import type { QueryClient } from '@tanstack/react-query'
+import { NotFoundPage } from '@/widgets/not-found'
 import ClerkProvider from '@/app/providers/clerk/provider'
 import TanStackQueryDevtools from '@/app/providers/tanstack-query/devtools'
 import appCss from '@/app/styles/globals.css?url'
 
 interface MyRouterContext {
   queryClient: QueryClient
+  auth: { getToken: () => Promise<string | null> }
 }
 
 export const Route = createRootRouteWithContext<MyRouterContext>()({
