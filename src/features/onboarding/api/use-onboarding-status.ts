@@ -5,9 +5,9 @@ import { deriveOnboardingStep } from '../lib/onboarding-machine'
 import { mapOnboardingError } from '../lib/error-mapping'
 import {
   useCreateOnboardingWorkspaceMutation,
-  useOnboardingStatusQuery,
   useSyncUserMutation,
-} from './hooks'
+} from './mutations'
+import { useOnboardingStatusQuery } from './queries'
 import { generateIdempotencyKey } from '@/shared/lib/idempotency'
 
 export function useOnboardingOrchestrator() {

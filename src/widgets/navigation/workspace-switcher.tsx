@@ -1,4 +1,4 @@
-import { Link } from '@tanstack/react-router'
+import { Link, useNavigate } from '@tanstack/react-router'
 import { ChevronsUpDown, Plus } from 'lucide-react'
 import { useAuth } from '@clerk/clerk-react'
 import { useQuery } from '@tanstack/react-query'
@@ -46,6 +46,7 @@ export function WorkspaceSwitcher() {
 }
 
 function WorkspaceSwitcherContent() {
+  const navigate = useNavigate()
   const currentWorkspace = useAppSelector(selectCurrentWorkspace)
   const { getToken } = useAuth()
   const { data } = useQuery({
@@ -117,7 +118,9 @@ function WorkspaceSwitcherContent() {
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
           <DropdownMenuGroup>
-            <DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => navigate({ to: '/workspace/new' })}
+            >
               <Plus className="mr-2 h-4 w-4" />
               Create Workspace
             </DropdownMenuItem>

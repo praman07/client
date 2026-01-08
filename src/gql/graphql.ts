@@ -29,11 +29,34 @@ export type Scalars = {
   Float: { input: number; output: number }
 }
 
+export type AvailabilityResponse = {
+  __typename?: 'AvailabilityResponse'
+  available: Scalars['Boolean']['output']
+  message?: Maybe<Scalars['String']['output']>
+  reservationId?: Maybe<Scalars['String']['output']>
+}
+
+export type CreateWorkspaceInput = {
+  name: Scalars['String']['input']
+  slug: Scalars['String']['input']
+}
+
 export type Mutation = {
   __typename?: 'Mutation'
   _health?: Maybe<Scalars['String']['output']>
+  checkSlugAvailability: AvailabilityResponse
   createOnboardingWorkspace: Workspace
+  createWorkspace: Workspace
   syncUser: User
+}
+
+export type MutationCheckSlugAvailabilityArgs = {
+  slug: Scalars['String']['input']
+}
+
+export type MutationCreateWorkspaceArgs = {
+  name: Scalars['String']['input']
+  slug: Scalars['String']['input']
 }
 
 export type MutationSyncUserArgs = {
@@ -125,16 +148,31 @@ export type GetWorkspaceBySlugQuery = {
   }
 }
 
-export type OnboardingStatusQueryVariables = Exact<{ [key: string]: never }>
+export type CreateWorkspaceMutationVariables = Exact<{
+  slug: Scalars['String']['input']
+  name: Scalars['String']['input']
+}>
 
-export type OnboardingStatusQuery = {
-  __typename?: 'Query'
-  onboardingStatus: {
-    __typename?: 'OnboardingStatus'
-    hasUser: boolean
-    hasWorkspace: boolean
-    hasProject: boolean
-    workspaceSlug?: string | null
+export type CreateWorkspaceMutation = {
+  __typename?: 'Mutation'
+  createWorkspace: {
+    __typename?: 'Workspace'
+    id: string
+    slug: string
+    name: string
+  }
+}
+
+export type CheckSlugAvailabilityMutationVariables = Exact<{
+  slug: Scalars['String']['input']
+}>
+
+export type CheckSlugAvailabilityMutation = {
+  __typename?: 'Mutation'
+  checkSlugAvailability: {
+    __typename?: 'AvailabilityResponse'
+    available: boolean
+    message?: string | null
   }
 }
 
@@ -160,6 +198,19 @@ export type CreateOnboardingWorkspaceMutation = {
     __typename?: 'Workspace'
     id: string
     slug: string
+  }
+}
+
+export type OnboardingStatusQueryVariables = Exact<{ [key: string]: never }>
+
+export type OnboardingStatusQuery = {
+  __typename?: 'Query'
+  onboardingStatus: {
+    __typename?: 'OnboardingStatus'
+    hasUser: boolean
+    hasWorkspace: boolean
+    hasProject: boolean
+    workspaceSlug?: string | null
   }
 }
 
@@ -338,32 +389,67 @@ export const GetWorkspaceBySlugDocument = {
   GetWorkspaceBySlugQuery,
   GetWorkspaceBySlugQueryVariables
 >
-export const OnboardingStatusDocument = {
+export const CreateWorkspaceDocument = {
   kind: 'Document',
   definitions: [
     {
       kind: 'OperationDefinition',
-      operation: 'query',
-      name: { kind: 'Name', value: 'OnboardingStatus' },
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'CreateWorkspace' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'slug' } },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'String' },
+            },
+          },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'name' } },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'String' },
+            },
+          },
+        },
+      ],
       selectionSet: {
         kind: 'SelectionSet',
         selections: [
           {
             kind: 'Field',
-            name: { kind: 'Name', value: 'onboardingStatus' },
+            name: { kind: 'Name', value: 'createWorkspace' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'slug' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'slug' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'name' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'name' },
+                },
+              },
+            ],
             selectionSet: {
               kind: 'SelectionSet',
               selections: [
-                { kind: 'Field', name: { kind: 'Name', value: 'hasUser' } },
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'hasWorkspace' },
-                },
-                { kind: 'Field', name: { kind: 'Name', value: 'hasProject' } },
-                {
-                  kind: 'Field',
-                  name: { kind: 'Name', value: 'workspaceSlug' },
-                },
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'slug' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'name' } },
               ],
             },
           },
@@ -372,8 +458,60 @@ export const OnboardingStatusDocument = {
     },
   ],
 } as unknown as DocumentNode<
-  OnboardingStatusQuery,
-  OnboardingStatusQueryVariables
+  CreateWorkspaceMutation,
+  CreateWorkspaceMutationVariables
+>
+export const CheckSlugAvailabilityDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'CheckSlugAvailability' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: { kind: 'Variable', name: { kind: 'Name', value: 'slug' } },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'String' },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'checkSlugAvailability' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'slug' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'slug' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'available' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'message' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  CheckSlugAvailabilityMutation,
+  CheckSlugAvailabilityMutationVariables
 >
 export const SyncUserDocument = {
   kind: 'Document',
@@ -508,6 +646,43 @@ export const CreateOnboardingWorkspaceDocument = {
 } as unknown as DocumentNode<
   CreateOnboardingWorkspaceMutation,
   CreateOnboardingWorkspaceMutationVariables
+>
+export const OnboardingStatusDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'OnboardingStatus' },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'onboardingStatus' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'hasUser' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'hasWorkspace' },
+                },
+                { kind: 'Field', name: { kind: 'Name', value: 'hasProject' } },
+                {
+                  kind: 'Field',
+                  name: { kind: 'Name', value: 'workspaceSlug' },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  OnboardingStatusQuery,
+  OnboardingStatusQueryVariables
 >
 export const GetMyWorkspacesDocument = {
   kind: 'Document',

@@ -15,6 +15,19 @@ type Mutation {
     avatarUrl: String
   ): User!
   createOnboardingWorkspace: Workspace!
+  checkSlugAvailability(slug: String!): AvailabilityResponse!
+  createWorkspace(slug: String!, name: String!): Workspace!
+}
+
+type AvailabilityResponse {
+  available: Boolean!
+  message: String
+  reservationId: String
+}
+
+input CreateWorkspaceInput {
+  name: String!
+  slug: String!
 }
 
 type User {

@@ -4,6 +4,12 @@ import { Bell } from 'lucide-react'
 import { Fragment } from 'react/jsx-runtime'
 import { Button } from '@/shared/ui/primitives/button'
 
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from '@/shared/ui/primitives/avatar'
+
 // Define the known shape of staticData for breadcrumbs
 type RouteStaticData = {
   breadcrumb?: React.ComponentType
@@ -26,9 +32,14 @@ export function DashboardHeader({ children }: { children?: React.ReactNode }) {
       <div className="flex h-14 items-center gap-4 px-6">
         {/* Left: Logo & Context */}
         <div className="flex items-center gap-4 mr-auto">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-foreground text-background font-bold">
-            C
-          </div>
+          <Avatar className="h-8 w-8 rounded-lg">
+            <AvatarImage
+              src="/logo2.png"
+              alt="Collabify"
+              className="rounded-lg object-contain"
+            />
+            <AvatarFallback className="rounded-lg">C</AvatarFallback>
+          </Avatar>
 
           <div className="flex items-center gap-2 text-sm">
             {breadcrumbs.map((crumb, index) => {
