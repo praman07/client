@@ -38,4 +38,4 @@ export type WorkspaceFormApi = ReactFormApi<
   any,
   any,
   any
-> & { state: { isSubmitting: boolean } }
+> & { state: { isSubmitting: boolean; values: CreateWorkspaceInput } }

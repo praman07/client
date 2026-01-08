@@ -31,6 +31,10 @@ export function WorkspaceSlugField({ form }: Props) {
 
           try {
             const response = await checkSlug(value)
+
+            // Stale Guard: If current form value differs from the value we checked, ignore this result.
+            if (value !== form.state.values.slug) return null
+
             if (!response.checkSlugAvailability.available) {
               return 'Slug is already taken'
             }
