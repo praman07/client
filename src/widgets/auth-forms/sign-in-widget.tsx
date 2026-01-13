@@ -1,5 +1,14 @@
 import { SignIn } from '@clerk/clerk-react'
 
-export function SignInWidget() {
-  return <SignIn signUpUrl="/sign-up" forceRedirectUrl="/onboarding" />
+interface Props {
+  redirectUrl?: string | null
+}
+
+export function SignInWidget({ redirectUrl }: Props) {
+  return (
+    <SignIn
+      signUpUrl="/sign-up"
+      forceRedirectUrl={redirectUrl || '/onboarding'}
+    />
+  )
 }

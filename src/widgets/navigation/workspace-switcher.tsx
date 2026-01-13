@@ -19,12 +19,12 @@ import {
   AvatarImage,
 } from '@/shared/ui/primitives/avatar'
 import { cn } from '@/shared/lib/utils'
-import { useAppSelector } from '@/app/store'
 import { selectCurrentWorkspace } from '@/entities/session/model/selectors'
 import { createGqlClient } from '@/shared/api/graphql-client'
 import { WidgetError } from '@/shared/ui/error/widget-error'
 import { gql } from '@/gql'
 import { workspaceKeys } from '@/entities/workspace/api/query-keys'
+import { useAppSelector } from '@/shared/lib/redux'
 
 const GET_MY_WORKSPACES_QUERY = gql(`
   query GetMyWorkspaces {

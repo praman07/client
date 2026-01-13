@@ -6,10 +6,10 @@ import {
   SESSION_WORKSPACE_FRAGMENT,
 } from '../api/fragments'
 import { createGqlClient } from '@/shared/api/graphql-client'
-import { useAppDispatch } from '@/app/store'
 import { gql, useFragment } from '@/gql'
 import { sessionKeys } from '@/entities/session/api/query-keys'
 import { workspaceKeys } from '@/entities/workspace/api/query-keys'
+import { useAppDispatch } from '@/shared/lib/redux'
 
 const GET_ME_QUERY = gql(`
   query GetMe {

@@ -20,8 +20,8 @@ import { Route as MarketingAboutRouteImport } from './routes/_marketing/about'
 import { Route as AuthSignUpRouteImport } from './routes/_auth/sign-up'
 import { Route as AuthSignInRouteImport } from './routes/_auth/sign-in'
 import { Route as AppOnboardingRouteImport } from './routes/_app/onboarding'
-import { Route as AuthInviteInviteIdRouteImport } from './routes/_auth/invite.$inviteId'
 import { Route as AppWorkspaceNewRouteImport } from './routes/_app/workspace/new'
+import { Route as AppWorkspaceJoinRouteImport } from './routes/_app/workspace/join'
 import { Route as AppUserSettingsSplatRouteImport } from './routes/_app/user-settings.$'
 import { Route as AppWorkspaceWorkspaceSlugRouteRouteImport } from './routes/_app/workspace/$workspaceSlug/route'
 import { Route as AppWorkspaceWorkspaceSlugMainRouteRouteImport } from './routes/_app/workspace/$workspaceSlug/_main/route'
@@ -100,14 +100,14 @@ const AppOnboardingRoute = AppOnboardingRouteImport.update({
   path: '/onboarding',
   getParentRoute: () => AppRouteRoute,
 } as any)
-const AuthInviteInviteIdRoute = AuthInviteInviteIdRouteImport.update({
-  id: '/invite/$inviteId',
-  path: '/invite/$inviteId',
-  getParentRoute: () => AuthRouteRoute,
-} as any)
 const AppWorkspaceNewRoute = AppWorkspaceNewRouteImport.update({
   id: '/workspace/new',
   path: '/workspace/new',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+const AppWorkspaceJoinRoute = AppWorkspaceJoinRouteImport.update({
+  id: '/workspace/join',
+  path: '/workspace/join',
   getParentRoute: () => AppRouteRoute,
 } as any)
 const AppUserSettingsSplatRoute = AppUserSettingsSplatRouteImport.update({
@@ -277,8 +277,8 @@ export interface FileRoutesByFullPath {
   '/': typeof MarketingIndexRoute
   '/workspace/$workspaceSlug': typeof AppWorkspaceWorkspaceSlugMainRouteRouteWithChildren
   '/user-settings/$': typeof AppUserSettingsSplatRoute
+  '/workspace/join': typeof AppWorkspaceJoinRoute
   '/workspace/new': typeof AppWorkspaceNewRoute
-  '/invite/$inviteId': typeof AuthInviteInviteIdRoute
   '/workspace/$workspaceSlug/project/$projectId': typeof AppWorkspaceWorkspaceSlugProjectProjectIdRouteRouteWithChildren
   '/workspace/$workspaceSlug/members': typeof AppWorkspaceWorkspaceSlugMainMembersRoute
   '/workspace/$workspaceSlug/projects': typeof AppWorkspaceWorkspaceSlugMainProjectsRoute
@@ -313,8 +313,8 @@ export interface FileRoutesByTo {
   '/': typeof MarketingIndexRoute
   '/workspace/$workspaceSlug': typeof AppWorkspaceWorkspaceSlugMainIndexRoute
   '/user-settings/$': typeof AppUserSettingsSplatRoute
+  '/workspace/join': typeof AppWorkspaceJoinRoute
   '/workspace/new': typeof AppWorkspaceNewRoute
-  '/invite/$inviteId': typeof AuthInviteInviteIdRoute
   '/workspace/$workspaceSlug/members': typeof AppWorkspaceWorkspaceSlugMainMembersRoute
   '/workspace/$workspaceSlug/projects': typeof AppWorkspaceWorkspaceSlugMainProjectsRoute
   '/workspace/$workspaceSlug/settings': typeof AppWorkspaceWorkspaceSlugMainSettingsRoute
@@ -346,8 +346,8 @@ export interface FileRoutesById {
   '/_marketing/': typeof MarketingIndexRoute
   '/_app/workspace/$workspaceSlug': typeof AppWorkspaceWorkspaceSlugRouteRouteWithChildren
   '/_app/user-settings/$': typeof AppUserSettingsSplatRoute
+  '/_app/workspace/join': typeof AppWorkspaceJoinRoute
   '/_app/workspace/new': typeof AppWorkspaceNewRoute
-  '/_auth/invite/$inviteId': typeof AuthInviteInviteIdRoute
   '/_app/workspace/$workspaceSlug/_main': typeof AppWorkspaceWorkspaceSlugMainRouteRouteWithChildren
   '/_app/workspace/$workspaceSlug/project/$projectId': typeof AppWorkspaceWorkspaceSlugProjectProjectIdRouteRouteWithChildren
   '/_app/workspace/$workspaceSlug/_main/members': typeof AppWorkspaceWorkspaceSlugMainMembersRoute
@@ -385,8 +385,8 @@ export interface FileRouteTypes {
     | '/'
     | '/workspace/$workspaceSlug'
     | '/user-settings/$'
+    | '/workspace/join'
     | '/workspace/new'
-    | '/invite/$inviteId'
     | '/workspace/$workspaceSlug/project/$projectId'
     | '/workspace/$workspaceSlug/members'
     | '/workspace/$workspaceSlug/projects'
@@ -421,8 +421,8 @@ export interface FileRouteTypes {
     | '/'
     | '/workspace/$workspaceSlug'
     | '/user-settings/$'
+    | '/workspace/join'
     | '/workspace/new'
-    | '/invite/$inviteId'
     | '/workspace/$workspaceSlug/members'
     | '/workspace/$workspaceSlug/projects'
     | '/workspace/$workspaceSlug/settings'
@@ -453,8 +453,8 @@ export interface FileRouteTypes {
     | '/_marketing/'
     | '/_app/workspace/$workspaceSlug'
     | '/_app/user-settings/$'
+    | '/_app/workspace/join'
     | '/_app/workspace/new'
-    | '/_auth/invite/$inviteId'
     | '/_app/workspace/$workspaceSlug/_main'
     | '/_app/workspace/$workspaceSlug/project/$projectId'
     | '/_app/workspace/$workspaceSlug/_main/members'
@@ -566,18 +566,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppOnboardingRouteImport
       parentRoute: typeof AppRouteRoute
     }
-    '/_auth/invite/$inviteId': {
-      id: '/_auth/invite/$inviteId'
-      path: '/invite/$inviteId'
-      fullPath: '/invite/$inviteId'
-      preLoaderRoute: typeof AuthInviteInviteIdRouteImport
-      parentRoute: typeof AuthRouteRoute
-    }
     '/_app/workspace/new': {
       id: '/_app/workspace/new'
       path: '/workspace/new'
       fullPath: '/workspace/new'
       preLoaderRoute: typeof AppWorkspaceNewRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/_app/workspace/join': {
+      id: '/_app/workspace/join'
+      path: '/workspace/join'
+      fullPath: '/workspace/join'
+      preLoaderRoute: typeof AppWorkspaceJoinRouteImport
       parentRoute: typeof AppRouteRoute
     }
     '/_app/user-settings/$': {
@@ -939,6 +939,7 @@ interface AppRouteRouteChildren {
   AppOnboardingRoute: typeof AppOnboardingRoute
   AppWorkspaceWorkspaceSlugRouteRoute: typeof AppWorkspaceWorkspaceSlugRouteRouteWithChildren
   AppUserSettingsSplatRoute: typeof AppUserSettingsSplatRoute
+  AppWorkspaceJoinRoute: typeof AppWorkspaceJoinRoute
   AppWorkspaceNewRoute: typeof AppWorkspaceNewRoute
 }
 
@@ -947,6 +948,7 @@ const AppRouteRouteChildren: AppRouteRouteChildren = {
   AppWorkspaceWorkspaceSlugRouteRoute:
     AppWorkspaceWorkspaceSlugRouteRouteWithChildren,
   AppUserSettingsSplatRoute: AppUserSettingsSplatRoute,
+  AppWorkspaceJoinRoute: AppWorkspaceJoinRoute,
   AppWorkspaceNewRoute: AppWorkspaceNewRoute,
 }
 
@@ -957,13 +959,11 @@ const AppRouteRouteWithChildren = AppRouteRoute._addFileChildren(
 interface AuthRouteRouteChildren {
   AuthSignInRoute: typeof AuthSignInRoute
   AuthSignUpRoute: typeof AuthSignUpRoute
-  AuthInviteInviteIdRoute: typeof AuthInviteInviteIdRoute
 }
 
 const AuthRouteRouteChildren: AuthRouteRouteChildren = {
   AuthSignInRoute: AuthSignInRoute,
   AuthSignUpRoute: AuthSignUpRoute,
-  AuthInviteInviteIdRoute: AuthInviteInviteIdRoute,
 }
 
 const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
