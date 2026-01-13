@@ -1,4 +1,4 @@
-import type { WorkspaceFormApi } from '../../model/schema'
+import type { WorkspaceFormApi } from '../model'
 import { Label } from '@/shared/ui/primitives/label'
 import { RadioGroup, RadioGroupItem } from '@/shared/ui/primitives/radio-group'
 

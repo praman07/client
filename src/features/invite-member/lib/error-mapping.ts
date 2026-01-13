@@ -4,7 +4,6 @@ export function mapInviteMemberError(error: unknown): string {
   if (error instanceof ClientError) {
     const gqlError = error.response.errors?.[0]
     const code = gqlError?.extensions.code
-    const message = gqlError?.message
 
     switch (code) {
       case 'INVITE_LIMIT_EXCEEDED':

@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { useOnboardingOrchestrator } from '@/features/onboarding/api/use-onboarding-status'
+import { useOnboardingOrchestrator } from '@/features/onboarding/hooks'
 import { OnboardingWizard } from '@/widgets/onboarding/onboarding-wizard'
 import { RouteError } from '@/shared/ui/error/route-error'
 

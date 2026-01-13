@@ -1,5 +1,5 @@
-import { createWorkspaceSchema } from '../../model/schema'
-import type { WorkspaceFormApi } from '../../model/schema'
+import { createWorkspaceSchema } from '../model'
+import type { WorkspaceFormApi } from '../model'
 import { Input } from '@/shared/ui/primitives/input'
 import { Label } from '@/shared/ui/primitives/label'
 

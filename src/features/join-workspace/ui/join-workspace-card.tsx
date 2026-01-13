@@ -1,6 +1,9 @@
 import { Loader2 } from 'lucide-react'
 
-import { useAcceptWorkspaceInviteMutation } from '../api/mutations'
+import { useNavigate } from '@tanstack/react-router'
+import { toast } from 'sonner'
+import { useAcceptInvite } from '../hooks'
+import { mapAcceptInviteError } from '../lib'
 import { Button } from '@/shared/ui/primitives/button'
 import {
   Card,
@@ -30,11 +33,34 @@ export function JoinWorkspaceCard({
   workspaceLogoUrl,
   inviterName,
 }: Props) {
+  const { mutate, isPending } = useAcceptInvite()
   const { user } = useUser()
-  const { mutate, isPending } = useAcceptWorkspaceInviteMutation()
+  const navigate = useNavigate()
 
   const handleJoin = () => {
-    mutate(token)
+    mutate(token, {
+      onSuccess: (data) => {
+        if (data.acceptWorkspaceInvite.success) {
+          toast.success(data.acceptWorkspaceInvite.message)
+          navigate({
+            to: '/workspace/$workspaceSlug',
+            params: { workspaceSlug: data.acceptWorkspaceInvite.workspaceSlug },
+          })
+        }
+      },
+      onError: (error) => {
+        const message = mapAcceptInviteError(error)
+        
+        // Handle redirect for specific error cases
+        if (message === 'You are already a member of this workspace') {
+          toast.error(message)
+          navigate({ to: '/' })
+          return
+        }
+
+        toast.error(message)
+      },
+    })
   }
 
   return (

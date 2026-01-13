@@ -1,5 +1,5 @@
 import { Plus, Trash2 } from 'lucide-react'
-import type { InviteMemberFormApi } from '../api/schema'
+import type { InviteMemberFormApi } from '../model'
 import { Button } from '@/shared/ui/primitives/button'
 import { Input } from '@/shared/ui/primitives/input'
 import { Label } from '@/shared/ui/primitives/label'

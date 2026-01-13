@@ -1,27 +1,8 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useAuth } from '@clerk/clerk-react'
-import { gql } from '@/gql'
 import { createGqlClient } from '@/shared/api/graphql-client'
 import { workspaceKeys } from '@/entities/workspace/api/query-keys'
-
-const CREATE_WORKSPACE = gql(`
-  mutation CreateWorkspace($slug: String!, $name: String!) {
-    createWorkspace(slug: $slug, name: $name) {
-      id
-      slug
-      name
-    }
-  }
-`)
-
-const CHECK_SLUG_AVAILABILITY = gql(`
-  mutation CheckSlugAvailability($slug: String!) {
-    checkSlugAvailability(slug: $slug) {
-      available
-      message
-    }
-  }
-`)
+import { CREATE_WORKSPACE } from '../api'
 
 export function useCreateWorkspace() {
   const { getToken } = useAuth()
@@ -35,18 +16,6 @@ export function useCreateWorkspace() {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: workspaceKeys.my() })
-    },
-  })
-}
-
-export function useCheckSlugAvailability() {
-  const { getToken } = useAuth()
-
-  return useMutation({
-    mutationFn: async (slug: string) => {
-      const token = await getToken()
-      const client = createGqlClient(token)
-      return client.request(CHECK_SLUG_AVAILABILITY, { slug })
     },
   })
 }

@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { createGqlClient } from '@/shared/api/graphql-client'
 import { useAuth } from '@/shared/auth'
-import { GET_WORKSPACE_INVITE_INFO } from '@/features/join-workspace/api/queries'
+import { GET_WORKSPACE_INVITE_INFO } from '@/features/join-workspace/api'
 import { joinWorkspaceKeys } from '@/features/join-workspace/api/query-keys'
 import { Button } from '@/shared/ui/primitives/button'
 import { JoinWorkspaceCard } from '@/features/join-workspace/ui/join-workspace-card'
@@ -69,7 +69,7 @@ export function JoinWorkspaceFlow({ token }: JoinWorkspaceFlowProps) {
       token={token}
       workspaceName={data.getWorkspaceInviteInfo.workspaceName}
       workspaceLogoUrl={data.getWorkspaceInviteInfo.workspaceLogoUrl}
-      inviterName={data.getWorkspaceInviteInfo.inviterName}
+      inviterName={data.getWorkspaceInviteInfo.inviterName ?? 'Someone'}
     />
   )
 }

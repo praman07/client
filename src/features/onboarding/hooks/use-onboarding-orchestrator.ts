@@ -4,10 +4,10 @@ import { useNavigate } from '@tanstack/react-router'
 import { deriveOnboardingStep } from '../lib/onboarding-machine'
 import { mapOnboardingError } from '../lib/error-mapping'
 import {
-  useCreateOnboardingWorkspaceMutation,
-  useSyncUserMutation,
-} from './mutations'
-import { useOnboardingStatusQuery } from './queries'
+  useCreateOnboardingWorkspace,
+  useSyncUser,
+  useOnboardingStatus,
+} from './index'
 import { generateIdempotencyKey } from '@/shared/lib/idempotency'
 
 export function useOnboardingOrchestrator() {
@@ -19,10 +19,9 @@ export function useOnboardingOrchestrator() {
   const [internalError, setInternalError] = useState<unknown>(null)
 
   // 1. Data Layer
-  const { data, isLoading, error: queryError } = useOnboardingStatusQuery()
-  const { mutateAsync: syncUser } = useSyncUserMutation()
-  const { mutateAsync: createWorkspace } =
-    useCreateOnboardingWorkspaceMutation()
+  const { data, isLoading, error: queryError } = useOnboardingStatus()
+  const { mutateAsync: syncUser } = useSyncUser()
+  const { mutateAsync: createWorkspace } = useCreateOnboardingWorkspace()
 
   // 2. Logic Layer (Derived State)
   const status = data?.onboardingStatus

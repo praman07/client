@@ -1,24 +1,11 @@
 import { useQuery } from '@tanstack/react-query'
-import { useAuth, useClerk } from '@clerk/clerk-react'
-import { onboardingKeys } from './query-keys'
+import { useAuth } from '@/shared/auth'
 import { createGqlClient } from '@/shared/api/graphql-client'
-import { gql } from '@/gql'
+import { onboardingKeys, ONBOARDING_STATUS_QUERY } from '../api'
+import { useUser } from '@clerk/clerk-react'
 
-// Inline Query
-const ONBOARDING_STATUS_QUERY = gql(`
-  query OnboardingStatus {
-    onboardingStatus {
-      hasUser
-      hasWorkspace
-      hasProject
-      workspaceSlug
-    }
-  }
-`)
-
-export const useOnboardingStatusQuery = () => {
-  const { user } = useClerk()
-  // We need the token. useClerk doesn't give it directly in a convenient way for queries compared to useAuth
+export function useOnboardingStatus() {
+  const { user } = useUser()
   const { getToken } = useAuth()
 
   return useQuery({
