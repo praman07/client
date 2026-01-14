@@ -1,6 +1,6 @@
 import { AlertCircle, RefreshCw } from 'lucide-react'
 import type { FallbackProps } from 'react-error-boundary'
-import { Button } from '@/shared/ui/primitives/button'
+import { Button } from '@/shared/ui/primitives'
 
 export function WidgetError({ error, resetErrorBoundary }: FallbackProps) {
   return (

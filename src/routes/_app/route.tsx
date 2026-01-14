@@ -1,7 +1,8 @@
 import { Outlet, createFileRoute } from '@tanstack/react-router'
 import { RedirectToSignIn, SignedIn, SignedOut } from '@clerk/clerk-react'
-import { RouteError } from '@/shared/ui/error/route-error'
-import { useSyncCurrentUser } from '@/entities/session/lib/use-session-sync'
+import { RouteError } from '@/shared/ui'
+import { useSyncCurrentUser } from '@/entities/user/hooks'
+import { useAuthSync } from '@/entities/session/hooks'
 import { ReduxProvider } from '@/app/providers/redux/provider'
 
 export const Route = createFileRoute('/_app')({
@@ -18,6 +19,7 @@ function AppLayoutWrapper() {
 }
 
 function AppLayout() {
+  useAuthSync()
   useSyncCurrentUser()
 
   return (

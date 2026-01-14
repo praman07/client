@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "codegen": "graphql-codegen",
-    "dev": "graphql-codegen && vite dev --port 3000",
+    "dev": "vite dev --port 3000",
     "build": "vite build",
     "preview": "vite preview",
     "test": "vitest run",
@@ -74,6 +74,7 @@
     "react-day-picker": "^9.13.0",
     "react-dom": "^19.2.0",
     "react-error-boundary": "^6.0.1",
+    "react-hook-form": "^7.71.1",
     "react-redux": "^9.2.0",
     "react-resizable-panels": "^4.2.0",
     "recharts": "2.15.4",

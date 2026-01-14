@@ -1,6 +1,6 @@
 import { UserPlus } from 'lucide-react'
 import { InviteMemberDialog } from './invite-member-dialog'
-import { Button } from '@/shared/ui/primitives/button'
+import { Button } from '@/shared/ui'
 
 type InviteButtonProps = React.ComponentProps<typeof Button>
 

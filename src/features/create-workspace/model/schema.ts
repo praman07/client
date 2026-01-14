@@ -1,7 +1,7 @@
 import { z } from 'zod'
 
 // Helper type to manage strict TanStack Form generics
-import type { ReactFormApi } from '@tanstack/react-form'
+
 import { RESERVED_SLUGS } from '@/shared/config/limits'
 
 export const createWorkspaceSchema = z.object({
@@ -23,19 +23,3 @@ export const createWorkspaceSchema = z.object({
     .transform((s) => s.toLowerCase()),
   teamSize: z.enum(['just_me', '1-10', '10-50', '50+']).default('just_me'),
 })
-
-export type CreateWorkspaceInput = z.infer<typeof createWorkspaceSchema>
-export type WorkspaceFormApi = ReactFormApi<
-  CreateWorkspaceInput,
-  any,
-  any,
-  any,
-  any,
-  any,
-  any,
-  any,
-  any,
-  any,
-  any,
-  any
-> & { state: { isSubmitting: boolean; values: CreateWorkspaceInput } }

@@ -1,21 +1,15 @@
-import { Outlet, createFileRoute } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router'
 import { z } from 'zod'
-import { RouteError } from '@/shared/ui/error/route-error'
-import { DashboardHeader } from '@/widgets/navigation/dashboard-header'
-import { WorkspaceSwitcher } from '@/widgets/navigation/workspace-switcher'
-
-import { useSyncCurrentWorkspace } from '@/entities/session/lib/use-session-sync'
-import {
-  WorkspaceErrorState,
-  WorkspaceLoadingState,
-} from '@/widgets/workspace/workspace-layout-states'
+import { RouteError } from '@/shared/ui'
+import { WorkspaceLayout } from '@/pages/workspace'
+import { WorkspaceSwitcher } from '@/widgets/navigation'
 
 const workspaceSearchSchema = z.object({
   action: z.enum(['create-project']).optional(),
 })
 
 export const Route = createFileRoute('/_app/workspace/$workspaceSlug')({
-  component: WorkspaceLayout,
+  component: WorkspaceLayoutRouteComponent,
   errorComponent: RouteError,
   validateSearch: (search) => workspaceSearchSchema.parse(search),
   staticData: {
@@ -23,27 +17,7 @@ export const Route = createFileRoute('/_app/workspace/$workspaceSlug')({
   },
 })
 
-function WorkspaceLayout() {
+function WorkspaceLayoutRouteComponent() {
   const { workspaceSlug } = Route.useParams()
-  const { data, isLoading, error } = useSyncCurrentWorkspace(workspaceSlug)
-
-  if (isLoading) {
-    return <WorkspaceLoadingState />
-  }
-
-  if (error || !data?.workspaceBySlug) {
-    return <WorkspaceErrorState />
-  }
-
-  return (
-    <div className="min-h-screen bg-background flex flex-col">
-      {/* TIER 1: GLOBAL HEADER */}
-      <DashboardHeader />
-
-      {/* CONTENT AREA */}
-      <main className="flex-1 flex flex-col">
-        <Outlet />
-      </main>
-    </div>
-  )
+  return <WorkspaceLayout workspaceSlug={workspaceSlug} />
 }

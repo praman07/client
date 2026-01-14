@@ -6,38 +6,30 @@ type Query {
   workspaceBySlug(slug: String!): Workspace!
   getWorkspaceInviteInfo(token: String!): WorkspaceInviteInfo!
   workspaceMembers(workspaceId: ID!): [WorkspaceMember!]!
+
+  """Get paginated notifications for the current user."""
+  notifications(limit: Int, cursor: String, isRead: Boolean): NotificationConnection!
+
+  """Get count of unread notifications."""
+  unreadNotificationCount: Int!
 }
 
 type Mutation {
   _health: String
-  syncUser(
-    clerkId: String!
-    email: String!
-    fullName: String
-    avatarUrl: String
-  ): User!
+  syncUser(clerkId: String!, email: String!, fullName: String, avatarUrl: String, emailVerified: Boolean): User!
   createOnboardingWorkspace: Workspace!
   checkSlugAvailability(slug: String!): AvailabilityResponse!
   createWorkspace(slug: String!, name: String!): Workspace!
   inviteToWorkspace(input: InviteToWorkspaceInput!): InviteResponse!
   acceptWorkspaceInvite(input: AcceptInviteInput!): JoinResponse!
-  updateWorkspaceMemberRole(
-    workspaceId: ID!
-    memberId: ID!
-    role: String!
-  ): WorkspaceMember!
+  updateWorkspaceMemberRole(workspaceId: ID!, memberId: ID!, role: String!): WorkspaceMember!
   removeWorkspaceMember(workspaceId: ID!, memberId: ID!): InviteResponse!
-}
 
-type AvailabilityResponse {
-  available: Boolean!
-  message: String
-  reservationId: String
-}
+  """Mark specific notifications as read."""
+  markNotificationRead(ids: [ID!]!): Boolean!
 
-input CreateWorkspaceInput {
-  name: String!
-  slug: String!
+  """Mark all notifications as read."""
+  markAllNotificationsRead: Boolean!
 }
 
 type User {
@@ -67,15 +59,10 @@ type OnboardingStatus {
   workspaceSlug: String
 }
 
-input InviteToWorkspaceInput {
-  workspaceId: String!
-  emails: [String!]!
-}
-
-input AcceptInviteInput {
-  token: String!
-  userId: String!
-  userEmail: String!
+type AvailabilityResponse {
+  available: Boolean!
+  message: String
+  reservationId: String
 }
 
 type InviteResponse {
@@ -84,16 +71,16 @@ type InviteResponse {
   invitedCount: Int!
 }
 
+type WorkspaceInviteInfo {
+  workspaceName: String!
+  workspaceLogoUrl: String
+  inviterName: String
+}
+
 type JoinResponse {
   success: Boolean!
   message: String!
   workspaceSlug: String!
-}
-
-type WorkspaceInviteInfo {
-  workspaceName: String!
-  workspaceLogoUrl: String
-  inviterName: String!
 }
 
 type WorkspaceMember {
@@ -101,4 +88,75 @@ type WorkspaceMember {
   role: String!
   joinedAt: String!
   user: User!
+}
+
+input InviteToWorkspaceInput {
+  workspaceId: ID!
+  emails: [String!]!
+}
+
+input AcceptInviteInput {
+  token: String!
+  userId: String
+  userEmail: String
+}
+
+scalar DateTime
+
+scalar JSON
+
+type Notification {
+  id: ID!
+  recipientUserId: String!
+  actorId: String
+  entityType: String!
+  entityId: String!
+  category: String!
+  isRead: Boolean!
+  isArchived: Boolean!
+  createdAt: DateTime!
+  data: JSON
+  actor: User
+  workspace: Workspace
+  project: Project
+  page: Page
+  task: Task
+  chatMessage: ChatMessage
+}
+
+type NotificationEdge {
+  cursor: String!
+  node: Notification!
+}
+
+type NotificationConnection {
+  edges: [NotificationEdge!]!
+  pageInfo: PageInfo!
+}
+
+type PageInfo {
+  hasNextPage: Boolean!
+  endCursor: String
+}
+
+type Project {
+  id: ID!
+  name: String!
+  key: String!
+}
+
+type Task {
+  id: ID!
+  title: String!
+  statusName: String!
+}
+
+type Page {
+  id: ID!
+  title: String!
+}
+
+type ChatMessage {
+  id: ID!
+  content: String!
 }

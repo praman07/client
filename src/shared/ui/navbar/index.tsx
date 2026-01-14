@@ -1,20 +1,18 @@
 import * as React from 'react'
 import { Link } from '@tanstack/react-router'
 import { Menu } from 'lucide-react'
-import { Button } from '@/shared/ui/primitives/button'
 import {
+  Button,
   NavigationMenu,
   NavigationMenuItem,
   NavigationMenuList,
-  navigationMenuTriggerStyle,
-} from '@/shared/ui/primitives/navigation-menu'
-import {
   Sheet,
   SheetContent,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from '@/shared/ui/primitives/sheet'
+  navigationMenuTriggerStyle,
+} from '@/shared/ui'
 import { cn } from '@/shared/lib/utils'
 
 export interface NavbarProps extends React.HTMLAttributes<HTMLElement> {

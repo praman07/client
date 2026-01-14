@@ -1,58 +1,30 @@
 import { createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
-import type {
-  SessionUserFragment,
-  SessionWorkspaceFragment,
-} from '@/gql/graphql'
 
 interface SessionState {
-  currentUser: SessionUserFragment | null
-  currentWorkspace: SessionWorkspaceFragment | null
-  isLoading: boolean
+  token: string | null
+  isAuthenticated: boolean
 }
 
 const initialState: SessionState = {
-  currentUser: null,
-  currentWorkspace: null,
-  isLoading: true, // Default to loading until initial auth check clears
+  token: null,
+  isAuthenticated: false,
 }
 
 export const sessionSlice = createSlice({
   name: 'session',
   initialState,
   reducers: {
-    setSessionUser: (
-      state,
-      action: PayloadAction<SessionUserFragment | null>,
-    ) => {
-      state.currentUser = action.payload
-      // If user is cleared, workspace should likely be cleared too
-      if (!action.payload) {
-        state.currentWorkspace = null
-      }
-    },
-    setCurrentWorkspace: (
-      state,
-      action: PayloadAction<SessionWorkspaceFragment | null>,
-    ) => {
-      state.currentWorkspace = action.payload
-    },
-    setIsLoading: (state, action: PayloadAction<boolean>) => {
-      state.isLoading = action.payload
+    setSession: (state, action: PayloadAction<{ token: string }>) => {
+      state.token = action.payload.token
+      state.isAuthenticated = true
     },
     clearSession: (state) => {
-      state.currentUser = null
-      state.currentWorkspace = null
-      state.isLoading = false
+      state.token = null
+      state.isAuthenticated = false
     },
   },
 })
 
-export const {
-  setSessionUser,
-  setCurrentWorkspace,
-  setIsLoading,
-  clearSession,
-} = sessionSlice.actions
-
+export const { setSession, clearSession } = sessionSlice.actions
 export default sessionSlice.reducer

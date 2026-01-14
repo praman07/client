@@ -12,8 +12,9 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from '@/shared/ui/primitives/dialog'
-import { InputGroup, InputGroupAddon } from '@/shared/ui/primitives/input-group'
+  InputGroup,
+  InputGroupAddon,
+} from '@/shared/ui/primitives'
 
 function Command({
   className,

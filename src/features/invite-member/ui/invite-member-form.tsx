@@ -1,57 +1,27 @@
 import { useState } from 'react'
 import { useForm } from '@tanstack/react-form'
-import { useMutation } from '@tanstack/react-query'
+
 import { toast } from 'sonner'
 import { CheckCircle2, Loader2 } from 'lucide-react'
 
-import { INVITE_TO_WORKSPACE } from '../api/mutations'
-import { mapInviteMemberError } from '../lib/error-mapping'
-import { inviteMemberSchema } from '../api/schema'
+import { mapInviteMemberError } from '../lib'
+import { inviteMemberSchema } from '../model'
+import { useInviteMember } from '../hooks'
 import { EmailListField } from './email-list-field'
-import type { InviteMemberFormValues } from '../api/schema'
-import { createGqlClient } from '@/shared/api/graphql-client'
-import { useAuth } from '@/shared/auth'
-import { useAppSelector } from '@/shared/lib/redux'
-import { Button } from '@/shared/ui/primitives/button'
-import { selectCurrentWorkspace } from '@/entities/session/model/selectors'
+import type { InviteMemberFormValues } from '../model'
+import { useAppSelector } from '@/shared/lib/store/redux'
+import { Button } from '@/shared/ui'
+import { selectCurrentWorkspace } from '@/entities/workspace/model/selectors'
 
 interface Props {
   onClose: () => void
 }
 
 export function InviteMemberForm({ onClose }: Props) {
-  const { getToken } = useAuth()
   const [isSuccess, setIsSuccess] = useState(false)
   const currentWorkspace = useAppSelector(selectCurrentWorkspace)
 
-  const { mutate, isPending } = useMutation({
-    mutationFn: async (values: InviteMemberFormValues) => {
-      if (!currentWorkspace?.id) throw new Error('No workspace selected')
-      const token = await getToken()
-      const client = createGqlClient(token)
-
-      const emailList = values.emails.map((e) => e.email)
-
-      return client.request(INVITE_TO_WORKSPACE, {
-        input: {
-          workspaceId: currentWorkspace.id,
-          emails: emailList,
-        },
-      })
-    },
-    onSuccess: (data) => {
-      if (data.inviteToWorkspace.success) {
-        setIsSuccess(true)
-        toast.success(data.inviteToWorkspace.message)
-      } else {
-        toast.error('Failed to invite members')
-      }
-    },
-    onError: (error) => {
-      const message = mapInviteMemberError(error)
-      toast.error(message)
-    },
-  })
+  const { mutate, isPending } = useInviteMember()
 
   const form = useForm({
     defaultValues: {
@@ -61,7 +31,23 @@ export function InviteMemberForm({ onClose }: Props) {
       onChange: inviteMemberSchema,
     },
     onSubmit: ({ value }) => {
-      mutate(value)
+      mutate(
+        { emails: value.emails },
+        {
+          onSuccess: (data) => {
+            if (data.inviteToWorkspace.success) {
+              setIsSuccess(true)
+              toast.success(data.inviteToWorkspace.message)
+            } else {
+              toast.error('Failed to invite members')
+            }
+          },
+          onError: (error) => {
+            const message = mapInviteMemberError(error)
+            toast.error(message)
+          },
+        },
+      )
     },
   })
 
