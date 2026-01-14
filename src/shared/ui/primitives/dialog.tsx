@@ -67,7 +67,7 @@ function DialogContent({
               <Button
                 variant="ghost"
                 className="absolute top-4 right-4"
-                size="icon-sm"
+                size="sm"
               />
             }
           >
@@ -102,7 +102,7 @@ function DialogFooter({
     <div
       data-slot="dialog-footer"
       className={cn(
-        'gap-2 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end',
+        'gap-2 flex flex-col-reverse sm:flex-row sm:justify-end',
         className,
       )}
       {...props}

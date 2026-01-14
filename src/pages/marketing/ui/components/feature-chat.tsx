@@ -8,7 +8,14 @@ import {
   UserPlus,
 } from 'lucide-react'
 import { Link } from '@tanstack/react-router'
-import { Avatar, AvatarFallback, Button , Card, CardContent , Input  } from '@/shared/ui'
+import {
+  Avatar,
+  AvatarFallback,
+  Button,
+  Card,
+  CardContent,
+  Input,
+} from '@/shared/ui'
 
 export function MarketingFeatureChat() {
   return (

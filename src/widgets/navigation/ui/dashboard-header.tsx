@@ -3,8 +3,7 @@ import { UserButton } from '@clerk/clerk-react'
 import { Bell } from 'lucide-react'
 import { Fragment } from 'react/jsx-runtime'
 import type { RouteStaticData } from '../model'
-import { Avatar, AvatarFallback, AvatarImage, Button  } from '@/shared/ui'
-
+import { Avatar, AvatarFallback, AvatarImage, Button } from '@/shared/ui'
 
 // Define the known shape of staticData for breadcrumbs
 

@@ -7,7 +7,12 @@ import {
   AvatarImage,
   Badge,
   Skeleton,
-  Table, TableBody, TableCell, TableHead , TableHeader , TableRow 
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
 } from '@/shared/ui'
 
 interface MemberListProps {

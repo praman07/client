@@ -1,18 +1,24 @@
 import { Link, useNavigate } from '@tanstack/react-router'
 import { ChevronsUpDown, Plus } from 'lucide-react'
 import { ErrorBoundary } from 'react-error-boundary'
-import { useWorkspaceList } from '../hooks'
-import { selectCurrentWorkspace } from '@/entities/session/model/selectors'
-import { useAppSelector } from '@/shared/lib/redux'
+import { selectCurrentWorkspace, selectMyWorkspaces  } from '@/entities/workspace/model/selectors'
+import { useAppSelector } from '@/shared/lib/store/redux'
 import { cn } from '@/shared/lib/utils'
-import { Avatar, AvatarFallback, AvatarImage, DropdownMenu , DropdownMenuContent ,
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+  DropdownMenu,
+  DropdownMenuContent,
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
   WidgetError,
-  buttonVariants } from '@/shared/ui'
+  buttonVariants,
+} from '@/shared/ui'
+import { useMyWorkspaces } from '@/entities/workspace'
 
 export function WorkspaceSwitcher() {
   return (
@@ -25,7 +31,10 @@ export function WorkspaceSwitcher() {
 function WorkspaceSwitcherContent() {
   const navigate = useNavigate()
   const currentWorkspace = useAppSelector(selectCurrentWorkspace)
-  const { data } = useWorkspaceList()
+  const myWorkspaces = useAppSelector(selectMyWorkspaces)
+
+  // Ensure query runs to sync data
+  useMyWorkspaces()
 
   const workspaceSlug = currentWorkspace?.slug
 
@@ -65,24 +74,23 @@ function WorkspaceSwitcherContent() {
           <DropdownMenuGroup>
             <DropdownMenuLabel>Workspaces</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            {data?.myWorkspaces &&
-              data.myWorkspaces.map((workspace) => (
-                <DropdownMenuItem key={workspace.id}>
-                  <Link
-                    to="/workspace/$workspaceSlug"
-                    params={{ workspaceSlug: workspace.slug }}
-                    className="flex items-center gap-2 cursor-pointer w-full"
-                  >
-                    <Avatar className="h-4 w-4 rounded-md">
-                      <AvatarImage src={workspace.logoUrl || undefined} />
-                      <AvatarFallback className="rounded-md bg-muted text-[10px]">
-                        {workspace.name[0]}
-                      </AvatarFallback>
-                    </Avatar>
-                    <span>{workspace.name}</span>
-                  </Link>
-                </DropdownMenuItem>
-              ))}
+            {myWorkspaces.map((workspace) => (
+              <DropdownMenuItem key={workspace.id}>
+                <Link
+                  to="/workspace/$workspaceSlug"
+                  params={{ workspaceSlug: workspace.slug }}
+                  className="flex items-center gap-2 cursor-pointer w-full"
+                >
+                  <Avatar className="h-4 w-4 rounded-md">
+                    <AvatarImage src={workspace.logoUrl || undefined} />
+                    <AvatarFallback className="rounded-md bg-muted text-[10px]">
+                      {workspace.name[0]}
+                    </AvatarFallback>
+                  </Avatar>
+                  <span>{workspace.name}</span>
+                </Link>
+              </DropdownMenuItem>
+            ))}
           </DropdownMenuGroup>
           <DropdownMenuSeparator />
           <DropdownMenuGroup>

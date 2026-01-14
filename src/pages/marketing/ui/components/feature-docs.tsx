@@ -1,6 +1,6 @@
 import { ArrowRight, Check, FileText } from 'lucide-react'
 import { Link } from '@tanstack/react-router'
-import { Button, Card, CardContent  } from '@/shared/ui'
+import { Button, Card, CardContent } from '@/shared/ui'
 
 export function MarketingFeatureDocs() {
   return (

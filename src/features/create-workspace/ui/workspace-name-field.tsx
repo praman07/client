@@ -1,6 +1,6 @@
 import { createWorkspaceSchema } from '../model'
 import type { WorkspaceFormApi } from '../model'
-import { Input, Label  } from '@/shared/ui'
+import { Input, Label } from '@/shared/ui'
 
 interface Props {
   form: WorkspaceFormApi

@@ -1,6 +1,6 @@
 import { Outlet } from '@tanstack/react-router'
 import { WorkspaceErrorState, WorkspaceLoadingState } from './layout-states'
-import { useSyncCurrentWorkspace } from '@/entities/session/lib/use-session-sync'
+import { useSyncWorkspaceContext } from '@/entities/workspace/hooks'
 import { DashboardHeader } from '@/widgets/navigation'
 
 interface WorkspaceLayoutProps {
@@ -8,7 +8,7 @@ interface WorkspaceLayoutProps {
 }
 
 export function WorkspaceLayout({ workspaceSlug }: WorkspaceLayoutProps) {
-  const { data, isLoading, error } = useSyncCurrentWorkspace(workspaceSlug)
+  const { data, isLoading, error } = useSyncWorkspaceContext(workspaceSlug)
 
   if (isLoading) {
     return <WorkspaceLoadingState />

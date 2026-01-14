@@ -1,5 +1,5 @@
 import { Outlet, createFileRoute } from '@tanstack/react-router'
-import { NavTabs, ProjectSwitcher  } from '@/widgets/navigation'
+import { NavTabs, ProjectSwitcher } from '@/widgets/navigation'
 import { PROJECT_TABS } from '@/shared/config/navigation'
 
 export const Route = createFileRoute(

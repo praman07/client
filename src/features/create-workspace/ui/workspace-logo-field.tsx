@@ -1,5 +1,5 @@
 import { Upload } from 'lucide-react'
-import { Button, Label  } from '@/shared/ui'
+import { Button, Label } from '@/shared/ui'
 
 export function WorkspaceLogoField() {
   return (

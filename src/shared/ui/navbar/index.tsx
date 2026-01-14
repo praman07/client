@@ -1,7 +1,8 @@
 import * as React from 'react'
 import { Link } from '@tanstack/react-router'
 import { Menu } from 'lucide-react'
-import { Button,
+import {
+  Button,
   NavigationMenu,
   NavigationMenuItem,
   NavigationMenuList,
@@ -10,7 +11,8 @@ import { Button,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-  navigationMenuTriggerStyle } from '@/shared/ui'
+  navigationMenuTriggerStyle,
+} from '@/shared/ui'
 import { cn } from '@/shared/lib/utils'
 
 export interface NavbarProps extends React.HTMLAttributes<HTMLElement> {

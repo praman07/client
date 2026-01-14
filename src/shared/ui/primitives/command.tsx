@@ -11,7 +11,9 @@ import {
   DialogContent,
   DialogDescription,
   DialogHeader,
-  DialogTitle, InputGroup, InputGroupAddon 
+  DialogTitle,
+  InputGroup,
+  InputGroupAddon,
 } from '@/shared/ui/primitives'
 
 function Command({

@@ -5,7 +5,8 @@ import {
   CardContent,
   CardDescription,
   CardHeader,
-  CardTitle, Progress 
+  CardTitle,
+  Progress,
 } from '@/shared/ui'
 
 interface OnboardingWizardProps {

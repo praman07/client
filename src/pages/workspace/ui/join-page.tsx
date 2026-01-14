@@ -1,7 +1,7 @@
 import { Link } from '@tanstack/react-router'
 import { Link2Off } from 'lucide-react'
 import { JoinWorkspaceFlow } from '@/features/join-workspace'
-import { Button, ErrorStateCard  } from '@/shared/ui'
+import { Button, ErrorStateCard } from '@/shared/ui'
 
 interface JoinPageProps {
   token?: string

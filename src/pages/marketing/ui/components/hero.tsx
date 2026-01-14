@@ -1,5 +1,16 @@
 import { ArrowRight, FileText, MessageSquare } from 'lucide-react'
-import { Avatar, AvatarFallback , AvatarImage , Badge, Button, Card, CardContent , CardHeader, CardTitle, Input  } from '@/shared/ui'
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+  Badge,
+  Button,
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  Input,
+} from '@/shared/ui'
 
 export function MarketingHero() {
   return (

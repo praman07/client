@@ -270,14 +270,23 @@ export type SessionUserFragment = {
   avatarUrl?: string | null
 } & { ' $fragmentName'?: 'SessionUserFragment' }
 
-export type SessionWorkspaceFragment = {
-  __typename?: 'Workspace'
-  id: string
-  slug: string
-  name: string
-  logoUrl?: string | null
-  domainWhitelist?: string | null
-} & { ' $fragmentName'?: 'SessionWorkspaceFragment' }
+export type SessionSyncUserMutationVariables = Exact<{
+  clerkId: Scalars['String']['input']
+  email: Scalars['String']['input']
+  fullName?: InputMaybe<Scalars['String']['input']>
+  avatarUrl?: InputMaybe<Scalars['String']['input']>
+}>
+
+export type SessionSyncUserMutation = {
+  __typename?: 'Mutation'
+  syncUser: {
+    __typename?: 'User'
+    id: string
+    email: string
+    fullName?: string | null
+    avatarUrl?: string | null
+  }
+}
 
 export type GetMeQueryVariables = Exact<{ [key: string]: never }>
 
@@ -290,6 +299,35 @@ export type GetMeQuery = {
     | null
 }
 
+export type UserFragmentFragment = {
+  __typename?: 'User'
+  id: string
+  email: string
+  fullName?: string | null
+  avatarUrl?: string | null
+} & { ' $fragmentName'?: 'UserFragmentFragment' }
+
+export type WorkspaceFragmentFragment = {
+  __typename?: 'Workspace'
+  id: string
+  name: string
+  slug: string
+  logoUrl?: string | null
+} & { ' $fragmentName'?: 'WorkspaceFragmentFragment' }
+
+export type GetMyWorkspacesQueryVariables = Exact<{ [key: string]: never }>
+
+export type GetMyWorkspacesQuery = {
+  __typename?: 'Query'
+  myWorkspaces: Array<
+    { __typename?: 'Workspace' } & {
+      ' $fragmentRefs'?: {
+        WorkspaceFragmentFragment: WorkspaceFragmentFragment
+      }
+    }
+  >
+}
+
 export type GetWorkspaceBySlugQueryVariables = Exact<{
   slug: Scalars['String']['input']
 }>
@@ -297,7 +335,7 @@ export type GetWorkspaceBySlugQueryVariables = Exact<{
 export type GetWorkspaceBySlugQuery = {
   __typename?: 'Query'
   workspaceBySlug: { __typename?: 'Workspace' } & {
-    ' $fragmentRefs'?: { SessionWorkspaceFragment: SessionWorkspaceFragment }
+    ' $fragmentRefs'?: { WorkspaceFragmentFragment: WorkspaceFragmentFragment }
   }
 }
 
@@ -459,19 +497,6 @@ export type RemoveWorkspaceMemberMutation = {
   }
 }
 
-export type GetMyWorkspacesQueryVariables = Exact<{ [key: string]: never }>
-
-export type GetMyWorkspacesQuery = {
-  __typename?: 'Query'
-  myWorkspaces: Array<{
-    __typename?: 'Workspace'
-    id: string
-    slug: string
-    name: string
-    logoUrl?: string | null
-  }>
-}
-
 export const SessionUserFragmentDoc = {
   kind: 'Document',
   definitions: [
@@ -494,12 +519,34 @@ export const SessionUserFragmentDoc = {
     },
   ],
 } as unknown as DocumentNode<SessionUserFragment, unknown>
-export const SessionWorkspaceFragmentDoc = {
+export const UserFragmentFragmentDoc = {
   kind: 'Document',
   definitions: [
     {
       kind: 'FragmentDefinition',
-      name: { kind: 'Name', value: 'SessionWorkspace' },
+      name: { kind: 'Name', value: 'UserFragment' },
+      typeCondition: {
+        kind: 'NamedType',
+        name: { kind: 'Name', value: 'User' },
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'email' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'fullName' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'avatarUrl' } },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<UserFragmentFragment, unknown>
+export const WorkspaceFragmentFragmentDoc = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'WorkspaceFragment' },
       typeCondition: {
         kind: 'NamedType',
         name: { kind: 'Name', value: 'Workspace' },
@@ -508,15 +555,125 @@ export const SessionWorkspaceFragmentDoc = {
         kind: 'SelectionSet',
         selections: [
           { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-          { kind: 'Field', name: { kind: 'Name', value: 'slug' } },
           { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'slug' } },
           { kind: 'Field', name: { kind: 'Name', value: 'logoUrl' } },
-          { kind: 'Field', name: { kind: 'Name', value: 'domainWhitelist' } },
         ],
       },
     },
   ],
-} as unknown as DocumentNode<SessionWorkspaceFragment, unknown>
+} as unknown as DocumentNode<WorkspaceFragmentFragment, unknown>
+export const SessionSyncUserDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'mutation',
+      name: { kind: 'Name', value: 'SessionSyncUser' },
+      variableDefinitions: [
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'clerkId' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'String' },
+            },
+          },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'email' },
+          },
+          type: {
+            kind: 'NonNullType',
+            type: {
+              kind: 'NamedType',
+              name: { kind: 'Name', value: 'String' },
+            },
+          },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'fullName' },
+          },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } },
+        },
+        {
+          kind: 'VariableDefinition',
+          variable: {
+            kind: 'Variable',
+            name: { kind: 'Name', value: 'avatarUrl' },
+          },
+          type: { kind: 'NamedType', name: { kind: 'Name', value: 'String' } },
+        },
+      ],
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'syncUser' },
+            arguments: [
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'clerkId' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'clerkId' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'email' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'email' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'fullName' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'fullName' },
+                },
+              },
+              {
+                kind: 'Argument',
+                name: { kind: 'Name', value: 'avatarUrl' },
+                value: {
+                  kind: 'Variable',
+                  name: { kind: 'Name', value: 'avatarUrl' },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'email' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'fullName' } },
+                { kind: 'Field', name: { kind: 'Name', value: 'avatarUrl' } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  SessionSyncUserMutation,
+  SessionSyncUserMutationVariables
+>
 export const GetMeDocument = {
   kind: 'Document',
   definitions: [
@@ -562,6 +719,54 @@ export const GetMeDocument = {
     },
   ],
 } as unknown as DocumentNode<GetMeQuery, GetMeQueryVariables>
+export const GetMyWorkspacesDocument = {
+  kind: 'Document',
+  definitions: [
+    {
+      kind: 'OperationDefinition',
+      operation: 'query',
+      name: { kind: 'Name', value: 'GetMyWorkspaces' },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          {
+            kind: 'Field',
+            name: { kind: 'Name', value: 'myWorkspaces' },
+            selectionSet: {
+              kind: 'SelectionSet',
+              selections: [
+                {
+                  kind: 'FragmentSpread',
+                  name: { kind: 'Name', value: 'WorkspaceFragment' },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: 'FragmentDefinition',
+      name: { kind: 'Name', value: 'WorkspaceFragment' },
+      typeCondition: {
+        kind: 'NamedType',
+        name: { kind: 'Name', value: 'Workspace' },
+      },
+      selectionSet: {
+        kind: 'SelectionSet',
+        selections: [
+          { kind: 'Field', name: { kind: 'Name', value: 'id' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'slug' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'logoUrl' } },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  GetMyWorkspacesQuery,
+  GetMyWorkspacesQueryVariables
+>
 export const GetWorkspaceBySlugDocument = {
   kind: 'Document',
   definitions: [
@@ -603,7 +808,7 @@ export const GetWorkspaceBySlugDocument = {
               selections: [
                 {
                   kind: 'FragmentSpread',
-                  name: { kind: 'Name', value: 'SessionWorkspace' },
+                  name: { kind: 'Name', value: 'WorkspaceFragment' },
                 },
               ],
             },
@@ -613,7 +818,7 @@ export const GetWorkspaceBySlugDocument = {
     },
     {
       kind: 'FragmentDefinition',
-      name: { kind: 'Name', value: 'SessionWorkspace' },
+      name: { kind: 'Name', value: 'WorkspaceFragment' },
       typeCondition: {
         kind: 'NamedType',
         name: { kind: 'Name', value: 'Workspace' },
@@ -622,10 +827,9 @@ export const GetWorkspaceBySlugDocument = {
         kind: 'SelectionSet',
         selections: [
           { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-          { kind: 'Field', name: { kind: 'Name', value: 'slug' } },
           { kind: 'Field', name: { kind: 'Name', value: 'name' } },
+          { kind: 'Field', name: { kind: 'Name', value: 'slug' } },
           { kind: 'Field', name: { kind: 'Name', value: 'logoUrl' } },
-          { kind: 'Field', name: { kind: 'Name', value: 'domainWhitelist' } },
         ],
       },
     },
@@ -1341,35 +1545,4 @@ export const RemoveWorkspaceMemberDocument = {
 } as unknown as DocumentNode<
   RemoveWorkspaceMemberMutation,
   RemoveWorkspaceMemberMutationVariables
->
-export const GetMyWorkspacesDocument = {
-  kind: 'Document',
-  definitions: [
-    {
-      kind: 'OperationDefinition',
-      operation: 'query',
-      name: { kind: 'Name', value: 'GetMyWorkspaces' },
-      selectionSet: {
-        kind: 'SelectionSet',
-        selections: [
-          {
-            kind: 'Field',
-            name: { kind: 'Name', value: 'myWorkspaces' },
-            selectionSet: {
-              kind: 'SelectionSet',
-              selections: [
-                { kind: 'Field', name: { kind: 'Name', value: 'id' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'slug' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'name' } },
-                { kind: 'Field', name: { kind: 'Name', value: 'logoUrl' } },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<
-  GetMyWorkspacesQuery,
-  GetMyWorkspacesQueryVariables
 >

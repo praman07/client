@@ -6,7 +6,8 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuTrigger, buttonVariants 
+  DropdownMenuTrigger,
+  buttonVariants,
 } from '@/shared/ui'
 import { cn } from '@/shared/lib/utils'
 

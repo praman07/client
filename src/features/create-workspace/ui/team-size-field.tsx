@@ -1,5 +1,5 @@
 import type { WorkspaceFormApi } from '../model'
-import { Label, RadioGroup, RadioGroupItem  } from '@/shared/ui'
+import { Label, RadioGroup, RadioGroupItem } from '@/shared/ui'
 
 interface Props {
   form: WorkspaceFormApi

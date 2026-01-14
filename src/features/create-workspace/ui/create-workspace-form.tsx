@@ -8,7 +8,7 @@ import { TeamSizeField } from './team-size-field'
 import { WorkspaceLogoField } from './workspace-logo-field'
 import { WorkspaceNameField } from './workspace-name-field'
 import { WorkspaceSlugField } from './workspace-slug-field'
-import { Button, Separator , Spinner  } from '@/shared/ui'
+import { Button, Separator, Spinner } from '@/shared/ui'
 
 export function CreateWorkspaceForm() {
   const navigate = useNavigate()

@@ -1,7 +1,7 @@
 import { createWorkspaceSchema } from '../model'
 import { useCheckSlugAvailability } from '../hooks'
 import type { WorkspaceFormApi } from '../model'
-import { Input, Label , Spinner  } from '@/shared/ui'
+import { Input, Label, Spinner } from '@/shared/ui'
 
 interface Props {
   form: WorkspaceFormApi

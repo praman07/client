@@ -8,12 +8,20 @@ import { SidebarLeftIcon } from '@hugeicons/core-free-icons'
 import { useIsMobile } from '../../hooks'
 import type { VariantProps } from 'class-variance-authority'
 import { cn } from '@/shared/lib/utils'
-import { Button, Input , Separator ,
+import {
+  Button,
+  Input,
+  Separator,
   Sheet,
   SheetContent,
   SheetDescription,
   SheetHeader,
-  SheetTitle, Skeleton , Tooltip, TooltipContent, TooltipTrigger  } from '@/shared/ui/primitives'
+  SheetTitle,
+  Skeleton,
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/shared/ui/primitives'
 
 const SIDEBAR_COOKIE_NAME = 'sidebar_state'
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7

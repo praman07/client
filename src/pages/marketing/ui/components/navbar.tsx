@@ -1,6 +1,6 @@
 import { SignedIn, SignedOut, UserButton } from '@clerk/clerk-react'
 import { Link } from '@tanstack/react-router'
-import { Button, Navbar  } from '@/shared/ui'
+import { Button, Navbar } from '@/shared/ui'
 
 const NAV_LINKS = [
   { href: '/pricing', label: 'Pricing' },

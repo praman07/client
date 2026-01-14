@@ -1,6 +1,6 @@
 import { InviteButton } from '@/features/invite-member'
 import { MemberList } from '@/features/view-members'
-import { useCurrentWorkspace } from '@/entities/session/model/workspace-hooks'
+import { useCurrentWorkspace } from '@/entities/workspace/hooks'
 
 export function MembersPage() {
   const currentWorkspace = useCurrentWorkspace()

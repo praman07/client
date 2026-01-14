@@ -1,6 +1,6 @@
 import { Plus, Trash2 } from 'lucide-react'
 import type { InviteMemberFormApi } from '../model'
-import { Button, Input , Label  } from '@/shared/ui'
+import { Button, Input, Label } from '@/shared/ui'
 
 interface Props {
   form: InviteMemberFormApi

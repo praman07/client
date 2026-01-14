@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { InviteMemberForm } from './invite-member-form'
-import { selectCurrentWorkspace } from '@/entities/session/model/selectors'
 
+import { selectCurrentWorkspace } from '@/entities/workspace'
+import { useAppSelector } from '@/shared/lib/store/redux'
 import {
   Dialog,
   DialogContent,
@@ -10,7 +11,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/shared/ui'
-import { useAppSelector } from '@/shared/lib/redux'
 
 interface Props {
   children: React.ReactNode

@@ -4,13 +4,18 @@ import { useNavigate } from '@tanstack/react-router'
 import { toast } from 'sonner'
 import { useAcceptInvite } from '../hooks'
 import { mapAcceptInviteError } from '../lib'
-import { Avatar,
+import {
+  Avatar,
   AvatarFallback,
   AvatarImage,
   Button,
   Card,
   CardContent,
-  CardDescription, CardFooter, CardHeader, CardTitle  } from '@/shared/ui'
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/shared/ui'
 import { useUser } from '@/shared/hooks'
 
 interface Props {

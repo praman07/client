@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useAuth } from '@clerk/clerk-react'
 import { CREATE_WORKSPACE } from '../api'
 import { GqlClient } from '@/shared/api/graphql-client'
-import { workspaceKeys } from '@/entities/workspace/api/query-keys'
+import { workspaceKeys } from '@/entities/workspace'
 
 export function useCreateWorkspace() {
   const { getToken } = useAuth()
@@ -15,7 +15,7 @@ export function useCreateWorkspace() {
       return client.request(CREATE_WORKSPACE, variables)
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: workspaceKeys.my() })
+      queryClient.invalidateQueries({ queryKey: workspaceKeys.myWorkspaces() })
     },
   })
 }
