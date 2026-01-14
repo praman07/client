@@ -3,14 +3,12 @@ import { useNavigate } from '@tanstack/react-router'
 import { useState } from 'react'
 import { toast } from 'sonner'
 import { mapCreateWorkspaceError } from '../lib'
+import { useCreateWorkspace } from '../hooks'
 import { TeamSizeField } from './team-size-field'
 import { WorkspaceLogoField } from './workspace-logo-field'
 import { WorkspaceNameField } from './workspace-name-field'
 import { WorkspaceSlugField } from './workspace-slug-field'
-import { Spinner } from '@/shared/ui/primitives/spinner'
-import { Separator } from '@/shared/ui/primitives/separator'
-import { Button } from '@/shared/ui/primitives/button'
-import { useCreateWorkspace } from '../hooks'
+import { Button, Separator , Spinner  } from '@/shared/ui'
 
 export function CreateWorkspaceForm() {
   const navigate = useNavigate()

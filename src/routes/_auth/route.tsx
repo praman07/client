@@ -1,5 +1,5 @@
 import { Outlet, createFileRoute } from '@tanstack/react-router'
-import { AuthSplitLayout } from '@/shared/ui/layouts/auth-split-layout'
+import { AuthSplitLayout } from '@/pages/auth'
 
 export const Route = createFileRoute('/_auth')({
   component: AuthLayout,

@@ -7,28 +7,50 @@ type Query {
   getWorkspaceInviteInfo(token: String!): WorkspaceInviteInfo!
   workspaceMembers(workspaceId: ID!): [WorkspaceMember!]!
 
-  """Get paginated notifications for the current user."""
-  notifications(limit: Int, cursor: String, isRead: Boolean): NotificationConnection!
+  """
+  Get paginated notifications for the current user.
+  """
+  notifications(
+    limit: Int
+    cursor: String
+    isRead: Boolean
+  ): NotificationConnection!
 
-  """Get count of unread notifications."""
+  """
+  Get count of unread notifications.
+  """
   unreadNotificationCount: Int!
 }
 
 type Mutation {
   _health: String
-  syncUser(clerkId: String!, email: String!, fullName: String, avatarUrl: String, emailVerified: Boolean): User!
+  syncUser(
+    clerkId: String!
+    email: String!
+    fullName: String
+    avatarUrl: String
+    emailVerified: Boolean
+  ): User!
   createOnboardingWorkspace: Workspace!
   checkSlugAvailability(slug: String!): AvailabilityResponse!
   createWorkspace(slug: String!, name: String!): Workspace!
   inviteToWorkspace(input: InviteToWorkspaceInput!): InviteResponse!
   acceptWorkspaceInvite(input: AcceptInviteInput!): JoinResponse!
-  updateWorkspaceMemberRole(workspaceId: ID!, memberId: ID!, role: String!): WorkspaceMember!
+  updateWorkspaceMemberRole(
+    workspaceId: ID!
+    memberId: ID!
+    role: String!
+  ): WorkspaceMember!
   removeWorkspaceMember(workspaceId: ID!, memberId: ID!): InviteResponse!
 
-  """Mark specific notifications as read."""
+  """
+  Mark specific notifications as read.
+  """
   markNotificationRead(ids: [ID!]!): Boolean!
 
-  """Mark all notifications as read."""
+  """
+  Mark all notifications as read.
+  """
   markAllNotificationsRead: Boolean!
 }
 

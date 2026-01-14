@@ -9,7 +9,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '@/shared/ui/primitives/dialog'
+} from '@/shared/ui'
 import { useAppSelector } from '@/shared/lib/redux'
 
 interface Props {

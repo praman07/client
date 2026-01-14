@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { UPDATE_MEMBER_ROLE, workspaceMemberKeys } from '../api'
 import { useAuth } from '@/shared/hooks'
 import { GqlClient } from '@/shared/api/graphql-client'
-import { workspaceMemberKeys, UPDATE_MEMBER_ROLE } from '../api'
 
 export function useUpdateMemberRole(workspaceId: string) {
   const queryClient = useQueryClient()

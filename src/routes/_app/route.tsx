@@ -1,6 +1,6 @@
 import { Outlet, createFileRoute } from '@tanstack/react-router'
 import { RedirectToSignIn, SignedIn, SignedOut } from '@clerk/clerk-react'
-import { RouteError } from '@/shared/ui/error/route-error'
+import { RouteError } from '@/shared/ui'
 import { useSyncCurrentUser } from '@/entities/session/lib/use-session-sync'
 import { ReduxProvider } from '@/app/providers/redux/provider'
 

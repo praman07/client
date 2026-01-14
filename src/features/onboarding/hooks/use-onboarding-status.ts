@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
+import { ONBOARDING_STATUS_QUERY, onboardingKeys } from '../api'
 import { GqlClient } from '@/shared/api/graphql-client'
-import { onboardingKeys, ONBOARDING_STATUS_QUERY } from '../api'
 import { useAuth, useUser } from '@/shared/hooks'
 
 export function useOnboardingStatus() {

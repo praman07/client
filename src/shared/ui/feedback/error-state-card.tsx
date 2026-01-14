@@ -6,7 +6,7 @@ import {
   CardContent,
   CardFooter,
   CardHeader,
-} from '@/shared/ui/primitives/card'
+} from '@/shared/ui/primitives'
 
 interface ErrorStateCardProps {
   icon?: LucideIcon

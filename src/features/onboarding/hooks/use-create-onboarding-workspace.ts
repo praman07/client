@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { CREATE_ONBOARDING_WORKSPACE_MUTATION, onboardingKeys } from '../api'
 import { useAuth } from '@/shared/hooks'
 import { GqlClient } from '@/shared/api/graphql-client'
-import { onboardingKeys, CREATE_ONBOARDING_WORKSPACE_MUTATION } from '../api'
 
 export function useCreateOnboardingWorkspace() {
   const queryClient = useQueryClient()

@@ -19,7 +19,7 @@ import {
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
-} from '@/shared/ui/primitives/dropdown-menu'
+} from '@/shared/ui/primitives'
 
 function Menubar({ className, ...props }: MenubarPrimitive.Props) {
   return (

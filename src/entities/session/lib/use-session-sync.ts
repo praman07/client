@@ -35,7 +35,7 @@ export function useSyncCurrentUser() {
     queryKey: sessionKeys.me(),
     queryFn: async () => {
       const token = await getToken()
-      const client = createGqlClient(token)
+      const client = GqlClient(token)
       const data = await client.request(GET_ME_QUERY)
 
       // Sync User to Redux immediately upon fetch
@@ -60,7 +60,7 @@ export function useSyncCurrentWorkspace(slug?: string) {
       if (!slug) return null
 
       const token = await getToken()
-      const client = createGqlClient(token)
+      const client = GqlClient(token)
 
       try {
         const data = await client.request(GET_WORKSPACE_BY_SLUG_QUERY, {

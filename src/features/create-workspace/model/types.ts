@@ -1,6 +1,6 @@
-import { z } from 'zod'
-import { ReactFormApi } from '@tanstack/react-form'
-import { createWorkspaceSchema } from './schema'
+import type { z } from 'zod'
+import type { ReactFormApi } from '@tanstack/react-form'
+import type { createWorkspaceSchema } from './schema'
 
 export type CreateWorkspaceInput = z.infer<typeof createWorkspaceSchema>
 

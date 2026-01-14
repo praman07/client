@@ -5,7 +5,7 @@ import { ArrowLeft01Icon, ArrowRight01Icon } from '@hugeicons/core-free-icons'
 import type { UseEmblaCarouselType } from 'embla-carousel-react'
 
 import { cn } from '@/shared/lib/utils'
-import { Button } from '@/shared/ui/primitives/button'
+import { Button } from '@/shared/ui/primitives'
 
 type CarouselApi = UseEmblaCarouselType[1]
 type UseCarouselParameters = Parameters<typeof useEmblaCarousel>

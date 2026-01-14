@@ -6,11 +6,11 @@ import { CheckCircle2, Loader2 } from 'lucide-react'
 
 import { mapInviteMemberError } from '../lib'
 import { inviteMemberSchema } from '../model'
+import { useInviteMember } from '../hooks'
 import { EmailListField } from './email-list-field'
 import type { InviteMemberFormValues } from '../model'
-import { useInviteMember } from '../hooks'
 import { useAppSelector } from '@/shared/lib/redux'
-import { Button } from '@/shared/ui/primitives/button'
+import { Button } from '@/shared/ui'
 import { selectCurrentWorkspace } from '@/entities/session/model/selectors'
 
 interface Props {
@@ -18,7 +18,6 @@ interface Props {
 }
 
 export function InviteMemberForm({ onClose }: Props) {
-
   const [isSuccess, setIsSuccess] = useState(false)
   const currentWorkspace = useAppSelector(selectCurrentWorkspace)
 
@@ -32,20 +31,23 @@ export function InviteMemberForm({ onClose }: Props) {
       onChange: inviteMemberSchema,
     },
     onSubmit: ({ value }) => {
-      mutate({ emails: value.emails }, {
-        onSuccess: (data) => {
-          if (data.inviteToWorkspace.success) {
-            setIsSuccess(true)
-            toast.success(data.inviteToWorkspace.message)
-          } else {
-            toast.error('Failed to invite members')
-          }
+      mutate(
+        { emails: value.emails },
+        {
+          onSuccess: (data) => {
+            if (data.inviteToWorkspace.success) {
+              setIsSuccess(true)
+              toast.success(data.inviteToWorkspace.message)
+            } else {
+              toast.error('Failed to invite members')
+            }
+          },
+          onError: (error) => {
+            const message = mapInviteMemberError(error)
+            toast.error(message)
+          },
         },
-        onError: (error) => {
-          const message = mapInviteMemberError(error)
-          toast.error(message)
-        }
-      })
+      )
     },
   })
 

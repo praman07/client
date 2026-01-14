@@ -11,7 +11,7 @@ import {
 } from '@hugeicons/core-free-icons'
 import type { DayButton } from 'react-day-picker'
 import { cn } from '@/shared/lib/utils'
-import { Button, buttonVariants } from '@/shared/ui/primitives/button'
+import { Button, buttonVariants } from '@/shared/ui/primitives'
 
 function Calendar({
   className,

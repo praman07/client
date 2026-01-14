@@ -4,20 +4,13 @@ import { useNavigate } from '@tanstack/react-router'
 import { toast } from 'sonner'
 import { useAcceptInvite } from '../hooks'
 import { mapAcceptInviteError } from '../lib'
-import { Button } from '@/shared/ui/primitives/button'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/shared/ui/primitives/card'
-import {
-  Avatar,
+import { Avatar,
   AvatarFallback,
   AvatarImage,
-} from '@/shared/ui/primitives/avatar'
+  Button,
+  Card,
+  CardContent,
+  CardDescription, CardFooter, CardHeader, CardTitle  } from '@/shared/ui'
 import { useUser } from '@/shared/hooks'
 
 interface Props {
@@ -50,7 +43,7 @@ export function JoinWorkspaceCard({
       },
       onError: (error) => {
         const message = mapAcceptInviteError(error)
-        
+
         // Handle redirect for specific error cases
         if (message === 'You are already a member of this workspace') {
           toast.error(message)

@@ -5,7 +5,7 @@ import { cva } from 'class-variance-authority'
 import type { VariantProps } from 'class-variance-authority'
 
 import { cn } from '@/shared/lib/utils'
-import { Separator } from '@/shared/ui/primitives/separator'
+import { Separator } from '@/shared/ui/primitives'
 
 function ItemGroup({ className, ...props }: React.ComponentProps<'div'>) {
   return (

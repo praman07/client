@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
+import { GET_WORKSPACE_MEMBERS, workspaceMemberKeys } from '../api'
 import { useAuth } from '@/shared/hooks'
 import { GqlClient } from '@/shared/api/graphql-client'
-import { workspaceMemberKeys, GET_WORKSPACE_MEMBERS } from '../api'
 
 export function useWorkspaceMembers(workspaceId: string) {
   const { getToken } = useAuth()

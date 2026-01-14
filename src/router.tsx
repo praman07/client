@@ -5,7 +5,7 @@ import { RouteError } from './shared/ui/error/route-error'
 
 // Import the generated route tree
 import { routeTree } from './routeTree.gen'
-import { NotFoundPage } from '@/widgets/not-found'
+import { NotFoundPage } from './pages/not-found'
 
 // Create a new router instance
 export const getRouter = () => {

@@ -1,6 +1,5 @@
 import { Upload } from 'lucide-react'
-import { Button } from '@/shared/ui/primitives/button'
-import { Label } from '@/shared/ui/primitives/label'
+import { Button, Label  } from '@/shared/ui'
 
 export function WorkspaceLogoField() {
   return (

@@ -5,8 +5,8 @@ import { deriveOnboardingStep } from '../lib/onboarding-machine'
 import { mapOnboardingError } from '../lib/error-mapping'
 import {
   useCreateOnboardingWorkspace,
-  useSyncUser,
   useOnboardingStatus,
+  useSyncUser,
 } from './index'
 import { generateIdempotencyKey } from '@/shared/lib/idempotency'
 

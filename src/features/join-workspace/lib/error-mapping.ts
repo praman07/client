@@ -9,7 +9,7 @@ export function mapAcceptInviteError(error: unknown): string {
 
   if (error instanceof ClientError) {
     const gqlError = error.response.errors?.[0]
-    const code = gqlError?.extensions?.code
+    const code = gqlError?.extensions.code
 
     if (
       code === 'WORKSPACE_ONBOARDING_ALREADY_EXISTS' ||
@@ -25,7 +25,7 @@ export function mapAcceptInviteError(error: unknown): string {
 export function isAlreadyMemberError(error: unknown): boolean {
   if (error instanceof ClientError) {
     const gqlError = error.response.errors?.[0]
-    const code = gqlError?.extensions?.code
+    const code = gqlError?.extensions.code
     return (
       code === 'WORKSPACE_ONBOARDING_ALREADY_EXISTS' ||
       code === 'ALREADY_WORKSPACE_MEMBER'

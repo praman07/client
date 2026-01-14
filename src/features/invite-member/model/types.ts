@@ -1,6 +1,6 @@
-import { z } from 'zod'
+import type { inviteMemberSchema } from './schema'
+import type { z } from 'zod'
 import type { ReactFormApi } from '@tanstack/react-form'
-import { inviteMemberSchema } from './schema'
 
 export type InviteMemberFormValues = z.infer<typeof inviteMemberSchema>
 

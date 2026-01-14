@@ -2,20 +2,13 @@ import { useWorkspaceMembers } from '../hooks'
 import { mapMembersError } from '../lib'
 
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/shared/ui/primitives/table'
-import {
   Avatar,
   AvatarFallback,
   AvatarImage,
-} from '@/shared/ui/primitives/avatar'
-import { Badge } from '@/shared/ui/primitives/badge'
-import { Skeleton } from '@/shared/ui/primitives/skeleton'
+  Badge,
+  Skeleton,
+  Table, TableBody, TableCell, TableHead , TableHeader , TableRow 
+} from '@/shared/ui'
 
 interface MemberListProps {
   workspaceId: string

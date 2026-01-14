@@ -5,25 +5,15 @@ import { cva } from 'class-variance-authority'
 
 import { HugeiconsIcon } from '@hugeicons/react'
 import { SidebarLeftIcon } from '@hugeicons/core-free-icons'
+import { useIsMobile } from '../../hooks'
 import type { VariantProps } from 'class-variance-authority'
 import { cn } from '@/shared/lib/utils'
-import { Button } from '@/shared/ui/primitives/button'
-import { Input } from '@/shared/ui/primitives/input'
-import { Separator } from '@/shared/ui/primitives/separator'
-import {
+import { Button, Input , Separator ,
   Sheet,
   SheetContent,
   SheetDescription,
   SheetHeader,
-  SheetTitle,
-} from '@/shared/ui/primitives/sheet'
-import { Skeleton } from '@/shared/ui/primitives/skeleton'
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from '@/shared/ui/primitives/tooltip'
-import { useIsMobile } from '../../hooks'
+  SheetTitle, Skeleton , Tooltip, TooltipContent, TooltipTrigger  } from '@/shared/ui/primitives'
 
 const SIDEBAR_COOKIE_NAME = 'sidebar_state'
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7
@@ -263,7 +253,7 @@ function SidebarTrigger({
       data-sidebar="trigger"
       data-slot="sidebar-trigger"
       variant="ghost"
-      size="icon-sm"
+      size="sm"
       className={cn(className)}
       onClick={(event) => {
         onClick?.(event)

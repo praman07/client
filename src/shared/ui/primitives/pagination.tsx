@@ -7,7 +7,7 @@ import {
   MoreHorizontalCircle01Icon,
 } from '@hugeicons/core-free-icons'
 import { cn } from '@/shared/lib/utils'
-import { Button } from '@/shared/ui/primitives/button'
+import { Button } from '@/shared/ui/primitives'
 
 function Pagination({ className, ...props }: React.ComponentProps<'nav'>) {
   return (

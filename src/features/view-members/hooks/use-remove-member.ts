@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { REMOVE_MEMBER, workspaceMemberKeys } from '../api'
 import { useAuth } from '@/shared/hooks'
 import { GqlClient } from '@/shared/api/graphql-client'
-import { workspaceMemberKeys, REMOVE_MEMBER } from '../api'
 
 export function useRemoveMember(workspaceId: string) {
   const queryClient = useQueryClient()

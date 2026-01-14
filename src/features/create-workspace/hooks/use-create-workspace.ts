@@ -1,8 +1,8 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useAuth } from '@clerk/clerk-react'
+import { CREATE_WORKSPACE } from '../api'
 import { GqlClient } from '@/shared/api/graphql-client'
 import { workspaceKeys } from '@/entities/workspace/api/query-keys'
-import { CREATE_WORKSPACE } from '../api'
 
 export function useCreateWorkspace() {
   const { getToken } = useAuth()
