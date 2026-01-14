@@ -7,7 +7,7 @@ import { env } from '@/shared/config/env'
  * @param token - Optional Clerk session token
  * @returns GraphQLClient instance with auth headers
  */
-export const createGqlClient = (token?: string | null) => {
+export const GqlClient = (token?: string | null) => {
   const baseUrl =
     env.VITE_SERVER_URL ||
     (typeof window !== 'undefined' ? window.location.origin : '')

@@ -1,8 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
-import { useAuth } from '@/shared/auth'
-import { createGqlClient } from '@/shared/api/graphql-client'
+import { GqlClient } from '@/shared/api/graphql-client'
 import { onboardingKeys, ONBOARDING_STATUS_QUERY } from '../api'
-import { useUser } from '@clerk/clerk-react'
+import { useAuth, useUser } from '@/shared/hooks'
 
 export function useOnboardingStatus() {
   const { user } = useUser()
@@ -12,7 +11,7 @@ export function useOnboardingStatus() {
     queryKey: onboardingKeys.status(),
     queryFn: async () => {
       const token = await getToken()
-      const client = createGqlClient(token)
+      const client = GqlClient(token)
       return client.request(ONBOARDING_STATUS_QUERY)
     },
     enabled: !!user,

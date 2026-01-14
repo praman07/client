@@ -20,7 +20,7 @@ import {
 } from '@/shared/ui/primitives/avatar'
 import { cn } from '@/shared/lib/utils'
 import { selectCurrentWorkspace } from '@/entities/session/model/selectors'
-import { createGqlClient } from '@/shared/api/graphql-client'
+import { GqlClient } from '@/shared/api/graphql-client'
 import { WidgetError } from '@/shared/ui/error/widget-error'
 import { gql } from '@/gql'
 import { workspaceKeys } from '@/entities/workspace/api/query-keys'
@@ -53,7 +53,7 @@ function WorkspaceSwitcherContent() {
     queryKey: workspaceKeys.my(),
     queryFn: async () => {
       const token = await getToken()
-      const client = createGqlClient(token)
+      const client = GqlClient(token)
       return client.request(GET_MY_WORKSPACES_QUERY)
     },
     throwOnError: true, // Ensure errors bubble to ErrorBoundary

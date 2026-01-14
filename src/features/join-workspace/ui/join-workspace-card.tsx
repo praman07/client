@@ -18,7 +18,7 @@ import {
   AvatarFallback,
   AvatarImage,
 } from '@/shared/ui/primitives/avatar'
-import { useUser } from '@/shared/auth'
+import { useUser } from '@/shared/hooks'
 
 interface Props {
   token: string

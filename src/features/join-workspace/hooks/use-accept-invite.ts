@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query'
-import { useAuth, useUser } from '@/shared/auth'
-import { createGqlClient } from '@/shared/api/graphql-client'
+import { useAuth, useUser } from '@/shared/hooks'
+import { GqlClient } from '@/shared/api/graphql-client'
 import { ACCEPT_WORKSPACE_INVITE } from '../api'
 
 export function useAcceptInvite() {
@@ -14,7 +14,7 @@ export function useAcceptInvite() {
       }
 
       const authToken = await getToken()
-      const client = createGqlClient(authToken)
+      const client = GqlClient(token)
       return client.request(ACCEPT_WORKSPACE_INVITE, {
         input: {
           token,

@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { useAuth } from '@/shared/auth'
-import { createGqlClient } from '@/shared/api/graphql-client'
+import { useAuth } from '@/shared/hooks'
+import { GqlClient } from '@/shared/api/graphql-client'
 import { onboardingKeys, SYNC_USER_MUTATION } from '../api'
 
 export function useSyncUser() {
@@ -15,7 +15,7 @@ export function useSyncUser() {
       avatarUrl?: string
     }) => {
       const token = await getToken()
-      const client = createGqlClient(token)
+      const client = GqlClient(token)
       return client.request(SYNC_USER_MUTATION, variables)
     },
     onSuccess: () =>

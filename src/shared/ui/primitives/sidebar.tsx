@@ -23,7 +23,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/shared/ui/primitives/tooltip'
-import { useIsMobile } from '@/shared/lib/hooks/use-mobile'
+import { useIsMobile } from '../../hooks'
 
 const SIDEBAR_COOKIE_NAME = 'sidebar_state'
 const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7

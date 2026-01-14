@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
-import { createGqlClient } from '@/shared/api/graphql-client'
-import { useAuth } from '@/shared/auth'
+import { GqlClient } from '@/shared/api/graphql-client'
+import { useUser, useAuth } from '@/shared/hooks'
 import { GET_WORKSPACE_INVITE_INFO } from '@/features/join-workspace/api'
 import { joinWorkspaceKeys } from '@/features/join-workspace/api/query-keys'
 import { Button } from '@/shared/ui/primitives/button'
@@ -17,7 +17,7 @@ export function JoinWorkspaceFlow({ token }: JoinWorkspaceFlowProps) {
     queryKey: joinWorkspaceKeys.info(token),
     queryFn: async () => {
       const t = await getToken()
-      const client = createGqlClient(t)
+      const client = GqlClient(t)
       return client.request(GET_WORKSPACE_INVITE_INFO, { token })
     },
     retry: false,

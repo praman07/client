@@ -5,7 +5,7 @@ import {
   SESSION_USER_FRAGMENT,
   SESSION_WORKSPACE_FRAGMENT,
 } from '../api/fragments'
-import { createGqlClient } from '@/shared/api/graphql-client'
+import { GqlClient } from '@/shared/api/graphql-client'
 import { gql, useFragment } from '@/gql'
 import { sessionKeys } from '@/entities/session/api/query-keys'
 import { workspaceKeys } from '@/entities/workspace/api/query-keys'
