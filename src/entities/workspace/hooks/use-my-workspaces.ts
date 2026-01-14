@@ -4,7 +4,7 @@ import { setMyWorkspaces } from '../model/slice'
 import { workspaceKeys } from '../api'
 import { gql } from '@/gql'
 import { GqlClient } from '@/shared/api/graphql-client'
-import { useAppDispatch } from '@/shared/lib/store/redux'
+import { useAppDispatch } from '@/shared/hooks'
 
 const GET_MY_WORKSPACES_QUERY = gql(`
   query GetMyWorkspaces {

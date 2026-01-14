@@ -1,7 +1,7 @@
 import { useAuth } from '@clerk/clerk-react'
 import { useEffect } from 'react'
 import { clearSession, setSession } from '../model/slice'
-import { useAppDispatch } from '@/shared/lib/store/redux'
+import { useAppDispatch } from '@/shared/hooks'
 
 export function useAuthSync() {
   const { getToken, isSignedIn } = useAuth()

@@ -4,7 +4,7 @@ import { SYNC_USER_MUTATION } from '@/entities/session/api'
 import { setCurrentUser } from '@/entities/user/model'
 import { GqlClient } from '@/shared/api/graphql-client'
 import { useAuth, useUser } from '@/shared/hooks'
-import { useAppDispatch } from '@/shared/lib/store/redux'
+import { useAppDispatch } from '@/shared/hooks'
 
 export function useUpdateUser() {
   const { user, isLoaded } = useUser()

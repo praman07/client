@@ -1,17 +1,16 @@
-import { useClerk } from '@clerk/clerk-react'
-import { useEffect, useState } from 'react'
+import { useUser } from '@/shared/hooks'
+import { generateIdempotencyKey } from '@/shared/lib/idempotency'
 import { useNavigate } from '@tanstack/react-router'
-import { deriveOnboardingStep } from '../lib/onboarding-machine'
-import { mapOnboardingError } from '../lib/error-mapping'
+import { useEffect, useState } from 'react'
+import { deriveOnboardingStep, mapOnboardingError } from '../lib'
 import {
   useCreateOnboardingWorkspace,
   useOnboardingStatus,
   useSyncUser,
 } from './index'
-import { generateIdempotencyKey } from '@/shared/lib/idempotency'
 
 export function useOnboardingOrchestrator() {
-  const { user } = useClerk()
+  const { user } = useUser()
   const navigate = useNavigate()
 
   // Stable Idempotency Key

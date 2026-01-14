@@ -14,7 +14,7 @@ export function useAcceptInvite() {
       }
 
       const authToken = await getToken()
-      const client = GqlClient(token)
+      const client = GqlClient(authToken)
       return client.request(ACCEPT_WORKSPACE_INVITE, {
         input: {
           token,

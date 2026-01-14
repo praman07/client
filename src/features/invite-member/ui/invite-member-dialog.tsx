@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { InviteMemberForm } from './invite-member-form'
 
 import { selectCurrentWorkspace } from '@/entities/workspace'
-import { useAppSelector } from '@/shared/lib/store/redux'
+import { useAppSelector } from '@/shared/hooks'
 import {
   Dialog,
   DialogContent,

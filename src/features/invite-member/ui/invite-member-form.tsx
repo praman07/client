@@ -9,7 +9,7 @@ import { inviteMemberSchema } from '../model'
 import { useInviteMember } from '../hooks'
 import { EmailListField } from './email-list-field'
 import type { InviteMemberFormValues } from '../model'
-import { useAppSelector } from '@/shared/lib/store/redux'
+import { useAppSelector } from '@/shared/hooks'
 import { Button } from '@/shared/ui'
 import { selectCurrentWorkspace } from '@/entities/workspace/model/selectors'
 
