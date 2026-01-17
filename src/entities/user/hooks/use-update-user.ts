@@ -2,9 +2,8 @@ import { useMutation } from '@tanstack/react-query'
 import { useEffect } from 'react'
 import { SYNC_USER_MUTATION } from '@/entities/session/api'
 import { setCurrentUser } from '@/entities/user/model'
-import { GqlClient } from '@/shared/api/graphql-client'
-import { useAuth, useUser } from '@/shared/hooks'
-import { useAppDispatch } from '@/shared/hooks'
+import { GqlClient } from '@/shared/api'
+import { useAppDispatch, useAuth, useUser } from '@/shared/hooks'
 
 export function useUpdateUser() {
   const { user, isLoaded } = useUser()
@@ -26,8 +25,6 @@ export function useUpdateUser() {
       })
     },
     onSuccess: (data) => {
-      // Sync successful, update Redux user
-      // Sync successful, update Redux user
       dispatch(setCurrentUser(data.syncUser))
     },
   })

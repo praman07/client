@@ -1,0 +1,15 @@
+export const RESERVED_SLUGS = [
+  'admin',
+  'api',
+  'settings',
+  'dashboard',
+  'login',
+  'register',
+  'projects',
+  'billing',
+  'support',
+  'help',
+  'auth',
+  'root',
+  'www',
+] as const

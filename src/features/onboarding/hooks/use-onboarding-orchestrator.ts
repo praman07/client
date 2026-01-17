@@ -1,5 +1,3 @@
-import { useUser } from '@/shared/hooks'
-import { generateIdempotencyKey } from '@/shared/lib/idempotency'
 import { useNavigate } from '@tanstack/react-router'
 import { useEffect, useState } from 'react'
 import { deriveOnboardingStep, mapOnboardingError } from '../lib'
@@ -8,6 +6,8 @@ import {
   useOnboardingStatus,
   useSyncUser,
 } from './index'
+import { generateIdempotencyKey } from '@/shared/lib/idempotency'
+import { useUser } from '@/shared/hooks'
 
 export function useOnboardingOrchestrator() {
   const { user } = useUser()

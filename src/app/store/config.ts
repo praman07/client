@@ -3,6 +3,8 @@ import sessionReducer from '@/entities/session/model/slice'
 import workspaceReducer from '@/entities/workspace/model/slice'
 import createWorkspaceReducer from '@/features/create-workspace/model/slice'
 import userReducer from '@/entities/user/model/slice'
+import projectReducer from '@/entities/project/model/slice'
+import createProjectReducer from '@/features/create-project/model/slice'
 
 export const store = configureStore({
   reducer: {
@@ -10,6 +12,8 @@ export const store = configureStore({
     workspace: workspaceReducer,
     createWorkspace: createWorkspaceReducer,
     user: userReducer,
+    project: projectReducer,
+    createProject: createProjectReducer,
   },
 })
 

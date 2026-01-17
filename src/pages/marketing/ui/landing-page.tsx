@@ -6,13 +6,11 @@ import {
   MarketingFooter,
   MarketingHero,
   MarketingLogos,
-  MarketingNavbar,
 } from './components'
 
 export function LandingPage() {
   return (
     <div className="flex flex-col min-h-screen">
-      <MarketingNavbar />
       <MarketingHero />
       <MarketingLogos />
       <MarketingFeatureDocs />

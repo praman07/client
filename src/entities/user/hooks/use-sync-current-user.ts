@@ -5,10 +5,9 @@ import {
   GET_ME_QUERY,
   SESSION_USER_FRAGMENT,
 } from '@/entities/session/api/fragments'
-import { useAppDispatch } from '@/shared/hooks'
+import { useAppDispatch, useAuth } from '@/shared/hooks'
 import { useFragment } from '@/gql'
 import { GqlClient } from '@/shared/api/graphql-client'
-import { useAuth } from '@/shared/hooks'
 
 export function useSyncCurrentUser() {
   const { getToken } = useAuth()

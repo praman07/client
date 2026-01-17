@@ -1,7 +1,10 @@
 import { Link, useNavigate } from '@tanstack/react-router'
 import { ChevronsUpDown, Plus } from 'lucide-react'
 import { ErrorBoundary } from 'react-error-boundary'
-import { selectCurrentWorkspace, selectMyWorkspaces  } from '@/entities/workspace/model/selectors'
+import {
+  selectCurrentWorkspace,
+  selectMyWorkspaces,
+} from '@/entities/workspace/model/selectors'
 import { useAppSelector } from '@/shared/hooks'
 import { cn } from '@/shared/lib/utils'
 import {
