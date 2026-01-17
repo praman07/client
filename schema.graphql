@@ -1,65 +1,55 @@
+"""
+A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.
+"""
+scalar DateTime
+
+"""
+The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
+"""
+scalar JSON @specifiedBy(url: "http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf")
+
+type PageInfo {
+  hasNextPage: Boolean!
+  endCursor: String
+}
+
 type Query {
   health: String!
   me: User
+  getWorkspaceInviteInfo(token: String!): WorkspaceInviteInfo!
   myWorkspaces: [Workspace!]!
   onboardingStatus: OnboardingStatus!
   workspaceBySlug(slug: String!): Workspace!
-  getWorkspaceInviteInfo(token: String!): WorkspaceInviteInfo!
   workspaceMembers(workspaceId: ID!): [WorkspaceMember!]!
 
-  """
-  Get paginated notifications for the current user.
-  """
-  notifications(
-    limit: Int
-    cursor: String
-    isRead: Boolean
-  ): NotificationConnection!
+  """Get paginated notifications for the current user."""
+  notifications(limit: Int, cursor: String, isRead: Boolean): NotificationConnection!
 
-  """
-  Get count of unread notifications.
-  """
+  """Get count of unread notifications."""
   unreadNotificationCount: Int!
   myProjects(workspaceId: ID!): [Project!]!
-  project(id: ID!): Project
   projectBySlug(workspaceId: ID!, slug: String!): Project
+  project(id: ID!): Project
 }
 
 type Mutation {
   _health: String
-  syncUser(
-    clerkId: String!
-    email: String!
-    fullName: String
-    avatarUrl: String
-    emailVerified: Boolean
-  ): User!
-  createOnboardingWorkspace: Workspace!
+  syncUser(clerkId: String!, email: String!, fullName: String, avatarUrl: String, emailVerified: Boolean): User!
+  acceptWorkspaceInvite(input: AcceptInviteInput!): JoinResponse!
   checkSlugAvailability(slug: String!): AvailabilityResponse!
+  createOnboardingWorkspace: Workspace!
   createWorkspace(slug: String!, name: String!): Workspace!
   inviteToWorkspace(input: InviteToWorkspaceInput!): InviteResponse!
-  acceptWorkspaceInvite(input: AcceptInviteInput!): JoinResponse!
-  updateWorkspaceMemberRole(
-    workspaceId: ID!
-    memberId: ID!
-    role: String!
-  ): WorkspaceMember!
   removeWorkspaceMember(workspaceId: ID!, memberId: ID!): InviteResponse!
+  updateWorkspaceMemberRole(workspaceId: ID!, memberId: ID!, role: String!): WorkspaceMember!
 
-  """
-  Mark specific notifications as read.
-  """
+  """Mark specific notifications as read."""
   markNotificationRead(ids: [ID!]!): Boolean!
 
-  """
-  Mark all notifications as read.
-  """
+  """Mark all notifications as read."""
   markAllNotificationsRead: Boolean!
-  checkProjectSlugAvailability(
-    workspaceId: ID!
-    slug: String!
-  ): AvailabilityResponse!
   createProject(workspaceId: ID!, input: CreateProjectInput!): Project!
+  checkProjectSlugAvailability(workspaceId: ID!, slug: String!): AvailabilityResponse!
 }
 
 type User {
@@ -82,11 +72,16 @@ type Workspace {
   updatedAt: String!
 }
 
-type OnboardingStatus {
-  hasUser: Boolean!
-  hasWorkspace: Boolean!
-  hasProject: Boolean!
-  workspaceSlug: String
+input AcceptInviteInput {
+  token: String!
+  userId: String
+  userEmail: String
+}
+
+type JoinResponse {
+  success: Boolean!
+  message: String!
+  workspaceSlug: String!
 }
 
 type AvailabilityResponse {
@@ -94,6 +89,11 @@ type AvailabilityResponse {
   message: String
   reservationId: String
   reason: String
+}
+
+input InviteToWorkspaceInput {
+  workspaceId: ID!
+  emails: [String!]!
 }
 
 type InviteResponse {
@@ -108,10 +108,11 @@ type WorkspaceInviteInfo {
   inviterName: String
 }
 
-type JoinResponse {
-  success: Boolean!
-  message: String!
-  workspaceSlug: String!
+type OnboardingStatus {
+  hasUser: Boolean!
+  hasWorkspace: Boolean!
+  hasProject: Boolean!
+  workspaceSlug: String
 }
 
 type WorkspaceMember {
@@ -121,20 +122,15 @@ type WorkspaceMember {
   user: User!
 }
 
-input InviteToWorkspaceInput {
-  workspaceId: ID!
-  emails: [String!]!
+type NotificationConnection {
+  edges: [NotificationEdge!]!
+  pageInfo: PageInfo!
 }
 
-input AcceptInviteInput {
-  token: String!
-  userId: String
-  userEmail: String
+type NotificationEdge {
+  node: Notification!
+  cursor: String!
 }
-
-scalar DateTime
-
-scalar JSON
 
 type Notification {
   id: ID!
@@ -143,44 +139,16 @@ type Notification {
   entityType: String!
   entityId: String!
   category: String!
+  data: JSON
   isRead: Boolean!
   isArchived: Boolean!
   createdAt: DateTime!
-  data: JSON
   actor: User
+  chatMessage: ChatMessage
   workspace: Workspace
   project: Project
-  page: Page
   task: Task
-  chatMessage: ChatMessage
-}
-
-type NotificationEdge {
-  cursor: String!
-  node: Notification!
-}
-
-type NotificationConnection {
-  edges: [NotificationEdge!]!
-  pageInfo: PageInfo!
-}
-
-type PageInfo {
-  hasNextPage: Boolean!
-  endCursor: String
-}
-
-type Project {
-  id: ID!
-  name: String!
-  key: String!
-  workspaceId: String!
-  description: String
-  isPrivate: Boolean
-  isArchived: Boolean
-  createdAt: String!
-  updatedAt: String!
-  members: [ProjectMember!]!
+  page: Page
 }
 
 type Task {
@@ -205,6 +173,19 @@ type ProjectMember {
   userId: ID!
   role: String
   joinedAt: String!
+}
+
+type Project {
+  id: ID!
+  workspaceId: String!
+  key: String!
+  name: String!
+  description: String
+  isPrivate: Boolean
+  isArchived: Boolean
+  createdAt: String!
+  updatedAt: String!
+  members: [ProjectMember!]!
 }
 
 input CreateProjectInput {
