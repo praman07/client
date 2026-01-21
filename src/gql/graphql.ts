@@ -26,6 +26,10 @@ export type AcceptInviteInput = {
   userId?: InputMaybe<Scalars['String']['input']>;
 };
 
+export type ArchiveChannelInput = {
+  channelId: Scalars['ID']['input'];
+};
+
 export type AvailabilityResponse = {
   __typename?: 'AvailabilityResponse';
   available: Scalars['Boolean']['output'];
@@ -34,16 +38,68 @@ export type AvailabilityResponse = {
   reservationId?: Maybe<Scalars['String']['output']>;
 };
 
+export enum ChannelType {
+  Dm = 'DM',
+  Private = 'PRIVATE',
+  Public = 'PUBLIC'
+}
+
+export type ChatChannel = {
+  __typename?: 'ChatChannel';
+  createdAt: Scalars['DateTime']['output'];
+  deletedAt?: Maybe<Scalars['DateTime']['output']>;
+  id: Scalars['ID']['output'];
+  isArchived: Scalars['Boolean']['output'];
+  lastMessage?: Maybe<ChatMessage>;
+  memberCount: Scalars['Int']['output'];
+  members?: Maybe<Array<ChatMember>>;
+  name?: Maybe<Scalars['String']['output']>;
+  projectId?: Maybe<Scalars['ID']['output']>;
+  topic?: Maybe<Scalars['String']['output']>;
+  type: ChannelType;
+  updatedAt: Scalars['DateTime']['output'];
+  workspaceId: Scalars['ID']['output'];
+};
+
+export type ChatMember = {
+  __typename?: 'ChatMember';
+  channelId: Scalars['ID']['output'];
+  id: Scalars['ID']['output'];
+  isMuted: Scalars['Boolean']['output'];
+  joinedAt: Scalars['DateTime']['output'];
+  lastDeliveredMsgId?: Maybe<Scalars['ID']['output']>;
+  lastReadMsgId?: Maybe<Scalars['ID']['output']>;
+  role: Scalars['String']['output'];
+  userId: Scalars['ID']['output'];
+};
+
 export type ChatMessage = {
   __typename?: 'ChatMessage';
-  content: Scalars['String']['output'];
+  authorUserId: Scalars['ID']['output'];
+  channelId: Scalars['ID']['output'];
+  content: Scalars['JSON']['output'];
+  createdAt: Scalars['DateTime']['output'];
   id: Scalars['ID']['output'];
+  type: Scalars['String']['output'];
+};
+
+export type CreateChannelInput = {
+  memberUserIds?: InputMaybe<Array<Scalars['ID']['input']>>;
+  name?: InputMaybe<Scalars['String']['input']>;
+  projectId?: InputMaybe<Scalars['ID']['input']>;
+  topic?: InputMaybe<Scalars['String']['input']>;
+  type?: InputMaybe<ChannelType>;
+  workspaceId: Scalars['ID']['input'];
 };
 
 export type CreateProjectInput = {
   description?: InputMaybe<Scalars['String']['input']>;
   name: Scalars['String']['input'];
   slug?: InputMaybe<Scalars['String']['input']>;
+};
+
+export type CreateThreadInput = {
+  parentMessageId: Scalars['ID']['input'];
 };
 
 export type InviteResponse = {
@@ -69,10 +125,13 @@ export type Mutation = {
   __typename?: 'Mutation';
   _health?: Maybe<Scalars['String']['output']>;
   acceptWorkspaceInvite: JoinResponse;
+  archiveChannel: ChatChannel;
   checkProjectSlugAvailability: AvailabilityResponse;
   checkSlugAvailability: AvailabilityResponse;
+  createChannel: ChatChannel;
   createOnboardingWorkspace: Workspace;
   createProject: Project;
+  createThread: ChatMessage;
   createWorkspace: Workspace;
   inviteToWorkspace: InviteResponse;
   /** Mark all notifications as read. */
@@ -80,6 +139,7 @@ export type Mutation = {
   /** Mark specific notifications as read. */
   markNotificationRead: Scalars['Boolean']['output'];
   removeWorkspaceMember: InviteResponse;
+  renameChannel: ChatChannel;
   syncUser: User;
   updateWorkspaceMemberRole: WorkspaceMember;
 };
@@ -87,6 +147,11 @@ export type Mutation = {
 
 export type MutationAcceptWorkspaceInviteArgs = {
   input: AcceptInviteInput;
+};
+
+
+export type MutationArchiveChannelArgs = {
+  input: ArchiveChannelInput;
 };
 
 
@@ -101,9 +166,19 @@ export type MutationCheckSlugAvailabilityArgs = {
 };
 
 
+export type MutationCreateChannelArgs = {
+  input: CreateChannelInput;
+};
+
+
 export type MutationCreateProjectArgs = {
   input: CreateProjectInput;
   workspaceId: Scalars['ID']['input'];
+};
+
+
+export type MutationCreateThreadArgs = {
+  input: CreateThreadInput;
 };
 
 
@@ -126,6 +201,11 @@ export type MutationMarkNotificationReadArgs = {
 export type MutationRemoveWorkspaceMemberArgs = {
   memberId: Scalars['ID']['input'];
   workspaceId: Scalars['ID']['input'];
+};
+
+
+export type MutationRenameChannelArgs = {
+  input: RenameChannelInput;
 };
 
 
@@ -196,6 +276,12 @@ export type PageInfo = {
   hasNextPage: Scalars['Boolean']['output'];
 };
 
+export enum PresenceStatus {
+  Away = 'AWAY',
+  Offline = 'OFFLINE',
+  Online = 'ONLINE'
+}
+
 export type Project = {
   __typename?: 'Project';
   createdAt: Scalars['String']['output'];
@@ -221,6 +307,17 @@ export type ProjectMember = {
 
 export type Query = {
   __typename?: 'Query';
+  getChannelMembers: Array<ChatMember>;
+  getChannelMessages: Array<ChatMessage>;
+  getChannelUnreadCount: Scalars['Int']['output'];
+  getLastReadMessage?: Maybe<Scalars['ID']['output']>;
+  getMessageById?: Maybe<ChatMessage>;
+  getMessagesAfterCursor: Array<ChatMessage>;
+  getMissingMessages: Array<ChatMessage>;
+  getPresenceMap: Array<UserPresence>;
+  getSubscribedChannels: Array<Scalars['ID']['output']>;
+  getThreadMessages: Array<ChatMessage>;
+  getUserChannels: Array<ChatChannel>;
   getWorkspaceInviteInfo: WorkspaceInviteInfo;
   health: Scalars['String']['output'];
   me?: Maybe<User>;
@@ -235,6 +332,64 @@ export type Query = {
   unreadNotificationCount: Scalars['Int']['output'];
   workspaceBySlug: Workspace;
   workspaceMembers: Array<WorkspaceMember>;
+};
+
+
+export type QueryGetChannelMembersArgs = {
+  channelId: Scalars['ID']['input'];
+};
+
+
+export type QueryGetChannelMessagesArgs = {
+  beforeCursor?: InputMaybe<Scalars['ID']['input']>;
+  channelId: Scalars['ID']['input'];
+  limit?: InputMaybe<Scalars['Int']['input']>;
+};
+
+
+export type QueryGetChannelUnreadCountArgs = {
+  channelId: Scalars['ID']['input'];
+};
+
+
+export type QueryGetLastReadMessageArgs = {
+  channelId: Scalars['ID']['input'];
+};
+
+
+export type QueryGetMessageByIdArgs = {
+  messageId: Scalars['ID']['input'];
+};
+
+
+export type QueryGetMessagesAfterCursorArgs = {
+  afterCursor: Scalars['ID']['input'];
+  channelId: Scalars['ID']['input'];
+  limit?: InputMaybe<Scalars['Int']['input']>;
+};
+
+
+export type QueryGetMissingMessagesArgs = {
+  channelId: Scalars['ID']['input'];
+  rangeEnd: Scalars['ID']['input'];
+  rangeStart: Scalars['ID']['input'];
+};
+
+
+export type QueryGetPresenceMapArgs = {
+  userIds: Array<Scalars['ID']['input']>;
+};
+
+
+export type QueryGetThreadMessagesArgs = {
+  beforeCursor?: InputMaybe<Scalars['ID']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  parentMessageId: Scalars['ID']['input'];
+};
+
+
+export type QueryGetUserChannelsArgs = {
+  userId: Scalars['ID']['input'];
 };
 
 
@@ -275,6 +430,11 @@ export type QueryWorkspaceMembersArgs = {
   workspaceId: Scalars['ID']['input'];
 };
 
+export type RenameChannelInput = {
+  channelId: Scalars['ID']['input'];
+  name: Scalars['String']['input'];
+};
+
 export type Task = {
   __typename?: 'Task';
   id: Scalars['ID']['output'];
@@ -291,6 +451,13 @@ export type User = {
   id: Scalars['ID']['output'];
   status: Scalars['String']['output'];
   updatedAt: Scalars['String']['output'];
+};
+
+export type UserPresence = {
+  __typename?: 'UserPresence';
+  lastActiveAt?: Maybe<Scalars['DateTime']['output']>;
+  status: PresenceStatus;
+  userId: Scalars['ID']['output'];
 };
 
 export type Workspace = {
