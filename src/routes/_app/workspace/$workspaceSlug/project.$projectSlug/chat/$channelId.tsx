@@ -1,15 +1,12 @@
 import { createFileRoute } from '@tanstack/react-router'
+import { ChatWindow } from '@/widgets/chat-window'
 
 export const Route = createFileRoute(
   '/_app/workspace/$workspaceSlug/project/$projectSlug/chat/$channelId',
 )({
-  component: RouteComponent,
+  component: ChatChannelPage,
 })
 
-function RouteComponent() {
-  return (
-    <div>
-      Hello "/_app/workspace/$workspaceSlug/project/$projectId/chat/$channelId"!
-    </div>
-  )
+function ChatChannelPage() {
+  return <ChatWindow />
 }

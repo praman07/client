@@ -19,12 +19,14 @@ export function WorkspaceLayout({ workspaceSlug }: WorkspaceLayoutProps) {
   }
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
+    <div className="h-screen w-full bg-background flex flex-col overflow-hidden">
       {/* TIER 1: GLOBAL HEADER */}
-      <DashboardHeader />
+      <div className="shrink-0">
+        <DashboardHeader />
+      </div>
 
       {/* CONTENT AREA */}
-      <main className="flex-1 flex flex-col">
+      <main className="flex-1 flex flex-col overflow-hidden">
         <Outlet />
       </main>
     </div>

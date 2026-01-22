@@ -4,7 +4,7 @@ import { setCurrentWorkspaceId } from '../model/slice'
 import { workspaceKeys } from '../api'
 import { WORKSPACE_FRAGMENT } from '../api/fragments'
 import { gql, useFragment } from '@/gql'
-import { GqlClient } from '@/shared/api/graphql-client'
+import { GqlClient } from '@/shared/api'
 import { useAppDispatch } from '@/shared/hooks'
 
 const GET_WORKSPACE_BY_SLUG_QUERY = gql(`

@@ -47,14 +47,14 @@ function ProjectBaseLayout() {
   }
 
   return (
-    <>
-      <div className="border-b bg-background px-6">
+    <div className="flex h-full flex-col">
+      <div className="shrink-0 border-b bg-background px-6">
         <NavTabs items={PROJECT_TABS as any} from={Route.fullPath} />
       </div>
       {/* Logic Layer: Project Context Provider could go here */}
-      <div className="p-6">
+      <div className="flex-1 overflow-hidden relative">
         <Outlet />
       </div>
-    </>
+    </div>
   )
 }

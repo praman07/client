@@ -14,6 +14,10 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  * Learn more about it here: https://the-guild.dev/graphql/codegen/plugins/presets/preset-client#reducing-bundle-size
  */
 type Documents = {
+    "\n  fragment ChannelFields on ChatChannel {\n    id\n    name\n    topic\n    type\n    projectId\n    memberCount\n    createdAt\n    updatedAt\n    isArchived\n    workspaceId\n  }\n": typeof types.ChannelFieldsFragmentDoc,
+    "\n  query GetUserChannels($workspaceId: ID!) {\n    getUserChannels(workspaceId: $workspaceId) {\n      ...ChannelFields\n    }\n  }\n": typeof types.GetUserChannelsDocument,
+    "\n  fragment MessageFields on ChatMessage {\n    id\n    channelId\n    content\n    authorUserId\n    type\n    createdAt\n  }\n": typeof types.MessageFieldsFragmentDoc,
+    "\n  query GetMessageById($messageId: ID!) {\n    getMessageById(messageId: $messageId) {\n      ...MessageFields\n    }\n  }\n": typeof types.GetMessageByIdDocument,
     "\n  fragment ProjectFields on Project {\n    id\n    key\n    name\n    description\n    workspaceId\n    createdAt\n    updatedAt\n    members {\n      userId\n      role\n      joinedAt\n    }\n  }\n": typeof types.ProjectFieldsFragmentDoc,
     "\n  query GetProject($id: ID!) {\n    project(id: $id) {\n      ...ProjectFields\n    }\n  }\n": typeof types.GetProjectDocument,
     "\n  query MyProjects($workspaceId: ID!) {\n    myProjects(workspaceId: $workspaceId) {\n      ...ProjectFields\n    }\n  }\n": typeof types.MyProjectsDocument,
@@ -25,6 +29,7 @@ type Documents = {
     "\n  fragment WorkspaceFragment on Workspace {\n    id\n    name\n    slug\n    logoUrl\n  }\n": typeof types.WorkspaceFragmentFragmentDoc,
     "\n  query GetMyWorkspaces {\n    myWorkspaces {\n      ...WorkspaceFragment\n    }\n  }\n": typeof types.GetMyWorkspacesDocument,
     "\n  query GetWorkspaceBySlug($slug: String!) {\n    workspaceBySlug(slug: $slug) {\n      ...WorkspaceFragment\n    }\n  }\n": typeof types.GetWorkspaceBySlugDocument,
+    "\n  mutation CreateChannel($input: CreateChannelInput!) {\n    createChannel(input: $input) {\n      workspaceId\n      ...ChannelFields\n    }\n  }\n": typeof types.CreateChannelDocument,
     "\n  mutation CreateProject($workspaceId: ID!, $input: CreateProjectInput!) {\n    createProject(workspaceId: $workspaceId, input: $input) {\n      ...ProjectFields\n    }\n  }\n": typeof types.CreateProjectDocument,
     "\n  mutation CheckSlug($workspaceId: ID!, $slug: String!) {\n    checkProjectSlugAvailability(workspaceId: $workspaceId, slug: $slug) {\n      available\n      message\n      reason\n      reservationId\n    }\n  }\n": typeof types.CheckSlugDocument,
     "\n  mutation CreateWorkspace($slug: String!, $name: String!) {\n    createWorkspace(slug: $slug, name: $name) {\n      id\n      slug\n      name\n    }\n  }\n": typeof types.CreateWorkspaceDocument,
@@ -40,6 +45,10 @@ type Documents = {
     "\n  mutation RemoveWorkspaceMember($workspaceId: ID!, $memberId: ID!) {\n    removeWorkspaceMember(workspaceId: $workspaceId, memberId: $memberId) {\n      success\n      message\n    }\n  }\n": typeof types.RemoveWorkspaceMemberDocument,
 };
 const documents: Documents = {
+    "\n  fragment ChannelFields on ChatChannel {\n    id\n    name\n    topic\n    type\n    projectId\n    memberCount\n    createdAt\n    updatedAt\n    isArchived\n    workspaceId\n  }\n": types.ChannelFieldsFragmentDoc,
+    "\n  query GetUserChannels($workspaceId: ID!) {\n    getUserChannels(workspaceId: $workspaceId) {\n      ...ChannelFields\n    }\n  }\n": types.GetUserChannelsDocument,
+    "\n  fragment MessageFields on ChatMessage {\n    id\n    channelId\n    content\n    authorUserId\n    type\n    createdAt\n  }\n": types.MessageFieldsFragmentDoc,
+    "\n  query GetMessageById($messageId: ID!) {\n    getMessageById(messageId: $messageId) {\n      ...MessageFields\n    }\n  }\n": types.GetMessageByIdDocument,
     "\n  fragment ProjectFields on Project {\n    id\n    key\n    name\n    description\n    workspaceId\n    createdAt\n    updatedAt\n    members {\n      userId\n      role\n      joinedAt\n    }\n  }\n": types.ProjectFieldsFragmentDoc,
     "\n  query GetProject($id: ID!) {\n    project(id: $id) {\n      ...ProjectFields\n    }\n  }\n": types.GetProjectDocument,
     "\n  query MyProjects($workspaceId: ID!) {\n    myProjects(workspaceId: $workspaceId) {\n      ...ProjectFields\n    }\n  }\n": types.MyProjectsDocument,
@@ -51,6 +60,7 @@ const documents: Documents = {
     "\n  fragment WorkspaceFragment on Workspace {\n    id\n    name\n    slug\n    logoUrl\n  }\n": types.WorkspaceFragmentFragmentDoc,
     "\n  query GetMyWorkspaces {\n    myWorkspaces {\n      ...WorkspaceFragment\n    }\n  }\n": types.GetMyWorkspacesDocument,
     "\n  query GetWorkspaceBySlug($slug: String!) {\n    workspaceBySlug(slug: $slug) {\n      ...WorkspaceFragment\n    }\n  }\n": types.GetWorkspaceBySlugDocument,
+    "\n  mutation CreateChannel($input: CreateChannelInput!) {\n    createChannel(input: $input) {\n      workspaceId\n      ...ChannelFields\n    }\n  }\n": types.CreateChannelDocument,
     "\n  mutation CreateProject($workspaceId: ID!, $input: CreateProjectInput!) {\n    createProject(workspaceId: $workspaceId, input: $input) {\n      ...ProjectFields\n    }\n  }\n": types.CreateProjectDocument,
     "\n  mutation CheckSlug($workspaceId: ID!, $slug: String!) {\n    checkProjectSlugAvailability(workspaceId: $workspaceId, slug: $slug) {\n      available\n      message\n      reason\n      reservationId\n    }\n  }\n": types.CheckSlugDocument,
     "\n  mutation CreateWorkspace($slug: String!, $name: String!) {\n    createWorkspace(slug: $slug, name: $name) {\n      id\n      slug\n      name\n    }\n  }\n": types.CreateWorkspaceDocument,
@@ -80,6 +90,22 @@ const documents: Documents = {
  */
 export function gql(source: string): unknown;
 
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  fragment ChannelFields on ChatChannel {\n    id\n    name\n    topic\n    type\n    projectId\n    memberCount\n    createdAt\n    updatedAt\n    isArchived\n    workspaceId\n  }\n"): (typeof documents)["\n  fragment ChannelFields on ChatChannel {\n    id\n    name\n    topic\n    type\n    projectId\n    memberCount\n    createdAt\n    updatedAt\n    isArchived\n    workspaceId\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  query GetUserChannels($workspaceId: ID!) {\n    getUserChannels(workspaceId: $workspaceId) {\n      ...ChannelFields\n    }\n  }\n"): (typeof documents)["\n  query GetUserChannels($workspaceId: ID!) {\n    getUserChannels(workspaceId: $workspaceId) {\n      ...ChannelFields\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  fragment MessageFields on ChatMessage {\n    id\n    channelId\n    content\n    authorUserId\n    type\n    createdAt\n  }\n"): (typeof documents)["\n  fragment MessageFields on ChatMessage {\n    id\n    channelId\n    content\n    authorUserId\n    type\n    createdAt\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  query GetMessageById($messageId: ID!) {\n    getMessageById(messageId: $messageId) {\n      ...MessageFields\n    }\n  }\n"): (typeof documents)["\n  query GetMessageById($messageId: ID!) {\n    getMessageById(messageId: $messageId) {\n      ...MessageFields\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -124,6 +150,10 @@ export function gql(source: "\n  query GetMyWorkspaces {\n    myWorkspaces {\n  
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "\n  query GetWorkspaceBySlug($slug: String!) {\n    workspaceBySlug(slug: $slug) {\n      ...WorkspaceFragment\n    }\n  }\n"): (typeof documents)["\n  query GetWorkspaceBySlug($slug: String!) {\n    workspaceBySlug(slug: $slug) {\n      ...WorkspaceFragment\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation CreateChannel($input: CreateChannelInput!) {\n    createChannel(input: $input) {\n      workspaceId\n      ...ChannelFields\n    }\n  }\n"): (typeof documents)["\n  mutation CreateChannel($input: CreateChannelInput!) {\n    createChannel(input: $input) {\n      workspaceId\n      ...ChannelFields\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

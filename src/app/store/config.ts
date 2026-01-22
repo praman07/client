@@ -1,4 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit'
+import chatSessionReducer from '@/entities/chat-session/model/slice'
 import sessionReducer from '@/entities/session/model/slice'
 import workspaceReducer from '@/entities/workspace/model/slice'
 import createWorkspaceReducer from '@/features/create-workspace/model/slice'
@@ -14,6 +15,7 @@ export const store = configureStore({
     user: userReducer,
     project: projectReducer,
     createProject: createProjectReducer,
+    chatSession: chatSessionReducer,
   },
 })
 
