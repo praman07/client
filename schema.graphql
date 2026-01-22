@@ -35,7 +35,7 @@ type Query {
   getMessageById(messageId: ID!): ChatMessage
   getMessagesAfterCursor(channelId: ID!, afterCursor: ID!, limit: Int): [ChatMessage!]!
   getMissingMessages(channelId: ID!, rangeStart: ID!, rangeEnd: ID!): [ChatMessage!]!
-  getUserChannels(userId: ID!): [ChatChannel!]!
+  getUserChannels(workspaceId: ID!, limit: Int, offset: Int): [ChatChannel!]!
   getChannelMembers(channelId: ID!, limit: Int, offset: Int): [ChatMember!]!
   getChannelUnreadCount(channelId: ID!): Int!
   getSubscribedChannels: [ID!]!

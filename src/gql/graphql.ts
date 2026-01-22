@@ -99,6 +99,9 @@ export type CreateProjectInput = {
 };
 
 export type CreateThreadInput = {
+  channelId: Scalars['ID']['input'];
+  content: Scalars['JSON']['input'];
+  nonce?: InputMaybe<Scalars['String']['input']>;
   parentMessageId: Scalars['ID']['input'];
 };
 
@@ -337,6 +340,8 @@ export type Query = {
 
 export type QueryGetChannelMembersArgs = {
   channelId: Scalars['ID']['input'];
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
 };
 
 
@@ -389,7 +394,9 @@ export type QueryGetThreadMessagesArgs = {
 
 
 export type QueryGetUserChannelsArgs = {
-  userId: Scalars['ID']['input'];
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  offset?: InputMaybe<Scalars['Int']['input']>;
+  workspaceId: Scalars['ID']['input'];
 };
 
 
