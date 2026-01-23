@@ -1,6 +1,6 @@
 import React from 'react'
+import type { ReactionGroup } from '../model/types'
 import { cn } from '@/shared/lib/utils'
-import { ReactionGroup } from '../model/types'
 
 interface ReactionBadgeProps {
   reaction: ReactionGroup

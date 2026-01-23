@@ -1,7 +1,8 @@
-import { Sidebar, SidebarContent } from '@/shared/ui/primitives/sidebar'
+import { DUMMY_CHANNELS, DUMMY_DMS } from '../lib/dummy-data'
 import { ChannelList } from './channel-list'
 import { DMList } from './dm-list'
-import { DUMMY_CHANNELS, DUMMY_DMS } from '../lib/dummy-data'
+import { CreateChannelModal } from '@/features/create-channel'
+import { Sidebar, SidebarContent } from '@/shared/ui/primitives/sidebar'
 import { Separator } from '@/shared/ui/primitives/separator'
 import { ScrollArea } from '@/shared/ui'
 
@@ -20,6 +21,7 @@ export function ChatSidebar() {
           </div>
         </ScrollArea>
       </SidebarContent>
+      <CreateChannelModal />
     </Sidebar>
   )
 }

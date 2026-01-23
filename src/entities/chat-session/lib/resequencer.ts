@@ -1,6 +1,6 @@
-import { Message } from '@/entities/message/model/types'
-import { ChannelSessionState } from '../model/types'
 import { compareStreamId } from './stream-id'
+import type { ChannelSessionState } from '../model/types'
+import type { Message } from '@/entities/message/model/types'
 
 /**
  * Pure function to handle incoming message ordering.

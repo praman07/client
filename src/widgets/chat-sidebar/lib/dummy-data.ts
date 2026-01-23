@@ -1,6 +1,6 @@
-import { ChannelItem, DMItem } from '../model/types'
+import type { ChannelItem, DMItem } from '../model/types'
 
-export const DUMMY_CHANNELS: ChannelItem[] = Array.from({ length: 50 }).map(
+export const DUMMY_CHANNELS: Array<ChannelItem> = Array.from({ length: 50 }).map(
   (_, i) => ({
     id: `channel-${i}`,
     name: `channel-${i + 1}`,
@@ -9,7 +9,7 @@ export const DUMMY_CHANNELS: ChannelItem[] = Array.from({ length: 50 }).map(
   }),
 )
 
-export const DUMMY_DMS: DMItem[] = Array.from({ length: 50 }).map((_, i) => ({
+export const DUMMY_DMS: Array<DMItem> = Array.from({ length: 50 }).map((_, i) => ({
   id: `dm-${i}`,
   userId: `user-${i}`,
   name: `User ${i + 1}`,

@@ -1,12 +1,13 @@
-import { env } from '@/shared/config/env'
 import { eventRouter } from './event-router'
 import {
-  ClientMessage,
   ClientEventName,
-  ClientEventPayloads,
-  ServerEventName,
-  ServerMessageUnion,
+  ServerEventName
 } from './protocol'
+import type {
+  ClientEventPayloads,
+  ClientMessage,
+  ServerMessageUnion} from './protocol';
+import { env } from '@/shared/config/env'
 
 // --- Constants ---
 const RECONNECT_INTERVAL_MS = 2000
@@ -24,7 +25,7 @@ export const createConnectionManager = () => {
   let isExplicitlyDisconnected = false
   let pingInterval: ReturnType<typeof setInterval> | null = null
   let reconnectTimeout: ReturnType<typeof setTimeout> | null = null
-  const messageQueue: string[] = []
+  const messageQueue: Array<string> = []
   const activeSubscriptions = new Set<string>()
 
   // --- Helpers ---

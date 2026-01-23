@@ -1,7 +1,7 @@
 import React from 'react'
+import { AlertCircle, Loader2, WifiOff } from 'lucide-react'
+import type { SessionStatus } from '../model/types'
 import { cn } from '@/shared/lib/utils'
-import { Loader2, WifiOff, AlertCircle } from 'lucide-react'
-import { SessionStatus } from '../model/types'
 
 interface SyncStatusIndicatorProps {
   status: SessionStatus

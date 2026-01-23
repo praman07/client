@@ -5,7 +5,7 @@ export function useChannel(channelId: string) {
   // Disabled until backend supports getChannelById or similar
   return useQuery({
     queryKey: channelKeys.detail(channelId),
-    queryFn: async () => {
+    queryFn: () => {
       // Backend does not support getChannel yet
       return null
     },

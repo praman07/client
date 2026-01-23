@@ -1,16 +1,16 @@
 import { HugeiconsIcon } from '@hugeicons/react'
 import { PlusSignIcon } from '@hugeicons/core-free-icons'
+import { Link, useParams } from '@tanstack/react-router'
+import type { DMItem } from '../model/types'
 import {
   SidebarGroup,
-  SidebarGroupLabel,
-  SidebarGroupContent,
-  SidebarMenu,
-  SidebarMenuItem,
-  SidebarMenuButton,
   SidebarGroupAction,
+  SidebarGroupContent,
+  SidebarGroupLabel,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
 } from '@/shared/ui/primitives/sidebar'
-import { DMItem } from '../model/types'
-import { Link, useParams } from '@tanstack/react-router'
 import {
   Avatar,
   AvatarFallback,
@@ -18,11 +18,11 @@ import {
 } from '@/shared/ui/primitives/avatar'
 
 interface DMListProps {
-  items: DMItem[]
+  items: Array<DMItem>
 }
 
 export function DMList({ items }: DMListProps) {
-  const { channelId } = useParams({ strict: false }) as { channelId?: string }
+  const { channelId } = useParams({ strict: false })
 
   return (
     <SidebarGroup>

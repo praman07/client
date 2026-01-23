@@ -1,42 +1,39 @@
+import { useCreateChannelModal } from '..'
+import { CreateChannelForm } from './create-channel-form'
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from '@/shared/ui'
-import { CreateChannelForm } from './create-channel-form'
-import { ReactNode, useState } from 'react'
+import { useAppSelector } from '@/shared/hooks'
+import { selectCurrentProject } from '@/entities/project/model/selectors'
 
-interface CreateChannelModalProps {
-  children: ReactNode
-  workspaceId: string
-  projectId?: string
-}
-
-export function CreateChannelModal({
-  children,
-  workspaceId,
-  projectId,
-}: CreateChannelModalProps) {
-  const [open, setOpen] = useState(false)
+export function CreateChannelModal() {
+  const { isOpen, close } = useCreateChannelModal()
+  const project = useAppSelector(selectCurrentProject)
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
+    <Dialog open={isOpen} onOpenChange={(open) => !open && close()}>
+      <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
           <DialogTitle>Create Channel</DialogTitle>
           <DialogDescription>
-            Create a new channel to start a conversation.
+            Add a new channel to your project.
           </DialogDescription>
         </DialogHeader>
-        <CreateChannelForm
-          workspaceId={workspaceId}
-          projectId={projectId}
-          onSuccess={() => setOpen(false)}
-        />
+        {project ? (
+          <CreateChannelForm
+            workspaceId={project.workspaceId}
+            projectId={project.id}
+            onSuccess={close}
+          />
+        ) : (
+          <div className="p-4 text-center text-muted-foreground">
+            Loading project context...
+          </div>
+        )}
       </DialogContent>
     </Dialog>
   )

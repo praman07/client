@@ -1,28 +1,34 @@
 import { HugeiconsIcon } from '@hugeicons/react'
 import {
-  SidebarGroup,
-  SidebarGroupLabel,
-  SidebarGroupContent,
-  SidebarMenu,
-  SidebarMenuItem,
-  SidebarMenuButton,
-  SidebarGroupAction,
-} from '@/shared/ui/primitives/sidebar'
-import { HashtagIcon, LockKeyIcon, PlusSignIcon } from '@hugeicons/core-free-icons'
-import { ChannelItem } from '../model/types'
+  HashtagIcon,
+  LockKeyIcon,
+  PlusSignIcon,
+} from '@hugeicons/core-free-icons'
 import { Link, useParams } from '@tanstack/react-router'
+import type { ChannelItem } from '../model/types'
+import {
+  SidebarGroup,
+  SidebarGroupAction,
+  SidebarGroupContent,
+  SidebarGroupLabel,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+} from '@/shared/ui/primitives/sidebar'
+import { useCreateChannelModal } from '@/features/create-channel'
 
 interface ChannelListProps {
-  channels: ChannelItem[]
+  channels: Array<ChannelItem>
 }
 
 export function ChannelList({ channels }: ChannelListProps) {
-  const { channelId } = useParams({ strict: false }) as { channelId?: string }
+  const { channelId } = useParams({ strict: false })
+  const { open } = useCreateChannelModal()
 
   return (
     <SidebarGroup>
       <SidebarGroupLabel>Channels</SidebarGroupLabel>
-      <SidebarGroupAction title="Create Channel">
+      <SidebarGroupAction title="Create Channel" onClick={open}>
         <HugeiconsIcon icon={PlusSignIcon} />
       </SidebarGroupAction>
       <SidebarGroupContent>

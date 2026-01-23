@@ -1,6 +1,6 @@
 import React from 'react'
+import type { UserPresenceStatus } from '../model/types'
 import { cn } from '@/shared/lib/utils'
-import { UserPresenceStatus } from '../model/types'
 
 interface StatusDotProps {
   status: UserPresenceStatus

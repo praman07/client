@@ -78,7 +78,7 @@ export interface SendMessagePayload {
   dedupeId: string
   channelId: string
   content: string
-  files?: string[]
+  files?: Array<string>
   threadId?: string
 }
 
@@ -108,12 +108,12 @@ export interface RemoveReactionPayload {
 
 export interface MarkMessageReadPayload {
   channelId: string
-  messageIds: string[]
+  messageIds: Array<string>
 }
 
 export interface MarkMessageDeliveredPayload {
   channelId: string
-  messageIds: string[]
+  messageIds: Array<string>
 }
 
 export interface MarkChannelReadPayload {

@@ -1,7 +1,8 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { ChatSessionState, ChannelSessionState } from './types'
-import { Message } from '@/entities/message/model/types'
+import { createSlice } from '@reduxjs/toolkit'
 import { resequenceMessage } from '../lib/resequencer'
+import type { ChannelSessionState, ChatSessionState } from './types'
+import type { PayloadAction } from '@reduxjs/toolkit';
+import type { Message } from '@/entities/message/model/types'
 
 const initialState: ChatSessionState = {
   sessions: {},

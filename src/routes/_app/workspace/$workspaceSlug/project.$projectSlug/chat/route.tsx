@@ -1,4 +1,4 @@
-import { createFileRoute, Outlet } from '@tanstack/react-router'
+import { Outlet, createFileRoute } from '@tanstack/react-router'
 import { SidebarInset } from '@/shared/ui/primitives/sidebar' // Import SidebarInset
 import {
   ChatSidebar,

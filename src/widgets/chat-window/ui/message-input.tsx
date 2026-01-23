@@ -1,7 +1,7 @@
 import { HugeiconsIcon } from '@hugeicons/react'
 import {
-  SentIcon,
   Attachment01Icon,
+  SentIcon,
   SmileIcon,
 } from '@hugeicons/core-free-icons'
 import { Button } from '@/shared/ui/primitives/button'

@@ -1,4 +1,4 @@
-import {
+import type {
   ServerEventName,
   ServerEventPayloads,
   ServerMessageUnion,

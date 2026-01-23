@@ -1,5 +1,5 @@
+import type { UserPresenceStatus } from '../model/types'
 import { useAppSelector } from '@/shared/hooks' // Assuming shared/hooks exports typed selector
-import { UserPresenceStatus } from '../model/types'
 
 export function useUserPresence(userId: string): UserPresenceStatus {
   return useAppSelector(

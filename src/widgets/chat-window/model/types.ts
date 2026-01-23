@@ -18,7 +18,7 @@ export interface MessageItem {
   senderName: string
   senderAvatar?: string
   timestamp: string
-  attachments?: MessageAttachment[]
-  reactions?: MessageReaction[]
+  attachments?: Array<MessageAttachment>
+  reactions?: Array<MessageReaction>
   isMe?: boolean
 }

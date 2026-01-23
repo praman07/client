@@ -5,11 +5,7 @@ export const createChannelSchema = z.object({
     .string()
     .trim()
     .min(1, 'Channel name is required')
-    .max(80, 'Channel name must be less than 80 characters')
-    .regex(
-      /^[a-z0-9-]+$/,
-      'Channel name must be lowercase, numbers, and dashes only',
-    ),
+    .max(100, 'Channel name must be less than 100 characters'),
   topic: z
     .string()
     .trim()
@@ -17,3 +13,5 @@ export const createChannelSchema = z.object({
     .optional(),
   type: z.enum(['PUBLIC', 'PRIVATE']).default('PUBLIC'),
 })
+
+export type CreateChannelFormValues = z.infer<typeof createChannelSchema>

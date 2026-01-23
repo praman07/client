@@ -1,6 +1,6 @@
 import React from 'react'
-import { cn } from '@/shared/lib/utils'
 import { format } from 'date-fns'
+import { cn } from '@/shared/lib/utils'
 
 interface MessageTimestampProps {
   date: string // ISO String

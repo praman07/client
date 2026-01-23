@@ -1,6 +1,6 @@
-import { MessageItem } from '../model/types'
+import type { MessageItem } from '../model/types'
 
-export const DUMMY_MESSAGES: MessageItem[] = [
+export const DUMMY_MESSAGES: Array<MessageItem> = [
   {
     id: 'm1',
     content: 'Hey everyone! Welcome to the new chat system.',

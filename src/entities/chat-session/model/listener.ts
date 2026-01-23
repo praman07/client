@@ -1,7 +1,7 @@
-import { AppDispatch } from '@/app/store' // Assuming store export
+import { chatSessionActions } from './slice'
+import type { AppDispatch } from '@/app/store' // Assuming store export
 import { eventRouter } from '@/shared/ws/connection-manager/event-router'
 import { ServerEventName } from '@/shared/ws/connection-manager/protocol'
-import { chatSessionActions } from './slice'
 
 /**
  * Initializes the WebSocket event listeners that bridge the Network Layer with Redux.

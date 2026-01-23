@@ -1,7 +1,7 @@
 import React from 'react'
-import { cn } from '@/shared/lib/utils'
-import { Message } from '../model/types'
 import { MessageTimestamp } from './MessageTimestamp'
+import type { Message } from '../model/types'
+import { cn } from '@/shared/lib/utils'
 
 interface MessageBubbleProps {
   message: Message

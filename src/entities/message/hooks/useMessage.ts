@@ -1,8 +1,8 @@
 import { useQuery } from '@tanstack/react-query'
+import { messageKeys } from '../api/query-keys'
 import { GqlClient } from '@/shared/api'
 import { useAuth } from '@/shared/hooks'
 import { gql } from '@/gql'
-import { messageKeys } from '../api/query-keys'
 
 const GET_MESSAGE = gql(`
   query GetMessageById($messageId: ID!) {

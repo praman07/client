@@ -1,2 +1,3 @@
-export { CreateChannelForm } from './ui/create-channel-form'
-export { useCreateChannel } from './hooks/use-create-channel'
+export { CreateChannelModal } from './ui'
+export { useCreateChannelModal } from './hooks'
+export type { CreateChannelInput } from './model'

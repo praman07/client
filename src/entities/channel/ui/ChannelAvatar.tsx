@@ -1,7 +1,7 @@
 import React from 'react'
 import { Hash, Lock, Users } from 'lucide-react'
+import type { ChannelType } from '../model/types'
 import { cn } from '@/shared/lib/utils'
-import { ChannelType } from '../model/types'
 
 interface ChannelAvatarProps {
   type: ChannelType

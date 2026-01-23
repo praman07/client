@@ -1,5 +1,6 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { Channel } from './types'
+import { createSlice } from '@reduxjs/toolkit'
+import type { PayloadAction } from '@reduxjs/toolkit';
+import type { Channel } from './types'
 
 interface ChannelState {
   channels: Record<string, Channel>
@@ -15,7 +16,7 @@ export const channelSlice = createSlice({
   name: 'channel',
   initialState,
   reducers: {
-    setChannels: (state, action: PayloadAction<Channel[]>) => {
+    setChannels: (state, action: PayloadAction<Array<Channel>>) => {
       const list = action.payload
       state.channels = {} // Reset or merge? Usually reset on full list fetch is safer for "My Channels"
       list.forEach((channel) => {

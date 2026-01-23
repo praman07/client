@@ -19,6 +19,6 @@ export interface DMItem {
 
 export interface SidebarSectionData {
   title: string
-  items: (ChannelItem | DMItem)[]
+  items: Array<ChannelItem | DMItem>
   type: SidebarItemType
 }

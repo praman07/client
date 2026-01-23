@@ -1,8 +1,13 @@
 import { Outlet, createFileRoute } from '@tanstack/react-router'
+import { useEffect } from 'react'
 import { NavTabs, ProjectSwitcher } from '@/widgets/navigation'
 import { PROJECT_TABS } from '@/shared/config/navigation'
-import { useAppSelector } from '@/shared/hooks'
+import { useAppDispatch, useAppSelector } from '@/shared/hooks'
 import { selectWorkspaceBySlug } from '@/entities/workspace/model/selectors'
+import {
+  clearCurrentProject,
+  setCurrentProject,
+} from '@/entities/project/model/slice'
 import { useProjectBySlug } from '@/entities/project/hooks'
 import { useFragment } from '@/gql'
 import { PROJECT_FRAGMENT } from '@/entities/project/api/fragments'
@@ -23,6 +28,7 @@ export const Route = createFileRoute(
 function ProjectBaseLayout() {
   const params = Route.useParams()
   const { workspaceSlug, projectSlug } = params
+  const dispatch = useAppDispatch()
 
   // 1. Get Workspace ID (Parent Layout should have synced it)
   const workspace = useAppSelector((state) =>
@@ -36,12 +42,26 @@ function ProjectBaseLayout() {
   )
   const project = useFragment(PROJECT_FRAGMENT, data?.projectBySlug)
 
-  // 3. Loading State
+  // 3. Sync project to Redux state when available
+  useEffect(() => {
+    if (project) {
+      dispatch(setCurrentProject(project))
+    }
+  }, [project, dispatch])
+
+  // 4. Clear project context when leaving project routes
+  useEffect(() => {
+    return () => {
+      dispatch(clearCurrentProject())
+    }
+  }, [dispatch])
+
+  // 5. Loading State
   if (isLoading || (!workspace && !error)) {
     return <ProjectLoadingState />
   }
 
-  // 4. Error/Not Found State
+  // 5. Error/Not Found State
   if (error || !project) {
     return <ProjectErrorState workspaceSlug={workspaceSlug} />
   }
@@ -51,7 +71,7 @@ function ProjectBaseLayout() {
       <div className="shrink-0 border-b bg-background px-6">
         <NavTabs items={PROJECT_TABS as any} from={Route.fullPath} />
       </div>
-      {/* Logic Layer: Project Context Provider could go here */}
+      {/* Project Context Provider: Redux state now synced */}
       <div className="flex-1 overflow-hidden relative">
         <Outlet />
       </div>

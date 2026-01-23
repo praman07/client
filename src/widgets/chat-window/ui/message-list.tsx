@@ -1,6 +1,6 @@
-import { useRef, useEffect } from 'react'
+import { useEffect, useRef } from 'react'
+import type { MessageItem as MessageItemType } from '../model/types'
 import { ScrollArea } from '@/shared/ui/primitives/scroll-area'
-import { MessageItem as MessageItemType } from '../model/types'
 import {
   Avatar,
   AvatarFallback,
@@ -8,7 +8,7 @@ import {
 } from '@/shared/ui/primitives/avatar'
 
 interface MessageListProps {
-  messages: MessageItemType[]
+  messages: Array<MessageItemType>
 }
 
 function MessageItem({ message }: { message: MessageItemType }) {

@@ -1,5 +1,5 @@
-import { RootState } from '@/app/store'
 import { createSelector } from '@reduxjs/toolkit'
+import type { RootState } from '@/app/store'
 
 const selectChatSessionDomain = (state: RootState) => state.chatSession
 

@@ -1,5 +1,6 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { PresenceState, UserPresenceStatus } from './types'
+import { createSlice } from '@reduxjs/toolkit'
+import type { PayloadAction } from '@reduxjs/toolkit';
+import type { PresenceState, UserPresenceStatus } from './types'
 
 const initialState: PresenceState = {
   users: {},

@@ -1,5 +1,5 @@
-import { RootState } from '@/app/store' // Assuming this exists or will exist
 import { createSelector } from '@reduxjs/toolkit'
+import type { RootState } from '@/app/store' // Assuming this exists or will exist
 
 // @ts-ignore - RootState might not have channel field yet until registered
 const selectChannelDomain = (state: RootState) => state.channel
