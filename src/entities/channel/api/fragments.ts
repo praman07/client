@@ -16,8 +16,8 @@ export const CHANNEL_FIELDS_FRAGMENT = gql(`
 `)
 
 export const GET_CHANNELS = gql(`
-  query GetUserChannels($workspaceId: ID!) {
-    getUserChannels(workspaceId: $workspaceId) {
+  query GetUserChannels($workspaceId: ID!, $projectId: ID!) {
+    getUserChannels(workspaceId: $workspaceId, projectId: $projectId) {
       ...ChannelFields
     }
   }

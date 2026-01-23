@@ -1,28 +1,27 @@
 import { useQuery } from '@tanstack/react-query'
-import { setChannels } from '../model/slice'
 import { GET_CHANNELS, channelKeys } from '../api'
-import type { Channel } from '../model/types'
-import { useAppDispatch, useAuth } from '@/shared/hooks'
+import { useAppSelector, useAuth } from '@/shared/hooks'
 import { GqlClient } from '@/shared/api'
+import { selectCurrentWorkspaceId } from '@/entities/workspace'
+import { selectCurrentProject } from '@/entities/project'
 
-export function useChannels(workspaceId: string) {
+export function useChannels() {
   const { getToken } = useAuth()
-  const dispatch = useAppDispatch()
+  const workspaceId = useAppSelector(selectCurrentWorkspaceId)
+  const currentProject = useAppSelector(selectCurrentProject)
+  const projectId = currentProject?.id
 
   return useQuery({
-    queryKey: channelKeys.list(workspaceId),
+    queryKey: channelKeys.list(workspaceId || '', projectId || ''),
     queryFn: async () => {
+      if (!workspaceId) throw new Error('No workspace selected')
+      if (!projectId) throw new Error('No project selected')
+
       const token = await getToken()
-      // GqlClient factory handles null token if needed, or we can throw
       const client = GqlClient(token)
 
-      const data = await client.request(GET_CHANNELS, { workspaceId })
-
-      // Dispatch to Redux Store
-      dispatch(setChannels(data.getUserChannels as Array<Channel>))
-
-      return data
+      return client.request(GET_CHANNELS, { workspaceId, projectId })
     },
-    enabled: !!workspaceId,
+    enabled: !!workspaceId && !!projectId,
   })
 }

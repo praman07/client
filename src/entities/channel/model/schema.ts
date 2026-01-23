@@ -1,19 +1,19 @@
 import { z } from 'zod'
 
-export const ChannelTypeSchema = z.enum(['PROJECT', 'DM', 'GROUP_DM'])
+export const ChannelTypeSchema = z.enum(['PUBLIC', 'PRIVATE', 'DM'])
 
 export const ChannelSchema = z.object({
   id: z.string(),
-  name: z.string(),
-  description: z.string().optional(),
-  type: ChannelTypeSchema,
+  workspaceId: z.string(),
   projectId: z.string(),
-  memberCount: z.number().int().nonnegative(),
+  type: ChannelTypeSchema,
+  name: z.string().optional(),
+  topic: z.string().optional(),
+  isArchived: z.boolean(),
   createdAt: z.string().datetime(),
   updatedAt: z.string().datetime(),
-  createdBy: z.string(),
-  isArchived: z.boolean().default(false),
-  lastSyncedAt: z.string().datetime().optional(),
+  deletedAt: z.string().datetime().optional(),
+  memberCount: z.number().int().nonnegative(),
 })
 
 export type Channel = z.infer<typeof ChannelSchema>
