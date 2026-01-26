@@ -3,7 +3,8 @@ import { z } from 'zod'
 import { RouteError } from '@/shared/ui'
 import { WorkspaceLayout } from '@/pages/workspace'
 import { WorkspaceSwitcher } from '@/widgets/navigation'
-import { useSocketConnection } from '@/shared/ws'
+import { EventHandlerRegistry } from '@/app/providers/events'
+import { useSocketConnection } from '@/app/providers/socket-connection.provider'
 
 const workspaceSearchSchema = z.object({
   action: z.enum(['create-project']).optional(),
@@ -21,8 +22,14 @@ export const Route = createFileRoute('/_app/workspace/$workspaceSlug')({
 function WorkspaceLayoutRouteComponent() {
   const { workspaceSlug } = Route.useParams()
 
-  // Initialize Global WebSocket Connection (Handles auth internally)
-  useSocketConnection()
+  // Initialize Global Socket & Events Scoped to Workspace
+  // This hook handles the detailed connection logic non-blocking.
+  useSocketConnection(true)
 
-  return <WorkspaceLayout workspaceSlug={workspaceSlug} />
+  return (
+    <>
+      <EventHandlerRegistry />
+      <WorkspaceLayout workspaceSlug={workspaceSlug} />
+    </>
+  )
 }

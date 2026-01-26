@@ -38,8 +38,8 @@ export default [
             { from: 'shared', allow: ['shared'] },
             // Entities can import shared and entities
             { from: 'entities', allow: ['shared', 'entities'] },
-            // Features can import shared, entities, and features
-            { from: 'features', allow: ['shared', 'entities', 'features'] },
+            // Features can import shared and entities (NOT other features)
+            { from: 'features', allow: ['shared', 'entities'] },
             // Widgets can import everything below
             {
               from: 'widgets',

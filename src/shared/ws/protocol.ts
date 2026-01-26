@@ -6,7 +6,8 @@
 export type ProtocolEnvelope = ClientMessage | ServerMessageUnion // Use Union for stricter typing
 
 export interface ClientMessage {
-  event: ClientEventName
+  id: string // Request ID
+  type: ClientEventName
   payload: unknown
   headers?: {
     traceId?: string
@@ -15,8 +16,15 @@ export interface ClientMessage {
 
 // Generic Interface (Internal Use)
 export interface ServerMessage<T = unknown> {
-  event: ServerEventName
-  payload: T
+  id?: string
+  type: ServerEventName
+  success: boolean
+  data?: T
+  error?: {
+    code: string
+    message: string
+    details?: unknown
+  }
   meta?: {
     serverTimestamp: string // ISO 8601
   }
@@ -30,21 +38,21 @@ export type ServerMessageUnion = {
 // --- Event Names ---
 
 export enum ClientEventName {
-  SendMessage = 'send-message',
-  EditMessage = 'edit-message',
-  DeleteMessage = 'delete-message',
-  SendThreadMessage = 'send-thread-message',
-  AddReaction = 'add-reaction',
-  RemoveReaction = 'remove-reaction',
-  MarkMessageRead = 'mark-message-read',
-  MarkMessageDelivered = 'mark-message-delivered',
-  MarkChannelRead = 'mark-channel-read',
-  SubscribeChannel = 'subscribe-channel',
-  UnsubscribeChannel = 'unsubscribe-channel',
-  SubscribeThread = 'subscribe-thread',
-  UnsubscribeThread = 'unsubscribe-thread',
-  UserTyping = 'user-typing',
-  UserStopTyping = 'user-stop-typing',
+  SendMessage = 'chat:send-message',
+  EditMessage = 'chat:edit-message',
+  DeleteMessage = 'chat:delete-message',
+  SendThreadMessage = 'chat:send-thread-message',
+  AddReaction = 'chat:add-reaction',
+  RemoveReaction = 'chat:remove-reaction',
+  MarkMessageRead = 'chat:mark-read',
+  MarkMessageDelivered = 'chat:mark-delivered',
+  MarkChannelRead = 'chat:mark-channel-read',
+  SubscribeChannel = 'chat:subscribe-channel',
+  UnsubscribeChannel = 'chat:unsubscribe-channel',
+  SubscribeThread = 'chat:subscribe-thread',
+  UnsubscribeThread = 'chat:unsubscribe-thread',
+  UserTyping = 'chat:user-typing',
+  UserStopTyping = 'chat:user-stop-typing',
   PresenceUpdate = 'presence-update',
   RequestMissingMessages = 'request-missing-messages',
   // Internal/System
@@ -52,21 +60,22 @@ export enum ClientEventName {
 }
 
 export enum ServerEventName {
-  NewMessage = 'new-message',
-  MessageEdited = 'message-edited',
-  MessageDeleted = 'message-deleted',
-  ThreadMessage = 'thread-message',
-  ReactionAdded = 'reaction-added',
-  ReactionRemoved = 'reaction-removed',
-  MessageDelivered = 'message-delivered',
-  MessageRead = 'message-read',
-  ChannelRead = 'channel-read',
+  NewMessage = 'chat:new-message',
+  MessageEdited = 'chat:message-edited',
+  MessageDeleted = 'chat:message-deleted',
+  ThreadMessage = 'chat:thread-message',
+  ReactionAdded = 'chat:reaction-added',
+  ReactionRemoved = 'chat:reaction-removed',
+  MessageDelivered = 'chat:message-delivered',
+  MessageRead = 'chat:message-read',
+  ChannelRead = 'chat:channel-read',
   PresenceChanged = 'presence-changed',
-  UserTyping = 'user-typing',
-  UserStopTyping = 'user-stop-typing',
-  ChannelRenamed = 'channel-renamed',
-  ChannelArchived = 'channel-archived',
-  SyncRequired = 'sync-required',
+  UserTyping = 'chat:user-typing',
+  UserStopTyping = 'chat:user-stop-typing',
+  ChannelRenamed = 'chat:channel-renamed',
+  ChannelArchived = 'chat:channel-archived',
+  SyncRequired = 'chat:sync-required',
+  SubscribeAck = 'chat:subscribe-ack',
   Error = 'error',
   // Internal
   Pong = 'pong',
@@ -76,7 +85,7 @@ export enum ServerEventName {
 
 export interface SendMessagePayload {
   dedupeId: string
-  channelId: string
+  conversationId: string
   content: string
   files?: Array<string>
   threadId?: string
@@ -84,69 +93,69 @@ export interface SendMessagePayload {
 
 export interface EditMessagePayload {
   messageId: string
-  channelId: string
+  conversationId: string
   newContent: string
 }
 
 export interface DeleteMessagePayload {
   messageId: string
-  channelId: string
+  conversationId: string
 }
 
 export interface AddReactionPayload {
-  channelId: string
+  conversationId: string
   messageId: string
   emoji: string
   skinTone?: number
 }
 
 export interface RemoveReactionPayload {
-  channelId: string
+  conversationId: string
   messageId: string
   emoji: string
 }
 
 export interface MarkMessageReadPayload {
-  channelId: string
+  conversationId: string
   messageIds: Array<string>
 }
 
 export interface MarkMessageDeliveredPayload {
-  channelId: string
+  conversationId: string
   messageIds: Array<string>
 }
 
 export interface MarkChannelReadPayload {
-  channelId: string
+  conversationId: string
   watermarkId: string
 }
 
 export interface SubscribeChannelPayload {
-  channelId: string
+  conversationId: string
 }
 
 export interface UnsubscribeChannelPayload {
-  channelId: string
+  conversationId: string
 }
 
 export interface SubscribeThreadPayload {
-  channelId: string
+  conversationId: string
   threadId: string
 }
 
 export interface UnsubscribeThreadPayload {
-  channelId: string
+  conversationId: string
   threadId: string
 }
 
 export interface UserTypingPayload {
-  channelId: string
+  conversationId: string
   threadId?: string
   isTyping: boolean
 }
 
 export interface RequestMissingMessagesPayload {
-  channelId: string
+  conversationId: string
   afterStreamId: string
   limit?: number
 }
@@ -157,7 +166,7 @@ export interface NewMessagePayload {
   messageId: string
   streamId: string
   dedupeId: string
-  channelId: string
+  conversationId: string
   authorId: string
   content: string
   createdAt: string
@@ -165,7 +174,7 @@ export interface NewMessagePayload {
 }
 
 export interface MessageDeliveredPayload {
-  channelId: string
+  conversationId: string
   messageId: string
   userId: string
   deliveredAt: string
@@ -173,19 +182,19 @@ export interface MessageDeliveredPayload {
 
 export interface MessageEditedPayload {
   messageId: string
-  channelId: string
+  conversationId: string
   newContent: string
   editedAt: string
 }
 
 export interface MessageDeletedPayload {
   messageId: string
-  channelId: string
+  conversationId: string
   deletedAt: string
 }
 
 export interface ReactionUpdatePayload {
-  channelId: string
+  conversationId: string
   messageId: string
   emoji: string
   userId: string
@@ -193,14 +202,14 @@ export interface ReactionUpdatePayload {
 }
 
 export interface MessageReadPayload {
-  channelId: string
+  conversationId: string
   messageId: string
   userId: string
   readAt: string
 }
 
 export interface ChannelReadPayload {
-  channelId: string
+  conversationId: string
   userId: string
   watermarkId: string
 }
@@ -212,22 +221,22 @@ export interface PresenceChangedPayload {
 }
 
 export interface UserTypingServerPayload {
-  channelId: string
+  conversationId: string
   userId: string
   isTyping: boolean
 }
 
 export interface ChannelRenamedPayload {
-  channelId: string
+  conversationId: string
   newName: string
 }
 
 export interface ChannelArchivedPayload {
-  channelId: string
+  conversationId: string
 }
 
 export interface SyncRequiredPayload {
-  channelId: string
+  conversationId: string
   reason: 'gap_too_large' | 'rebalance' | 'token_expired'
 }
 
@@ -235,6 +244,11 @@ export interface ErrorPayload {
   code: string
   message: string
   opId?: string
+}
+
+export interface SubscribeAckPayload {
+  conversationId: string
+  status: string
 }
 
 // --- Event Mapping ---
@@ -276,6 +290,7 @@ export type ServerEventPayloads = {
   [ServerEventName.ChannelRenamed]: ChannelRenamedPayload
   [ServerEventName.ChannelArchived]: ChannelArchivedPayload
   [ServerEventName.SyncRequired]: SyncRequiredPayload
+  [ServerEventName.SubscribeAck]: SubscribeAckPayload
   [ServerEventName.Error]: ErrorPayload
   [ServerEventName.Pong]: {}
 }

@@ -35,7 +35,7 @@ type Query {
   getMessageById(messageId: ID!): ChatMessage
   getMessagesAfterCursor(channelId: ID!, afterCursor: ID!, limit: Int): [ChatMessage!]!
   getMissingMessages(channelId: ID!, rangeStart: ID!, rangeEnd: ID!): [ChatMessage!]!
-  getUserChannels(workspaceId: ID!, projectId: ID!, limit: Int, offset: Int): [ChatChannel!]!
+  getUserChannels(workspaceId: ID!, projectId: ID!, limit: Int, offset: Int): [Conversation!]!
   getChannelMembers(channelId: ID!, limit: Int, offset: Int): [ChatMember!]!
   getChannelUnreadCount(channelId: ID!): Int!
   getSubscribedChannels: [ID!]!
@@ -61,9 +61,9 @@ type Mutation {
   markAllNotificationsRead: Boolean!
   createProject(workspaceId: ID!, input: CreateProjectInput!): Project!
   checkProjectSlugAvailability(workspaceId: ID!, slug: String!): AvailabilityResponse!
-  createChannel(input: CreateChannelInput!): ChatChannel!
-  archiveChannel(input: ArchiveChannelInput!): ChatChannel!
-  renameChannel(input: RenameChannelInput!): ChatChannel!
+  createChannel(input: CreateChannelInput!): Conversation!
+  archiveChannel(input: ArchiveChannelInput!): Conversation!
+  renameChannel(input: RenameChannelInput!): Conversation!
   createThread(input: CreateThreadInput!): ChatMessage!
   checkChannelAvailability(input: CheckChannelAvailabilityInput!): ChannelAvailabilityResponse!
 }
@@ -205,11 +205,11 @@ input CreateProjectInput {
   description: String
 }
 
-type ChatChannel {
+type Conversation {
   id: ID!
   workspaceId: ID!
   projectId: ID
-  type: ChannelType!
+  type: ConversationType!
   name: String
   topic: String
   isArchived: Boolean!
@@ -221,15 +221,15 @@ type ChatChannel {
   memberCount: Int!
 }
 
-enum ChannelType {
-  PUBLIC
-  PRIVATE
+enum ConversationType {
+  CHANNEL
   DM
+  GROUP_DM
 }
 
 type ChatMember {
   id: ID!
-  channelId: ID!
+  conversationId: ID!
   userId: ID!
   lastReadMsgId: ID
   lastDeliveredMsgId: ID
@@ -240,7 +240,7 @@ type ChatMember {
 
 type ChatMessage {
   id: ID!
-  channelId: ID!
+  conversationId: ID!
   authorUserId: ID!
   content: JSON!
   type: String!
@@ -264,7 +264,7 @@ input CreateChannelInput {
   projectId: ID
   name: String
   topic: String
-  type: ChannelType
+  type: ConversationType
   memberUserIds: [ID!]
 }
 
