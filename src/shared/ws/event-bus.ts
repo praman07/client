@@ -4,6 +4,7 @@ export type RecoveryRequestedEvent = {
   type: 'intent:recovery-requested'
   payload: {
     conversationId: string
+    projectId: string | null
     lastStreamId: string | null
   }
 }

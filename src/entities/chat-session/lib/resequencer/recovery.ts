@@ -19,6 +19,7 @@ export function triggerRecovery(state: ConversationState) {
     type: 'intent:recovery-requested',
     payload: {
       conversationId: state.conversationId,
+      projectId: state.projectId,
       lastStreamId: state.expectedStreamId,
     },
   })

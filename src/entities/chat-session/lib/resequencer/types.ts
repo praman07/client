@@ -4,6 +4,7 @@ export type ResequencerStatus = 'SYNCED' | 'RECOVERING' | 'DESYNCED'
 
 export interface ConversationState {
   conversationId: string
+  projectId: string | null
   expectedStreamId: string | null
   // We use string Keys to strictly map ID -> Payload
   buffer: Map<string, NewMessagePayload>

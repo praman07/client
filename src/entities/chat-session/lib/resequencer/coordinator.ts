@@ -20,7 +20,7 @@ class ChatResequencer {
    * @param projectId The active project context (injected from UI state)
    */
   async processNewMessage(payload: NewMessagePayload, projectId: string) {
-    const state = await this.getOrInitState(payload.conversationId)
+    const state = await this.getOrInitState(payload.conversationId, projectId)
 
     const task = async () => {
       await processMessageInternal(state, payload, projectId)
@@ -83,6 +83,7 @@ class ChatResequencer {
    */
   private async getOrInitState(
     conversationId: string,
+    projectId?: string,
   ): Promise<ConversationState> {
     // 1. Fast Path
     let state = this.states.get(conversationId)
@@ -107,6 +108,7 @@ class ChatResequencer {
 
       const newState: ConversationState = {
         conversationId,
+        projectId: projectId ?? null,
         expectedStreamId: initialStreamId,
         buffer: new Map(),
         status: 'SYNCED', // Since we default to 0-0, we are "Synced" at the start

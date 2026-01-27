@@ -3,12 +3,12 @@ import { DUMMY_DMS } from '../lib/dummy-data'
 import { mapChannelsToItems } from '../lib/map-channels-to-items'
 import { ChannelList } from './channel-list'
 import { DMList } from './dm-list'
+import type { Channel } from '@/entities/channel'
 import { CreateChannelModal } from '@/features/create-channel'
 import { Sidebar, SidebarContent } from '@/shared/ui/primitives/sidebar'
 import { Separator } from '@/shared/ui/primitives/separator'
 import { ScrollArea } from '@/shared/ui'
 import { useChannels } from '@/entities/channel'
-import type { Channel } from '@/entities/channel'
 import { Skeleton } from '@/shared/ui/primitives/skeleton'
 
 export function ChatSidebar() {
@@ -16,7 +16,7 @@ export function ChatSidebar() {
   const { data, isLoading } = useChannels()
 
   // Read channels from Query Data
-  const channels = (data?.getUserChannels as Channel[]) || []
+  const channels = (data?.getUserChannels as Array<Channel>) || []
 
   const channelItems = useMemo(() => mapChannelsToItems(channels), [channels])
 

@@ -1,0 +1,77 @@
+import { useEffect } from 'react'
+import { registerHandler, RecoveryRequestedEvent } from '@/shared/ws/event-bus'
+import type { NewMessagePayload } from '@/shared/ws/protocol'
+import { resequencer } from '../lib/resequencer'
+import { useFetchDelta } from '../hooks/use-fetch-delta'
+
+export const RecoveryListener = () => {
+  const { fetchDelta } = useFetchDelta()
+
+  useEffect(() => {
+    // Subscribe to internal "Intent" from Resequencer
+    const unsubscribe = registerHandler<RecoveryRequestedEvent>(
+      'intent:recovery-requested',
+      async (event) => {
+        const { conversationId, projectId, lastStreamId } = event.payload
+
+        console.log(
+          `[RecoveryListener] Handling gap for ${conversationId} (Project: ${projectId}) > ${lastStreamId}`,
+        )
+
+        // Safety: If no project ID (legacy state), we cannot commit to persistence.
+        if (!projectId) {
+          console.warn(
+            '[RecoveryListener] Missing Project ID in recovery event',
+          )
+          return
+        }
+
+        try {
+          // 1. Fetch from Backend (Imperative)
+          // We default to "0-0" if for some reason lastStreamId is null (Cold start edge case)
+          const messages = await fetchDelta(
+            conversationId,
+            lastStreamId || '0-0',
+            50, // Default limit
+          )
+
+          if (!messages || messages.length === 0) {
+            console.log(
+              `[RecoveryListener] No messages found for ${conversationId}`,
+            )
+            return
+          }
+
+          console.log(
+            `[RecoveryListener] Fetched ${messages.length} messages. Recovering...`,
+          )
+
+          // 2. Feed back to Engine
+          // TODO: @DesignChoice - ProjectID is derived from event payload.
+          // This avoids coupling the listener to the global store, maintaining FSD compliance.
+          const mappedMessages: NewMessagePayload[] = messages.map(
+            (msg: any) => ({
+              id: msg.id,
+              messageId: msg.id,
+              streamId: msg.streamId,
+              conversationId: msg.conversationId,
+              content: msg.content,
+              authorId: msg.authorUserId,
+              createdAt: msg.createdAt,
+              dedupeId: `recovery-${msg.id}`,
+              projectId: projectId,
+            }),
+          )
+
+          await resequencer.processRecoveryBatch(mappedMessages, projectId)
+        } catch (err) {
+          console.error('[RecoveryListener] Recovery failed', err)
+        }
+      },
+    )
+
+    return () => unsubscribe()
+  }, [fetchDelta])
+
+  return null // Headless
+}
