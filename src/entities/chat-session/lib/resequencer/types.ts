@@ -5,7 +5,9 @@ export type ResequencerStatus = 'SYNCED' | 'RECOVERING' | 'DESYNCED'
 export interface ConversationState {
   conversationId: string
   projectId: string | null
-  expectedStreamId: string | null
+  // Dual-Sequencing:
+  lastSequence: number // Monotonic Counter (Truth)
+  expectedStreamId: string | null // Legacy / Tie-breaker
   // We use string Keys to strictly map ID -> Payload
   buffer: Map<string, NewMessagePayload>
   status: ResequencerStatus

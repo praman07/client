@@ -21,6 +21,7 @@ export function triggerRecovery(state: ConversationState) {
       conversationId: state.conversationId,
       projectId: state.projectId,
       lastStreamId: state.expectedStreamId,
+      lastSequence: state.lastSequence,
     },
   })
 }

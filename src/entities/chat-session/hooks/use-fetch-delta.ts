@@ -9,20 +9,20 @@ export function useFetchDelta() {
   const fetchDelta = useCallback(
     async (
       conversationId: string,
-      afterStreamId: string,
+      afterSequence: number,
       limit: number = 50,
     ) => {
       const token = await getToken()
       if (!token) {
         console.warn('[ChatRecovery] No auth token available')
-        return []
+        return { messages: [], hasMore: false, lastSequence: 0 }
       }
 
       const client = GqlClient(token)
       try {
         const data = await client.request(GET_MISSING_MESSAGES, {
           conversationId,
-          afterStreamId,
+          afterSequence, // Use Sequence Cursor
           limit,
         })
         return data.messagesDelta

@@ -29,12 +29,14 @@ export async function commitMessage(
           conversationId: state.conversationId,
           projectId,
           lastStreamIdSeen: payload.streamId,
+          lastSequence: payload.sequence, // Persist Sequence
           lastOpenedAt: Date.now(),
-        })
+        } as any)
       },
     )
     // Updates memory ONLY after DB commit
     state.expectedStreamId = payload.streamId
+    state.lastSequence = payload.sequence!
     state.lastCommitTs = Date.now()
   } catch (err) {
     throw err
@@ -42,17 +44,20 @@ export async function commitMessage(
 }
 
 /**
- * Retrieves the last known stream ID for a conversation from the DB.
+ * Retrieves the last known cursor (Stream ID & Sequence) from DB.
  */
-export async function getLastStreamId(
+export async function getConversationCursor(
   conversationId: string,
-): Promise<string | null> {
+): Promise<{ streamId: string | null; sequence: number }> {
   try {
-    const cursor = await db.conversation_state.get({ conversationId })
-    return cursor?.lastStreamIdSeen || null
+    const cursor = (await db.conversation_state.get({ conversationId })) as any
+    return {
+      streamId: cursor?.lastStreamIdSeen || null,
+      sequence: cursor?.lastSequence || 0,
+    }
   } catch (e) {
-    console.error('[ResequencerStorage] Failed to get last stream ID', e)
-    return null
+    console.error('[ResequencerStorage] Failed to get cursor', e)
+    return { streamId: null, sequence: 0 }
   }
 }
 

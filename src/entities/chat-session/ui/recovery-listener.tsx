@@ -12,10 +12,11 @@ export const RecoveryListener = () => {
     const unsubscribe = registerHandler<RecoveryRequestedEvent>(
       'intent:recovery-requested',
       async (event) => {
-        const { conversationId, projectId, lastStreamId } = event.payload
+        const { conversationId, projectId, lastStreamId, lastSequence } =
+          event.payload
 
         console.log(
-          `[RecoveryListener] Handling gap for ${conversationId} (Project: ${projectId}) > ${lastStreamId}`,
+          `[RecoveryListener] Handling gap for ${conversationId} (Project: ${projectId}) > Seq: ${lastSequence}`,
         )
 
         // Safety: If no project ID (legacy state), we cannot commit to persistence.
@@ -28,10 +29,10 @@ export const RecoveryListener = () => {
 
         try {
           // 1. Fetch from Backend (Imperative)
-          // We default to "0-0" if for some reason lastStreamId is null (Cold start edge case)
-          const messages = await fetchDelta(
+          // Sequence-based recovery (Deterministic)
+          const { messages } = await fetchDelta(
             conversationId,
-            lastStreamId || '0-0',
+            lastSequence,
             50, // Default limit
           )
 
@@ -57,6 +58,7 @@ export const RecoveryListener = () => {
               conversationId: msg.conversationId,
               content: msg.content,
               authorId: msg.authorUserId,
+              sequence: msg.sequence,
               createdAt: msg.createdAt,
               dedupeId: `recovery-${msg.id}`,
               projectId: projectId,

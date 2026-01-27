@@ -8,6 +8,7 @@ export interface DBMessage extends Message {
   // We index primarily on [projectId+conversationId+streamId]
   // dedupeId is unique to prevent duplicate delivery
   dedupeId?: string
+  sequence?: number // Dual-Sequencing (Optional for back-compat/opt-in)
 }
 
 export interface OutboxItem {
@@ -70,6 +71,14 @@ export class CollabifyDB extends Dexie {
     this.version(2).stores({
       outbox:
         '++id, projectId, conversationId, dedupeId, authorId, status, createdAt',
+    })
+
+    this.version(3).stores({
+      // 5. Dual-Sequencing Support
+      // Added `sequence` for gap detection
+      // Added `[projectId+conversationId+sequence]` for fast ordering/fetching
+      messages:
+        '[projectId+conversationId+streamId], [projectId+conversationId+sequence], dedupeId, projectId, conversationId, streamId, sequence',
     })
   }
 }

@@ -1,4 +1,3 @@
-import { compareStreamId, isStrictlyNextStreamId } from './stream-id'
 import { commitMessage } from './storage'
 import { triggerRecovery } from './recovery'
 import { BUFFER_LIMIT, GAP_TIMEOUT_MS } from './constants'
@@ -19,7 +18,7 @@ export function findOldestBufferedMessage(
       oldest = msg
       continue
     }
-    if (compareStreamId(msg.streamId, oldest.streamId) < 0) {
+    if (msg.sequence < oldest.sequence) {
       oldest = msg
     }
   }
@@ -29,6 +28,9 @@ export function findOldestBufferedMessage(
 /**
  * Flushes the buffer by finding the oldest message > expectedStreamId.
  */
+/**
+ * Flushes the buffer by finding the oldest message strictly next in sequence.
+ */
 export async function flushBuffer(
   state: ConversationState,
   projectId: string,
@@ -37,37 +39,31 @@ export async function flushBuffer(
   if (state.buffer.size === 0) return
 
   while (state.buffer.size > 0) {
-    if (!state.expectedStreamId) break
-
     const oldest = findOldestBufferedMessage(state.buffer)
     if (!oldest) break
 
-    const comparison = compareStreamId(oldest.streamId, state.expectedStreamId)
-
-    // If oldest is older/equal to expected (Duplicate), discard
-    if (comparison <= 0) {
+    // 1. Check for Duplicate/Old (Guard against race conditions)
+    if (oldest.sequence <= state.lastSequence) {
       state.buffer.delete(oldest.streamId)
       continue
     }
 
-    // Check Strategy
+    // 2. Check Strategy
     if (strategy === 'strict') {
-      const isNext = isStrictlyNextStreamId(
-        state.expectedStreamId,
-        oldest.streamId,
-      )
+      const isNext = oldest.sequence === state.lastSequence + 1
       if (!isNext) {
-        // Stop flushing, wait for gap to fill or timeout
+        // Gap Detected: Stop flushing, wait for gap to fill or timeout
         break
       }
     }
+    // If 'force', we skip the gap check (used on timeout)
 
-    // If we are here, we commit (either strictly next, or forcing gap)
+    // 3. Commit
     try {
       await commitMessage(state, oldest, projectId)
       state.buffer.delete(oldest.streamId)
 
-      console.debug(`[Resequencer] Committed: ${oldest.streamId}`)
+      console.debug(`[Resequencer] Committed from Buffer: ${oldest.sequence}`)
 
       // Reset recovery attempts if we are syncing successfully
       state.recoveryAttempts = 0
@@ -118,59 +114,30 @@ export async function processMessageInternal(
   payload: NewMessagePayload,
   projectId: string,
 ) {
-  // Cold Start Safety
-  if (state.expectedStreamId === null) {
-    console.warn(`[Resequencer] Cold Start. Buffering & Requesting Sync.`)
-    state.buffer.set(payload.streamId, payload)
-    state.status = 'DESYNCED'
-    triggerRecovery(state)
-    return
-  }
-
-  const comparison = compareStreamId(payload.streamId, state.expectedStreamId)
-
-  // Debug Log: Entry
-  console.debug(
-    `[Resequencer] Processing ${payload.streamId} (Expected: > ${state.expectedStreamId})`,
-  )
-
-  // 1. Deduplication
-  if (comparison < 0) {
-    console.debug(`[Resequencer] Dropping Duplicate: ${payload.streamId}`)
+  // 1. Deduplication (Sequence Based)
+  // If we have seen this sequence (or higher), it's old or duplicate.
+  // Note: We blindly believe sequence numbers from server as truth.
+  if (payload.sequence <= state.lastSequence) {
+    console.debug(
+      `[Resequencer] Dropping Duplicate/Old: ${payload.sequence} (Head: ${state.lastSequence})`,
+    )
     return
   }
 
   // 2. Exact Match (Strict Ordering)
-  if (comparison === 0) {
-    console.debug(`[Resequencer] Dropping Exact Match: ${payload.streamId}`)
-    return
-  }
-
-  // 3. New Message Handling
-
-  // OPTIMIZATION: Check for Strict Sequence
-  // If this message is EXACTLY the next one (same timestamp, seq+1), we commit immediately.
-  // This avoids latency for the happy path.
-  const isStrictNext = isStrictlyNextStreamId(
-    state.expectedStreamId,
-    payload.streamId,
-  )
+  const isStrictNext = payload.sequence === state.lastSequence + 1
 
   if (isStrictNext) {
     console.debug(
-      `[Resequencer] Strict Sequence Detected: ${payload.streamId}. Committing immediately.`,
+      `[Resequencer] Strict Sequence Detected: ${payload.sequence}. Committing immediately.`,
     )
     try {
       await commitMessage(state, payload, projectId)
-      // After strict commit, we might have bridged a gap and can flush buffer!
-      // Opportunistic Flush: Only flush if strictly next
+      // Opportunistic Flush
       await flushBuffer(state, projectId, 'strict')
       return
     } catch (e) {
       console.error('[Resequencer] Strict Commit Failed', e)
-      // Fallback to buffering if commit fails?
-      // No, if commit fails, we are likely in trouble (DB error).
-      // We should probably throw or let it retry via recovery.
       return
     }
   }

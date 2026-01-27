@@ -171,6 +171,7 @@ export interface NewMessagePayload {
   authorId: string
   content: string
   createdAt: string
+  sequence: number
   threadId?: string
 }
 

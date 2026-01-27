@@ -41,7 +41,7 @@ type Query {
   getSubscribedChannels: [ID!]!
   getLastReadMessage(channelId: ID!): ID
   getPresenceMap(userIds: [ID!]!): [UserPresence!]!
-  messagesDelta(conversationId: ID!, afterStreamId: String!, limit: Int): [ChatMessage!]!
+  messagesDelta(conversationId: ID!, afterSequence: Int, afterStreamId: String, limit: Int): MessagesDelta!
 }
 
 type Mutation {
@@ -246,6 +246,7 @@ type ChatMessage {
   content: JSON!
   type: String!
   streamId: String!
+  sequence: Int!
   createdAt: DateTime!
 }
 
@@ -296,4 +297,10 @@ type ChannelAvailabilityResponse {
   message: String
   reason: String
   reservationId: String
+}
+
+type MessagesDelta {
+  messages: [ChatMessage!]!
+  hasMore: Boolean!
+  lastSequence: Int!
 }

@@ -6,6 +6,7 @@ export type RecoveryRequestedEvent = {
     conversationId: string
     projectId: string | null
     lastStreamId: string | null
+    lastSequence: number // Dual-Sequencing
   }
 }
 

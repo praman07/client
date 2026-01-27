@@ -4,6 +4,7 @@ export const MESSAGE_RECOVERY_FRAGMENT = gql(`
   fragment MessageRecoveryFields on ChatMessage {
     id
     streamId
+    sequence
     conversationId
     authorUserId
     content
@@ -13,9 +14,13 @@ export const MESSAGE_RECOVERY_FRAGMENT = gql(`
 `)
 
 export const GET_MISSING_MESSAGES = gql(`
-  query GetMissingMessages($conversationId: ID!, $afterStreamId: String!, $limit: Int) {
-    messagesDelta(conversationId: $conversationId, afterStreamId: $afterStreamId, limit: $limit) {
-      ...MessageRecoveryFields
+  query GetMissingMessages($conversationId: ID!, $afterSequence: Int!, $limit: Int) {
+    messagesDelta(conversationId: $conversationId, afterSequence: $afterSequence, limit: $limit) {
+      messages {
+        ...MessageRecoveryFields
+      }
+      hasMore
+      lastSequence
     }
   }
 `)

@@ -1,6 +1,6 @@
 import { compareStreamId } from './stream-id'
 import { processMessageInternal } from './engine'
-import { getLastStreamId, resetConversationStorage } from './storage'
+import { getConversationCursor, resetConversationStorage } from './storage'
 import { triggerRecovery } from './recovery'
 import type { ConversationState } from './types'
 import type { NewMessagePayload } from '@/shared/ws/protocol'
@@ -96,7 +96,7 @@ class ChatResequencer {
 
     // 3. Initialization
     const initTask = (async () => {
-      const lastStreamId = await getLastStreamId(conversationId)
+      const { streamId, sequence } = await getConversationCursor(conversationId)
 
       // Double check after await (though initPromises protects us, standard double-check doesn't hurt)
       if (this.states.has(conversationId)) {
@@ -104,12 +104,13 @@ class ChatResequencer {
       }
 
       // If no stream ID exists (fresh conversation), successful sync starts at '0-0'
-      const initialStreamId = lastStreamId || '0-0'
+      const initialStreamId = streamId || '0-0'
 
       const newState: ConversationState = {
         conversationId,
         projectId: projectId ?? null,
         expectedStreamId: initialStreamId,
+        lastSequence: sequence, // Init from DB
         buffer: new Map(),
         status: 'SYNCED', // Since we default to 0-0, we are "Synced" at the start
         gapTimer: null,
