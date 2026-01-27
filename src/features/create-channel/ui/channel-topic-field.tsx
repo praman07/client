@@ -1,5 +1,5 @@
-import { createChannelSchema  } from '../model'
-import type { ChannelFormApi  } from '../model';
+import { createChannelSchema } from '../model'
+import type { ChannelFormApi } from '../model'
 import { Label, Textarea } from '@/shared/ui'
 
 interface Props {

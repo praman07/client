@@ -6,7 +6,7 @@ import { useCreateChannel } from '../hooks'
 import { getChannelErrorMessage } from '../lib'
 import { ChannelNameField } from './channel-name-field'
 import { ChannelTopicField } from './channel-topic-field'
-import { ChannelTypeField } from './channel-type-field'
+// import { ChannelTypeField } from './channel-type-field'
 import type { CreateChannelFormApi } from '../model'
 import { Button } from '@/shared/ui'
 
@@ -30,7 +30,7 @@ export function CreateChannelForm({
     defaultValues: {
       name: '',
       topic: '',
-      type: 'PUBLIC' as 'PUBLIC' | 'PRIVATE',
+      type: 'CHANNEL' as const,
     },
     onSubmit: async ({ value }) => {
       setRootError(null)
@@ -75,7 +75,6 @@ export function CreateChannelForm({
       >
         <ChannelNameField form={form} projectId={projectId} />
         <ChannelTopicField form={form} />
-        <ChannelTypeField form={form} />
 
         <div className="flex justify-end pt-2">
           <form.Subscribe

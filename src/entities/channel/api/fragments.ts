@@ -1,7 +1,7 @@
 import { gql } from '@/gql'
 
 export const CHANNEL_FIELDS_FRAGMENT = gql(`
-  fragment ChannelFields on ChatChannel {
+  fragment ChannelFields on Conversation {
     id
     name
     topic

@@ -11,7 +11,7 @@ export const createChannelSchema = z.object({
     .trim()
     .max(500, 'Topic must be less than 500 characters')
     .optional(),
-  type: z.enum(['PUBLIC', 'PRIVATE']).default('PUBLIC'),
+  type: z.enum(['CHANNEL', 'DM', 'GROUP_DM']).default('CHANNEL'),
 })
 
 export type CreateChannelFormValues = z.infer<typeof createChannelSchema>

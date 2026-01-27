@@ -12,7 +12,7 @@ export const MessageDeliveryStatusSchema = z.enum([
 export const MessageSchema = z.object({
   id: z.string(), // Server ID or Optimistic ID
   streamId: z.string().optional(), // Redis Sequence ID
-  channelId: z.string(),
+  conversationId: z.string(),
   content: z.string(), // Rich text or plain string
   authorId: z.string(),
   createdAt: z.string().datetime(),

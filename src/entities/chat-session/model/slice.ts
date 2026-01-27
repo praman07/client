@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { resequenceMessage } from '../lib/resequencer'
+// Removed resequencer import - logic moves to Feature pipeline
 import type { ChannelSessionState, ChatSessionState } from './types'
-import type { PayloadAction } from '@reduxjs/toolkit';
+import type { PayloadAction } from '@reduxjs/toolkit'
 import type { Message } from '@/entities/message/model/types'
 
 const initialState: ChatSessionState = {
@@ -40,19 +40,38 @@ export const chatSessionSlice = createSlice({
       }
     },
 
-    processIncomingMessage: (
+    // processIncomingMessage REMOVED.
+    // The Feature layer (Pipeline) handles resequencing logic and writes to Dexie.
+    // It then calls `updateCursor` or `bufferMessage` here to update Redux metadata.
+
+    updateExpectedStreamId: (
       state,
-      action: PayloadAction<{ channelId: string; message: Message }>,
+      action: PayloadAction<{ channelId: string; nextExpectedId: string }>,
     ) => {
-      const { channelId, message } = action.payload
+      const session = state.sessions[action.payload.channelId]
+      if (session) {
+        session.expectedStreamId = action.payload.nextExpectedId
+        session.lastAppliedMessageId = null // We don't need this in Redux anymore really
+        session.status = 'IN_SYNC'
+      }
+    },
+
+    bufferMessage: (
+      state,
+      action: PayloadAction<{
+        channelId: string
+        streamId: string
+        message: Message
+      }>,
+    ) => {
+      const { channelId, streamId, message } = action.payload
       const session = state.sessions[channelId]
-
-      if (!session) return // Ignore messages for unknown channels (or auto-init?)
-
-      const changes = resequenceMessage(session, message)
-
-      // Apply pure changes to state
-      Object.assign(session, changes)
+      if (session) {
+        session.buffer[streamId] = message
+        session.status = 'RECOVERING'
+        session.stats.bufferedCount = Object.keys(session.buffer).length
+        session.stats.gapDetectedAt = Date.now()
+      }
     },
 
     setConnectionState: (
@@ -73,7 +92,8 @@ export const chatSessionSlice = createSlice({
 
 export const {
   initChannel,
-  processIncomingMessage,
+  updateExpectedStreamId,
+  bufferMessage,
   setConnectionState,
   forceSync,
 } = chatSessionSlice.actions

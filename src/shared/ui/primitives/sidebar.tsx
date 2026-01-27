@@ -135,7 +135,7 @@ function SidebarProvider({
           } as React.CSSProperties
         }
         className={cn(
-          'group/sidebar-wrapper has-data-[variant=inset]:bg-sidebar flex min-h-svh w-full',
+          'group/sidebar-wrapper has-data-[variant=inset]:bg-sidebar flex min-h-full w-full',
           className,
         )}
         {...props}
@@ -507,6 +507,11 @@ function SidebarMenuButton({
     tooltip?: string | React.ComponentProps<typeof TooltipContent>
   } & VariantProps<typeof sidebarMenuButtonVariants>) {
   const { isMobile, state } = useSidebar()
+  const finalRender = React.useMemo(() => {
+    if (!tooltip) return render
+    return (props: any) => <TooltipTrigger {...props} render={render} />
+  }, [tooltip, render])
+
   const comp = useRender({
     defaultTagName: 'button',
     props: mergeProps<'button'>(
@@ -515,7 +520,7 @@ function SidebarMenuButton({
       },
       props,
     ),
-    render: !tooltip ? render : TooltipTrigger,
+    render: finalRender,
     state: {
       slot: 'sidebar-menu-button',
       sidebar: 'menu-button',

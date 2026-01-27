@@ -1,6 +1,6 @@
 import { useCheckChannelSlug } from '../hooks'
-import { createChannelSchema  } from '../model'
-import type { ChannelFormApi  } from '../model';
+import { createChannelSchema } from '../model'
+import type { ChannelFormApi } from '../model'
 import { Input, Label, Spinner } from '@/shared/ui'
 
 interface Props {

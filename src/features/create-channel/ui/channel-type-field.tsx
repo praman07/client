@@ -1,5 +1,5 @@
-import { CHANNEL_TYPES  } from '../model'
-import type {ChannelFormApi, ChannelType } from '../model';
+import { CHANNEL_TYPES } from '../model'
+import type { ChannelFormApi, ChannelType } from '../model'
 import { Label, RadioGroup, RadioGroupItem } from '@/shared/ui'
 
 interface Props {

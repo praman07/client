@@ -4,7 +4,7 @@ import type { createChannelSchema } from './schema'
 
 export type CreateChannelInput = z.infer<typeof createChannelSchema>
 
-export const CHANNEL_TYPES = ['PUBLIC', 'PRIVATE'] as const
+export const CHANNEL_TYPES = ['CHANNEL', 'DM', 'GROUP_DM'] as const
 export type ChannelType = z.infer<typeof createChannelSchema.shape.type>
 
 export type CreateChannelFormApi = ReactFormApi<
