@@ -8,12 +8,12 @@
  * Responsibility: Single ingress fan-out and replication (Leader -> Follower).
  * Domain agnostic.
  */
-import { leaderElection } from '@/shared/lib/broadcast/leader-election'
 import type {
   ServerEventName,
   ServerEventPayloads,
   ServerMessageUnion,
 } from './protocol'
+import { leaderElection } from '@/shared/lib/broadcast/leader-election'
 
 // Internal type for erased handlers
 type GenericEventHandler = (payload: never) => void
@@ -48,8 +48,12 @@ export const eventRouter = {
     }
 
     // 2. Local Dispatch
-
     const typeHandlers = handlers.get(envelope.type)
+
+    console.debug(
+      `[EventRouter] Dispatching ${envelope.type} to ${typeHandlers?.size || 0} handlers`,
+    )
+
     if (!typeHandlers) return
 
     typeHandlers.forEach((genericHandler) => {

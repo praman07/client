@@ -17,7 +17,7 @@ export interface MarkReadCommand {
   type: 'chat:mark-read'
   payload: {
     conversationId: string
-    messageIds: string[]
+    messageIds: Array<string>
   }
 }
 

@@ -1,7 +1,7 @@
+import type { ChatDownstreamEvent } from '@/shared/contracts/chat/downstream'
 import { eventRouter } from '@/shared/ws/event-router'
 import { ServerEventName } from '@/shared/ws/protocol'
 import { dispatchEvent } from '@/shared/ws/event-bus'
-import { ChatDownstreamEvent } from '@/shared/contracts/chat/downstream'
 
 /**
  * Domain Event Bridge
@@ -13,6 +13,7 @@ import { ChatDownstreamEvent } from '@/shared/contracts/chat/downstream'
  */
 
 const CHAT_EVENTS = [
+  ServerEventName.AckMessage,
   ServerEventName.NewMessage,
   ServerEventName.MessageEdited,
   ServerEventName.MessageDeleted,

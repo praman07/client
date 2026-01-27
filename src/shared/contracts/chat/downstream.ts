@@ -36,5 +36,18 @@ export interface MessageReadEvent {
   }
 }
 
+export interface AckMessageEvent {
+  type: 'chat:ack-message'
+  payload: {
+    dedupeId: string
+    status: 'pending' | 'sent' | 'failed' | 'duplicate'
+    message?: string
+    streamId?: string
+  }
+}
+
 // Union of all Chat Downstream Events
-export type ChatDownstreamEvent = NewMessageEvent | MessageReadEvent
+export type ChatDownstreamEvent =
+  | NewMessageEvent
+  | MessageReadEvent
+  | AckMessageEvent

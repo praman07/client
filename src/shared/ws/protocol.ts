@@ -60,6 +60,7 @@ export enum ClientEventName {
 }
 
 export enum ServerEventName {
+  AckMessage = 'chat:ack-message',
   NewMessage = 'chat:new-message',
   MessageEdited = 'chat:message-edited',
   MessageDeleted = 'chat:message-deleted',
@@ -251,6 +252,13 @@ export interface SubscribeAckPayload {
   status: string
 }
 
+export interface AckMessagePayload {
+  dedupeId: string
+  status: 'pending' | 'sent' | 'failed' | 'duplicate'
+  message?: string
+  streamId?: string
+}
+
 // --- Event Mapping ---
 
 export type ClientEventPayloads = {
@@ -275,6 +283,7 @@ export type ClientEventPayloads = {
 }
 
 export type ServerEventPayloads = {
+  [ServerEventName.AckMessage]: AckMessagePayload
   [ServerEventName.NewMessage]: NewMessagePayload
   [ServerEventName.MessageEdited]: MessageEditedPayload
   [ServerEventName.MessageDeleted]: MessageDeletedPayload

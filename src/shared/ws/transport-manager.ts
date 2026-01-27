@@ -9,13 +9,13 @@
  * Responsibility: Manage raw WebSocket connection, heartbeat, and reconnection.
  */
 import { eventRouter } from './event-router'
-import { leaderElection } from '@/shared/lib/broadcast/leader-election'
 import { ClientEventName, ServerEventName } from './protocol'
 import type {
   ClientEventPayloads,
   ClientMessage,
   ServerMessageUnion,
 } from './protocol'
+import { leaderElection } from '@/shared/lib/broadcast/leader-election'
 import { env } from '@/shared/config/env'
 
 // --- Constants ---
@@ -241,6 +241,9 @@ export const createConnectionManager = () => {
 
   const handleMessage = (event: MessageEvent) => {
     try {
+      // DEBUG: Log everything
+      console.log('[WS-Manager] Raw Message:', event.data)
+
       const data = JSON.parse(event.data)
       if (isValidServerMessage(data)) {
         // TODO: Handle SubscribeAck

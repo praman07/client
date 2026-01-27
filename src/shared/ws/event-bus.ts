@@ -1,7 +1,18 @@
-import { ChatDownstreamEvent } from '@/shared/contracts/chat/downstream'
+import type { ChatDownstreamEvent } from '@/shared/contracts/chat/downstream'
+
+export type RecoveryRequestedEvent = {
+  type: 'intent:recovery-requested'
+  payload: {
+    conversationId: string
+    lastStreamId: string | null
+  }
+}
 
 export type BaseAppEvent = { type: string }
-export type AppEvent = ChatDownstreamEvent | BaseAppEvent
+export type AppEvent =
+  | ChatDownstreamEvent
+  | RecoveryRequestedEvent
+  | BaseAppEvent
 
 type EventHandler<T> = (event: T) => void
 
@@ -40,7 +51,7 @@ export function registerHandler<T extends AppEvent>(
 export function dispatchEvent(event: AppEvent) {
   const set = handlers.get(event.type)
   if (!set || set.size === 0) {
-    // console.debug(`[EventBus] No handlers for: ${event.type}`)
+    console.debug(`[EventBus] No handlers for: ${event.type}`)
     return
   }
 

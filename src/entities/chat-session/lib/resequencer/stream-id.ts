@@ -25,6 +25,27 @@ export function compareStreamId(
 }
 
 /**
+ * Checks if candidateId is strictly the next ID after currentId.
+ * Logic:
+ * 1. Same Timestamp AND Sequence + 1
+ * 2. Note: If timestamp increases, we CANNOT strictly know if it's next (could be gap).
+ *    So we return false for timestamp jumps to force buffering (Safe Mode).
+ */
+export function isStrictlyNextStreamId(
+  currentId: string | null,
+  candidateId: string,
+): boolean {
+  if (!currentId) return false // Cold start always buffers/desyncs or handled separately
+  const [ts1, seq1] = currentId.split('-').map(Number)
+  const [ts2, seq2] = candidateId.split('-').map(Number)
+
+  if (ts1 === ts2 && seq2 === seq1 + 1) {
+    return true
+  }
+  return false
+}
+
+/**
  * Parses a stream ID into its components
  */
 export function parseStreamId(id: string) {
