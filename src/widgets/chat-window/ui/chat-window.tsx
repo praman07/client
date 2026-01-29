@@ -1,36 +1,49 @@
-import { useParams } from '@tanstack/react-router'
-import { DUMMY_MESSAGES } from '../lib/dummy-messages'
 import { ChatHeader } from './chat-header'
-import { MessageList } from './message-list'
+import { MessageList } from '@/widgets/message-list'
 import { MessageInput } from './message-input'
-import {
-  DUMMY_CHANNELS,
-  DUMMY_DMS,
-} from '@/widgets/chat-sidebar/lib/dummy-data'
+import { useChannelSubscription } from '@/features/subscribe-channel'
+import { useResequencerStatus } from '@/entities/chat-session/hooks/use-resequencer-status'
+import { SyncStatusIndicator } from '@/entities/chat-session/ui/SyncStatusIndicator'
 
-export function ChatWindow() {
-  const { channelId } = useParams({ strict: false })
+import { Chat } from '@/shared/ui/primitives/chat-layout'
 
-  // Simple lookup for dummy data
-  const channel = DUMMY_CHANNELS.find((c) => c.id === channelId)
-  const dm = DUMMY_DMS.find((d) => d.id === channelId)
+// TODO: Fetch real channel details via Query
 
-  const name = channel?.name || dm?.name || 'Unknown Channel'
-  const isPrivate = channel?.type === 'private' || !!dm
+interface ChatWindowProps {
+  channelId: string
+  projectId: string
+  channelName: string
+  isPrivate: boolean
+  description?: string
+}
+
+export function ChatWindow({
+  channelId,
+  projectId,
+  channelName,
+  isPrivate,
+  description,
+}: ChatWindowProps) {
+  // 1. Activate Subscription (Data Plane)
+  useChannelSubscription(channelId || '', projectId)
+
+  // 2. Monitoring (Control Plane)
+  const status = useResequencerStatus(channelId || '')
 
   return (
-    <div className="flex flex-col h-full bg-background">
+    <Chat>
       <ChatHeader
-        channelName={name}
+        channelName={channelName}
         isPrivate={isPrivate}
         description={
-          channel
-            ? 'Topic: General discussion about the project'
-            : 'Direct Message'
+          description || 'Topic: General discussion about the project'
         }
-      />
-      <MessageList messages={DUMMY_MESSAGES} />
-      <MessageInput />
-    </div>
+      >
+        {/* Sync Status Indicator */}
+        <SyncStatusIndicator status={status} />
+      </ChatHeader>
+      <MessageList channelId={channelId || ''} projectId={projectId} />
+      <MessageInput channelId={channelId || ''} projectId={projectId} />
+    </Chat>
   )
 }

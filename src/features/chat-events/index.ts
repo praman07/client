@@ -1,8 +1,8 @@
 import { registerNewMessageHandler } from './new-message'
 import { registerAckMessageHandler } from './ack-message'
 import type { ChatEventHandlerContext } from './new-message'
-
 import { startOutboxRetryWorker } from './outbox-worker'
+import { registerSyncRequiredHandler } from './sync-required'
 
 export function registerChatHandlers(context: ChatEventHandlerContext) {
   // Start the background worker
@@ -11,6 +11,7 @@ export function registerChatHandlers(context: ChatEventHandlerContext) {
   const unsubs = [
     registerNewMessageHandler(context),
     registerAckMessageHandler(context),
+    registerSyncRequiredHandler(),
   ]
 
   return () => {

@@ -9,7 +9,19 @@ export function useChannelSubscription(channelId: string, projectId: string) {
   useEffect(() => {
     if (!channelId) return
     dispatch(initChannel({ channelId }))
-    wsManager.subscribe(channelId)
+
+    // Audit Fix: Smart Subscription (Sync-on-Connect)
+    wsManager.subscribe(channelId, async () => {
+      const { resequencer } =
+        await import('@/entities/chat-session/lib/resequencer/coordinator')
+      const state = await resequencer.getSubscriptionState(channelId, projectId)
+      return {
+        conversationId: channelId,
+        lastSequence: state.lastSequence,
+        epoch: state.epoch ?? undefined, // Convert null to undefined for protocol compatibility
+      }
+    })
+
     return () => {
       wsManager.unsubscribe(channelId)
     }

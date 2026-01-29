@@ -46,9 +46,32 @@ export function isStrictlyNextStreamId(
 }
 
 /**
- * Parses a stream ID into its components
+ * Parses a stream ID into its components (Unsafe - assumes valid input)
  */
 export function parseStreamId(id: string) {
   const [ts, seq] = id.split('-').map(Number)
   return { ts, seq }
+}
+
+/**
+ * Validates if the string is a conformant Redis Stream ID
+ * Format: <timestamp>-<sequence> (e.g. 1690000000000-0)
+ */
+export function isValidStreamId(id: string | null): boolean {
+  if (!id) return false
+  // Regex: 1+ digits, hyphen, 1+ digits
+  return /^\d+-\d+$/.test(id)
+}
+
+/**
+ * Safely parses a stream ID, throwing or returning null on failure.
+ * Used at integration boundaries (Network/Storage).
+ */
+export function safeParseStreamId(id: unknown): string | null {
+  if (typeof id !== 'string') return null
+  if (!isValidStreamId(id)) {
+    console.warn(`[StreamID] Invalid format: ${id}`)
+    return null
+  }
+  return id
 }

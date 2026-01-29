@@ -12,11 +12,11 @@ export const RecoveryListener = () => {
     const unsubscribe = registerHandler<RecoveryRequestedEvent>(
       'intent:recovery-requested',
       async (event) => {
-        const { conversationId, projectId, lastStreamId, lastSequence } =
+        const { conversationId, projectId, lastSequence, gapSize } =
           event.payload
 
         console.log(
-          `[RecoveryListener] Handling gap for ${conversationId} (Project: ${projectId}) > Seq: ${lastSequence}`,
+          `[RecoveryListener] Handling gap for ${conversationId} (Project: ${projectId}) > Seq: ${lastSequence} (Gap: ${gapSize})`,
         )
 
         // Safety: If no project ID (legacy state), we cannot commit to persistence.
@@ -30,16 +30,29 @@ export const RecoveryListener = () => {
         try {
           // 1. Fetch from Backend (Imperative)
           // Sequence-based recovery (Deterministic)
+          // For small gaps (< 5), fetch exactly what's missing
+          // For larger gaps, add buffer to handle race conditions
+          // CRITICAL: fetchLimit must be >= 1 for GraphQL validation
+          const fetchLimit = Math.max(
+            1,
+            gapSize < 5 ? gapSize : Math.min(gapSize + 10, 100),
+          )
+
+          console.debug(
+            `[RecoveryListener] Fetching ${fetchLimit} messages (gap: ${gapSize})...`,
+          )
+
           const { messages } = await fetchDelta(
             conversationId,
             lastSequence,
-            50, // Default limit
+            fetchLimit,
           )
 
           if (!messages || messages.length === 0) {
-            console.log(
-              `[RecoveryListener] No messages found for ${conversationId}`,
+            console.warn(
+              `[RecoveryListener] No messages found for ${conversationId}. Server history missing? Forcing cursor advance.`,
             )
+            await resequencer.handleRecoveryGap(conversationId, projectId)
             return
           }
 

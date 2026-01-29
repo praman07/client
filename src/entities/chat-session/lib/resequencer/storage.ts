@@ -1,5 +1,6 @@
 import type { NewMessagePayload } from '@/shared/ws/protocol'
 import type { ConversationState } from './types'
+import type { ConversationState as DBConversationState } from '@/shared/lib/db/schema'
 import { db } from '@/shared/lib/db'
 
 /**
@@ -37,6 +38,7 @@ export async function commitMessage(
     // Updates memory ONLY after DB commit
     state.expectedStreamId = payload.streamId
     state.lastSequence = payload.sequence!
+    state.lastStreamIdSeen = payload.streamId // Hybrid: Keep in sync!
     state.lastCommitTs = Date.now()
   } catch (err) {
     throw err
@@ -45,15 +47,71 @@ export async function commitMessage(
 
 /**
  * Retrieves the last known cursor (Stream ID & Sequence) from DB.
+ * Uses compound key [projectId+conversationId] for efficient lookup.
+ *
+ * MIGRATION FALLBACK: If cursor.sequence is 0/undefined but messages exist,
+ * derive lastSequence from the max sequence in messages table.
  */
 export async function getConversationCursor(
   conversationId: string,
+  projectId?: string,
 ): Promise<{ streamId: string | null; sequence: number }> {
   try {
-    const cursor = (await db.conversation_state.get({ conversationId })) as any
+    let cursor: DBConversationState | undefined
+
+    // 1. Fast Path: Use compound key if projectId is available
+    if (projectId) {
+      cursor = (await db.conversation_state.get([
+        projectId,
+        conversationId,
+      ])) as DBConversationState | undefined
+    }
+
+    // 2. Fallback: Search by conversationId index (slower but works)
+    if (!cursor) {
+      cursor = await db.conversation_state
+        .where('conversationId')
+        .equals(conversationId)
+        .first()
+    }
+
+    let sequence = cursor?.lastSequence ?? 0
+    const streamId = cursor?.lastStreamIdSeen ?? null
+
+    // 3. MIGRATION FALLBACK: Derive sequence from messages if cursor.sequence is 0
+    // This handles records created before lastSequence was added to the schema
+    if (sequence === 0 && projectId) {
+      const latestMessage = await db.messages
+        .where('[projectId+conversationId+sequence]')
+        .between(
+          [projectId, conversationId, 0],
+          [projectId, conversationId, Number.MAX_SAFE_INTEGER],
+        )
+        .last()
+
+      if (latestMessage?.sequence) {
+        sequence = latestMessage.sequence
+        console.log(
+          '[Storage] Migration: Derived sequence from messages:',
+          sequence,
+        )
+
+        // Backfill the cursor record for future lookups
+        if (cursor && projectId) {
+          await db.conversation_state.put({
+            ...cursor,
+            lastSequence: sequence,
+          })
+        }
+      }
+    }
+
+    // DEBUG: Cursor lookup (uncomment for debugging)
+    // console.log('[Storage] getConversationCursor:', { conversationId, sequence, foundCursor: !!cursor })
+
     return {
-      streamId: cursor?.lastStreamIdSeen || null,
-      sequence: cursor?.lastSequence || 0,
+      streamId,
+      sequence,
     }
   } catch (e) {
     console.error('[ResequencerStorage] Failed to get cursor', e)

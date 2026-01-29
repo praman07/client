@@ -18,8 +18,8 @@ export function registerAckMessageHandler(context: ChatEventHandlerContext) {
     // Cast to internal contract type
     const payload = (event as any).payload as AckMessagePayload
 
-    // Validate StreamID presence for Fast Path
-    if (!payload.streamId || payload.status !== 'sent') {
+    // Validate StreamID and sequence presence for Fast Path
+    if (!payload.streamId || !payload.sequence || payload.status !== 'sent') {
       // Just a status update (pending/failed), ignore for resequencing
       return
     }
@@ -65,6 +65,7 @@ export function registerAckMessageHandler(context: ChatEventHandlerContext) {
         authorId: outboxItem.authorId || 'CURRENT_USER',
         content: outboxItem.payload.content,
         createdAt: new Date(outboxItem.createdAt).toISOString(),
+        sequence: payload.sequence, // CRITICAL: Required for resequencer gap detection
       }
 
       console.debug('[AckHandler] Fast-Tracking Message:', payload.streamId)

@@ -7,6 +7,7 @@ export type RecoveryRequestedEvent = {
     projectId: string | null
     lastStreamId: string | null
     lastSequence: number // Dual-Sequencing
+    gapSize: number // Exact missing count
   }
 }
 

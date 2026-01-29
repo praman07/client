@@ -50,9 +50,9 @@ export const eventRouter = {
     // 2. Local Dispatch
     const typeHandlers = handlers.get(envelope.type)
 
-    console.debug(
-      `[EventRouter] Dispatching ${envelope.type} to ${typeHandlers?.size || 0} handlers`,
-    )
+    // console.debug(
+    //   `[EventRouter] Dispatching ${envelope.type} to ${typeHandlers?.size || 0} handlers`,
+    // )
 
     if (!typeHandlers) return
 
@@ -78,8 +78,13 @@ export const eventRouter = {
   },
 }
 
-// --- Relay Listener ---
-leaderElection.onRelay((payload) => {
-  // Prevent cycles by flagging as fromRelay
-  eventRouter.dispatch(payload as ServerMessageUnion, true)
-})
+// --- Relay Listener (Singleton Guard for HMR) ---
+let relayListenerRegistered = false
+
+if (!relayListenerRegistered) {
+  leaderElection.onRelay((payload) => {
+    // Prevent cycles by flagging as fromRelay
+    eventRouter.dispatch(payload as ServerMessageUnion, true)
+  })
+  relayListenerRegistered = true
+}

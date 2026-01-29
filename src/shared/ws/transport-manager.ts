@@ -14,6 +14,7 @@ import type {
   ClientEventPayloads,
   ClientMessage,
   ServerMessageUnion,
+  SubscribeChannelPayload,
 } from './protocol'
 import { leaderElection } from '@/shared/lib/broadcast/leader-election'
 import { env } from '@/shared/config/env'
@@ -53,10 +54,16 @@ export const createConnectionManager = () => {
   const messageQueue: Array<{ msg: string; type: ClientEventName }> = []
 
   // Intent: what the app WANTS to be subscribed to. Separate from transport state.
-  const activeSubscriptions = new Set<string>()
+  // Value is a Factory Function that returns the latest payload (cursor/epoch)
+  const activeSubscriptions = new Map<
+    string,
+    () => Promise<SubscribeChannelPayload>
+  >()
 
   // Status Listeners
   const statusListeners = new Set<(status: ConnectionStatus) => void>()
+  const authErrorListeners = new Set<() => void>()
+
   const notifyStatus = (state: InternalState) => {
     // Map Internal State to Public Status
     let publicStatus: ConnectionStatus
@@ -154,7 +161,7 @@ export const createConnectionManager = () => {
     if (pingInterval) clearInterval(pingInterval)
     pingInterval = setInterval(() => {
       // Direct send to avoid closure issues with 'manager' const
-      console.log('[WS-Manager] Emitting:', ClientEventName.Ping)
+      // console.log('[WS-Manager] Emitting:', ClientEventName.Ping)
       sendEnvelope({ type: ClientEventName.Ping, payload: {} })
     }, HEARTBEAT_INTERVAL_MS)
   }
@@ -200,8 +207,17 @@ export const createConnectionManager = () => {
     flushQueue()
     startHeartbeat()
 
-    activeSubscriptions.forEach((conversationId) => {
-      manager.emit(ClientEventName.SubscribeChannel, { conversationId })
+    // Re-subscribe to all active channels
+    activeSubscriptions.forEach(async (factory) => {
+      try {
+        const payload = await factory()
+        manager.emit(ClientEventName.SubscribeChannel, payload)
+      } catch (err) {
+        console.error(
+          '[WS-Manager] Failed to generate subscription payload',
+          err,
+        )
+      }
     })
   }
 
@@ -222,6 +238,16 @@ export const createConnectionManager = () => {
 
     // Unexpected close
     console.log('[WS-Manager] Unexpected close -> Scheduling Reconnect')
+
+    // Audit Fix: Token Expiry Handling
+    if (event.code === 4001) {
+      console.warn('[WS-Manager] Auth Error (4001) -> Triggering Refresh')
+      internalState = 'OFFLINE'
+      notifyStatus('OFFLINE')
+      authErrorListeners.forEach((cb) => cb())
+      return // Do not schedule internal reconnect (Orchestrator will restart)
+    }
+
     notifyStatus(internalState) // Will notify DISCONNECTED/RECONNECTING implicitly via scheduleReconnect?
     // scheduleReconnect sets internalState = 'RECONNECTING'
     scheduleReconnect()
@@ -242,12 +268,12 @@ export const createConnectionManager = () => {
   const handleMessage = (event: MessageEvent) => {
     try {
       // DEBUG: Log everything
-      console.log('[WS-Manager] Raw Message:', event.data)
+      // console.log('[WS-Manager] Raw Message:', event.data)
 
       const data = JSON.parse(event.data)
       if (isValidServerMessage(data)) {
         // TODO: Handle SubscribeAck
-        console.log('[WS-Manager] Dispatching:', data.type)
+        // console.log('[WS-Manager] Dispatching:', data.type)
         eventRouter.dispatch(data)
       } else {
         console.warn('[WS-Manager] Invalid Envelope:', data)
@@ -342,20 +368,38 @@ export const createConnectionManager = () => {
     },
 
     emit<T extends ClientEventName>(type: T, payload: ClientEventPayloads[T]) {
-      console.log('[WS-Manager] Emitting:', type)
+      if (type !== ClientEventName.Ping) {
+        console.log('[WS-Manager] Emitting:', type)
+      }
       sendEnvelope({ type, payload })
-    },
-
-    subscribe(conversationId: string) {
-      if (activeSubscriptions.has(conversationId)) return
-      activeSubscriptions.add(conversationId)
-      this.emit(ClientEventName.SubscribeChannel, { conversationId })
     },
 
     unsubscribe(conversationId: string) {
       if (!activeSubscriptions.has(conversationId)) return
       activeSubscriptions.delete(conversationId)
       this.emit(ClientEventName.UnsubscribeChannel, { conversationId })
+    },
+
+    /**
+     * Subscribe with a dynamic payload factory.
+     * The factory is called on initial subscribe AND every reconnect.
+     */
+    async subscribe(
+      conversationId: string,
+      payloadFactory: () => Promise<SubscribeChannelPayload> = async () => ({
+        conversationId,
+      }),
+    ) {
+      // Store intent
+      activeSubscriptions.set(conversationId, payloadFactory)
+
+      // Immediate action
+      try {
+        const payload = await payloadFactory()
+        this.emit(ClientEventName.SubscribeChannel, payload)
+      } catch (err) {
+        console.error('[WS-Manager] Subscribe failed', err)
+      }
     },
 
     getStatus() {
@@ -370,6 +414,11 @@ export const createConnectionManager = () => {
       else if (internalState === 'OFFLINE') cb('OFFLINE')
       else cb('DISCONNECTED')
       return () => statusListeners.delete(cb)
+    },
+
+    onAuthError(cb: () => void) {
+      authErrorListeners.add(cb)
+      return () => authErrorListeners.delete(cb)
     },
   }
 

@@ -133,6 +133,8 @@ export interface MarkChannelReadPayload {
 
 export interface SubscribeChannelPayload {
   conversationId: string
+  lastSequence?: number
+  epoch?: string // Stream Continuity ID (streamId)
 }
 
 export interface UnsubscribeChannelPayload {
@@ -173,6 +175,9 @@ export interface NewMessagePayload {
   createdAt: string
   sequence: number
   threadId?: string
+  meta?: {
+    replay?: boolean
+  }
 }
 
 export interface MessageDeliveredPayload {
@@ -258,6 +263,7 @@ export interface AckMessagePayload {
   status: 'pending' | 'sent' | 'failed' | 'duplicate'
   message?: string
   streamId?: string
+  sequence?: number // Required for resequencer gap detection
 }
 
 // --- Event Mapping ---

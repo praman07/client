@@ -17,9 +17,74 @@ export function registerNewMessageHandler(context: ChatEventHandlerContext) {
   return registerHandler<NewMessageEvent>('chat:new-message', async (event) => {
     const payload = event.payload as unknown as NewMessagePayload
 
-    // INJECTION POINT:
-    // We utilize the injected getter to stay FSD compliant (Feature cannot import App Store).
-    const projectId = context.getProjectId() || 'FALLBACK_PROJECT_STUB'
+    console.debug(
+      `[NewMessage] Received ${payload.meta?.replay ? 'Hot Replay' : 'Live'} message:`,
+      {
+        sequence: payload.sequence,
+        conversationId: payload.conversationId,
+        dedupeId: payload.dedupeId,
+        isReplay: payload.meta?.replay,
+      },
+    )
+
+    // INJECTION POINT & ROBUST RESOLUTION:
+    // 1. Try Context (Fastest)
+    let projectId = context.getProjectId()
+
+    // INVARIANT: Skip if this is our own message (already processed via ACK)
+    // This prevents double-processing which causes race conditions in resequencer
+    if (payload.dedupeId) {
+      const existing = await db.messages
+        .where('dedupeId')
+        .equals(payload.dedupeId)
+        .first()
+
+      if (existing) {
+        const isReplay = payload.meta?.replay === true
+        console.debug(
+          `[NewMessage] Skipping duplicate (${isReplay ? 'Hot Replay' : 'ACK path'} already committed):`,
+          {
+            dedupeId: payload.dedupeId,
+            sequence: payload.sequence,
+            isReplay,
+          },
+        )
+        return
+      }
+    }
+
+    // 2. Fallback: DB Lookup (If Context is missing/background tab)
+    if (!projectId) {
+      console.warn('[ChatEvents] Context missing ProjectID. Searching DB...')
+
+      // Attempt 1: Check Conversation State (PK is Compound, so use Index)
+      const state = await db.conversation_state
+        .where('conversationId')
+        .equals(payload.conversationId)
+        .first()
+
+      if (state?.projectId) {
+        projectId = state.projectId
+      } else {
+        // Attempt 2: last resort - check any existing message
+        const existingMsg = await db.messages
+          .where('conversationId')
+          .equals(payload.conversationId)
+          .first()
+
+        if (existingMsg?.projectId) {
+          projectId = existingMsg.projectId
+        }
+      }
+    }
+
+    // 3. Hard Fail Protection
+    if (!projectId) {
+      console.error(
+        `[ChatEvents] CRITICAL: Could not resolve ProjectID for Conversation ${payload.conversationId}. Dropping Message to prevent ghost data.`,
+      )
+      return
+    }
 
     // Validation: Strict Invariant Check
     if (!payload.streamId) {

@@ -46,8 +46,17 @@ export interface AckMessageEvent {
   }
 }
 
+export interface SyncRequiredEvent {
+  type: 'chat:sync-required'
+  payload: {
+    conversationId: string
+    reason: string
+  }
+}
+
 // Union of all Chat Downstream Events
 export type ChatDownstreamEvent =
   | NewMessageEvent
   | MessageReadEvent
   | AckMessageEvent
+  | SyncRequiredEvent

@@ -24,3 +24,15 @@ export const GET_MISSING_MESSAGES = gql(`
     }
   }
 `)
+
+export const GET_HISTORY = gql(`
+  query GetHistory($conversationId: ID!, $beforeSequence: Int!, $limit: Int) {
+    history(conversationId: $conversationId, beforeSequence: $beforeSequence, limit: $limit) {
+       messages {
+         ...MessageRecoveryFields
+       }
+       hasMore
+       minSequence
+    }
+  }
+`)

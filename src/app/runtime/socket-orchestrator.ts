@@ -20,6 +20,16 @@ class SocketOrchestrator {
     workspaceId: null,
   }
 
+  constructor() {
+    wsManager.onAuthError(() => {
+      console.warn(
+        '[SocketOrchestrator] Auth Error detected. Retrying connection...',
+      )
+      this.connecting = false // Force reset lock
+      this.ensureConnection()
+    })
+  }
+
   private connecting = false
   private currentGetToken: (() => Promise<string | null>) | null = null
 

@@ -1,10 +1,9 @@
-import React from 'react'
-import { AlertCircle, Loader2, WifiOff } from 'lucide-react'
-import type { SessionStatus } from '../model/types'
+import { AlertCircle, Loader2 } from 'lucide-react'
+import type { ResequencerStatus } from '../lib/resequencer/types'
 import { cn } from '@/shared/lib/utils'
 
 interface SyncStatusIndicatorProps {
-  status: SessionStatus
+  status: ResequencerStatus
   className?: string
 }
 
@@ -12,7 +11,7 @@ export function SyncStatusIndicator({
   status,
   className,
 }: SyncStatusIndicatorProps) {
-  if (status === 'IN_SYNC') return null
+  if (status === 'SYNCED') return null
 
   return (
     <div
@@ -20,28 +19,28 @@ export function SyncStatusIndicator({
         'flex items-center gap-2 text-xs font-medium px-3 py-1.5 rounded-full',
         className,
         {
+          'bg-blue-500/10 text-blue-500': status === 'FETCHING',
           'bg-yellow-500/10 text-yellow-500': status === 'RECOVERING',
           'bg-red-500/10 text-red-500': status === 'DESYNCED',
-          'bg-slate-500/10 text-slate-500': status === 'OFFLINE',
         },
       )}
     >
+      {status === 'FETCHING' && (
+        <>
+          <Loader2 className="w-3 h-3 animate-spin" />
+          <span>Loading messages...</span>
+        </>
+      )}
       {status === 'RECOVERING' && (
         <>
           <Loader2 className="w-3 h-3 animate-spin" />
-          <span>Syncing...</span>
+          <span>Recovering...</span>
         </>
       )}
       {status === 'DESYNCED' && (
         <>
           <AlertCircle className="w-3 h-3" />
-          <span>Connection Lost</span>
-        </>
-      )}
-      {status === 'OFFLINE' && (
-        <>
-          <WifiOff className="w-3 h-3" />
-          <span>Offline</span>
+          <span>Sync failed</span>
         </>
       )}
     </div>
