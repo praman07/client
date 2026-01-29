@@ -1,5 +1,5 @@
 import { AlertCircle, Loader2 } from 'lucide-react'
-import type { ResequencerStatus } from '../lib/resequencer/types'
+import type { ResequencerStatus } from '@/entities/stream-session'
 import { cn } from '@/shared/lib/utils'
 
 interface SyncStatusIndicatorProps {

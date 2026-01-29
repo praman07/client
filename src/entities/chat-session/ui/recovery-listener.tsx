@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { registerHandler, RecoveryRequestedEvent } from '@/shared/ws/event-bus'
 import type { NewMessagePayload } from '@/shared/ws/protocol'
-import { resequencer } from '../lib/resequencer'
+import { resequencer } from '../lib/chat-resequencer'
 import { useFetchDelta } from '../hooks/use-fetch-delta'
 
 export const RecoveryListener = () => {

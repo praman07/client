@@ -17,7 +17,7 @@ import {
   ChatToolbarTextarea,
 } from '@/shared/ui/primitives/chat-layout'
 
-import { sendMessage } from '@/features/chat-events/send-message'
+import { sendMessage } from '@/features/chat-events'
 
 interface MessageInputProps {
   channelId: string

@@ -1,7 +1,8 @@
 import { useEffect } from 'react'
-import { wsManager } from '@/shared/ws/transport-manager'
+import { wsManager } from '@/shared/ws'
 import { useAppDispatch } from '@/shared/hooks'
 import { initChannel } from '@/entities/chat-session/model/slice'
+import { resequencer } from '@/entities/chat-session'
 
 export function useChannelSubscription(channelId: string, projectId: string) {
   const dispatch = useAppDispatch()
@@ -11,19 +12,24 @@ export function useChannelSubscription(channelId: string, projectId: string) {
     dispatch(initChannel({ channelId }))
 
     // Audit Fix: Smart Subscription (Sync-on-Connect)
-    wsManager.subscribe(channelId, async () => {
-      const { resequencer } =
-        await import('@/entities/chat-session/lib/resequencer/coordinator')
-      const state = await resequencer.getSubscriptionState(channelId, projectId)
-      return {
-        conversationId: channelId,
-        lastSequence: state.lastSequence,
-        epoch: state.epoch ?? undefined, // Convert null to undefined for protocol compatibility
-      }
+    wsManager.subscribe({
+      domain: 'chat',
+      getId: (payload: any) => payload.conversationId || channelId,
+      createPayload: async () => {
+        const state = await resequencer.getSubscriptionState(
+          channelId,
+          projectId,
+        )
+        return {
+          conversationId: channelId,
+          lastSequence: state.lastSequence,
+          epoch: state.epoch ?? undefined, // Convert null to undefined for protocol compatibility
+        }
+      },
     })
 
     return () => {
-      wsManager.unsubscribe(channelId)
+      wsManager.unsubscribe('chat', channelId)
     }
   }, [channelId, projectId, dispatch])
 }

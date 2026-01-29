@@ -1,5 +1,5 @@
 import { GqlClient } from '@/shared/api'
-import { resequencer } from '@/entities/chat-session/lib/resequencer'
+import { resequencer } from '@/entities/chat-session'
 import type { NewMessagePayload } from '@/shared/ws/protocol'
 
 import { useAuth } from '@/shared/hooks'

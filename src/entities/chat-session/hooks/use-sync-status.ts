@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
-import { resequencer } from '../lib/resequencer/coordinator'
-import type { ResequencerStatus } from '../lib/resequencer/types'
+import { resequencer } from '../lib/chat-resequencer'
+import type { ResequencerStatus } from '@/entities/stream-session'
 
 export function useSyncStatus(conversationId: string): ResequencerStatus {
   const [status, setStatus] = useState<ResequencerStatus>('SYNCED')

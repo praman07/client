@@ -14,6 +14,7 @@ import type {
   ServerMessageUnion,
 } from './protocol'
 import { leaderElection } from '@/shared/lib/broadcast/leader-election'
+import { dispatchEvent } from './event-bus'
 
 // Internal type for erased handlers
 type GenericEventHandler = (payload: never) => void
@@ -47,29 +48,44 @@ export const eventRouter = {
       leaderElection.relay(envelope)
     }
 
-    // 2. Local Dispatch
+    // 2. Local Dispatch to EventRouter handlers
     const typeHandlers = handlers.get(envelope.type)
 
     // console.debug(
     //   `[EventRouter] Dispatching ${envelope.type} to ${typeHandlers?.size || 0} handlers`,
     // )
 
-    if (!typeHandlers) return
+    if (typeHandlers) {
+      typeHandlers.forEach((genericHandler) => {
+        try {
+          // Safety: Handler type matches envelope type by design of .on()
+          const specificHandler = genericHandler as unknown as (
+            payload: typeof envelope.data,
+          ) => void
+          specificHandler(envelope.data)
+        } catch (error) {
+          console.error(
+            `[EventRouter] Error in handler for ${envelope.type}:`,
+            error,
+          )
+        }
+      })
+    }
 
-    typeHandlers.forEach((genericHandler) => {
-      try {
-        // Safety: Handler type matches envelope type by design of .on()
-        const specificHandler = genericHandler as unknown as (
-          payload: typeof envelope.data,
-        ) => void
-        specificHandler(envelope.data)
-      } catch (error) {
-        console.error(
-          `[EventRouter] Error in handler for ${envelope.type}:`,
-          error,
-        )
+    // 3. **NEW**: Bridge to EventBus for backward compatibility
+    // This allows handlers using registerHandler() to receive WebSocket events
+    try {
+      const appEvent = {
+        type: envelope.type,
+        payload: envelope.data || {},
       }
-    })
+      dispatchEvent(appEvent as any)
+    } catch (error) {
+      console.error(
+        `[EventRouter] Bridge to EventBus failed for ${envelope.type}:`,
+        error,
+      )
+    }
   },
 
   // Debug helper

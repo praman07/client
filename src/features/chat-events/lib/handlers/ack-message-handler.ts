@@ -1,8 +1,9 @@
-import type { ChatEventHandlerContext } from './new-message'
 import type { AckMessagePayload } from '@/shared/ws/protocol'
 import { registerHandler } from '@/shared/ws/event-bus'
-import { resequencer } from '@/entities/chat-session/lib/resequencer'
+import type { AckMessageEvent } from '@/shared/contracts/chat/downstream'
+import { resequencer } from '@/entities/chat-session'
 import { db } from '@/shared/lib/db'
+import type { ChatEventHandlerContext } from '../../model'
 
 /**
  * Handle: chat:ack-message
@@ -14,9 +15,8 @@ import { db } from '@/shared/lib/db'
  * 4. Feed to Resequencer immediately (skip Broadcast wait).
  */
 export function registerAckMessageHandler(context: ChatEventHandlerContext) {
-  return registerHandler('chat:ack-message', async (event) => {
-    // Cast to internal contract type
-    const payload = (event as any).payload as AckMessagePayload
+  return registerHandler<AckMessageEvent>('chat:ack-message', async (event) => {
+    const payload = event.payload as AckMessagePayload
 
     // Validate StreamID and sequence presence for Fast Path
     if (!payload.streamId || !payload.sequence || payload.status !== 'sent') {

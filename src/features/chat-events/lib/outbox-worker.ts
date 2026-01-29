@@ -56,7 +56,7 @@ async function retryItem(item: any) {
   await db.outbox.update(item.id, { retryCount: currentRetries + 1 })
 
   // Dynamic import to avoid circular dependencies
-  const { wsManager } = await import('@/shared/ws/transport-manager')
+  const { wsManager } = await import('@/shared/ws')
   const { ClientEventName } = await import('@/shared/ws/protocol')
 
   console.log(

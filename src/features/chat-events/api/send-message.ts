@@ -1,7 +1,7 @@
 import type { OutboxItem } from '@/shared/lib/db/schema'
 import type { SendMessageCommand } from '@/shared/contracts/chat/upstream'
 import { db } from '@/shared/lib/db'
-import { wsManager } from '@/shared/ws/transport-manager'
+import { wsManager } from '@/shared/ws'
 import { ClientEventName } from '@/shared/ws/protocol'
 
 export async function sendMessage(

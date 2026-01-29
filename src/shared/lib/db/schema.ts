@@ -85,9 +85,9 @@ export class CollabifyDB extends Dexie {
     })
 
     this.version(4).stores({
-      // 6. Bounded Retries
+      // 6. Bounded Retries + Compound Index Optimization
       outbox:
-        '++id, projectId, conversationId, dedupeId, authorId, status, retryCount, createdAt',
+        '++id, [conversationId+projectId], projectId, conversationId, dedupeId, authorId, status, retryCount, createdAt',
     })
   }
 }

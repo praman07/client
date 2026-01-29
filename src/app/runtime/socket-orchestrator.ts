@@ -5,7 +5,7 @@
  *
  * Responsibility: Translate app capability (Auth + Workspace) into Transport Intent.
  */
-import { wsManager } from '@/shared/ws/transport-manager'
+import { wsManager } from '@/shared/ws'
 
 type OrchestratorState = {
   enabled: boolean

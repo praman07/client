@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
-import { resequencer } from '../lib/resequencer'
-import { ResequencerStatus } from '../lib/resequencer/types'
+import { resequencer } from '../lib/chat-resequencer'
+import type { ResequencerStatus } from '@/entities/stream-session'
 
 /**
  * Hook to subscribe to resequencer status changes.

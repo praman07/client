@@ -1,5 +1,5 @@
 import type { NewMessagePayload } from '@/shared/ws/protocol'
-import type { ConversationState } from './types'
+import type { StreamSessionState } from '@/entities/stream-session'
 import type { ConversationState as DBConversationState } from '@/shared/lib/db/schema'
 import { db } from '@/shared/lib/db'
 
@@ -7,7 +7,7 @@ import { db } from '@/shared/lib/db'
  * Commits a message to the database and updates the conversation state.
  */
 export async function commitMessage(
-  state: ConversationState,
+  state: StreamSessionState<NewMessagePayload>,
   payload: NewMessagePayload,
   projectId: string,
 ) {
