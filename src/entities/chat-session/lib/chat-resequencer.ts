@@ -12,6 +12,7 @@ import {
   type BasePayload,
 } from '@/entities/stream-session'
 import type { NewMessagePayload } from '@/shared/ws/protocol'
+import { dispatchEvent } from '@/shared/ws/event-bus'
 import {
   commitMessage,
   getConversationCursor,
@@ -44,11 +45,17 @@ const chatStorageAdapter: StorageAdapter<ChatPayload> = {
 // Chat recovery adapter
 const chatRecoveryAdapter: RecoveryAdapter = {
   triggerRecovery: (request) => {
-    // Dispatch custom event for chat feature layer to handle
-    const event = new CustomEvent('chat-recovery-needed', {
-      detail: request,
+    // Dispatch to EventBus for RecoveryListener to handle
+    dispatchEvent({
+      type: 'intent:recovery-requested',
+      payload: {
+        conversationId: request.conversationId,
+        projectId: request.projectId,
+        lastStreamId: request.lastStreamId,
+        lastSequence: request.lastSequence,
+        gapSize: request.gapSize,
+      },
     })
-    window.dispatchEvent(event)
   },
 }
 
