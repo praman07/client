@@ -16,6 +16,14 @@ export function useSocketConnection(enabled: boolean = true) {
   const workspaceId = workspace?.id
 
   useEffect(() => {
+    console.log('[useSocketConnection] Effect triggered', {
+      enabled,
+      isSignedIn,
+      userId,
+      workspaceId,
+      hasGetToken: !!getToken,
+    })
+
     // Check Readiness
     if (!enabled || !isSignedIn || !userId || !workspaceId) {
       // Signal Disable

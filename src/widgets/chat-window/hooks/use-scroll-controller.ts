@@ -1,8 +1,8 @@
 import { useRef, useCallback, useState, useEffect } from 'react'
 import { Virtualizer } from '@tanstack/react-virtual'
-import { MessageListScrollMode } from '../types/message-list.types'
 import { isNearBottom, isNearTop } from '../lib/scroll-math'
 import { BOTTOM_THRESHOLD, PREFETCH_THRESHOLD } from '../lib/constants'
+import { MessageListScrollMode } from '../model/message-list.types'
 
 interface ScrollControllerProps {
   virtualizer: Virtualizer<HTMLDivElement, Element>

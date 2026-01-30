@@ -15,9 +15,9 @@ import {
   ChatToolbarAddonEnd,
   ChatToolbarAddonStart,
   ChatToolbarTextarea,
-} from '@/shared/ui/primitives/chat-layout'
+} from './components/chat-layout'
 
-import { sendMessage } from '@/features/chat-events'
+import { sendMessage } from '@/features/chat/events'
 
 interface MessageInputProps {
   channelId: string

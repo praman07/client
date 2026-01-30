@@ -13,16 +13,13 @@ import {
   ChatHeaderMain,
   ChatHeader as ChatHeaderRoot,
   ChatHeaderStart,
-} from '@/shared/ui/primitives/chat-layout'
+} from './components/chat-layout'
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
 } from '@/shared/ui/primitives/input-group'
-import {
-  Avatar,
-  AvatarFallback,
-} from '@/shared/ui/primitives/avatar'
+import { Avatar, AvatarFallback } from '@/shared/ui/primitives/avatar'
 
 interface ChatHeaderProps {
   channelName?: string

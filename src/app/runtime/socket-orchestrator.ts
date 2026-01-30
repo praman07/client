@@ -80,6 +80,14 @@ class SocketOrchestrator {
   }
 
   private async ensureConnection() {
+    console.log('[SocketOrchestrator] ensureConnection called', {
+      connecting: this.connecting,
+      enabled: this.state.enabled,
+      userId: this.state.userId,
+      workspaceId: this.state.workspaceId,
+      hasGetToken: !!this.currentGetToken,
+    })
+
     if (this.connecting) return
     if (!this.state.enabled) return
     if (!this.state.userId || !this.state.workspaceId) return
@@ -91,12 +99,16 @@ class SocketOrchestrator {
       // Double check state after lock
       if (!this.state.enabled) return
 
+      console.log('[SocketOrchestrator] Fetching token...')
       const token = await this.currentGetToken()
+      console.log('[SocketOrchestrator] Token fetched:', !!token)
+
       if (!token) return
 
       // Check again before connecting (async gap)
       if (!this.state.enabled || !this.state.workspaceId) return
 
+      console.log('[SocketOrchestrator] Calling wsManager.connect()')
       wsManager.connect(token, this.state.workspaceId)
     } catch (err) {
       console.error('[SocketOrchestrator] Token fetch failed', err)

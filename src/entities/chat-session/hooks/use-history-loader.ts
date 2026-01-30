@@ -4,9 +4,9 @@ import type { NewMessagePayload } from '@/shared/ws/protocol'
 
 import { useAuth } from '@/shared/hooks'
 import { useCallback, useState, useRef } from 'react'
-import { GET_HISTORY } from '@/entities/chat-session/api/fragments'
 import { MessageRecoveryFieldsFragmentDoc } from '@/gql/graphql'
 import { useFragment } from '@/gql/fragment-masking'
+import { GET_HISTORY } from '../api'
 
 /**
  * Controller Hook for fetching historical messages.

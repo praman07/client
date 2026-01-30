@@ -1,6 +1,6 @@
 import { db } from '@/shared/lib/db'
 import type { DBMessage, OutboxItem } from '@/shared/lib/db/schema'
-import type { MessageRowData } from '../types/message-list.types'
+import type { MessageRowData } from './message-list.types'
 
 /**
  * Gets the Min and Max sequence for a conversation currently in DB.

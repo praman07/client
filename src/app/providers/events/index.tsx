@@ -1,9 +1,9 @@
 import { useEffect, useRef } from 'react'
-import { registerChatHandlers } from '@/features/chat-events'
+import { registerChatHandlers } from '@/features/chat/events'
 import { initializeDomainBridge } from '@/app/bootstrap/event-bridge'
 import { store } from '@/app/store/config'
 import { selectCurrentProject } from '@/entities/project/model/selectors'
-import { startStorageGarbageCollector } from '@/features/storage-gc'
+import { startStorageGarbageCollector } from '@/shared/lib/storage-gc'
 
 export function EventHandlerRegistry() {
   const initialized = useRef(false)

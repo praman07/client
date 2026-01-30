@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 import { GqlClient } from '@/shared/api'
 import { useAuth } from '@/shared/hooks'
-import { GET_MISSING_MESSAGES } from '../api/fragments'
+import { GET_MISSING_MESSAGES } from '../api'
 
 export function useFetchDelta() {
   const { getToken } = useAuth()

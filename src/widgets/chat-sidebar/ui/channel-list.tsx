@@ -15,7 +15,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@/shared/ui/primitives/sidebar'
-import { useCreateChannelModal } from '@/features/create-channel'
+import { useCreateChannelModal } from '@/features/chat/create-channel'
 
 interface ChannelListProps {
   channels: Array<ChannelItem>

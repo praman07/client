@@ -97,7 +97,7 @@ export function createWSManager(): WSManager {
     )
 
     if (!success) {
-      console.log('[WSManager] Connection blocked or failed')
+      console.log('[WSManager] Connection skipped (waiting for auth/workspace)')
     }
   }
 

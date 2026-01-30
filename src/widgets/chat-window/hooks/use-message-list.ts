@@ -1,9 +1,9 @@
 import { useCallback, useRef, useEffect } from 'react'
 import { useVirtualizer } from '@tanstack/react-virtual'
 import { useMessageWindow } from '../hooks/use-message-window'
-import { useWindowController } from './window-controller'
-import { useScrollController } from './scroll-controller'
-import { useHistoryLoader } from '../hooks/use-history-loader'
+import { useWindowController } from './use-window-controller'
+import { useScrollController } from './use-scroll-controller'
+import { useHistoryLoader } from '@/entities/chat-session'
 import { MESSAGE_WINDOW_SIZE } from '../lib/constants'
 
 interface UseMessageListProps {

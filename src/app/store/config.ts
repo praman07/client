@@ -6,7 +6,7 @@ import createWorkspaceReducer from '@/features/create-workspace/model/slice'
 import userReducer from '@/entities/user/model/slice'
 import projectReducer from '@/entities/project/model/slice'
 import createProjectReducer from '@/features/create-project/model/slice'
-import { createChannelReducer } from '@/features/create-channel/model/slice'
+import { createChannelReducer } from '@/features/chat/create-channel/model/slice'
 
 export const store = configureStore({
   reducer: {

@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { cn } from '@/shared/lib/utils'
 
-function ChatEvent({ className, ...props }: React.ComponentProps<'div'>) {
+function MessageEvent({ className, ...props }: React.ComponentProps<'div'>) {
   return (
     <div
       data-slot="chat-event"
@@ -14,7 +14,10 @@ function ChatEvent({ className, ...props }: React.ComponentProps<'div'>) {
   )
 }
 
-function ChatEventAddon({ className, ...props }: React.ComponentProps<'div'>) {
+function MessageEventAddon({
+  className,
+  ...props
+}: React.ComponentProps<'div'>) {
   return (
     <div
       data-slot="chat-event-addon"
@@ -27,7 +30,10 @@ function ChatEventAddon({ className, ...props }: React.ComponentProps<'div'>) {
   )
 }
 
-function ChatEventBody({ className, ...props }: React.ComponentProps<'div'>) {
+function MessageEventBody({
+  className,
+  ...props
+}: React.ComponentProps<'div'>) {
   return (
     <div
       data-slot="chat-event-body"
@@ -37,7 +43,10 @@ function ChatEventBody({ className, ...props }: React.ComponentProps<'div'>) {
   )
 }
 
-function ChatEventTitle({ className, ...props }: React.ComponentProps<'span'>) {
+function MessageEventTitle({
+  className,
+  ...props
+}: React.ComponentProps<'span'>) {
   return (
     <span
       data-slot="chat-event-title"
@@ -47,7 +56,7 @@ function ChatEventTitle({ className, ...props }: React.ComponentProps<'span'>) {
   )
 }
 
-function ChatEventDescription({
+function MessageEventDescription({
   className,
   ...props
 }: React.ComponentProps<'span'>) {
@@ -60,7 +69,7 @@ function ChatEventDescription({
   )
 }
 
-function ChatEventContent({
+function MessageEventContent({
   className,
   ...props
 }: React.ComponentProps<'div'>) {
@@ -74,10 +83,10 @@ function ChatEventContent({
 }
 
 export {
-  ChatEvent,
-  ChatEventAddon,
-  ChatEventBody,
-  ChatEventTitle,
-  ChatEventDescription,
-  ChatEventContent,
+  MessageEvent,
+  MessageEventAddon,
+  MessageEventBody,
+  MessageEventTitle,
+  MessageEventDescription,
+  MessageEventContent,
 }

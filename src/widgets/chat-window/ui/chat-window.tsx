@@ -1,11 +1,11 @@
 import { ChatHeader } from './chat-header'
-import { MessageList } from '@/widgets/message-list'
+import { MessageList } from '@/widgets/chat-window/ui/message-list'
 import { MessageInput } from './message-input'
-import { useChannelSubscription } from '@/features/subscribe-channel'
-import { useResequencerStatus } from '@/entities/chat-session/hooks/use-resequencer-status'
+import { useChannelSubscription } from '@/features/chat/subscribe-channel'
+import { useResequencerStatus } from '@/entities/chat-session'
 import { SyncStatusIndicator } from '@/entities/chat-session/ui/SyncStatusIndicator'
 
-import { Chat } from '@/shared/ui/primitives/chat-layout'
+import { ChatContainer } from './components/chat-layout'
 
 // TODO: Fetch real channel details via Query
 
@@ -31,7 +31,7 @@ export function ChatWindow({
   const status = useResequencerStatus(channelId || '')
 
   return (
-    <Chat>
+    <ChatContainer>
       <ChatHeader
         channelName={channelName}
         isPrivate={isPrivate}
@@ -39,11 +39,10 @@ export function ChatWindow({
           description || 'Topic: General discussion about the project'
         }
       >
-        {/* Sync Status Indicator */}
         <SyncStatusIndicator status={status} />
       </ChatHeader>
       <MessageList channelId={channelId || ''} projectId={projectId} />
       <MessageInput channelId={channelId || ''} projectId={projectId} />
-    </Chat>
+    </ChatContainer>
   )
 }

@@ -175,7 +175,7 @@ export function establishConnection(
   onClose: () => void,
 ): boolean {
   if (!state.token) {
-    console.error('[ConnectionManager] Cannot connect without token')
+    console.log('[ConnectionManager] Skipping connection (no token yet)')
     return false
   }
 
