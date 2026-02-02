@@ -26,6 +26,22 @@ export type AcceptInviteInput = {
   userId?: InputMaybe<Scalars['String']['input']>;
 };
 
+export type AddChannelMembersResult = {
+  __typename?: 'AddChannelMembersResult';
+  addedCount: Scalars['Int']['output'];
+  members: Array<ChannelMemberInfo>;
+  skippedCount: Scalars['Int']['output'];
+  success: Scalars['Boolean']['output'];
+};
+
+export type AddGroupMembersResult = {
+  __typename?: 'AddGroupMembersResult';
+  addedCount: Scalars['Int']['output'];
+  members: Array<GroupMemberInfo>;
+  skippedCount: Scalars['Int']['output'];
+  success: Scalars['Boolean']['output'];
+};
+
 export type ArchiveChannelInput = {
   channelId: Scalars['ID']['input'];
 };
@@ -46,6 +62,12 @@ export type ChannelAvailabilityResponse = {
   reservationId?: Maybe<Scalars['String']['output']>;
 };
 
+export type ChannelMemberInfo = {
+  __typename?: 'ChannelMemberInfo';
+  user: UserBasic;
+  userId: Scalars['ID']['output'];
+};
+
 export type ChatMember = {
   __typename?: 'ChatMember';
   conversationId: Scalars['ID']['output'];
@@ -64,7 +86,13 @@ export type ChatMessage = {
   content: Scalars['JSON']['output'];
   conversationId: Scalars['ID']['output'];
   createdAt: Scalars['DateTime']['output'];
+  deletedAt?: Maybe<Scalars['DateTime']['output']>;
+  editedAt?: Maybe<Scalars['DateTime']['output']>;
   id: Scalars['ID']['output'];
+  isEdited: Scalars['Boolean']['output'];
+  metadata?: Maybe<Scalars['JSON']['output']>;
+  parentMessageId?: Maybe<Scalars['ID']['output']>;
+  replyCount: Scalars['Int']['output'];
   sequence: Scalars['Int']['output'];
   streamId: Scalars['String']['output'];
   type: Scalars['String']['output'];
@@ -73,6 +101,13 @@ export type ChatMessage = {
 export type CheckChannelAvailabilityInput = {
   projectId: Scalars['ID']['input'];
   slug: Scalars['String']['input'];
+};
+
+export type CloseThreadResult = {
+  __typename?: 'CloseThreadResult';
+  closedAt: Scalars['DateTime']['output'];
+  success: Scalars['Boolean']['output'];
+  threadId: Scalars['ID']['output'];
 };
 
 export type Conversation = {
@@ -92,11 +127,71 @@ export type Conversation = {
   workspaceId: Scalars['ID']['output'];
 };
 
+export type ConversationConnection = {
+  __typename?: 'ConversationConnection';
+  edges: Array<ConversationEdge>;
+  pageInfo: PageInfo;
+};
+
+export type ConversationDetails = {
+  __typename?: 'ConversationDetails';
+  createdAt: Scalars['DateTime']['output'];
+  createdBy?: Maybe<Scalars['ID']['output']>;
+  deletedAt?: Maybe<Scalars['DateTime']['output']>;
+  description?: Maybe<Scalars['String']['output']>;
+  id: Scalars['ID']['output'];
+  isPublic: Scalars['Boolean']['output'];
+  lastMessage?: Maybe<LastMessagePreview>;
+  memberCount: Scalars['Int']['output'];
+  members: Array<ConversationMemberDetails>;
+  name?: Maybe<Scalars['String']['output']>;
+  parentMessageId?: Maybe<Scalars['ID']['output']>;
+  projectId?: Maybe<Scalars['ID']['output']>;
+  type: ConversationType;
+  unreadCount: Scalars['Int']['output'];
+  updatedAt: Scalars['DateTime']['output'];
+  workspaceId: Scalars['ID']['output'];
+};
+
+export type ConversationEdge = {
+  __typename?: 'ConversationEdge';
+  createdAt: Scalars['DateTime']['output'];
+  deletedAt?: Maybe<Scalars['DateTime']['output']>;
+  description?: Maybe<Scalars['String']['output']>;
+  id: Scalars['ID']['output'];
+  isPublic: Scalars['Boolean']['output'];
+  lastMessage?: Maybe<LastMessagePreview>;
+  memberCount: Scalars['Int']['output'];
+  name?: Maybe<Scalars['String']['output']>;
+  projectId?: Maybe<Scalars['ID']['output']>;
+  type: ConversationType;
+  unreadCount: Scalars['Int']['output'];
+  updatedAt: Scalars['DateTime']['output'];
+  workspaceId: Scalars['ID']['output'];
+};
+
+export type ConversationMemberDetails = {
+  __typename?: 'ConversationMemberDetails';
+  isMuted: Scalars['Boolean']['output'];
+  joinedAt: Scalars['DateTime']['output'];
+  role: Scalars['String']['output'];
+  user: UserBasic;
+  userId: Scalars['ID']['output'];
+};
+
 export enum ConversationType {
   Channel = 'CHANNEL',
   Dm = 'DM',
-  GroupDm = 'GROUP_DM'
+  GroupDm = 'GROUP_DM',
+  Thread = 'THREAD'
 }
+
+export type ConversationUnreadCount = {
+  __typename?: 'ConversationUnreadCount';
+  conversationId: Scalars['ID']['output'];
+  lastUnreadMessageId?: Maybe<Scalars['ID']['output']>;
+  unreadCount: Scalars['Int']['output'];
+};
 
 export type CreateChannelInput = {
   memberUserIds?: InputMaybe<Array<Scalars['ID']['input']>>;
@@ -107,6 +202,19 @@ export type CreateChannelInput = {
   workspaceId: Scalars['ID']['input'];
 };
 
+export type CreateDmInput = {
+  projectId: Scalars['ID']['input'];
+  recipientUserId: Scalars['ID']['input'];
+  workspaceId: Scalars['ID']['input'];
+};
+
+export type CreateGroupInput = {
+  memberUserIds: Array<Scalars['ID']['input']>;
+  name: Scalars['String']['input'];
+  projectId: Scalars['ID']['input'];
+  workspaceId: Scalars['ID']['input'];
+};
+
 export type CreateProjectInput = {
   description?: InputMaybe<Scalars['String']['input']>;
   name: Scalars['String']['input'];
@@ -114,10 +222,58 @@ export type CreateProjectInput = {
 };
 
 export type CreateThreadInput = {
-  channelId: Scalars['ID']['input'];
-  content: Scalars['JSON']['input'];
-  nonce?: InputMaybe<Scalars['String']['input']>;
-  parentMessageId: Scalars['ID']['input'];
+  conversationId: Scalars['ID']['input'];
+  messageId: Scalars['ID']['input'];
+  projectId: Scalars['ID']['input'];
+  workspaceId: Scalars['ID']['input'];
+};
+
+export type DeleteChannelResult = {
+  __typename?: 'DeleteChannelResult';
+  channelId: Scalars['ID']['output'];
+  success: Scalars['Boolean']['output'];
+};
+
+export type DeleteDmResult = {
+  __typename?: 'DeleteDmResult';
+  dmId: Scalars['ID']['output'];
+  success: Scalars['Boolean']['output'];
+};
+
+export type DeleteGroupResult = {
+  __typename?: 'DeleteGroupResult';
+  groupId: Scalars['ID']['output'];
+  success: Scalars['Boolean']['output'];
+};
+
+export type DeleteThreadResult = {
+  __typename?: 'DeleteThreadResult';
+  success: Scalars['Boolean']['output'];
+  threadId: Scalars['ID']['output'];
+};
+
+export type DmConversation = {
+  __typename?: 'DmConversation';
+  createdAt: Scalars['DateTime']['output'];
+  id: Scalars['ID']['output'];
+  memberCount: Scalars['Int']['output'];
+  members: Array<DmMember>;
+  projectId: Scalars['ID']['output'];
+  type: ConversationType;
+  updatedAt: Scalars['DateTime']['output'];
+  workspaceId: Scalars['ID']['output'];
+};
+
+export type DmMember = {
+  __typename?: 'DmMember';
+  user: UserBasic;
+  userId: Scalars['ID']['output'];
+};
+
+export type GroupMemberInfo = {
+  __typename?: 'GroupMemberInfo';
+  user: UserBasic;
+  userId: Scalars['ID']['output'];
 };
 
 export type HistoryPayload = {
@@ -146,6 +302,28 @@ export type JoinResponse = {
   workspaceSlug: Scalars['String']['output'];
 };
 
+export type LastMessagePreview = {
+  __typename?: 'LastMessagePreview';
+  authorUserId: Scalars['ID']['output'];
+  content: Scalars['JSON']['output'];
+  createdAt: Scalars['DateTime']['output'];
+  id: Scalars['ID']['output'];
+};
+
+export type LeaveGroupResult = {
+  __typename?: 'LeaveGroupResult';
+  groupId: Scalars['ID']['output'];
+  success: Scalars['Boolean']['output'];
+};
+
+export type MessageReaction = {
+  __typename?: 'MessageReaction';
+  count: Scalars['Int']['output'];
+  emoji: Scalars['String']['output'];
+  hasReacted: Scalars['Boolean']['output'];
+  recentUsers: Array<User>;
+};
+
 export type MessagesDelta = {
   __typename?: 'MessagesDelta';
   hasMore: Scalars['Boolean']['output'];
@@ -157,29 +335,63 @@ export type Mutation = {
   __typename?: 'Mutation';
   _health?: Maybe<Scalars['String']['output']>;
   acceptWorkspaceInvite: JoinResponse;
+  addChannelMembers: AddChannelMembersResult;
+  addGroupMembers: AddGroupMembersResult;
   archiveChannel: Conversation;
   checkChannelAvailability: ChannelAvailabilityResponse;
   checkProjectSlugAvailability: AvailabilityResponse;
   checkSlugAvailability: AvailabilityResponse;
+  closeThread: CloseThreadResult;
   createChannel: Conversation;
+  createDm: Conversation;
+  createGroup: Conversation;
   createOnboardingWorkspace: Workspace;
   createProject: Project;
-  createThread: ChatMessage;
+  createThread: Conversation;
   createWorkspace: Workspace;
+  deleteChannel: DeleteChannelResult;
+  deleteDm: DeleteDmResult;
+  deleteGroup: DeleteGroupResult;
+  deleteThread: DeleteThreadResult;
   inviteToWorkspace: InviteResponse;
+  leaveGroup: LeaveGroupResult;
   /** Mark all notifications as read. */
   markAllNotificationsRead: Scalars['Boolean']['output'];
   /** Mark specific notifications as read. */
   markNotificationRead: Scalars['Boolean']['output'];
+  muteConversation: MuteConversationResult;
+  removeChannelMember: RemoveChannelMemberResult;
+  removeGroupMember: RemoveGroupMemberResult;
   removeWorkspaceMember: InviteResponse;
   renameChannel: Conversation;
+  renameGroup: RenameGroupResult;
+  reopenThread: ReopenThreadResult;
+  subscribeThread: SubscribeThreadResult;
   syncUser: User;
+  unarchiveChannel: UnarchiveChannelResult;
+  unsubscribeThread: UnsubscribeThreadResult;
+  updateChannelDescription: UpdateChannelDescriptionResult;
+  updateChannelVisibility: UpdateChannelVisibilityResult;
   updateWorkspaceMemberRole: WorkspaceMember;
 };
 
 
 export type MutationAcceptWorkspaceInviteArgs = {
   input: AcceptInviteInput;
+};
+
+
+export type MutationAddChannelMembersArgs = {
+  channelId: Scalars['ID']['input'];
+  userIds: Array<Scalars['ID']['input']>;
+  workspaceId: Scalars['ID']['input'];
+};
+
+
+export type MutationAddGroupMembersArgs = {
+  groupId: Scalars['ID']['input'];
+  userIds: Array<Scalars['ID']['input']>;
+  workspaceId: Scalars['ID']['input'];
 };
 
 
@@ -204,8 +416,24 @@ export type MutationCheckSlugAvailabilityArgs = {
 };
 
 
+export type MutationCloseThreadArgs = {
+  threadId: Scalars['ID']['input'];
+  workspaceId: Scalars['ID']['input'];
+};
+
+
 export type MutationCreateChannelArgs = {
   input: CreateChannelInput;
+};
+
+
+export type MutationCreateDmArgs = {
+  input: CreateDmInput;
+};
+
+
+export type MutationCreateGroupArgs = {
+  input: CreateGroupInput;
 };
 
 
@@ -226,13 +454,63 @@ export type MutationCreateWorkspaceArgs = {
 };
 
 
+export type MutationDeleteChannelArgs = {
+  channelId: Scalars['ID']['input'];
+  workspaceId: Scalars['ID']['input'];
+};
+
+
+export type MutationDeleteDmArgs = {
+  dmId: Scalars['ID']['input'];
+  workspaceId: Scalars['ID']['input'];
+};
+
+
+export type MutationDeleteGroupArgs = {
+  groupId: Scalars['ID']['input'];
+  workspaceId: Scalars['ID']['input'];
+};
+
+
+export type MutationDeleteThreadArgs = {
+  threadId: Scalars['ID']['input'];
+  workspaceId: Scalars['ID']['input'];
+};
+
+
 export type MutationInviteToWorkspaceArgs = {
   input: InviteToWorkspaceInput;
 };
 
 
+export type MutationLeaveGroupArgs = {
+  groupId: Scalars['ID']['input'];
+  workspaceId: Scalars['ID']['input'];
+};
+
+
 export type MutationMarkNotificationReadArgs = {
   ids: Array<Scalars['ID']['input']>;
+};
+
+
+export type MutationMuteConversationArgs = {
+  conversationId: Scalars['ID']['input'];
+  isMuted: Scalars['Boolean']['input'];
+};
+
+
+export type MutationRemoveChannelMemberArgs = {
+  channelId: Scalars['ID']['input'];
+  userId: Scalars['ID']['input'];
+  workspaceId: Scalars['ID']['input'];
+};
+
+
+export type MutationRemoveGroupMemberArgs = {
+  groupId: Scalars['ID']['input'];
+  userId: Scalars['ID']['input'];
+  workspaceId: Scalars['ID']['input'];
 };
 
 
@@ -247,6 +525,24 @@ export type MutationRenameChannelArgs = {
 };
 
 
+export type MutationRenameGroupArgs = {
+  groupId: Scalars['ID']['input'];
+  name: Scalars['String']['input'];
+  workspaceId: Scalars['ID']['input'];
+};
+
+
+export type MutationReopenThreadArgs = {
+  threadId: Scalars['ID']['input'];
+  workspaceId: Scalars['ID']['input'];
+};
+
+
+export type MutationSubscribeThreadArgs = {
+  threadId: Scalars['ID']['input'];
+};
+
+
 export type MutationSyncUserArgs = {
   avatarUrl?: InputMaybe<Scalars['String']['input']>;
   clerkId: Scalars['String']['input'];
@@ -256,10 +552,42 @@ export type MutationSyncUserArgs = {
 };
 
 
+export type MutationUnarchiveChannelArgs = {
+  channelId: Scalars['ID']['input'];
+  workspaceId: Scalars['ID']['input'];
+};
+
+
+export type MutationUnsubscribeThreadArgs = {
+  threadId: Scalars['ID']['input'];
+};
+
+
+export type MutationUpdateChannelDescriptionArgs = {
+  channelId: Scalars['ID']['input'];
+  description?: InputMaybe<Scalars['String']['input']>;
+  workspaceId: Scalars['ID']['input'];
+};
+
+
+export type MutationUpdateChannelVisibilityArgs = {
+  channelId: Scalars['ID']['input'];
+  isPublic: Scalars['Boolean']['input'];
+  workspaceId: Scalars['ID']['input'];
+};
+
+
 export type MutationUpdateWorkspaceMemberRoleArgs = {
   memberId: Scalars['ID']['input'];
   role: Scalars['String']['input'];
   workspaceId: Scalars['ID']['input'];
+};
+
+export type MuteConversationResult = {
+  __typename?: 'MuteConversationResult';
+  conversationId: Scalars['ID']['output'];
+  isMuted: Scalars['Boolean']['output'];
+  success: Scalars['Boolean']['output'];
 };
 
 export type Notification = {
@@ -346,20 +674,21 @@ export type ProjectMember = {
 export type Query = {
   __typename?: 'Query';
   getChannelMembers: Array<ChatMember>;
-  getChannelMessages: Array<ChatMessage>;
-  getChannelUnreadCount: Scalars['Int']['output'];
+  getConversation: ConversationDetails;
+  getDmByUsers?: Maybe<DmConversation>;
   getLastReadMessage?: Maybe<Scalars['ID']['output']>;
   getMessageById?: Maybe<ChatMessage>;
   getMessagesAfterCursor: Array<ChatMessage>;
   getMissingMessages: Array<ChatMessage>;
-  getPresenceMap: Array<UserPresence>;
-  getSubscribedChannels: Array<Scalars['ID']['output']>;
+  getReadReceipts: ReadReceiptsResponse;
   getThreadMessages: Array<ChatMessage>;
-  getUserChannels: Array<Conversation>;
+  getUnreadCounts: UnreadCountsResponse;
+  getUserConversations: ConversationConnection;
   getWorkspaceInviteInfo: WorkspaceInviteInfo;
   health: Scalars['String']['output'];
   history: HistoryPayload;
   me?: Maybe<User>;
+  messageReactions: Array<MessageReaction>;
   messagesDelta: MessagesDelta;
   myProjects: Array<Project>;
   myWorkspaces: Array<Workspace>;
@@ -368,6 +697,7 @@ export type Query = {
   onboardingStatus: OnboardingStatus;
   project?: Maybe<Project>;
   projectBySlug?: Maybe<Project>;
+  reactionUsers: ReactionUsersConnection;
   /** Get count of unread notifications. */
   unreadNotificationCount: Scalars['Int']['output'];
   workspaceBySlug: Workspace;
@@ -382,15 +712,15 @@ export type QueryGetChannelMembersArgs = {
 };
 
 
-export type QueryGetChannelMessagesArgs = {
-  beforeCursor?: InputMaybe<Scalars['ID']['input']>;
-  channelId: Scalars['ID']['input'];
-  limit?: InputMaybe<Scalars['Int']['input']>;
+export type QueryGetConversationArgs = {
+  conversationId: Scalars['ID']['input'];
 };
 
 
-export type QueryGetChannelUnreadCountArgs = {
-  channelId: Scalars['ID']['input'];
+export type QueryGetDmByUsersArgs = {
+  otherUserId: Scalars['ID']['input'];
+  projectId: Scalars['ID']['input'];
+  workspaceId: Scalars['ID']['input'];
 };
 
 
@@ -418,8 +748,8 @@ export type QueryGetMissingMessagesArgs = {
 };
 
 
-export type QueryGetPresenceMapArgs = {
-  userIds: Array<Scalars['ID']['input']>;
+export type QueryGetReadReceiptsArgs = {
+  messageId: Scalars['ID']['input'];
 };
 
 
@@ -430,10 +760,18 @@ export type QueryGetThreadMessagesArgs = {
 };
 
 
-export type QueryGetUserChannelsArgs = {
-  limit?: InputMaybe<Scalars['Int']['input']>;
-  offset?: InputMaybe<Scalars['Int']['input']>;
+export type QueryGetUnreadCountsArgs = {
   projectId: Scalars['ID']['input'];
+  workspaceId: Scalars['ID']['input'];
+};
+
+
+export type QueryGetUserConversationsArgs = {
+  cursor?: InputMaybe<Scalars['String']['input']>;
+  includeArchived?: InputMaybe<Scalars['Boolean']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  projectId: Scalars['ID']['input'];
+  type?: InputMaybe<ConversationType>;
   workspaceId: Scalars['ID']['input'];
 };
 
@@ -447,6 +785,11 @@ export type QueryHistoryArgs = {
   beforeSequence: Scalars['Int']['input'];
   conversationId: Scalars['ID']['input'];
   limit?: InputMaybe<Scalars['Int']['input']>;
+};
+
+
+export type QueryMessageReactionsArgs = {
+  messageId: Scalars['ID']['input'];
 };
 
 
@@ -481,6 +824,13 @@ export type QueryProjectBySlugArgs = {
 };
 
 
+export type QueryReactionUsersArgs = {
+  cursor?: InputMaybe<Scalars['Int']['input']>;
+  emoji: Scalars['String']['input'];
+  messageId: Scalars['ID']['input'];
+};
+
+
 export type QueryWorkspaceBySlugArgs = {
   slug: Scalars['String']['input'];
 };
@@ -490,9 +840,63 @@ export type QueryWorkspaceMembersArgs = {
   workspaceId: Scalars['ID']['input'];
 };
 
+export type ReactionUsersConnection = {
+  __typename?: 'ReactionUsersConnection';
+  nextCursor?: Maybe<Scalars['Int']['output']>;
+  users: Array<User>;
+};
+
+export type ReadReceiptUser = {
+  __typename?: 'ReadReceiptUser';
+  avatarUrl?: Maybe<Scalars['String']['output']>;
+  userId: Scalars['ID']['output'];
+  username: Scalars['String']['output'];
+};
+
+export type ReadReceiptsResponse = {
+  __typename?: 'ReadReceiptsResponse';
+  readBy: Array<ReadReceiptUser>;
+  totalMembers: Scalars['Int']['output'];
+  totalReads: Scalars['Int']['output'];
+};
+
+export type RemoveChannelMemberResult = {
+  __typename?: 'RemoveChannelMemberResult';
+  channelId: Scalars['ID']['output'];
+  success: Scalars['Boolean']['output'];
+  userId: Scalars['ID']['output'];
+};
+
+export type RemoveGroupMemberResult = {
+  __typename?: 'RemoveGroupMemberResult';
+  groupId: Scalars['ID']['output'];
+  success: Scalars['Boolean']['output'];
+  userId: Scalars['ID']['output'];
+};
+
 export type RenameChannelInput = {
   channelId: Scalars['ID']['input'];
   name: Scalars['String']['input'];
+};
+
+export type RenameGroupResult = {
+  __typename?: 'RenameGroupResult';
+  groupId: Scalars['ID']['output'];
+  name: Scalars['String']['output'];
+  success: Scalars['Boolean']['output'];
+};
+
+export type ReopenThreadResult = {
+  __typename?: 'ReopenThreadResult';
+  success: Scalars['Boolean']['output'];
+  threadId: Scalars['ID']['output'];
+};
+
+export type SubscribeThreadResult = {
+  __typename?: 'SubscribeThreadResult';
+  isSubscribed: Scalars['Boolean']['output'];
+  success: Scalars['Boolean']['output'];
+  threadId: Scalars['ID']['output'];
 };
 
 export type Task = {
@@ -500,6 +904,39 @@ export type Task = {
   id: Scalars['ID']['output'];
   statusName: Scalars['String']['output'];
   title: Scalars['String']['output'];
+};
+
+export type UnarchiveChannelResult = {
+  __typename?: 'UnarchiveChannelResult';
+  channelId: Scalars['ID']['output'];
+  name: Scalars['String']['output'];
+  success: Scalars['Boolean']['output'];
+};
+
+export type UnreadCountsResponse = {
+  __typename?: 'UnreadCountsResponse';
+  conversations: Array<ConversationUnreadCount>;
+};
+
+export type UnsubscribeThreadResult = {
+  __typename?: 'UnsubscribeThreadResult';
+  isSubscribed: Scalars['Boolean']['output'];
+  success: Scalars['Boolean']['output'];
+  threadId: Scalars['ID']['output'];
+};
+
+export type UpdateChannelDescriptionResult = {
+  __typename?: 'UpdateChannelDescriptionResult';
+  channelId: Scalars['ID']['output'];
+  description?: Maybe<Scalars['String']['output']>;
+  success: Scalars['Boolean']['output'];
+};
+
+export type UpdateChannelVisibilityResult = {
+  __typename?: 'UpdateChannelVisibilityResult';
+  channelId: Scalars['ID']['output'];
+  isPublic: Scalars['Boolean']['output'];
+  success: Scalars['Boolean']['output'];
 };
 
 export type User = {
@@ -511,6 +948,14 @@ export type User = {
   id: Scalars['ID']['output'];
   status: Scalars['String']['output'];
   updatedAt: Scalars['String']['output'];
+};
+
+export type UserBasic = {
+  __typename?: 'UserBasic';
+  avatarUrl?: Maybe<Scalars['String']['output']>;
+  email: Scalars['String']['output'];
+  fullName: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
 };
 
 export type UserPresence = {
@@ -546,19 +991,6 @@ export type WorkspaceMember = {
   user: User;
 };
 
-export type ChannelFieldsFragment = { __typename?: 'Conversation', id: string, name?: string | null, topic?: string | null, type: ConversationType, projectId?: string | null, memberCount: number, createdAt: any, updatedAt: any, isArchived: boolean, workspaceId: string } & { ' $fragmentName'?: 'ChannelFieldsFragment' };
-
-export type GetUserChannelsQueryVariables = Exact<{
-  workspaceId: Scalars['ID']['input'];
-  projectId: Scalars['ID']['input'];
-}>;
-
-
-export type GetUserChannelsQuery = { __typename?: 'Query', getUserChannels: Array<(
-    { __typename?: 'Conversation' }
-    & { ' $fragmentRefs'?: { 'ChannelFieldsFragment': ChannelFieldsFragment } }
-  )> };
-
 export type MessageRecoveryFieldsFragment = { __typename?: 'ChatMessage', id: string, streamId: string, sequence: number, conversationId: string, authorUserId: string, content: any, type: string, createdAt: any } & { ' $fragmentName'?: 'MessageRecoveryFieldsFragment' };
 
 export type GetMissingMessagesQueryVariables = Exact<{
@@ -585,17 +1017,34 @@ export type GetHistoryQuery = { __typename?: 'Query', history: { __typename?: 'H
       & { ' $fragmentRefs'?: { 'MessageRecoveryFieldsFragment': MessageRecoveryFieldsFragment } }
     )> } };
 
-export type MessageFieldsFragment = { __typename?: 'ChatMessage', id: string, conversationId: string, content: any, authorUserId: string, type: string, createdAt: any } & { ' $fragmentName'?: 'MessageFieldsFragment' };
+export type ConversationEdgeFieldsFragment = { __typename?: 'ConversationEdge', id: string, type: ConversationType, name?: string | null, description?: string | null, isPublic: boolean, workspaceId: string, projectId?: string | null, memberCount: number, unreadCount: number, createdAt: any, updatedAt: any, deletedAt?: any | null, lastMessage?: { __typename?: 'LastMessagePreview', id: string, content: any, authorUserId: string, createdAt: any } | null } & { ' $fragmentName'?: 'ConversationEdgeFieldsFragment' };
 
-export type GetMessageByIdQueryVariables = Exact<{
-  messageId: Scalars['ID']['input'];
+export type GetUserConversationsQueryVariables = Exact<{
+  workspaceId: Scalars['ID']['input'];
+  projectId: Scalars['ID']['input'];
+  type?: InputMaybe<ConversationType>;
+  includeArchived?: InputMaybe<Scalars['Boolean']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  cursor?: InputMaybe<Scalars['String']['input']>;
 }>;
 
 
-export type GetMessageByIdQuery = { __typename?: 'Query', getMessageById?: (
-    { __typename?: 'ChatMessage' }
-    & { ' $fragmentRefs'?: { 'MessageFieldsFragment': MessageFieldsFragment } }
-  ) | null };
+export type GetUserConversationsQuery = { __typename?: 'Query', getUserConversations: { __typename?: 'ConversationConnection', edges: Array<(
+      { __typename?: 'ConversationEdge' }
+      & { ' $fragmentRefs'?: { 'ConversationEdgeFieldsFragment': ConversationEdgeFieldsFragment } }
+    )>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, endCursor?: string | null } } };
+
+export type ConversationDetailsFieldsFragment = { __typename?: 'ConversationDetails', id: string, type: ConversationType, name?: string | null, description?: string | null, isPublic: boolean, workspaceId: string, projectId?: string | null, parentMessageId?: string | null, createdBy?: string | null, memberCount: number, unreadCount: number, createdAt: any, updatedAt: any, deletedAt?: any | null, members: Array<{ __typename?: 'ConversationMemberDetails', userId: string, role: string, isMuted: boolean, joinedAt: any, user: { __typename?: 'UserBasic', id: string, fullName: string, email: string, avatarUrl?: string | null } }>, lastMessage?: { __typename?: 'LastMessagePreview', id: string, content: any, authorUserId: string, createdAt: any } | null } & { ' $fragmentName'?: 'ConversationDetailsFieldsFragment' };
+
+export type GetConversationQueryVariables = Exact<{
+  conversationId: Scalars['ID']['input'];
+}>;
+
+
+export type GetConversationQuery = { __typename?: 'Query', getConversation: (
+    { __typename?: 'ConversationDetails' }
+    & { ' $fragmentRefs'?: { 'ConversationDetailsFieldsFragment': ConversationDetailsFieldsFragment } }
+  ) };
 
 export type ProjectFieldsFragment = { __typename?: 'Project', id: string, key: string, name: string, description?: string | null, workspaceId: string, createdAt: string, updatedAt: string, members: Array<{ __typename?: 'ProjectMember', userId: string, role?: string | null, joinedAt: string }> } & { ' $fragmentName'?: 'ProjectFieldsFragment' };
 
@@ -785,17 +1234,17 @@ export type RemoveWorkspaceMemberMutationVariables = Exact<{
 
 export type RemoveWorkspaceMemberMutation = { __typename?: 'Mutation', removeWorkspaceMember: { __typename?: 'InviteResponse', success: boolean, message: string } };
 
-export const ChannelFieldsFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"ChannelFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Conversation"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"topic"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"projectId"}},{"kind":"Field","name":{"kind":"Name","value":"memberCount"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}},{"kind":"Field","name":{"kind":"Name","value":"isArchived"}},{"kind":"Field","name":{"kind":"Name","value":"workspaceId"}}]}}]} as unknown as DocumentNode<ChannelFieldsFragment, unknown>;
 export const MessageRecoveryFieldsFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"MessageRecoveryFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"ChatMessage"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"streamId"}},{"kind":"Field","name":{"kind":"Name","value":"sequence"}},{"kind":"Field","name":{"kind":"Name","value":"conversationId"}},{"kind":"Field","name":{"kind":"Name","value":"authorUserId"}},{"kind":"Field","name":{"kind":"Name","value":"content"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}}]}}]} as unknown as DocumentNode<MessageRecoveryFieldsFragment, unknown>;
-export const MessageFieldsFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"MessageFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"ChatMessage"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"conversationId"}},{"kind":"Field","name":{"kind":"Name","value":"content"}},{"kind":"Field","name":{"kind":"Name","value":"authorUserId"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}}]}}]} as unknown as DocumentNode<MessageFieldsFragment, unknown>;
+export const ConversationEdgeFieldsFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"ConversationEdgeFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"ConversationEdge"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"isPublic"}},{"kind":"Field","name":{"kind":"Name","value":"workspaceId"}},{"kind":"Field","name":{"kind":"Name","value":"projectId"}},{"kind":"Field","name":{"kind":"Name","value":"memberCount"}},{"kind":"Field","name":{"kind":"Name","value":"unreadCount"}},{"kind":"Field","name":{"kind":"Name","value":"lastMessage"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"content"}},{"kind":"Field","name":{"kind":"Name","value":"authorUserId"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}}]}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}},{"kind":"Field","name":{"kind":"Name","value":"deletedAt"}}]}}]} as unknown as DocumentNode<ConversationEdgeFieldsFragment, unknown>;
+export const ConversationDetailsFieldsFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"ConversationDetailsFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"ConversationDetails"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"isPublic"}},{"kind":"Field","name":{"kind":"Name","value":"workspaceId"}},{"kind":"Field","name":{"kind":"Name","value":"projectId"}},{"kind":"Field","name":{"kind":"Name","value":"parentMessageId"}},{"kind":"Field","name":{"kind":"Name","value":"createdBy"}},{"kind":"Field","name":{"kind":"Name","value":"memberCount"}},{"kind":"Field","name":{"kind":"Name","value":"unreadCount"}},{"kind":"Field","name":{"kind":"Name","value":"members"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"userId"}},{"kind":"Field","name":{"kind":"Name","value":"role"}},{"kind":"Field","name":{"kind":"Name","value":"isMuted"}},{"kind":"Field","name":{"kind":"Name","value":"joinedAt"}},{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"fullName"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"avatarUrl"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"lastMessage"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"content"}},{"kind":"Field","name":{"kind":"Name","value":"authorUserId"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}}]}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}},{"kind":"Field","name":{"kind":"Name","value":"deletedAt"}}]}}]} as unknown as DocumentNode<ConversationDetailsFieldsFragment, unknown>;
 export const ProjectFieldsFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"ProjectFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Project"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"key"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"workspaceId"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}},{"kind":"Field","name":{"kind":"Name","value":"members"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"userId"}},{"kind":"Field","name":{"kind":"Name","value":"role"}},{"kind":"Field","name":{"kind":"Name","value":"joinedAt"}}]}}]}}]} as unknown as DocumentNode<ProjectFieldsFragment, unknown>;
 export const SessionUserFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"SessionUser"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"User"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"fullName"}},{"kind":"Field","name":{"kind":"Name","value":"avatarUrl"}}]}}]} as unknown as DocumentNode<SessionUserFragment, unknown>;
 export const UserFragmentFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"UserFragment"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"User"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"fullName"}},{"kind":"Field","name":{"kind":"Name","value":"avatarUrl"}}]}}]} as unknown as DocumentNode<UserFragmentFragment, unknown>;
 export const WorkspaceFragmentFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"WorkspaceFragment"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Workspace"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"logoUrl"}}]}}]} as unknown as DocumentNode<WorkspaceFragmentFragment, unknown>;
-export const GetUserChannelsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetUserChannels"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"workspaceId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"projectId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"getUserChannels"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"workspaceId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"workspaceId"}}},{"kind":"Argument","name":{"kind":"Name","value":"projectId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"projectId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"ChannelFields"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"ChannelFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Conversation"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"topic"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"projectId"}},{"kind":"Field","name":{"kind":"Name","value":"memberCount"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}},{"kind":"Field","name":{"kind":"Name","value":"isArchived"}},{"kind":"Field","name":{"kind":"Name","value":"workspaceId"}}]}}]} as unknown as DocumentNode<GetUserChannelsQuery, GetUserChannelsQueryVariables>;
 export const GetMissingMessagesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetMissingMessages"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"conversationId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"afterSequence"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"limit"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"messagesDelta"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"conversationId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"conversationId"}}},{"kind":"Argument","name":{"kind":"Name","value":"afterSequence"},"value":{"kind":"Variable","name":{"kind":"Name","value":"afterSequence"}}},{"kind":"Argument","name":{"kind":"Name","value":"limit"},"value":{"kind":"Variable","name":{"kind":"Name","value":"limit"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"messages"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"MessageRecoveryFields"}}]}},{"kind":"Field","name":{"kind":"Name","value":"hasMore"}},{"kind":"Field","name":{"kind":"Name","value":"lastSequence"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"MessageRecoveryFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"ChatMessage"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"streamId"}},{"kind":"Field","name":{"kind":"Name","value":"sequence"}},{"kind":"Field","name":{"kind":"Name","value":"conversationId"}},{"kind":"Field","name":{"kind":"Name","value":"authorUserId"}},{"kind":"Field","name":{"kind":"Name","value":"content"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}}]}}]} as unknown as DocumentNode<GetMissingMessagesQuery, GetMissingMessagesQueryVariables>;
 export const GetHistoryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetHistory"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"conversationId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"beforeSequence"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"limit"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"history"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"conversationId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"conversationId"}}},{"kind":"Argument","name":{"kind":"Name","value":"beforeSequence"},"value":{"kind":"Variable","name":{"kind":"Name","value":"beforeSequence"}}},{"kind":"Argument","name":{"kind":"Name","value":"limit"},"value":{"kind":"Variable","name":{"kind":"Name","value":"limit"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"messages"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"MessageRecoveryFields"}}]}},{"kind":"Field","name":{"kind":"Name","value":"hasMore"}},{"kind":"Field","name":{"kind":"Name","value":"minSequence"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"MessageRecoveryFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"ChatMessage"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"streamId"}},{"kind":"Field","name":{"kind":"Name","value":"sequence"}},{"kind":"Field","name":{"kind":"Name","value":"conversationId"}},{"kind":"Field","name":{"kind":"Name","value":"authorUserId"}},{"kind":"Field","name":{"kind":"Name","value":"content"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}}]}}]} as unknown as DocumentNode<GetHistoryQuery, GetHistoryQueryVariables>;
-export const GetMessageByIdDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetMessageById"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"messageId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"getMessageById"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"messageId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"messageId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"MessageFields"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"MessageFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"ChatMessage"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"conversationId"}},{"kind":"Field","name":{"kind":"Name","value":"content"}},{"kind":"Field","name":{"kind":"Name","value":"authorUserId"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}}]}}]} as unknown as DocumentNode<GetMessageByIdQuery, GetMessageByIdQueryVariables>;
+export const GetUserConversationsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetUserConversations"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"workspaceId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"projectId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"type"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"ConversationType"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"includeArchived"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Boolean"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"limit"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"cursor"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"getUserConversations"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"workspaceId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"workspaceId"}}},{"kind":"Argument","name":{"kind":"Name","value":"projectId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"projectId"}}},{"kind":"Argument","name":{"kind":"Name","value":"type"},"value":{"kind":"Variable","name":{"kind":"Name","value":"type"}}},{"kind":"Argument","name":{"kind":"Name","value":"includeArchived"},"value":{"kind":"Variable","name":{"kind":"Name","value":"includeArchived"}}},{"kind":"Argument","name":{"kind":"Name","value":"limit"},"value":{"kind":"Variable","name":{"kind":"Name","value":"limit"}}},{"kind":"Argument","name":{"kind":"Name","value":"cursor"},"value":{"kind":"Variable","name":{"kind":"Name","value":"cursor"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"edges"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"ConversationEdgeFields"}}]}},{"kind":"Field","name":{"kind":"Name","value":"pageInfo"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"hasNextPage"}},{"kind":"Field","name":{"kind":"Name","value":"endCursor"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"ConversationEdgeFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"ConversationEdge"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"isPublic"}},{"kind":"Field","name":{"kind":"Name","value":"workspaceId"}},{"kind":"Field","name":{"kind":"Name","value":"projectId"}},{"kind":"Field","name":{"kind":"Name","value":"memberCount"}},{"kind":"Field","name":{"kind":"Name","value":"unreadCount"}},{"kind":"Field","name":{"kind":"Name","value":"lastMessage"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"content"}},{"kind":"Field","name":{"kind":"Name","value":"authorUserId"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}}]}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}},{"kind":"Field","name":{"kind":"Name","value":"deletedAt"}}]}}]} as unknown as DocumentNode<GetUserConversationsQuery, GetUserConversationsQueryVariables>;
+export const GetConversationDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetConversation"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"conversationId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"getConversation"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"conversationId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"conversationId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"ConversationDetailsFields"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"ConversationDetailsFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"ConversationDetails"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"isPublic"}},{"kind":"Field","name":{"kind":"Name","value":"workspaceId"}},{"kind":"Field","name":{"kind":"Name","value":"projectId"}},{"kind":"Field","name":{"kind":"Name","value":"parentMessageId"}},{"kind":"Field","name":{"kind":"Name","value":"createdBy"}},{"kind":"Field","name":{"kind":"Name","value":"memberCount"}},{"kind":"Field","name":{"kind":"Name","value":"unreadCount"}},{"kind":"Field","name":{"kind":"Name","value":"members"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"userId"}},{"kind":"Field","name":{"kind":"Name","value":"role"}},{"kind":"Field","name":{"kind":"Name","value":"isMuted"}},{"kind":"Field","name":{"kind":"Name","value":"joinedAt"}},{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"fullName"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"avatarUrl"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"lastMessage"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"content"}},{"kind":"Field","name":{"kind":"Name","value":"authorUserId"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}}]}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}},{"kind":"Field","name":{"kind":"Name","value":"deletedAt"}}]}}]} as unknown as DocumentNode<GetConversationQuery, GetConversationQueryVariables>;
 export const GetProjectDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetProject"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"project"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"ProjectFields"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"ProjectFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Project"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"key"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"workspaceId"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}},{"kind":"Field","name":{"kind":"Name","value":"members"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"userId"}},{"kind":"Field","name":{"kind":"Name","value":"role"}},{"kind":"Field","name":{"kind":"Name","value":"joinedAt"}}]}}]}}]} as unknown as DocumentNode<GetProjectQuery, GetProjectQueryVariables>;
 export const MyProjectsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"MyProjects"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"workspaceId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"myProjects"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"workspaceId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"workspaceId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"ProjectFields"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"ProjectFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Project"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"key"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"workspaceId"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}},{"kind":"Field","name":{"kind":"Name","value":"members"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"userId"}},{"kind":"Field","name":{"kind":"Name","value":"role"}},{"kind":"Field","name":{"kind":"Name","value":"joinedAt"}}]}}]}}]} as unknown as DocumentNode<MyProjectsQuery, MyProjectsQueryVariables>;
 export const GetProjectBySlugDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetProjectBySlug"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"workspaceId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"slug"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"projectBySlug"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"workspaceId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"workspaceId"}}},{"kind":"Argument","name":{"kind":"Name","value":"slug"},"value":{"kind":"Variable","name":{"kind":"Name","value":"slug"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"ProjectFields"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"ProjectFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Project"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"key"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"workspaceId"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}},{"kind":"Field","name":{"kind":"Name","value":"members"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"userId"}},{"kind":"Field","name":{"kind":"Name","value":"role"}},{"kind":"Field","name":{"kind":"Name","value":"joinedAt"}}]}}]}}]} as unknown as DocumentNode<GetProjectBySlugQuery, GetProjectBySlugQueryVariables>;

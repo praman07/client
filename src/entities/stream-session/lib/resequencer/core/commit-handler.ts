@@ -14,17 +14,17 @@ export interface BasePayload {
 }
 
 export interface CommitHandler<T extends BasePayload> {
-  commit(
+  commit: (
     state: StreamSessionState<T>,
     payload: T,
     projectId: string,
-  ): Promise<void>
-  commitWithRetry(
+  ) => Promise<void>
+  commitWithRetry: (
     state: StreamSessionState<T>,
     payload: T,
     projectId: string,
     maxRetries?: number,
-  ): Promise<boolean>
+  ) => Promise<boolean>
 }
 
 export function createCommitHandler<T extends BasePayload>(

@@ -1,4 +1,4 @@
-import { useRef, useState, useLayoutEffect, useCallback } from 'react'
+import { useCallback, useLayoutEffect, useRef, useState } from 'react'
 import { useVirtualizer } from '@tanstack/react-virtual'
 
 type ScrollMode = 'LOCKED_BOTTOM' | 'FREE_SCROLL' | 'FETCHING_HISTORY'

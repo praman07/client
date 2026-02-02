@@ -16,8 +16,8 @@ import * as eventRegistry from '../protocol/event-registry'
 
 export interface DomainEventConfig {
   domain: string
-  upstreamEvents: string[] // Client → Server
-  downstreamEvents: string[] // Server → Client
+  upstreamEvents: Array<string> // Client → Server
+  downstreamEvents: Array<string> // Server → Client
 }
 
 const domains = new Map<string, DomainEventConfig>()
@@ -71,7 +71,7 @@ export function getDomainConfig(domain: string): DomainEventConfig | undefined {
 /**
  * Gets all registered domains.
  */
-export function getAllDomains(): string[] {
+export function getAllDomains(): Array<string> {
   return Array.from(domains.keys())
 }
 

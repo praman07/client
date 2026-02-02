@@ -65,21 +65,21 @@ export function getDomain(type: string): string | null {
 /**
  * Gets all registered events for a domain.
  */
-export function getEventsForDomain(domain: string): EventMetadata[] {
+export function getEventsForDomain(domain: string): Array<EventMetadata> {
   return Array.from(registry.values()).filter((e) => e.domain === domain)
 }
 
 /**
  * Gets all upstream events.
  */
-export function getUpstreamEvents(): EventMetadata[] {
+export function getUpstreamEvents(): Array<EventMetadata> {
   return Array.from(registry.values()).filter((e) => e.direction === 'upstream')
 }
 
 /**
  * Gets all downstream events.
  */
-export function getDownstreamEvents(): EventMetadata[] {
+export function getDownstreamEvents(): Array<EventMetadata> {
   return Array.from(registry.values()).filter(
     (e) => e.direction === 'downstream',
   )

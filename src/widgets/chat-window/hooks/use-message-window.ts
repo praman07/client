@@ -1,6 +1,6 @@
 import { useLiveQuery } from 'dexie-react-hooks'
-import { db } from '@/shared/lib/db'
 import { mergeMessages } from '../model/selectors'
+import { db } from '@/shared/lib/db'
 
 interface UseMessageWindowProps {
   conversationId: string

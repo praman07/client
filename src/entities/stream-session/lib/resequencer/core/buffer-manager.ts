@@ -4,21 +4,21 @@
  * Responsibility: Manage message buffer, flushing, and overflow detection
  */
 
-import type { StreamSessionState } from '../types/state'
-import type { CommitHandler, BasePayload } from './commit-handler'
 import { compareStreamId } from '../utils/stream-id'
+import type { StreamSessionState } from '../types/state'
+import type { BasePayload, CommitHandler } from './commit-handler'
 
 export type FlushStrategy = 'strict' | 'force'
 
 export interface BufferManager<T extends BasePayload> {
-  add(state: StreamSessionState<T>, message: T): void
-  flush(
+  add: (state: StreamSessionState<T>, message: T) => void
+  flush: (
     state: StreamSessionState<T>,
     projectId: string,
     strategy: FlushStrategy,
-  ): Promise<void>
-  findOldest(buffer: Map<string, T>): T | null
-  checkOverflow(state: StreamSessionState<T>, maxSize: number): boolean
+  ) => Promise<void>
+  findOldest: (buffer: Map<string, T>) => T | null
+  checkOverflow: (state: StreamSessionState<T>, maxSize: number) => boolean
 }
 
 export function createBufferManager<T extends BasePayload>(

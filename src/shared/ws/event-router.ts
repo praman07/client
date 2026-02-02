@@ -8,13 +8,13 @@
  * Responsibility: Single ingress fan-out and replication (Leader -> Follower).
  * Domain agnostic.
  */
+import { dispatchEvent } from './event-bus'
 import type {
   ServerEventName,
   ServerEventPayloads,
   ServerMessageUnion,
 } from './protocol'
 import { leaderElection } from '@/shared/lib/broadcast/leader-election'
-import { dispatchEvent } from './event-bus'
 
 // Internal type for erased handlers
 type GenericEventHandler = (payload: never) => void

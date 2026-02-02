@@ -5,14 +5,14 @@
  */
 
 import type { StreamSessionState } from '../types/state'
-import type { CommitHandler, BasePayload } from './commit-handler'
+import type { BasePayload, CommitHandler } from './commit-handler'
 import type { BufferManager } from './buffer-manager'
-import type { ProcessorPlugin, PluginContext } from '../plugins/plugin-types'
+import type { PluginContext, ProcessorPlugin } from '../plugins/plugin-types'
 
 export interface ProcessingContext {
   projectId: string
   isReplay: boolean
-  plugins: ProcessorPlugin[]
+  plugins: Array<ProcessorPlugin>
 }
 
 export interface ProcessingResult {
@@ -22,11 +22,11 @@ export interface ProcessingResult {
 }
 
 export interface MessageProcessor<T extends BasePayload> {
-  process(
+  process: (
     state: StreamSessionState<T>,
     payload: T,
     context: ProcessingContext,
-  ): Promise<ProcessingResult>
+  ) => Promise<ProcessingResult>
 }
 
 export function createMessageProcessor<T extends BasePayload>(
@@ -38,7 +38,7 @@ export function createMessageProcessor<T extends BasePayload>(
    */
   async function runPreProcessPlugins(
     pluginContext: PluginContext<T>,
-    plugins: ProcessorPlugin<T>[],
+    plugins: Array<ProcessorPlugin<T>>,
   ): Promise<{ shouldContinue: boolean; reason?: string }> {
     const prePlugins = plugins.filter((p) => p.phase === 'pre-process')
 
@@ -69,7 +69,7 @@ export function createMessageProcessor<T extends BasePayload>(
    */
   async function runPostProcessPlugins(
     pluginContext: PluginContext<T>,
-    plugins: ProcessorPlugin<T>[],
+    plugins: Array<ProcessorPlugin<T>>,
   ): Promise<void> {
     const postPlugins = plugins.filter((p) => p.phase === 'post-process')
 

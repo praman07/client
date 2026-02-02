@@ -7,6 +7,7 @@ import userReducer from '@/entities/user/model/slice'
 import projectReducer from '@/entities/project/model/slice'
 import createProjectReducer from '@/features/create-project/model/slice'
 import { createChannelReducer } from '@/features/chat/create-channel/model/slice'
+import conversationReducer from '@/entities/conversation/model/slice'
 
 export const store = configureStore({
   reducer: {
@@ -18,6 +19,7 @@ export const store = configureStore({
     createProject: createProjectReducer,
     createChannel: createChannelReducer,
     chatSession: chatSessionReducer,
+    conversation: conversationReducer, // ✅ NEW - Conversation state management
   },
 })
 

@@ -1,6 +1,6 @@
-import { db } from '@/shared/lib/db'
 import type { DBMessage, OutboxItem } from '@/shared/lib/db/schema'
 import type { MessageRowData } from './message-list.types'
+import { db } from '@/shared/lib/db'
 
 /**
  * Gets the Min and Max sequence for a conversation currently in DB.
@@ -36,9 +36,9 @@ export async function getSequenceRange(
  * - Sorts by Sequence (Primary) and CreatedAt (Secondary fbk)
  */
 export function mergeMessages(
-  history: DBMessage[],
-  outbox: OutboxItem[],
-): MessageRowData[] {
+  history: Array<DBMessage>,
+  outbox: Array<OutboxItem>,
+): Array<MessageRowData> {
   const historyMap = new Map<string, MessageRowData>()
 
   // 1. Convert History to Rows

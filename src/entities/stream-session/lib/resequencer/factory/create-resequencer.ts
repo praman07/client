@@ -4,9 +4,6 @@
  * Responsibility: Wire up all modules and provide public API
  */
 
-import type { ResequencerConfig } from '../types/config'
-import type { ResequencerStatus } from '../types/state'
-import type { BasePayload } from '../core/commit-handler'
 import { createStateManager } from '../core/state-manager'
 import { createCommitHandler } from '../core/commit-handler'
 import { createBufferManager } from '../core/buffer-manager'
@@ -17,6 +14,9 @@ import { createAutoHealerPlugin } from '../plugins/auto-healer'
 import { createGapDetectorPlugin } from '../plugins/gap-detector'
 import { BUFFER_LIMIT } from '../utils/constants'
 import { compareStreamId } from '../utils/stream-id'
+import type { BasePayload } from '../core/commit-handler'
+import type { ResequencerStatus } from '../types/state'
+import type { ResequencerConfig } from '../types/config'
 
 export interface SubscriptionState {
   lastSequence: number
@@ -24,23 +24,29 @@ export interface SubscriptionState {
 }
 
 export interface ResequencerAPI<T extends BasePayload> {
-  processNewMessage(
+  processNewMessage: (
     payload: T & { conversationId: string },
     projectId: string,
-  ): Promise<void>
-  processRecoveryBatch(
+  ) => Promise<void>
+  processRecoveryBatch: (
     messages: Array<T & { conversationId: string; streamId: string }>,
     projectId: string,
-  ): Promise<void>
-  handleSyncRequired(conversationId: string): Promise<void>
-  resetConversation(conversationId: string, projectId?: string): Promise<void>
-  handleRecoveryGap(conversationId: string, projectId: string): Promise<void>
-  getStatus(conversationId: string): ResequencerStatus
-  getSubscriptionState(
+  ) => Promise<void>
+  handleSyncRequired: (conversationId: string) => Promise<void>
+  resetConversation: (
     conversationId: string,
     projectId?: string,
-  ): Promise<SubscriptionState>
-  refreshAllActive(): Promise<void>
+  ) => Promise<void>
+  handleRecoveryGap: (
+    conversationId: string,
+    projectId: string,
+  ) => Promise<void>
+  getStatus: (conversationId: string) => ResequencerStatus
+  getSubscriptionState: (
+    conversationId: string,
+    projectId?: string,
+  ) => Promise<SubscriptionState>
+  refreshAllActive: () => Promise<void>
 }
 
 export function createStreamResequencer<T extends BasePayload>(

@@ -5,9 +5,9 @@
  */
 
 import type {
-  ProcessorPlugin,
   PluginContext,
   PluginResult,
+  ProcessorPlugin,
 } from './plugin-types'
 import type { BasePayload } from '../core/commit-handler'
 

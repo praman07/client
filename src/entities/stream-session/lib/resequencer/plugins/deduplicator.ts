@@ -4,13 +4,13 @@
  * Responsibility: Skip messages already seen based on streamId comparison
  */
 
+import { compareStreamId } from '../utils/stream-id'
 import type {
-  ProcessorPlugin,
   PluginContext,
   PluginResult,
+  ProcessorPlugin,
 } from './plugin-types'
 import type { BasePayload } from '../core/commit-handler'
-import { compareStreamId } from '../utils/stream-id'
 
 export function createDeduplicatorPlugin<
   T extends BasePayload,

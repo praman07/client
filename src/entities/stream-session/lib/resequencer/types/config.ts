@@ -13,7 +13,7 @@ export interface ResequencerConfig<T> {
   storageAdapter: StorageAdapter<T>
   recoveryAdapter: RecoveryAdapter
   gapConfig?: GapDetectorConfig
-  customPlugins?: ProcessorPlugin<T>[]
+  customPlugins?: Array<ProcessorPlugin<T>>
 }
 
 /**

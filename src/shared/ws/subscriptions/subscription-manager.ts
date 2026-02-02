@@ -78,8 +78,8 @@ export function has(domain: string, id: string): boolean {
 /**
  * Gets all subscription factories for a specific domain.
  */
-export function getAllForDomain(domain: string): SubscriptionFactory[] {
-  const results: SubscriptionFactory[] = []
+export function getAllForDomain(domain: string): Array<SubscriptionFactory> {
+  const results: Array<SubscriptionFactory> = []
 
   subscriptions.forEach((factory, key) => {
     if (key.startsWith(`${domain}:`)) {
@@ -93,7 +93,7 @@ export function getAllForDomain(domain: string): SubscriptionFactory[] {
 /**
  * Gets all active subscriptions (all domains).
  */
-export function getAll(): SubscriptionFactory[] {
+export function getAll(): Array<SubscriptionFactory> {
   return Array.from(subscriptions.values())
 }
 

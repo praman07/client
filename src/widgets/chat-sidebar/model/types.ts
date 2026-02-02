@@ -17,6 +17,14 @@ export interface DMItem {
   unreadCount?: number
 }
 
+export interface GroupItem {
+  id: string
+  name: string
+  memberCount: number
+  avatarUrl?: string | null
+  unreadCount?: number
+}
+
 export interface SidebarSectionData {
   title: string
   items: Array<ChannelItem | DMItem>

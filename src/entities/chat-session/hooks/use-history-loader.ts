@@ -1,12 +1,12 @@
+import { useCallback, useRef, useState } from 'react'
+import { GET_HISTORY } from '../api'
+import type { NewMessagePayload } from '@/shared/ws/protocol'
 import { GqlClient } from '@/shared/api'
 import { resequencer } from '@/entities/chat-session'
-import type { NewMessagePayload } from '@/shared/ws/protocol'
 
 import { useAuth } from '@/shared/hooks'
-import { useCallback, useState, useRef } from 'react'
 import { MessageRecoveryFieldsFragmentDoc } from '@/gql/graphql'
 import { useFragment } from '@/gql/fragment-masking'
-import { GET_HISTORY } from '../api'
 
 /**
  * Controller Hook for fetching historical messages.
@@ -55,8 +55,8 @@ export function useHistoryLoader() {
 
           // ADAPTER: Map GQL Fragment -> WebSocket Protocol Payload
           // The resequencer expects the same shape as live updates.
-          const payloadBatch: NewMessagePayload[] = historyData.messages.map(
-            (maskedMsg) => {
+          const payloadBatch: Array<NewMessagePayload> =
+            historyData.messages.map((maskedMsg) => {
               const msg = useFragment(
                 MessageRecoveryFieldsFragmentDoc,
                 maskedMsg,
@@ -75,8 +75,7 @@ export function useHistoryLoader() {
                 sequence: msg.sequence,
                 threadId: undefined, // TODO: Add thread support if needed
               }
-            },
-          )
+            })
           // The original code had an extra closing parenthesis for the map function.
           // The provided snippet had a syntax error with an extra `})` at the end of the map.
           // Corrected to ensure valid syntax.

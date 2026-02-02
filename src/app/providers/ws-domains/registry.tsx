@@ -18,7 +18,7 @@ import { registerDomain } from '@/shared/ws/events/domain-registry'
 import { eventRouter } from '@/shared/ws'
 
 interface DomainRegistryProps {
-  plugins: DomainPlugin[]
+  plugins: Array<DomainPlugin>
 }
 
 /**

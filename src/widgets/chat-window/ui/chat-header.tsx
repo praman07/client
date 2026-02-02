@@ -7,13 +7,13 @@ import {
   Settings01Icon,
   VideoReplayIcon,
 } from '@hugeicons/core-free-icons'
-import { Button } from '@/shared/ui/primitives/button'
 import {
   ChatHeaderEnd,
   ChatHeaderMain,
   ChatHeader as ChatHeaderRoot,
   ChatHeaderStart,
 } from './components/chat-layout'
+import { Button } from '@/shared/ui/primitives/button'
 import {
   InputGroup,
   InputGroupAddon,

@@ -1,11 +1,10 @@
 import { ChatHeader } from './chat-header'
-import { MessageList } from '@/widgets/chat-window/ui/message-list'
 import { MessageInput } from './message-input'
+import { ChatContainer } from './components/chat-layout'
+import { MessageList } from '@/widgets/chat-window/ui/message-list'
 import { useChannelSubscription } from '@/features/chat/subscribe-channel'
 import { useResequencerStatus } from '@/entities/chat-session'
 import { SyncStatusIndicator } from '@/entities/chat-session/ui/SyncStatusIndicator'
-
-import { ChatContainer } from './components/chat-layout'
 
 // TODO: Fetch real channel details via Query
 

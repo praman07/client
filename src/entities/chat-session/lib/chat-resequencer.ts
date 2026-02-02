@@ -5,19 +5,19 @@
  */
 
 import {
-  createStreamResequencer,
-  type RecoveryAdapter,
-  type StorageAdapter,
-  type CursorState,
-  type BasePayload,
-} from '@/entities/stream-session'
-import type { NewMessagePayload } from '@/shared/ws/protocol'
-import { dispatchEvent } from '@/shared/ws/event-bus'
-import {
   commitMessage,
   getConversationCursor,
   resetConversationStorage,
 } from './resequencer/storage'
+import type { NewMessagePayload } from '@/shared/ws/protocol'
+import type {
+  BasePayload,
+  CursorState,
+  RecoveryAdapter,
+  StorageAdapter,
+} from '@/entities/stream-session'
+import { createStreamResequencer } from '@/entities/stream-session'
+import { dispatchEvent } from '@/shared/ws/event-bus'
 
 // NewMessagePayload extends BasePayload
 type ChatPayload = NewMessagePayload & BasePayload

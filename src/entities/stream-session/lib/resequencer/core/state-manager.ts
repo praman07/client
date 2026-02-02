@@ -10,15 +10,15 @@ import type { CursorLoader } from '../utils/cursor-loader'
 import type { BasePayload } from './commit-handler'
 
 export interface StateManager<T extends BasePayload> {
-  get(conversationId: string): StreamSessionState<T> | undefined
-  getOrInit(
+  get: (conversationId: string) => StreamSessionState<T> | undefined
+  getOrInit: (
     conversationId: string,
     projectId?: string,
-  ): Promise<StreamSessionState<T>>
-  reload(conversationId: string): Promise<void>
-  reset(conversationId: string, projectId?: string): Promise<void>
-  cleanup(): void
-  getAllActive(): string[]
+  ) => Promise<StreamSessionState<T>>
+  reload: (conversationId: string) => Promise<void>
+  reset: (conversationId: string, projectId?: string) => Promise<void>
+  cleanup: () => void
+  getAllActive: () => Array<string>
 }
 
 export function createStateManager<T extends BasePayload>(
@@ -151,7 +151,7 @@ export function createStateManager<T extends BasePayload>(
   /**
    * Get all active conversation IDs
    */
-  function getAllActive(): string[] {
+  function getAllActive(): Array<string> {
     return Array.from(states.keys())
   }
 

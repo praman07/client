@@ -30,19 +30,21 @@ type Query {
   myProjects(workspaceId: ID!): [Project!]!
   projectBySlug(workspaceId: ID!, slug: String!): Project
   project(id: ID!): Project
-  getChannelMessages(channelId: ID!, limit: Int, beforeCursor: ID): [ChatMessage!]!
   getThreadMessages(parentMessageId: ID!, limit: Int, beforeCursor: ID): [ChatMessage!]!
   getMessageById(messageId: ID!): ChatMessage
   getMessagesAfterCursor(channelId: ID!, afterCursor: ID!, limit: Int): [ChatMessage!]!
   getMissingMessages(channelId: ID!, rangeStart: ID!, rangeEnd: ID!): [ChatMessage!]!
-  getUserChannels(workspaceId: ID!, projectId: ID!, limit: Int, offset: Int): [Conversation!]!
   getChannelMembers(channelId: ID!, limit: Int, offset: Int): [ChatMember!]!
-  getChannelUnreadCount(channelId: ID!): Int!
-  getSubscribedChannels: [ID!]!
   getLastReadMessage(channelId: ID!): ID
-  getPresenceMap(userIds: [ID!]!): [UserPresence!]!
   messagesDelta(conversationId: ID!, afterSequence: Int, afterStreamId: String, limit: Int): MessagesDelta!
   history(conversationId: ID!, beforeSequence: Int!, limit: Int): HistoryPayload!
+  messageReactions(messageId: ID!): [MessageReaction!]!
+  reactionUsers(messageId: ID!, emoji: String!, cursor: Int): ReactionUsersConnection!
+  getUnreadCounts(workspaceId: ID!, projectId: ID!): UnreadCountsResponse!
+  getReadReceipts(messageId: ID!): ReadReceiptsResponse!
+  getUserConversations(workspaceId: ID!, projectId: ID!, type: ConversationType, includeArchived: Boolean, limit: Int, cursor: String): ConversationConnection!
+  getConversation(conversationId: ID!): ConversationDetails!
+  getDmByUsers(workspaceId: ID!, projectId: ID!, otherUserId: ID!): DmConversation
 }
 
 type Mutation {
@@ -66,8 +68,28 @@ type Mutation {
   createChannel(input: CreateChannelInput!): Conversation!
   archiveChannel(input: ArchiveChannelInput!): Conversation!
   renameChannel(input: RenameChannelInput!): Conversation!
-  createThread(input: CreateThreadInput!): ChatMessage!
+  createThread(input: CreateThreadInput!): Conversation!
   checkChannelAvailability(input: CheckChannelAvailabilityInput!): ChannelAvailabilityResponse!
+  createDm(input: CreateDmInput!): Conversation!
+  createGroup(input: CreateGroupInput!): Conversation!
+  deleteChannel(workspaceId: ID!, channelId: ID!): DeleteChannelResult!
+  unarchiveChannel(workspaceId: ID!, channelId: ID!): UnarchiveChannelResult!
+  updateChannelDescription(workspaceId: ID!, channelId: ID!, description: String): UpdateChannelDescriptionResult!
+  updateChannelVisibility(workspaceId: ID!, channelId: ID!, isPublic: Boolean!): UpdateChannelVisibilityResult!
+  addChannelMembers(workspaceId: ID!, channelId: ID!, userIds: [ID!]!): AddChannelMembersResult!
+  removeChannelMember(workspaceId: ID!, channelId: ID!, userId: ID!): RemoveChannelMemberResult!
+  deleteDm(workspaceId: ID!, dmId: ID!): DeleteDmResult!
+  muteConversation(conversationId: ID!, isMuted: Boolean!): MuteConversationResult!
+  renameGroup(workspaceId: ID!, groupId: ID!, name: String!): RenameGroupResult!
+  deleteGroup(workspaceId: ID!, groupId: ID!): DeleteGroupResult!
+  addGroupMembers(workspaceId: ID!, groupId: ID!, userIds: [ID!]!): AddGroupMembersResult!
+  removeGroupMember(workspaceId: ID!, groupId: ID!, userId: ID!): RemoveGroupMemberResult!
+  leaveGroup(workspaceId: ID!, groupId: ID!): LeaveGroupResult!
+  closeThread(workspaceId: ID!, threadId: ID!): CloseThreadResult!
+  reopenThread(workspaceId: ID!, threadId: ID!): ReopenThreadResult!
+  deleteThread(workspaceId: ID!, threadId: ID!): DeleteThreadResult!
+  subscribeThread(threadId: ID!): SubscribeThreadResult!
+  unsubscribeThread(threadId: ID!): UnsubscribeThreadResult!
 }
 
 type User {
@@ -227,6 +249,7 @@ enum ConversationType {
   CHANNEL
   DM
   GROUP_DM
+  THREAD
 }
 
 type ChatMember {
@@ -249,6 +272,24 @@ type ChatMessage {
   streamId: String!
   sequence: Int!
   createdAt: DateTime!
+  parentMessageId: ID
+  replyCount: Int!
+  isEdited: Boolean!
+  editedAt: DateTime
+  metadata: JSON
+  deletedAt: DateTime
+}
+
+type MessageReaction {
+  emoji: String!
+  count: Int!
+  hasReacted: Boolean!
+  recentUsers: [User!]!
+}
+
+type ReactionUsersConnection {
+  users: [User!]!
+  nextCursor: Int
 }
 
 type UserPresence {
@@ -282,10 +323,10 @@ input RenameChannelInput {
 }
 
 input CreateThreadInput {
-  channelId: ID!
-  parentMessageId: ID!
-  content: JSON!
-  nonce: String
+  workspaceId: ID!
+  projectId: ID!
+  conversationId: ID!
+  messageId: ID!
 }
 
 input CheckChannelAvailabilityInput {
@@ -300,6 +341,133 @@ type ChannelAvailabilityResponse {
   reservationId: String
 }
 
+input CreateDmInput {
+  workspaceId: ID!
+  projectId: ID!
+  recipientUserId: ID!
+}
+
+input CreateGroupInput {
+  workspaceId: ID!
+  projectId: ID!
+  name: String!
+  memberUserIds: [ID!]!
+}
+
+type DeleteChannelResult {
+  success: Boolean!
+  channelId: ID!
+}
+
+type UnarchiveChannelResult {
+  success: Boolean!
+  channelId: ID!
+  name: String!
+}
+
+type UpdateChannelDescriptionResult {
+  success: Boolean!
+  channelId: ID!
+  description: String
+}
+
+type UpdateChannelVisibilityResult {
+  success: Boolean!
+  channelId: ID!
+  isPublic: Boolean!
+}
+
+type AddChannelMembersResult {
+  success: Boolean!
+  addedCount: Int!
+  skippedCount: Int!
+  members: [ChannelMemberInfo!]!
+}
+
+type ChannelMemberInfo {
+  userId: ID!
+  user: UserBasic!
+}
+
+type RemoveChannelMemberResult {
+  success: Boolean!
+  channelId: ID!
+  userId: ID!
+}
+
+type DeleteDmResult {
+  success: Boolean!
+  dmId: ID!
+}
+
+type MuteConversationResult {
+  success: Boolean!
+  conversationId: ID!
+  isMuted: Boolean!
+}
+
+type RenameGroupResult {
+  success: Boolean!
+  groupId: ID!
+  name: String!
+}
+
+type DeleteGroupResult {
+  success: Boolean!
+  groupId: ID!
+}
+
+type AddGroupMembersResult {
+  success: Boolean!
+  addedCount: Int!
+  skippedCount: Int!
+  members: [GroupMemberInfo!]!
+}
+
+type GroupMemberInfo {
+  userId: ID!
+  user: UserBasic!
+}
+
+type RemoveGroupMemberResult {
+  success: Boolean!
+  groupId: ID!
+  userId: ID!
+}
+
+type LeaveGroupResult {
+  success: Boolean!
+  groupId: ID!
+}
+
+type CloseThreadResult {
+  success: Boolean!
+  threadId: ID!
+  closedAt: DateTime!
+}
+
+type ReopenThreadResult {
+  success: Boolean!
+  threadId: ID!
+}
+
+type DeleteThreadResult {
+  success: Boolean!
+  threadId: ID!
+}
+
+type SubscribeThreadResult {
+  success: Boolean!
+  threadId: ID!
+  isSubscribed: Boolean!
+}
+
+type UnsubscribeThreadResult {
+  success: Boolean!
+  threadId: ID!
+  isSubscribed: Boolean!
+}
+
 type MessagesDelta {
   messages: [ChatMessage!]!
   hasMore: Boolean!
@@ -310,4 +478,104 @@ type HistoryPayload {
   messages: [ChatMessage!]!
   hasMore: Boolean!
   minSequence: Int
+}
+
+type UnreadCountsResponse {
+  conversations: [ConversationUnreadCount!]!
+}
+
+type ConversationUnreadCount {
+  conversationId: ID!
+  unreadCount: Int!
+  lastUnreadMessageId: ID
+}
+
+type ReadReceiptsResponse {
+  readBy: [ReadReceiptUser!]!
+  totalReads: Int!
+  totalMembers: Int!
+}
+
+type ReadReceiptUser {
+  userId: ID!
+  username: String!
+  avatarUrl: String
+}
+
+type ConversationConnection {
+  edges: [ConversationEdge!]!
+  pageInfo: PageInfo!
+}
+
+type ConversationEdge {
+  id: ID!
+  type: ConversationType!
+  name: String
+  description: String
+  isPublic: Boolean!
+  workspaceId: ID!
+  projectId: ID
+  memberCount: Int!
+  unreadCount: Int!
+  lastMessage: LastMessagePreview
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  deletedAt: DateTime
+}
+
+type LastMessagePreview {
+  id: ID!
+  content: JSON!
+  authorUserId: ID!
+  createdAt: DateTime!
+}
+
+type ConversationDetails {
+  id: ID!
+  type: ConversationType!
+  name: String
+  description: String
+  isPublic: Boolean!
+  workspaceId: ID!
+  projectId: ID
+  parentMessageId: ID
+  createdBy: ID
+  memberCount: Int!
+  unreadCount: Int!
+  members: [ConversationMemberDetails!]!
+  lastMessage: LastMessagePreview
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  deletedAt: DateTime
+}
+
+type ConversationMemberDetails {
+  userId: ID!
+  role: String!
+  isMuted: Boolean!
+  joinedAt: DateTime!
+  user: UserBasic!
+}
+
+type UserBasic {
+  id: ID!
+  fullName: String!
+  email: String!
+  avatarUrl: String
+}
+
+type DmConversation {
+  id: ID!
+  workspaceId: ID!
+  projectId: ID!
+  type: ConversationType!
+  memberCount: Int!
+  members: [DmMember!]!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+type DmMember {
+  userId: ID!
+  user: UserBasic!
 }

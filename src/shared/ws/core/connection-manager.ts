@@ -13,8 +13,8 @@
  * - Heartbeat (see heartbeat.ts)
  */
 
-import type { ServerMessage, ClientMessage } from '../protocol/core-protocol'
 import { eventRouter } from '../event-router'
+import type { ClientMessage, ServerMessage } from '../protocol/core-protocol'
 import { env } from '@/shared/config/env'
 
 export type InternalState =

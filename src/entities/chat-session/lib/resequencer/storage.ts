@@ -61,10 +61,7 @@ export async function getConversationCursor(
 
     // 1. Fast Path: Use compound key if projectId is available
     if (projectId) {
-      cursor = (await db.conversation_state.get([
-        projectId,
-        conversationId,
-      ])) as DBConversationState | undefined
+      cursor = await db.conversation_state.get([projectId, conversationId])
     }
 
     // 2. Fallback: Search by conversationId index (slower but works)

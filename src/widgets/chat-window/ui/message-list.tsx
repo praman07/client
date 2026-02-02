@@ -1,17 +1,17 @@
-import { useMemo, useEffect, useRef } from 'react'
-import { useUser } from '@/shared/hooks'
+import { useEffect, useMemo, useRef } from 'react'
 import { useMessageWindow } from '../hooks/use-message-window'
 import { useWindowController } from '../hooks/use-window-controller'
-import { useHistoryLoader } from '@/entities/chat-session'
 import { MESSAGE_WINDOW_SIZE } from '../lib/constants'
 import { transformMessages } from '../lib/transform-messages'
 import { useChatScroll } from '../hooks/use-chat-scroll'
 import {
-  PrimaryMessage,
   AdditionalMessage,
   DateSeparator,
+  PrimaryMessage,
   ScrollToBottomButton,
 } from './components'
+import { useHistoryLoader } from '@/entities/chat-session'
+import { useUser } from '@/shared/hooks'
 
 interface MessageListProps {
   projectId: string

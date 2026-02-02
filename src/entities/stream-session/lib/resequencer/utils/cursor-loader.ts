@@ -4,11 +4,11 @@
  * Responsibility: Load and validate cursor state from storage
  */
 
-import type { StorageAdapter, CursorState } from '../adapters/storage-adapter'
 import { safeParseStreamId } from '../utils/stream-id'
+import type { CursorState, StorageAdapter } from '../adapters/storage-adapter'
 
 export interface CursorLoader {
-  load(conversationId: string, projectId?: string): Promise<LoadedCursor>
+  load: (conversationId: string, projectId?: string) => Promise<LoadedCursor>
 }
 
 export interface LoadedCursor {

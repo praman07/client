@@ -12,8 +12,8 @@
  */
 
 import { createDomainPlugin } from './domain-plugin'
-import { registerChatHandlers } from '@/features/chat/events'
 import type { ChatEventHandlerContext } from '@/features/chat/events/model'
+import { registerChatHandlers } from '@/features/chat/events'
 
 // Chat upstream events (client → server)
 const UPSTREAM_EVENTS = [

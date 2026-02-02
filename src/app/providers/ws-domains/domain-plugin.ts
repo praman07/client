@@ -19,10 +19,10 @@ export interface DomainPlugin {
   domain: string
 
   /** Upstream event types (client → server) */
-  upstreamEvents: string[]
+  upstreamEvents: Array<string>
 
   /** Downstream event types (server → client) */
-  downstreamEvents: string[]
+  downstreamEvents: Array<string>
 
   /**
    * Register event handlers for this domain.

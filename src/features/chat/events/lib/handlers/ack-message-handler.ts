@@ -1,9 +1,9 @@
 import type { AckMessagePayload } from '@/shared/ws/protocol'
-import { registerHandler } from '@/shared/ws/event-bus'
 import type { AckMessageEvent } from '@/shared/contracts/chat/downstream'
+import type { ChatEventHandlerContext } from '../../model'
+import { registerHandler } from '@/shared/ws/event-bus'
 import { resequencer } from '@/entities/chat-session'
 import { db } from '@/shared/lib/db'
-import type { ChatEventHandlerContext } from '../../model'
 
 /**
  * Handle: chat:ack-message

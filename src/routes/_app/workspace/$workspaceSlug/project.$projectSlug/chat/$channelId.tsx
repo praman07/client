@@ -1,10 +1,9 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useMemo } from 'react'
+import type { Conversation } from '@/entities/conversation'
 import { ChatWindow } from '@/widgets/chat-window'
 import { RecoveryListener } from '@/entities/chat-session/ui'
-import { CHANNEL_FIELDS_FRAGMENT, useChannels } from '@/entities/channel'
-import { useFragment } from '@/gql'
-import { ConversationType } from '@/gql/graphql'
+import { useUserConversations } from '@/entities/conversation'
 
 export const Route = createFileRoute(
   '/_app/workspace/$workspaceSlug/project/$projectSlug/chat/$channelId',
@@ -14,14 +13,22 @@ export const Route = createFileRoute(
 
 function ChatChannelPage() {
   const { channelId } = Route.useParams()
-  const { data: channels, isLoading } = useChannels()
 
-  // Validation Logic (Client-Side)
-  // We check if the requested channelId exists in the user's visible channels
-  const validChannel = useMemo(() => {
-    if (!channels) return null
-    return channels.getUserChannels.find((c: any) => c.id === channelId)
-  }, [channels, channelId])
+  // Fetch all conversations for validation
+  const { data: conversationsData, isLoading } = useUserConversations()
+
+  // Find and validate the conversation
+  const conversation = useMemo(() => {
+    if (!conversationsData?.getUserConversations?.edges) return null
+
+    const edges = conversationsData.getUserConversations
+      .edges as Array<Conversation>
+
+    // Find conversation by ID and ensure it's a channel
+    const found = edges.find((c) => c.id === channelId && c.type === 'CHANNEL')
+
+    return found || null
+  }, [conversationsData, channelId])
 
   if (isLoading) {
     return (
@@ -31,30 +38,26 @@ function ChatChannelPage() {
     )
   }
 
-  if (!validChannel) {
-    // Falls back to project home or shows 404
-    // For now, simple textual 404
+  if (!conversation) {
     return (
       <div className="h-full flex items-center justify-center flex-col gap-2">
         <h2 className="text-xl font-bold">Channel Not Found</h2>
         <p className="text-muted-foreground">
-          You typically see this if you lack access or the ID is incorrect.
+          You don't have access to this channel or it doesn't exist.
         </p>
       </div>
     )
   }
 
-  const channelData = useFragment(CHANNEL_FIELDS_FRAGMENT, validChannel)
-
   return (
     <>
       <RecoveryListener />
       <ChatWindow
-        channelId={channelData.id}
-        projectId={channelData.projectId || ''}
-        channelName={channelData.name || 'Unknown Channel'}
-        isPrivate={channelData.type === ConversationType.Channel}
-        description={channelData.topic || undefined}
+        channelId={conversation.id}
+        projectId={conversation.projectId || ''}
+        channelName={conversation.name || 'Unnamed Channel'}
+        isPrivate={!conversation.isPublic}
+        description={conversation.description ?? undefined}
       />
     </>
   )

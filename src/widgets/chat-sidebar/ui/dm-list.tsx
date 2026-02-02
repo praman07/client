@@ -1,7 +1,7 @@
 import { HugeiconsIcon } from '@hugeicons/react'
 import { PlusSignIcon } from '@hugeicons/core-free-icons'
 import { Link, useParams } from '@tanstack/react-router'
-import type { DMItem } from '../model/types'
+import type { DMItem, GroupItem } from '../model/types'
 import {
   SidebarGroup,
   SidebarGroupAction,
@@ -18,9 +18,13 @@ import {
 } from '@/shared/ui/primitives/avatar'
 
 interface DMListProps {
-  items: Array<DMItem>
+  items: Array<DMItem | GroupItem>
 }
 
+/**
+ * DMList Component
+ * Displays both direct messages and group conversations
+ */
 export function DMList({ items }: DMListProps) {
   const { channelId } = useParams({ strict: false })
 
@@ -46,20 +50,29 @@ export function DMList({ items }: DMListProps) {
               >
                 <div className="relative flex items-center justify-center">
                   <Avatar className="h-6 w-6 rounded-md">
-                    <AvatarImage src={dm.avatarUrl} alt={dm.name} />
+                    <AvatarImage
+                      src={
+                        'avatarUrl' in dm
+                          ? (dm.avatarUrl ?? undefined)
+                          : undefined
+                      }
+                      alt={dm.name}
+                    />
                     <AvatarFallback className="rounded-md text-[10px]">
                       {dm.name.substring(0, 2).toUpperCase()}
                     </AvatarFallback>
                   </Avatar>
-                  <span
-                    className={`absolute bottom-0 right-0 h-2 w-2 rounded-full border border-background ${
-                      dm.status === 'online'
-                        ? 'bg-green-500'
-                        : dm.status === 'away'
-                          ? 'bg-yellow-500'
-                          : 'bg-zinc-500'
-                    }`}
-                  />
+                  {'status' in dm && (
+                    <span
+                      className={`absolute bottom-0 right-0 h-2 w-2 rounded-full border border-background ${
+                        dm.status === 'online'
+                          ? 'bg-green-500'
+                          : dm.status === 'away'
+                            ? 'bg-yellow-500'
+                            : 'bg-zinc-500'
+                      }`}
+                    />
+                  )}
                 </div>
                 <span>{dm.name}</span>
               </SidebarMenuButton>

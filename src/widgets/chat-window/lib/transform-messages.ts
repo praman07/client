@@ -16,8 +16,10 @@ export interface VirtualItem {
  * - Different author or >5 mins = new group (primary message)
  * - Date separator inserted on day boundary
  */
-export function transformMessages(messages: MessageRowData[]): VirtualItem[] {
-  const items: VirtualItem[] = []
+export function transformMessages(
+  messages: Array<MessageRowData>,
+): Array<VirtualItem> {
+  const items: Array<VirtualItem> = []
 
   for (let i = 0; i < messages.length; i++) {
     const current = messages[i]

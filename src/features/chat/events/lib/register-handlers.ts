@@ -8,8 +8,8 @@
  */
 
 import {
-  registerNewMessageHandler,
   registerAckMessageHandler,
+  registerNewMessageHandler,
   registerSyncRequiredHandler,
 } from './handlers'
 import { startOutboxRetryWorker } from './outbox-worker'

@@ -1,9 +1,9 @@
-import { registerHandler } from '@/shared/ws/event-bus'
 import type { NewMessagePayload } from '@/shared/ws/protocol'
+import type { ChatEventHandlerContext } from '../../model'
+import type { NewMessageEvent } from '@/shared/contracts/chat/downstream'
+import { registerHandler } from '@/shared/ws/event-bus'
 import { resequencer } from '@/entities/chat-session'
 import { db } from '@/shared/lib/db'
-import type { ChatEventHandlerContext } from '../../model'
-import { NewMessageEvent } from '@/shared/contracts/chat/downstream'
 
 /**
  * Handle: chat:new-message

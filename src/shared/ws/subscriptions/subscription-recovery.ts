@@ -11,8 +11,8 @@
  * - Uses subscription manager to get active subscriptions
  */
 
-import type { SubscriptionFactory } from './subscription-manager'
 import * as subscriptionManager from './subscription-manager'
+import type { SubscriptionFactory } from './subscription-manager'
 
 /**
  * Re-subscribes to all active resources on reconnection.

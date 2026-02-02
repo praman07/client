@@ -8,14 +8,14 @@ import {
   SmileIcon,
 } from '@hugeicons/core-free-icons'
 import { useEffect, useRef, useState } from 'react'
-import { useAuth } from '@/shared/hooks'
-import { Button } from '@/shared/ui/primitives/button'
 import {
   ChatToolbar,
   ChatToolbarAddonEnd,
   ChatToolbarAddonStart,
   ChatToolbarTextarea,
 } from './components/chat-layout'
+import { useAuth } from '@/shared/hooks'
+import { Button } from '@/shared/ui/primitives/button'
 
 import { sendMessage } from '@/features/chat/events'
 

@@ -1,8 +1,9 @@
 import { useEffect } from 'react'
-import { registerHandler, RecoveryRequestedEvent } from '@/shared/ws/event-bus'
-import type { NewMessagePayload } from '@/shared/ws/protocol'
 import { resequencer } from '../lib/chat-resequencer'
 import { useFetchDelta } from '../hooks/use-fetch-delta'
+import type { RecoveryRequestedEvent } from '@/shared/ws/event-bus'
+import type { NewMessagePayload } from '@/shared/ws/protocol'
+import { registerHandler } from '@/shared/ws/event-bus'
 
 export const RecoveryListener = () => {
   const { fetchDelta } = useFetchDelta()
@@ -63,7 +64,7 @@ export const RecoveryListener = () => {
           // 2. Feed back to Engine
           // TODO: @DesignChoice - ProjectID is derived from event payload.
           // This avoids coupling the listener to the global store, maintaining FSD compliance.
-          const mappedMessages: NewMessagePayload[] = messages.map(
+          const mappedMessages: Array<NewMessagePayload> = messages.map(
             (msg: any) => ({
               id: msg.id,
               messageId: msg.id,

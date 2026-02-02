@@ -1,4 +1,3 @@
-import { Avatar, AvatarFallback } from '@/shared/ui/primitives/avatar'
 import {
   MessageEvent,
   MessageEventAddon,
@@ -7,8 +6,9 @@ import {
   MessageEventDescription,
   MessageEventTitle,
 } from './message'
-import { cn } from '@/shared/lib/utils'
 import type { MessageRowData } from '../../model/message-list.types'
+import { Avatar, AvatarFallback } from '@/shared/ui/primitives/avatar'
+import { cn } from '@/shared/lib/utils'
 
 function getSafeContent(content: unknown): string {
   if (typeof content === 'string') return content

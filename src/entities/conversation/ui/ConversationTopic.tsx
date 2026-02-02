@@ -1,12 +1,18 @@
-import React from 'react'
 import { cn } from '@/shared/lib/utils'
 
-interface ChannelTopicProps {
+interface ConversationTopicProps {
   topic?: string | null
   className?: string
 }
 
-export function ChannelTopic({ topic, className }: ChannelTopicProps) {
+/**
+ * Conversation topic display
+ * Shows conversation topic/description
+ */
+export function ConversationTopic({
+  topic,
+  className,
+}: ConversationTopicProps) {
   if (!topic) return null
 
   return (

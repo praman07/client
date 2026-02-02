@@ -4,20 +4,20 @@
  * Responsibility: Monitor for missing messages and coordinate recovery
  */
 
+import {
+  FAST_FORWARD_THRESHOLD,
+  GAP_TIMEOUT_MS,
+  MAX_RECOVERY_ATTEMPTS,
+  RECOVERY_TIMEOUT_MS,
+} from '../utils/constants'
 import type {
-  ProcessorPlugin,
   PluginContext,
   PluginResult,
+  ProcessorPlugin,
 } from './plugin-types'
 import type { BasePayload } from '../core/commit-handler'
 import type { RecoveryAdapter } from '../adapters/recovery-adapter'
 import type { BufferManager } from '../core/buffer-manager'
-import {
-  GAP_TIMEOUT_MS,
-  FAST_FORWARD_THRESHOLD,
-  MAX_RECOVERY_ATTEMPTS,
-  RECOVERY_TIMEOUT_MS,
-} from '../utils/constants'
 
 export interface GapDetectorConfig {
   gapTimeoutMs?: number
