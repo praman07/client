@@ -1,11 +1,8 @@
 import { HugeiconsIcon } from '@hugeicons/react'
 import {
-  CallIcon,
   HashtagIcon,
   LockKeyIcon,
-  Search01Icon,
   Settings01Icon,
-  VideoReplayIcon,
 } from '@hugeicons/core-free-icons'
 import {
   ChatHeaderEnd,
@@ -13,15 +10,12 @@ import {
   ChatHeader as ChatHeaderRoot,
   ChatHeaderStart,
 } from './components/chat-layout'
-import { Button } from '@/shared/ui/primitives/button'
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupInput,
-} from '@/shared/ui/primitives/input-group'
 import { Avatar, AvatarFallback } from '@/shared/ui/primitives/avatar'
+import { Button } from '@/shared/ui'
+import { useChannelSettings } from '@/widgets/channel-settings-modal'
 
 interface ChatHeaderProps {
+  channelId: string
   channelName?: string
   isPrivate?: boolean
   description?: string
@@ -30,12 +24,15 @@ interface ChatHeaderProps {
 }
 
 export function ChatHeader({
+  channelId,
   channelName = 'general',
   isPrivate = false,
   description = 'General discussion',
   memberCount = 24,
   children,
 }: ChatHeaderProps) {
+  const { open: openChannelSettings } = useChannelSettings()
+
   return (
     <ChatHeaderRoot className="border-b">
       <ChatHeaderStart>
@@ -47,7 +44,10 @@ export function ChatHeader({
 
       <ChatHeaderMain>
         <div className="flex items-center gap-2">
-          <h2 className="text-sm font-semibold truncate max-w-[200px]">
+          <h2
+            className="text-sm font-semibold truncate max-w-[200px] cursor-pointer hover:underline"
+            onClick={() => openChannelSettings(channelId)}
+          >
             {channelName}
           </h2>
           <span className="text-[10px] bg-accent px-1.5 py-0.5 rounded text-muted-foreground font-medium uppercase tracking-wider">
@@ -63,29 +63,7 @@ export function ChatHeader({
       </ChatHeaderMain>
 
       <ChatHeaderEnd>
-        <InputGroup className="hidden @2xl/chat:flex w-48 xl:w-64">
-          <InputGroupInput placeholder="Search messages..." />
-          <InputGroupAddon>
-            <HugeiconsIcon icon={Search01Icon} className="size-4" />
-          </InputGroupAddon>
-        </InputGroup>
-
         <div className="flex items-center gap-1">
-          <Button
-            variant="ghost"
-            size="icon"
-            className="size-8 hidden @2xl/chat:inline-flex"
-          >
-            <HugeiconsIcon icon={CallIcon} className="size-4" />
-          </Button>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="size-8 hidden @2xl/chat:inline-flex"
-          >
-            <HugeiconsIcon icon={VideoReplayIcon} className="size-4" />
-          </Button>
-
           <div className="flex -space-x-2 ml-2 mr-1">
             <Avatar className="size-6 border-2 border-background">
               <AvatarFallback className="text-[8px]">U1</AvatarFallback>

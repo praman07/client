@@ -8,6 +8,7 @@ import projectReducer from '@/entities/project/model/slice'
 import createProjectReducer from '@/features/create-project/model/slice'
 import { createChannelReducer } from '@/features/chat/create-channel/model/slice'
 import conversationReducer from '@/entities/conversation/model/slice'
+import { channelSettingsReducer } from '@/widgets/channel-settings-modal'
 
 export const store = configureStore({
   reducer: {
@@ -20,6 +21,7 @@ export const store = configureStore({
     createChannel: createChannelReducer,
     chatSession: chatSessionReducer,
     conversation: conversationReducer, // ✅ NEW - Conversation state management
+    channelSettings: channelSettingsReducer, // Channel settings modal state
   },
 })
 

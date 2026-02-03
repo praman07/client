@@ -34,7 +34,7 @@ type Query {
   getMessageById(messageId: ID!): ChatMessage
   getMessagesAfterCursor(channelId: ID!, afterCursor: ID!, limit: Int): [ChatMessage!]!
   getMissingMessages(channelId: ID!, rangeStart: ID!, rangeEnd: ID!): [ChatMessage!]!
-  getChannelMembers(channelId: ID!, limit: Int, offset: Int): [ChatMember!]!
+  getChannelMembers(channelId: ID!, limit: Int, offset: Int): [ChatMemberRecord!]!
   getLastReadMessage(channelId: ID!): ID
   messagesDelta(conversationId: ID!, afterSequence: Int, afterStreamId: String, limit: Int): MessagesDelta!
   history(conversationId: ID!, beforeSequence: Int!, limit: Int): HistoryPayload!
@@ -43,7 +43,7 @@ type Query {
   getUnreadCounts(workspaceId: ID!, projectId: ID!): UnreadCountsResponse!
   getReadReceipts(messageId: ID!): ReadReceiptsResponse!
   getUserConversations(workspaceId: ID!, projectId: ID!, type: ConversationType, includeArchived: Boolean, limit: Int, cursor: String): ConversationConnection!
-  getConversation(conversationId: ID!): ConversationDetails!
+  getConversation(conversationId: ID!): Conversation!
   getDmByUsers(workspaceId: ID!, projectId: ID!, otherUserId: ID!): DmConversation
 }
 
@@ -236,13 +236,17 @@ type Conversation {
   type: ConversationType!
   name: String
   topic: String
+  isPublic: Boolean!
+  parentMessageId: ID
+  createdBy: ID
   isArchived: Boolean!
+  unreadCount: Int!
+  memberCount: Int!
   createdAt: DateTime!
   updatedAt: DateTime!
   deletedAt: DateTime
-  members: [ChatMember!]
-  lastMessage: ChatMessage
-  memberCount: Int!
+  members: [ConversationMember!]
+  lastMessage: LastMessagePreview
 }
 
 enum ConversationType {
@@ -252,7 +256,29 @@ enum ConversationType {
   THREAD
 }
 
-type ChatMember {
+type ConversationMember {
+  userId: ID!
+  role: String!
+  isMuted: Boolean!
+  joinedAt: DateTime!
+  user: UserBasic!
+}
+
+type UserBasic {
+  id: ID!
+  fullName: String!
+  email: String!
+  avatarUrl: String
+}
+
+type LastMessagePreview {
+  id: ID!
+  content: JSON!
+  authorUserId: ID!
+  createdAt: DateTime!
+}
+
+type ChatMemberRecord {
   id: ID!
   conversationId: ID!
   userId: ID!
@@ -503,65 +529,8 @@ type ReadReceiptUser {
 }
 
 type ConversationConnection {
-  edges: [ConversationEdge!]!
+  edges: [Conversation!]!
   pageInfo: PageInfo!
-}
-
-type ConversationEdge {
-  id: ID!
-  type: ConversationType!
-  name: String
-  description: String
-  isPublic: Boolean!
-  workspaceId: ID!
-  projectId: ID
-  memberCount: Int!
-  unreadCount: Int!
-  lastMessage: LastMessagePreview
-  createdAt: DateTime!
-  updatedAt: DateTime!
-  deletedAt: DateTime
-}
-
-type LastMessagePreview {
-  id: ID!
-  content: JSON!
-  authorUserId: ID!
-  createdAt: DateTime!
-}
-
-type ConversationDetails {
-  id: ID!
-  type: ConversationType!
-  name: String
-  description: String
-  isPublic: Boolean!
-  workspaceId: ID!
-  projectId: ID
-  parentMessageId: ID
-  createdBy: ID
-  memberCount: Int!
-  unreadCount: Int!
-  members: [ConversationMemberDetails!]!
-  lastMessage: LastMessagePreview
-  createdAt: DateTime!
-  updatedAt: DateTime!
-  deletedAt: DateTime
-}
-
-type ConversationMemberDetails {
-  userId: ID!
-  role: String!
-  isMuted: Boolean!
-  joinedAt: DateTime!
-  user: UserBasic!
-}
-
-type UserBasic {
-  id: ID!
-  fullName: String!
-  email: String!
-  avatarUrl: String
 }
 
 type DmConversation {

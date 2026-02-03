@@ -22,7 +22,7 @@ interface ChannelListProps {
 }
 
 export function ChannelList({ channels }: ChannelListProps) {
-  const { channelId } = useParams({ strict: false })
+  const { conversationId } = useParams({ strict: false })
   const { open } = useCreateChannelModal()
 
   return (
@@ -36,12 +36,15 @@ export function ChannelList({ channels }: ChannelListProps) {
           {channels.map((channel) => (
             <SidebarMenuItem key={channel.id}>
               <SidebarMenuButton
-                isActive={channelId === channel.id}
+                isActive={conversationId === channel.id}
                 tooltip={channel.name}
                 render={
                   <Link
-                    to="/workspace/$workspaceSlug/project/$projectSlug/chat/$channelId"
-                    params={(prev: any) => ({ ...prev, channelId: channel.id })}
+                    to="/workspace/$workspaceSlug/project/$projectSlug/chat/$conversationId"
+                    params={(prev: any) => ({
+                      ...prev,
+                      conversationId: channel.id,
+                    })}
                   />
                 }
               >

@@ -1,11 +1,11 @@
-import type { ConversationEdgeFieldsFragment } from '@/gql/graphql'
+import type { ConversationFieldsFragment } from '@/gql/graphql'
 import { ConversationType } from '@/gql/graphql'
 
 /**
- * Conversation type (uses generated GraphQL fragment type)
- * Represents any type of conversation: channel, DM, group, thread
+ * Conversation entity type
+ * Unified type combining list and detail views
  */
-export type Conversation = ConversationEdgeFieldsFragment
+export type Conversation = ConversationFieldsFragment
 
 /**
  * Conversation member (from ConversationMemberDetails type)

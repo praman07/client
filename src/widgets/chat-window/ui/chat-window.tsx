@@ -32,6 +32,7 @@ export function ChatWindow({
   return (
     <ChatContainer>
       <ChatHeader
+        channelId={channelId}
         channelName={channelName}
         isPrivate={isPrivate}
         description={

@@ -26,7 +26,7 @@ interface DMListProps {
  * Displays both direct messages and group conversations
  */
 export function DMList({ items }: DMListProps) {
-  const { channelId } = useParams({ strict: false })
+  const { conversationId } = useParams({ strict: false })
 
   return (
     <SidebarGroup>
@@ -39,12 +39,12 @@ export function DMList({ items }: DMListProps) {
           {items.map((dm) => (
             <SidebarMenuItem key={dm.id}>
               <SidebarMenuButton
-                isActive={channelId === dm.id}
+                isActive={conversationId === dm.id}
                 tooltip={dm.name}
                 render={
                   <Link
-                    to="/workspace/$workspaceSlug/project/$projectSlug/chat/$channelId"
-                    params={(prev: any) => ({ ...prev, channelId: dm.id })}
+                    to="/workspace/$workspaceSlug/project/$projectSlug/chat/$conversationId"
+                    params={(prev: any) => ({ ...prev, conversationId: dm.id })}
                   />
                 }
               >
