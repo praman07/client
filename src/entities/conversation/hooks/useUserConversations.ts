@@ -11,20 +11,6 @@ import { GqlClient } from '@/shared/api'
 import { selectCurrentWorkspaceId } from '@/entities/workspace'
 import { selectCurrentProject } from '@/entities/project'
 
-/**
- * Fetch user's conversations (channels, DMs, groups, threads)
- * Follows FE-04: Data Fetching pattern from frontend.md
- *
- * @example
- * // All channels
- * const { data } = useUserConversations({ type: 'CHANNEL' })
- *
- * // All DMs
- * const { data } = useUserConversations({ type: 'DM' })
- *
- * // All conversations (no filter)
- * const { data } = useUserConversations()
- */
 export function useUserConversations(
   params?: {
     workspaceId?: string
@@ -49,11 +35,27 @@ export function useUserConversations(
   const workspaceId = params?.workspaceId || defaultWorkspaceId
   const projectId = params?.projectId || defaultProjectId
   const type = params?.type
+  const includeArchived = params?.includeArchived
 
-  // Generate query key based on type filter
-  const queryKey = type
-    ? conversationKeys.byType(workspaceId || '', projectId || '', type)
-    : conversationKeys.all(workspaceId || '', projectId || '')
+  // Generate query key based on type filter AND includeArchived flag
+  // This ensures active and archived queries don't collide
+  let queryKey: readonly unknown[]
+
+  if (type) {
+    queryKey = includeArchived
+      ? [
+          ...conversationKeys.byType(workspaceId || '', projectId || '', type),
+          'archived',
+        ]
+      : conversationKeys.byType(workspaceId || '', projectId || '', type)
+  } else {
+    queryKey = includeArchived
+      ? [
+          ...conversationKeys.all(workspaceId || '', projectId || ''),
+          'archived',
+        ]
+      : conversationKeys.all(workspaceId || '', projectId || '')
+  }
 
   return useQuery({
     queryKey,

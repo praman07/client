@@ -5,6 +5,7 @@ import {
   mapGroupsToItems,
 } from '../lib/map-channels-to-items'
 import { ChannelList } from './channel-list'
+import { ArchivedChannelList } from './archived-channel-list'
 import { DMList } from './dm-list'
 import type { DMItem, GroupItem } from '../model/types'
 import type { Conversation } from '@/entities/conversation'
@@ -33,6 +34,13 @@ export function ChatSidebar() {
       type: ConversationType.Channel,
     })
 
+  // Fetch archived channels
+  const { data: archivedChannelsData, isLoading: archivedChannelsLoading } =
+    useUserConversations({
+      type: ConversationType.Channel,
+      includeArchived: true,
+    })
+
   // Fetch DMs
   const { data: dmsData, isLoading: dmsLoading } = useUserConversations({
     type: ConversationType.Dm,
@@ -49,8 +57,32 @@ export function ChatSidebar() {
 
   const channels = useMemo(() => {
     const edges = channelsData?.getUserConversations?.edges || []
-    return sortConversations(edges as Array<Conversation>)
+    const allChannels = sortConversations(edges as Array<Conversation>)
+    // Filter out archived channels from active channels list
+    return allChannels.filter((channel) => !channel.isArchived)
   }, [channelsData])
+
+  const archivedChannels = useMemo(() => {
+    const edges = archivedChannelsData?.getUserConversations?.edges || []
+    const allChannels = sortConversations(edges as Array<Conversation>)
+    // Filter to only show archived channels
+    const filtered = allChannels.filter((channel) => channel.isArchived)
+
+    // Debug logging
+    console.log('🔍 DEBUG: Archived Channels Data Flow', {
+      totalEdges: edges.length,
+      allChannelsCount: allChannels.length,
+      filteredArchivedCount: filtered.length,
+      archivedChannels: filtered.map((c) => ({
+        id: c.id,
+        name: c.name,
+        isArchived: c.isArchived,
+        deletedAt: c.deletedAt,
+      })),
+    })
+
+    return filtered
+  }, [archivedChannelsData])
 
   const dms = useMemo(() => {
     const edges = dmsData?.getUserConversations?.edges || []
@@ -71,6 +103,11 @@ export function ChatSidebar() {
     [channels],
   )
 
+  const archivedChannelItems = useMemo(
+    () => mapConversationsToItems(archivedChannels),
+    [archivedChannels],
+  )
+
   const dmItems = useMemo(() => mapDmsToItems(dms), [dms])
 
   const groupItems = useMemo(() => mapGroupsToItems(groups), [groups])
@@ -81,7 +118,8 @@ export function ChatSidebar() {
     [dmItems, groupItems],
   )
 
-  const isLoading = channelsLoading || dmsLoading || groupsLoading
+  const isLoading =
+    channelsLoading || archivedChannelsLoading || dmsLoading || groupsLoading
 
   return (
     <Sidebar
@@ -96,6 +134,9 @@ export function ChatSidebar() {
             ) : (
               <>
                 <ChannelList channels={channelItems} />
+                {archivedChannelItems.length > 0 && (
+                  <ArchivedChannelList channels={archivedChannelItems} />
+                )}
                 <Separator />
                 <DMList items={allDMs} />
               </>
