@@ -5,6 +5,8 @@ import { MessageList } from '@/widgets/chat-window/ui/message-list'
 import { useChannelSubscription } from '@/features/chat/subscribe-channel'
 import { useResequencerStatus } from '@/entities/chat-session'
 import { SyncStatusIndicator } from '@/entities/chat-session/ui/SyncStatusIndicator'
+import { MemberCacheProvider } from '../lib/member-cache-context'
+import { useConversation } from '@/entities/conversation'
 
 // TODO: Fetch real channel details via Query
 
@@ -23,6 +25,35 @@ export function ChatWindow({
   isPrivate,
   description,
 }: ChatWindowProps) {
+  // 0. Fetch conversation with members for cache
+  const { data: conversationData } = useConversation(channelId, {
+    staleTime: 5 * 60 * 1000, // Cache for 5 minutes
+  })
+
+  // Extract members array (undefined if not loaded yet, filter out nulls and unwrap fragment refs)
+  const members = conversationData?.getConversation?.members
+    ? (conversationData.getConversation.members.filter(
+        (m): m is NonNullable<typeof m> => m != null,
+      ) as unknown as Array<{
+        userId: string
+        role: string
+        isMuted: boolean
+        joinedAt: string
+        user: {
+          id: string
+          fullName: string
+          email: string
+          avatarUrl?: string | null
+        }
+      }>)
+    : undefined
+
+  // DEBUG: Log member data
+  console.log('[ChatWindow] Conversation data:', conversationData)
+  console.log('[ChatWindow] Members count:', members?.length)
+  console.log('[ChatWindow] Members:', members)
+
+
   // 1. Activate Subscription (Data Plane)
   useChannelSubscription(channelId || '', projectId)
 
@@ -30,19 +61,21 @@ export function ChatWindow({
   const status = useResequencerStatus(channelId || '')
 
   return (
-    <ChatContainer>
-      <ChatHeader
-        channelId={channelId}
-        channelName={channelName}
-        isPrivate={isPrivate}
-        description={
-          description || 'Topic: General discussion about the project'
-        }
-      >
-        <SyncStatusIndicator status={status} />
-      </ChatHeader>
-      <MessageList channelId={channelId || ''} projectId={projectId} />
-      <MessageInput channelId={channelId || ''} projectId={projectId} />
-    </ChatContainer>
+    <MemberCacheProvider members={members}>
+      <ChatContainer>
+        <ChatHeader
+          channelId={channelId}
+          channelName={channelName}
+          isPrivate={isPrivate}
+          description={
+            description || 'Topic: General discussion about the project'
+          }
+        >
+          <SyncStatusIndicator status={status} />
+        </ChatHeader>
+        <MessageList channelId={channelId || ''} projectId={projectId} />
+        <MessageInput channelId={channelId || ''} projectId={projectId} />
+      </ChatContainer>
+    </MemberCacheProvider>
   )
 }

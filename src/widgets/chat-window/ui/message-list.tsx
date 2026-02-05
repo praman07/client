@@ -12,6 +12,7 @@ import {
 } from './components'
 import { useHistoryLoader } from '@/entities/chat-session'
 import { useUser } from '@/shared/hooks'
+import { useMessageAuthors } from '../hooks/use-message-authors'
 
 interface MessageListProps {
   projectId: string
@@ -33,7 +34,10 @@ export function MessageList({ projectId, channelId }: MessageListProps) {
     maxSequence,
   })
 
-  // 3. History Loader: Fetches from Network and feeds to Resequencer
+  // 3. Batch fetch missing message authors
+  useMessageAuthors(messages)
+
+  // 4. History Loader: Fetches from Network and feeds to Resequencer
   const { loadMore } = useHistoryLoader()
 
   // Track if we are fetching to prevent double loads
@@ -141,9 +145,6 @@ export function MessageList({ projectId, channelId }: MessageListProps) {
               ) : item.isPrimary && item.message ? (
                 <PrimaryMessage
                   message={item.message}
-                  avatarFallback={(item.message.authorId || '?')
-                    .substring(0, 2)
-                    .toUpperCase()}
                   className="mt-4"
                 />
               ) : item.message ? (

@@ -21,6 +21,7 @@ type Documents = {
     "\n  fragment ConversationMemberFields on ConversationMember {\n    userId\n    role\n    isMuted\n    joinedAt\n    user {\n      id\n      fullName\n      email\n      avatarUrl\n    }\n  }\n": typeof types.ConversationMemberFieldsFragmentDoc,
     "\n  query GetUserConversations(\n    $workspaceId: ID!\n    $projectId: ID!\n    $type: ConversationType\n    $includeArchived: Boolean\n    $limit: Int\n    $cursor: String\n  ) {\n    getUserConversations(\n      workspaceId: $workspaceId\n      projectId: $projectId\n      type: $type\n      includeArchived: $includeArchived\n      limit: $limit\n      cursor: $cursor\n    ) {\n      edges {\n        ...ConversationFields\n      }\n      pageInfo {\n        hasNextPage\n        endCursor\n      }\n    }\n  }\n": typeof types.GetUserConversationsDocument,
     "\n  query GetConversation($conversationId: ID!) {\n    getConversation(conversationId: $conversationId) {\n      ...ConversationFields\n      members {\n        ...ConversationMemberFields\n      }\n    }\n  }\n": typeof types.GetConversationDocument,
+    "\n  query GetUsersByIds($userIds: [ID!]!) {\n    getUsersByIds(userIds: $userIds) {\n      id\n      fullName\n      email\n      avatarUrl\n    }\n  }\n": typeof types.GetUsersByIdsDocument,
     "\n  fragment ProjectFields on Project {\n    id\n    key\n    name\n    description\n    workspaceId\n    createdAt\n    updatedAt\n    members {\n      userId\n      role\n      joinedAt\n    }\n  }\n": typeof types.ProjectFieldsFragmentDoc,
     "\n  query GetProject($id: ID!) {\n    project(id: $id) {\n      ...ProjectFields\n    }\n  }\n": typeof types.GetProjectDocument,
     "\n  query MyProjects($workspaceId: ID!) {\n    myProjects(workspaceId: $workspaceId) {\n      ...ProjectFields\n    }\n  }\n": typeof types.MyProjectsDocument,
@@ -60,6 +61,7 @@ const documents: Documents = {
     "\n  fragment ConversationMemberFields on ConversationMember {\n    userId\n    role\n    isMuted\n    joinedAt\n    user {\n      id\n      fullName\n      email\n      avatarUrl\n    }\n  }\n": types.ConversationMemberFieldsFragmentDoc,
     "\n  query GetUserConversations(\n    $workspaceId: ID!\n    $projectId: ID!\n    $type: ConversationType\n    $includeArchived: Boolean\n    $limit: Int\n    $cursor: String\n  ) {\n    getUserConversations(\n      workspaceId: $workspaceId\n      projectId: $projectId\n      type: $type\n      includeArchived: $includeArchived\n      limit: $limit\n      cursor: $cursor\n    ) {\n      edges {\n        ...ConversationFields\n      }\n      pageInfo {\n        hasNextPage\n        endCursor\n      }\n    }\n  }\n": types.GetUserConversationsDocument,
     "\n  query GetConversation($conversationId: ID!) {\n    getConversation(conversationId: $conversationId) {\n      ...ConversationFields\n      members {\n        ...ConversationMemberFields\n      }\n    }\n  }\n": types.GetConversationDocument,
+    "\n  query GetUsersByIds($userIds: [ID!]!) {\n    getUsersByIds(userIds: $userIds) {\n      id\n      fullName\n      email\n      avatarUrl\n    }\n  }\n": types.GetUsersByIdsDocument,
     "\n  fragment ProjectFields on Project {\n    id\n    key\n    name\n    description\n    workspaceId\n    createdAt\n    updatedAt\n    members {\n      userId\n      role\n      joinedAt\n    }\n  }\n": types.ProjectFieldsFragmentDoc,
     "\n  query GetProject($id: ID!) {\n    project(id: $id) {\n      ...ProjectFields\n    }\n  }\n": types.GetProjectDocument,
     "\n  query MyProjects($workspaceId: ID!) {\n    myProjects(workspaceId: $workspaceId) {\n      ...ProjectFields\n    }\n  }\n": types.MyProjectsDocument,
@@ -134,6 +136,10 @@ export function gql(source: "\n  query GetUserConversations(\n    $workspaceId: 
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "\n  query GetConversation($conversationId: ID!) {\n    getConversation(conversationId: $conversationId) {\n      ...ConversationFields\n      members {\n        ...ConversationMemberFields\n      }\n    }\n  }\n"): (typeof documents)["\n  query GetConversation($conversationId: ID!) {\n    getConversation(conversationId: $conversationId) {\n      ...ConversationFields\n      members {\n        ...ConversationMemberFields\n      }\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  query GetUsersByIds($userIds: [ID!]!) {\n    getUsersByIds(userIds: $userIds) {\n      id\n      fullName\n      email\n      avatarUrl\n    }\n  }\n"): (typeof documents)["\n  query GetUsersByIds($userIds: [ID!]!) {\n    getUsersByIds(userIds: $userIds) {\n      id\n      fullName\n      email\n      avatarUrl\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

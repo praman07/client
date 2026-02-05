@@ -45,6 +45,7 @@ type Query {
   getUserConversations(workspaceId: ID!, projectId: ID!, type: ConversationType, includeArchived: Boolean, limit: Int, cursor: String): ConversationConnection!
   getConversation(conversationId: ID!): Conversation!
   getDmByUsers(workspaceId: ID!, projectId: ID!, otherUserId: ID!): DmConversation
+  getUsersByIds(userIds: [ID!]!): [UserBasic!]!
 }
 
 type Mutation {
