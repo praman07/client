@@ -15,6 +15,7 @@ import {
   ProjectErrorState,
   ProjectLoadingState,
 } from '@/entities/project/ui/layout-states'
+import { DomainRegistry } from '@/app/providers/ws-domains'
 
 export const Route = createFileRoute(
   '/_app/workspace/$workspaceSlug/project/$projectSlug',
@@ -68,6 +69,7 @@ function ProjectBaseLayout() {
 
   return (
     <div className="flex h-full flex-col">
+      <DomainRegistry projectId={project.id} />
       <div className="shrink-0 border-b bg-background px-6">
         <NavTabs items={PROJECT_TABS as any} from={Route.fullPath} />
       </div>

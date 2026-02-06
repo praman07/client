@@ -23,6 +23,7 @@ export interface NewMessagePayload {
   meta?: {
     replay?: boolean
   }
+  projectId?: string
 }
 
 export interface AckMessagePayload {
