@@ -15,6 +15,7 @@ import { createDomainPlugin } from './domain-plugin'
 import type { ChatEventHandlerContext } from '@/features/chat/events/model'
 import { registerChatHandlers } from '@/features/chat/events'
 import { createLogger } from '@/shared/lib/logger'
+import { registerPriorityRule } from '@/shared/ws'
 
 const log = createLogger('ws:plugin')
 
@@ -60,11 +61,19 @@ export function createChatPlugin(context: ChatEventHandlerContext) {
     registerHandlers() {
       log.debug('Registering chat event handlers')
 
-      // Register all chat handlers (new-message, ack-message, sync-required)
-      // This calls the existing registerChatHandlers function
+      // Register chat handlers (new-message, ack-message, sync-required)
       cleanupHandlers = registerChatHandlers(context)
 
-      log.debug('Chat handlers registered successfully')
+      // Register priority rules for chat message queue
+      registerPriorityRule(
+        (type) =>
+          type === 'chat:send-message' ||
+          type === 'chat:send-thread-message' ||
+          type === 'chat:edit-message' ||
+          type === 'chat:delete-message',
+      )
+
+      log.debug('Chat handlers and priority rules registered')
     },
 
     cleanup() {
@@ -73,6 +82,8 @@ export function createChatPlugin(context: ChatEventHandlerContext) {
         cleanupHandlers()
         cleanupHandlers = null
       }
+      // Note: Priority rules are global and not cleaned up per-plugin
+      // They should be managed by the domain registry lifecycle
     },
   })
 }

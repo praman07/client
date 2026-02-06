@@ -22,25 +22,56 @@ type QueuedMessage = {
 
 type MessagePriority = 'HIGH' | 'LOW'
 
+/**
+ * Priority Rule: Function that determines if an event type is high priority.
+ * Domains register their own priority rules via registerPriorityRule().
+ *
+ * @param eventType - Event type string (e.g., 'chat:send-message')
+ * @returns true if the event should be treated as high priority
+ */
+export type PriorityRule = (eventType: string) => boolean
+
+// Registered priority rules from domains
+const priorityRules: PriorityRule[] = []
+
+/**
+ * Registers a priority rule for determining message queue priority.
+ * Domains should call this during plugin initialization.
+ *
+ * @param rule - Function that returns true for high-priority event types
+ *
+ * @example
+ * // In chat plugin:
+ * registerPriorityRule(type =>
+ *   type === 'chat:send-message' ||
+ *   type === 'chat:send-thread-message'
+ * )
+ */
+export function registerPriorityRule(rule: PriorityRule): void {
+  priorityRules.push(rule)
+}
+
+/**
+ * Clears all registered priority rules.
+ * Used for testing and plugin cleanup.
+ */
+export function clearPriorityRules(): void {
+  priorityRules.length = 0
+}
+
 const messageQueue: Array<QueuedMessage> = []
 
 /**
- * Determines message priority based on event type.
- * HIGH: User-initiated actions (send, edit, delete)
- * LOW: System/auxiliary actions (typing, presence)
+ * Determines message priority based on registered priority rules.
+ * HIGH: Any rule returns true
+ * LOW: No rules match
+ *
+ * Note: If no rules are registered, all messages are LOW priority.
  */
 export function getMessagePriority(type: string): MessagePriority {
-  // High priority: User content creation/modification
-  if (
-    type === 'chat:send-message' ||
-    type === 'chat:send-thread-message' ||
-    type === 'chat:edit-message' ||
-    type === 'chat:delete-message'
-  ) {
-    return 'HIGH'
-  }
-  // Low priority: Everything else
-  return 'LOW'
+  // Check if any registered rule marks this as high priority
+  const isHighPriority = priorityRules.some((rule) => rule(type))
+  return isHighPriority ? 'HIGH' : 'LOW'
 }
 
 /**

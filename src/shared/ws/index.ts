@@ -17,8 +17,9 @@ export * from './protocol'
 
 // Event infrastructure
 export { eventRouter } from './event-router'
-export { dispatchEvent } from './event-bus'
-export * from './events/domain-registry'
+export { registerDomain } from './events/domain-registry'
+export { registerPriorityRule, clearPriorityRules } from './core/message-queue'
+export type { PriorityRule } from './core/message-queue'
 
 // Core types
 export type { ConnectionStatus } from './core/connection-manager'

@@ -1,21 +1,46 @@
-import type { ChatDownstreamEvent } from '@/shared/contracts/chat/downstream'
+/**
+ * EVENT BUS: Domain-agnostic event system
+ *
+ * Responsibility:
+ * - Provide pub/sub for application events
+ * - Support type-safe event registration and dispatch
+ * - Enable loose coupling between features
+ *
+ * Architecture:
+ * - Generic event structure (type + payload)
+ * - Domains register their own event handlers via plugins
+ * - No domain-specific imports in this file
+ */
 
+/**
+ * Base event structure.
+ * All events must have a type string and optional payload.
+ */
+export interface BaseEvent {
+  type: string
+  payload?: unknown
+}
+
+/**
+ * Recovery event: Internal system event for gap detection.
+ * This is framework-level, not domain-specific.
+ */
 export type RecoveryRequestedEvent = {
   type: 'intent:recovery-requested'
   payload: {
     conversationId: string
     projectId: string | null
     lastStreamId: string | null
-    lastSequence: number // Dual-Sequencing
-    gapSize: number // Exact missing count
+    lastSequence: number
+    gapSize: number
   }
 }
 
-export type BaseAppEvent = { type: string }
-export type AppEvent =
-  | ChatDownstreamEvent
-  | RecoveryRequestedEvent
-  | BaseAppEvent
+/**
+ * Generic application event type.
+ * Domains can extend this via their own type definitions.
+ */
+export type AppEvent = BaseEvent | RecoveryRequestedEvent
 
 type EventHandler<T> = (event: T) => void
 
