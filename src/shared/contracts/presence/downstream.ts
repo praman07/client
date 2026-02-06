@@ -1,9 +1,9 @@
 /**
- * DOWNSTREAM CONTRACTS (Server -> Client)
- * Domain: Presence
+ * Presence Downstream Contracts - Placeholder
+ * TODO: Implement when presence feature is developed
  */
 
-export interface PresenceEvent {
+export type PresenceDownstreamContract = {
   type: 'presence:update'
   payload: {
     userId: string

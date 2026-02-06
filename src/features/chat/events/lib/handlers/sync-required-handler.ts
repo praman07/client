@@ -1,13 +1,14 @@
 import type { SyncRequiredEvent } from '@/shared/contracts/chat/downstream'
+import { ChatDownstreamEvent } from '@/shared/contracts/chat/events'
 import { registerHandler } from '@/shared/ws/event-bus'
 import { queryClient } from '@/shared/lib/tanstack-query/query-client'
 import { createLogger } from '@/shared/lib/logger'
 
-const log = createLogger('chat:sync')
+const log = createLogger('chat:sync-required-handler')
 
 export function registerSyncRequiredHandler() {
   return registerHandler<SyncRequiredEvent>(
-    'chat:sync-required',
+    ChatDownstreamEvent.SyncRequired,
     async (event) => {
       const { conversationId, reason } = event.payload
 

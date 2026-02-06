@@ -1,8 +1,8 @@
 import type { OutboxItem } from '@/shared/lib/db/schema'
-import type { SendMessageCommand } from '@/shared/contracts/chat/upstream'
+import type { SendMessageContract } from '@/shared/contracts/chat/upstream'
+import { ChatUpstreamEvent } from '@/shared/contracts/chat/upstream'
 import { db } from '@/shared/lib/db'
 import { wsManager } from '@/shared/ws'
-import { ChatUpstreamEvent } from '@/shared/contracts/chat/upstream'
 
 export async function sendMessage(
   content: string,
@@ -40,8 +40,8 @@ export async function sendMessage(
 
   // 3. Emit WS Event (Strict Contract)
   // We use the upstream contract to define the shape, ensuring strict compliance.
-  const command: SendMessageCommand = {
-    type: 'chat:send-message',
+  const command: SendMessageContract = {
+    type: ChatUpstreamEvent.SendMessage,
     payload: {
       conversationId: channelId,
       content,

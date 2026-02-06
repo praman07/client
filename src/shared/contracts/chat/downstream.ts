@@ -1,8 +1,10 @@
 /**
- * DOWNSTREAM CONTRACTS (Server → Client)
- * Domain: Chat
- * Source of Truth: Backend Message Entity
+ * Chat Downstream Contracts (Server → Client)
+ * All server-sent WebSocket events
  */
+
+import type { DownstreamContract } from '../types'
+import { ChatDownstreamEvent } from './events'
 
 // ═══════════════════════════════════════════════════════════════
 // PAYLOADS
@@ -28,38 +30,41 @@ export interface AckMessagePayload {
   status: 'pending' | 'sent' | 'failed' | 'duplicate'
   message?: string
   streamId?: string
-  sequence?: number // Required for resequencer gap detection
+  sequence?: number
+  messageId?: string
 }
 
 export interface SyncRequiredPayload {
   conversationId: string
-  reason: 'gap_too_large' | 'rebalance' | 'token_expired'
+  reason: string
 }
 
 export interface MessageEditedPayload {
   messageId: string
   conversationId: string
-  newContent: string
+  content: string
   editedAt: string
+  authorId: string
 }
 
 export interface MessageDeletedPayload {
   messageId: string
   conversationId: string
   deletedAt: string
+  authorId: string
 }
 
 export interface MessageReadPayload {
   conversationId: string
-  messageId: string
   userId: string
+  messageIds: string[]
   readAt: string
 }
 
 export interface MessageDeliveredPayload {
   conversationId: string
-  messageId: string
   userId: string
+  messageIds: string[]
   deliveredAt: string
 }
 
@@ -71,60 +76,83 @@ export interface UserTypingPayload {
 
 export interface SubscribeAckPayload {
   conversationId: string
-  status: string
+  success: boolean
 }
 
 // ═══════════════════════════════════════════════════════════════
-// EVENT TYPES
+// CONTRACTS
 // ═══════════════════════════════════════════════════════════════
 
-export interface NewMessageEvent {
-  type: 'chat:new-message'
-  payload: NewMessagePayload
-}
+export type NewMessageContract = DownstreamContract<
+  ChatDownstreamEvent.NewMessage,
+  NewMessagePayload
+>
 
-export interface AckMessageEvent {
-  type: 'chat:ack-message'
-  payload: AckMessagePayload
-}
+export type AckMessageContract = DownstreamContract<
+  ChatDownstreamEvent.AckMessage,
+  AckMessagePayload
+>
 
-export interface SyncRequiredEvent {
-  type: 'chat:sync-required'
-  payload: SyncRequiredPayload
-}
+export type SyncRequiredContract = DownstreamContract<
+  ChatDownstreamEvent.SyncRequired,
+  SyncRequiredPayload
+>
 
-export interface MessageReadEvent {
-  type: 'chat:message-read'
-  payload: MessageReadPayload
-}
+export type MessageEditedContract = DownstreamContract<
+  ChatDownstreamEvent.MessageEdited,
+  MessageEditedPayload
+>
 
-export interface MessageEditedEvent {
-  type: 'chat:message-edited'
-  payload: MessageEditedPayload
-}
+export type MessageDeletedContract = DownstreamContract<
+  ChatDownstreamEvent.MessageDeleted,
+  MessageDeletedPayload
+>
 
-export interface MessageDeletedEvent {
-  type: 'chat:message-deleted'
-  payload: MessageDeletedPayload
-}
+export type MessageReadContract = DownstreamContract<
+  ChatDownstreamEvent.MessageRead,
+  MessageReadPayload
+>
 
-export interface UserTypingEvent {
-  type: 'chat:user-typing'
-  payload: UserTypingPayload
-}
+export type MessageDeliveredContract = DownstreamContract<
+  ChatDownstreamEvent.MessageDelivered,
+  MessageDeliveredPayload
+>
 
-export interface SubscribeAckEvent {
-  type: 'chat:subscribe-ack'
-  payload: SubscribeAckPayload
-}
+export type UserTypingContract = DownstreamContract<
+  ChatDownstreamEvent.UserTyping,
+  UserTypingPayload
+>
 
-// Union of all Chat Downstream Events
-export type ChatDownstreamEvent =
-  | NewMessageEvent
-  | AckMessageEvent
-  | SyncRequiredEvent
-  | MessageReadEvent
-  | MessageEditedEvent
-  | MessageDeletedEvent
-  | UserTypingEvent
-  | SubscribeAckEvent
+export type SubscribeAckContract = DownstreamContract<
+  ChatDownstreamEvent.SubscribeAck,
+  SubscribeAckPayload
+>
+
+// ═══════════════════════════════════════════════════════════════
+// UNION TYPE
+// ═══════════════════════════════════════════════════════════════
+
+export type ChatDownstreamContract =
+  | NewMessageContract
+  | AckMessageContract
+  | SyncRequiredContract
+  | MessageEditedContract
+  | MessageDeletedContract
+  | MessageReadContract
+  | MessageDeliveredContract
+  | UserTypingContract
+  | SubscribeAckContract
+
+// ═══════════════════════════════════════════════════════════════
+// BACKWARD COMPATIBILITY - Event type aliases
+// ═══════════════════════════════════════════════════════════════
+
+export type NewMessageEvent = NewMessageContract
+export type AckMessageEvent = AckMessageContract
+export type SyncRequiredEvent = SyncRequiredContract
+export type MessageEditedEvent = MessageEditedContract
+export type MessageDeletedEvent = MessageDeletedContract
+export type MessageReadEvent = MessageReadContract
+export type MessageDeliveredEvent = MessageDeliveredContract
+export type UserTypingEvent = UserTypingContract
+export type SubscribeAckEvent = SubscribeAckContract

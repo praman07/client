@@ -10,47 +10,35 @@
  * - Implements DomainPlugin interface
  * - Delegates to existing chat event handlers in features/chat-events
  */
+/**
+ * CHAT DOMAIN PLUGIN
+ * Registers chat-specific event handlers and priority rules.
+ */
 
-import type { ChatEventHandlerContext } from '@/features/chat/events/model'
 import { createDomainPlugin } from '@/shared/ws/domains'
 import { registerChatHandlers } from '@/features/chat/events'
+import type { ChatEventHandlerContext } from '@/features/chat/events'
+import {
+  ChatUpstreamEvent,
+  ChatDownstreamEvent,
+} from '@/shared/contracts/chat/events'
 import { createLogger } from '@/shared/lib/logger'
 
 const log = createLogger('ws:plugin')
 
 // Chat upstream events (client → server)
-const UPSTREAM_EVENTS = [
-  'chat:ping',
-  'chat:subscribe-conversation',
-  'chat:unsubscribe-conversation',
-  'chat:send-message',
-  'chat:send-thread-message',
-  'chat:edit-message',
-  'chat:delete-message',
-  'chat:typing-start',
-  'chat:typing-stop',
-]
+const UPSTREAM_EVENTS = Object.values(ChatUpstreamEvent)
 
 // Chat downstream events (server → client)
-const DOWNSTREAM_EVENTS = [
-  'chat:pong',
-  'chat:subscribe-ack',
-  'chat:new-message',
-  'chat:new-thread-message',
-  'chat:message-edited',
-  'chat:message-deleted',
-  'chat:ack-message',
-  'chat:sync-required',
-  'chat:user-typing',
-]
+const DOWNSTREAM_EVENTS = Object.values(ChatDownstreamEvent)
 
 // Chat message priority rules
 const PRIORITY_RULES = [
   (type: string) =>
-    type === 'chat:send-message' ||
-    type === 'chat:send-thread-message' ||
-    type === 'chat:edit-message' ||
-    type === 'chat:delete-message',
+    type === ChatUpstreamEvent.SendMessage ||
+    type === ChatUpstreamEvent.SendThreadMessage ||
+    type === ChatUpstreamEvent.EditMessage ||
+    type === ChatUpstreamEvent.DeleteMessage,
 ]
 
 let cleanupHandlers: (() => void) | null = null

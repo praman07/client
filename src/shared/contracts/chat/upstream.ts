@@ -1,44 +1,118 @@
 /**
- * UPSTREAM CONTRACTS (Client -> Server)
- * Domain: Chat
+ * Chat Upstream Contracts (Client → Server)
+ * All client-initiated WebSocket commands
  */
 
-// Event enum for backward compatibility with protocol.ts
-export enum ChatUpstreamEvent {
-  SendMessage = 'chat:send-message',
-  EditMessage = 'chat:edit-message',
-  DeleteMessage = 'chat:delete-message',
-  SendThreadMessage = 'chat:send-thread-message',
-  AddReaction = 'chat:add-reaction',
-  RemoveReaction = 'chat:remove-reaction',
-  MarkMessageRead = 'chat:mark-read',
-  MarkMessageDelivered = 'chat:mark-delivered',
-  MarkChannelRead = 'chat:mark-channel-read',
-  SubscribeConversation = 'chat:subscribe-conversation',
-  UnsubscribeConversation = 'chat:unsubscribe-conversation',
-  SubscribeThread = 'chat:subscribe-thread',
-  UnsubscribeThread = 'chat:unsubscribe-thread',
-  UserTyping = 'chat:user-typing',
-  UserStopTyping = 'chat:user-stop-typing',
-  Ping = 'chat:ping',
+import type { UpstreamContract } from '../types'
+import { ChatUpstreamEvent } from './events'
+
+// Re-export event enum for convenience
+export { ChatUpstreamEvent }
+
+// ═══════════════════════════════════════════════════════════════
+// PAYLOADS
+// ═══════════════════════════════════════════════════════════════
+
+export interface SendMessagePayload {
+  conversationId: string
+  content: string
+  dedupeId: string
+  replyToId?: string
 }
 
-export interface SendMessageCommand {
-  type: 'chat:send-message'
-  payload: {
-    conversationId: string
-    content: string
-    dedupeId: string // Required for optimistic UI
-    replyToId?: string
-  }
+export interface EditMessagePayload {
+  messageId: string
+  content: string
 }
 
-export interface MarkReadCommand {
-  type: 'chat:mark-read'
-  payload: {
-    conversationId: string
-    messageIds: Array<string>
-  }
+export interface DeleteMessagePayload {
+  messageId: string
 }
 
-export type ChatUpstreamCommand = SendMessageCommand | MarkReadCommand
+export interface AddReactionPayload {
+  messageId: string
+  emoji: string
+}
+
+export interface RemoveReactionPayload {
+  messageId: string
+  emoji: string
+}
+
+export interface MarkReadPayload {
+  conversationId: string
+  messageIds: string[]
+}
+
+export interface SubscribePayload {
+  conversationId: string
+}
+
+export interface TypingPayload {
+  conversationId: string
+}
+
+// ═══════════════════════════════════════════════════════════════
+// CONTRACTS
+// ═══════════════════════════════════════════════════════════════
+
+export type SendMessageContract = UpstreamContract<
+  ChatUpstreamEvent.SendMessage,
+  SendMessagePayload
+>
+
+export type EditMessageContract = UpstreamContract<
+  ChatUpstreamEvent.EditMessage,
+  EditMessagePayload
+>
+
+export type DeleteMessageContract = UpstreamContract<
+  ChatUpstreamEvent.DeleteMessage,
+  DeleteMessagePayload
+>
+
+export type AddReactionContract = UpstreamContract<
+  ChatUpstreamEvent.AddReaction,
+  AddReactionPayload
+>
+
+export type RemoveReactionContract = UpstreamContract<
+  ChatUpstreamEvent.RemoveReaction,
+  RemoveReactionPayload
+>
+
+export type MarkReadContract = UpstreamContract<
+  ChatUpstreamEvent.MarkRead,
+  MarkReadPayload
+>
+
+export type SubscribeContract = UpstreamContract<
+  ChatUpstreamEvent.Subscribe,
+  SubscribePayload
+>
+
+export type TypingContract = UpstreamContract<
+  ChatUpstreamEvent.StartTyping,
+  TypingPayload
+>
+
+// ═══════════════════════════════════════════════════════════════
+// UNION TYPE
+// ═══════════════════════════════════════════════════════════════
+
+export type ChatUpstreamContract =
+  | SendMessageContract
+  | EditMessageContract
+  | DeleteMessageContract
+  | AddReactionContract
+  | RemoveReactionContract
+  | MarkReadContract
+  | SubscribeContract
+  | TypingContract
+
+// ═══════════════════════════════════════════════════════════════
+// BACKWARD COMPATIBILITY - Command type aliases
+// ═══════════════════════════════════════════════════════════════
+
+export type SendMessageCommand = SendMessageContract
+export type MarkReadCommand = MarkReadContract
