@@ -5,6 +5,9 @@ import { MESSAGE_WINDOW_SIZE } from '../lib/constants'
 import { useWindowController } from './use-window-controller'
 import { useScrollController } from './use-scroll-controller'
 import { useHistoryLoader } from '@/entities/chat-session'
+import { createLogger } from '@/shared/lib/logger'
+
+const log = createLogger('chat:messageList')
 
 interface UseMessageListProps {
   conversationId: string
@@ -44,7 +47,7 @@ export function useMessageList({
     const oldestSeq = messages[0].sequence || 0
     if (oldestSeq <= 1) return // Reached absolute start
 
-    console.log('[MessageList] Fetching history before', oldestSeq)
+    log.debug('Fetching history before', oldestSeq)
 
     const count = await loadMore(
       conversationId,

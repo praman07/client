@@ -13,6 +13,9 @@
  */
 
 import * as eventRegistry from '../protocol/event-registry'
+import { createLogger } from '@/shared/lib/logger'
+
+const log = createLogger('ws:registry')
 
 export interface DomainEventConfig {
   domain: string
@@ -32,7 +35,7 @@ export function registerDomain(config: DomainEventConfig): void {
   const { domain, upstreamEvents, downstreamEvents } = config
 
   if (domains.has(domain)) {
-    console.warn(`[DomainRegistry] Domain already registered: ${domain}`)
+    log.warn(`Domain already registered: ${domain}`)
     return
   }
 
@@ -49,8 +52,8 @@ export function registerDomain(config: DomainEventConfig): void {
     eventRegistry.registerEventType(type, 'downstream', domain)
   })
 
-  console.log(
-    `[DomainRegistry] Registered domain: ${domain} (${upstreamEvents.length} upstream, ${downstreamEvents.length} downstream)`,
+  log.debug(
+    `Registered domain: ${domain} (${upstreamEvents.length} upstream, ${downstreamEvents.length} downstream)`,
   )
 }
 
@@ -103,7 +106,7 @@ export function extractDomain(eventType: string): string | null {
  */
 export function unregisterDomain(domain: string): void {
   domains.delete(domain)
-  console.log(`[DomainRegistry] Unregistered domain: ${domain}`)
+  log.debug(`Unregistered domain: ${domain}`)
 }
 
 /**

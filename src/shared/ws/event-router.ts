@@ -15,6 +15,9 @@ import type {
   ServerMessageUnion,
 } from './protocol'
 import { leaderElection } from '@/shared/lib/broadcast/leader-election'
+import { createLogger } from '@/shared/lib/logger'
+
+const log = createLogger('ws:router')
 
 // Internal type for erased handlers
 type GenericEventHandler = (payload: never) => void
@@ -51,9 +54,9 @@ export const eventRouter = {
     // 2. Local Dispatch to EventRouter handlers
     const typeHandlers = handlers.get(envelope.type)
 
-    // console.debug(
-    //   `[EventRouter] Dispatching ${envelope.type} to ${typeHandlers?.size || 0} handlers`,
-    // )
+    log.debug(
+      `Dispatching ${envelope.type} to ${typeHandlers?.size || 0} handlers`,
+    )
 
     if (typeHandlers) {
       typeHandlers.forEach((genericHandler) => {
@@ -64,10 +67,7 @@ export const eventRouter = {
           ) => void
           specificHandler(envelope.data)
         } catch (error) {
-          console.error(
-            `[EventRouter] Error in handler for ${envelope.type}:`,
-            error,
-          )
+          log.error(`Error in handler for ${envelope.type}:`, error)
         }
       })
     }
@@ -81,10 +81,7 @@ export const eventRouter = {
       }
       dispatchEvent(appEvent as any)
     } catch (error) {
-      console.error(
-        `[EventRouter] Bridge to EventBus failed for ${envelope.type}:`,
-        error,
-      )
+      log.error(`Bridge to EventBus failed for ${envelope.type}:`, error)
     }
   },
 

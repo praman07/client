@@ -5,6 +5,9 @@
 
 const HEARTBEAT_INTERVAL_MS = 1000
 const LEADER_TIMEOUT_MS = 5000
+import { createLogger } from '@/shared/lib/logger'
+
+const log = createLogger('ws:leader')
 
 type BroadcastEvent =
   | { type: 'HELLO'; tabId: string }
@@ -66,8 +69,8 @@ export class LeaderElection {
       // Check if leader died
       // Watchdog: If no heartbeat in 5000ms, assume leader is dead/frozen.
       if (now - this.lastHeartbeatMs > LEADER_TIMEOUT_MS) {
-        console.warn(
-          `[Leader] Leader ${this.leaderId} timed out (Watchdog). Promoting self.`,
+        log.warn(
+          `Leader ${this.leaderId} timed out (Watchdog). Promoting self.`,
         )
         this.promoteSelf()
       }

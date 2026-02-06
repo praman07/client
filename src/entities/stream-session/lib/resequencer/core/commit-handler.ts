@@ -6,6 +6,9 @@
 
 import type { StreamSessionState } from '../types/state'
 import type { StorageAdapter } from '../adapters/storage-adapter'
+import { createLogger } from '@/shared/lib/logger'
+
+const log = createLogger('reseq:commit')
 
 export interface BasePayload {
   streamId: string
@@ -56,15 +59,15 @@ export function createCommitHandler<T extends BasePayload>(
         await commit(state, payload, projectId)
 
         if (attempt > 1) {
-          console.debug(
-            `[CommitHandler] ✅ Succeeded on attempt ${attempt} for seq ${payload.sequence}`,
+          log.debug(
+            `✅ Succeeded on attempt ${attempt} for seq ${payload.sequence}`,
           )
         }
 
         return true
       } catch (e) {
-        console.warn(
-          `[CommitHandler] Attempt ${attempt}/${maxRetries} failed for seq ${payload.sequence}:`,
+        log.warn(
+          `Attempt ${attempt}/${maxRetries} failed for seq ${payload.sequence}:`,
           e,
         )
 

@@ -1,6 +1,9 @@
 import type { SyncRequiredEvent } from '@/shared/contracts/chat/downstream'
 import { registerHandler } from '@/shared/ws/event-bus'
 import { queryClient } from '@/shared/lib/tanstack-query/query-client'
+import { createLogger } from '@/shared/lib/logger'
+
+const log = createLogger('chat:sync')
 
 export function registerSyncRequiredHandler() {
   return registerHandler<SyncRequiredEvent>(
@@ -8,8 +11,8 @@ export function registerSyncRequiredHandler() {
     async (event) => {
       const { conversationId, reason } = event.payload
 
-      console.warn(
-        `[SyncRequired] Force Sync Triggered. Reason: ${reason} (Conv: ${conversationId})`,
+      log.warn(
+        `Force Sync Triggered. Reason: ${reason} (Conv: ${conversationId})`,
       )
 
       // Strategy: Invalidate Query Cache

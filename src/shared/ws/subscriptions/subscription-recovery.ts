@@ -13,6 +13,9 @@
 
 import * as subscriptionManager from './subscription-manager'
 import type { SubscriptionFactory } from './subscription-manager'
+import { createLogger } from '@/shared/lib/logger'
+
+const log = createLogger('ws:sub-rec')
 
 /**
  * Re-subscribes to all active resources on reconnection.
@@ -25,13 +28,11 @@ export async function resubscribeAll(
   const subscriptions = subscriptionManager.getAll()
 
   if (subscriptions.length === 0) {
-    console.log('[SubscriptionRecovery] No active subscriptions to restore')
+    log.debug('No active subscriptions to restore')
     return
   }
 
-  console.log(
-    `[SubscriptionRecovery] Restoring ${subscriptions.length} subscriptions`,
-  )
+  log.debug(`Restoring ${subscriptions.length} subscriptions`)
 
   const results = await Promise.allSettled(
     subscriptions.map(async (factory: SubscriptionFactory) => {
@@ -41,21 +42,18 @@ export async function resubscribeAll(
 
         emit(eventType, payload)
 
-        console.log(`[SubscriptionRecovery] Restored: ${factory.domain}`)
+        emit(eventType, payload)
+
+        log.debug(`Restored: ${factory.domain}`)
       } catch (err) {
-        console.error(
-          `[SubscriptionRecovery] Failed to restore ${factory.domain}:`,
-          err,
-        )
+        log.error(`Failed to restore ${factory.domain}:`, err)
       }
     }),
   )
 
   const failures = results.filter((r) => r.status === 'rejected')
   if (failures.length > 0) {
-    console.warn(
-      `[SubscriptionRecovery] ${failures.length}/${subscriptions.length} subscriptions failed`,
-    )
+    log.warn(`${failures.length}/${subscriptions.length} subscriptions failed`)
   }
 }
 
@@ -72,9 +70,7 @@ export async function resubscribeForDomain(
     return
   }
 
-  console.log(
-    `[SubscriptionRecovery] Restoring ${subscriptions.length} ${domain} subscriptions`,
-  )
+  log.debug(`Restoring ${subscriptions.length} ${domain} subscriptions`)
 
   await Promise.allSettled(
     subscriptions.map(async (factory: SubscriptionFactory) => {
@@ -84,10 +80,7 @@ export async function resubscribeForDomain(
 
         emit(eventType, payload)
       } catch (err) {
-        console.error(
-          `[SubscriptionRecovery] Failed to restore ${domain}:`,
-          err,
-        )
+        log.error(`Failed to restore ${domain}:`, err)
       }
     }),
   )

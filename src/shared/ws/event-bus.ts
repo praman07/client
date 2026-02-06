@@ -20,6 +20,9 @@ export type AppEvent =
 type EventHandler<T> = (event: T) => void
 
 const handlers = new Map<string, Set<EventHandler<any>>>()
+import { createLogger } from '@/shared/lib/logger'
+
+const log = createLogger('ws:bus')
 
 /**
  * Registers a handler for a specific event type.
@@ -38,12 +41,12 @@ export function registerHandler<T extends AppEvent>(
   // Prevent duplicates naturally via Set
   set.add(handler)
 
-  console.log(`[EventBus] Registered handler for: ${eventType}`)
+  log.debug(`Registered handler for: ${eventType}`)
 
   // Unsubscribe capability
   return () => {
     set.delete(handler)
-    console.debug(`[EventBus] Unregistered handler for: ${eventType}`)
+    log.debug(`Unregistered handler for: ${eventType}`)
   }
 }
 
@@ -54,7 +57,7 @@ export function registerHandler<T extends AppEvent>(
 export function dispatchEvent(event: AppEvent) {
   const set = handlers.get(event.type)
   if (!set || set.size === 0) {
-    console.debug(`[EventBus] No handlers for: ${event.type}`)
+    log.debug(`No handlers for: ${event.type}`)
     return
   }
 
@@ -63,7 +66,7 @@ export function dispatchEvent(event: AppEvent) {
     try {
       fn(event)
     } catch (err) {
-      console.error(`[EventBus] Handler failed for ${event.type}`, err)
+      log.error(`Handler failed for ${event.type}`, err)
     }
   })
 }

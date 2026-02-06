@@ -4,6 +4,9 @@ import { useFetchDelta } from '../hooks/use-fetch-delta'
 import type { RecoveryRequestedEvent } from '@/shared/ws/event-bus'
 import type { NewMessagePayload } from '@/shared/ws/protocol'
 import { registerHandler } from '@/shared/ws/event-bus'
+import { createLogger } from '@/shared/lib/logger'
+
+const log = createLogger('chat:recovery')
 
 export const RecoveryListener = () => {
   const { fetchDelta } = useFetchDelta()
@@ -16,15 +19,13 @@ export const RecoveryListener = () => {
         const { conversationId, projectId, lastSequence, gapSize } =
           event.payload
 
-        console.log(
-          `[RecoveryListener] Handling gap for ${conversationId} (Project: ${projectId}) > Seq: ${lastSequence} (Gap: ${gapSize})`,
+        log.debug(
+          `Handling gap for ${conversationId} (Project: ${projectId}) > Seq: ${lastSequence} (Gap: ${gapSize})`,
         )
 
         // Safety: If no project ID (legacy state), we cannot commit to persistence.
         if (!projectId) {
-          console.warn(
-            '[RecoveryListener] Missing Project ID in recovery event',
-          )
+          log.warn('Missing Project ID in recovery event')
           return
         }
 
@@ -39,9 +40,7 @@ export const RecoveryListener = () => {
             gapSize < 5 ? gapSize : Math.min(gapSize + 10, 100),
           )
 
-          console.debug(
-            `[RecoveryListener] Fetching ${fetchLimit} messages (gap: ${gapSize})...`,
-          )
+          log.debug(`Fetching ${fetchLimit} messages (gap: ${gapSize})...`)
 
           const { messages } = await fetchDelta(
             conversationId,
@@ -50,16 +49,14 @@ export const RecoveryListener = () => {
           )
 
           if (!messages || messages.length === 0) {
-            console.warn(
-              `[RecoveryListener] No messages found for ${conversationId}. Server history missing? Forcing cursor advance.`,
+            log.warn(
+              `No messages found for ${conversationId}. Server history missing? Forcing cursor advance.`,
             )
             await resequencer.handleRecoveryGap(conversationId, projectId)
             return
           }
 
-          console.log(
-            `[RecoveryListener] Fetched ${messages.length} messages. Recovering...`,
-          )
+          log.debug(`Fetched ${messages.length} messages. Recovering...`)
 
           // 2. Feed back to Engine
           // TODO: @DesignChoice - ProjectID is derived from event payload.
@@ -81,7 +78,7 @@ export const RecoveryListener = () => {
 
           await resequencer.processRecoveryBatch(mappedMessages, projectId)
         } catch (err) {
-          console.error('[RecoveryListener] Recovery failed', err)
+          log.error('Recovery failed', err)
         }
       },
     )

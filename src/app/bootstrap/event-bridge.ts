@@ -2,6 +2,9 @@ import type { ChatDownstreamEvent } from '@/shared/contracts/chat/downstream'
 import { eventRouter } from '@/shared/ws/event-router'
 import { ServerEventName } from '@/shared/ws/protocol'
 import { dispatchEvent } from '@/shared/ws/event-bus'
+import { createLogger } from '@/shared/lib/logger'
+
+const log = createLogger('ws:bridge')
 
 /**
  * Domain Event Bridge
@@ -32,7 +35,7 @@ const CHAT_EVENTS = [
 ]
 
 export function initializeDomainBridge() {
-  console.log('[EventBridge] Initializing Domain Bridge')
+  log.debug('Initializing Domain Bridge')
 
   const unsubs: Array<() => void> = []
 
@@ -49,7 +52,7 @@ export function initializeDomainBridge() {
   })
 
   return () => {
-    console.log('[EventBridge] Teardown')
+    log.debug('Teardown')
     unsubs.forEach((u) => u())
   }
 }

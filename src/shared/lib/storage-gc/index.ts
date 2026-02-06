@@ -1,4 +1,7 @@
 import { db } from '@/shared/lib/db'
+import { createLogger } from '@/shared/lib/logger'
+
+const log = createLogger('db:gc')
 
 const GC_INTERVAL_MS = 24 * 60 * 60 * 1000 // 24 Hours
 const MESSAGE_RETENTION_MS = 30 * 24 * 60 * 60 * 1000 // 30 Days
@@ -7,7 +10,7 @@ const FAILED_OUTBOX_RETENTION_MS = 24 * 60 * 60 * 1000 // 24 Hours
 export function startStorageGarbageCollector() {
   const runGC = async () => {
     try {
-      console.log('[StorageGC] Starting Garbage Collection...')
+      log.debug('Starting Garbage Collection...')
       const now = Date.now()
 
       // Architecture: Message Retention Policy
@@ -28,7 +31,7 @@ export function startStorageGarbageCollector() {
       if (oldMessages.length > 0) {
         // Strategy: Batch delete to avoid locking the UI thread
         await db.messages.bulkDelete(oldMessages)
-        console.log(`[StorageGC] Deleted ${oldMessages.length} old messages`)
+        log.debug(`Deleted ${oldMessages.length} old messages`)
       }
 
       // Architecture: Outbox Hygiene
@@ -43,12 +46,10 @@ export function startStorageGarbageCollector() {
 
       if (oldOutbox.length > 0) {
         await db.outbox.bulkDelete(oldOutbox)
-        console.log(
-          `[StorageGC] Deleted ${oldOutbox.length} failed outbox items`,
-        )
+        log.debug(`Deleted ${oldOutbox.length} failed outbox items`)
       }
     } catch (err) {
-      console.error('[StorageGC] Failed', err)
+      log.error('Failed', err)
     }
   }
 

@@ -14,6 +14,9 @@
 import { createDomainPlugin } from './domain-plugin'
 import type { ChatEventHandlerContext } from '@/features/chat/events/model'
 import { registerChatHandlers } from '@/features/chat/events'
+import { createLogger } from '@/shared/lib/logger'
+
+const log = createLogger('ws:plugin')
 
 // Chat upstream events (client → server)
 const UPSTREAM_EVENTS = [
@@ -55,17 +58,17 @@ export function createChatPlugin(context: ChatEventHandlerContext) {
     downstreamEvents: DOWNSTREAM_EVENTS,
 
     registerHandlers() {
-      console.log('[ChatPlugin] Registering chat event handlers')
+      log.debug('Registering chat event handlers')
 
       // Register all chat handlers (new-message, ack-message, sync-required)
       // This calls the existing registerChatHandlers function
       cleanupHandlers = registerChatHandlers(context)
 
-      console.log('[ChatPlugin] Chat handlers registered successfully')
+      log.debug('Chat handlers registered successfully')
     },
 
     cleanup() {
-      console.log('[ChatPlugin] Cleaning up chat handlers')
+      log.debug('Cleaning up chat handlers')
       if (cleanupHandlers) {
         cleanupHandlers()
         cleanupHandlers = null

@@ -8,6 +8,9 @@ import type { StreamSessionState } from '../types/state'
 import type { BasePayload, CommitHandler } from './commit-handler'
 import type { BufferManager } from './buffer-manager'
 import type { PluginContext, ProcessorPlugin } from '../plugins/plugin-types'
+import { createLogger } from '@/shared/lib/logger'
+
+const log = createLogger('reseq:processor')
 
 export interface ProcessingContext {
   projectId: string
@@ -46,17 +49,12 @@ export function createMessageProcessor<T extends BasePayload>(
       const result = await plugin.execute(pluginContext)
 
       if (result.action === 'skip') {
-        console.debug(
-          `[MessageProcessor] Plugin '${plugin.name}' skipped message: ${result.reason}`,
-        )
+        log.debug(`Plugin ${plugin.name} skipped message: ${result.reason}`)
         return { shouldContinue: false, reason: result.reason }
       }
 
       if (result.action === 'error') {
-        console.error(
-          `[MessageProcessor] Plugin '${plugin.name}' error:`,
-          result.error,
-        )
+        log.error(`Plugin ${plugin.name} error:`, result.error)
         return { shouldContinue: false, reason: result.error.message }
       }
     }
@@ -76,11 +74,8 @@ export function createMessageProcessor<T extends BasePayload>(
     for (const plugin of postPlugins) {
       try {
         await plugin.execute(pluginContext)
-      } catch (e) {
-        console.error(
-          `[MessageProcessor] Post-process plugin '${plugin.name}' failed:`,
-          e,
-        )
+      } catch (err) {
+        log.error(`Post-process plugin ${plugin.name} failed:`, err)
       }
     }
   }
@@ -117,7 +112,7 @@ export function createMessageProcessor<T extends BasePayload>(
     // History messages are intentionally OLDER than lastSequence
     // They should be committed directly without waiting in buffer
     if (isReplay) {
-      console.debug(`[MessageProcessor] Replay commit: seq ${payload.sequence}`)
+      log.debug(`Replay commit: seq ${payload.sequence}`)
 
       const success = await commitHandler.commitWithRetry(
         state,
@@ -134,11 +129,12 @@ export function createMessageProcessor<T extends BasePayload>(
     }
 
     // REALTIME MODE: Check if strict next sequence
-    const isStrictNext = payload.sequence === state.lastSequence + 1
+    const expectedSeq = state.lastSequence + 1
+    const isStrictNext = payload.sequence === expectedSeq
 
     if (isStrictNext) {
       // Commit message
-      console.debug(`[MessageProcessor] Strict next: ${payload.sequence}`)
+      log.debug(`Strict next: ${payload.sequence}`)
 
       const success = await commitHandler.commitWithRetry(
         state,
@@ -159,9 +155,7 @@ export function createMessageProcessor<T extends BasePayload>(
         }
       } else {
         // Commit failed - buffer and trigger recovery
-        console.error(
-          `[MessageProcessor] Commit failed for seq ${payload.sequence}`,
-        )
+        log.error(`Commit failed for seq ${payload.sequence}`)
 
         bufferManager.add(state, payload)
         state.status = 'RECOVERING'
@@ -177,8 +171,8 @@ export function createMessageProcessor<T extends BasePayload>(
     // Not strict next - buffer the message
     bufferManager.add(state, payload)
 
-    console.debug(
-      `[MessageProcessor] Buffered: ${payload.streamId} (size: ${state.buffer.size})`,
+    log.debug(
+      `Gap detected: got ${payload.sequence}, expected ${expectedSeq}. Buffering. (buffer size: ${state.buffer.size})`,
     )
 
     // Run post-process plugins (gap detection)

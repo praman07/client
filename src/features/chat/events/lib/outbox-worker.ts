@@ -1,6 +1,9 @@
 import { db } from '@/shared/lib/db'
 
 import { leaderElection } from '@/shared/lib/broadcast/leader-election'
+import { createLogger } from '@/shared/lib/logger'
+
+const log = createLogger('chat:outbox')
 
 const RETRY_INTERVAL_MS = 10000 // 10 seconds
 const STALE_THRESHOLD_MS = 5000 // 5 seconds
@@ -23,17 +26,17 @@ export function startOutboxRetryWorker() {
 
       if (pendingItems.length === 0) return
 
-      console.debug(`[OutboxWorker] Found ${pendingItems.length} stale items`)
+      log.debug(`Found ${pendingItems.length} stale items`)
 
       for (const item of pendingItems) {
         try {
           await retryItem(item)
         } catch (e) {
-          console.error(`[OutboxWorker] Retry failed for ${item.dedupeId}`, e)
+          log.error(`Retry failed for ${item.dedupeId}`, e)
         }
       }
     } catch (error) {
-      console.error('[OutboxWorker] Loop Failed', error)
+      log.error('Loop Failed', error)
     }
   }, RETRY_INTERVAL_MS)
 
@@ -45,8 +48,8 @@ async function retryItem(item: any) {
   const currentRetries = item.retryCount || 0
 
   if (currentRetries >= MAX_RETRIES) {
-    console.error(
-      `[OutboxWorker] Max retries (${MAX_RETRIES}) reached for ${item.dedupeId}. marking as failed.`,
+    log.error(
+      `Max retries (${MAX_RETRIES}) reached for ${item.dedupeId}. marking as failed.`,
     )
     await db.outbox.update(item.id, { status: 'failed' })
     return
@@ -59,9 +62,7 @@ async function retryItem(item: any) {
   const { wsManager } = await import('@/shared/ws')
   const { ClientEventName } = await import('@/shared/ws/protocol')
 
-  console.log(
-    `[OutboxWorker] Retrying: ${item.dedupeId} (Attempt ${currentRetries + 1})`,
-  )
+  log.debug(`Retrying: ${item.dedupeId} (Attempt ${currentRetries + 1})`)
 
   const payloadContent = item.payload.content
   const safeContent =

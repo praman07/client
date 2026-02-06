@@ -7,6 +7,9 @@
 import { compareStreamId } from '../utils/stream-id'
 import type { StreamSessionState } from '../types/state'
 import type { BasePayload, CommitHandler } from './commit-handler'
+import { createLogger } from '@/shared/lib/logger'
+
+const log = createLogger('reseq:buffer')
 
 export type FlushStrategy = 'strict' | 'force'
 
@@ -85,14 +88,12 @@ export function createBufferManager<T extends BasePayload>(
         await commitHandler.commit(state, oldest, projectId)
         state.buffer.delete(oldest.streamId)
 
-        console.debug(
-          `[BufferManager] Flushed: ${oldest.sequence} / ${oldest.streamId}`,
-        )
+        log.debug(`Flushed: ${oldest.sequence} / ${oldest.streamId}`)
 
         state.recoveryAttempts = 0
         state.status = 'SYNCED'
       } catch (e) {
-        console.error('[BufferManager] Flush failed:', e)
+        log.error('Flush failed:', e)
         break
       }
     }

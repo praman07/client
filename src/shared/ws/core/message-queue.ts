@@ -11,6 +11,9 @@
  */
 
 const MAX_QUEUE_SIZE = 50
+import { createLogger } from '@/shared/lib/logger'
+
+const log = createLogger('ws:queue')
 
 type QueuedMessage = {
   msg: string
@@ -68,10 +71,7 @@ export function enqueue(msg: string, type: string): void {
       }
     } else {
       // Incoming is LOW priority, drop it
-      console.warn(
-        '[MessageQueue] Queue full, dropping low-priority message:',
-        type,
-      )
+      log.warn('Queue full, dropping low-priority message:', type)
       return
     }
   } else {

@@ -18,6 +18,9 @@ import type {
 import type { BasePayload } from '../core/commit-handler'
 import type { RecoveryAdapter } from '../adapters/recovery-adapter'
 import type { BufferManager } from '../core/buffer-manager'
+import { createLogger } from '@/shared/lib/logger'
+
+const log = createLogger('reseq:gap')
 
 export interface GapDetectorConfig {
   gapTimeoutMs?: number
@@ -54,7 +57,7 @@ export function createGapDetectorPlugin<T extends BasePayload>(
       const gapSize = oldest.sequence - state.lastSequence - 1
 
       if (gapSize > fastForwardThreshold) {
-        console.warn(`[GapDetector] Large gap (${gapSize}). Fast-forwarding.`)
+        log.warn(`Large gap (${gapSize}). Fast-forwarding.`)
         await bufferManager.flush(state, projectId, 'force')
         state.status = 'SYNCED'
         state.recoveryAttempts = 0
@@ -64,8 +67,8 @@ export function createGapDetectorPlugin<T extends BasePayload>(
 
     // Trigger recovery if under max attempts
     if (state.recoveryAttempts < maxRecoveryAttempts) {
-      console.warn(
-        `[GapDetector] Triggering recovery (${state.recoveryAttempts + 1}/${maxRecoveryAttempts})`,
+      log.warn(
+        `Triggering recovery (${state.recoveryAttempts + 1}/${maxRecoveryAttempts})`,
       )
 
       state.status = 'RECOVERING'
@@ -87,7 +90,7 @@ export function createGapDetectorPlugin<T extends BasePayload>(
       }, recoveryTimeout)
     } else {
       // Max attempts exhausted - force flush
-      console.error('[GapDetector] Max recovery attempts. Force flushing.')
+      log.error('Max recovery attempts. Force flushing.')
       await bufferManager.flush(state, projectId, 'force')
     }
   }

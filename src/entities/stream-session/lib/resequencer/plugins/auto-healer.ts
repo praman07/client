@@ -10,6 +10,9 @@ import type {
   ProcessorPlugin,
 } from './plugin-types'
 import type { BasePayload } from '../core/commit-handler'
+import { createLogger } from '@/shared/lib/logger'
+
+const log = createLogger('reseq:healer')
 
 export function createAutoHealerPlugin<
   T extends BasePayload,
@@ -23,8 +26,8 @@ export function createAutoHealerPlugin<
 
       // Detect server reset: sequence 1 when we're way ahead
       if (payload.sequence === 1 && state.lastSequence > 1) {
-        console.warn(
-          `[AutoHealer] Server reset detected! Local: ${state.lastSequence} -> Remote: 1`,
+        log.warn(
+          `Server reset detected! Local: ${state.lastSequence} -> Remote: 1`,
         )
 
         // Reset state

@@ -2,6 +2,9 @@ import { createWorkspaceSchema } from '../model'
 import { useCheckSlugAvailability } from '../hooks'
 import type { WorkspaceFormApi } from '../model'
 import { Input, Label, Spinner } from '@/shared/ui'
+import { createLogger } from '@/shared/lib/logger'
+
+const log = createLogger('app:workspace')
 
 interface Props {
   form: WorkspaceFormApi
@@ -37,7 +40,7 @@ export function WorkspaceSlugField({ form }: Props) {
               return 'Slug is already taken'
             }
           } catch (e) {
-            console.error('Validation check failed', e)
+            log.error('Validation check failed', e)
           }
           return null
         },

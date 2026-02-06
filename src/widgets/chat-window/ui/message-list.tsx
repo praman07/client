@@ -13,6 +13,9 @@ import {
 import { useHistoryLoader } from '@/entities/chat-session'
 import { useUser } from '@/shared/hooks'
 import { useMessageAuthors } from '../hooks/use-message-authors'
+import { createLogger } from '@/shared/lib/logger'
+
+const log = createLogger('chat:messageList')
 
 interface MessageListProps {
   projectId: string
@@ -48,11 +51,11 @@ export function MessageList({ projectId, channelId }: MessageListProps) {
 
     const oldestSeq = messages[0]?.sequence ?? 0
     if (oldestSeq <= 1) {
-      console.log('[MessageList] Reached beginning of history.')
+      log.debug('Reached beginning of history.')
       return
     }
 
-    console.log('[MessageList] Fetching history before sequence:', oldestSeq)
+    log.debug('Fetching history before sequence:', oldestSeq)
     isFetchingRef.current = true
 
     try {
@@ -66,7 +69,7 @@ export function MessageList({ projectId, channelId }: MessageListProps) {
         loadOlder(count)
       }
     } catch (err) {
-      console.error('[MessageList] History fetch failed', err)
+      log.error('History fetch failed', err)
     } finally {
       isFetchingRef.current = false
     }
@@ -143,10 +146,7 @@ export function MessageList({ projectId, channelId }: MessageListProps) {
               {item.type === 'DATE' && item.timestamp !== undefined ? (
                 <DateSeparator timestamp={item.timestamp} />
               ) : item.isPrimary && item.message ? (
-                <PrimaryMessage
-                  message={item.message}
-                  className="mt-4"
-                />
+                <PrimaryMessage message={item.message} className="mt-4" />
               ) : item.message ? (
                 <AdditionalMessage message={item.message} />
               ) : null}

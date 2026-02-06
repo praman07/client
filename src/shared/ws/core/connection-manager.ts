@@ -16,6 +16,9 @@
 import { eventRouter } from '../event-router'
 import type { ClientMessage, ServerMessage } from '../protocol/core-protocol'
 import { env } from '@/shared/config/env'
+import { createLogger } from '@/shared/lib/logger'
+
+const log = createLogger('ws:conn-mgr')
 
 export type InternalState =
   | 'IDLE' // Not connected, no intent to connect
@@ -106,10 +109,10 @@ function handleMessage(event: MessageEvent): void {
     if (isValidServerMessage(data)) {
       eventRouter.dispatch(data as any)
     } else {
-      console.warn('[ConnectionManager] Invalid envelope:', data)
+      log.warn('Invalid envelope:', data)
     }
   } catch (e) {
-    console.error('[ConnectionManager] Parse failure:', event.data)
+    log.error('Parse failure:', event.data)
   }
 }
 
@@ -118,10 +121,10 @@ function handleMessage(event: MessageEvent): void {
  */
 export function handleOpen(onConnected: () => void): void {
   if (state.state !== 'CONNECTING') {
-    console.warn('[ConnectionManager] Open event but state is:', state.state)
+    log.warn('Open event but state is:', state.state)
   }
 
-  console.log('[ConnectionManager] Connected')
+  log.debug('Connected')
   setState('CONNECTED')
 
   // Caller responsibility: flush queue, start heartbeat, re-subscribe
@@ -135,7 +138,7 @@ export function handleClose(
   event: CloseEvent,
   onScheduleReconnect: () => void,
 ): void {
-  console.log('[ConnectionManager] Closed:', {
+  log.debug('Closed:', {
     code: event.code,
     reason: event.reason,
     wasClean: event.wasClean,
@@ -150,14 +153,14 @@ export function handleClose(
 
   // Auth error (close code 4001)
   if (event.code === 4001) {
-    console.warn('[ConnectionManager] Auth error detected')
+    log.warn('Auth error detected')
     setState('OFFLINE')
     callbacks?.onAuthError()
     return
   }
 
   // Unexpected close -> trigger reconnect
-  console.log('[ConnectionManager] Unexpected close, scheduling reconnect')
+  log.debug('Unexpected close, scheduling reconnect')
   onScheduleReconnect()
 }
 
@@ -175,7 +178,7 @@ export function establishConnection(
   onClose: () => void,
 ): boolean {
   if (!state.token) {
-    console.log('[ConnectionManager] Skipping connection (no token yet)')
+    log.debug('Skipping connection (no token yet)')
     return false
   }
 
@@ -185,7 +188,7 @@ export function establishConnection(
   }
 
   if (!isLeader) {
-    console.log('[ConnectionManager] Blocked: not leader')
+    log.debug('Blocked: not leader')
     return false
   }
 
@@ -211,19 +214,18 @@ export function establishConnection(
   }
 
   try {
-    console.log('[ConnectionManager] Opening socket to:', url.toString())
+    log.debug('Opening socket to:', url.toString())
     setState('CONNECTING')
 
     state.socket = new WebSocket(url.toString())
     state.socket.onopen = () => handleOpen(onOpen)
     state.socket.onclose = (event) => handleClose(event, onClose)
     state.socket.onmessage = handleMessage
-    state.socket.onerror = (e) =>
-      console.error('[ConnectionManager] Socket error:', e)
+    state.socket.onerror = (e) => log.error('Socket error:', e)
 
     return true
   } catch (e) {
-    console.error('[ConnectionManager] Exception during creation:', e)
+    log.error('Exception during creation:', e)
     setState('IDLE')
     onClose() // Trigger reconnect
     return false

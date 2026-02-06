@@ -13,6 +13,9 @@
 
 const RECONNECT_INTERVAL_MS = 2000
 const MAX_RECONNECT_ATTEMPTS = 5
+import { createLogger } from '@/shared/lib/logger'
+
+const log = createLogger('ws:reconnect')
 
 type ReconnectState = {
   attempts: number
@@ -39,13 +42,13 @@ export function calculateDelay(attempts: number): number {
  */
 export function scheduleReconnect(reconnectFn: () => void): boolean {
   if (state.attempts >= MAX_RECONNECT_ATTEMPTS) {
-    console.error('[ReconnectionStrategy] Max reconnect attempts reached')
+    log.error('Max reconnect attempts reached')
     return false
   }
 
   const delay = calculateDelay(state.attempts)
-  console.info(
-    `[ReconnectionStrategy] Scheduling reconnect in ${delay}ms (attempt ${state.attempts + 1}/${MAX_RECONNECT_ATTEMPTS})`,
+  log.info(
+    `Scheduling reconnect in ${delay}ms (attempt ${state.attempts + 1}/${MAX_RECONNECT_ATTEMPTS})`,
   )
 
   state.timeout = setTimeout(() => {

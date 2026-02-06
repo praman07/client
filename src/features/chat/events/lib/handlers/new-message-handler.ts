@@ -4,6 +4,9 @@ import type { NewMessageEvent } from '@/shared/contracts/chat/downstream'
 import { registerHandler } from '@/shared/ws/event-bus'
 import { resequencer } from '@/entities/chat-session'
 import { db } from '@/shared/lib/db'
+import { createLogger } from '@/shared/lib/logger'
+
+const log = createLogger('chat:handler')
 
 /**
  * Handle: chat:new-message
@@ -14,8 +17,8 @@ export function registerNewMessageHandler(context: ChatEventHandlerContext) {
   return registerHandler<NewMessageEvent>('chat:new-message', async (event) => {
     const payload = event.payload as unknown as NewMessagePayload
 
-    console.debug(
-      `[NewMessage] Received ${payload.meta?.replay ? 'Hot Replay' : 'Live'} message:`,
+    log.debug(
+      `Received ${payload.meta?.replay ? 'Hot Replay' : 'Live'} message:`,
       {
         sequence: payload.sequence,
         conversationId: payload.conversationId,
@@ -38,8 +41,8 @@ export function registerNewMessageHandler(context: ChatEventHandlerContext) {
 
       if (existing) {
         const isReplay = payload.meta?.replay === true
-        console.debug(
-          `[NewMessage] Skipping duplicate (${isReplay ? 'Hot Replay' : 'ACK path'} already committed):`,
+        log.debug(
+          `Skipping duplicate (${isReplay ? 'Hot Replay' : 'ACK path'} already committed):`,
           {
             dedupeId: payload.dedupeId,
             sequence: payload.sequence,
@@ -52,7 +55,7 @@ export function registerNewMessageHandler(context: ChatEventHandlerContext) {
 
     // 2. Fallback: DB Lookup (If Context is missing/background tab)
     if (!projectId) {
-      console.warn('[ChatEvents] Context missing ProjectID. Searching DB...')
+      log.warn('Context missing ProjectID. Searching DB...')
 
       // Attempt 1: Check Conversation State (PK is Compound, so use Index)
       const state = await db.conversation_state
@@ -77,21 +80,21 @@ export function registerNewMessageHandler(context: ChatEventHandlerContext) {
 
     // 3. Hard Fail Protection
     if (!projectId) {
-      console.error(
-        `[ChatEvents] CRITICAL: Could not resolve ProjectID for Conversation ${payload.conversationId}. Dropping Message to prevent ghost data.`,
+      log.error(
+        `CRITICAL: Could not resolve ProjectID for Conversation ${payload.conversationId}. Dropping Message to prevent ghost data.`,
       )
       return
     }
 
     // Validation: Strict Invariant Check
     if (!payload.streamId) {
-      console.error('[ChatEvents] Invalid payload: Missing streamId', payload)
+      log.error('Invalid payload: Missing streamId', payload)
       return
     }
 
     if (!context.getProjectId()) {
-      console.warn(
-        '[ChatEvents] No active project in store (Injected Context). Using Fallback Stub.',
+      log.warn(
+        'No active project in store (Injected Context). Using Fallback Stub.',
       )
     }
 
@@ -109,11 +112,11 @@ export function registerNewMessageHandler(context: ChatEventHandlerContext) {
           .equals(payload.dedupeId)
           .delete()
           .catch((err: any) => {
-            console.warn('[NewMessageHandler] Failed to clean outbox:', err)
+            log.warn('Failed to clean outbox:', err)
           })
       }
     } catch (error) {
-      console.error('[ChatEvents] Failed to process new-message:', error)
+      log.error('Failed to process new-message:', error)
     }
   })
 }

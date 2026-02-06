@@ -2,6 +2,9 @@ import { useEffect } from 'react'
 import { socketOrchestrator } from '@/app/runtime/socket-orchestrator'
 import { useAuth } from '@/shared/hooks'
 import { useCurrentWorkspace } from '@/entities/workspace'
+import { createLogger } from '@/shared/lib/logger'
+
+const log = createLogger('ws:connection')
 
 /**
  * Socket Intent Hook
@@ -16,7 +19,7 @@ export function useSocketConnection(enabled: boolean = true) {
   const workspaceId = workspace?.id
 
   useEffect(() => {
-    console.log('[useSocketConnection] Effect triggered', {
+    log.debug('Effect triggered', {
       enabled,
       isSignedIn,
       userId,

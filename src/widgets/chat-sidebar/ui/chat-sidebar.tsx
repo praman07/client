@@ -19,6 +19,9 @@ import {
   sortConversations,
   useUserConversations,
 } from '@/entities/conversation'
+import { createLogger } from '@/shared/lib/logger'
+
+const log = createLogger('chat:sidebar')
 /**
  * Chat Sidebar
  * Displays channels, DMs, and group conversations
@@ -69,7 +72,7 @@ export function ChatSidebar() {
     const filtered = allChannels.filter((channel) => channel.isArchived)
 
     // Debug logging
-    console.log('🔍 DEBUG: Archived Channels Data Flow', {
+    log.debug('Archived Channels Data Flow', {
       totalEdges: edges.length,
       allChannelsCount: allChannels.length,
       filteredArchivedCount: filtered.length,

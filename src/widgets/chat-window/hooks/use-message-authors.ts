@@ -5,6 +5,9 @@ import type { MessageRowData } from '../model/message-list.types'
 import { useAuth } from '@/shared/hooks'
 import { GqlClient } from '@/shared/api'
 import { GET_USERS_BY_IDS } from '@/entities/conversation/api'
+import { createLogger } from '@/shared/lib/logger'
+
+const log = createLogger('chat:authors')
 
 /**
  * Hook to batch fetch and cache missing message authors
@@ -31,17 +34,13 @@ export function useMessageAuthors(messages: MessageRowData[]) {
       const token = await getToken()
       const client = GqlClient(token)
 
-      console.log(
-        '[useMessageAuthors] Fetching',
-        missingAuthorIds.length,
-        'missing authors',
-      )
+      log.debug('Fetching', missingAuthorIds.length, 'missing authors')
 
       const result = await client.request(GET_USERS_BY_IDS, {
         userIds: missingAuthorIds,
       })
 
-      console.log('[useMessageAuthors] Fetched users:', result.getUsersByIds)
+      log.debug('Fetched users:', result.getUsersByIds)
 
       return result.getUsersByIds.map((u) => ({
         userId: u.id,
@@ -58,11 +57,7 @@ export function useMessageAuthors(messages: MessageRowData[]) {
   // Add fetched users to member cache when they arrive
   useEffect(() => {
     if (fetchedUsers && fetchedUsers.length > 0) {
-      console.log(
-        '[useMessageAuthors] Adding',
-        fetchedUsers.length,
-        'users to cache',
-      )
+      log.debug('Adding', fetchedUsers.length, 'users to cache')
       addUsers(fetchedUsers)
     }
   }, [fetchedUsers, addUsers])

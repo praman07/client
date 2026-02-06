@@ -8,6 +8,9 @@ import type { StreamSessionState } from '../types/state'
 import type { StorageAdapter } from '../adapters/storage-adapter'
 import type { CursorLoader } from '../utils/cursor-loader'
 import type { BasePayload } from './commit-handler'
+import { createLogger } from '@/shared/lib/logger'
+
+const log = createLogger('reseq:state')
 
 export interface StateManager<T extends BasePayload> {
   get: (conversationId: string) => StreamSessionState<T> | undefined
@@ -102,9 +105,7 @@ export function createStateManager<T extends BasePayload>(
 
     // Only advance, never regress (monotonicity)
     if (cursor.lastSequence > state.lastSequence) {
-      console.log(
-        `[StateManager] Reloading: ${state.lastSequence} -> ${cursor.lastSequence}`,
-      )
+      log.debug(`Reloading: ${state.lastSequence} -> ${cursor.lastSequence}`)
 
       state.lastSequence = cursor.lastSequence
       state.expectedStreamId = cursor.expectedStreamId
@@ -144,7 +145,7 @@ export function createStateManager<T extends BasePayload>(
     }
 
     if (evicted > 0) {
-      console.log(`[StateManager] Evicted ${evicted} stale states`)
+      log.debug(`Evicted ${evicted} stale states`)
     }
   }
 

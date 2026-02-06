@@ -1,5 +1,8 @@
 import { useCallback, useLayoutEffect, useRef, useState } from 'react'
 import { useVirtualizer } from '@tanstack/react-virtual'
+import { createLogger } from '@/shared/lib/logger'
+
+const log = createLogger('chat:scroll')
 
 type ScrollMode = 'LOCKED_BOTTOM' | 'FREE_SCROLL' | 'FETCHING_HISTORY'
 
@@ -121,9 +124,7 @@ export function useChatScroll({
           // FALLBACK: Clear prepending state after 5s if fetch fails/returns 0
           setTimeout(() => {
             if (isPrependingRef.current) {
-              console.log(
-                '[useChatScroll] Timeout: clearing stuck prepending state',
-              )
+              log.debug('[Timeout] Clearing stuck prepending state')
               isPrependingRef.current = false
               isFetchingRef.current = false
             }
@@ -151,7 +152,7 @@ export function useChatScroll({
     // if (delta !== 0) console.log('[useChatScroll] LayoutEffect:', { mode, delta, count })
 
     if (delta > 0) {
-      console.log('[useChatScroll] LayoutEffect:', {
+      log.debug('LayoutEffect:', {
         mode,
         delta,
         count,
@@ -173,20 +174,15 @@ export function useChatScroll({
 
         // If user scrolled during load, skip adjustment (they took control)
         if (userScrolledDuringLoadRef.current) {
-          console.log(
-            '[useChatScroll] User scrolled during load, skipping adjustment',
-          )
+          log.debug('User scrolled during load, skipping adjustment')
         } else if (heightDiff > 0) {
-          console.log('[useChatScroll] Prepend adjustment:', {
+          log.debug('Prepend adjustment:', {
             heightDiff,
             scrollTopBefore: parent.scrollTop,
           })
           // Adjust scroll position to maintain visual anchor
           parent.scrollTop += heightDiff
-          console.log(
-            '[useChatScroll] Adjusted scrollTop to:',
-            parent.scrollTop,
-          )
+          log.debug('Adjusted scrollTop to:', parent.scrollTop)
         }
 
         // Clear prepend state AFTER adjustment

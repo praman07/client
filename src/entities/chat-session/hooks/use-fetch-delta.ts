@@ -2,6 +2,9 @@ import { useCallback } from 'react'
 import { GET_MISSING_MESSAGES } from '../api'
 import { GqlClient } from '@/shared/api'
 import { useAuth } from '@/shared/hooks'
+import { createLogger } from '@/shared/lib/logger'
+
+const log = createLogger('chat:recovery')
 
 export function useFetchDelta() {
   const { getToken } = useAuth()
@@ -14,7 +17,7 @@ export function useFetchDelta() {
     ) => {
       const token = await getToken()
       if (!token) {
-        console.warn('[ChatRecovery] No auth token available')
+        log.warn('No auth token available')
         return { messages: [], hasMore: false, lastSequence: 0 }
       }
 
@@ -27,7 +30,7 @@ export function useFetchDelta() {
         })
         return data.messagesDelta
       } catch (error) {
-        console.error('[ChatRecovery] Failed to fetch delta:', error)
+        log.error('Failed to fetch delta:', error)
         throw error
       }
     },

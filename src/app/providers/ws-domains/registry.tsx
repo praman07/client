@@ -16,6 +16,9 @@ import { useEffect } from 'react'
 import type { DomainPlugin } from './domain-plugin'
 import { registerDomain } from '@/shared/ws/events/domain-registry'
 import { eventRouter } from '@/shared/ws'
+import { createLogger } from '@/shared/lib/logger'
+
+const log = createLogger('ws:registry')
 
 interface DomainRegistryProps {
   plugins: Array<DomainPlugin>
@@ -27,7 +30,7 @@ interface DomainRegistryProps {
  */
 export function DomainRegistry({ plugins }: DomainRegistryProps) {
   useEffect(() => {
-    console.log(`[DomainRegistry] Initializing ${plugins.length} domain(s)`)
+    log.debug(`Initializing ${plugins.length} domain(s)`)
 
     // Register each plugin
     plugins.forEach((plugin) => {
@@ -41,14 +44,14 @@ export function DomainRegistry({ plugins }: DomainRegistryProps) {
       // Attach event handlers
       plugin.registerHandlers(eventRouter)
 
-      console.log(
-        `[DomainRegistry] Registered ${plugin.domain} (${plugin.upstreamEvents.length} upstream, ${plugin.downstreamEvents.length} downstream)`,
+      log.debug(
+        `Registered ${plugin.domain} (${plugin.upstreamEvents.length} upstream, ${plugin.downstreamEvents.length} downstream)`,
       )
     })
 
     // Cleanup on unmount
     return () => {
-      console.log('[DomainRegistry] Cleaning up domains')
+      log.debug('Cleaning up domains')
       plugins.forEach((plugin) => {
         plugin.cleanup?.()
       })

@@ -7,6 +7,9 @@ import { useResequencerStatus } from '@/entities/chat-session'
 import { SyncStatusIndicator } from '@/entities/chat-session/ui/SyncStatusIndicator'
 import { MemberCacheProvider } from '../lib/member-cache-context'
 import { useConversation } from '@/entities/conversation'
+import { createLogger } from '@/shared/lib/logger'
+
+const log = createLogger('chat:window')
 
 // TODO: Fetch real channel details via Query
 
@@ -49,10 +52,9 @@ export function ChatWindow({
     : undefined
 
   // DEBUG: Log member data
-  // console.log('[ChatWindow] Conversation data:', conversationData)
-  // console.log('[ChatWindow] Members count:', members?.length)
-  // console.log('[ChatWindow] Members:', members)
-
+  log.debug('Conversation data:', conversationData)
+  log.debug('Members count:', members?.length)
+  log.debug('Members:', members)
 
   // 1. Activate Subscription (Data Plane)
   useConversationSubscription(channelId || '', projectId, 'CHANNEL')

@@ -8,6 +8,9 @@ import {
 } from './index'
 import { generateIdempotencyKey } from '@/shared/lib/idempotency'
 import { useUser } from '@/shared/hooks'
+import { createLogger } from '@/shared/lib/logger'
+
+const log = createLogger('app:onboarding')
 
 export function useOnboardingOrchestrator() {
   const { user } = useUser()
@@ -58,7 +61,7 @@ export function useOnboardingOrchestrator() {
               avatarUrl: user.imageUrl,
             })
           } catch (e) {
-            console.error('Sync failed', e)
+            log.error('Sync failed', e)
             setInternalError(mapOnboardingError(e))
           }
           break
@@ -68,7 +71,7 @@ export function useOnboardingOrchestrator() {
           try {
             await createWorkspace({ idempotencyKey: creationKey })
           } catch (e) {
-            console.error('Workspace creation failed', e)
+            log.error('Workspace creation failed', e)
             setInternalError(mapOnboardingError(e))
           }
           break

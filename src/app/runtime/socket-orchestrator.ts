@@ -6,6 +6,9 @@
  * Responsibility: Translate app capability (Auth + Workspace) into Transport Intent.
  */
 import { wsManager } from '@/shared/ws'
+import { createLogger } from '@/shared/lib/logger'
+
+const log = createLogger('ws:orchestrator')
 
 type OrchestratorState = {
   enabled: boolean
@@ -22,9 +25,7 @@ class SocketOrchestrator {
 
   constructor() {
     wsManager.onAuthError(() => {
-      console.warn(
-        '[SocketOrchestrator] Auth Error detected. Retrying connection...',
-      )
+      log.warn('Auth Error detected. Retrying connection...')
       this.connecting = false // Force reset lock
       this.ensureConnection()
     })
@@ -80,7 +81,7 @@ class SocketOrchestrator {
   }
 
   private async ensureConnection() {
-    console.log('[SocketOrchestrator] ensureConnection called', {
+    log.debug('ensureConnection called', {
       connecting: this.connecting,
       enabled: this.state.enabled,
       userId: this.state.userId,
@@ -99,19 +100,19 @@ class SocketOrchestrator {
       // Double check state after lock
       if (!this.state.enabled) return
 
-      console.log('[SocketOrchestrator] Fetching token...')
+      log.debug('Fetching token...')
       const token = await this.currentGetToken()
-      console.log('[SocketOrchestrator] Token fetched:', !!token)
+      log.debug('Token fetched:', !!token)
 
       if (!token) return
 
       // Check again before connecting (async gap)
       if (!this.state.enabled || !this.state.workspaceId) return
 
-      console.log('[SocketOrchestrator] Calling wsManager.connect()')
+      log.debug('Calling wsManager.connect()')
       wsManager.connect(token, this.state.workspaceId)
     } catch (err) {
-      console.error('[SocketOrchestrator] Token fetch failed', err)
+      log.error('Token fetch failed', err)
     } finally {
       this.connecting = false
     }

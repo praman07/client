@@ -7,6 +7,9 @@ import { useAuth } from '@/shared/hooks'
 import { MessageRecoveryFieldsFragmentDoc } from '@/gql/graphql'
 import { useFragment } from '@/gql/fragment-masking'
 import { commitMessageBatch } from '../lib/resequencer/storage'
+import { createLogger } from '@/shared/lib/logger'
+
+const log = createLogger('chat:history')
 
 /**
  * Controller Hook for fetching historical messages.
@@ -85,7 +88,7 @@ export function useHistoryLoader() {
         }
         return 0
       } catch (err) {
-        console.error('[HistoryLoader] Fetch failed', err)
+        log.error('Fetch failed', err)
         throw err
       } finally {
         fetchLock.current = false

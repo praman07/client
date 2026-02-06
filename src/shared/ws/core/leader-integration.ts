@@ -12,6 +12,9 @@
  */
 
 import { leaderElection } from '@/shared/lib/broadcast/leader-election'
+import { createLogger } from '@/shared/lib/logger'
+
+const log = createLogger('ws:leader')
 
 type LeaderCallbacks = {
   onPromoted: () => void
@@ -35,7 +38,7 @@ export function setupLeaderIntegration(callbacks: LeaderCallbacks): void {
     const wasLeader = isLeader
     isLeader = state === 'LEADER'
 
-    console.log('[LeaderIntegration] Leader state changed:', state)
+    log.debug('Leader state changed:', state)
 
     if (isLeader && !wasLeader) {
       // Tab promoted to leader

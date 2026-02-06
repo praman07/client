@@ -18,6 +18,10 @@ export interface SubscriptionFactory<T = any> {
   createPayload: () => Promise<T>
 }
 
+import { createLogger } from '@/shared/lib/logger'
+
+const log = createLogger('ws:sub-mgr')
+
 const subscriptions = new Map<string, SubscriptionFactory>()
 
 /**
@@ -46,7 +50,7 @@ export function subscribe<T>(factory: SubscriptionFactory<T>): void {
     createPayload,
   })
 
-  console.log(`[SubscriptionManager] Subscribed: ${key}`)
+  log.debug(`Subscribed: ${key}`)
 }
 
 /**
@@ -62,7 +66,7 @@ export function unsubscribe(domain: string, id: string): boolean {
 
   if (existed) {
     subscriptions.delete(key)
-    console.log(`[SubscriptionManager] Unsubscribed: ${key}`)
+    log.debug(`Unsubscribed: ${key}`)
   }
 
   return existed
@@ -102,7 +106,7 @@ export function getAll(): Array<SubscriptionFactory> {
  */
 export function clear(): void {
   subscriptions.clear()
-  console.log('[SubscriptionManager] Cleared all subscriptions')
+  log.debug('Cleared all subscriptions')
 }
 
 /**

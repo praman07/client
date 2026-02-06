@@ -17,6 +17,9 @@ import { compareStreamId } from '../utils/stream-id'
 import type { BasePayload } from '../core/commit-handler'
 import type { ResequencerStatus } from '../types/state'
 import type { ResequencerConfig } from '../types/config'
+import { createLogger } from '@/shared/lib/logger'
+
+const log = createLogger('reseq:factory')
 
 export interface SubscriptionState {
   lastSequence: number
@@ -86,8 +89,8 @@ export function createStreamResequencer<T extends BasePayload>(
 
     // Project isolation check
     if (state.projectId && state.projectId !== projectId) {
-      console.error(
-        `[Resequencer] Cross-project leak! State: ${state.projectId} vs Incoming: ${projectId}`,
+      log.error(
+        `Cross-project leak! State: ${state.projectId} vs Incoming: ${projectId}`,
       )
       return
     }
@@ -110,7 +113,7 @@ export function createStreamResequencer<T extends BasePayload>(
 
       // Check buffer overflow
       if (bufferManager.checkOverflow(state, BUFFER_LIMIT)) {
-        console.error(`[Resequencer] Buffer overflow (${state.buffer.size})`)
+        log.error(`Buffer overflow (${state.buffer.size})`)
         state.buffer.clear()
         state.status = 'DESYNCED'
         config.recoveryAdapter.triggerRecovery({
@@ -125,10 +128,7 @@ export function createStreamResequencer<T extends BasePayload>(
     }
 
     state.processingChain = state.processingChain.then(task).catch((err) => {
-      console.error(
-        `[Resequencer] Processing error for ${payload.conversationId}:`,
-        err,
-      )
+      log.error(`Processing error for ${payload.conversationId}:`, err)
     })
 
     return state.processingChain
@@ -171,7 +171,7 @@ export function createStreamResequencer<T extends BasePayload>(
     }
 
     state.processingChain = state.processingChain.then(task).catch((err) => {
-      console.error(`[Resequencer] Recovery batch error:`, err)
+      log.error(`Recovery batch error:`, err)
     })
 
     return state.processingChain
@@ -181,7 +181,7 @@ export function createStreamResequencer<T extends BasePayload>(
    * Handle sync required signal
    */
   async function handleSyncRequired(conversationId: string): Promise<void> {
-    console.warn(`[Resequencer] Sync required for ${conversationId}`)
+    log.warn(`Sync required for ${conversationId}`)
 
     const state = await stateManager.getOrInit(conversationId)
     state.buffer.clear()
@@ -231,7 +231,7 @@ export function createStreamResequencer<T extends BasePayload>(
     await bufferManager.flush(state, projectId, 'force')
     state.status = 'SYNCED'
 
-    console.warn(`[Resequencer] Force-healed gap for ${conversationId}`)
+    log.warn(`Force-healed gap for ${conversationId}`)
   }
 
   /**
@@ -271,7 +271,7 @@ export function createStreamResequencer<T extends BasePayload>(
    */
   async function refreshAllActive(): Promise<void> {
     const activeIds = stateManager.getAllActive()
-    console.log(`[Resequencer] Refreshing ${activeIds.length} active states`)
+    log.debug(`Refreshing ${activeIds.length} active states`)
 
     await Promise.all(activeIds.map((id) => stateManager.reload(id)))
   }

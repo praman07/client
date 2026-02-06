@@ -6,6 +6,9 @@
 
 import { safeParseStreamId } from '../utils/stream-id'
 import type { CursorState, StorageAdapter } from '../adapters/storage-adapter'
+import { createLogger } from '@/shared/lib/logger'
+
+const log = createLogger('reseq:cursor')
 
 export interface CursorLoader {
   load: (conversationId: string, projectId?: string) => Promise<LoadedCursor>
@@ -37,9 +40,7 @@ export function createCursorLoader<T>(
       const validStreamId = safeParseStreamId(cursor.expectedStreamId)
 
       if (cursor.expectedStreamId && !validStreamId) {
-        console.error(
-          `[CursorLoader] Corrupted StreamID: ${cursor.expectedStreamId}. Resetting.`,
-        )
+        log.error(`Corrupted StreamID: ${cursor.expectedStreamId}. Resetting.`)
 
         return {
           lastSequence: cursor.lastSequence || 0,
@@ -55,7 +56,7 @@ export function createCursorLoader<T>(
         isValid: true,
       }
     } catch (e) {
-      console.error('[CursorLoader] Failed to load cursor:', e)
+      log.error('Failed to load cursor:', e)
 
       return {
         lastSequence: 0,

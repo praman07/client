@@ -21,6 +21,9 @@ import * as subscriptionManager from './subscriptions/subscription-manager'
 import * as subscriptionRecovery from './subscriptions/subscription-recovery'
 import type { ClientMessage } from './protocol/core-protocol'
 import type { ConnectionStatus } from './core/connection-manager'
+import { createLogger } from '@/shared/lib/logger'
+
+const log = createLogger('ws:manager')
 
 export interface WSManager {
   // Connection control
@@ -68,12 +71,12 @@ export function createWSManager(): WSManager {
   // Setup leader integration
   leaderIntegration.setupLeaderIntegration({
     onPromoted: () => {
-      console.log('[WSManager] Promoted to leader, connecting...')
+      log.debug('Promoted to leader, connecting...')
       reconnectionStrategy.resetAttempts()
       attemptConnection()
     },
     onDemoted: () => {
-      console.log('[WSManager] Demoted from leader, disconnecting...')
+      log.debug('Demoted from leader, disconnecting...')
       connectionManager.closeConnection()
       heartbeat.stopHeartbeat()
     },
@@ -85,7 +88,7 @@ export function createWSManager(): WSManager {
       payload: {},
     })
     if (!sent) {
-      console.warn('[WSManager] Failed to send ping (socket not ready)')
+      log.warn('Failed to send ping (socket not ready)')
     }
   }
 
@@ -97,7 +100,7 @@ export function createWSManager(): WSManager {
     )
 
     if (!success) {
-      console.log('[WSManager] Connection skipped (waiting for auth/workspace)')
+      log.debug('Connection skipped (waiting for auth/workspace)')
     }
   }
 
@@ -126,7 +129,7 @@ export function createWSManager(): WSManager {
     })
 
     if (!scheduled) {
-      console.error('[WSManager] Max reconnect attempts reached')
+      log.error('Max reconnect attempts reached')
       currentStatus = 'OFFLINE'
       statusListeners.forEach((cb) => cb('OFFLINE'))
     }
@@ -181,10 +184,7 @@ export function createWSManager(): WSManager {
             manager.emit(eventType, payload)
           })
           .catch((err) => {
-            console.error(
-              '[WSManager] Failed to create subscription payload:',
-              err,
-            )
+            log.error('Failed to create subscription payload:', err)
           })
       }
     },

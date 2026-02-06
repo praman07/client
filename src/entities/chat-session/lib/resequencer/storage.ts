@@ -2,6 +2,9 @@ import type { NewMessagePayload } from '@/shared/ws/protocol'
 import type { StreamSessionState } from '@/entities/stream-session'
 import type { ConversationState as DBConversationState } from '@/shared/lib/db/schema'
 import { db } from '@/shared/lib/db'
+import { createLogger } from '@/shared/lib/logger'
+
+const log = createLogger('reseq:storage')
 
 /**
  * Commits a message to the database and updates the conversation state.
@@ -85,9 +88,9 @@ export async function commitMessageBatch(
       },
     )
 
-    console.log(`[Storage] Batch committed ${sorted.length} messages`)
+    log.debug(`Batch committed ${sorted.length} messages`)
   } catch (err) {
-    console.error('[Storage] Batch commit failed:', err)
+    log.error('Batch commit failed:', err)
     throw err
   }
 }
@@ -135,10 +138,7 @@ export async function getConversationCursor(
 
       if (latestMessage?.sequence) {
         sequence = latestMessage.sequence
-        console.log(
-          '[Storage] Migration: Derived sequence from messages:',
-          sequence,
-        )
+        log.debug('Migration: Derived sequence from messages:', sequence)
 
         // Backfill the cursor record for future lookups
         if (cursor && projectId) {
@@ -158,7 +158,7 @@ export async function getConversationCursor(
       sequence,
     }
   } catch (e) {
-    console.error('[ResequencerStorage] Failed to get cursor', e)
+    log.error('Failed to get cursor', e)
     return { streamId: null, sequence: 0 }
   }
 }
@@ -177,7 +177,7 @@ export async function resetConversationStorage(conversationId: string) {
       },
     )
   } catch (e) {
-    console.error('[ResequencerStorage] Failed to reset storage', e)
+    log.error('Failed to reset storage', e)
     throw e
   }
 }
