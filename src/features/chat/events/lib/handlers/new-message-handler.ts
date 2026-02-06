@@ -33,13 +33,8 @@ export function registerNewMessageHandler(context: ChatEventHandlerContext) {
       )
 
       // INJECTION POINT & ROBUST RESOLUTION:
-      // 0. Payload (Source of Truth - Critical for Stateless/Draft Conversations)
-      let projectId = payload.projectId
-
-      // 1. Try Context (Fast fallback)
-      if (!projectId) {
-        projectId = context.getProjectId()
-      }
+      // 1. Try Context (Fastest)
+      let projectId = context.getProjectId()
 
       // INVARIANT: Skip if this is our own message (already processed via ACK)
       // This prevents double-processing which causes race conditions in resequencer
