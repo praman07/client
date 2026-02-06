@@ -1,9 +1,9 @@
 import { useChannelSettings } from '../hooks'
 import { ChannelSettingsTabs } from './channel-settings-tabs'
+import type { ConversationFieldsFragment } from '@/gql/graphql'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/shared/ui'
 import { useConversation } from '@/entities/conversation'
 import { Skeleton } from '@/shared/ui/primitives/skeleton'
-import type { ConversationFieldsFragment } from '@/gql/graphql'
 
 export function ChannelSettingsModal() {
   const { isOpen, channelId, close } = useChannelSettings()

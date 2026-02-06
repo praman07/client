@@ -12,13 +12,13 @@
  * - Supports multiple domains (Chat, Pages, Whiteboard, etc.)
  */
 
+import { createLogger } from '@/shared/lib/logger'
+
 export interface SubscriptionFactory<T = any> {
   domain: string
   getId: (payload: T) => string
   createPayload: () => Promise<T>
 }
-
-import { createLogger } from '@/shared/lib/logger'
 
 const log = createLogger('ws:sub-mgr')
 

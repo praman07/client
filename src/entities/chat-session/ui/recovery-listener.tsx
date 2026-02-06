@@ -2,7 +2,7 @@ import { useEffect } from 'react'
 import { resequencer } from '../lib/chat-resequencer'
 import { useFetchDelta } from '../hooks/use-fetch-delta'
 import type { RecoveryRequestedEvent } from '@/shared/ws/event-bus'
-import type { NewMessagePayload } from '@/shared/ws/protocol'
+import type { NewMessagePayload } from '@/shared/contracts/chat/downstream'
 import { registerHandler } from '@/shared/ws/event-bus'
 import { createLogger } from '@/shared/lib/logger'
 

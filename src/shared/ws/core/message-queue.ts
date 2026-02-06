@@ -10,8 +10,9 @@
  * Max queue size: 50 messages
  */
 
-const MAX_QUEUE_SIZE = 50
 import { createLogger } from '@/shared/lib/logger'
+
+const MAX_QUEUE_SIZE = 50
 
 const log = createLogger('ws:queue')
 
@@ -32,7 +33,7 @@ type MessagePriority = 'HIGH' | 'LOW'
 export type PriorityRule = (eventType: string) => boolean
 
 // Registered priority rules from domains
-const priorityRules: PriorityRule[] = []
+const priorityRules: Array<PriorityRule> = []
 
 /**
  * Registers a priority rule for determining message queue priority.

@@ -1,4 +1,4 @@
-import type { Message, DeliveryStatus } from '@/shared/contracts/chat/message'
+import type { DeliveryStatus, Message } from '@/shared/contracts/chat/message'
 
 /**
  * The unified shape used by the MessageList Virtualizer.

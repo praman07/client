@@ -1,4 +1,6 @@
 import { useState } from 'react'
+import { Archive, ArchiveRestore, Trash2 } from 'lucide-react'
+import { useChannelSettings } from '../hooks'
 import type { ConversationFieldsFragment } from '@/gql/graphql'
 
 import { Button } from '@/shared/ui/primitives/button'
@@ -6,8 +8,6 @@ import { Separator } from '@/shared/ui/primitives/separator'
 import { ArchiveChannelDialog } from '@/features/chat/archive-channel'
 import { UnarchiveChannelDialog } from '@/features/chat/unarchive-channel'
 import { DeleteChannelDialog } from '@/features/chat/delete-channel'
-import { Archive, ArchiveRestore, Trash2 } from 'lucide-react'
-import { useChannelSettings } from '../hooks'
 
 interface SettingsTabProps {
   conversation: ConversationFieldsFragment

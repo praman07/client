@@ -34,5 +34,5 @@ export interface Message {
   parentMessageId?: string
   replyCount?: number
   deliveryStatus?: DeliveryStatus
-  reactions?: MessageReaction[]
+  reactions?: Array<MessageReaction>
 }

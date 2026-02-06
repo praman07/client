@@ -11,9 +11,10 @@
  * Backoff multiplier: 1.5x per attempt
  */
 
+import { createLogger } from '@/shared/lib/logger'
+
 const RECONNECT_INTERVAL_MS = 2000
 const MAX_RECONNECT_ATTEMPTS = 5
-import { createLogger } from '@/shared/lib/logger'
 
 const log = createLogger('ws:reconnect')
 

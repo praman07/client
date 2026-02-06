@@ -11,11 +11,10 @@
  * - Delegates to existing chat event handlers in features/chat-events
  */
 
-import { createDomainPlugin } from './domain-plugin'
 import type { ChatEventHandlerContext } from '@/features/chat/events/model'
+import { createDomainPlugin } from '@/shared/ws/domains'
 import { registerChatHandlers } from '@/features/chat/events'
 import { createLogger } from '@/shared/lib/logger'
-import { registerPriorityRule } from '@/shared/ws'
 
 const log = createLogger('ws:plugin')
 
@@ -45,6 +44,15 @@ const DOWNSTREAM_EVENTS = [
   'chat:user-typing',
 ]
 
+// Chat message priority rules
+const PRIORITY_RULES = [
+  (type: string) =>
+    type === 'chat:send-message' ||
+    type === 'chat:send-thread-message' ||
+    type === 'chat:edit-message' ||
+    type === 'chat:delete-message',
+]
+
 let cleanupHandlers: (() => void) | null = null
 
 /**
@@ -57,23 +65,12 @@ export function createChatPlugin(context: ChatEventHandlerContext) {
     domain: 'chat',
     upstreamEvents: UPSTREAM_EVENTS,
     downstreamEvents: DOWNSTREAM_EVENTS,
+    priorityRules: PRIORITY_RULES,
 
     registerHandlers() {
       log.debug('Registering chat event handlers')
-
-      // Register chat handlers (new-message, ack-message, sync-required)
       cleanupHandlers = registerChatHandlers(context)
-
-      // Register priority rules for chat message queue
-      registerPriorityRule(
-        (type) =>
-          type === 'chat:send-message' ||
-          type === 'chat:send-thread-message' ||
-          type === 'chat:edit-message' ||
-          type === 'chat:delete-message',
-      )
-
-      log.debug('Chat handlers and priority rules registered')
+      log.debug('Chat handlers registered')
     },
 
     cleanup() {
@@ -82,8 +79,21 @@ export function createChatPlugin(context: ChatEventHandlerContext) {
         cleanupHandlers()
         cleanupHandlers = null
       }
-      // Note: Priority rules are global and not cleaned up per-plugin
-      // They should be managed by the domain registry lifecycle
+    },
+
+    onConnect() {
+      log.debug('Chat plugin: WebSocket connected')
+      // Future: Could trigger re-subscription logic here
+    },
+
+    onDisconnect() {
+      log.debug('Chat plugin: WebSocket disconnected')
+      // Future: Could pause optimistic updates here
+    },
+
+    onReconnect() {
+      log.debug('Chat plugin: WebSocket reconnected')
+      // Future: Could trigger sync check here
     },
   })
 }

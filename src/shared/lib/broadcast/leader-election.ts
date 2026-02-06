@@ -3,9 +3,10 @@
  * Implements a simplified Bully algorithm with heartbeat watchdog.
  */
 
+import { createLogger } from '@/shared/lib/logger'
+
 const HEARTBEAT_INTERVAL_MS = 1000
 const LEADER_TIMEOUT_MS = 5000
-import { createLogger } from '@/shared/lib/logger'
 
 const log = createLogger('ws:leader')
 

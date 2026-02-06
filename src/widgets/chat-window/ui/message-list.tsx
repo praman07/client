@@ -4,6 +4,7 @@ import { useWindowController } from '../hooks/use-window-controller'
 import { MESSAGE_WINDOW_SIZE } from '../lib/constants'
 import { transformMessages } from '../lib/transform-messages'
 import { useChatScroll } from '../hooks/use-chat-scroll'
+import { useMessageAuthors } from '../hooks/use-message-authors'
 import {
   AdditionalMessage,
   DateSeparator,
@@ -12,7 +13,6 @@ import {
 } from './components'
 import { useHistoryLoader } from '@/entities/chat-session'
 import { useUser } from '@/shared/hooks'
-import { useMessageAuthors } from '../hooks/use-message-authors'
 import { createLogger } from '@/shared/lib/logger'
 
 const log = createLogger('chat:messageList')

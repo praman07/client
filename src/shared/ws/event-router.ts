@@ -5,30 +5,33 @@
  * - contracts/* (domain logic)
  * - app/*
  *
- * Responsibility: Single ingress fan-out and replication (Leader -> Follower).
- * Domain agnostic.
+ * Responsibility: Single ingress fan-out and replication (Leader → Follower).
+ * 100% Domain agnostic - works with chat, whiteboard, presence, etc.
  */
 import { dispatchEvent } from './event-bus'
-import type {
-  ServerEventName,
-  ServerEventPayloads,
-  ServerMessageUnion,
-} from './protocol'
+import type { ServerMessage } from './protocol/core-protocol'
 import { leaderElection } from '@/shared/lib/broadcast/leader-election'
 import { createLogger } from '@/shared/lib/logger'
 
 const log = createLogger('ws:router')
 
+// Generic types - no domain coupling
+type EventType = string
+
 // Internal type for erased handlers
 type GenericEventHandler = (payload: never) => void
 
 // Module-level state
-const handlers = new Map<ServerEventName, Set<GenericEventHandler>>()
+const handlers = new Map<EventType, Set<GenericEventHandler>>()
 
 export const eventRouter = {
-  on<T extends ServerEventName>(
-    type: T,
-    handler: (payload: ServerEventPayloads[T]) => void,
+  /**
+   * Register a handler for a specific event type.
+   * Type-safe when called with specific domain event types.
+   */
+  on<TPayload = unknown>(
+    type: EventType,
+    handler: (payload: TPayload) => void,
   ) {
     if (!handlers.has(type)) {
       handlers.set(type, new Set())
@@ -44,8 +47,11 @@ export const eventRouter = {
     }
   },
 
-  // Main Dispatch Entry Point
-  dispatch(envelope: ServerMessageUnion, fromRelay = false) {
+  /**
+   * Main Dispatch Entry Point.
+   * Accepts any ServerMessage envelope with {type, data} structure.
+   */
+  dispatch(envelope: ServerMessage, fromRelay = false) {
     // 1. Broadcast (Leader Only)
     if (leaderElection.isLeader() && !fromRelay) {
       leaderElection.relay(envelope)
@@ -72,7 +78,7 @@ export const eventRouter = {
       })
     }
 
-    // 3. **NEW**: Bridge to EventBus for backward compatibility
+    // 3. Bridge to EventBus for backward compatibility
     // This allows handlers using registerHandler() to receive WebSocket events
     try {
       const appEvent = {
@@ -86,7 +92,7 @@ export const eventRouter = {
   },
 
   // Debug helper
-  getListenerCount(type: ServerEventName) {
+  getListenerCount(type: EventType) {
     return handlers.get(type)?.size || 0
   },
 }
@@ -97,7 +103,7 @@ let relayListenerRegistered = false
 if (!relayListenerRegistered) {
   leaderElection.onRelay((payload) => {
     // Prevent cycles by flagging as fromRelay
-    eventRouter.dispatch(payload as ServerMessageUnion, true)
+    eventRouter.dispatch(payload as ServerMessage, true)
   })
   relayListenerRegistered = true
 }

@@ -39,7 +39,7 @@ export function useUserConversations(
 
   // Generate query key based on type filter AND includeArchived flag
   // This ensures active and archived queries don't collide
-  let queryKey: readonly unknown[]
+  let queryKey: ReadonlyArray<unknown>
 
   if (type) {
     queryKey = includeArchived

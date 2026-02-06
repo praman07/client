@@ -10,7 +10,8 @@
  * const log = createLogger('chat:scroll')
  * log.debug('Prepend adjustment:', { heightDiff })
  */
-import { ALL, GROUPS, FILES, type GroupFlag } from './debug-flags'
+import { ALL, FILES, GROUPS } from './debug-flags'
+import type { GroupFlag } from './debug-flags'
 
 type FileFlag = string
 
@@ -50,19 +51,19 @@ interface Logger {
   /**
    * Debug level - only in dev + flag enabled
    */
-  debug: (...args: unknown[]) => void
+  debug: (...args: Array<unknown>) => void
   /**
    * Info level - only in dev + flag enabled
    */
-  info: (...args: unknown[]) => void
+  info: (...args: Array<unknown>) => void
   /**
    * Warn level - always shown (production + dev)
    */
-  warn: (...args: unknown[]) => void
+  warn: (...args: Array<unknown>) => void
   /**
    * Error level - always shown (production + dev)
    */
-  error: (...args: unknown[]) => void
+  error: (...args: Array<unknown>) => void
 }
 
 /**

@@ -1,4 +1,4 @@
-import { useMemo, useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { useMemberCache } from '../lib/member-cache-context'
 import type { MessageRowData } from '../model/message-list.types'
@@ -17,7 +17,7 @@ const log = createLogger('chat:authors')
  *
  * @param messages - Array of messages to extract author IDs from
  */
-export function useMessageAuthors(messages: MessageRowData[]) {
+export function useMessageAuthors(messages: Array<MessageRowData>) {
   const { getMemberInfo, addUsers } = useMemberCache()
   const { getToken } = useAuth()
 

@@ -1,6 +1,5 @@
 import { useEffect, useRef } from 'react'
 import { registerChatHandlers } from '@/features/chat/events'
-import { initializeDomainBridge } from '@/app/bootstrap/event-bridge'
 import { store } from '@/app/store/config'
 import { selectCurrentProject } from '@/entities/project/model/selectors'
 import { startStorageGarbageCollector } from '@/shared/lib/storage-gc'
@@ -13,8 +12,7 @@ export function EventHandlerRegistry() {
   const cleanupRef = useRef<{
     handlers: (() => void) | null
     gc: (() => void) | null
-    bridge: (() => void) | null
-  }>({ handlers: null, gc: null, bridge: null })
+  }>({ handlers: null, gc: null })
 
   useEffect(() => {
     if (!initialized.current) {
@@ -32,8 +30,7 @@ export function EventHandlerRegistry() {
       // Start GC
       cleanupRef.current.gc = startStorageGarbageCollector()
 
-      // Initialize Bridge
-      cleanupRef.current.bridge = initializeDomainBridge()
+      // Note: event-bridge.ts removed - event-router already bridges to event-bus
       initialized.current = true
     }
 
@@ -42,8 +39,7 @@ export function EventHandlerRegistry() {
       log.debug('Teardown')
       cleanupRef.current.handlers?.()
       cleanupRef.current.gc?.()
-      cleanupRef.current.bridge?.()
-      cleanupRef.current = { handlers: null, gc: null, bridge: null }
+      cleanupRef.current = { handlers: null, gc: null }
       initialized.current = false
     }
   }, [])

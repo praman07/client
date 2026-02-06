@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
+import type { ConversationType } from '..'
 import type { PayloadAction } from '@reduxjs/toolkit'
 import type { Conversation, ConversationDetail } from './types'
-import { ConversationType } from '..'
 
 /**
  * Conversation State

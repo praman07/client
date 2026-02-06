@@ -1,11 +1,11 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useNavigate, useParams } from '@tanstack/react-router'
+import { toast } from 'sonner'
 import { DELETE_CHANNEL_MUTATION } from '../api'
+import { mapDeleteChannelError } from '../lib/error-mapping'
 import { GqlClient } from '@/shared/api'
 import { useAuth } from '@/shared/hooks'
 import { conversationKeys } from '@/entities/conversation'
-import { toast } from 'sonner'
-import { mapDeleteChannelError } from '../lib/error-mapping'
 
 interface DeleteChannelInput {
   workspaceId: string

@@ -13,51 +13,56 @@
  */
 
 import { useEffect } from 'react'
-import type { DomainPlugin } from './domain-plugin'
-import { registerDomain } from '@/shared/ws/events/domain-registry'
-import { eventRouter } from '@/shared/ws'
+import { createChatPlugin } from './chat-plugin'
+import { registerPlugin } from '@/shared/ws/domains'
 import { createLogger } from '@/shared/lib/logger'
 
-const log = createLogger('ws:registry')
-
-interface DomainRegistryProps {
-  plugins: Array<DomainPlugin>
-}
+const log = createLogger('ws:domain-registry')
 
 /**
- * DomainRegistry component coordinates plugin registration.
- * Place this component in the app provider tree after auth/workspace providers.
+ * DOMAIN REGISTRY
+ *
+ * Responsibility:
+ * - Register all domain plugins at app startup
+ * - Initialize domain-specific event handlers
+ *
+ * Architecture:
+ * - Component mounts once in app root
+ * - Registers plugins via centralized plugin registry
+ * - Plugins handle their own cleanup
  */
-export function DomainRegistry({ plugins }: DomainRegistryProps) {
+
+interface DomainRegistryProps {
+  projectId: string | null
+}
+
+export function DomainRegistry({ projectId }: DomainRegistryProps) {
   useEffect(() => {
-    log.debug(`Initializing ${plugins.length} domain(s)`)
+    log.debug('Initializing domain plugins')
 
-    // Register each plugin
-    plugins.forEach((plugin) => {
-      // Register domain with event registry
-      registerDomain({
-        domain: plugin.domain,
-        upstreamEvents: plugin.upstreamEvents,
-        downstreamEvents: plugin.downstreamEvents,
-      })
-
-      // Attach event handlers
-      plugin.registerHandlers(eventRouter)
-
-      log.debug(
-        `Registered ${plugin.domain} (${plugin.upstreamEvents.length} upstream, ${plugin.downstreamEvents.length} downstream)`,
-      )
+    // Chat Plugin
+    // Provides: projectId for message persistence
+    const chatPlugin = createChatPlugin({
+      getProjectId: () => projectId ?? undefined,
     })
+
+    registerPlugin(chatPlugin)
+
+    // Future plugins:
+    // const whiteboardPlugin = createWhiteboardPlugin({ ... })
+    // registerPlugin(whiteboardPlugin)
+    //
+    // const pagesPlugin = createPagesPlugin({ ... })
+    // registerPlugin(pagesPlugin)
+
+    log.debug('Domain plugins registered')
 
     // Cleanup on unmount
     return () => {
-      log.debug('Cleaning up domains')
-      plugins.forEach((plugin) => {
-        plugin.cleanup?.()
-      })
+      log.debug('Cleaning up domain plugins')
+      // Plugin registry handles cleanup
     }
-  }, [plugins])
+  }, [projectId])
 
-  // This is a provider component, renders nothing
   return null
 }

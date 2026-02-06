@@ -1,16 +1,16 @@
+import { useChannelSettings } from '../hooks'
+import { ChannelSettingsTab } from '../model/types'
+import { AboutTab } from './about-tab'
+import { MembersTab } from './members-tab'
+import { SettingsTab } from './settings-tab'
+import type { ConversationFieldsFragment } from '@/gql/graphql'
+import { ScrollArea } from '@/shared/ui/primitives/scroll-area'
 import {
   Tabs,
   TabsContent,
   TabsList,
   TabsTrigger,
 } from '@/shared/ui/primitives/tabs'
-import { ScrollArea } from '@/shared/ui/primitives/scroll-area'
-import { AboutTab } from './about-tab'
-import { MembersTab } from './members-tab'
-import { SettingsTab } from './settings-tab'
-import { useChannelSettings } from '../hooks'
-import { ChannelSettingsTab } from '../model/types'
-import type { ConversationFieldsFragment } from '@/gql/graphql'
 
 interface ChannelSettingsTabsProps {
   conversation: ConversationFieldsFragment

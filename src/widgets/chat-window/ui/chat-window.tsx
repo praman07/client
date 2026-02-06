@@ -1,3 +1,4 @@
+import { MemberCacheProvider } from '../lib/member-cache-context'
 import { ChatHeader } from './chat-header'
 import { MessageInput } from './message-input'
 import { ChatContainer } from './components/chat-layout'
@@ -5,7 +6,6 @@ import { MessageList } from '@/widgets/chat-window/ui/message-list'
 import { useConversationSubscription } from '@/features/chat/subscribe-conversation'
 import { useResequencerStatus } from '@/entities/chat-session'
 import { SyncStatusIndicator } from '@/entities/chat-session/ui/SyncStatusIndicator'
-import { MemberCacheProvider } from '../lib/member-cache-context'
 import { useConversation } from '@/entities/conversation'
 import { createLogger } from '@/shared/lib/logger'
 

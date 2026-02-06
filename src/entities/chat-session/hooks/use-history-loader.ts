@@ -1,12 +1,12 @@
 import { useCallback, useRef, useState } from 'react'
 import { GET_HISTORY } from '../api'
-import type { NewMessagePayload } from '@/shared/ws/protocol'
+import { commitMessageBatch } from '../lib/resequencer/storage'
+import type { NewMessagePayload } from '@/shared/contracts/chat/downstream'
 import { GqlClient } from '@/shared/api'
 
 import { useAuth } from '@/shared/hooks'
 import { MessageRecoveryFieldsFragmentDoc } from '@/gql/graphql'
 import { useFragment } from '@/gql/fragment-masking'
-import { commitMessageBatch } from '../lib/resequencer/storage'
 import { createLogger } from '@/shared/lib/logger'
 
 const log = createLogger('chat:history')

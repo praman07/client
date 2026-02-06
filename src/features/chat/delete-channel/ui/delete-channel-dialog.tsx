@@ -1,4 +1,6 @@
 import { useState } from 'react'
+import { Loader2 } from 'lucide-react'
+import { useDeleteChannel } from '../hooks'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -11,8 +13,6 @@ import {
 } from '@/shared/ui/primitives/alert-dialog'
 import { Checkbox } from '@/shared/ui/primitives/checkbox'
 import { Label } from '@/shared/ui/primitives/label'
-import { useDeleteChannel } from '../hooks'
-import { Loader2 } from 'lucide-react'
 
 interface DeleteChannelDialogProps {
   isOpen: boolean

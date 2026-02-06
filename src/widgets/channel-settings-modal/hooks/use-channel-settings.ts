@@ -1,7 +1,7 @@
-import { useAppSelector, useAppDispatch } from '@/shared/hooks'
 import { channelSettingsActions } from '../model/slice'
 import type { RootState } from '@/app/store'
 import type { ChannelSettingsTab } from '../model/types'
+import { useAppDispatch, useAppSelector } from '@/shared/hooks'
 
 export function useChannelSettings() {
   const dispatch = useAppDispatch()

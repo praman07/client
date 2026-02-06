@@ -1,17 +1,17 @@
 import { useForm } from '@tanstack/react-form'
-import { Button } from '@/shared/ui/primitives/button'
-import { Input } from '@/shared/ui/primitives/input'
-import { useRenameChannel } from '../hooks'
-import { renameChannelSchema, sanitizeChannelName } from '../model/schema'
-import { mapRenameChannelError } from '../lib/error-mapping'
 import { toast } from 'sonner'
 import { HugeiconsIcon } from '@hugeicons/react'
 import { Cancel01Icon } from '@hugeicons/core-free-icons'
+import { useRenameChannel } from '../hooks'
+import { renameChannelSchema, sanitizeChannelName } from '../model/schema'
+import { mapRenameChannelError } from '../lib/error-mapping'
+import { Input } from '@/shared/ui/primitives/input'
+import { Button } from '@/shared/ui/primitives/button'
 
 interface RenameChannelFormProps {
   channelId: string
   currentName: string
-  existingNames: string[]
+  existingNames: Array<string>
   onSuccess?: () => void
   onCancel?: () => void
 }

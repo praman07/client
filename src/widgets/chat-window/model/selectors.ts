@@ -71,10 +71,7 @@ export function mergeMessages(
         createdAt: new Date(p.createdAt).toISOString(), // Convert timestamp to ISO
         updatedAt: new Date(p.createdAt).toISOString(),
         projectId: p.projectId,
-        deliveryStatus: (p.status || 'pending') as
-          | 'pending'
-          | 'sending'
-          | 'failed',
+        deliveryStatus: p.status || 'pending',
         isOptimistic: true,
         virtualId: p.dedupeId,
         reactions: [],

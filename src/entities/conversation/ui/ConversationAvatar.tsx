@@ -1,6 +1,6 @@
 import { Hash, Lock, MessageCircle, MessagesSquare, Users } from 'lucide-react'
+import type { ConversationType } from '..'
 import { cn } from '@/shared/lib/utils'
-import { ConversationType } from '..'
 
 interface ConversationAvatarProps {
   type: ConversationType

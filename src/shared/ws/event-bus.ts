@@ -16,6 +16,8 @@
  * Base event structure.
  * All events must have a type string and optional payload.
  */
+import { createLogger } from '@/shared/lib/logger'
+
 export interface BaseEvent {
   type: string
   payload?: unknown
@@ -45,7 +47,6 @@ export type AppEvent = BaseEvent | RecoveryRequestedEvent
 type EventHandler<T> = (event: T) => void
 
 const handlers = new Map<string, Set<EventHandler<any>>>()
-import { createLogger } from '@/shared/lib/logger'
 
 const log = createLogger('ws:bus')
 

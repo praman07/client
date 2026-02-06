@@ -1,4 +1,4 @@
-import type { NewMessagePayload } from '@/shared/ws/protocol'
+import type { NewMessagePayload } from '@/shared/contracts/chat/downstream'
 import type { StreamSessionState } from '@/entities/stream-session'
 import type { ConversationState as DBConversationState } from '@/shared/lib/db/schema'
 import { db } from '@/shared/lib/db'

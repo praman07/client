@@ -4,5 +4,7 @@
 
 export { DomainRegistry } from './registry'
 export { createChatPlugin } from './chat-plugin'
-export type { DomainPlugin } from './domain-plugin'
-export { createDomainPlugin } from './domain-plugin'
+
+// Re-export from shared for convenience
+export type { DomainPlugin } from '@/shared/ws/domains'
+export { createDomainPlugin } from '@/shared/ws/domains'

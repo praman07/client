@@ -1,7 +1,8 @@
 import { createFileRoute } from '@tanstack/react-router'
+import type { Conversation } from '@/entities/conversation'
 import { ChatWindow } from '@/widgets/chat-window'
 import { RecoveryListener } from '@/entities/chat-session/ui'
-import { useConversation, type Conversation } from '@/entities/conversation'
+import { useConversation } from '@/entities/conversation'
 import { ChannelSettingsModal } from '@/widgets/channel-settings-modal'
 
 export const Route = createFileRoute(

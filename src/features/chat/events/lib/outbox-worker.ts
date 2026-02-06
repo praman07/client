@@ -60,7 +60,7 @@ async function retryItem(item: any) {
 
   // Dynamic import to avoid circular dependencies
   const { wsManager } = await import('@/shared/ws')
-  const { ClientEventName } = await import('@/shared/ws/protocol')
+  const { ChatUpstreamEvent } = await import('@/shared/contracts/chat/upstream')
 
   log.debug(`Retrying: ${item.dedupeId} (Attempt ${currentRetries + 1})`)
 
@@ -70,7 +70,7 @@ async function retryItem(item: any) {
       ? payloadContent
       : payloadContent?.text || JSON.stringify(payloadContent)
 
-  wsManager.emit(ClientEventName.SendMessage, {
+  wsManager.emit(ChatUpstreamEvent.SendMessage, {
     conversationId: item.conversationId,
     content: safeContent,
     dedupeId: item.dedupeId,

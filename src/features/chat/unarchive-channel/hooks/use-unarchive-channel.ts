@@ -1,10 +1,10 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { toast } from 'sonner'
 import { UNARCHIVE_CHANNEL_MUTATION } from '../api'
+import { mapUnarchiveChannelError } from '../lib/error-mapping'
 import { GqlClient } from '@/shared/api'
 import { useAuth } from '@/shared/hooks'
 import { conversationKeys } from '@/entities/conversation'
-import { toast } from 'sonner'
-import { mapUnarchiveChannelError } from '../lib/error-mapping'
 
 interface UnarchiveChannelInput {
   workspaceId: string

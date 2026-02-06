@@ -1,12 +1,12 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useNavigate, useParams } from '@tanstack/react-router'
+import { toast } from 'sonner'
 import { ARCHIVE_CHANNEL_MUTATION } from '../api'
+import { mapArchiveChannelError } from '../lib/error-mapping'
 import type { ArchiveChannelInput } from '@/gql/graphql'
 import { GqlClient } from '@/shared/api'
 import { useAuth } from '@/shared/hooks'
 import { conversationKeys } from '@/entities/conversation'
-import { toast } from 'sonner'
-import { mapArchiveChannelError } from '../lib/error-mapping'
 
 export function useArchiveChannel() {
   const { getToken } = useAuth()

@@ -1,11 +1,11 @@
 import {
   createContext,
+  useCallback,
   useContext,
   useMemo,
   useState,
-  useCallback,
-  type ReactNode,
 } from 'react'
+import type { ReactNode } from 'react'
 import { createLogger } from '@/shared/lib/logger'
 
 const log = createLogger('chat:memberCache')

@@ -1,3 +1,5 @@
+import { useMemberCache } from '../../lib/member-cache-context'
+import { getInitials } from '../../lib/get-initials'
 import {
   MessageEvent,
   MessageEventAddon,
@@ -13,8 +15,6 @@ import {
   AvatarImage,
 } from '@/shared/ui/primitives/avatar'
 import { cn } from '@/shared/lib/utils'
-import { useMemberCache } from '../../lib/member-cache-context'
-import { getInitials } from '../../lib/get-initials'
 import { createLogger } from '@/shared/lib/logger'
 
 const log = createLogger('chat:message')

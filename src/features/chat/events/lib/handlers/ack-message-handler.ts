@@ -1,5 +1,7 @@
-import type { AckMessagePayload } from '@/shared/ws/protocol'
-import type { AckMessageEvent } from '@/shared/contracts/chat/downstream'
+import type {
+  AckMessageEvent,
+  AckMessagePayload,
+} from '@/shared/contracts/chat/downstream'
 import type { ChatEventHandlerContext } from '../../model'
 import { registerHandler } from '@/shared/ws/event-bus'
 import { resequencer } from '@/entities/chat-session'
@@ -19,7 +21,7 @@ const log = createLogger('chat:ack')
  */
 export function registerAckMessageHandler(context: ChatEventHandlerContext) {
   return registerHandler<AckMessageEvent>('chat:ack-message', async (event) => {
-    const payload = event.payload as AckMessagePayload
+    const payload = event.payload
 
     // Validate StreamID and sequence presence for Fast Path
     if (!payload.streamId || !payload.sequence || payload.status !== 'sent') {

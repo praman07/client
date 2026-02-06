@@ -2,7 +2,7 @@ import type { OutboxItem } from '@/shared/lib/db/schema'
 import type { SendMessageCommand } from '@/shared/contracts/chat/upstream'
 import { db } from '@/shared/lib/db'
 import { wsManager } from '@/shared/ws'
-import { ClientEventName } from '@/shared/ws/protocol'
+import { ChatUpstreamEvent } from '@/shared/contracts/chat/upstream'
 
 export async function sendMessage(
   content: string,
@@ -51,8 +51,8 @@ export async function sendMessage(
   }
 
   // WS Manager emits the event + payload.
-  // We explicitly map ClientEventName.SendMessage which is now 'chat:send-message'
-  wsManager.emit(ClientEventName.SendMessage, command.payload)
+  // We explicitly use ChatUpstreamEvent.SendMessage which is 'chat:send-message'
+  wsManager.emit(ChatUpstreamEvent.SendMessage, command.payload)
 
   // 4. Note: We do NOT define a timeout here.
   // The 'receive-message' pipeline will handle the ACK (which comes as a 'new-message' event).

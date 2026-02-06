@@ -12,14 +12,17 @@
 export { wsManager, createWSManager } from './manager'
 export type { WSManager } from './manager'
 
-// Protocol types
-export * from './protocol'
+// Protocol types (core, domain-agnostic)
+export * from './protocol/core-protocol'
 
 // Event infrastructure
 export { eventRouter } from './event-router'
 export { registerDomain } from './events/domain-registry'
 export { registerPriorityRule, clearPriorityRules } from './core/message-queue'
 export type { PriorityRule } from './core/message-queue'
+
+// Domain plugin system
+export * from './domains'
 
 // Core types
 export type { ConnectionStatus } from './core/connection-manager'

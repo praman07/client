@@ -1,3 +1,5 @@
+import { Loader2 } from 'lucide-react'
+import { useArchiveChannel } from '../hooks'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -8,8 +10,6 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/shared/ui/primitives/alert-dialog'
-import { useArchiveChannel } from '../hooks'
-import { Loader2 } from 'lucide-react'
 
 interface ArchiveChannelDialogProps {
   isOpen: boolean

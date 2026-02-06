@@ -1,5 +1,7 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { ChannelSettingsState, ChannelSettingsTab } from './types'
+import { createSlice } from '@reduxjs/toolkit'
+import { ChannelSettingsTab } from './types'
+import type { PayloadAction } from '@reduxjs/toolkit'
+import type { ChannelSettingsState } from './types'
 
 const initialState: ChannelSettingsState = {
   isOpen: false,

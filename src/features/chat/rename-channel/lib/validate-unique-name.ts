@@ -4,8 +4,8 @@ import type { Conversation } from '@/entities/conversation'
  * Extract channel names from conversation list for duplicate validation
  */
 export function extractChannelNames(
-  conversations: Conversation[] | undefined,
-): string[] {
+  conversations: Array<Conversation> | undefined,
+): Array<string> {
   if (!conversations) return []
 
   return conversations

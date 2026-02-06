@@ -9,7 +9,7 @@ import {
   getConversationCursor,
   resetConversationStorage,
 } from './resequencer/storage'
-import type { NewMessagePayload } from '@/shared/ws/protocol'
+import type { NewMessagePayload } from '@/shared/contracts/chat/downstream'
 import type {
   BasePayload,
   CursorState,

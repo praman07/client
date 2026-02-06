@@ -1,4 +1,8 @@
 import { useState } from 'react'
+import { HugeiconsIcon } from '@hugeicons/react'
+import { Edit02Icon } from '@hugeicons/core-free-icons'
+import { useChannelSettings } from '../hooks'
+import type { Conversation, ConversationFieldsFragment } from '@/gql/graphql'
 import { Button } from '@/shared/ui/primitives/button'
 import { Label } from '@/shared/ui/primitives/label'
 import { Separator } from '@/shared/ui/primitives/separator'
@@ -6,11 +10,7 @@ import {
   RenameChannelForm,
   extractChannelNames,
 } from '@/features/chat/rename-channel'
-import { useUserConversations, ConversationType } from '@/entities/conversation'
-import { useChannelSettings } from '../hooks'
-import type { Conversation, ConversationFieldsFragment } from '@/gql/graphql'
-import { HugeiconsIcon } from '@hugeicons/react'
-import { Edit02Icon } from '@hugeicons/core-free-icons'
+import { ConversationType, useUserConversations } from '@/entities/conversation'
 
 interface AboutTabProps {
   conversation: ConversationFieldsFragment
@@ -36,7 +36,7 @@ export function AboutTab({ conversation }: AboutTabProps) {
   )
 
   const existingChannelNames = extractChannelNames(
-    channelsData?.getUserConversations?.edges as Conversation[],
+    channelsData?.getUserConversations?.edges as Array<Conversation>,
   )
 
   const handleSuccess = () => {
