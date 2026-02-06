@@ -18,8 +18,8 @@ import { registerChatHandlers } from '@/features/chat/events'
 // Chat upstream events (client → server)
 const UPSTREAM_EVENTS = [
   'chat:ping',
-  'chat:subscribe-channel',
-  'chat:unsubscribe-channel',
+  'chat:subscribe-conversation',
+  'chat:unsubscribe-conversation',
   'chat:send-message',
   'chat:send-thread-message',
   'chat:edit-message',

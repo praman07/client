@@ -1,6 +1,6 @@
 import Dexie from 'dexie'
 import type { EntityTable } from 'dexie'
-import type { Message } from '@/entities/message/model/types'
+import type { Message } from '@/shared/contracts/chat/message'
 
 // -- Types --
 

@@ -2,11 +2,11 @@ import { useCallback, useRef, useState } from 'react'
 import { GET_HISTORY } from '../api'
 import type { NewMessagePayload } from '@/shared/ws/protocol'
 import { GqlClient } from '@/shared/api'
-import { resequencer } from '@/entities/chat-session'
 
 import { useAuth } from '@/shared/hooks'
 import { MessageRecoveryFieldsFragmentDoc } from '@/gql/graphql'
 import { useFragment } from '@/gql/fragment-masking'
+import { commitMessageBatch } from '../lib/resequencer/storage'
 
 /**
  * Controller Hook for fetching historical messages.
@@ -67,20 +67,20 @@ export function useHistoryLoader() {
                 dedupeId: msg.streamId, // In history, streamId is the unique proof
                 conversationId: msg.conversationId,
                 authorId: msg.authorUserId,
+                // Extract text from content object or use raw string
                 content:
                   typeof msg.content === 'string'
                     ? msg.content
-                    : JSON.stringify(msg.content), // Ensure string protocol
+                    : (msg.content?.text ?? JSON.stringify(msg.content)),
                 createdAt: msg.createdAt,
                 sequence: msg.sequence,
                 threadId: undefined, // TODO: Add thread support if needed
               }
             })
-          // The original code had an extra closing parenthesis for the map function.
-          // The provided snippet had a syntax error with an extra `})` at the end of the map.
-          // Corrected to ensure valid syntax.
-
-          await resequencer.processRecoveryBatch(payloadBatch, projectId)
+          // CRITICAL: Use batch commit for single DB transaction
+          // This triggers only ONE LiveQuery update, enabling scroll anchor preservation
+          // Individual commits would cause N re-renders with delta=1 each
+          await commitMessageBatch(payloadBatch, projectId)
           return historyData.messages.length
         }
         return 0

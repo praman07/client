@@ -2,7 +2,7 @@ import { createSlice } from '@reduxjs/toolkit'
 // Removed resequencer import - logic moves to Feature pipeline
 import type { ChannelSessionState, ChatSessionState } from './types'
 import type { PayloadAction } from '@reduxjs/toolkit'
-import type { Message } from '@/entities/message/model/types'
+import type { Message } from '@/shared/contracts/chat/message'
 
 const initialState: ChatSessionState = {
   sessions: {},

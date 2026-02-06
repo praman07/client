@@ -2,7 +2,7 @@ import { ChatHeader } from './chat-header'
 import { MessageInput } from './message-input'
 import { ChatContainer } from './components/chat-layout'
 import { MessageList } from '@/widgets/chat-window/ui/message-list'
-import { useChannelSubscription } from '@/features/chat/subscribe-channel'
+import { useConversationSubscription } from '@/features/chat/subscribe-conversation'
 import { useResequencerStatus } from '@/entities/chat-session'
 import { SyncStatusIndicator } from '@/entities/chat-session/ui/SyncStatusIndicator'
 import { MemberCacheProvider } from '../lib/member-cache-context'
@@ -49,13 +49,13 @@ export function ChatWindow({
     : undefined
 
   // DEBUG: Log member data
-  console.log('[ChatWindow] Conversation data:', conversationData)
-  console.log('[ChatWindow] Members count:', members?.length)
-  console.log('[ChatWindow] Members:', members)
+  // console.log('[ChatWindow] Conversation data:', conversationData)
+  // console.log('[ChatWindow] Members count:', members?.length)
+  // console.log('[ChatWindow] Members:', members)
 
 
   // 1. Activate Subscription (Data Plane)
-  useChannelSubscription(channelId || '', projectId)
+  useConversationSubscription(channelId || '', projectId, 'CHANNEL')
 
   // 2. Monitoring (Control Plane)
   const status = useResequencerStatus(channelId || '')

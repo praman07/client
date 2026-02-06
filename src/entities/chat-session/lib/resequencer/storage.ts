@@ -46,6 +46,53 @@ export async function commitMessage(
 }
 
 /**
+ * BATCH COMMIT: Commits multiple messages in a single transaction.
+ * This is critical for history loading - triggers only ONE LiveQuery update
+ * instead of N updates, enabling proper scroll anchor preservation.
+ */
+export async function commitMessageBatch(
+  payloads: Array<NewMessagePayload>,
+  projectId: string,
+) {
+  if (payloads.length === 0) return
+
+  // Sort by sequence to ensure correct order
+  const sorted = [...payloads].sort(
+    (a, b) => (a.sequence ?? 0) - (b.sequence ?? 0),
+  )
+
+  try {
+    await db.transaction(
+      'rw',
+      [db.messages, db.conversation_state],
+      async () => {
+        // Batch insert all messages
+        const messagesToInsert = sorted.map((payload) => ({
+          ...payload,
+          projectId,
+          id: payload.messageId,
+          deliveryStatus: 'sent' as const,
+          replyCount: 0,
+          reactions: [],
+          attachments: [],
+        }))
+
+        await db.messages.bulkPut(messagesToInsert as any)
+
+        // Update conversation state with the LAST (highest sequence) message
+        // Note: For history, we DON'T update lastSequence if older than current
+        // This preserves the "newest message seen" cursor for realtime
+      },
+    )
+
+    console.log(`[Storage] Batch committed ${sorted.length} messages`)
+  } catch (err) {
+    console.error('[Storage] Batch commit failed:', err)
+    throw err
+  }
+}
+
+/**
  * Retrieves the last known cursor (Stream ID & Sequence) from DB.
  * Uses compound key [projectId+conversationId] for efficient lookup.
  *

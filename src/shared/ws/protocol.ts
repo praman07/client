@@ -47,8 +47,8 @@ export enum ClientEventName {
   MarkMessageRead = 'chat:mark-read',
   MarkMessageDelivered = 'chat:mark-delivered',
   MarkChannelRead = 'chat:mark-channel-read',
-  SubscribeChannel = 'chat:subscribe-channel',
-  UnsubscribeChannel = 'chat:unsubscribe-channel',
+  SubscribeConversation = 'chat:subscribe-conversation',
+  UnsubscribeConversation = 'chat:unsubscribe-conversation',
   SubscribeThread = 'chat:subscribe-thread',
   UnsubscribeThread = 'chat:unsubscribe-thread',
   UserTyping = 'chat:user-typing',
@@ -131,13 +131,14 @@ export interface MarkChannelReadPayload {
   watermarkId: string
 }
 
-export interface SubscribeChannelPayload {
+export interface SubscribeConversationPayload {
   conversationId: string
+  conversationType: 'CHANNEL' | 'DM' | 'GROUP_DM' | 'THREAD'
   lastSequence?: number
   epoch?: string // Stream Continuity ID (streamId)
 }
 
-export interface UnsubscribeChannelPayload {
+export interface UnsubscribeConversationPayload {
   conversationId: string
 }
 
@@ -278,8 +279,8 @@ export type ClientEventPayloads = {
   [ClientEventName.MarkMessageRead]: MarkMessageReadPayload
   [ClientEventName.MarkMessageDelivered]: MarkMessageDeliveredPayload
   [ClientEventName.MarkChannelRead]: MarkChannelReadPayload
-  [ClientEventName.SubscribeChannel]: SubscribeChannelPayload
-  [ClientEventName.UnsubscribeChannel]: UnsubscribeChannelPayload
+  [ClientEventName.SubscribeConversation]: SubscribeConversationPayload
+  [ClientEventName.UnsubscribeConversation]: UnsubscribeConversationPayload
   [ClientEventName.SubscribeThread]: SubscribeThreadPayload
   [ClientEventName.UnsubscribeThread]: UnsubscribeThreadPayload
   [ClientEventName.UserTyping]: UserTypingPayload

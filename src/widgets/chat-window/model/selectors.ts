@@ -66,11 +66,15 @@ export function mergeMessages(
         streamId: `temp-${p.dedupeId}`, // Placeholder streamId
         sequence: Infinity, // Optimistic items always at end
         content: p.payload?.content || '', // Extract content from payload
+        type: 'text', // Default type for user messages
         authorId: p.authorId,
         createdAt: new Date(p.createdAt).toISOString(), // Convert timestamp to ISO
         updatedAt: new Date(p.createdAt).toISOString(),
         projectId: p.projectId,
-        deliveryStatus: (p.status || 'pending') as any,
+        deliveryStatus: (p.status || 'pending') as
+          | 'pending'
+          | 'sending'
+          | 'failed',
         isOptimistic: true,
         virtualId: p.dedupeId,
         reactions: [],

@@ -49,6 +49,18 @@ export function useChatScroll({
   // Height Tracking: To calculate delta for manual adjustment
   const prevScrollHeightRef = useRef(0)
 
+  // PREPEND SIGNAL: Decoupled from mode state for correct timing
+  // Stays true from trigger until layout adjustment is complete
+  const isPrependingRef = useRef(false)
+  const prependScrollHeightRef = useRef(0)
+
+  // EDGE CASE: Fetch cooldown to prevent rapid-fire requests
+  const lastFetchTimeRef = useRef(0)
+  const FETCH_COOLDOWN_MS = 500
+
+  // EDGE CASE: Track if user scrolled during load (if so, don't adjust)
+  const userScrolledDuringLoadRef = useRef(false)
+
   // 1. Scroll Sensor (The Input)
   const onScroll = useCallback(
     (e: React.UIEvent<HTMLDivElement>) => {
@@ -91,14 +103,34 @@ export function useChatScroll({
         } else if (
           scrollTop <= TOP_THRESHOLD &&
           !isFetchingRef.current &&
+          !isPrependingRef.current &&
           count > 0 &&
-          onLoadMore
+          onLoadMore &&
+          Date.now() - lastFetchTimeRef.current > FETCH_COOLDOWN_MS
         ) {
-          // Transition to FETCHING
-          // DEBUG: console.log('[useChatScroll] Mode: FREE_SCROLL → FETCHING_HISTORY')
+          // CRITICAL: Capture scroll height BEFORE triggering load
+          // This ensures we can calculate the exact height delta after prepend
+          prependScrollHeightRef.current = scrollHeight
+          isPrependingRef.current = true
           isFetchingRef.current = true
+          userScrolledDuringLoadRef.current = false // Reset scroll tracking
+          lastFetchTimeRef.current = Date.now() // Record fetch time
           setMode('FETCHING_HISTORY')
           onLoadMore()
+
+          // FALLBACK: Clear prepending state after 5s if fetch fails/returns 0
+          setTimeout(() => {
+            if (isPrependingRef.current) {
+              console.log(
+                '[useChatScroll] Timeout: clearing stuck prepending state',
+              )
+              isPrependingRef.current = false
+              isFetchingRef.current = false
+            }
+          }, 5000)
+        } else if (isFetchingRef.current || isPrependingRef.current) {
+          // User scrolled while we're loading - don't auto-adjust
+          userScrolledDuringLoadRef.current = true
         }
       }
     },
@@ -119,52 +151,70 @@ export function useChatScroll({
     // if (delta !== 0) console.log('[useChatScroll] LayoutEffect:', { mode, delta, count })
 
     if (delta > 0) {
+      console.log('[useChatScroll] LayoutEffect:', {
+        mode,
+        delta,
+        count,
+        isPrepending: isPrependingRef.current,
+        currentScrollHeight,
+        capturedHeight: prependScrollHeightRef.current,
+      })
+
       if (mode === 'LOCKED_BOTTOM') {
         // Append Case - scroll to bottom
         rowVirtualizer.scrollToIndex(count - 1, {
           align: 'end',
           behavior: 'auto',
         })
-      } else if (
-        mode === 'FETCHING_HISTORY' ||
-        mode === 'FREE_SCROLL' // Check for prepend
-      ) {
-        // Detect Prepend via Index Shift
+      } else if (isPrependingRef.current) {
+        // PREPEND CASE: Use captured height for precise adjustment
+        // This is the key fix - we use the height captured BEFORE the load
+        const heightDiff = currentScrollHeight - prependScrollHeightRef.current
+
+        // If user scrolled during load, skip adjustment (they took control)
+        if (userScrolledDuringLoadRef.current) {
+          console.log(
+            '[useChatScroll] User scrolled during load, skipping adjustment',
+          )
+        } else if (heightDiff > 0) {
+          console.log('[useChatScroll] Prepend adjustment:', {
+            heightDiff,
+            scrollTopBefore: parent.scrollTop,
+          })
+          // Adjust scroll position to maintain visual anchor
+          parent.scrollTop += heightDiff
+          console.log(
+            '[useChatScroll] Adjusted scrollTop to:',
+            parent.scrollTop,
+          )
+        }
+
+        // Clear prepend state AFTER adjustment
+        isPrependingRef.current = false
+        isFetchingRef.current = false
+        userScrolledDuringLoadRef.current = false
+        setMode('FREE_SCROLL')
+      } else if (mode === 'FREE_SCROLL') {
+        // Fallback: Detect prepend via anchor index shift (edge cases)
         if (anchorRef.current !== null) {
-          let newAnchorIndex = -1
           const { key: oldKey, index: oldIndex } = anchorRef.current
 
-          // Search for the key in new list
           for (let i = 0; i < count; i++) {
-            if (getItemKey(i) === oldKey) {
-              newAnchorIndex = i
+            if (getItemKey(i) === oldKey && i > oldIndex) {
+              // Index shifted = items added above
+              const heightDiff = currentScrollHeight - prevScrollHeight
+              if (heightDiff > 0) {
+                parent.scrollTop += heightDiff
+              }
               break
             }
           }
-
-          if (newAnchorIndex !== -1) {
-            // If index shifted significantly (indicating items added above)
-            // OR if we are explicitly FETCHING_HISTORY (known prepend)
-            // We perform Manual Scroll Adjustment
-
-            if (newAnchorIndex > oldIndex || mode === 'FETCHING_HISTORY') {
-              // PREPEND DETECTED
-              const heightDiff = currentScrollHeight - prevScrollHeight
-              if (heightDiff > 0) {
-                // Manual Adjustment (Instant, No Virtualizer Error)
-                // DEBUG: console.log('[useChatScroll] Prepend detected:', { heightDiff })
-                parent.scrollTop += heightDiff
-              }
-            }
-          }
-        }
-
-        if (mode === 'FETCHING_HISTORY') {
-          setMode('FREE_SCROLL')
-          isFetchingRef.current = false
         }
       }
     }
+    // NOTE: Removed the delta === 0 edge case that was clearing isPrependingRef
+    // This caused a race condition: re-renders from state changes (loadOlder)
+    // would clear the flag before the actual messages arrived from DB
 
     // Capture state for next run
     prevCountRef.current = count

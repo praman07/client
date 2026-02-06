@@ -1,12 +1,4 @@
-import type { Message } from '@/entities/message/model/types'
-
-export type DeliveryStatus =
-  | 'pending'
-  | 'sending'
-  | 'sent'
-  | 'delivered'
-  | 'read'
-  | 'failed'
+import type { Message, DeliveryStatus } from '@/shared/contracts/chat/message'
 
 /**
  * The unified shape used by the MessageList Virtualizer.

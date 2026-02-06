@@ -177,7 +177,7 @@ export function createWSManager(): WSManager {
         factory
           .createPayload()
           .then((payload) => {
-            const eventType = `${factory.domain}:subscribe-channel`
+            const eventType = `${factory.domain}:subscribe-conversation`
             manager.emit(eventType, payload)
           })
           .catch((err) => {
@@ -193,7 +193,7 @@ export function createWSManager(): WSManager {
       const existed = subscriptionManager.unsubscribe(domain, id)
 
       if (existed && connectionManager.isOpen()) {
-        const eventType = `${domain}:unsubscribe-channel`
+        const eventType = `${domain}:unsubscribe-conversation`
         manager.emit(eventType, { conversationId: id })
       }
     },

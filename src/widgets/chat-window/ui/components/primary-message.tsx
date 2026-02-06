@@ -32,8 +32,8 @@ export function PrimaryMessage({
   const { getMemberInfo } = useMemberCache()
   const memberInfo = getMemberInfo(message.authorId)
 
-  console.log('[PrimaryMessage] Looking up authorId:', message.authorId)
-  console.log('[PrimaryMessage] Found memberInfo:', memberInfo)
+  // console.log('[PrimaryMessage] Looking up authorId:', message.authorId)
+  // console.log('[PrimaryMessage] Found memberInfo:', memberInfo)
 
   // Display name: use fullName if available, fallback to authorId
   const displayName = memberInfo?.fullName ?? message.authorId
@@ -43,7 +43,7 @@ export function PrimaryMessage({
     ? getInitials(memberInfo.fullName)
     : (message.authorId || '?').substring(0, 2).toUpperCase()
 
-  console.log('[PrimaryMessage] Display name:', displayName, 'Initials:', initials)
+  // console.log('[PrimaryMessage] Display name:', displayName, 'Initials:', initials)
 
   return (
     <MessageEvent className={cn('hover:bg-accent/50', className)}>

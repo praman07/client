@@ -1,4 +1,4 @@
-import type { Message } from '@/entities/message/model/types'
+import type { Message } from '@/shared/contracts/chat/message'
 
 export type SessionStatus = 'IN_SYNC' | 'RECOVERING' | 'DESYNCED' | 'OFFLINE'
 

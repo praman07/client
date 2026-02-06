@@ -37,7 +37,7 @@ export async function resubscribeAll(
     subscriptions.map(async (factory: SubscriptionFactory) => {
       try {
         const payload = await factory.createPayload()
-        const eventType = `${factory.domain}:subscribe-channel` // Convention
+        const eventType = `${factory.domain}:subscribe-conversation`
 
         emit(eventType, payload)
 
@@ -80,7 +80,7 @@ export async function resubscribeForDomain(
     subscriptions.map(async (factory: SubscriptionFactory) => {
       try {
         const payload = await factory.createPayload()
-        const eventType = `${domain}:subscribe-channel`
+        const eventType = `${domain}:subscribe-conversation`
 
         emit(eventType, payload)
       } catch (err) {

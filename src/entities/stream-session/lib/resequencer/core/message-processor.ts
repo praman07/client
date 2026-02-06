@@ -113,7 +113,27 @@ export function createMessageProcessor<T extends BasePayload>(
       }
     }
 
-    // Check if strict next sequence
+    // HISTORY/REPLAY MODE: Bypass strict sequencing
+    // History messages are intentionally OLDER than lastSequence
+    // They should be committed directly without waiting in buffer
+    if (isReplay) {
+      console.debug(`[MessageProcessor] Replay commit: seq ${payload.sequence}`)
+
+      const success = await commitHandler.commitWithRetry(
+        state,
+        payload,
+        projectId,
+      )
+
+      if (success) {
+        await runPostProcessPlugins(pluginContext, plugins)
+        return { success: true, action: 'committed' }
+      }
+
+      return { success: false, action: 'error', reason: 'Replay commit failed' }
+    }
+
+    // REALTIME MODE: Check if strict next sequence
     const isStrictNext = payload.sequence === state.lastSequence + 1
 
     if (isStrictNext) {
