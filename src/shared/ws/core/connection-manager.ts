@@ -93,11 +93,25 @@ function setState(newState: InternalState): void {
  * Validates server message structure.
  */
 function isValidServerMessage(data: unknown): data is ServerMessage {
-  if (typeof data !== 'object' || data === null) return false
+  if (typeof data !== 'object' || data === null) {
+    log.debug('Validation failed: not an object or null')
+    return false
+  }
 
-  const { type } = data as Record<string, unknown>
-  // Basic validation - just check if type is a string
-  return typeof type === 'string'
+  const { type, success } = data as Record<string, unknown>
+
+  const isValid = typeof type === 'string' && typeof success === 'boolean'
+
+  if (!isValid) {
+    log.debug('Validation failed:', {
+      type,
+      typeIsString: typeof type === 'string',
+      success,
+      successIsBoolean: typeof success === 'boolean',
+    })
+  }
+
+  return isValid
 }
 
 /**
@@ -106,7 +120,9 @@ function isValidServerMessage(data: unknown): data is ServerMessage {
 function handleMessage(event: MessageEvent): void {
   try {
     const data = JSON.parse(event.data)
+
     if (isValidServerMessage(data)) {
+      log.debug('Dispatching event:', data.type)
       eventRouter.dispatch(data as any)
     } else {
       log.warn('Invalid envelope:', data)

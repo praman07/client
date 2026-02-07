@@ -59,7 +59,7 @@ export enum ChatDownstreamEvent {
   ChannelArchived = 'chat:channel-archived',
 
   SyncRequired = 'chat:sync-required',
-  SubscribeAck = 'chat:subscribe-ack',
+  SubscribeSuccess = 'chat:subscribe-success',
 
   Pong = 'chat:pong',
 }

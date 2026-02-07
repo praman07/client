@@ -41,7 +41,7 @@ export type {
   MessageReadPayload,
   MessageDeliveredPayload,
   UserTypingPayload,
-  SubscribeAckPayload,
+  SubscribeSuccessPayload,
   NewMessageContract,
   AckMessageContract,
   SyncRequiredContract,
@@ -50,7 +50,7 @@ export type {
   MessageReadContract,
   MessageDeliveredContract,
   UserTypingContract,
-  SubscribeAckContract,
+  SubscribeSuccessContract,
   ChatDownstreamContract,
 } from './downstream'
 

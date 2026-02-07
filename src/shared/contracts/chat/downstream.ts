@@ -75,9 +75,9 @@ export interface UserTypingPayload {
   isTyping: boolean
 }
 
-export interface SubscribeAckPayload {
+export interface SubscribeSuccessPayload {
   conversationId: string
-  success: boolean
+  conversationType: 'CHANNEL' | 'DM' | 'GROUP_DM' | 'THREAD'
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -124,9 +124,9 @@ export type UserTypingContract = DownstreamContract<
   UserTypingPayload
 >
 
-export type SubscribeAckContract = DownstreamContract<
-  ChatDownstreamEvent.SubscribeAck,
-  SubscribeAckPayload
+export type SubscribeSuccessContract = DownstreamContract<
+  ChatDownstreamEvent.SubscribeSuccess,
+  SubscribeSuccessPayload
 >
 
 // ═══════════════════════════════════════════════════════════════
@@ -142,7 +142,7 @@ export type ChatDownstreamContract =
   | MessageReadContract
   | MessageDeliveredContract
   | UserTypingContract
-  | SubscribeAckContract
+  | SubscribeSuccessContract
 
 // ═══════════════════════════════════════════════════════════════
 // BACKWARD COMPATIBILITY - Event type aliases
@@ -156,4 +156,4 @@ export type MessageDeletedEvent = MessageDeletedContract
 export type MessageReadEvent = MessageReadContract
 export type MessageDeliveredEvent = MessageDeliveredContract
 export type UserTypingEvent = UserTypingContract
-export type SubscribeAckEvent = SubscribeAckContract
+export type SubscribeSuccessEvent = SubscribeSuccessContract

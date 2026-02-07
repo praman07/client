@@ -120,8 +120,8 @@ export const ServerEventName = {
   ChannelArchived: 'chat:channel-archived',
   /** @deprecated Use ChatDownstreamEvent.SyncRequired */
   SyncRequired: 'chat:sync-required',
-  /** @deprecated Use ChatDownstreamEvent.SubscribeAck */
-  SubscribeAck: 'chat:subscribe-ack',
+  /** @deprecated Use ChatDownstreamEvent.SubscribeSuccess */
+  SubscribeSuccess: 'chat:subscribe-success',
   /** @deprecated Use core error handling */
   Error: 'error',
   /** @deprecated Use core protocol */
@@ -140,7 +140,7 @@ export interface ServerEventPayloads {
   [ServerEventName.MessageEdited]: import('@/shared/contracts/chat/downstream').MessageEditedPayload
   [ServerEventName.MessageDeleted]: import('@/shared/contracts/chat/downstream').MessageDeletedPayload
   [ServerEventName.UserTyping]: import('@/shared/contracts/chat/downstream').UserTypingPayload
-  [ServerEventName.SubscribeAck]: import('@/shared/contracts/chat/downstream').SubscribeAckPayload
+  [ServerEventName.SubscribeSuccess]: import('@/shared/contracts/chat/downstream').SubscribeSuccessPayload
   // Add others as needed
 }
 
