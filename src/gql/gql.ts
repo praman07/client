@@ -29,7 +29,9 @@ type Documents = {
     "\n  fragment SessionUser on User {\n    id\n    email\n    fullName\n    avatarUrl\n  }\n": typeof types.SessionUserFragmentDoc,
     "\n  mutation SessionSyncUser(\n    $clerkId: String!\n    $email: String!\n    $fullName: String\n    $avatarUrl: String\n  ) {\n    syncUser(\n      clerkId: $clerkId\n      email: $email\n      fullName: $fullName\n      avatarUrl: $avatarUrl\n    ) {\n      id\n      email\n      fullName\n      avatarUrl\n    }\n  }": typeof types.SessionSyncUserDocument,
     "\n  query GetMe {\n    me {\n      ...SessionUser\n    }\n  }\n": typeof types.GetMeDocument,
-    "\n  fragment UserFragment on User {\n    id\n    email\n    fullName\n    avatarUrl\n  }\n": typeof types.UserFragmentFragmentDoc,
+    "\n  fragment User on User {\n    id\n    email\n    fullName\n    avatarUrl\n  }\n": typeof types.UserFragmentDoc,
+    "\n  fragment BoardFields on Whiteboard {\n    id\n    workspaceId\n    projectId\n    title\n    description\n    elementCount\n    fileSizeBytes\n    isArchived\n    isLocked\n    createdBy\n    createdAt\n    updatedAt\n  }\n": typeof types.BoardFieldsFragmentDoc,
+    "\n  fragment BoardWithCollaborators on Whiteboard {\n    ...BoardFields\n    collaborators {\n      userId\n      joinedAt\n      user {\n        id\n        fullName\n        email\n        avatarUrl\n      }\n    }\n  }\n": typeof types.BoardWithCollaboratorsFragmentDoc,
     "\n  fragment WorkspaceFragment on Workspace {\n    id\n    name\n    slug\n    logoUrl\n  }\n": typeof types.WorkspaceFragmentFragmentDoc,
     "\n  query GetMyWorkspaces {\n    myWorkspaces {\n      ...WorkspaceFragment\n    }\n  }\n": typeof types.GetMyWorkspacesDocument,
     "\n  query GetWorkspaceBySlug($slug: String!) {\n    workspaceBySlug(slug: $slug) {\n      ...WorkspaceFragment\n    }\n  }\n": typeof types.GetWorkspaceBySlugDocument,
@@ -69,7 +71,9 @@ const documents: Documents = {
     "\n  fragment SessionUser on User {\n    id\n    email\n    fullName\n    avatarUrl\n  }\n": types.SessionUserFragmentDoc,
     "\n  mutation SessionSyncUser(\n    $clerkId: String!\n    $email: String!\n    $fullName: String\n    $avatarUrl: String\n  ) {\n    syncUser(\n      clerkId: $clerkId\n      email: $email\n      fullName: $fullName\n      avatarUrl: $avatarUrl\n    ) {\n      id\n      email\n      fullName\n      avatarUrl\n    }\n  }": types.SessionSyncUserDocument,
     "\n  query GetMe {\n    me {\n      ...SessionUser\n    }\n  }\n": types.GetMeDocument,
-    "\n  fragment UserFragment on User {\n    id\n    email\n    fullName\n    avatarUrl\n  }\n": types.UserFragmentFragmentDoc,
+    "\n  fragment User on User {\n    id\n    email\n    fullName\n    avatarUrl\n  }\n": types.UserFragmentDoc,
+    "\n  fragment BoardFields on Whiteboard {\n    id\n    workspaceId\n    projectId\n    title\n    description\n    elementCount\n    fileSizeBytes\n    isArchived\n    isLocked\n    createdBy\n    createdAt\n    updatedAt\n  }\n": types.BoardFieldsFragmentDoc,
+    "\n  fragment BoardWithCollaborators on Whiteboard {\n    ...BoardFields\n    collaborators {\n      userId\n      joinedAt\n      user {\n        id\n        fullName\n        email\n        avatarUrl\n      }\n    }\n  }\n": types.BoardWithCollaboratorsFragmentDoc,
     "\n  fragment WorkspaceFragment on Workspace {\n    id\n    name\n    slug\n    logoUrl\n  }\n": types.WorkspaceFragmentFragmentDoc,
     "\n  query GetMyWorkspaces {\n    myWorkspaces {\n      ...WorkspaceFragment\n    }\n  }\n": types.GetMyWorkspacesDocument,
     "\n  query GetWorkspaceBySlug($slug: String!) {\n    workspaceBySlug(slug: $slug) {\n      ...WorkspaceFragment\n    }\n  }\n": types.GetWorkspaceBySlugDocument,
@@ -171,7 +175,15 @@ export function gql(source: "\n  query GetMe {\n    me {\n      ...SessionUser\n
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "\n  fragment UserFragment on User {\n    id\n    email\n    fullName\n    avatarUrl\n  }\n"): (typeof documents)["\n  fragment UserFragment on User {\n    id\n    email\n    fullName\n    avatarUrl\n  }\n"];
+export function gql(source: "\n  fragment User on User {\n    id\n    email\n    fullName\n    avatarUrl\n  }\n"): (typeof documents)["\n  fragment User on User {\n    id\n    email\n    fullName\n    avatarUrl\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  fragment BoardFields on Whiteboard {\n    id\n    workspaceId\n    projectId\n    title\n    description\n    elementCount\n    fileSizeBytes\n    isArchived\n    isLocked\n    createdBy\n    createdAt\n    updatedAt\n  }\n"): (typeof documents)["\n  fragment BoardFields on Whiteboard {\n    id\n    workspaceId\n    projectId\n    title\n    description\n    elementCount\n    fileSizeBytes\n    isArchived\n    isLocked\n    createdBy\n    createdAt\n    updatedAt\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  fragment BoardWithCollaborators on Whiteboard {\n    ...BoardFields\n    collaborators {\n      userId\n      joinedAt\n      user {\n        id\n        fullName\n        email\n        avatarUrl\n      }\n    }\n  }\n"): (typeof documents)["\n  fragment BoardWithCollaborators on Whiteboard {\n    ...BoardFields\n    collaborators {\n      userId\n      joinedAt\n      user {\n        id\n        fullName\n        email\n        avatarUrl\n      }\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

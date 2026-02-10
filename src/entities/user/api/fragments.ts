@@ -1,7 +1,7 @@
 import { gql } from '@/gql'
 
 export const USER_FRAGMENT = gql(`
-  fragment UserFragment on User {
+  fragment User on User {
     id
     email
     fullName

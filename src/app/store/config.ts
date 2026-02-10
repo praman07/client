@@ -9,6 +9,8 @@ import createProjectReducer from '@/features/create-project/model/slice'
 import { createChannelReducer } from '@/features/chat/create-channel/model/slice'
 import conversationReducer from '@/entities/conversation/model/slice'
 import { channelSettingsReducer } from '@/widgets/channel-settings-modal'
+import whiteboardSessionReducer from '@/entities/whiteboard-session/model/slice'
+import whiteboardPresenceReducer from '@/entities/whiteboard-presence/model/slice'
 
 export const store = configureStore({
   reducer: {
@@ -22,6 +24,8 @@ export const store = configureStore({
     chatSession: chatSessionReducer,
     conversation: conversationReducer, // ✅ NEW - Conversation state management
     channelSettings: channelSettingsReducer, // Channel settings modal state
+    whiteboardSession: whiteboardSessionReducer, // ✅ NEW - Whiteboard Y.Doc session
+    whiteboardPresence: whiteboardPresenceReducer, // ✅ NEW - Whiteboard collaborators
   },
 })
 
