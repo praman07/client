@@ -87,6 +87,7 @@
 // ═══════════════════════════════════════════════════════════════
 
 export * as Chat from './chat'
+export * as Whiteboard from './whiteboard'
 
 // ═══════════════════════════════════════════════════════════════
 // SHARED TYPES
@@ -112,6 +113,13 @@ export type {
   ChatUpstreamContract,
   ChatDownstreamContract,
 } from './chat'
+
+export type {
+  WhiteboardUpstreamEvent,
+  WhiteboardDownstreamEvent,
+  WhiteboardUpstreamPayload,
+  WhiteboardDownstreamPayload,
+} from './whiteboard'
 
 /**
  * Validates if an event type string belongs to a registered domain.

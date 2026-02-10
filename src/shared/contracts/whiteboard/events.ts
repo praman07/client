@@ -1,16 +1,26 @@
 /**
- * Whiteboard Event Names - Placeholder
- * TODO: Implement when whiteboard feature is developed
+ * Whiteboard Event Consolidation
+ * Combines upstream and downstream events into single namespace
+ *
+ * @layer Shared
+ * @module contracts/whiteboard
  */
 
-export enum WhiteboardUpstreamEvent {
-  // Placeholder - implement when needed
-}
+import { WhiteboardUpstreamEvent } from './upstream'
+import { WhiteboardDownstreamEvent } from './downstream'
 
-export enum WhiteboardDownstreamEvent {
-  // Placeholder - implement when needed
-}
+/**
+ * All whiteboard WebSocket events (bidirectional)
+ * Combines upstream (client→server) and downstream (server→client) events
+ */
+export const WhiteboardEvent = {
+  ...WhiteboardUpstreamEvent,
+  ...WhiteboardDownstreamEvent,
+} as const
 
+/**
+ * Type-safe union of all whiteboard event names
+ */
 export type WhiteboardEvent =
   | WhiteboardUpstreamEvent
   | WhiteboardDownstreamEvent

@@ -97,6 +97,18 @@ type Query {
     otherUserId: ID!
   ): DmConversation
   getUsersByIds(userIds: [ID!]!): [UserBasic!]!
+  board(id: ID!): Whiteboard
+  userBoards(workspaceId: ID!, limit: Int, cursor: ID): BoardConnection!
+  boardCollaborators(boardId: ID!): [BoardCollaborator!]!
+  projectBoards(projectId: ID!, limit: Int, cursor: ID): BoardConnection!
+  workspaceBoards(
+    workspaceId: ID!
+    includeArchived: Boolean
+    limit: Int
+    cursor: ID
+  ): BoardConnection!
+  boardSnapshot(boardId: ID!): BoardSnapshot!
+  activeCollaborators(boardId: ID!): [ActiveCollaborator!]!
 }
 
 type Mutation {
@@ -188,6 +200,22 @@ type Mutation {
   deleteThread(workspaceId: ID!, threadId: ID!): DeleteThreadResult!
   subscribeThread(threadId: ID!): SubscribeThreadResult!
   unsubscribeThread(threadId: ID!): UnsubscribeThreadResult!
+  createBoard(input: CreateBoardInput!): BoardPayload!
+  deleteBoard(boardId: ID!): DeleteBoardResult!
+  renameBoard(boardId: ID!, title: String!): Whiteboard!
+  updateBoardDescription(boardId: ID!, description: String): Whiteboard!
+  addBoardCollaborators(
+    boardId: ID!
+    userIds: [ID!]!
+  ): AddBoardCollaboratorsResult!
+  removeBoardCollaborator(
+    boardId: ID!
+    userId: ID!
+  ): RemoveBoardCollaboratorResult!
+  archiveBoard(boardId: ID!): Whiteboard!
+  unarchiveBoard(boardId: ID!): Whiteboard!
+  lockBoard(boardId: ID!): Whiteboard!
+  unlockBoard(boardId: ID!): Whiteboard!
 }
 
 type User {
@@ -645,4 +673,89 @@ type DmConversation {
 type DmMember {
   userId: ID!
   user: UserBasic!
+}
+
+type Whiteboard {
+  id: ID!
+  workspaceId: ID!
+  projectId: ID
+  title: String!
+  description: String
+  elementCount: Int!
+  fileSizeBytes: String!
+  isArchived: Boolean!
+  isLocked: Boolean!
+  createdBy: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  deletedAt: DateTime
+  collaborators: [BoardCollaborator!]
+  creator: UserBasic!
+}
+
+type BoardCollaborator {
+  userId: ID!
+  joinedAt: DateTime!
+  user: UserBasic!
+}
+
+input CreateBoardInput {
+  workspaceId: ID!
+  projectId: ID
+  title: String!
+  description: String
+
+  """
+  Optional: Add workspace members as collaborators during board creation
+  """
+  collaboratorIds: [ID!]
+}
+
+type BoardPayload {
+  board: Whiteboard!
+
+  """
+  Collaborators that were successfully added (may be fewer than requested if some failed validation)
+  """
+  addedCollaborators: [BoardCollaborator!]!
+}
+
+type DeleteBoardResult {
+  success: Boolean!
+  boardId: ID!
+}
+
+type AddBoardCollaboratorsResult {
+  success: Boolean!
+  addedCount: Int!
+  skippedCount: Int!
+}
+
+type RemoveBoardCollaboratorResult {
+  success: Boolean!
+}
+
+type BoardConnection {
+  boards: [Whiteboard!]!
+  nextCursor: ID
+}
+
+type BoardSnapshot {
+  boardId: ID!
+  snapshot: String!
+  lastStreamId: String
+  snapshotTimestamp: DateTime
+}
+
+type CursorPosition {
+  x: Float!
+  y: Float!
+}
+
+type ActiveCollaborator {
+  userId: ID!
+  connectionId: ID!
+  joinedAt: DateTime!
+  lastSeenAt: DateTime!
+  cursorPosition: CursorPosition
 }

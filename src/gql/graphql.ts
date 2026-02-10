@@ -26,6 +26,22 @@ export type AcceptInviteInput = {
   userId?: InputMaybe<Scalars['String']['input']>;
 };
 
+export type ActiveCollaborator = {
+  __typename?: 'ActiveCollaborator';
+  connectionId: Scalars['ID']['output'];
+  cursorPosition?: Maybe<CursorPosition>;
+  joinedAt: Scalars['DateTime']['output'];
+  lastSeenAt: Scalars['DateTime']['output'];
+  userId: Scalars['ID']['output'];
+};
+
+export type AddBoardCollaboratorsResult = {
+  __typename?: 'AddBoardCollaboratorsResult';
+  addedCount: Scalars['Int']['output'];
+  skippedCount: Scalars['Int']['output'];
+  success: Scalars['Boolean']['output'];
+};
+
 export type AddChannelMembersResult = {
   __typename?: 'AddChannelMembersResult';
   addedCount: Scalars['Int']['output'];
@@ -52,6 +68,34 @@ export type AvailabilityResponse = {
   message?: Maybe<Scalars['String']['output']>;
   reason?: Maybe<Scalars['String']['output']>;
   reservationId?: Maybe<Scalars['String']['output']>;
+};
+
+export type BoardCollaborator = {
+  __typename?: 'BoardCollaborator';
+  joinedAt: Scalars['DateTime']['output'];
+  user: UserBasic;
+  userId: Scalars['ID']['output'];
+};
+
+export type BoardConnection = {
+  __typename?: 'BoardConnection';
+  boards: Array<Whiteboard>;
+  nextCursor?: Maybe<Scalars['ID']['output']>;
+};
+
+export type BoardPayload = {
+  __typename?: 'BoardPayload';
+  /** Collaborators that were successfully added (may be fewer than requested if some failed validation) */
+  addedCollaborators: Array<BoardCollaborator>;
+  board: Whiteboard;
+};
+
+export type BoardSnapshot = {
+  __typename?: 'BoardSnapshot';
+  boardId: Scalars['ID']['output'];
+  lastStreamId?: Maybe<Scalars['String']['output']>;
+  snapshot: Scalars['String']['output'];
+  snapshotTimestamp?: Maybe<Scalars['DateTime']['output']>;
 };
 
 export type ChannelAvailabilityResponse = {
@@ -160,6 +204,15 @@ export type ConversationUnreadCount = {
   unreadCount: Scalars['Int']['output'];
 };
 
+export type CreateBoardInput = {
+  /** Optional: Add workspace members as collaborators during board creation */
+  collaboratorIds?: InputMaybe<Array<Scalars['ID']['input']>>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  projectId?: InputMaybe<Scalars['ID']['input']>;
+  title: Scalars['String']['input'];
+  workspaceId: Scalars['ID']['input'];
+};
+
 export type CreateChannelInput = {
   memberUserIds?: InputMaybe<Array<Scalars['ID']['input']>>;
   name?: InputMaybe<Scalars['String']['input']>;
@@ -193,6 +246,18 @@ export type CreateThreadInput = {
   messageId: Scalars['ID']['input'];
   projectId: Scalars['ID']['input'];
   workspaceId: Scalars['ID']['input'];
+};
+
+export type CursorPosition = {
+  __typename?: 'CursorPosition';
+  x: Scalars['Float']['output'];
+  y: Scalars['Float']['output'];
+};
+
+export type DeleteBoardResult = {
+  __typename?: 'DeleteBoardResult';
+  boardId: Scalars['ID']['output'];
+  success: Scalars['Boolean']['output'];
 };
 
 export type DeleteChannelResult = {
@@ -302,13 +367,16 @@ export type Mutation = {
   __typename?: 'Mutation';
   _health?: Maybe<Scalars['String']['output']>;
   acceptWorkspaceInvite: JoinResponse;
+  addBoardCollaborators: AddBoardCollaboratorsResult;
   addChannelMembers: AddChannelMembersResult;
   addGroupMembers: AddGroupMembersResult;
+  archiveBoard: Whiteboard;
   archiveChannel: Conversation;
   checkChannelAvailability: ChannelAvailabilityResponse;
   checkProjectSlugAvailability: AvailabilityResponse;
   checkSlugAvailability: AvailabilityResponse;
   closeThread: CloseThreadResult;
+  createBoard: BoardPayload;
   createChannel: Conversation;
   createDm: Conversation;
   createGroup: Conversation;
@@ -316,27 +384,34 @@ export type Mutation = {
   createProject: Project;
   createThread: Conversation;
   createWorkspace: Workspace;
+  deleteBoard: DeleteBoardResult;
   deleteChannel: DeleteChannelResult;
   deleteDm: DeleteDmResult;
   deleteGroup: DeleteGroupResult;
   deleteThread: DeleteThreadResult;
   inviteToWorkspace: InviteResponse;
   leaveGroup: LeaveGroupResult;
+  lockBoard: Whiteboard;
   /** Mark all notifications as read. */
   markAllNotificationsRead: Scalars['Boolean']['output'];
   /** Mark specific notifications as read. */
   markNotificationRead: Scalars['Boolean']['output'];
   muteConversation: MuteConversationResult;
+  removeBoardCollaborator: RemoveBoardCollaboratorResult;
   removeChannelMember: RemoveChannelMemberResult;
   removeGroupMember: RemoveGroupMemberResult;
   removeWorkspaceMember: InviteResponse;
+  renameBoard: Whiteboard;
   renameChannel: Conversation;
   renameGroup: RenameGroupResult;
   reopenThread: ReopenThreadResult;
   subscribeThread: SubscribeThreadResult;
   syncUser: User;
+  unarchiveBoard: Whiteboard;
   unarchiveChannel: UnarchiveChannelResult;
+  unlockBoard: Whiteboard;
   unsubscribeThread: UnsubscribeThreadResult;
+  updateBoardDescription: Whiteboard;
   updateChannelDescription: UpdateChannelDescriptionResult;
   updateChannelVisibility: UpdateChannelVisibilityResult;
   updateWorkspaceMemberRole: WorkspaceMember;
@@ -345,6 +420,12 @@ export type Mutation = {
 
 export type MutationAcceptWorkspaceInviteArgs = {
   input: AcceptInviteInput;
+};
+
+
+export type MutationAddBoardCollaboratorsArgs = {
+  boardId: Scalars['ID']['input'];
+  userIds: Array<Scalars['ID']['input']>;
 };
 
 
@@ -359,6 +440,11 @@ export type MutationAddGroupMembersArgs = {
   groupId: Scalars['ID']['input'];
   userIds: Array<Scalars['ID']['input']>;
   workspaceId: Scalars['ID']['input'];
+};
+
+
+export type MutationArchiveBoardArgs = {
+  boardId: Scalars['ID']['input'];
 };
 
 
@@ -386,6 +472,11 @@ export type MutationCheckSlugAvailabilityArgs = {
 export type MutationCloseThreadArgs = {
   threadId: Scalars['ID']['input'];
   workspaceId: Scalars['ID']['input'];
+};
+
+
+export type MutationCreateBoardArgs = {
+  input: CreateBoardInput;
 };
 
 
@@ -418,6 +509,11 @@ export type MutationCreateThreadArgs = {
 export type MutationCreateWorkspaceArgs = {
   name: Scalars['String']['input'];
   slug: Scalars['String']['input'];
+};
+
+
+export type MutationDeleteBoardArgs = {
+  boardId: Scalars['ID']['input'];
 };
 
 
@@ -456,6 +552,11 @@ export type MutationLeaveGroupArgs = {
 };
 
 
+export type MutationLockBoardArgs = {
+  boardId: Scalars['ID']['input'];
+};
+
+
 export type MutationMarkNotificationReadArgs = {
   ids: Array<Scalars['ID']['input']>;
 };
@@ -464,6 +565,12 @@ export type MutationMarkNotificationReadArgs = {
 export type MutationMuteConversationArgs = {
   conversationId: Scalars['ID']['input'];
   isMuted: Scalars['Boolean']['input'];
+};
+
+
+export type MutationRemoveBoardCollaboratorArgs = {
+  boardId: Scalars['ID']['input'];
+  userId: Scalars['ID']['input'];
 };
 
 
@@ -484,6 +591,12 @@ export type MutationRemoveGroupMemberArgs = {
 export type MutationRemoveWorkspaceMemberArgs = {
   memberId: Scalars['ID']['input'];
   workspaceId: Scalars['ID']['input'];
+};
+
+
+export type MutationRenameBoardArgs = {
+  boardId: Scalars['ID']['input'];
+  title: Scalars['String']['input'];
 };
 
 
@@ -519,14 +632,30 @@ export type MutationSyncUserArgs = {
 };
 
 
+export type MutationUnarchiveBoardArgs = {
+  boardId: Scalars['ID']['input'];
+};
+
+
 export type MutationUnarchiveChannelArgs = {
   channelId: Scalars['ID']['input'];
   workspaceId: Scalars['ID']['input'];
 };
 
 
+export type MutationUnlockBoardArgs = {
+  boardId: Scalars['ID']['input'];
+};
+
+
 export type MutationUnsubscribeThreadArgs = {
   threadId: Scalars['ID']['input'];
+};
+
+
+export type MutationUpdateBoardDescriptionArgs = {
+  boardId: Scalars['ID']['input'];
+  description?: InputMaybe<Scalars['String']['input']>;
 };
 
 
@@ -640,6 +769,10 @@ export type ProjectMember = {
 
 export type Query = {
   __typename?: 'Query';
+  activeCollaborators: Array<ActiveCollaborator>;
+  board?: Maybe<Whiteboard>;
+  boardCollaborators: Array<BoardCollaborator>;
+  boardSnapshot: BoardSnapshot;
   getChannelMembers: Array<ChatMemberRecord>;
   getConversation: Conversation;
   getDmByUsers?: Maybe<DmConversation>;
@@ -664,12 +797,35 @@ export type Query = {
   notifications: NotificationConnection;
   onboardingStatus: OnboardingStatus;
   project?: Maybe<Project>;
+  projectBoards: BoardConnection;
   projectBySlug?: Maybe<Project>;
   reactionUsers: ReactionUsersConnection;
   /** Get count of unread notifications. */
   unreadNotificationCount: Scalars['Int']['output'];
+  userBoards: BoardConnection;
+  workspaceBoards: BoardConnection;
   workspaceBySlug: Workspace;
   workspaceMembers: Array<WorkspaceMember>;
+};
+
+
+export type QueryActiveCollaboratorsArgs = {
+  boardId: Scalars['ID']['input'];
+};
+
+
+export type QueryBoardArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type QueryBoardCollaboratorsArgs = {
+  boardId: Scalars['ID']['input'];
+};
+
+
+export type QueryBoardSnapshotArgs = {
+  boardId: Scalars['ID']['input'];
 };
 
 
@@ -791,6 +947,13 @@ export type QueryProjectArgs = {
 };
 
 
+export type QueryProjectBoardsArgs = {
+  cursor?: InputMaybe<Scalars['ID']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  projectId: Scalars['ID']['input'];
+};
+
+
 export type QueryProjectBySlugArgs = {
   slug: Scalars['String']['input'];
   workspaceId: Scalars['ID']['input'];
@@ -801,6 +964,21 @@ export type QueryReactionUsersArgs = {
   cursor?: InputMaybe<Scalars['Int']['input']>;
   emoji: Scalars['String']['input'];
   messageId: Scalars['ID']['input'];
+};
+
+
+export type QueryUserBoardsArgs = {
+  cursor?: InputMaybe<Scalars['ID']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  workspaceId: Scalars['ID']['input'];
+};
+
+
+export type QueryWorkspaceBoardsArgs = {
+  cursor?: InputMaybe<Scalars['ID']['input']>;
+  includeArchived?: InputMaybe<Scalars['Boolean']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  workspaceId: Scalars['ID']['input'];
 };
 
 
@@ -831,6 +1009,11 @@ export type ReadReceiptsResponse = {
   readBy: Array<ReadReceiptUser>;
   totalMembers: Scalars['Int']['output'];
   totalReads: Scalars['Int']['output'];
+};
+
+export type RemoveBoardCollaboratorResult = {
+  __typename?: 'RemoveBoardCollaboratorResult';
+  success: Scalars['Boolean']['output'];
 };
 
 export type RemoveChannelMemberResult = {
@@ -936,6 +1119,25 @@ export type UserPresence = {
   lastActiveAt?: Maybe<Scalars['DateTime']['output']>;
   status: PresenceStatus;
   userId: Scalars['ID']['output'];
+};
+
+export type Whiteboard = {
+  __typename?: 'Whiteboard';
+  collaborators?: Maybe<Array<BoardCollaborator>>;
+  createdAt: Scalars['DateTime']['output'];
+  createdBy: Scalars['ID']['output'];
+  creator: UserBasic;
+  deletedAt?: Maybe<Scalars['DateTime']['output']>;
+  description?: Maybe<Scalars['String']['output']>;
+  elementCount: Scalars['Int']['output'];
+  fileSizeBytes: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  isArchived: Scalars['Boolean']['output'];
+  isLocked: Scalars['Boolean']['output'];
+  projectId?: Maybe<Scalars['ID']['output']>;
+  title: Scalars['String']['output'];
+  updatedAt: Scalars['DateTime']['output'];
+  workspaceId: Scalars['ID']['output'];
 };
 
 export type Workspace = {

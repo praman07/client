@@ -7,4 +7,7 @@ export type {
   OutboxItem,
   ConversationState,
   ProjectMeta,
+  WhiteboardOfflineUpdate,
+  WhiteboardBoardCache,
+  // ❌ WhiteboardPresence removed - ephemeral (Redux only)
 } from './schema'

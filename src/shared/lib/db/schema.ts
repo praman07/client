@@ -2,92 +2,176 @@ import Dexie from 'dexie'
 import type { EntityTable } from 'dexie'
 import type { Message } from '@/shared/contracts/chat/message'
 
-// -- Types --
+// ============================================================================
+// CHAT DOMAIN
+// ============================================================================
 
+/**
+ * Message storage with dual-sequencing support
+ *
+ * Architecture Decision: Why dual indexes (streamId + sequence)?
+ * - streamId: Redis Stream ordering (durable, cross-client)
+ * - sequence: Gap detection for real-time reconciliation
+ * Both are needed because Redis doesn't guarantee monotonic delivery order
+ */
 export interface DBMessage extends Message {
-  // We index primarily on [projectId+conversationId+streamId]
-  // dedupeId is unique to prevent duplicate delivery
   dedupeId?: string
-  sequence?: number // Dual-Sequencing (Optional for back-compat/opt-in)
+  sequence?: number
   projectId: string
 }
 
+/**
+ * Optimistic update queue with bounded retries
+ *
+ * Architecture Decision: Why unknown payload?
+ * Prevents accidental type coercion. Force explicit casting at write/read sites.
+ */
 export interface OutboxItem {
-  id?: number // Auto-increment
+  id?: number
   projectId: string
   conversationId: string
   dedupeId: string
   authorId: string
-  payload: any // Raw payload
+  payload: unknown
   status: 'pending' | 'sending' | 'failed'
   retryCount?: number
   createdAt: number
 }
 
+/**
+ * Conversation read cursors and metadata
+ * Enables unread count calculation without full message scan
+ */
 export interface ConversationState {
   projectId: string
-  conversationId: string // PK, or part of PK
+  conversationId: string
   lastStreamIdSeen: string | null
-  lastSequence?: number // For gap detection
+  lastSequence?: number
   lastOpenedAt: number
   unreadCount?: number
 }
 
+/**
+ * Project metadata for LRU cache eviction
+ */
 export interface ProjectMeta {
   projectId: string
   workspaceId: string
   lastAccessedAt: number
 }
 
-// -- Database Definition --
+// ============================================================================
+// WHITEBOARD DOMAIN
+// ============================================================================
+
+/**
+ * Offline queue for Y.js CRDT updates
+ *
+ * Architecture Decision: Binary storage (Uint8Array) not Base64
+ * - Saves ~33% storage overhead
+ * - Avoids encode/decode CPU cost on every read/write
+ *
+ * Architecture Decision: Why track size?
+ * - IndexedDB has browser-specific quota limits (~50MB-1GB)
+ * - Size enables proactive queue compaction before hitting quota
+ * - Size-aware merge heuristics (merge small updates, split large ones)
+ *
+ * TODO (Architecture): Implement quota pressure detection
+ * - Monitor `navigator.storage.estimate()` periodically
+ * - Trigger aggressive merging when quota > 80%
+ */
+export interface WhiteboardOfflineUpdate {
+  id?: number
+  boardId: string
+  update: Uint8Array
+  size: number
+  dedupeId: string
+  timestamp: number
+  status: 'pending' | 'sending' | 'failed'
+  retryCount: number
+  lastRetryAt: number | null
+  createdAt: number
+  mergedInto?: string
+  error?: string
+}
+
+/**
+ * Y.Doc snapshot cache with size-based LRU eviction
+ *
+ * Architecture Decision: Why both stateVector + snapshot?
+ * - stateVector: Enables delta sync (only fetch missing updates)
+ * - snapshot: Full state for cold start (avoids replaying entire history)
+ * Trade-off: 2x storage for significantly faster reconnection
+ *
+ * TODO (Architecture): Implement smart eviction policy
+ * - Current: LRU by time only
+ * - Better: Weighted score (recency + frequency + size)
+ * - Example: Keep small frequently-accessed boards, evict large stale ones
+ */
+export interface WhiteboardBoardCache {
+  boardId: string
+  stateVector: Uint8Array
+  snapshot: Uint8Array
+  snapshotSize: number
+  streamId: string
+  updatedAt: number
+}
+
+// ============================================================================
+// DATABASE SCHEMA
+// ============================================================================
 
 export class CollabifyDB extends Dexie {
-  messages!: EntityTable<DBMessage, 'id'> // PK is technically compound but we can query freely
+  // Chat tables
+  messages!: EntityTable<DBMessage, 'id'>
   outbox!: EntityTable<OutboxItem, 'id'>
-  conversation_state!: EntityTable<ConversationState, 'conversationId'> // simplified PK for now, or compound
+  conversation_state!: EntityTable<ConversationState, 'conversationId'>
   project_meta!: EntityTable<ProjectMeta, 'projectId'>
+
+  // Whiteboard tables
+  whiteboardOfflineUpdates!: EntityTable<WhiteboardOfflineUpdate, 'id'>
+  whiteboardBoardCache!: EntityTable<WhiteboardBoardCache, 'boardId'>
+  // ❌ WhiteboardPresence REMOVED - presence is ephemeral (Redux/WS only)
 
   constructor() {
     super('CollabifyDB')
 
+    // v1: Initial chat schema
     this.version(1).stores({
-      // 1. Core Message Stream
-      // Partitioned by project -> conversation -> streamId
-      // Compound Index: [projectId+conversationId+streamId] enables efficient timeline queries
       messages:
         '[projectId+conversationId+streamId], dedupeId, projectId, conversationId, streamId',
-
-      // 2. Outbox (Optimistic Updates)
-      // Pending outbound messages
       outbox: '++id, projectId, conversationId, dedupeId, authorId, createdAt',
-
-      // 3. Conversation State
-      // Cursor tracking, read receipts, last opened timestamps.
       conversation_state:
         '[projectId+conversationId], projectId, conversationId, lastStreamIdSeen, lastOpenedAt',
-
-      // 4. Project Metadata
-      // Track Access Time for LRU Eviction policies.
       project_meta: 'projectId, workspaceId, lastAccessedAt',
     })
 
+    // v2: Outbox status index (enables efficient retry sweeps)
     this.version(2).stores({
       outbox:
         '++id, projectId, conversationId, dedupeId, authorId, status, createdAt',
     })
 
+    // v3: Dual-sequencing (gap detection for real-time reconciliation)
     this.version(3).stores({
-      // 5. Dual-Sequencing Support
-      // Added `sequence` for gap detection
-      // Added `[projectId+conversationId+sequence]` for fast ordering/fetching
       messages:
         '[projectId+conversationId+streamId], [projectId+conversationId+sequence], dedupeId, projectId, conversationId, streamId, sequence',
     })
 
+    // v4: Bounded retries (prevent infinite retry loops)
     this.version(4).stores({
-      // 6. Bounded Retries + Compound Index Optimization
       outbox:
         '++id, [conversationId+projectId], projectId, conversationId, dedupeId, authorId, status, retryCount, createdAt',
+    })
+
+    // v5: Whiteboard offline-first support
+    // WARNING: Binary blob storage - monitor IndexedDB quota pressure
+    // TODO: Add quota monitoring in app bootstrap
+    this.version(5).stores({
+      whiteboardOfflineUpdates:
+        '++id, boardId, status, [boardId+status], timestamp, createdAt, mergedInto, size',
+
+      whiteboardBoardCache: 'boardId, updatedAt, snapshotSize',
     })
   }
 }
