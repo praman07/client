@@ -12,7 +12,11 @@ import {
   DialogDescription,
 } from '@/shared/ui/primitives/dialog'
 import { Button } from '@/shared/ui/primitives/button'
-import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/primitives/avatar'
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from '@/shared/ui/primitives/avatar'
 import { ScrollArea } from '@/shared/ui/primitives/scroll-area'
 import { useAddCollaborators } from '../hooks'
 import { addCollaboratorsSchema } from '../model'

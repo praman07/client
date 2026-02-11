@@ -34,7 +34,7 @@ export function useLockBoard() {
           if (!old) return old
           return {
             ...old,
-            board: old.board ? { ...old.board, isLocked: true } : null,
+            getBoard: old.getBoard ? { ...old.getBoard, isLocked: true } : null,
           }
         },
       )

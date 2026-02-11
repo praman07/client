@@ -34,7 +34,9 @@ export function useArchiveBoard() {
           if (!old) return old
           return {
             ...old,
-            board: old.board ? { ...old.board, isArchived: true } : null,
+            getBoard: old.getBoard
+              ? { ...old.getBoard, isArchived: true }
+              : null,
           }
         },
       )

@@ -1,20 +1,18 @@
 import { gql } from '@/gql'
 
 export const GET_BOARD = gql(`
-  query GetBoard($id: ID!) {
-    board(id: $id) {
+  query GetBoard($boardId: ID!) {
+    getBoard(boardId: $boardId) {
       id
-      workspaceId
-      projectId
       title
       description
-      elementCount
-      fileSizeBytes
-      isArchived
-      isLocked
+      workspaceId
+      projectId
       createdBy
       createdAt
       updatedAt
+      isLocked
+      isArchived
     }
   }
 `)

@@ -9,7 +9,11 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/shared/ui/primitives/alert-dialog'
-import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/primitives/avatar'
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from '@/shared/ui/primitives/avatar'
 import { useRemoveCollaborator } from '../hooks'
 import { mapRemoveCollaboratorError } from '../lib'
 
@@ -36,8 +40,7 @@ export function RemoveCollaboratorDialog({
   open,
   onOpenChange,
 }: RemoveCollaboratorDialogProps) {
-  const { mutateAsync: removeCollaborator, isPending } =
-    useRemoveCollaborator()
+  const { mutateAsync: removeCollaborator, isPending } = useRemoveCollaborator()
 
   const handleRemove = async () => {
     if (!collaborator) return

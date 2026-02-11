@@ -38,7 +38,7 @@ export function useRenameBoard() {
           if (!old) return old
           return {
             ...old,
-            board: old.board ? { ...old.board, title } : null,
+            getBoard: old.getBoard ? { ...old.getBoard, name: title } : null,
           }
         },
       )

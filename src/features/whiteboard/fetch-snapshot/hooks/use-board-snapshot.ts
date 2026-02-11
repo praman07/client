@@ -11,12 +11,15 @@ import type { GetBoardSnapshotQuery } from '@/gql/graphql'
 /**
  * Fetch Y.js snapshot for board initialization (Base64 encoded, auto-decoded to Uint8Array)
  *
+ * @param boardId - Board to load snapshot for
+ * @param stateVector - Optional Y.js state vector for differential sync
  * @example
  * const { data } = useBoardSnapshot('board_abc123')
  * if (data) Y.applyUpdate(ydoc, data.diff)
  */
 export function useBoardSnapshot(
   boardId: string,
+  stateVector?: string,
   options?: Omit<
     UseQueryOptions<GetBoardSnapshotQuery, Error, DecodedSnapshot>,
     'queryKey' | 'queryFn' | 'select'
@@ -31,9 +34,9 @@ export function useBoardSnapshot(
       if (!token) throw new Error('Not authenticated')
 
       const client = GqlClient(token)
-      return client.request(GET_BOARD_SNAPSHOT, { boardId })
+      return client.request(GET_BOARD_SNAPSHOT, { boardId, stateVector })
     },
-    select: (data) => decodeSnapshot(data.boardSnapshot),
+    select: (data) => decodeSnapshot(data.getBoardSnapshot),
     enabled: !!boardId,
     staleTime: Infinity, // Snapshots are immutable
     gcTime: 1000 * 60 * 5, // Cache for 5 minutes

@@ -1,25 +1,10 @@
 import { useQuery } from '@tanstack/react-query'
-import type { UseQueryOptions } from '@tanstack/react-query'
 import { useAuth } from '@/shared/hooks'
 import { GqlClient } from '@/shared/api/graphql-client'
 import { boardKeys } from '@/entities/whiteboard-board'
-import { GET_BOARD_COLLABORATORS } from '../api/fragments'
-import type { GetBoardCollaboratorsQuery } from '@/gql/graphql'
+import { GET_ACTIVE_COLLABORATORS } from '../api'
 
-/**
- * Fetch list of users with access to a board (DB collaborators)
- *
- * @example
- * const { data } = useBoardCollaborators('board_abc123')
- * const collaborators = data?.boardCollaborators ?? []
- */
-export function useBoardCollaborators(
-  boardId: string,
-  options?: Omit<
-    UseQueryOptions<GetBoardCollaboratorsQuery>,
-    'queryKey' | 'queryFn'
-  >,
-) {
+export function useActiveCollaborators(boardId: string) {
   const { getToken } = useAuth()
 
   return useQuery({
@@ -29,10 +14,10 @@ export function useBoardCollaborators(
       if (!token) throw new Error('Not authenticated')
 
       const client = GqlClient(token)
-      return client.request(GET_BOARD_COLLABORATORS, { boardId })
+      const data = await client.request(GET_ACTIVE_COLLABORATORS, { boardId })
+
+      return data.activeCollaborators
     },
-    enabled: !!boardId,
-    staleTime: 5 * 60 * 1000, // 5 minutes
-    ...options,
+    enabled: Boolean(boardId),
   })
 }

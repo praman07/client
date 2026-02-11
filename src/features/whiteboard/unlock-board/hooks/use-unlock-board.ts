@@ -34,7 +34,9 @@ export function useUnlockBoard() {
           if (!old) return old
           return {
             ...old,
-            board: old.board ? { ...old.board, isLocked: false } : null,
+            getBoard: old.getBoard
+              ? { ...old.getBoard, isLocked: false }
+              : null,
           }
         },
       )

@@ -11,7 +11,7 @@ import type { GetBoardQuery } from '@/gql/graphql'
  *
  * @example
  * const { data } = useBoard('board_abc123')
- * const board = data?.board
+ * const board = data?.getBoard
  */
 export function useBoard(
   boardId: string,
@@ -26,7 +26,7 @@ export function useBoard(
       if (!token) throw new Error('Not authenticated')
 
       const client = GqlClient(token)
-      return client.request(GET_BOARD, { id: boardId })
+      return client.request(GET_BOARD, { boardId })
     },
     enabled: !!boardId,
     staleTime: 5 * 60 * 1000, // 5 minutes

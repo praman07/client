@@ -3,7 +3,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "codegen": "graphql-codegen",
+    "gen": "graphql-codegen",
     "schema:sync": "cd ../server && bun run scripts/sync-schema.ts",
     "dev": "vite dev --port 3000",
     "build": "vite build",

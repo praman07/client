@@ -1,15 +1,15 @@
 import { gql } from '@/gql'
 
-export const GET_BOARD_COLLABORATORS = gql(`
-  query GetBoardCollaborators($boardId: ID!) {
-    boardCollaborators(boardId: $boardId) {
+export const GET_ACTIVE_COLLABORATORS = gql(`
+  query GetActiveCollaborators($boardId: ID!) {
+    activeCollaborators(boardId: $boardId) {
       userId
+      connectionId
       joinedAt
-      user {
-        id
-        fullName
-        email
-        avatarUrl
+      lastSeenAt
+      cursorPosition {
+        x
+        y
       }
     }
   }

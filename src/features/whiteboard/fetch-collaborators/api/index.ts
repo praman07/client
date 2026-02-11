@@ -1,1 +1,1 @@
-export { GET_BOARD_COLLABORATORS } from './fragments'
+export { GET_ACTIVE_COLLABORATORS } from './fragments'

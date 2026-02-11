@@ -37,15 +37,13 @@ export function useUpdateDescription() {
       // Optimistically update
       queryClient.setQueryData<GetBoardQuery>(
         boardKeys.detail(boardId),
-        (old) => {
-          if (!old) return old
-          return {
+        (old) =>
+          old && {
             ...old,
-            board: old.board
-              ? { ...old.board, description: description || null }
+            getBoard: old.getBoard
+              ? { ...old.getBoard, description: description || null }
               : null,
-          }
-        },
+          },
       )
 
       return { previous }

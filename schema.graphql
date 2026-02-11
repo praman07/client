@@ -97,17 +97,16 @@ type Query {
     otherUserId: ID!
   ): DmConversation
   getUsersByIds(userIds: [ID!]!): [UserBasic!]!
-  board(id: ID!): Whiteboard
+  getBoard(boardId: ID!): Whiteboard
   userBoards(workspaceId: ID!, limit: Int, cursor: ID): BoardConnection!
   boardCollaborators(boardId: ID!): [BoardCollaborator!]!
-  projectBoards(projectId: ID!, limit: Int, cursor: ID): BoardConnection!
   workspaceBoards(
     workspaceId: ID!
     includeArchived: Boolean
     limit: Int
     cursor: ID
   ): BoardConnection!
-  boardSnapshot(boardId: ID!): BoardSnapshot!
+  getBoardSnapshot(boardId: ID!, stateVector: String): BoardSnapshot!
   activeCollaborators(boardId: ID!): [ActiveCollaborator!]!
 }
 

@@ -1,1 +1,1 @@
-export { useBoardCollaborators } from './use-board-collaborators'
+export { useActiveCollaborators } from './use-board-collaborators'

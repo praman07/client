@@ -34,7 +34,9 @@ export function useUnarchiveBoard() {
           if (!old) return old
           return {
             ...old,
-            board: old.board ? { ...old.board, isArchived: false } : null,
+            getBoard: old.getBoard
+              ? { ...old.getBoard, isArchived: false }
+              : null,
           }
         },
       )
