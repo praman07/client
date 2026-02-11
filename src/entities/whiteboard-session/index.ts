@@ -8,6 +8,14 @@ export type {
 export * from './model/selectors'
 export * as whiteboardSessionActions from './model/slice'
 
+// Redux Actions (for features/whiteboard-events)
+export {
+  setConnectionStatus,
+  decrementPendingCount,
+  incrementPendingCount,
+  setActiveBoardId,
+} from './model/slice'
+
 // Hooks
 export { useYDocInstance } from './hooks/use-ydoc-instance'
 export { useSyncStatus } from './hooks/use-sync-status'

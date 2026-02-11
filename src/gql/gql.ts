@@ -54,6 +54,20 @@ type Documents = {
     "\n  query GetWorkspaceMembers($workspaceId: ID!) {\n    workspaceMembers(workspaceId: $workspaceId) {\n      id\n      role\n      joinedAt\n      user {\n        id\n        fullName\n        email\n        avatarUrl\n      }\n    }\n  }\n": typeof types.GetWorkspaceMembersDocument,
     "\n  mutation UpdateWorkspaceMemberRole($workspaceId: ID!, $memberId: ID!, $role: String!) {\n    updateWorkspaceMemberRole(workspaceId: $workspaceId, memberId: $memberId, role: $role) {\n      id\n      role\n    }\n  }\n": typeof types.UpdateWorkspaceMemberRoleDocument,
     "\n  mutation RemoveWorkspaceMember($workspaceId: ID!, $memberId: ID!) {\n    removeWorkspaceMember(workspaceId: $workspaceId, memberId: $memberId) {\n      success\n      message\n    }\n  }\n": typeof types.RemoveWorkspaceMemberDocument,
+    "\n  mutation AddBoardCollaborators($boardId: ID!, $userIds: [ID!]!) {\n    addBoardCollaborators(boardId: $boardId, userIds: $userIds) {\n      success\n      addedCount\n      skippedCount\n    }\n  }\n": typeof types.AddBoardCollaboratorsDocument,
+    "\n  mutation ArchiveBoard($boardId: ID!) {\n    archiveBoard(boardId: $boardId) {\n      id\n      isArchived\n      updatedAt\n    }\n  }\n": typeof types.ArchiveBoardDocument,
+    "\n  mutation CreateBoard($input: CreateBoardInput!) {\n    createBoard(input: $input) {\n      board {\n        id\n        workspaceId\n        projectId\n        title\n        description\n        createdAt\n      }\n      addedCollaborators {\n        userId\n        joinedAt\n      }\n    }\n  }\n": typeof types.CreateBoardDocument,
+    "\n  mutation DeleteBoard($boardId: ID!) {\n    deleteBoard(boardId: $boardId) {\n      success\n      boardId\n    }\n  }\n": typeof types.DeleteBoardDocument,
+    "\n  query GetBoard($id: ID!) {\n    board(id: $id) {\n      id\n      workspaceId\n      projectId\n      title\n      description\n      elementCount\n      fileSizeBytes\n      isArchived\n      isLocked\n      createdBy\n      createdAt\n      updatedAt\n    }\n  }\n": typeof types.GetBoardDocument,
+    "\n  query GetBoardCollaborators($boardId: ID!) {\n    boardCollaborators(boardId: $boardId) {\n      userId\n      joinedAt\n      user {\n        id\n        fullName\n        email\n        avatarUrl\n      }\n    }\n  }\n": typeof types.GetBoardCollaboratorsDocument,
+    "\n  query GetBoardSnapshot($boardId: ID!) {\n    boardSnapshot(boardId: $boardId) {\n      boardId\n      snapshot\n      lastStreamId\n      snapshotTimestamp\n    }\n  }\n": typeof types.GetBoardSnapshotDocument,
+    "\n  query GetUserBoards($workspaceId: ID!, $limit: Int, $cursor: ID) {\n    userBoards(workspaceId: $workspaceId, limit: $limit, cursor: $cursor) {\n      boards {\n        id\n        workspaceId\n        projectId\n        title\n        description\n        elementCount\n        fileSizeBytes\n        isArchived\n        isLocked\n        createdBy\n        createdAt\n        updatedAt\n      }\n      nextCursor\n    }\n  }\n": typeof types.GetUserBoardsDocument,
+    "\n  mutation LockBoard($boardId: ID!) {\n    lockBoard(boardId: $boardId) {\n      id\n      isLocked\n      updatedAt\n    }\n  }\n": typeof types.LockBoardDocument,
+    "\n  mutation RemoveBoardCollaborator($boardId: ID!, $userId: ID!) {\n    removeBoardCollaborator(boardId: $boardId, userId: $userId) {\n      success\n    }\n  }\n": typeof types.RemoveBoardCollaboratorDocument,
+    "\n  mutation RenameBoard($boardId: ID!, $title: String!) {\n    renameBoard(boardId: $boardId, title: $title) {\n      id\n      title\n      updatedAt\n    }\n  }\n": typeof types.RenameBoardDocument,
+    "\n  mutation UnarchiveBoard($boardId: ID!) {\n    unarchiveBoard(boardId: $boardId) {\n      id\n      isArchived\n      updatedAt\n    }\n  }\n": typeof types.UnarchiveBoardDocument,
+    "\n  mutation UnlockBoard($boardId: ID!) {\n    unlockBoard(boardId: $boardId) {\n      id\n      isLocked\n      updatedAt\n    }\n  }\n": typeof types.UnlockBoardDocument,
+    "\n  mutation UpdateBoardDescription($boardId: ID!, $description: String) {\n    updateBoardDescription(boardId: $boardId, description: $description) {\n      id\n      description\n      updatedAt\n    }\n  }\n": typeof types.UpdateBoardDescriptionDocument,
 };
 const documents: Documents = {
     "\n  fragment MessageRecoveryFields on ChatMessage {\n    id\n    streamId\n    sequence\n    conversationId\n    authorUserId\n    content\n    type\n    createdAt\n  }\n": types.MessageRecoveryFieldsFragmentDoc,
@@ -96,6 +110,20 @@ const documents: Documents = {
     "\n  query GetWorkspaceMembers($workspaceId: ID!) {\n    workspaceMembers(workspaceId: $workspaceId) {\n      id\n      role\n      joinedAt\n      user {\n        id\n        fullName\n        email\n        avatarUrl\n      }\n    }\n  }\n": types.GetWorkspaceMembersDocument,
     "\n  mutation UpdateWorkspaceMemberRole($workspaceId: ID!, $memberId: ID!, $role: String!) {\n    updateWorkspaceMemberRole(workspaceId: $workspaceId, memberId: $memberId, role: $role) {\n      id\n      role\n    }\n  }\n": types.UpdateWorkspaceMemberRoleDocument,
     "\n  mutation RemoveWorkspaceMember($workspaceId: ID!, $memberId: ID!) {\n    removeWorkspaceMember(workspaceId: $workspaceId, memberId: $memberId) {\n      success\n      message\n    }\n  }\n": types.RemoveWorkspaceMemberDocument,
+    "\n  mutation AddBoardCollaborators($boardId: ID!, $userIds: [ID!]!) {\n    addBoardCollaborators(boardId: $boardId, userIds: $userIds) {\n      success\n      addedCount\n      skippedCount\n    }\n  }\n": types.AddBoardCollaboratorsDocument,
+    "\n  mutation ArchiveBoard($boardId: ID!) {\n    archiveBoard(boardId: $boardId) {\n      id\n      isArchived\n      updatedAt\n    }\n  }\n": types.ArchiveBoardDocument,
+    "\n  mutation CreateBoard($input: CreateBoardInput!) {\n    createBoard(input: $input) {\n      board {\n        id\n        workspaceId\n        projectId\n        title\n        description\n        createdAt\n      }\n      addedCollaborators {\n        userId\n        joinedAt\n      }\n    }\n  }\n": types.CreateBoardDocument,
+    "\n  mutation DeleteBoard($boardId: ID!) {\n    deleteBoard(boardId: $boardId) {\n      success\n      boardId\n    }\n  }\n": types.DeleteBoardDocument,
+    "\n  query GetBoard($id: ID!) {\n    board(id: $id) {\n      id\n      workspaceId\n      projectId\n      title\n      description\n      elementCount\n      fileSizeBytes\n      isArchived\n      isLocked\n      createdBy\n      createdAt\n      updatedAt\n    }\n  }\n": types.GetBoardDocument,
+    "\n  query GetBoardCollaborators($boardId: ID!) {\n    boardCollaborators(boardId: $boardId) {\n      userId\n      joinedAt\n      user {\n        id\n        fullName\n        email\n        avatarUrl\n      }\n    }\n  }\n": types.GetBoardCollaboratorsDocument,
+    "\n  query GetBoardSnapshot($boardId: ID!) {\n    boardSnapshot(boardId: $boardId) {\n      boardId\n      snapshot\n      lastStreamId\n      snapshotTimestamp\n    }\n  }\n": types.GetBoardSnapshotDocument,
+    "\n  query GetUserBoards($workspaceId: ID!, $limit: Int, $cursor: ID) {\n    userBoards(workspaceId: $workspaceId, limit: $limit, cursor: $cursor) {\n      boards {\n        id\n        workspaceId\n        projectId\n        title\n        description\n        elementCount\n        fileSizeBytes\n        isArchived\n        isLocked\n        createdBy\n        createdAt\n        updatedAt\n      }\n      nextCursor\n    }\n  }\n": types.GetUserBoardsDocument,
+    "\n  mutation LockBoard($boardId: ID!) {\n    lockBoard(boardId: $boardId) {\n      id\n      isLocked\n      updatedAt\n    }\n  }\n": types.LockBoardDocument,
+    "\n  mutation RemoveBoardCollaborator($boardId: ID!, $userId: ID!) {\n    removeBoardCollaborator(boardId: $boardId, userId: $userId) {\n      success\n    }\n  }\n": types.RemoveBoardCollaboratorDocument,
+    "\n  mutation RenameBoard($boardId: ID!, $title: String!) {\n    renameBoard(boardId: $boardId, title: $title) {\n      id\n      title\n      updatedAt\n    }\n  }\n": types.RenameBoardDocument,
+    "\n  mutation UnarchiveBoard($boardId: ID!) {\n    unarchiveBoard(boardId: $boardId) {\n      id\n      isArchived\n      updatedAt\n    }\n  }\n": types.UnarchiveBoardDocument,
+    "\n  mutation UnlockBoard($boardId: ID!) {\n    unlockBoard(boardId: $boardId) {\n      id\n      isLocked\n      updatedAt\n    }\n  }\n": types.UnlockBoardDocument,
+    "\n  mutation UpdateBoardDescription($boardId: ID!, $description: String) {\n    updateBoardDescription(boardId: $boardId, description: $description) {\n      id\n      description\n      updatedAt\n    }\n  }\n": types.UpdateBoardDescriptionDocument,
 };
 
 /**
@@ -272,6 +300,62 @@ export function gql(source: "\n  mutation UpdateWorkspaceMemberRole($workspaceId
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "\n  mutation RemoveWorkspaceMember($workspaceId: ID!, $memberId: ID!) {\n    removeWorkspaceMember(workspaceId: $workspaceId, memberId: $memberId) {\n      success\n      message\n    }\n  }\n"): (typeof documents)["\n  mutation RemoveWorkspaceMember($workspaceId: ID!, $memberId: ID!) {\n    removeWorkspaceMember(workspaceId: $workspaceId, memberId: $memberId) {\n      success\n      message\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation AddBoardCollaborators($boardId: ID!, $userIds: [ID!]!) {\n    addBoardCollaborators(boardId: $boardId, userIds: $userIds) {\n      success\n      addedCount\n      skippedCount\n    }\n  }\n"): (typeof documents)["\n  mutation AddBoardCollaborators($boardId: ID!, $userIds: [ID!]!) {\n    addBoardCollaborators(boardId: $boardId, userIds: $userIds) {\n      success\n      addedCount\n      skippedCount\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation ArchiveBoard($boardId: ID!) {\n    archiveBoard(boardId: $boardId) {\n      id\n      isArchived\n      updatedAt\n    }\n  }\n"): (typeof documents)["\n  mutation ArchiveBoard($boardId: ID!) {\n    archiveBoard(boardId: $boardId) {\n      id\n      isArchived\n      updatedAt\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation CreateBoard($input: CreateBoardInput!) {\n    createBoard(input: $input) {\n      board {\n        id\n        workspaceId\n        projectId\n        title\n        description\n        createdAt\n      }\n      addedCollaborators {\n        userId\n        joinedAt\n      }\n    }\n  }\n"): (typeof documents)["\n  mutation CreateBoard($input: CreateBoardInput!) {\n    createBoard(input: $input) {\n      board {\n        id\n        workspaceId\n        projectId\n        title\n        description\n        createdAt\n      }\n      addedCollaborators {\n        userId\n        joinedAt\n      }\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation DeleteBoard($boardId: ID!) {\n    deleteBoard(boardId: $boardId) {\n      success\n      boardId\n    }\n  }\n"): (typeof documents)["\n  mutation DeleteBoard($boardId: ID!) {\n    deleteBoard(boardId: $boardId) {\n      success\n      boardId\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  query GetBoard($id: ID!) {\n    board(id: $id) {\n      id\n      workspaceId\n      projectId\n      title\n      description\n      elementCount\n      fileSizeBytes\n      isArchived\n      isLocked\n      createdBy\n      createdAt\n      updatedAt\n    }\n  }\n"): (typeof documents)["\n  query GetBoard($id: ID!) {\n    board(id: $id) {\n      id\n      workspaceId\n      projectId\n      title\n      description\n      elementCount\n      fileSizeBytes\n      isArchived\n      isLocked\n      createdBy\n      createdAt\n      updatedAt\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  query GetBoardCollaborators($boardId: ID!) {\n    boardCollaborators(boardId: $boardId) {\n      userId\n      joinedAt\n      user {\n        id\n        fullName\n        email\n        avatarUrl\n      }\n    }\n  }\n"): (typeof documents)["\n  query GetBoardCollaborators($boardId: ID!) {\n    boardCollaborators(boardId: $boardId) {\n      userId\n      joinedAt\n      user {\n        id\n        fullName\n        email\n        avatarUrl\n      }\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  query GetBoardSnapshot($boardId: ID!) {\n    boardSnapshot(boardId: $boardId) {\n      boardId\n      snapshot\n      lastStreamId\n      snapshotTimestamp\n    }\n  }\n"): (typeof documents)["\n  query GetBoardSnapshot($boardId: ID!) {\n    boardSnapshot(boardId: $boardId) {\n      boardId\n      snapshot\n      lastStreamId\n      snapshotTimestamp\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  query GetUserBoards($workspaceId: ID!, $limit: Int, $cursor: ID) {\n    userBoards(workspaceId: $workspaceId, limit: $limit, cursor: $cursor) {\n      boards {\n        id\n        workspaceId\n        projectId\n        title\n        description\n        elementCount\n        fileSizeBytes\n        isArchived\n        isLocked\n        createdBy\n        createdAt\n        updatedAt\n      }\n      nextCursor\n    }\n  }\n"): (typeof documents)["\n  query GetUserBoards($workspaceId: ID!, $limit: Int, $cursor: ID) {\n    userBoards(workspaceId: $workspaceId, limit: $limit, cursor: $cursor) {\n      boards {\n        id\n        workspaceId\n        projectId\n        title\n        description\n        elementCount\n        fileSizeBytes\n        isArchived\n        isLocked\n        createdBy\n        createdAt\n        updatedAt\n      }\n      nextCursor\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation LockBoard($boardId: ID!) {\n    lockBoard(boardId: $boardId) {\n      id\n      isLocked\n      updatedAt\n    }\n  }\n"): (typeof documents)["\n  mutation LockBoard($boardId: ID!) {\n    lockBoard(boardId: $boardId) {\n      id\n      isLocked\n      updatedAt\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation RemoveBoardCollaborator($boardId: ID!, $userId: ID!) {\n    removeBoardCollaborator(boardId: $boardId, userId: $userId) {\n      success\n    }\n  }\n"): (typeof documents)["\n  mutation RemoveBoardCollaborator($boardId: ID!, $userId: ID!) {\n    removeBoardCollaborator(boardId: $boardId, userId: $userId) {\n      success\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation RenameBoard($boardId: ID!, $title: String!) {\n    renameBoard(boardId: $boardId, title: $title) {\n      id\n      title\n      updatedAt\n    }\n  }\n"): (typeof documents)["\n  mutation RenameBoard($boardId: ID!, $title: String!) {\n    renameBoard(boardId: $boardId, title: $title) {\n      id\n      title\n      updatedAt\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation UnarchiveBoard($boardId: ID!) {\n    unarchiveBoard(boardId: $boardId) {\n      id\n      isArchived\n      updatedAt\n    }\n  }\n"): (typeof documents)["\n  mutation UnarchiveBoard($boardId: ID!) {\n    unarchiveBoard(boardId: $boardId) {\n      id\n      isArchived\n      updatedAt\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation UnlockBoard($boardId: ID!) {\n    unlockBoard(boardId: $boardId) {\n      id\n      isLocked\n      updatedAt\n    }\n  }\n"): (typeof documents)["\n  mutation UnlockBoard($boardId: ID!) {\n    unlockBoard(boardId: $boardId) {\n      id\n      isLocked\n      updatedAt\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation UpdateBoardDescription($boardId: ID!, $description: String) {\n    updateBoardDescription(boardId: $boardId, description: $description) {\n      id\n      description\n      updatedAt\n    }\n  }\n"): (typeof documents)["\n  mutation UpdateBoardDescription($boardId: ID!, $description: String) {\n    updateBoardDescription(boardId: $boardId, description: $description) {\n      id\n      description\n      updatedAt\n    }\n  }\n"];
 
 export function gql(source: string) {
   return (documents as any)[source] ?? {};

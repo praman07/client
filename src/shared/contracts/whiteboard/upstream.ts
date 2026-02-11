@@ -31,7 +31,6 @@ export enum WhiteboardUpstreamEvent {
  */
 export interface SubscribeBoardPayload {
   boardId: string
-  stateVector?: string // Optional: Client's Y.Doc state vector (Base64) for diff computation
 }
 
 /**

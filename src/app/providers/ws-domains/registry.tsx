@@ -1,21 +1,10 @@
-/**
- * DOMAIN REGISTRY: React component for plugin orchestration
- *
- * Responsibility:
- * - Register domain plugins with system
- * - Initialize event handlers for each domain
- * - Manage plugin lifecycle (mount/unmount)
- *
- * Usage:
- * ```tsx
- * <DomainRegistry plugins={[chatPlugin]} />
- * ```
- */
-
 import { useEffect } from 'react'
 import { createChatPlugin } from './chat-plugin'
+import { createWhiteboardPlugin } from './whiteboard-plugin'
 import { registerPlugin } from '@/shared/ws/domains'
 import { createLogger } from '@/shared/lib/logger'
+import { useQueryClient } from '@tanstack/react-query'
+import { useAppDispatch, useUser } from '@/shared/hooks'
 
 const log = createLogger('ws:domain-registry')
 
@@ -37,6 +26,10 @@ interface DomainRegistryProps {
 }
 
 export function DomainRegistry({ projectId }: DomainRegistryProps) {
+  const dispatch = useAppDispatch()
+  const queryClient = useQueryClient()
+  const { user } = useUser()
+
   useEffect(() => {
     log.debug('Initializing domain plugins')
 
@@ -48,12 +41,15 @@ export function DomainRegistry({ projectId }: DomainRegistryProps) {
 
     registerPlugin(chatPlugin)
 
-    // Future plugins:
-    // const whiteboardPlugin = createWhiteboardPlugin({ ... })
-    // registerPlugin(whiteboardPlugin)
-    //
-    // const pagesPlugin = createPagesPlugin({ ... })
-    // registerPlugin(pagesPlugin)
+    // Whiteboard Plugin
+    // Provides: dispatch, queryClient, userId for event handlers
+    const whiteboardPlugin = createWhiteboardPlugin({
+      dispatch,
+      queryClient,
+      userId: user?.id ?? null,
+    })
+
+    registerPlugin(whiteboardPlugin)
 
     log.debug('Domain plugins registered')
 
@@ -62,7 +58,7 @@ export function DomainRegistry({ projectId }: DomainRegistryProps) {
       log.debug('Cleaning up domain plugins')
       // Plugin registry handles cleanup
     }
-  }, [projectId])
+  }, [projectId, dispatch, queryClient, user?.id])
 
   return null
 }

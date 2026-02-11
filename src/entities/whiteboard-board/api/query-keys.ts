@@ -6,4 +6,6 @@ export const boardKeys = {
   detail: (boardId: string) => [...boardKeys.details(), boardId] as const,
   snapshot: (boardId: string) =>
     [...boardKeys.all, 'snapshot', boardId] as const,
+  collaborators: (boardId: string) =>
+    [...boardKeys.detail(boardId), 'collaborators'] as const,
 }

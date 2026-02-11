@@ -3,6 +3,7 @@ export type ConnectionStatus =
   | 'connecting'
   | 'connected'
   | 'reconnecting'
+  | 'locked' // Board has been locked by admin
 
 export type SyncStatus = 'idle' | 'loading' | 'synced' | 'error'
 

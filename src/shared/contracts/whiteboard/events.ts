@@ -9,6 +9,9 @@
 import { WhiteboardUpstreamEvent } from './upstream'
 import { WhiteboardDownstreamEvent } from './downstream'
 
+// Re-export event enums for direct usage
+export { WhiteboardUpstreamEvent, WhiteboardDownstreamEvent }
+
 /**
  * All whiteboard WebSocket events (bidirectional)
  * Combines upstream (client→server) and downstream (server→client) events

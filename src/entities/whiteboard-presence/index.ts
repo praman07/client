@@ -8,6 +8,15 @@ export type {
 export * from './model/selectors'
 export * as whiteboardPresenceActions from './model/slice'
 
+// Redux Actions (for features/whiteboard-events)
+export {
+  setActiveCollaborators,
+  addCollaborator,
+  removeCollaborator,
+  updateCursorPosition,
+  setDrawingState,
+} from './model/slice'
+
 // Hooks
 export { useIdleDetection } from './hooks/use-idle-detection'
 export { useActiveCollaborators } from './hooks/use-active-collaborators'

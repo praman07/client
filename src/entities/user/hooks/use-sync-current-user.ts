@@ -27,7 +27,6 @@ export function useSyncCurrentUser() {
         dispatch(setCurrentUser(user))
       }
       return data
-      return data
     },
     staleTime: Infinity,
     refetchOnWindowFocus: false,
