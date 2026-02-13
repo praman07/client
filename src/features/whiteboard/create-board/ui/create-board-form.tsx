@@ -1,4 +1,4 @@
-import { useState } from 'react'
+ import { useState } from 'react'
 import { useForm } from '@tanstack/react-form'
 import { toast } from 'sonner'
 import { Button } from '@/shared/ui/primitives/button'
@@ -8,6 +8,8 @@ import { Textarea } from '@/shared/ui/primitives/textarea'
 import { useCreateBoard } from '../hooks'
 import { createBoardSchema } from '../model'
 import { mapCreateBoardError } from '../lib'
+import { CollaboratorPicker } from './collaborator-picker'
+import { useAuth } from '@/shared/hooks'
 
 interface CreateBoardFormProps {
   workspaceId: string
@@ -19,7 +21,7 @@ interface CreateBoardFormProps {
 /**
  * Form for creating a new whiteboard board
  *
- * Features: TanStack Form, Zod validation, optimistic updates
+ * Features: TanStack Form, Zod validation, optimistic updates, collaborator selection
  */
 export function CreateBoardForm({
   workspaceId,
@@ -29,6 +31,7 @@ export function CreateBoardForm({
 }: CreateBoardFormProps) {
   const [rootError, setRootError] = useState<string | null>(null)
   const { mutateAsync: createBoard, isPending } = useCreateBoard()
+  const { userId } = useAuth()
 
   const form = useForm({
     defaultValues: {
@@ -36,6 +39,7 @@ export function CreateBoardForm({
       projectId,
       title: '',
       description: '',
+      collaboratorIds: userId ? [userId] : [] as string[],
     },
     onSubmit: async ({ value }) => {
       setRootError(null)
@@ -134,6 +138,18 @@ export function CreateBoardForm({
               </p>
             )}
           </div>
+        )}
+      </form.Field>
+
+      {/* Collaborator Selection */}
+      <form.Field name="collaboratorIds">
+        {(field) => (
+          <CollaboratorPicker
+            workspaceId={workspaceId}
+            selectedUserIds={field.state.value}
+            onChange={field.handleChange}
+            currentUserId={userId || undefined}
+          />
         )}
       </form.Field>
 

@@ -11,19 +11,25 @@ const log = createLogger('whiteboard:use-subscribe')
  * Server will send board-init event with snapshot and collaborators.
  *
  * @param boardId - Board ID to subscribe to
- * @param enabled - Whether subscription is enabled (default: true)
+ * @param options - Subscription options
+ * @param options.enabled - Whether subscription is enabled (default: true)
  *
  * @example
  * ```tsx
  * function WhiteboardCanvas({ boardId }: { boardId: string }) {
- *   // Auto-subscribe (handles cleanup automatically)
- *   useSubscribeBoard(boardId)
+ *   const { snapshotReady } = useYDocInstance(boardId)
  *
- *   // ... rest of component
+ *   // Gate subscription on snapshot ready (prevents race condition)
+ *   useSubscribeBoard(boardId, { enabled: snapshotReady })
  * }
  * ```
  */
-export function useSubscribeBoard(boardId: string, enabled = true) {
+export function useSubscribeBoard(
+  boardId: string,
+  options?: { enabled?: boolean },
+) {
+  const enabled = options?.enabled ?? true
+
   useEffect(() => {
     if (!enabled) return
 

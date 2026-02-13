@@ -40,11 +40,13 @@ import { Route as AppWorkspaceWorkspaceSlugProjectProjectSlugMeetRouteRouteImpor
 import { Route as AppWorkspaceWorkspaceSlugProjectProjectSlugListRouteRouteImport } from './routes/_app/workspace/$workspaceSlug/project.$projectSlug/list/route'
 import { Route as AppWorkspaceWorkspaceSlugProjectProjectSlugKanbanRouteRouteImport } from './routes/_app/workspace/$workspaceSlug/project.$projectSlug/kanban/route'
 import { Route as AppWorkspaceWorkspaceSlugProjectProjectSlugChatRouteRouteImport } from './routes/_app/workspace/$workspaceSlug/project.$projectSlug/chat/route'
+import { Route as AppWorkspaceWorkspaceSlugProjectProjectSlugWhiteboardIndexRouteImport } from './routes/_app/workspace/$workspaceSlug/project.$projectSlug/whiteboard/index'
 import { Route as AppWorkspaceWorkspaceSlugProjectProjectSlugVaultIndexRouteImport } from './routes/_app/workspace/$workspaceSlug/project.$projectSlug/vault/index'
 import { Route as AppWorkspaceWorkspaceSlugProjectProjectSlugTimelineIndexRouteImport } from './routes/_app/workspace/$workspaceSlug/project.$projectSlug/timeline/index'
 import { Route as AppWorkspaceWorkspaceSlugProjectProjectSlugListIndexRouteImport } from './routes/_app/workspace/$workspaceSlug/project.$projectSlug/list/index'
 import { Route as AppWorkspaceWorkspaceSlugProjectProjectSlugKanbanIndexRouteImport } from './routes/_app/workspace/$workspaceSlug/project.$projectSlug/kanban/index'
 import { Route as AppWorkspaceWorkspaceSlugProjectProjectSlugChatIndexRouteImport } from './routes/_app/workspace/$workspaceSlug/project.$projectSlug/chat/index'
+import { Route as AppWorkspaceWorkspaceSlugProjectProjectSlugWhiteboardBoardIdRouteImport } from './routes/_app/workspace/$workspaceSlug/project.$projectSlug/whiteboard/$boardId'
 import { Route as AppWorkspaceWorkspaceSlugProjectProjectSlugPagesPageIdRouteImport } from './routes/_app/workspace/$workspaceSlug/project.$projectSlug/pages/$pageId'
 import { Route as AppWorkspaceWorkspaceSlugProjectProjectSlugChatConversationIdRouteImport } from './routes/_app/workspace/$workspaceSlug/project.$projectSlug/chat/$conversationId'
 
@@ -216,6 +218,13 @@ const AppWorkspaceWorkspaceSlugProjectProjectSlugChatRouteRoute =
     path: '/chat',
     getParentRoute: () => AppWorkspaceWorkspaceSlugProjectProjectSlugRouteRoute,
   } as any)
+const AppWorkspaceWorkspaceSlugProjectProjectSlugWhiteboardIndexRoute =
+  AppWorkspaceWorkspaceSlugProjectProjectSlugWhiteboardIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () =>
+      AppWorkspaceWorkspaceSlugProjectProjectSlugWhiteboardRouteRoute,
+  } as any)
 const AppWorkspaceWorkspaceSlugProjectProjectSlugVaultIndexRoute =
   AppWorkspaceWorkspaceSlugProjectProjectSlugVaultIndexRouteImport.update({
     id: '/',
@@ -251,6 +260,15 @@ const AppWorkspaceWorkspaceSlugProjectProjectSlugChatIndexRoute =
     getParentRoute: () =>
       AppWorkspaceWorkspaceSlugProjectProjectSlugChatRouteRoute,
   } as any)
+const AppWorkspaceWorkspaceSlugProjectProjectSlugWhiteboardBoardIdRoute =
+  AppWorkspaceWorkspaceSlugProjectProjectSlugWhiteboardBoardIdRouteImport.update(
+    {
+      id: '/$boardId',
+      path: '/$boardId',
+      getParentRoute: () =>
+        AppWorkspaceWorkspaceSlugProjectProjectSlugWhiteboardRouteRoute,
+    } as any,
+  )
 const AppWorkspaceWorkspaceSlugProjectProjectSlugPagesPageIdRoute =
   AppWorkspaceWorkspaceSlugProjectProjectSlugPagesPageIdRouteImport.update({
     id: '/$pageId',
@@ -294,15 +312,17 @@ export interface FileRoutesByFullPath {
   '/workspace/$workspaceSlug/project/$projectSlug/settings': typeof AppWorkspaceWorkspaceSlugProjectProjectSlugSettingsRouteRoute
   '/workspace/$workspaceSlug/project/$projectSlug/timeline': typeof AppWorkspaceWorkspaceSlugProjectProjectSlugTimelineRouteRouteWithChildren
   '/workspace/$workspaceSlug/project/$projectSlug/vault': typeof AppWorkspaceWorkspaceSlugProjectProjectSlugVaultRouteRouteWithChildren
-  '/workspace/$workspaceSlug/project/$projectSlug/whiteboard': typeof AppWorkspaceWorkspaceSlugProjectProjectSlugWhiteboardRouteRoute
+  '/workspace/$workspaceSlug/project/$projectSlug/whiteboard': typeof AppWorkspaceWorkspaceSlugProjectProjectSlugWhiteboardRouteRouteWithChildren
   '/workspace/$workspaceSlug/project/$projectSlug/': typeof AppWorkspaceWorkspaceSlugProjectProjectSlugIndexRoute
   '/workspace/$workspaceSlug/project/$projectSlug/chat/$conversationId': typeof AppWorkspaceWorkspaceSlugProjectProjectSlugChatConversationIdRoute
   '/workspace/$workspaceSlug/project/$projectSlug/pages/$pageId': typeof AppWorkspaceWorkspaceSlugProjectProjectSlugPagesPageIdRoute
+  '/workspace/$workspaceSlug/project/$projectSlug/whiteboard/$boardId': typeof AppWorkspaceWorkspaceSlugProjectProjectSlugWhiteboardBoardIdRoute
   '/workspace/$workspaceSlug/project/$projectSlug/chat/': typeof AppWorkspaceWorkspaceSlugProjectProjectSlugChatIndexRoute
   '/workspace/$workspaceSlug/project/$projectSlug/kanban/': typeof AppWorkspaceWorkspaceSlugProjectProjectSlugKanbanIndexRoute
   '/workspace/$workspaceSlug/project/$projectSlug/list/': typeof AppWorkspaceWorkspaceSlugProjectProjectSlugListIndexRoute
   '/workspace/$workspaceSlug/project/$projectSlug/timeline/': typeof AppWorkspaceWorkspaceSlugProjectProjectSlugTimelineIndexRoute
   '/workspace/$workspaceSlug/project/$projectSlug/vault/': typeof AppWorkspaceWorkspaceSlugProjectProjectSlugVaultIndexRoute
+  '/workspace/$workspaceSlug/project/$projectSlug/whiteboard/': typeof AppWorkspaceWorkspaceSlugProjectProjectSlugWhiteboardIndexRoute
 }
 export interface FileRoutesByTo {
   '/$': typeof SplatRoute
@@ -323,15 +343,16 @@ export interface FileRoutesByTo {
   '/workspace/$workspaceSlug/project/$projectSlug/meet': typeof AppWorkspaceWorkspaceSlugProjectProjectSlugMeetRouteRoute
   '/workspace/$workspaceSlug/project/$projectSlug/pages': typeof AppWorkspaceWorkspaceSlugProjectProjectSlugPagesRouteRouteWithChildren
   '/workspace/$workspaceSlug/project/$projectSlug/settings': typeof AppWorkspaceWorkspaceSlugProjectProjectSlugSettingsRouteRoute
-  '/workspace/$workspaceSlug/project/$projectSlug/whiteboard': typeof AppWorkspaceWorkspaceSlugProjectProjectSlugWhiteboardRouteRoute
   '/workspace/$workspaceSlug/project/$projectSlug': typeof AppWorkspaceWorkspaceSlugProjectProjectSlugIndexRoute
   '/workspace/$workspaceSlug/project/$projectSlug/chat/$conversationId': typeof AppWorkspaceWorkspaceSlugProjectProjectSlugChatConversationIdRoute
   '/workspace/$workspaceSlug/project/$projectSlug/pages/$pageId': typeof AppWorkspaceWorkspaceSlugProjectProjectSlugPagesPageIdRoute
+  '/workspace/$workspaceSlug/project/$projectSlug/whiteboard/$boardId': typeof AppWorkspaceWorkspaceSlugProjectProjectSlugWhiteboardBoardIdRoute
   '/workspace/$workspaceSlug/project/$projectSlug/chat': typeof AppWorkspaceWorkspaceSlugProjectProjectSlugChatIndexRoute
   '/workspace/$workspaceSlug/project/$projectSlug/kanban': typeof AppWorkspaceWorkspaceSlugProjectProjectSlugKanbanIndexRoute
   '/workspace/$workspaceSlug/project/$projectSlug/list': typeof AppWorkspaceWorkspaceSlugProjectProjectSlugListIndexRoute
   '/workspace/$workspaceSlug/project/$projectSlug/timeline': typeof AppWorkspaceWorkspaceSlugProjectProjectSlugTimelineIndexRoute
   '/workspace/$workspaceSlug/project/$projectSlug/vault': typeof AppWorkspaceWorkspaceSlugProjectProjectSlugVaultIndexRoute
+  '/workspace/$workspaceSlug/project/$projectSlug/whiteboard': typeof AppWorkspaceWorkspaceSlugProjectProjectSlugWhiteboardIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -364,15 +385,17 @@ export interface FileRoutesById {
   '/_app/workspace/$workspaceSlug/project/$projectSlug/settings': typeof AppWorkspaceWorkspaceSlugProjectProjectSlugSettingsRouteRoute
   '/_app/workspace/$workspaceSlug/project/$projectSlug/timeline': typeof AppWorkspaceWorkspaceSlugProjectProjectSlugTimelineRouteRouteWithChildren
   '/_app/workspace/$workspaceSlug/project/$projectSlug/vault': typeof AppWorkspaceWorkspaceSlugProjectProjectSlugVaultRouteRouteWithChildren
-  '/_app/workspace/$workspaceSlug/project/$projectSlug/whiteboard': typeof AppWorkspaceWorkspaceSlugProjectProjectSlugWhiteboardRouteRoute
+  '/_app/workspace/$workspaceSlug/project/$projectSlug/whiteboard': typeof AppWorkspaceWorkspaceSlugProjectProjectSlugWhiteboardRouteRouteWithChildren
   '/_app/workspace/$workspaceSlug/project/$projectSlug/': typeof AppWorkspaceWorkspaceSlugProjectProjectSlugIndexRoute
   '/_app/workspace/$workspaceSlug/project/$projectSlug/chat/$conversationId': typeof AppWorkspaceWorkspaceSlugProjectProjectSlugChatConversationIdRoute
   '/_app/workspace/$workspaceSlug/project/$projectSlug/pages/$pageId': typeof AppWorkspaceWorkspaceSlugProjectProjectSlugPagesPageIdRoute
+  '/_app/workspace/$workspaceSlug/project/$projectSlug/whiteboard/$boardId': typeof AppWorkspaceWorkspaceSlugProjectProjectSlugWhiteboardBoardIdRoute
   '/_app/workspace/$workspaceSlug/project/$projectSlug/chat/': typeof AppWorkspaceWorkspaceSlugProjectProjectSlugChatIndexRoute
   '/_app/workspace/$workspaceSlug/project/$projectSlug/kanban/': typeof AppWorkspaceWorkspaceSlugProjectProjectSlugKanbanIndexRoute
   '/_app/workspace/$workspaceSlug/project/$projectSlug/list/': typeof AppWorkspaceWorkspaceSlugProjectProjectSlugListIndexRoute
   '/_app/workspace/$workspaceSlug/project/$projectSlug/timeline/': typeof AppWorkspaceWorkspaceSlugProjectProjectSlugTimelineIndexRoute
   '/_app/workspace/$workspaceSlug/project/$projectSlug/vault/': typeof AppWorkspaceWorkspaceSlugProjectProjectSlugVaultIndexRoute
+  '/_app/workspace/$workspaceSlug/project/$projectSlug/whiteboard/': typeof AppWorkspaceWorkspaceSlugProjectProjectSlugWhiteboardIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -406,11 +429,13 @@ export interface FileRouteTypes {
     | '/workspace/$workspaceSlug/project/$projectSlug/'
     | '/workspace/$workspaceSlug/project/$projectSlug/chat/$conversationId'
     | '/workspace/$workspaceSlug/project/$projectSlug/pages/$pageId'
+    | '/workspace/$workspaceSlug/project/$projectSlug/whiteboard/$boardId'
     | '/workspace/$workspaceSlug/project/$projectSlug/chat/'
     | '/workspace/$workspaceSlug/project/$projectSlug/kanban/'
     | '/workspace/$workspaceSlug/project/$projectSlug/list/'
     | '/workspace/$workspaceSlug/project/$projectSlug/timeline/'
     | '/workspace/$workspaceSlug/project/$projectSlug/vault/'
+    | '/workspace/$workspaceSlug/project/$projectSlug/whiteboard/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/$'
@@ -431,15 +456,16 @@ export interface FileRouteTypes {
     | '/workspace/$workspaceSlug/project/$projectSlug/meet'
     | '/workspace/$workspaceSlug/project/$projectSlug/pages'
     | '/workspace/$workspaceSlug/project/$projectSlug/settings'
-    | '/workspace/$workspaceSlug/project/$projectSlug/whiteboard'
     | '/workspace/$workspaceSlug/project/$projectSlug'
     | '/workspace/$workspaceSlug/project/$projectSlug/chat/$conversationId'
     | '/workspace/$workspaceSlug/project/$projectSlug/pages/$pageId'
+    | '/workspace/$workspaceSlug/project/$projectSlug/whiteboard/$boardId'
     | '/workspace/$workspaceSlug/project/$projectSlug/chat'
     | '/workspace/$workspaceSlug/project/$projectSlug/kanban'
     | '/workspace/$workspaceSlug/project/$projectSlug/list'
     | '/workspace/$workspaceSlug/project/$projectSlug/timeline'
     | '/workspace/$workspaceSlug/project/$projectSlug/vault'
+    | '/workspace/$workspaceSlug/project/$projectSlug/whiteboard'
   id:
     | '__root__'
     | '/_app'
@@ -475,11 +501,13 @@ export interface FileRouteTypes {
     | '/_app/workspace/$workspaceSlug/project/$projectSlug/'
     | '/_app/workspace/$workspaceSlug/project/$projectSlug/chat/$conversationId'
     | '/_app/workspace/$workspaceSlug/project/$projectSlug/pages/$pageId'
+    | '/_app/workspace/$workspaceSlug/project/$projectSlug/whiteboard/$boardId'
     | '/_app/workspace/$workspaceSlug/project/$projectSlug/chat/'
     | '/_app/workspace/$workspaceSlug/project/$projectSlug/kanban/'
     | '/_app/workspace/$workspaceSlug/project/$projectSlug/list/'
     | '/_app/workspace/$workspaceSlug/project/$projectSlug/timeline/'
     | '/_app/workspace/$workspaceSlug/project/$projectSlug/vault/'
+    | '/_app/workspace/$workspaceSlug/project/$projectSlug/whiteboard/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -708,6 +736,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppWorkspaceWorkspaceSlugProjectProjectSlugChatRouteRouteImport
       parentRoute: typeof AppWorkspaceWorkspaceSlugProjectProjectSlugRouteRoute
     }
+    '/_app/workspace/$workspaceSlug/project/$projectSlug/whiteboard/': {
+      id: '/_app/workspace/$workspaceSlug/project/$projectSlug/whiteboard/'
+      path: '/'
+      fullPath: '/workspace/$workspaceSlug/project/$projectSlug/whiteboard/'
+      preLoaderRoute: typeof AppWorkspaceWorkspaceSlugProjectProjectSlugWhiteboardIndexRouteImport
+      parentRoute: typeof AppWorkspaceWorkspaceSlugProjectProjectSlugWhiteboardRouteRoute
+    }
     '/_app/workspace/$workspaceSlug/project/$projectSlug/vault/': {
       id: '/_app/workspace/$workspaceSlug/project/$projectSlug/vault/'
       path: '/'
@@ -742,6 +777,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/workspace/$workspaceSlug/project/$projectSlug/chat/'
       preLoaderRoute: typeof AppWorkspaceWorkspaceSlugProjectProjectSlugChatIndexRouteImport
       parentRoute: typeof AppWorkspaceWorkspaceSlugProjectProjectSlugChatRouteRoute
+    }
+    '/_app/workspace/$workspaceSlug/project/$projectSlug/whiteboard/$boardId': {
+      id: '/_app/workspace/$workspaceSlug/project/$projectSlug/whiteboard/$boardId'
+      path: '/$boardId'
+      fullPath: '/workspace/$workspaceSlug/project/$projectSlug/whiteboard/$boardId'
+      preLoaderRoute: typeof AppWorkspaceWorkspaceSlugProjectProjectSlugWhiteboardBoardIdRouteImport
+      parentRoute: typeof AppWorkspaceWorkspaceSlugProjectProjectSlugWhiteboardRouteRoute
     }
     '/_app/workspace/$workspaceSlug/project/$projectSlug/pages/$pageId': {
       id: '/_app/workspace/$workspaceSlug/project/$projectSlug/pages/$pageId'
@@ -877,6 +919,24 @@ const AppWorkspaceWorkspaceSlugProjectProjectSlugVaultRouteRouteWithChildren =
     AppWorkspaceWorkspaceSlugProjectProjectSlugVaultRouteRouteChildren,
   )
 
+interface AppWorkspaceWorkspaceSlugProjectProjectSlugWhiteboardRouteRouteChildren {
+  AppWorkspaceWorkspaceSlugProjectProjectSlugWhiteboardBoardIdRoute: typeof AppWorkspaceWorkspaceSlugProjectProjectSlugWhiteboardBoardIdRoute
+  AppWorkspaceWorkspaceSlugProjectProjectSlugWhiteboardIndexRoute: typeof AppWorkspaceWorkspaceSlugProjectProjectSlugWhiteboardIndexRoute
+}
+
+const AppWorkspaceWorkspaceSlugProjectProjectSlugWhiteboardRouteRouteChildren: AppWorkspaceWorkspaceSlugProjectProjectSlugWhiteboardRouteRouteChildren =
+  {
+    AppWorkspaceWorkspaceSlugProjectProjectSlugWhiteboardBoardIdRoute:
+      AppWorkspaceWorkspaceSlugProjectProjectSlugWhiteboardBoardIdRoute,
+    AppWorkspaceWorkspaceSlugProjectProjectSlugWhiteboardIndexRoute:
+      AppWorkspaceWorkspaceSlugProjectProjectSlugWhiteboardIndexRoute,
+  }
+
+const AppWorkspaceWorkspaceSlugProjectProjectSlugWhiteboardRouteRouteWithChildren =
+  AppWorkspaceWorkspaceSlugProjectProjectSlugWhiteboardRouteRoute._addFileChildren(
+    AppWorkspaceWorkspaceSlugProjectProjectSlugWhiteboardRouteRouteChildren,
+  )
+
 interface AppWorkspaceWorkspaceSlugProjectProjectSlugRouteRouteChildren {
   AppWorkspaceWorkspaceSlugProjectProjectSlugChatRouteRoute: typeof AppWorkspaceWorkspaceSlugProjectProjectSlugChatRouteRouteWithChildren
   AppWorkspaceWorkspaceSlugProjectProjectSlugKanbanRouteRoute: typeof AppWorkspaceWorkspaceSlugProjectProjectSlugKanbanRouteRouteWithChildren
@@ -886,7 +946,7 @@ interface AppWorkspaceWorkspaceSlugProjectProjectSlugRouteRouteChildren {
   AppWorkspaceWorkspaceSlugProjectProjectSlugSettingsRouteRoute: typeof AppWorkspaceWorkspaceSlugProjectProjectSlugSettingsRouteRoute
   AppWorkspaceWorkspaceSlugProjectProjectSlugTimelineRouteRoute: typeof AppWorkspaceWorkspaceSlugProjectProjectSlugTimelineRouteRouteWithChildren
   AppWorkspaceWorkspaceSlugProjectProjectSlugVaultRouteRoute: typeof AppWorkspaceWorkspaceSlugProjectProjectSlugVaultRouteRouteWithChildren
-  AppWorkspaceWorkspaceSlugProjectProjectSlugWhiteboardRouteRoute: typeof AppWorkspaceWorkspaceSlugProjectProjectSlugWhiteboardRouteRoute
+  AppWorkspaceWorkspaceSlugProjectProjectSlugWhiteboardRouteRoute: typeof AppWorkspaceWorkspaceSlugProjectProjectSlugWhiteboardRouteRouteWithChildren
   AppWorkspaceWorkspaceSlugProjectProjectSlugIndexRoute: typeof AppWorkspaceWorkspaceSlugProjectProjectSlugIndexRoute
 }
 
@@ -909,7 +969,7 @@ const AppWorkspaceWorkspaceSlugProjectProjectSlugRouteRouteChildren: AppWorkspac
     AppWorkspaceWorkspaceSlugProjectProjectSlugVaultRouteRoute:
       AppWorkspaceWorkspaceSlugProjectProjectSlugVaultRouteRouteWithChildren,
     AppWorkspaceWorkspaceSlugProjectProjectSlugWhiteboardRouteRoute:
-      AppWorkspaceWorkspaceSlugProjectProjectSlugWhiteboardRouteRoute,
+      AppWorkspaceWorkspaceSlugProjectProjectSlugWhiteboardRouteRouteWithChildren,
     AppWorkspaceWorkspaceSlugProjectProjectSlugIndexRoute:
       AppWorkspaceWorkspaceSlugProjectProjectSlugIndexRoute,
   }

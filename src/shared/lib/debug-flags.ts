@@ -28,6 +28,8 @@ export const GROUPS = {
   // Features
   chat: false,
   auth: false,
+  whiteboard: true, // ✅ General whiteboard (presence, subscribe, events)
+  'whiteboard-sync': true, // ✅ Board-update E2E flow tracing
 
   // Modules
   websocket: false,
@@ -98,6 +100,24 @@ export const FILES: Record<string, boolean | undefined> = {
   'app:events': undefined, // app/providers/events/index.tsx
   'app:onboarding': undefined, // use-onboarding-orchestrator.ts
   'app:workspace': undefined, // workspace-slug-field.tsx
+
+  // ─────────────────────────────────────
+  // Whiteboard Feature
+  // ─────────────────────────────────────
+  'whiteboard:presence': undefined, // entities/whiteboard-presence/model/slice.ts
+  'whiteboard:sidebar': undefined, // widgets/collaboration-sidebar
+  'whiteboard:events': undefined, // features/whiteboard/events
+  'whiteboard:user-joined': undefined, // events/handlers/user-joined.ts
+  'whiteboard:subscribe': undefined, // events/handlers/subscribe-success.ts
+  'whiteboard:plugin': undefined, // providers/ws-domains/whiteboard-plugin.ts
+  'whiteboard:ydoc': undefined, // entities/whiteboard-session/lib/ydoc-manager.ts
+  'whiteboard:validation': undefined, // entities/whiteboard-session/lib/validation.ts
+  'whiteboard:ydoc-instance': undefined, // entities/whiteboard-session/hooks/use-ydoc-instance.ts
+
+  // Board-update E2E flow (inherits from GROUPS['whiteboard-sync'])
+  'whiteboard:canvas': undefined, // widgets/whiteboard-canvas/hooks/use-excalidraw-binding.ts
+  'whiteboard:board-update': undefined, // features/whiteboard/events/handlers/board-update.ts
+  'whiteboard:send-update': undefined, // features/whiteboard/send-board-update
 
   // ─────────────────────────────────────
   // Database/Storage

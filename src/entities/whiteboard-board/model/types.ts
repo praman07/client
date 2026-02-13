@@ -4,6 +4,7 @@ export interface Board {
   projectId: string | null
   title: string
   description: string | null
+  thumbnail: string | null
   elementCount: number
   fileSizeBytes: string
   isLocked: boolean

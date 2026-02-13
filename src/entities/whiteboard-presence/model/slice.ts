@@ -1,10 +1,13 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
 import { assignColor } from '../lib/color-assignment'
+import { createLogger } from '@/shared/lib/logger'
 import type {
   WhiteboardPresenceState,
   CollaboratorPresence,
   CursorPosition,
 } from './types'
+
+const log = createLogger('whiteboard:presence')
 
 const initialState: WhiteboardPresenceState = {
   remoteCursors: {},
@@ -19,14 +22,25 @@ export const whiteboardPresenceSlice = createSlice({
       state,
       action: PayloadAction<Omit<CollaboratorPresence, 'color'>[]>,
     ) {
+      log.debug('🔄 Setting active collaborators', {
+        count: action.payload.length,
+        userIds: action.payload.map((c) => c.userId),
+      })
+
       state.remoteCursors = {}
       action.payload.forEach((collab) => {
+        const color = assignColor(collab.userId)
         state.remoteCursors[collab.userId] = {
           ...collab,
-          color: assignColor(collab.userId),
+          color,
         }
+        log.debug(
+          `  ✅ Added collaborator: ${collab.fullName} (${collab.userId}) color=${color}`,
+        )
       })
       state.totalCount = action.payload.length
+
+      log.debug('✅ Active collaborators set', { totalCount: state.totalCount })
     },
 
     addCollaborator(
@@ -34,16 +48,42 @@ export const whiteboardPresenceSlice = createSlice({
       action: PayloadAction<Omit<CollaboratorPresence, 'color'>>,
     ) {
       const collab = action.payload
+      const color = assignColor(collab.userId)
+
+      log.debug('➕ Adding new collaborator', {
+        userId: collab.userId,
+        fullName: collab.fullName,
+        avatarUrl: collab.avatarUrl,
+        color,
+        previousCount: state.totalCount,
+      })
+
       state.remoteCursors[collab.userId] = {
         ...collab,
-        color: assignColor(collab.userId),
+        color,
       }
       state.totalCount++
+
+      log.debug('✅ Collaborator added', {
+        totalCount: state.totalCount,
+        allUserIds: Object.keys(state.remoteCursors),
+      })
     },
 
     removeCollaborator(state, action: PayloadAction<{ userId: string }>) {
-      delete state.remoteCursors[action.payload.userId]
+      const { userId } = action.payload
+      const removed = state.remoteCursors[userId]
+
+      log.debug('➖ Removing collaborator', {
+        userId,
+        fullName: removed?.fullName,
+        previousCount: state.totalCount,
+      })
+
+      delete state.remoteCursors[userId]
       state.totalCount--
+
+      log.debug('✅ Collaborator removed', { totalCount: state.totalCount })
     },
 
     updateCursorPosition(

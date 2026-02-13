@@ -13,8 +13,7 @@ export const createBoardSchema = z.object({
     .trim()
     .max(500, 'Description must be less than 500 characters')
     .optional(),
-  // Note: collaboratorIds omitted for initial implementation
-  // Can be added later as advanced feature
+  collaboratorIds: z.array(z.string()).optional(),
 })
 
 export type CreateBoardFormData = z.infer<typeof createBoardSchema>

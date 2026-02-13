@@ -1,4 +1,7 @@
 import * as Y from 'yjs'
+import { createLogger } from '@/shared/lib/logger'
+
+const log = createLogger('whiteboard:validation')
 
 export function isValidYjsUpdate(update: Uint8Array): boolean {
   try {
@@ -7,7 +10,7 @@ export function isValidYjsUpdate(update: Uint8Array): boolean {
     tempDoc.destroy()
     return true
   } catch (error) {
-    console.error('[Y.js Validation] Invalid update:', error)
+    log.error('Invalid Y.js update:', error)
     return false
   }
 }

@@ -11,7 +11,7 @@
 // ============================================================================
 
 export enum WhiteboardDownstreamEvent {
-  BoardInit = 'whiteboard:board-init',
+  BoardInit = 'whiteboard:subscribe-success', // Server sends this on successful subscribe
   BoardUpdate = 'whiteboard:board-update',
   UpdateAck = 'whiteboard:update-ack',
   UserJoined = 'whiteboard:user-joined',

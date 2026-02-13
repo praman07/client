@@ -16,10 +16,31 @@ export function handleUserJoined(
   payload: UserJoinedPayload,
   context: WhiteboardEventHandlerContext,
 ) {
-  const { userId, fullName, avatarUrl } = payload
+  const { userId, fullName, avatarUrl, timestamp } = payload
   const { dispatch } = context
 
-  log.debug('User joined board', { userId, fullName })
+  log.debug('📨 User joined event received', {
+    payload,
+    fullName,
+    avatarUrl,
+    timestamp,
+  })
+
+  // Validate payload
+  if (!userId) {
+    log.error('❌ Invalid user-joined payload: missing userId', { payload })
+    return
+  }
+
+  if (!fullName) {
+    log.warn('⚠️ User joined with undefined fullName', { userId, payload })
+  }
+
+  log.debug('🚀 Dispatching addCollaborator action', {
+    userId,
+    fullName,
+    avatarUrl: avatarUrl || 'null',
+  })
 
   // Add collaborator to presence state
   // Note: color is auto-assigned by the entity layer
@@ -34,4 +55,6 @@ export function handleUserJoined(
       isIdle: false,
     }),
   )
+
+  log.debug('✅ addCollaborator dispatched successfully')
 }
