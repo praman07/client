@@ -14,7 +14,7 @@
 import { wsManager } from '@/shared/ws/manager'
 import { WhiteboardUpstreamEvent } from '@/shared/contracts/whiteboard/events'
 import type { BoardUpdatePayload } from '@/shared/contracts/whiteboard/upstream'
-import { uint8ArrayToBase64 } from '@/entities/whiteboard-session'
+import { uint8ArrayToBase64, offlineQueue } from '@/entities/whiteboard-session'
 import { createLogger } from '@/shared/lib/logger'
 
 const log = createLogger('whiteboard:send-update')
@@ -24,7 +24,7 @@ const log = createLogger('whiteboard:send-update')
  *
  * @param boardId - The board ID
  * @param update - The Y.js update (Uint8Array)
- * @returns Promise that resolves when the update is sent
+ * @returns Promise that resolves when the update is sent or queued
  *
  * @example
  * ```ts
@@ -44,7 +44,21 @@ export async function sendBoardUpdate(
     // Generate deduplication ID using browser crypto API
     const dedupeId = crypto.randomUUID()
 
-    // Encode update to Base64
+    // ✅ Check online status BEFORE sending
+    const isOnline = navigator.onLine && wsManager.getStatus() === 'CONNECTED'
+
+    if (!isOnline) {
+      // OFFLINE PATH: Queue to IndexedDB
+      await offlineQueue.enqueue(boardId, update, dedupeId)
+      log.info('Update queued (offline)', {
+        boardId,
+        dedupeId,
+        updateSize: update.length,
+      })
+      return
+    }
+
+    // ONLINE PATH: Send via WebSocket
     const encodedUpdate = uint8ArrayToBase64(update)
 
     // Prepare payload
@@ -62,16 +76,6 @@ export async function sendBoardUpdate(
 
     // Send via WebSocket (wsManager.emit is the correct API)
     wsManager.emit(WhiteboardUpstreamEvent.BoardUpdate, payload)
-
-    // TODO Phase 4: Add to offline queue if send fails
-    // if (!wsManager.isConnected()) {
-    //   await offlineQueue.add({
-    //     boardId,
-    //     update: encodedUpdate,
-    //     dedupeId,
-    //     timestamp: Date.now(),
-    //   })
-    // }
   } catch (error) {
     log.error('Failed to send board update', error)
     throw error

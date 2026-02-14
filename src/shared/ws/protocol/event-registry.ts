@@ -42,6 +42,13 @@ export function registerEventType(
 }
 
 /**
+ * Unregisters an event type (for cleanup).
+ */
+export function unregisterEventType(type: string): void {
+  registry.delete(type)
+}
+
+/**
  * Checks if an event type is registered.
  */
 export function isValidEvent(type: string): boolean {

@@ -1,57 +1,66 @@
 import '@excalidraw/excalidraw/index.css'
-import { useState } from 'react'
+import { useEffect } from 'react'
 import { Excalidraw } from '@excalidraw/excalidraw'
-import type { ExcalidrawImperativeAPI } from '@excalidraw/excalidraw/types'
 
 import { useBoard } from '@/features/whiteboard/fetch-board'
-import { useBoardSnapshot } from '@/features/whiteboard/fetch-snapshot'
 import { useReadOnlyMode } from '../hooks/use-read-only-mode'
-import { useYDocInstance } from '@/entities/whiteboard-session'
 import { useCanvasLifecycle } from '../hooks/use-canvas-lifecycle'
-import { useYExcalidraw } from '../hooks/use-y-excalidraw'
+import { useWhiteboardSync } from '../hooks/use-whiteboard-sync'
 import { useNetworkSync } from '../hooks/use-network-sync'
-import { useSubscribeBoard } from '@/features/whiteboard/subscribe-board'
+import { useFlushOfflineQueue } from '../hooks'
+import { useUndoManager } from '../hooks/use-undo-manager'
 import { CursorOverlay } from '../ui/cursor-overlay'
 import { ConnectionIndicator } from '../ui/connection-indicator'
 import { SyncStatusBadge } from '../ui/sync-status-badge'
+import { createLogger } from '@/shared/lib/logger'
+
+const log = createLogger('whiteboard:canvas')
 
 interface WhiteboardCanvasProps {
   boardId: string
 }
 
 export function WhiteboardCanvas({ boardId }: WhiteboardCanvasProps) {
-  const [excalidrawAPI, setExcalidrawAPI] = useState<ExcalidrawImperativeAPI | null>(null)
-  const [bindingReady, setBindingReady] = useState(false)
+  // Component lifecycle
+  useEffect(() => {
+    log.info('Canvas mounted', { boardId })
+    return () => log.debug('Canvas unmounting', { boardId })
+  }, [boardId])
   
   // Feature hooks
   const { data: board, isLoading: isBoardLoading } = useBoard(boardId)
-  const { data: snapshot, isLoading: isSnapshotLoading } = useBoardSnapshot(boardId)
   const isReadOnly = useReadOnlyMode(boardId)
   
-  // Get snapshot ready flag (prevents subscription race condition)
-  const { snapshotReady } = useYDocInstance(boardId)
+  // ✅ REFACTORED: Single unified sync hook
+  const { 
+    setExcalidrawAPI, 
+    ydoc, 
+    binding,
+    ready, 
+    snapshotReady 
+  } = useWhiteboardSync(boardId)
   
-  // Widget hooks
+  log.debug('Sync state', { ready, snapshotReady, hasYDoc: !!ydoc, hasBinding: !!binding })
+  
+  // Preserved hooks
+  useUndoManager(boardId, setExcalidrawAPI)
+  useFlushOfflineQueue(boardId)
   useCanvasLifecycle(boardId)
   
-  // ✅ y-excalidraw library binding
-  useYExcalidraw(boardId, excalidrawAPI, setBindingReady)
-  
   // ✅ Network sync (Y.Doc → WebSocket)
-  // CRITICAL: Only enable after binding is ready AND subscribed
-  useNetworkSync(boardId, bindingReady && snapshotReady)
+  useNetworkSync(boardId, ydoc, ready)
   
-  // CRITICAL: Only subscribe after snapshot is applied
-  // This prevents WebSocket deltas from arriving before snapshot
-  useSubscribeBoard(boardId, { enabled: snapshotReady })
-  
-  // Loading state
-  if (isBoardLoading || isSnapshotLoading) {
+  // Loading state - only check board metadata
+  // ✅ FIX: Don't block on `ready` - creates circular dependency!
+  // Excalidraw must render first to call setExcalidrawAPI → triggers init
+  if (isBoardLoading) {
     return (
       <div className="flex h-full w-full items-center justify-center">
         <div className="flex flex-col items-center gap-4">
           <div className="h-12 w-12 animate-spin rounded-full border-4 border-primary border-t-transparent" />
-          <p className="text-sm text-muted-foreground">Loading board...</p>
+          <p className="text-sm text-muted-foreground">
+            Loading board...
+          </p>
         </div>
       </div>
     )
@@ -81,26 +90,16 @@ export function WhiteboardCanvas({ boardId }: WhiteboardCanvasProps) {
     )
   }
   
-  console.info('[WhiteboardCanvas] Rendering canvas', {
-    boardId,
-    isReadOnly,
-    hasSnapshot: !!snapshot,
-  })
-  
-  // Note: Snapshot data needs to be applied to Y.Doc first
-  // The binding hook will then sync to Excalidraw
-  // For now, we let the Y.Doc initialization handle snapshot loading
-  const initialData = undefined
-  
   return (
     <div className="relative h-full w-full">
       {/* Main Canvas */}
       <Excalidraw
-        excalidrawAPI={(api: ExcalidrawImperativeAPI) => setExcalidrawAPI(api)}
-        initialData={initialData}
+        excalidrawAPI={setExcalidrawAPI}
         viewModeEnabled={isReadOnly}
         theme="light"
         name="Collabify Whiteboard"
+        isCollaborating={!!binding}
+        onPointerUpdate={binding?.onPointerUpdate}
       />
       
       {/* Overlays */}

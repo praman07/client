@@ -12,7 +12,7 @@
  * - Lifecycle hooks called on WS connection state changes
  */
 
-import { registerDomain } from '../events/domain-registry'
+import { registerDomain, unregisterDomain } from '../events/domain-registry'
 import { registerPriorityRule } from '../core/message-queue'
 import type { DomainPlugin } from './domain-plugin'
 import { createLogger } from '@/shared/lib/logger'
@@ -100,6 +100,9 @@ export function unregisterPlugin(domain: string): void {
   if (plugin.cleanup) {
     plugin.cleanup()
   }
+
+  // Unregister domain events
+  unregisterDomain(domain)
 
   plugins.delete(domain)
 }

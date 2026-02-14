@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { createChatPlugin } from './chat-plugin'
 import { createWhiteboardPlugin } from './whiteboard-plugin'
-import { registerPlugin } from '@/shared/ws/domains'
+import { registerPlugin, unregisterPlugin } from '@/shared/ws/domains'
 import { createLogger } from '@/shared/lib/logger'
 import { useQueryClient } from '@tanstack/react-query'
 import { useAppDispatch, useUser } from '@/shared/hooks'
@@ -56,7 +56,8 @@ export function DomainRegistry({ projectId }: DomainRegistryProps) {
     // Cleanup on unmount
     return () => {
       log.debug('Cleaning up domain plugins')
-      // Plugin registry handles cleanup
+      unregisterPlugin('chat')
+      unregisterPlugin('whiteboard')
     }
   }, [projectId, dispatch, queryClient, user?.id])
 

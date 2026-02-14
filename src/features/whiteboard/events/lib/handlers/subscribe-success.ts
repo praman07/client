@@ -8,8 +8,10 @@
 import type { BoardInitPayload } from '@/shared/contracts/whiteboard/downstream'
 import type { WhiteboardEventHandlerContext } from '../../model'
 import { setActiveCollaborators } from '@/entities/whiteboard-presence'
-import { setConnectionStatus } from '@/entities/whiteboard-session'
-// import { offlineQueue } from '@/shared/lib/db' // TODO: Implement in Phase 4
+import {
+  setConnectionStatus,
+  offlineQueue,
+} from '@/entities/whiteboard-session'
 import { createLogger } from '@/shared/lib/logger'
 
 const log = createLogger('whiteboard:subscribe')
@@ -62,14 +64,11 @@ export async function handleSubscribeSuccess(
   dispatch(setConnectionStatus('connected'))
   log.debug('✅ Connection status set to connected')
 
-  // TODO Phase 4: Flush offline queue for this board
-  // try {
-  //   const pendingUpdates = await offlineQueue.getForBoard(boardId)
-  //   for (const item of pendingUpdates) {
-  //     // Resend via WebSocket
-  //     await offlineQueue.remove(item.id)
-  //   }
-  // } catch (error) {
-  //   log.error('Failed to flush offline queue:', error)
-  // }
+  // ✅ Flush offline queue for this board
+  try {
+    await offlineQueue.flush(boardId)
+    log.info('Flushed offline queue after subscription', { boardId })
+  } catch (error) {
+    log.error('Failed to flush offline queue:', error)
+  }
 }

@@ -59,6 +59,7 @@ export const FILES: Record<string, boolean | undefined> = {
   'chat:outbox': undefined, // outbox-worker.ts
   'chat:ack': undefined, // ack-message-handler.ts
   'chat:handler': undefined, // new-message-handler.ts
+  'chat:sync-required-handler': undefined, // sync-required-handler.ts
 
   // ─────────────────────────────────────
   // WebSocket Module
@@ -77,6 +78,7 @@ export const FILES: Record<string, boolean | undefined> = {
   'ws:leader': undefined, // core/leader-integration.ts
   'ws:sub-mgr': undefined, // subscriptions/subscription-manager.ts
   'ws:sub-rec': undefined, // subscriptions/subscription-recovery.ts
+  'ws:plugin-registry': undefined, // domains/plugin-registry.ts
 
   // ─────────────────────────────────────
   // Resequencer Module
@@ -118,6 +120,19 @@ export const FILES: Record<string, boolean | undefined> = {
   'whiteboard:canvas': undefined, // widgets/whiteboard-canvas/hooks/use-excalidraw-binding.ts
   'whiteboard:board-update': undefined, // features/whiteboard/events/handlers/board-update.ts
   'whiteboard:send-update': undefined, // features/whiteboard/send-board-update
+  'whiteboard:update-ack': undefined, // features/whiteboard/events/handlers/update-ack.ts
+  'whiteboard:board-locked': undefined, // features/whiteboard/events/handlers/board-locked.ts
+  'whiteboard:board-unlocked': undefined, // features/whiteboard/events/handlers/board-unlocked.ts
+  'whiteboard:user-left': undefined, // features/whiteboard/events/handlers/user-left.ts
+  'whiteboard:use-subscribe': undefined, // features/whiteboard/subscribe-board/hooks/use-subscribe-board.ts
+  'whiteboard:use-send-update': undefined, // features/whiteboard/send-board-update/hooks/use-send-board-update.ts
+  'whiteboard:unsubscribe': undefined, // features/whiteboard/events/api/unsubscribe-board.ts
+  'whiteboard:cache': true, // entities/whiteboard-session/lib/board-cache-manager.ts
+  'whiteboard:cache-hook': true, // entities/whiteboard-session/hooks/use-board-cache.ts
+  'whiteboard:offline-queue': true, // entities/whiteboard-session/lib/offline-queue-manager.ts
+  'whiteboard:sync-engine': undefined, // widgets/whiteboard-canvas/lib/sync-engine.ts
+  'whiteboard:canvas-lifecycle': undefined, // widgets/whiteboard-canvas/hooks/use-canvas-lifecycle.ts
+  'whiteboard:conflict-resolver': undefined, // widgets/whiteboard-canvas/lib/conflict-resolver.ts
 
   // ─────────────────────────────────────
   // Database/Storage

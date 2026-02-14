@@ -65,11 +65,18 @@ export interface BoardUpdatePayload {
 /**
  * ACK for sent update (confirms server received it)
  * Use dedupeId to match with local queue
+ *
+ * Backend sends:
+ * - dedupeId: UUID from client's original request
+ * - streamId: Redis stream ID (durable, for ordering)
+ * - boardId: Board identifier
+ * - status: 'sent' | 'duplicate' (indicates if this was a new or duplicate update)
  */
 export interface UpdateAckPayload {
   dedupeId: string // Matches client's sent dedupeId
   streamId: string // Redis stream ID (durable)
-  timestamp: string // ISO 8601 datetime
+  boardId: string // Board identifier
+  status: 'sent' | 'duplicate' // Update status
 }
 
 /**

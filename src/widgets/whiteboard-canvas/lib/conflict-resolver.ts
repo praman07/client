@@ -1,4 +1,7 @@
-import { ExcalidrawElement } from "@excalidraw/excalidraw/element/types"
+import { ExcalidrawElement } from '@excalidraw/excalidraw/element/types'
+import { createLogger } from '@/shared/lib/logger'
+
+const log = createLogger('whiteboard:conflict-resolver')
 
 /**
  * Resolve conflict between two element versions
@@ -18,7 +21,7 @@ export function resolveConflict(
 
   // 1. Compare versionNonce (Excalidraw's internal version)
   if (local.versionNonce > remote.versionNonce) {
-    console.debug('[ConflictResolver] Local wins (versionNonce)', {
+    log.debug('Local wins (versionNonce)', {
       elementId: local.id,
       localVersion: local.versionNonce,
       remoteVersion: remote.versionNonce,
@@ -27,7 +30,7 @@ export function resolveConflict(
   }
 
   if (remote.versionNonce > local.versionNonce) {
-    console.debug('[ConflictResolver] Remote wins (versionNonce)', {
+    log.debug('Remote wins (versionNonce)', {
       elementId: remote.id,
       localVersion: local.versionNonce,
       remoteVersion: remote.versionNonce,
@@ -40,11 +43,11 @@ export function resolveConflict(
   const remoteUpdated = remote.updated || 0
 
   if (localUpdated > remoteUpdated) {
-    console.debug('[ConflictResolver] Local wins (timestamp)')
+    log.debug('Local wins (timestamp)')
     return local
   }
 
-  console.debug('[ConflictResolver] Remote wins (timestamp)')
+  log.debug('Remote wins (timestamp)')
   return remote
 }
 

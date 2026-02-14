@@ -1,6 +1,9 @@
 import { useEffect } from 'react'
 import { setActiveBoardId } from '@/entities/whiteboard-session'
 import { useAppDispatch } from '@/shared/hooks'
+import { createLogger } from '@/shared/lib/logger'
+
+const log = createLogger('whiteboard:canvas-lifecycle')
 
 /**
  * Canvas lifecycle management
@@ -13,13 +16,13 @@ export function useCanvasLifecycle(boardId: string) {
   const dispatch = useAppDispatch()
 
   useEffect(() => {
-    console.info('[CanvasLifecycle] Mounting canvas', { boardId })
+    log.info('Mounting canvas', { boardId })
 
     // Set active board in Redux
     dispatch(setActiveBoardId(boardId))
 
     return () => {
-      console.info('[CanvasLifecycle] Unmounting canvas', { boardId })
+      log.info('Unmounting canvas', { boardId })
 
       // Clear active board
       dispatch(setActiveBoardId(''))

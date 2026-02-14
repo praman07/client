@@ -1,5 +1,6 @@
 export { useCanvasLifecycle } from './use-canvas-lifecycle'
 export { useReadOnlyMode } from './use-read-only-mode'
 export { useCollaborativeCursors } from './use-collaborative-cursors'
-export { useYExcalidraw } from './use-y-excalidraw'
 export { useNetworkSync } from './use-network-sync'
+export { useFlushOfflineQueue } from './use-flush-offline-queue'
+export { useOfflineQueueStatus } from './use-offline-queue-status'

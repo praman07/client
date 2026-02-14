@@ -1,14 +1,15 @@
 /**
- * Whiteboard Event Handler: Board Update
+ * Whiteboard Event Handler: Board Update (Refactored)
  *
- * Role: Apply remote Y.js CRDT updates to local document
- * Security: Validates updates before applying
+ * Role: Dispatch remote Y.js CRDT updates via custom event
+ * Security: Validates updates before dispatching
+ *
+ * Note: Uses event-based communication with useWhiteboardSync hook
  */
 
 import type { BoardUpdatePayload } from '@/shared/contracts/whiteboard/downstream'
 import type { WhiteboardEventHandlerContext } from '../../model'
 import {
-  applyRemoteUpdate,
   isValidYjsUpdate,
   base64ToUint8Array,
 } from '@/entities/whiteboard-session'
@@ -18,9 +19,15 @@ const log = createLogger('whiteboard:board-update')
 
 export function handleBoardUpdate(
   payload: BoardUpdatePayload,
-  _context: WhiteboardEventHandlerContext, // Unused but required for handler signature
+  _context: WhiteboardEventHandlerContext,
 ) {
   const { boardId, update } = payload
+
+  // Guard: Validate payload structure
+  if (!update) {
+    log.error('Invalid payload: missing update data', { boardId, payload })
+    return
+  }
 
   log.debug('Received board update', {
     boardId,
@@ -36,11 +43,12 @@ export function handleBoardUpdate(
     return
   }
 
-  // Apply to local Y.Doc
-  try {
-    applyRemoteUpdate(boardId, binary)
-    log.debug('Successfully applied board update', { boardId })
-  } catch (error) {
-    log.error('[BoardUpdate] Failed to apply update:', error)
-  }
+  // ✅ Dispatch custom event for useWhiteboardSync to handle
+  window.dispatchEvent(
+    new CustomEvent('board-update', {
+      detail: { boardId, update: binary },
+    }),
+  )
+
+  log.debug('Board update event dispatched', { boardId })
 }

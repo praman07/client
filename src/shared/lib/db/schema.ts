@@ -169,7 +169,7 @@ export class CollabifyDB extends Dexie {
     // TODO: Add quota monitoring in app bootstrap
     this.version(5).stores({
       whiteboardOfflineUpdates:
-        '++id, boardId, status, [boardId+status], timestamp, createdAt, mergedInto, size',
+        '++id, boardId, status, dedupeId, mergedInto, [boardId+status], timestamp, createdAt, size',
 
       whiteboardBoardCache: 'boardId, updatedAt, snapshotSize',
     })

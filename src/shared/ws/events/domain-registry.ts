@@ -105,6 +105,19 @@ export function extractDomain(eventType: string): string | null {
  * Unregisters a domain (for testing/cleanup).
  */
 export function unregisterDomain(domain: string): void {
+  const config = domains.get(domain)
+  if (!config) return
+
+  // Unregister all upstream events
+  config.upstreamEvents.forEach((type) => {
+    eventRegistry.unregisterEventType(type)
+  })
+
+  // Unregister all downstream events
+  config.downstreamEvents.forEach((type) => {
+    eventRegistry.unregisterEventType(type)
+  })
+
   domains.delete(domain)
   log.debug(`Unregistered domain: ${domain}`)
 }

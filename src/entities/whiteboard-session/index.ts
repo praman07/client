@@ -17,10 +17,15 @@ export {
 } from './model/slice'
 
 // Hooks
-export { useYDocInstance } from './hooks/use-ydoc-instance'
 export { useSyncStatus } from './hooks/use-sync-status'
 
+// Board cache
+export { boardCache } from './lib/board-cache-manager'
+
+// Offline queue
+export { offlineQueue } from './lib/offline-queue-manager'
+
 // Lib (⚠️ Only for features/whiteboard-events)
-export { applyRemoteUpdate } from './lib/ydoc-manager'
-export { base64ToUint8Array, uint8ArrayToBase64 } from './lib/encoding'
+export { uint8ArrayToBase64, base64ToUint8Array } from './lib/encoding'
 export { isValidYjsUpdate } from './lib/validation'
+export { ydocRegistry } from './lib/ydoc-registry'

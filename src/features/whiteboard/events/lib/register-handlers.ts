@@ -50,7 +50,10 @@ export function registerWhiteboardHandlers(
   // Board Update (remote CRDT updates)
   unregisterFns.push(
     registerHandler(WhiteboardDownstreamEvent.BoardUpdate, (event) => {
-      handleBoardUpdate(event.payload as BoardUpdatePayload, context)
+      // ✅ FIX: Backend sends { type, data: { boardId, update, ... } }
+      // Extract the nested data object
+      const payload = (event.payload as any).data || event.payload
+      handleBoardUpdate(payload as BoardUpdatePayload, context)
     }),
   )
 
