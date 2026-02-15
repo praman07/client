@@ -1,4 +1,4 @@
-import { WhiteboardCanvas } from '@/widgets/whiteboard-canvas'
+import { WhiteboardCanvasV2 } from '@/widgets/whiteboard-canvas'
 import { CollaborationSidebar } from '@/widgets/collaboration-sidebar'
 import { SidebarProvider } from '@/shared/ui/primitives/sidebar'
 
@@ -22,7 +22,7 @@ export function BoardViewPage({ boardId }: BoardViewPageProps) {
       <SidebarProvider defaultOpen={true}>
         {/* Canvas - Takes remaining space */}
         <div className="flex-1 relative">
-          <WhiteboardCanvas boardId={boardId} />
+          <WhiteboardCanvasV2 boardId={boardId} />
         </div>
         
         {/* Collaboration Sidebar - Collapsible, positioned absolute to respect parent height */}

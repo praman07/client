@@ -29,3 +29,6 @@ export { offlineQueue } from './lib/offline-queue-manager'
 export { uint8ArrayToBase64, base64ToUint8Array } from './lib/encoding'
 export { isValidYjsUpdate } from './lib/validation'
 export { ydocRegistry } from './lib/ydoc-registry'
+
+// Y.js Integration (V2 Offline-First)
+export * from './lib/yjs'
