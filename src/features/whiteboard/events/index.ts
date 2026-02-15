@@ -21,3 +21,7 @@ export { subscribeBoard, unsubscribeBoard } from './api'
 
 // Real-time updates
 export { sendBoardUpdate, sendCursorMove, clearCursorThrottle } from './api'
+
+// Phase 2: Y.Doc and Tracker registries (for network sync)
+export { registerYDoc, unregisterYDoc } from './lib/handlers/board-update'
+export { registerTracker, unregisterTracker } from './lib/handlers/update-ack'

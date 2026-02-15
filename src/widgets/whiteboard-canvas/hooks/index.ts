@@ -9,3 +9,4 @@ export { useOfflineQueueStatus } from './use-offline-queue-status'
 export { useYDocInstance } from './use-ydoc-instance'
 export { useExcalidrawBinding } from './use-excalidraw-binding'
 export { useCollabV2 } from './use-collab-v2' // Reference pattern
+export { useNetworkSyncV2 } from './use-network-sync-v2' // Phase 2: Network sync

@@ -27,6 +27,8 @@ export function useCollabV2(
 ) {
   const [api, setApi] = useState<ExcalidrawImperativeAPI | null>(null)
   const [binding, setBinding] = useState<ExcalidrawBinding | null>(null)
+  const [syncReady, setSyncReady] = useState(false) // Phase 2: Track IndexedDB sync
+  const ydocRef = useRef<Y.Doc | null>(null) // Phase 2: Expose Y.Doc for network sync
 
   useEffect(() => {
     // Wait for Excalidraw API only
@@ -39,6 +41,8 @@ export function useCollabV2(
 
     // Create Y.Doc
     const ydoc = new Y.Doc()
+    ydocRef.current = ydoc // Store ref for Phase 2 network sync
+
     const yElements = ydoc.getArray<Y.Map<any>>('elements')
     const yAssets = ydoc.getMap('assets')
 
@@ -52,6 +56,7 @@ export function useCollabV2(
     // Log when synced (for debugging)
     indexeddbPersistence.on('synced', () => {
       console.log('[useCollabV2] IndexedDB synced for board:', boardId)
+      setSyncReady(true) // Phase 2: Signal network sync can start
     })
 
     indexeddbPersistence.on('error', (error: Error) => {
@@ -84,6 +89,8 @@ export function useCollabV2(
     // Cleanup
     return () => {
       console.log('[useCollabV2] Cleaning up for board:', boardId)
+      setSyncReady(false) // Phase 2: Reset sync state
+      ydocRef.current = null // Phase 2: Clear ref
       setBinding(null)
       newBinding.destroy()
       indexeddbPersistence.destroy()
@@ -97,5 +104,7 @@ export function useCollabV2(
   return {
     setApi,
     binding,
+    ydoc: ydocRef.current, // Phase 2: Expose for network sync
+    syncReady, // Phase 2: Expose sync state
   }
 }

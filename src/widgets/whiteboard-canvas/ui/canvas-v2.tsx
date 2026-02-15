@@ -2,7 +2,7 @@ import '@excalidraw/excalidraw/index.css'
 import { useEffect, useRef } from 'react'
 import { Excalidraw } from '@excalidraw/excalidraw'
 
-import { useCollabV2 } from '../hooks'
+import { useCollabV2, useNetworkSyncV2 } from '../hooks'
 import { createLogger } from '@/shared/lib/logger'
 
 const log = createLogger('whiteboard:canvas:v2')
@@ -19,14 +19,17 @@ interface WhiteboardCanvasV2Props {
  * - No waiting for sync (Y.js handles it)
  * - Stable dependencies prevent unnecessary recreates
  *
- * Phase 1: Pure offline (no network sync)
- * Phase 2: Add network sync via WebSocket
+ * Phase 1: Pure offline (IndexedDB) ✅
+ * Phase 2: Network sync (WebSocket) ← IN PROGRESS
  */
 export function WhiteboardCanvasV2({ boardId }: WhiteboardCanvasV2Props) {
   const excalidrawRef = useRef<HTMLDivElement>(null!)
 
-  // Reference pattern: single hook for everything
-  const { setApi, binding } = useCollabV2(excalidrawRef, boardId)
+  // Phase 1: Offline-first (working)
+  const { setApi, binding, ydoc, syncReady } = useCollabV2(excalidrawRef, boardId)
+
+  // Phase 2: Network sync (NEW)
+  useNetworkSyncV2(ydoc, boardId, syncReady)
 
   // Lifecycle logging
   useEffect(() => {
