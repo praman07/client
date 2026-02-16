@@ -140,11 +140,11 @@ export const FILES: Record<string, boolean | undefined> = {
   // ─────────────────────────────────────
   // ✅ STATE SYNC TESTING (ENABLED)
   // ─────────────────────────────────────
-  'whiteboard:canvas': true, // Main canvas component
-  'whiteboard:collab-v2': true, // NEW: use-collab-v2.ts - Y.Doc initialization
-  'whiteboard:state-vector-sync': true, // NEW: use-state-vector-sync.ts - GraphQL diff sync
-  'whiteboard:network-sync': true, // WebSocket real-time sync
-  'whiteboard:init-state': true, // NEW: use-board-initialization.ts - Board initialization
+  'whiteboard:canvas': false, // Main canvas component
+  'whiteboard:collab-v2': false, // NEW: use-collab-v2.ts - Y.Doc initialization
+  'whiteboard:state-vector-sync': false, // NEW: use-state-vector-sync.ts - GraphQL diff sync
+  'whiteboard:network-sync': false, // WebSocket real-time sync
+  'whiteboard:init-state': false, // NEW: use-board-initialization.ts - Board initialization
 
   // ─────────────────────────────────────
   // Additional Whiteboard

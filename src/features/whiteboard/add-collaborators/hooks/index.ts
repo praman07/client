@@ -1,1 +1,2 @@
-export { useAddCollaborators } from './use-add-collaborators'
+export * from './use-add-collaborators'
+export * from './use-board-collaborators'
