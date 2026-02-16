@@ -9,12 +9,13 @@ export function EmptyState() {
           <FileText className="h-12 w-12 text-muted-foreground/40" />
         </div>
       </div>
-      
+
       <h3 className="text-lg font-semibold mb-2">No boards yet</h3>
       <p className="text-sm text-muted-foreground max-w-sm">
-        Get started by creating your first whiteboard. Click the "New Board" button to begin.
+        Get started by creating your first whiteboard. Click the "New Board"
+        button to begin.
       </p>
-      
+
       <div className="mt-6 flex items-center gap-2 text-xs text-muted-foreground">
         <Clock className="h-4 w-4" />
         <span>Your boards will appear here</span>

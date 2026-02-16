@@ -48,7 +48,10 @@ export function BoardListHeader({
       </div>
 
       {/* Sort */}
-      <Select value={sortBy} onValueChange={(v) => onSortChange(v as SortOption)}>
+      <Select
+        value={sortBy}
+        onValueChange={(v) => onSortChange(v as SortOption)}
+      >
         <SelectTrigger className="w-40">
           <SlidersHorizontal className="h-4 w-4 mr-2" />
           <SelectValue />

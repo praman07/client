@@ -47,7 +47,7 @@ const isEnabled = (flag: FileFlag): boolean => {
 /**
  * Logger interface returned by createLogger
  */
-interface Logger {
+export interface Logger {
   /**
    * Debug level - only in dev + flag enabled
    */

@@ -8,7 +8,6 @@ const log = createLogger('whiteboard:use-send-update')
  * Hook for sending Y.js board updates
  */
 
-
 export function useSendBoardUpdate(boardId: string) {
   return useCallback(
     async (update: Uint8Array) => {

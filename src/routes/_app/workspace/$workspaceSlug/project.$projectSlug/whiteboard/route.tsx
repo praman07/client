@@ -8,7 +8,7 @@ export const Route = createFileRoute(
 
 /**
  * Whiteboard Layout
- * 
+ *
  * Container for whiteboard routes (list and individual boards)
  */
 function WhiteboardLayout() {

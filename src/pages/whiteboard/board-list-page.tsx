@@ -7,7 +7,7 @@ interface BoardListPageProps {
 
 /**
  * Board List Page
- * 
+ *
  * Gallery view of all whiteboards in the project
  * Full-screen layout with BoardList widget
  */

@@ -5,7 +5,7 @@ import { EmptyCollaborators } from './empty-collaborators'
 import { Users, ChevronRight } from 'lucide-react'
 import { useEffect } from 'react'
 import { createLogger } from '@/shared/lib/logger'
-import { 
+import {
   SidebarHeader,
   SidebarContent,
   SidebarGroup,
@@ -26,14 +26,14 @@ interface CollaborationSidebarProps {
 
 /**
  * Collaboration sidebar showing active users on the board
- * 
+ *
  * Features:
  * - Real-time presence tracking via WebSocket
- * - Activity indicators  
+ * - Activity indicators
  * - Cursor color preview
  * - Sorted by most recent activity
  * - Collapsible with toggle button
- * 
+ *
  * @layer Widgets
  * @module collaboration-sidebar
  */
@@ -41,7 +41,7 @@ export function CollaborationSidebar(props: CollaborationSidebarProps) {
   // ✅ Use WebSocket-powered Redux state (NOT GraphQL query!)
   const { collaborators, count } = useActiveCollaborators()
   const { state, toggleSidebar } = useSidebar()
-  
+
   // Debug log on collaborators change
   useEffect(() => {
     log.debug('👥 Collaborators state updated', {
@@ -61,26 +61,26 @@ export function CollaborationSidebar(props: CollaborationSidebarProps) {
       log.debug('🧹 CollaborationSidebar unmounted')
     }
   }, [props.boardId])
-  
+
   // Convert Redux state to sidebar format
   const mappedCollaborators = collaborators.map((c) => ({
     userId: c.userId,
     fullName: c.fullName || `User ${c.userId.slice(0, 8)}`,
     email: '', // Not tracked in presence state
     avatarUrl: c.avatarUrl ?? undefined,
-    cursor: c.cursor 
+    cursor: c.cursor
       ? { x: c.cursor.x, y: c.cursor.y, color: c.color }
       : { x: 0, y: 0, color: c.color },
     isActive: !c.isIdle,
     lastActivity: new Date(c.joinedAt),
   }))
-  
+
   const sorted = useSortedCollaborators(mappedCollaborators)
 
   const isCollapsed = state === 'collapsed'
 
   return (
-    <aside 
+    <aside
       className="bg-sidebar text-sidebar-foreground flex h-full flex-col border-l"
       style={{ width: isCollapsed ? '3rem' : '16rem' }}
       data-state={state}
@@ -93,7 +93,7 @@ export function CollaborationSidebar(props: CollaborationSidebarProps) {
           onClick={toggleSidebar}
           className="h-6 w-6 p-0 rounded-full hover:bg-muted"
         >
-          <ChevronRight 
+          <ChevronRight
             className={`h-4 w-4 transition-transform ${isCollapsed ? 'rotate-180' : ''}`}
           />
         </Button>
@@ -138,12 +138,18 @@ export function CollaborationSidebar(props: CollaborationSidebarProps) {
                       <div className="flex justify-center py-1">
                         <div
                           className="h-8 w-8 rounded-full border-2"
-                          style={{ 
-                            borderColor: collab.cursor.color,
-                            backgroundImage: collab.avatarUrl ? `url(${collab.avatarUrl})` : undefined,
-                            backgroundSize: 'cover',
-                            backgroundColor: !collab.avatarUrl ? '#ccc' : undefined
-                          } as React.CSSProperties}
+                          style={
+                            {
+                              borderColor: collab.cursor.color,
+                              backgroundImage: collab.avatarUrl
+                                ? `url(${collab.avatarUrl})`
+                                : undefined,
+                              backgroundSize: 'cover',
+                              backgroundColor: !collab.avatarUrl
+                                ? '#ccc'
+                                : undefined,
+                            } as React.CSSProperties
+                          }
                           title={collab.fullName}
                         />
                       </div>

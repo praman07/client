@@ -27,17 +27,17 @@ import { useUnarchiveBoard } from '@/features/whiteboard/unarchive-board/hooks'
 import { useLockBoard } from '@/features/whiteboard/lock-board/hooks'
 import { useUnlockBoard } from '@/features/whiteboard/unlock-board/hooks'
 import { useRenameBoard } from '@/features/whiteboard/rename-board/hooks'
-import { 
-  Pencil, 
-  Link2, 
-  Copy, 
-  Lock, 
-  Unlock, 
-  Users, 
-  Settings, 
-  Archive, 
-  ArchiveRestore, 
-  Trash2 
+import {
+  Pencil,
+  Link2,
+  Copy,
+  Lock,
+  Unlock,
+  Users,
+  Settings,
+  Archive,
+  ArchiveRestore,
+  Trash2,
 } from 'lucide-react'
 import { toast } from 'sonner'
 import type { ViewMode } from '../hooks'
@@ -50,7 +50,7 @@ interface BoardCardProps {
 
 /**
  * Individual board card with context menu
- * 
+ *
  * Features:
  * - Right-click context menu with all board actions
  * - Keyboard shortcuts
@@ -64,16 +64,17 @@ export function BoardCard({ board, viewMode }: BoardCardProps) {
   const lockBoard = useLockBoard()
   const unlockBoard = useUnlockBoard()
   const renameBoard = useRenameBoard()
-  
+
   // Modal states
   const [showRenameDialog, setShowRenameDialog] = useState(false)
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
   const [newBoardName, setNewBoardName] = useState(board.title)
-  
+
   // Get route params from router state matches
   const routerState = useRouterState()
-  const currentMatch = routerState.matches.find((match) => 
-    match.routeId === '/_app/workspace/$workspaceSlug/project/$projectSlug'
+  const currentMatch = routerState.matches.find(
+    (match) =>
+      match.routeId === '/_app/workspace/$workspaceSlug/project/$projectSlug',
   )
   const { workspaceSlug, projectSlug } = (currentMatch?.params ?? {}) as {
     workspaceSlug: string
@@ -94,7 +95,10 @@ export function BoardCard({ board, viewMode }: BoardCardProps) {
       return
     }
     try {
-      await renameBoard.mutateAsync({ boardId: board.id, title: newBoardName.trim() })
+      await renameBoard.mutateAsync({
+        boardId: board.id,
+        title: newBoardName.trim(),
+      })
       toast.success('Board renamed successfully')
       setShowRenameDialog(false)
     } catch (error) {
@@ -189,9 +193,12 @@ export function BoardCard({ board, viewMode }: BoardCardProps) {
               className="flex items-center gap-4 p-4 border rounded-lg hover:bg-muted/50 transition-colors group cursor-pointer"
             >
               <div className="w-32 shrink-0">
-                <BoardThumbnail boardId={board.id} thumbnail={board.thumbnail} />
+                <BoardThumbnail
+                  boardId={board.id}
+                  thumbnail={board.thumbnail}
+                />
               </div>
-              
+
               <div className="flex-1 min-w-0">
                 <h3 className="font-semibold truncate">{board.title}</h3>
                 <p className="text-sm text-muted-foreground">
@@ -207,21 +214,21 @@ export function BoardCard({ board, viewMode }: BoardCardProps) {
               Rename
               <ContextMenuShortcut>⌘R</ContextMenuShortcut>
             </ContextMenuItem>
-            
+
             <ContextMenuItem onClick={handleCopyLink}>
               <Link2 className="h-4 w-4 mr-2" />
               Copy Link
               <ContextMenuShortcut>⌘⇧C</ContextMenuShortcut>
             </ContextMenuItem>
-            
+
             <ContextMenuSeparator />
-            
+
             <ContextMenuItem onClick={handleDuplicate}>
               <Copy className="h-4 w-4 mr-2" />
               Duplicate
               <ContextMenuShortcut>⌘D</ContextMenuShortcut>
             </ContextMenuItem>
-            
+
             {board.isLocked ? (
               <ContextMenuItem onClick={handleUnlock}>
                 <Unlock className="h-4 w-4 mr-2" />
@@ -233,21 +240,21 @@ export function BoardCard({ board, viewMode }: BoardCardProps) {
                 Lock
               </ContextMenuItem>
             )}
-            
+
             <ContextMenuSeparator />
-            
+
             <ContextMenuItem onClick={handleManageCollaborators}>
               <Users className="h-4 w-4 mr-2" />
               Manage Collaborators
             </ContextMenuItem>
-            
+
             <ContextMenuItem onClick={handleSettings}>
               <Settings className="h-4 w-4 mr-2" />
               Board Settings
             </ContextMenuItem>
-            
+
             <ContextMenuSeparator />
-            
+
             {board.isArchived ? (
               <ContextMenuItem onClick={handleUnarchive}>
                 <ArchiveRestore className="h-4 w-4 mr-2" />
@@ -260,9 +267,9 @@ export function BoardCard({ board, viewMode }: BoardCardProps) {
                 <ContextMenuShortcut>⌘E</ContextMenuShortcut>
               </ContextMenuItem>
             )}
-            
+
             <ContextMenuSeparator />
-            
+
             <ContextMenuItem onClick={handleDelete} variant="destructive">
               <Trash2 className="h-4 w-4 mr-2" />
               Delete
@@ -296,10 +303,13 @@ export function BoardCard({ board, viewMode }: BoardCardProps) {
               </div>
             </div>
             <DialogFooter>
-              <Button variant="outline" onClick={() => setShowRenameDialog(false)}>
+              <Button
+                variant="outline"
+                onClick={() => setShowRenameDialog(false)}
+              >
                 Cancel
               </Button>
-              <Button 
+              <Button
                 onClick={handleRenameSubmit}
                 disabled={!newBoardName.trim() || renameBoard.isPending}
               >
@@ -315,14 +325,18 @@ export function BoardCard({ board, viewMode }: BoardCardProps) {
             <DialogHeader>
               <DialogTitle>Delete Board</DialogTitle>
               <DialogDescription>
-                Are you sure you want to delete "{board.title}"? This action cannot be undone.
+                Are you sure you want to delete "{board.title}"? This action
+                cannot be undone.
               </DialogDescription>
             </DialogHeader>
             <DialogFooter>
-              <Button variant="outline" onClick={() => setShowDeleteDialog(false)}>
+              <Button
+                variant="outline"
+                onClick={() => setShowDeleteDialog(false)}
+              >
                 Cancel
               </Button>
-              <Button 
+              <Button
                 variant="destructive"
                 onClick={handleDeleteConfirm}
                 disabled={deleteBoard.isPending}
@@ -351,7 +365,7 @@ export function BoardCard({ board, viewMode }: BoardCardProps) {
             className="border rounded-lg overflow-hidden hover:shadow-lg transition-shadow group cursor-pointer"
           >
             <BoardThumbnail boardId={board.id} thumbnail={board.thumbnail} />
-            
+
             <div className="p-3 flex items-center justify-between">
               <div className="flex-1 min-w-0">
                 <h3 className="font-semibold truncate">{board.title}</h3>
@@ -369,21 +383,21 @@ export function BoardCard({ board, viewMode }: BoardCardProps) {
             Rename
             <ContextMenuShortcut>⌘R</ContextMenuShortcut>
           </ContextMenuItem>
-          
+
           <ContextMenuItem onClick={handleCopyLink}>
             <Link2 className="h-4 w-4 mr-2" />
             Copy Link
             <ContextMenuShortcut>⌘⇧C</ContextMenuShortcut>
           </ContextMenuItem>
-          
+
           <ContextMenuSeparator />
-          
+
           <ContextMenuItem onClick={handleDuplicate}>
             <Copy className="h-4 w-4 mr-2" />
             Duplicate
             <ContextMenuShortcut>⌘D</ContextMenuShortcut>
           </ContextMenuItem>
-          
+
           {board.isLocked ? (
             <ContextMenuItem onClick={handleUnlock}>
               <Unlock className="h-4 w-4 mr-2" />
@@ -395,21 +409,21 @@ export function BoardCard({ board, viewMode }: BoardCardProps) {
               Lock
             </ContextMenuItem>
           )}
-          
+
           <ContextMenuSeparator />
-          
+
           <ContextMenuItem onClick={handleManageCollaborators}>
             <Users className="h-4 w-4 mr-2" />
             Manage Collaborators
           </ContextMenuItem>
-          
+
           <ContextMenuItem onClick={handleSettings}>
             <Settings className="h-4 w-4 mr-2" />
             Board Settings
           </ContextMenuItem>
-          
+
           <ContextMenuSeparator />
-          
+
           {board.isArchived ? (
             <ContextMenuItem onClick={handleUnarchive}>
               <ArchiveRestore className="h-4 w-4 mr-2" />
@@ -422,9 +436,9 @@ export function BoardCard({ board, viewMode }: BoardCardProps) {
               <ContextMenuShortcut>⌘E</ContextMenuShortcut>
             </ContextMenuItem>
           )}
-          
+
           <ContextMenuSeparator />
-          
+
           <ContextMenuItem onClick={handleDelete} variant="destructive">
             <Trash2 className="h-4 w-4 mr-2" />
             Delete
@@ -458,10 +472,13 @@ export function BoardCard({ board, viewMode }: BoardCardProps) {
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setShowRenameDialog(false)}>
+            <Button
+              variant="outline"
+              onClick={() => setShowRenameDialog(false)}
+            >
               Cancel
             </Button>
-            <Button 
+            <Button
               onClick={handleRenameSubmit}
               disabled={!newBoardName.trim() || renameBoard.isPending}
             >
@@ -477,14 +494,18 @@ export function BoardCard({ board, viewMode }: BoardCardProps) {
           <DialogHeader>
             <DialogTitle>Delete Board</DialogTitle>
             <DialogDescription>
-              Are you sure you want to delete "{board.title}"? This action cannot be undone.
+              Are you sure you want to delete "{board.title}"? This action
+              cannot be undone.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setShowDeleteDialog(false)}>
+            <Button
+              variant="outline"
+              onClick={() => setShowDeleteDialog(false)}
+            >
               Cancel
             </Button>
-            <Button 
+            <Button
               variant="destructive"
               onClick={handleDeleteConfirm}
               disabled={deleteBoard.isPending}

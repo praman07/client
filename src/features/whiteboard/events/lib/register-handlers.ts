@@ -47,7 +47,7 @@ export function registerWhiteboardHandlers(
     }),
   )
 
-  // Board Update (remote CRDT updates)
+  // Board Update (remote CRDT updates + replay gap)
   unregisterFns.push(
     registerHandler(WhiteboardDownstreamEvent.BoardUpdate, (event) => {
       // ✅ FIX: Backend sends { type, data: { boardId, update, ... } }

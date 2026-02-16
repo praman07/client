@@ -21,6 +21,7 @@ import {
 import type { PendingUpdatesTracker } from '@/widgets/whiteboard-canvas/lib/pending-updates-tracker'
 import { YjsOrigin } from '@/shared/lib/yjs/constants'
 import { createLogger } from '@/shared/lib/logger'
+import { safeApplyUpdate } from '@/shared/lib/yjs/safe-apply-update'
 
 const log = createLogger('whiteboard:board-update')
 
@@ -81,13 +82,13 @@ export function handleBoardUpdate(
     return
   }
 
-  log.debug('📥 Received board update', {
-    boardId,
-    streamId,
-    updateSize: update.length,
-    updateType: typeof update,
-    isString: typeof update === 'string',
-  })
+  // log.debug('📥 Received board update', {
+  //   boardId,
+  //   streamId,
+  //   updateSize: update.length,
+  //   updateType: typeof update,
+  //   isString: typeof update === 'string',
+  // })
 
   // Validate update is base64 string
   if (typeof update !== 'string') {
@@ -98,11 +99,11 @@ export function handleBoardUpdate(
   // Convert Base64 → Uint8Array
   const binary = base64ToUint8Array(update)
 
-  log.debug('Converted to binary', {
-    boardId,
-    binarySize: binary.length,
-    originalSize: update.length,
-  })
+  // log.debug('Converted to binary', {
+  //   boardId,
+  //   binarySize: binary.length,
+  //   originalSize: update.length,
+  // })
 
   // Security: Validate Y.js update structure
   if (!isValidYjsUpdate(binary)) {
@@ -141,69 +142,98 @@ export function handleBoardUpdate(
     updateSize: binary.length,
   })
 
-  log.debug('🔧 About to call Y.applyUpdate with origin:', {
-    boardId,
-    streamId,
-    origin: YjsOrigin.Remote,
-    ydocExists: !!ydoc,
-  })
+  // log.debug('🔧 About to call Y.applyUpdate with origin:', {
+  //   boardId,
+  //   streamId,
+  //   origin: YjsOrigin.Remote,
+  //   ydocExists: !!ydoc,
+  // })
 
-  // Check Y.Array state BEFORE applying update
-  try {
-    const yElements = ydoc.getArray('elements')
-    log.debug('📊 Y.Array state BEFORE Y.applyUpdate:', {
-      boardId,
-      streamId,
-      elementCount: yElements.length,
-      firstElement: yElements.length > 0 ? yElements.get(0) : null,
-    })
-  } catch (e) {
-    log.warn('Could not read Y.Array before update', e)
-  }
+  // // Check Y.Array state BEFORE applying update
+  // try {
+  //   const yElements = ydoc.getArray('elements')
+  //   const yAssets = ydoc.getMap('assets')
 
-  // Apply update WITH 'remote' origin (synchronously!)
-  // This prevents the update observer from re-sending it (echo prevention)
-  // ExcalidrawBinding still sees the update (it doesn't filter by origin)
-  try {
-    Y.applyUpdate(ydoc, binary, YjsOrigin.Remote)
-    log.debug('✨ Y.applyUpdate completed without error', {
+  //   log.debug('📊 Y.Doc state BEFORE Y.applyUpdate:', {
+  //     boardId,
+  //     streamId,
+  //     elementCount: yElements.length,
+  //     assetCount: yAssets.size,
+  //     firstElement: yElements.length > 0 ? yElements.get(0) : null,
+  //     ydocClientId: ydoc.clientID,
+  //   })
+  // } catch (e) {
+  //   log.warn('Could not read Y.Doc state before update', e)
+  // }
+
+  // Apply update WITH 'remote' origin
+  const result = safeApplyUpdate(
+    ydoc,
+    binary,
+    {
+      context: 'client:board-update',
       boardId,
       streamId,
-    })
-  } catch (error) {
-    log.error('❌ Y.applyUpdate threw error!', {
-      boardId,
-      streamId,
-      error,
-    })
+      origin: YjsOrigin.Remote,
+      throwOnError: false, // Non-fatal, continue processing
+    },
+    log,
+  )
+
+  if (!result.success) {
+    const error = result.error!
+    const errorMessage = error.message
+
+    // 🛡️ DEFENSIVE: Check for duplicate/conflict errors
+    const isDuplicateOrConflict =
+      errorMessage.includes('splice') ||
+      errorMessage.includes('getMissing') ||
+      errorMessage.includes('Cannot read properties of undefined')
+
+    if (isDuplicateOrConflict) {
+      log.warn('⚠️ Ignoring duplicate/conflicting update (non-fatal)', {
+        boardId,
+        streamId,
+        error: errorMessage,
+      })
+      return // Silent failure - OK
+    }
+
+    // Unknown error - throw
     throw error
   }
 
-  // Check Y.Array state AFTER applying update
-  try {
-    const yElements = ydoc.getArray('elements')
-    log.debug('📊 Y.Array state AFTER Y.applyUpdate:', {
-      boardId,
-      streamId,
-      elementCount: yElements.length,
-      firstElement: yElements.length > 0 ? yElements.get(0) : null,
-      lastElement:
-        yElements.length > 0 ? yElements.get(yElements.length - 1) : null,
-    })
-  } catch (e) {
-    log.warn('Could not read Y.Array after update', e)
-  }
-
-  log.debug('✨ Remote update applied successfully (Y.applyUpdate returned)', {
+  log.info('✅ Remote update applied', {
     boardId,
     streamId,
+    elementsDelta: result.elementsDelta,
   })
 
-  // Wait a tick to see if observer fires
-  setTimeout(() => {
-    log.debug('⏱️  100ms after Y.applyUpdate - checking if observers fired', {
-      boardId,
-      streamId,
-    })
-  }, 100)
+  // // Check Y.Array state AFTER applying update
+  // try {
+  //   const yElements = ydoc.getArray('elements')
+  //   log.debug('📊 Y.Array state AFTER Y.applyUpdate:', {
+  //     boardId,
+  //     streamId,
+  //     elementCount: yElements.length,
+  //     firstElement: yElements.length > 0 ? yElements.get(0) : null,
+  //     lastElement:
+  //       yElements.length > 0 ? yElements.get(yElements.length - 1) : null,
+  //   })
+  // } catch (e) {
+  //   log.warn('Could not read Y.Array after update', e)
+  // }
+
+  // log.debug('✨ Remote update applied successfully (Y.applyUpdate returned)', {
+  //   boardId,
+  //   streamId,
+  // })
+
+  // // Wait a tick to see if observer fires
+  // setTimeout(() => {
+  //   log.debug('⏱️  100ms after Y.applyUpdate - checking if observers fired', {
+  //     boardId,
+  //     streamId,
+  //   })
+  // }, 100)
 }

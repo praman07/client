@@ -28,8 +28,8 @@ export const GROUPS = {
   // Features
   chat: false,
   auth: false,
-  whiteboard: true, // ✅ General whiteboard (presence, subscribe, events)
-  'whiteboard-sync': true, // ✅ Board-update E2E flow tracing
+  whiteboard: false, // ❌ Disabled - use file-level flags for state sync testing
+  'whiteboard-sync': false, // ❌ Disabled - use file-level flags
 
   // Modules
   websocket: false,
@@ -47,99 +47,119 @@ export const FILES: Record<string, boolean | undefined> = {
   // ─────────────────────────────────────
   // Chat Feature
   // ─────────────────────────────────────
-  'chat:scroll': undefined, // use-chat-scroll.ts
-  'chat:history': undefined, // use-history-loader.ts
-  'chat:storage': undefined, // storage.ts
-  'chat:window': undefined, // chat-window.tsx
-  'chat:messageList': undefined, // message-list.tsx
-  'chat:memberCache': undefined, // member-cache-context.tsx
-  'chat:message': undefined, // primary-message.tsx
-  'chat:authors': undefined, // use-message-authors.ts
-  'chat:sidebar': undefined, // chat-sidebar.tsx
-  'chat:outbox': undefined, // outbox-worker.ts
-  'chat:ack': undefined, // ack-message-handler.ts
-  'chat:handler': undefined, // new-message-handler.ts
-  'chat:sync-required-handler': undefined, // sync-required-handler.ts
+  'chat:scroll': false,
+  'chat:history': false,
+  'chat:storage': false,
+  'chat:window': false,
+  'chat:messageList': false,
+  'chat:memberCache': false,
+  'chat:message': false,
+  'chat:authors': false,
+  'chat:sidebar': false,
+  'chat:outbox': false,
+  'chat:ack': false,
+  'chat:handler': false,
+  'chat:sync-required-handler': false,
 
   // ─────────────────────────────────────
   // WebSocket Module
   // ─────────────────────────────────────
-  'ws:connection': undefined, // socket-connection.provider.ts
-  'ws:registry': undefined, // registry.tsx
-  'ws:plugin': undefined, // chat-plugin.ts
-  'ws:bridge': undefined, // event-bridge.ts
-  'ws:orchestrator': undefined, // socket-orchestrator.ts
-  'ws:manager': undefined, // manager.ts
-  'ws:bus': undefined, // event-bus.ts
-  'ws:router': undefined, // event-router.ts
-  'ws:conn-mgr': undefined, // core/connection-manager.ts
-  'ws:reconnect': undefined, // core/reconnection-strategy.ts
-  'ws:queue': undefined, // core/message-queue.ts
-  'ws:leader': undefined, // core/leader-integration.ts
-  'ws:sub-mgr': undefined, // subscriptions/subscription-manager.ts
-  'ws:sub-rec': undefined, // subscriptions/subscription-recovery.ts
-  'ws:plugin-registry': undefined, // domains/plugin-registry.ts
+  'ws:connection': false,
+  'ws:registry': false,
+  'ws:plugin': false,
+  'ws:bridge': false,
+  'ws:orchestrator': false,
+  'ws:manager': false,
+  'ws:bus': false,
+  'ws:router': false,
+  'ws:conn-mgr': false,
+  'ws:reconnect': false,
+  'ws:queue': false,
+  'ws:leader': false,
+  'ws:sub-mgr': false,
+  'ws:sub-rec': false,
+  'ws:plugin-registry': false,
 
   // ─────────────────────────────────────
   // Resequencer Module
   // ─────────────────────────────────────
-  'reseq:processor': undefined, // message-processor.ts
-  'reseq:dedup': undefined, // deduplicator.ts
-  'reseq:factory': undefined, // create-resequencer.ts
-  'reseq:state': undefined, // state-manager.ts
-  'reseq:storage': undefined, // storage.ts (chat-session)
-  'reseq:commit': undefined, // core/commit-handler.ts
-  'reseq:buffer': undefined, // core/buffer-manager.ts
-  'reseq:gap': undefined, // plugins/gap-detector.ts
-  'reseq:healer': undefined, // plugins/auto-healer.ts
-  'reseq:cursor': undefined, // utils/cursor-loader.ts
+  'reseq:processor': false,
+  'reseq:dedup': false,
+  'reseq:factory': false,
+  'reseq:state': false,
+  'reseq:storage': false,
+  'reseq:commit': false,
+  'reseq:buffer': false,
+  'reseq:gap': false,
+  'reseq:healer': false,
+  'reseq:cursor': false,
 
   // ─────────────────────────────────────
   // Chat Recovery & Features
   // ─────────────────────────────────────
-  'chat:recovery': undefined, // recovery-listener.tsx & use-fetch-delta.ts
-  'chat:sync': undefined, // sync-required-handler.ts
-  'app:events': undefined, // app/providers/events/index.tsx
-  'app:onboarding': undefined, // use-onboarding-orchestrator.ts
-  'app:workspace': undefined, // workspace-slug-field.tsx
+  'chat:recovery': false,
+  'chat:sync': false,
+  'app:events': false,
+  'app:onboarding': false,
+  'app:workspace': false,
 
   // ─────────────────────────────────────
   // Whiteboard Feature
   // ─────────────────────────────────────
-  'whiteboard:presence': undefined, // entities/whiteboard-presence/model/slice.ts
-  'whiteboard:sidebar': undefined, // widgets/collaboration-sidebar
-  'whiteboard:events': undefined, // features/whiteboard/events
-  'whiteboard:user-joined': undefined, // events/handlers/user-joined.ts
-  'whiteboard:subscribe': undefined, // events/handlers/subscribe-success.ts
-  'whiteboard:plugin': undefined, // providers/ws-domains/whiteboard-plugin.ts
-  'whiteboard:ydoc': undefined, // entities/whiteboard-session/lib/ydoc-manager.ts
-  'whiteboard:validation': undefined, // entities/whiteboard-session/lib/validation.ts
-  'whiteboard:ydoc-instance': undefined, // entities/whiteboard-session/hooks/use-ydoc-instance.ts
+  'whiteboard:presence': false,
+  'whiteboard:sidebar': false,
+  'whiteboard:events': false,
+  'whiteboard:user-joined': false,
+  'whiteboard:subscribe': false,
+  'whiteboard:plugin': false,
+  'whiteboard:ydoc': false,
+  'whiteboard:validation': false,
+  'whiteboard:ydoc-instance': false,
+  'whiteboard:ydoc-registry': false, // NEW: ydoc-registry.ts
 
-  // Board-update E2E flow (inherits from GROUPS['whiteboard-sync'])
-  'whiteboard:canvas': undefined, // widgets/whiteboard-canvas/hooks/use-excalidraw-binding.ts
-  'whiteboard:board-update': undefined, // features/whiteboard/events/handlers/board-update.ts
-  'whiteboard:send-update': undefined, // features/whiteboard/send-board-update
-  'whiteboard:update-ack': undefined, // features/whiteboard/events/handlers/update-ack.ts
-  'whiteboard:board-locked': undefined, // features/whiteboard/events/handlers/board-locked.ts
-  'whiteboard:board-unlocked': undefined, // features/whiteboard/events/handlers/board-unlocked.ts
-  'whiteboard:user-left': undefined, // features/whiteboard/events/handlers/user-left.ts
-  'whiteboard:use-subscribe': undefined, // features/whiteboard/subscribe-board/hooks/use-subscribe-board.ts
-  'whiteboard:use-send-update': undefined, // features/whiteboard/send-board-update/hooks/use-send-board-update.ts
-  'whiteboard:unsubscribe': undefined, // features/whiteboard/events/api/unsubscribe-board.ts
-  'whiteboard:cache': true, // entities/whiteboard-session/lib/board-cache-manager.ts
-  'whiteboard:cache-hook': true, // entities/whiteboard-session/hooks/use-board-cache.ts
-  'whiteboard:offline-queue': true, // entities/whiteboard-session/lib/offline-queue-manager.ts
-  'whiteboard:sync-engine': undefined, // widgets/whiteboard-canvas/lib/sync-engine.ts
-  'whiteboard:canvas-lifecycle': undefined, // widgets/whiteboard-canvas/hooks/use-canvas-lifecycle.ts
-  'whiteboard:conflict-resolver': undefined, // widgets/whiteboard-canvas/lib/conflict-resolver.ts
+  // ─────────────────────────────────────
+  // Whiteboard Board Update Flow
+  // ─────────────────────────────────────
+  'whiteboard:canvas': false,
+  'whiteboard:board-update': false,
+  'whiteboard:send-update': false,
+  'whiteboard:update-ack': false,
+  'whiteboard:board-locked': false,
+  'whiteboard:board-unlocked': false,
+  'whiteboard:user-left': false,
+  'whiteboard:use-subscribe': false,
+  'whiteboard:use-send-update': false,
+  'whiteboard:unsubscribe': false,
+  'whiteboard:cache': false, // Disabled for testing
+  'whiteboard:cache-hook': false, // Disabled for testing
+  'whiteboard:offline-queue': false, // Disabled for testing
+  'whiteboard:sync-engine': false,
+  'whiteboard:canvas-lifecycle': false,
+  'whiteboard:conflict-resolver': false,
+  'whiteboard:pending-tracker': false, // NEW: pending-updates-tracker.ts
+
+  // ─────────────────────────────────────
+  // ✅ STATE SYNC TESTING (ENABLED)
+  // ─────────────────────────────────────
+  'whiteboard:canvas:v2': true, // NEW: canvas-v2.tsx - Main canvas component
+  'whiteboard:collab-v2': true, // NEW: use-collab-v2.ts - Y.Doc initialization
+  'whiteboard:state-vector-sync': true, // NEW: use-state-vector-sync.ts - GraphQL diff sync
+  'whiteboard:network-sync-v2': true, // NEW: use-network-sync-v2.ts - WebSocket real-time sync
+  'whiteboard:init-state': true, // NEW: use-board-initialization.ts - Board initialization
+
+  // ─────────────────────────────────────
+  // Additional Whiteboard
+  // ─────────────────────────────────────
+  'whiteboard:network-sync': false, // Old network sync (disabled)
+  'whiteboard:flush-queue': false,
+  'whiteboard:sync': false,
 
   // ─────────────────────────────────────
   // Database/Storage
   // ─────────────────────────────────────
-  'db:messages': undefined,
-  'db:outbox': undefined,
-  'db:gc': undefined, // storage-gc/index.ts
+  'db:messages': false,
+  'db:outbox': false,
+  'db:gc': false,
 }
 
 export type GroupFlag = keyof typeof GROUPS

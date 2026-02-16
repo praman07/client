@@ -14,15 +14,20 @@ interface GeneralTabProps {
 
 /**
  * General settings tab
- * 
+ *
  * Edit board name and description
  */
 export function GeneralTab({ boardId }: GeneralTabProps) {
   const { data: board } = useBoard(boardId)
   const renameBoard = useRenameBoard()
   const updateDescription = useUpdateDescription()
-  
-  const { register, handleSubmit, reset, formState: { isDirty } } = useSettingsForm({
+
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { isDirty },
+  } = useSettingsForm({
     defaultName: board?.getBoard?.title,
     defaultDescription: board?.getBoard?.description || '',
   })
@@ -46,10 +51,12 @@ export function GeneralTab({ boardId }: GeneralTabProps) {
     }
 
     if (data.description !== board?.getBoard?.description) {
-      promises.push(updateDescription.mutateAsync({ 
-        boardId, 
-        description: data.description 
-      }))
+      promises.push(
+        updateDescription.mutateAsync({
+          boardId,
+          description: data.description,
+        }),
+      )
     }
 
     await Promise.all(promises)
@@ -87,10 +94,7 @@ export function GeneralTab({ boardId }: GeneralTabProps) {
       </div>
 
       <div className="flex justify-end">
-        <Button 
-          type="submit" 
-          disabled={!isDirty || isPending}
-        >
+        <Button type="submit" disabled={!isDirty || isPending}>
           {isPending ? 'Saving...' : 'Save Changes'}
         </Button>
       </div>

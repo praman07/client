@@ -2,7 +2,11 @@ import { useState, useEffect, useRef } from 'react'
 import * as Y from 'yjs'
 import { ExcalidrawBinding } from '@mizuka-wu/y-excalidraw'
 import type { ExcalidrawImperativeAPI } from '@excalidraw/excalidraw/types'
-import { boardCache, uint8ArrayToBase64 } from '@/entities/whiteboard-session'
+import {
+  boardCache,
+  uint8ArrayToBase64,
+  createYDoc,
+} from '@/entities/whiteboard-session' // ✅ Add createYDoc import
 import { useBoardSnapshot } from '@/features/whiteboard/fetch-snapshot'
 import { useSubscribeBoard } from '@/features/whiteboard/subscribe-board'
 import { createLogger } from '@/shared/lib/logger'
@@ -45,8 +49,8 @@ export function useWhiteboardSync(boardId: string) {
     async function initialize() {
       log.info('🚀 Initializing whiteboard sync', { boardId })
 
-      // 1️⃣ Create Y.Doc
-      const ydoc = new Y.Doc()
+      // 1️⃣ Create Y.Doc with deterministic GUID
+      const ydoc = createYDoc({ boardId }) // ✅ Centralized creation!
       ydocRef.current = ydoc
 
       const yElements = ydoc.getArray<Y.Map<any>>('elements')

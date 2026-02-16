@@ -1,8 +1,8 @@
 import '@excalidraw/excalidraw/index.css'
-import { useEffect, useRef } from 'react'
+import { useRef, useState, useEffect } from 'react'
 import { Excalidraw } from '@excalidraw/excalidraw'
-
-import { useCollabV2, useNetworkSyncV2 } from '../hooks'
+import type { ExcalidrawImperativeAPI } from '@excalidraw/excalidraw/types'
+import { useWhiteboardSyncV2 } from '../hooks/use-whiteboard-sync-v2'
 import { createLogger } from '@/shared/lib/logger'
 
 const log = createLogger('whiteboard:canvas:v2')
@@ -12,51 +12,45 @@ interface WhiteboardCanvasV2Props {
 }
 
 /**
- * V2 Whiteboard Canvas - Offline-First Architecture (Reference Pattern)
+ * V2 Whiteboard Canvas - Clean Sequential Sync
  *
- * Uses excalidraw-yjs-starter reference implementation:
- * - Single hook creates entire Y.js stack
- * - No waiting for sync (Y.js handles it)
- * - Stable dependencies prevent unnecessary recreates
- *
- * Phase 1: Pure offline (IndexedDB) ✅
- * Phase 2: Network sync (WebSocket) ← IN PROGRESS
+ * Uses single orchestration hook with clear state progression:
+ * 1. Y.Doc creation (deterministic GUID)
+ * 2. Server sync
+ * 3. IndexedDB persistence
+ * 4. Client diff calculation & send
+ * 5. Network sync (WebSocket)
+ * 6. Excalidraw binding
  */
 export function WhiteboardCanvasV2({ boardId }: WhiteboardCanvasV2Props) {
   const excalidrawRef = useRef<HTMLDivElement>(null!)
+  const [api, setApi] = useState<ExcalidrawImperativeAPI | null>(null)
 
-  // Phase 1: Offline-first (working)
-  const { setApi, binding, ydoc, syncReady } = useCollabV2(excalidrawRef, boardId)
+  // Single hook orchestrates entire sync lifecycle
+  const { binding, serverSynced, indexeddbSynced } = useWhiteboardSyncV2(
+    boardId,
+    api,
+    excalidrawRef,
+  )
 
-  // Phase 2: Network sync (NEW)
-  useNetworkSyncV2(ydoc, boardId, syncReady)
-
-  // Lifecycle logging
+  // Debug logging
   useEffect(() => {
-    log.info('V2 Canvas state', {
+    log.debug('Canvas state', {
       boardId,
       hasBinding: !!binding,
+      serverSynced,
+      indexeddbSynced,
     })
-    return () => log.debug('V2 Canvas unmounting', { boardId })
-  }, [boardId, binding])
+  }, [boardId, binding, serverSynced, indexeddbSynced])
 
   return (
     <div ref={excalidrawRef} className="relative h-full w-full">
-      {/* Main Canvas */}
       <Excalidraw
         excalidrawAPI={setApi}
         theme="light"
         name="Collabify Whiteboard V2"
         isCollaborating={!!binding}
-        onPointerUpdate={binding?.onPointerUpdate}
       />
-
-      {/* V2 Beta Badge */}
-      <div className="absolute top-4 right-4 z-50">
-        <div className="bg-blue-100 border border-blue-400 text-blue-800 px-3 py-1 rounded-md text-xs font-medium">
-          V2 (Offline-First)
-        </div>
-      </div>
     </div>
   )
 }

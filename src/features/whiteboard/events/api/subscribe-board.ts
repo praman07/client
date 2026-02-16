@@ -20,27 +20,35 @@ const log = createLogger('whiteboard:subscribe')
  *
  * This will:
  * 1. Send subscribe event to server
- * 2. Server responds with board-init (snapshot, collaborators)
- * 3. Event handlers process the response
+ * 2. Server calculates replay gap from lastStreamId
+ * 3. Server sends replay-updates (if gap exists)
+ * 4. Server responds with subscribe-success
  *
- * @param boardId - The board ID to subscribe to
+ * @param input - Subscribe parameters
+ * @param input.boardId - The board ID to subscribe to
+ * @param input.lastStreamId - Last stream ID from snapshot (for replay gap)
  *
  * @example
  * ```ts
  * import { subscribeBoard } from '@/features/whiteboard/events'
  *
- * // In your whiteboard component on mount
- * useEffect(() => {
- *   subscribeBoard(boardId)
- *   return () => unsubscribeBoard(boardId)
- * }, [boardId])
+ * // After fetching snapshot
+ * const { snapshot, lastStreamId } = await getBoardSnapshot(boardId)
+ * Y.applyUpdate(ydoc, snapshot)
+ * subscribeBoard({ boardId, lastStreamId })
  * ```
  */
-export function subscribeBoard(boardId: string): void {
-  log.info('Subscribing to board', { boardId })
+export function subscribeBoard(input: {
+  boardId: string
+  lastStreamId?: string
+}): void {
+  const { boardId, lastStreamId } = input
+
+  log.info('Subscribing to board', { boardId, lastStreamId })
 
   const payload: SubscribeBoardPayload = {
     boardId,
+    lastStreamId,
   }
 
   wsManager.emit(WhiteboardUpstreamEvent.Subscribe, payload)

@@ -7,7 +7,7 @@ interface BoardThumbnailProps {
 
 /**
  * Board thumbnail preview
- * 
+ *
  * Shows canvas snapshot or placeholder icon
  */
 export function BoardThumbnail({ thumbnail }: BoardThumbnailProps) {

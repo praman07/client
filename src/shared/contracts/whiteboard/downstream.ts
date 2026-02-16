@@ -39,14 +39,13 @@ export interface BoardCollaborator {
 
 /**
  * Board initial state (sent on subscribe success)
- * Contains full Y.Doc snapshot and metadata
+ * Contains metadata about board (no snapshot - fetched via GraphQL)
  */
 export interface BoardInitPayload {
   boardId: string
-  snapshot: string // Base64-encoded Y.Doc state
-  streamId: string // Current Redis stream ID for delta syncing
-  elementCount: number // Performance hint
   collaborators: BoardCollaborator[]
+  isLocked: boolean
+  isArchived: boolean
 }
 
 /**

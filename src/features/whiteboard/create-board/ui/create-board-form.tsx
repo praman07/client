@@ -1,4 +1,4 @@
- import { useState } from 'react'
+import { useState } from 'react'
 import { useForm } from '@tanstack/react-form'
 import { toast } from 'sonner'
 import { Button } from '@/shared/ui/primitives/button'
@@ -39,7 +39,7 @@ export function CreateBoardForm({
       projectId,
       title: '',
       description: '',
-      collaboratorIds: userId ? [userId] : [] as string[],
+      collaboratorIds: userId ? [userId] : ([] as string[]),
     },
     onSubmit: async ({ value }) => {
       setRootError(null)

@@ -12,7 +12,7 @@ export const Route = createFileRoute(
 
 /**
  * Whiteboard Index Route
- * 
+ *
  * Displays board list page at /whiteboard
  */
 function WhiteboardIndexRoute() {

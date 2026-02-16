@@ -14,7 +14,7 @@ export interface YDocConfig {
  */
 export function createYDoc(config: YDocConfig): Y.Doc {
   const ydoc = new Y.Doc({
-    guid: config.guid,
+    guid: config.guid || config.boardId, // ✅ Use guid if provided, otherwise boardId
     gc: config.gc ?? true,
   })
 

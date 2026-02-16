@@ -1,5 +1,6 @@
 import { useQuery } from '@tanstack/react-query'
 import type { UseQueryOptions } from '@tanstack/react-query'
+import { useMemo } from 'react'
 import { useAuth } from '@/shared/hooks'
 import { GqlClient } from '@/shared/api/graphql-client'
 import { boardKeys } from '@/entities/whiteboard-board'
@@ -9,17 +10,17 @@ import type { DecodedSnapshot } from '../lib/decode-snapshot'
 import type { GetBoardSnapshotQuery } from '@/gql/graphql'
 
 /**
- * Fetch Y.js snapshot for board initialization (Base64 encoded, auto-decoded to Uint8Array)
+ * Fetch Y.js snapshot for board initialization with bidirectional sync
  *
  * @param boardId - Board to load snapshot for
- * @param stateVector - Optional Y.js state vector for differential sync
+ * @param clientSnapshot - Optional full client Y.Doc snapshot for bidirectional sync
  * @example
  * const { data } = useBoardSnapshot('board_abc123')
  * if (data) Y.applyUpdate(ydoc, data.diff)
  */
 export function useBoardSnapshot(
   boardId: string,
-  stateVector?: string,
+  clientSnapshot?: string,
   options?: Omit<
     UseQueryOptions<GetBoardSnapshotQuery, Error, DecodedSnapshot>,
     'queryKey' | 'queryFn' | 'select'
@@ -27,19 +28,27 @@ export function useBoardSnapshot(
 ) {
   const { getToken } = useAuth()
 
+  // ✅ Include clientSnapshot in query key for proper cache semantics
+  // Different clientSnapshot = different server response
+  const queryKey = useMemo(
+    () => [...boardKeys.snapshot(boardId), clientSnapshot || 'initial'],
+    [boardId, clientSnapshot],
+  )
+
   return useQuery({
-    queryKey: boardKeys.snapshot(boardId),
+    queryKey,
     queryFn: async () => {
       const token = await getToken()
       if (!token) throw new Error('Not authenticated')
 
       const client = GqlClient(token)
-      return client.request(GET_BOARD_SNAPSHOT, { boardId, stateVector })
+      return client.request(GET_BOARD_SNAPSHOT, { boardId, clientSnapshot })
     },
     select: (data) => decodeSnapshot(data.getBoardSnapshot),
     enabled: !!boardId,
-    staleTime: Infinity, // Snapshots are immutable
-    gcTime: 1000 * 60 * 5, // Cache for 5 minutes
+    staleTime: 0,
+    gcTime: 0, // ✅ Don't cache - prevent stale data on remount
+    refetchOnMount: 'always', // ✅ Always refetch on mount
     ...options,
   })
 }

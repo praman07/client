@@ -1,4 +1,8 @@
-import { Avatar, AvatarImage, AvatarFallback } from '@/shared/ui/primitives/avatar'
+import {
+  Avatar,
+  AvatarImage,
+  AvatarFallback,
+} from '@/shared/ui/primitives/avatar'
 import { Badge } from '@/shared/ui/primitives/badge'
 import {
   Tooltip,
@@ -17,7 +21,7 @@ interface CollaboratorItemProps {
  */
 function formatTimeAgo(date: Date): string {
   const seconds = Math.floor((Date.now() - date.getTime()) / 1000)
-  
+
   if (seconds < 60) return 'Just now'
   if (seconds < 3600) return `${Math.floor(seconds / 60)}m ago`
   if (seconds < 86400) return `${Math.floor(seconds / 3600)}h ago`
@@ -26,13 +30,13 @@ function formatTimeAgo(date: Date): string {
 
 /**
  * Collaborator list item showing user info and presence status
- * 
+ *
  * Features:
  * - Avatar with cursor color ring
  * - Name truncation
  * - Activity status badge
  * - Hover tooltip with full info
- * 
+ *
  * @layer Widgets
  * @module collaboration-sidebar
  */
@@ -52,22 +56,29 @@ export function CollaboratorItem({ collaborator }: CollaboratorItemProps) {
         <div className="flex items-center gap-3 px-2 py-1.5 rounded-md hover:bg-sidebar-accent/50 transition-all duration-200 cursor-default group w-full">
           {/* Avatar with cursor color ring */}
           <div className="relative">
-            <Avatar 
+            <Avatar
               className="h-8 w-8 ring-2 ring-offset-1 ring-offset-sidebar transition-transform group-hover:scale-105"
-              style={{ 
-                '--tw-ring-color': collaborator.cursor.color 
-              } as React.CSSProperties}
+              style={
+                {
+                  '--tw-ring-color': collaborator.cursor.color,
+                } as React.CSSProperties
+              }
             >
-              <AvatarImage src={collaborator.avatarUrl} alt={collaborator.fullName} />
+              <AvatarImage
+                src={collaborator.avatarUrl}
+                alt={collaborator.fullName}
+              />
               <AvatarFallback className="text-xs font-medium">
                 {initials}
               </AvatarFallback>
             </Avatar>
-            
+
             {/* Status indicator dot */}
             <div
               className={`absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-full border-2 border-sidebar ${
-                collaborator.isActive ? 'bg-green-500' : 'bg-muted-foreground/40'
+                collaborator.isActive
+                  ? 'bg-green-500'
+                  : 'bg-muted-foreground/40'
               }`}
             />
           </div>
@@ -91,7 +102,7 @@ export function CollaboratorItem({ collaborator }: CollaboratorItemProps) {
         <div className="space-y-1">
           <p className="font-semibold">{collaborator.fullName}</p>
           <div className="flex items-center gap-2 text-xs text-muted-foreground">
-            <Badge 
+            <Badge
               variant={collaborator.isActive ? 'default' : 'secondary'}
               className="h-5"
             >

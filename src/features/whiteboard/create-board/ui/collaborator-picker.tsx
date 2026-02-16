@@ -1,7 +1,11 @@
 import { useState, useMemo } from 'react'
 import { Check, X, Search } from 'lucide-react'
 import { cn } from '@/shared/lib/utils'
-import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/primitives/avatar'
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from '@/shared/ui/primitives/avatar'
 import { ScrollArea } from '@/shared/ui/primitives/scroll-area'
 import { Input } from '@/shared/ui/primitives/input'
 import { Badge } from '@/shared/ui/primitives/badge'
@@ -17,13 +21,13 @@ interface CollaboratorPickerProps {
 
 /**
  * Multi-select user picker for workspace members
- * 
+ *
  * Features:
  * - Search/filter members by name or email
  * - Multi-select with visual feedback
  * - Pre-selects current user as owner
  * - Shows selected users as removable badges
- * 
+ *
  * @layer Features
  * @module whiteboard/create-board
  */
@@ -45,13 +49,16 @@ export function CollaboratorPicker({
     return members.filter((m) => {
       const fullName = m.user.fullName || ''
       const email = m.user.email || ''
-      return fullName.toLowerCase().includes(query) || email.toLowerCase().includes(query)
+      return (
+        fullName.toLowerCase().includes(query) ||
+        email.toLowerCase().includes(query)
+      )
     })
   }, [members, searchQuery])
 
   const toggleMember = (userId: string) => {
     if (userId === currentUserId) return // Owner cannot be removed
-    
+
     if (selectedUserIds.includes(userId)) {
       onChange(selectedUserIds.filter((id) => id !== userId))
     } else {
@@ -80,7 +87,7 @@ export function CollaboratorPicker({
   return (
     <div className="space-y-3">
       <Label>Add Collaborators (Optional)</Label>
-      
+
       {/* Search Input */}
       <div className="relative">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
@@ -148,7 +155,7 @@ export function CollaboratorPicker({
                     'flex w-full items-center gap-3 rounded-md p-2 transition-colors',
                     isSelected && 'bg-accent',
                     !isOwner && 'hover:bg-accent/50 cursor-pointer',
-                    isOwner && 'opacity-60 cursor-not-allowed'
+                    isOwner && 'opacity-60 cursor-not-allowed',
                   )}
                 >
                   <Avatar className="h-8 w-8 shrink-0">
@@ -160,11 +167,19 @@ export function CollaboratorPicker({
                   <div className="flex-1 text-left min-w-0">
                     <p className="text-sm font-medium truncate">
                       {member.user.fullName}
-                      {isOwner && <span className="ml-2 text-xs text-muted-foreground">(You)</span>}
+                      {isOwner && (
+                        <span className="ml-2 text-xs text-muted-foreground">
+                          (You)
+                        </span>
+                      )}
                     </p>
-                    <p className="text-xs text-muted-foreground truncate">{member.user.email}</p>
+                    <p className="text-xs text-muted-foreground truncate">
+                      {member.user.email}
+                    </p>
                   </div>
-                  {isSelected && <Check className="h-4 w-4 text-primary shrink-0" />}
+                  {isSelected && (
+                    <Check className="h-4 w-4 text-primary shrink-0" />
+                  )}
                 </button>
               )
             })

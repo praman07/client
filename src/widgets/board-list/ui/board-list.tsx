@@ -17,7 +17,7 @@ interface BoardListProps {
 
 /**
  * Board list gallery with search, filters, and CRUD operations
- * 
+ *
  * Features:
  * - Grid/list view toggle
  * - Search boards by name
@@ -28,28 +28,36 @@ interface BoardListProps {
 export function BoardList({ workspaceId, projectId }: BoardListProps) {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
   const { data, isLoading, refetch } = useUserBoards(workspaceId)
-  const { searchQuery, setSearchQuery, showArchived, setShowArchived, sortBy, setSortBy } = useBoardFilters()
+  const {
+    searchQuery,
+    setSearchQuery,
+    showArchived,
+    setShowArchived,
+    sortBy,
+    setSortBy,
+  } = useBoardFilters()
   const { viewMode, toggleViewMode } = useViewMode()
 
   // Extract boards from infinite query data
   // useUserBoards returns InfiniteQueryResult, data.pages is the array of page results
-  const boards: Board[] = (data as any)?.pages?.flatMap((page: any) => {
-    // Each page has shape: { userBoards: { boards: Board[], nextCursor: string | null } }
-    return page.userBoards.boards.map((board: any) => ({
-      id: board.id,
-      workspaceId: board.workspaceId,
-      projectId: board.projectId,
-      title: board.title,
-      description: board.description,
-      thumbnail: board.thumbnail ?? null,
-      elementCount: board.elementCount,
-      fileSizeBytes: board.fileSizeBytes,
-      isLocked: board.isLocked,
-      isArchived: board.isArchived,
-      createdAt: board.createdAt,
-      updatedAt: board.updatedAt,
-    }))
-  }) ?? []
+  const boards: Board[] =
+    (data as any)?.pages?.flatMap((page: any) => {
+      // Each page has shape: { userBoards: { boards: Board[], nextCursor: string | null } }
+      return page.userBoards.boards.map((board: any) => ({
+        id: board.id,
+        workspaceId: board.workspaceId,
+        projectId: board.projectId,
+        title: board.title,
+        description: board.description,
+        thumbnail: board.thumbnail ?? null,
+        elementCount: board.elementCount,
+        fileSizeBytes: board.fileSizeBytes,
+        isLocked: board.isLocked,
+        isArchived: board.isArchived,
+        createdAt: board.createdAt,
+        updatedAt: board.updatedAt,
+      }))
+    }) ?? []
 
   // Apply filters and sorting
   const filteredBoards = filterBoards(boards, { searchQuery, showArchived })
@@ -67,7 +75,7 @@ export function BoardList({ workspaceId, projectId }: BoardListProps) {
     return (
       <>
         <EmptyState />
-        
+
         {/* FAB for creating first board */}
         <Button
           onClick={() => setIsCreateModalOpen(true)}
@@ -108,11 +116,13 @@ export function BoardList({ workspaceId, projectId }: BoardListProps) {
           <p>No boards found matching your filters</p>
         </div>
       ) : (
-        <div className={
-          viewMode === 'grid'
-            ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'
-            : 'space-y-2'
-        }>
+        <div
+          className={
+            viewMode === 'grid'
+              ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'
+              : 'space-y-2'
+          }
+        >
           {sortedBoards.map((board) => (
             <BoardCard key={board.id} board={board} viewMode={viewMode} />
           ))}

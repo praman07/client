@@ -26,30 +26,30 @@ export function WhiteboardCanvas({ boardId }: WhiteboardCanvasProps) {
     log.info('Canvas mounted', { boardId })
     return () => log.debug('Canvas unmounting', { boardId })
   }, [boardId])
-  
+
   // Feature hooks
   const { data: board, isLoading: isBoardLoading } = useBoard(boardId)
   const isReadOnly = useReadOnlyMode(boardId)
-  
+
   // ✅ REFACTORED: Single unified sync hook
-  const { 
-    setExcalidrawAPI, 
-    ydoc, 
-    binding,
-    ready, 
-    snapshotReady 
-  } = useWhiteboardSync(boardId)
-  
-  log.debug('Sync state', { ready, snapshotReady, hasYDoc: !!ydoc, hasBinding: !!binding })
-  
+  const { setExcalidrawAPI, ydoc, binding, ready, snapshotReady } =
+    useWhiteboardSync(boardId)
+
+  log.debug('Sync state', {
+    ready,
+    snapshotReady,
+    hasYDoc: !!ydoc,
+    hasBinding: !!binding,
+  })
+
   // Preserved hooks
   useUndoManager(boardId, setExcalidrawAPI)
   useFlushOfflineQueue(boardId)
   useCanvasLifecycle(boardId)
-  
+
   // ✅ Network sync (Y.Doc → WebSocket)
   useNetworkSync(boardId, ydoc, ready)
-  
+
   // Loading state - only check board metadata
   // ✅ FIX: Don't block on `ready` - creates circular dependency!
   // Excalidraw must render first to call setExcalidrawAPI → triggers init
@@ -58,14 +58,12 @@ export function WhiteboardCanvas({ boardId }: WhiteboardCanvasProps) {
       <div className="flex h-full w-full items-center justify-center">
         <div className="flex flex-col items-center gap-4">
           <div className="h-12 w-12 animate-spin rounded-full border-4 border-primary border-t-transparent" />
-          <p className="text-sm text-muted-foreground">
-            Loading board...
-          </p>
+          <p className="text-sm text-muted-foreground">Loading board...</p>
         </div>
       </div>
     )
   }
-  
+
   // Error state
   if (!board?.getBoard) {
     return (
@@ -89,7 +87,7 @@ export function WhiteboardCanvas({ boardId }: WhiteboardCanvasProps) {
       </div>
     )
   }
-  
+
   return (
     <div className="relative h-full w-full">
       {/* Main Canvas */}
@@ -101,12 +99,12 @@ export function WhiteboardCanvas({ boardId }: WhiteboardCanvasProps) {
         isCollaborating={!!binding}
         onPointerUpdate={binding?.onPointerUpdate}
       />
-      
+
       {/* Overlays */}
       <CursorOverlay boardId={boardId} />
       <ConnectionIndicator boardId={boardId} />
       <SyncStatusBadge boardId={boardId} />
-      
+
       {/* Read-only banner */}
       {isReadOnly && (
         <div className="absolute top-16 left-1/2 -translate-x-1/2 z-50">

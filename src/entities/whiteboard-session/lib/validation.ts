@@ -1,11 +1,13 @@
 import * as Y from 'yjs'
 import { createLogger } from '@/shared/lib/logger'
+import { createYDoc } from './yjs/create-ydoc' // ✅ Import centralized factory
 
 const log = createLogger('whiteboard:validation')
 
 export function isValidYjsUpdate(update: Uint8Array): boolean {
   try {
-    const tempDoc = new Y.Doc()
+    // ✅ Use temp boardId for validation
+    const tempDoc = createYDoc({ boardId: 'validation-temp' })
     Y.applyUpdate(tempDoc, update)
     tempDoc.destroy()
     return true

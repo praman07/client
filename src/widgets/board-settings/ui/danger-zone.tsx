@@ -21,7 +21,7 @@ interface DangerZoneProps {
 
 /**
  * Danger zone tab
- * 
+ *
  * Archive or permanently delete board
  */
 export function DangerZone({ boardId, onDeleted }: DangerZoneProps) {
@@ -60,7 +60,8 @@ export function DangerZone({ boardId, onDeleted }: DangerZoneProps) {
               Archive Board
             </h4>
             <p className="text-sm text-muted-foreground">
-              Hide this board from your list. You can restore it later from archived boards.
+              Hide this board from your list. You can restore it later from
+              archived boards.
             </p>
           </div>
 
@@ -102,8 +103,8 @@ export function DangerZone({ boardId, onDeleted }: DangerZoneProps) {
           <AlertDialogHeader>
             <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
             <AlertDialogDescription>
-              This action cannot be undone. This will permanently delete the board
-              and remove all its content from our servers.
+              This action cannot be undone. This will permanently delete the
+              board and remove all its content from our servers.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

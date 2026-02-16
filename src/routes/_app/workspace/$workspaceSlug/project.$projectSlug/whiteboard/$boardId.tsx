@@ -9,7 +9,7 @@ export const Route = createFileRoute(
 
 /**
  * Whiteboard Board Route
- * 
+ *
  * Displays individual board view at /whiteboard/:boardId
  */
 function WhiteboardBoardRoute() {

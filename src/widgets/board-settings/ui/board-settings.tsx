@@ -23,16 +23,16 @@ interface BoardSettingsProps {
 
 /**
  * Board settings modal with tabbed interface
- * 
+ *
  * Tabs:
  * - General: Name, description
  * - Access: Lock/unlock
  * - Danger Zone: Archive, delete
  */
-export function BoardSettings({ 
-  boardId, 
-  isOpen, 
-  onClose 
+export function BoardSettings({
+  boardId,
+  isOpen,
+  onClose,
 }: BoardSettingsProps) {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>

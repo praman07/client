@@ -8,11 +8,11 @@ interface BoardViewPageProps {
 
 /**
  * Whiteboard board view page
- * 
+ *
  * Layout:
  * - Canvas (full remaining height after header)
  * - Collapsible collaboration sidebar (right)
- * 
+ *
  * Note: This page is rendered within _app layout which has a header.
  * The h-full class makes it take the remaining space after the header.
  */
@@ -24,7 +24,7 @@ export function BoardViewPage({ boardId }: BoardViewPageProps) {
         <div className="flex-1 relative">
           <WhiteboardCanvasV2 boardId={boardId} />
         </div>
-        
+
         {/* Collaboration Sidebar - Collapsible, positioned absolute to respect parent height */}
         <div className="relative">
           <CollaborationSidebar boardId={boardId} />

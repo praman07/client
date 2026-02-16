@@ -31,6 +31,7 @@ export enum WhiteboardUpstreamEvent {
  */
 export interface SubscribeBoardPayload {
   boardId: string
+  lastStreamId?: string // ✅ NEW: From snapshot response, for replay gap handling
 }
 
 /**

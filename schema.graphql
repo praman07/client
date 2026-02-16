@@ -106,7 +106,7 @@ type Query {
     limit: Int
     cursor: ID
   ): BoardConnection!
-  getBoardSnapshot(boardId: ID!, stateVector: String): BoardSnapshot!
+  getBoardSnapshot(boardId: ID!, clientSnapshot: String): BoardSnapshot!
   activeCollaborators(boardId: ID!): [ActiveCollaborator!]!
 }
 

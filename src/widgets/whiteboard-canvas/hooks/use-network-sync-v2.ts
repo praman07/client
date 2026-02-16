@@ -16,10 +16,14 @@ import { createLogger } from '@/shared/lib/logger'
 const log = createLogger('whiteboard:network-sync-v2')
 
 /**
- * Network Sync for Y.Doc (Phase 2 - Fixed Deduplication)
+ * Network Sync for Y.Doc (Phase 2 - Fixed Deduplication + State Sync)
  *
  * Attaches observers to Y.Doc to send/receive updates via WebSocket.
- * Only activates AFTER IndexedDB has synced to prevent partial state.
+ * Only activates AFTER state vector sync to prevent divergence.
+ *
+ * **CRITICAL:** Must wait for state sync before subscribing!
+ * - If we subscribe before state sync, remote updates arrive while we're
+ *   still applying the GraphQL diff, causing race conditions.
  *
  * Deduplication Strategy:
  * - Track streamIds of updates we send (via ACK)
@@ -33,23 +37,25 @@ const log = createLogger('whiteboard:network-sync-v2')
  *
  * @param ydoc - Y.Doc instance from useCollabV2
  * @param boardId - Board ID
- * @param syncReady - Whether IndexedDB has synced (gates network sync)
+ * @param stateSynced - Whether state vector sync completed (gates network sync)
+ * @param lastStreamId - Last stream ID from snapshot (for replay gap)
  */
 export function useNetworkSyncV2(
   ydoc: Y.Doc | null,
   boardId: string,
-  syncReady: boolean,
+  stateSynced: boolean,
+  lastStreamId?: string | null,
 ) {
   const sendUpdate = useSendBoardUpdate(boardId)
   const isSubscribedRef = useRef(false)
   const pendingTracker = useRef(new PendingUpdatesTracker())
 
   useEffect(() => {
-    // Wait for Y.Doc AND IndexedDB sync
-    if (!ydoc || !syncReady) {
-      log.debug('Waiting for Y.Doc and sync', {
+    // Wait for Y.Doc AND state vector sync
+    if (!ydoc || !stateSynced) {
+      log.debug('Waiting for Y.Doc and state sync', {
         hasYDoc: !!ydoc,
-        syncReady,
+        stateSynced,
       })
       return
     }
@@ -62,27 +68,27 @@ export function useNetworkSyncV2(
     // OUTGOING: Y.Doc → WebSocket
     // ========================================
     const handleUpdate = (update: Uint8Array, origin: any) => {
-      log.debug('🔔 Y.Doc update event triggered', {
-        boardId,
-        updateSize: update.length,
-        origin: origin,
-        originType: typeof origin,
-        originConstructor: origin?.constructor?.name,
-        isIndexedDB: isIndexedDBOrigin(origin),
-        isLocal: isLocalOrigin(origin),
-      })
+      // log.debug('🔔 Y.Doc update event triggered', {
+      //   boardId,
+      //   updateSize: update.length,
+      //   origin: origin,
+      //   originType: typeof origin,
+      //   originConstructor: origin?.constructor?.name,
+      //   isIndexedDB: isIndexedDBOrigin(origin),
+      //   isLocal: isLocalOrigin(origin),
+      // })
 
-      // Log Y.Array state on sender side
-      try {
-        const yElements = ydoc.getArray('elements')
-        log.debug('📊 SENDER Y.Array state:', {
-          boardId,
-          elementCount: yElements.length,
-          updateSize: update.length,
-        })
-      } catch (e) {
-        log.warn('Could not read Y.Array on sender', e)
-      }
+      // // Log Y.Array state on sender side
+      // try {
+      //   const yElements = ydoc.getArray('elements')
+      //   log.debug('📊 SENDER Y.Array state:', {
+      //     boardId,
+      //     elementCount: yElements.length,
+      //     updateSize: update.length,
+      //   })
+      // } catch (e) {
+      //   log.warn('Could not read Y.Array on sender', e)
+      // }
 
       // Skip updates from IndexedDB restore (already persisted)
       if (isIndexedDBOrigin(origin)) {
@@ -118,9 +124,9 @@ export function useNetworkSyncV2(
 
     // Subscribe to board (triggers WebSocket subscription)
     if (!isSubscribedRef.current) {
-      subscribeBoard(boardId)
+      subscribeBoard({ boardId, lastStreamId: lastStreamId ?? undefined })
       isSubscribedRef.current = true
-      log.info('✅ Subscribed to board updates', { boardId })
+      log.info('✅ Subscribed to board updates', { boardId, lastStreamId })
     }
 
     // Cleanup
@@ -144,5 +150,5 @@ export function useNetworkSyncV2(
         log.info('Unsubscribed from board updates', { boardId })
       }
     }
-  }, [ydoc, boardId, syncReady, sendUpdate])
+  }, [ydoc, boardId, stateSynced, sendUpdate])
 }

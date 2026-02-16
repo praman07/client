@@ -3,13 +3,11 @@ import { Badge } from '@/shared/ui/primitives/badge'
 import { Loader2, Check } from 'lucide-react'
 
 export function SyncStatusBadge({ boardId: _boardId }: { boardId: string }) {
-  const isSyncing = useAppSelector(
-    (state) => state.whiteboardSession.isSyncing
-  )
+  const isSyncing = useAppSelector((state) => state.whiteboardSession.isSyncing)
   const pendingCount = useAppSelector(
-    (state) => state.whiteboardSession.pendingUpdateCount
+    (state) => state.whiteboardSession.pendingUpdateCount,
   )
-  
+
   if (!isSyncing && pendingCount === 0) {
     return (
       <div className="absolute top-4 right-32 z-50">
@@ -20,7 +18,7 @@ export function SyncStatusBadge({ boardId: _boardId }: { boardId: string }) {
       </div>
     )
   }
-  
+
   return (
     <div className="absolute top-4 right-32 z-50">
       <Badge variant="secondary" className="flex items-center gap-2">

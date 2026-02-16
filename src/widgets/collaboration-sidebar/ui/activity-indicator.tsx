@@ -5,7 +5,10 @@ interface ActivityIndicatorProps {
 export function ActivityIndicator({ isActive }: ActivityIndicatorProps) {
   if (!isActive) {
     return (
-      <div className="h-2 w-2 rounded-full bg-muted-foreground/30" title="Inactive" />
+      <div
+        className="h-2 w-2 rounded-full bg-muted-foreground/30"
+        title="Inactive"
+      />
     )
   }
 

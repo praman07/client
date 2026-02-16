@@ -11,7 +11,7 @@ interface AccessTabProps {
 
 /**
  * Access settings tab
- * 
+ *
  * Lock/unlock board (read-only mode)
  */
 export function AccessTab({ boardId }: AccessTabProps) {
@@ -33,7 +33,7 @@ export function AccessTab({ boardId }: AccessTabProps) {
     <div className="space-y-6">
       <div>
         <h3 className="text-sm font-medium mb-4">Board Access</h3>
-        
+
         <div className="border rounded-lg p-4 space-y-4">
           <div className="flex items-start justify-between">
             <div className="space-y-1">
@@ -57,14 +57,18 @@ export function AccessTab({ boardId }: AccessTabProps) {
               onClick={handleToggleLock}
               disabled={isPending}
             >
-              {isPending ? 'Processing...' : board?.isLocked ? 'Unlock Board' : 'Lock Board'}
+              {isPending
+                ? 'Processing...'
+                : board?.isLocked
+                  ? 'Unlock Board'
+                  : 'Lock Board'}
             </Button>
           </div>
 
           {board?.isLocked && (
             <div className="bg-destructive/10 text-destructive text-xs p-3 rounded">
-              <strong>Note:</strong> Locking prevents all edits from collaborators. 
-              They can still view and navigate the board.
+              <strong>Note:</strong> Locking prevents all edits from
+              collaborators. They can still view and navigate the board.
             </div>
           )}
         </div>

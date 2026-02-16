@@ -10,7 +10,7 @@ interface CursorPreviewProps {
 
 /**
  * Small colored dot showing the user's cursor color
- * 
+ *
  * @layer Widgets
  * @module collaboration-sidebar
  */

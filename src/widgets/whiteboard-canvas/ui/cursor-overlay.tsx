@@ -3,9 +3,9 @@ import { renderCursor } from '../lib/cursor-renderer'
 
 export function CursorOverlay({ boardId }: { boardId: string }) {
   const { cursors } = useCollaborativeCursors(boardId)
-  
+
   if (cursors.length === 0) return null
-  
+
   return (
     <svg
       className="absolute inset-0 pointer-events-none z-40"
@@ -17,17 +17,12 @@ export function CursorOverlay({ boardId }: { boardId: string }) {
           color: cursor.color,
           userName: cursor.userName,
         })
-        
+
         return (
           <g key={cursor.userId} transform={transform}>
             {/* Cursor icon */}
-            <path
-              d={path}
-              fill={cursor.color}
-              stroke="white"
-              strokeWidth="1"
-            />
-            
+            <path d={path} fill={cursor.color} stroke="white" strokeWidth="1" />
+
             {/* User name label */}
             <text
               x="20"

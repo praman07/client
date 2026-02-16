@@ -8,5 +8,7 @@ export { useOfflineQueueStatus } from './use-offline-queue-status'
 // V2 Offline-First Hooks
 export { useYDocInstance } from './use-ydoc-instance'
 export { useExcalidrawBinding } from './use-excalidraw-binding'
-export { useCollabV2 } from './use-collab-v2' // Reference pattern
+export { useCollabV2 } from './use-collab-v2' // Reference pattern (deprecated)
 export { useNetworkSyncV2 } from './use-network-sync-v2' // Phase 2: Network sync
+export { useStateVectorSync } from './use-state-vector-sync' // Legacy
+export { useWhiteboardSyncV2 } from './use-whiteboard-sync-v2' // ✅ Clean orchestration hook

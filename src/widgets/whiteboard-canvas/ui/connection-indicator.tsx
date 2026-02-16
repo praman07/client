@@ -2,13 +2,17 @@ import { useAppSelector } from '@/shared/hooks'
 import { Badge } from '@/shared/ui/primitives/badge'
 import { Wifi, WifiOff } from 'lucide-react'
 
-export function ConnectionIndicator({ boardId: _boardId }: { boardId: string }) {
+export function ConnectionIndicator({
+  boardId: _boardId,
+}: {
+  boardId: string
+}) {
   const connectionStatus = useAppSelector(
-    (state) => state.whiteboardSession.connectionStatus
+    (state) => state.whiteboardSession.connectionStatus,
   )
-  
+
   const isConnected = connectionStatus === 'connected'
-  
+
   return (
     <div className="absolute top-4 right-4 z-50">
       <Badge
