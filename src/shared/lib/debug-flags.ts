@@ -120,7 +120,6 @@ export const FILES: Record<string, boolean | undefined> = {
   // ─────────────────────────────────────
   // Whiteboard Board Update Flow
   // ─────────────────────────────────────
-  'whiteboard:canvas': false,
   'whiteboard:board-update': false,
   'whiteboard:send-update': false,
   'whiteboard:update-ack': false,
@@ -141,16 +140,15 @@ export const FILES: Record<string, boolean | undefined> = {
   // ─────────────────────────────────────
   // ✅ STATE SYNC TESTING (ENABLED)
   // ─────────────────────────────────────
-  'whiteboard:canvas:v2': true, // NEW: canvas-v2.tsx - Main canvas component
+  'whiteboard:canvas': true, // Main canvas component
   'whiteboard:collab-v2': true, // NEW: use-collab-v2.ts - Y.Doc initialization
   'whiteboard:state-vector-sync': true, // NEW: use-state-vector-sync.ts - GraphQL diff sync
-  'whiteboard:network-sync-v2': true, // NEW: use-network-sync-v2.ts - WebSocket real-time sync
+  'whiteboard:network-sync': true, // WebSocket real-time sync
   'whiteboard:init-state': true, // NEW: use-board-initialization.ts - Board initialization
 
   // ─────────────────────────────────────
   // Additional Whiteboard
   // ─────────────────────────────────────
-  'whiteboard:network-sync': false, // Old network sync (disabled)
   'whiteboard:flush-queue': false,
   'whiteboard:sync': false,
 

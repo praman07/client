@@ -23,7 +23,7 @@ const trackerRegistry = new Map<string, PendingUpdatesTracker>()
 
 /**
  * Register a pending updates tracker for a board
- * Called by useNetworkSyncV2 when network sync starts
+ * Called by useNetworkSync when network sync starts
  */
 export function registerTracker(
   boardId: string,
@@ -35,7 +35,7 @@ export function registerTracker(
 
 /**
  * Unregister a pending updates tracker
- * Called by useNetworkSyncV2 on cleanup
+ * Called by useNetworkSync on cleanup
  */
 export function unregisterTracker(boardId: string) {
   trackerRegistry.delete(boardId)

@@ -21,20 +21,9 @@ const log = createLogger('whiteboard:send-update')
 
 /**
  * Send a Y.js update to the server
- *
  * @param boardId - The board ID
  * @param update - The Y.js update (Uint8Array)
  * @returns Promise that resolves when the update is sent or queued
- *
- * @example
- * ```ts
- * import { sendBoardUpdate } from '@/features/whiteboard/events'
- *
- * // In your Y.js observer
- * ydoc.on('update', (update: Uint8Array) => {
- *   sendBoardUpdate(boardId, update)
- * })
- * ```
  */
 export async function sendBoardUpdate(
   boardId: string,

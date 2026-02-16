@@ -16,12 +16,6 @@ export {
   setActiveBoardId,
 } from './model/slice'
 
-// Hooks
-export { useSyncStatus } from './hooks/use-sync-status'
-
-// Board cache
-export { boardCache } from './lib/board-cache-manager'
-
 // Offline queue
 export { offlineQueue } from './lib/offline-queue-manager'
 
