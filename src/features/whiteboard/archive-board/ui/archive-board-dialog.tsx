@@ -8,7 +8,7 @@ import {
 } from '@/shared/ui/primitives/dialog'
 import { Button } from '@/shared/ui/primitives/button'
 
-interface DeleteBoardDialogProps {
+interface ArchiveBoardDialogProps {
   boardTitle: string
   open: boolean
   onOpenChange: (open: boolean) => void
@@ -17,23 +17,23 @@ interface DeleteBoardDialogProps {
 }
 
 /**
- * Confirmation dialog for deleting a board
+ * Confirmation dialog for archiving a board
  */
-export function DeleteBoardDialog({
+export function ArchiveBoardDialog({
   boardTitle,
   open,
   onOpenChange,
   onConfirm,
   isPending,
-}: DeleteBoardDialogProps) {
+}: ArchiveBoardDialogProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Delete Board</DialogTitle>
+          <DialogTitle>Archive Board</DialogTitle>
           <DialogDescription>
-            Are you sure you want to delete "{boardTitle}"? This action cannot
-            be undone.
+            Archive "{boardTitle}"? The board will be hidden from active views
+            but can be restored later.
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
@@ -44,13 +44,8 @@ export function DeleteBoardDialog({
           >
             Cancel
           </Button>
-          <Button
-            variant="destructive"
-            onClick={onConfirm}
-            disabled={isPending}
-            className='text-white'
-          >
-            {isPending ? 'Deleting...' : 'Delete'}
+          <Button onClick={onConfirm} disabled={isPending}>
+            {isPending ? 'Archiving...' : 'Archive'}
           </Button>
         </DialogFooter>
       </DialogContent>

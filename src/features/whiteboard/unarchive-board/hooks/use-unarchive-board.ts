@@ -54,12 +54,29 @@ export function useUnarchiveBoard() {
       toast.success('Board restored')
     },
     onSettled: (_, __, boardId) => {
-      // Refetch to sync with server
-      queryClient.invalidateQueries({ queryKey: boardKeys.detail(boardId) })
-
-      // Invalidate lists to update archive status
+      // 1. Board detail
       queryClient.invalidateQueries({
-        queryKey: ['whiteboard-board', 'list'],
+        queryKey: boardKeys.detail(boardId),
+      })
+
+      // 2. All board lists
+      queryClient.invalidateQueries({
+        queryKey: boardKeys.lists(),
+      })
+
+      // 3. User's boards
+      queryClient.invalidateQueries({
+        queryKey: ['whiteboard-board', 'user-boards'],
+      })
+
+      // 4. Board collaborators
+      queryClient.invalidateQueries({
+        queryKey: boardKeys.collaborators(boardId),
+      })
+
+      // 5. Recent boards
+      queryClient.invalidateQueries({
+        queryKey: ['whiteboard-board', 'recent'],
       })
     },
   })

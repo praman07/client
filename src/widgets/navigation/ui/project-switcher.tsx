@@ -62,7 +62,7 @@ export function ProjectSwitcher() {
             <DropdownMenuItem key={project.id} className="p-0">
               <Link
                 to="/workspace/$workspaceSlug/project/$projectSlug"
-                params={{ workspaceSlug, projectSlug: project.key }}
+                params={{ workspaceSlug: workspaceSlug!, projectSlug: project.key }}
                 className="w-full cursor-pointer flex items-center px-2 py-1.5"
               >
                 <Layers className="mr-2 h-4 w-4" />
@@ -76,7 +76,7 @@ export function ProjectSwitcher() {
           <DropdownMenuItem className="p-0">
             <Link
               to="/workspace/$workspaceSlug/projects"
-              params={{ workspaceSlug }}
+              params={{ workspaceSlug: workspaceSlug! }}
               className="w-full cursor-pointer flex items-center px-2 py-1.5"
             >
               <Plus className="mr-2 h-4 w-4" />

@@ -3,8 +3,9 @@ import { useBoardCardHandlers } from './use-board-card-handlers'
 import { BoardCardContextMenu } from './board-card-context-menu'
 import { BoardCardListView } from './board-card-list-view'
 import { BoardCardGridView } from './board-card-grid-view'
-import { RenameBoardDialog } from './board-card-rename-dialog'
-import { DeleteBoardDialog } from './board-card-delete-dialog'
+import { RenameBoardDialog } from '@/features/whiteboard/rename-board'
+import { DeleteBoardDialog } from '@/features/whiteboard/delete-board'
+import { ArchiveBoardDialog } from '@/features/whiteboard/archive-board'
 import { AddCollaboratorsDialog } from '@/features/whiteboard/add-collaborators'
 import { useBoardCollaborators } from '@/features/whiteboard/add-collaborators/hooks'
 import { useWorkspaceMembers } from '@/features/view-members/hooks'
@@ -81,6 +82,24 @@ export function BoardCard({ board, viewMode }: BoardCardProps) {
         onOpenChange={state.setShowDeleteDialog}
         onConfirm={handlers.handleDeleteConfirm}
         isPending={mutations.deleteBoard.isPending}
+      />
+
+      {/* Archive Confirmation Dialog */}
+      <ArchiveBoardDialog
+        boardTitle={board.title}
+        open={state.showArchiveDialog}
+        onOpenChange={state.setShowArchiveDialog}
+        onConfirm={handlers.handleArchiveConfirm}
+        isPending={mutations.archiveBoard.isPending}
+      />
+
+      {/* Unarchive Confirmation Dialog */}
+      <ArchiveBoardDialog
+        boardTitle={board.title}
+        open={state.showUnarchiveDialog}
+        onOpenChange={state.setShowUnarchiveDialog}
+        onConfirm={handlers.handleUnarchiveConfirm}
+        isPending={mutations.unarchiveBoard.isPending}
       />
 
       {/* Add Collaborators Dialog */}

@@ -35,6 +35,8 @@ export function useBoardCardHandlers({
   // Modal states
   const [showRenameDialog, setShowRenameDialog] = useState(false)
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
+  const [showArchiveDialog, setShowArchiveDialog] = useState(false)
+  const [showUnarchiveDialog, setShowUnarchiveDialog] = useState(false)
   const [showAddCollaboratorsDialog, setShowAddCollaboratorsDialog] =
     useState(false)
 
@@ -105,13 +107,23 @@ export function useBoardCardHandlers({
   const handleArchive = (e?: React.MouseEvent) => {
     e?.preventDefault()
     e?.stopPropagation()
+    setShowArchiveDialog(true)
+  }
+
+  const handleArchiveConfirm = () => {
     archiveBoard.mutate(board.id)
+    setShowArchiveDialog(false)
   }
 
   const handleUnarchive = (e?: React.MouseEvent) => {
     e?.preventDefault()
     e?.stopPropagation()
+    setShowUnarchiveDialog(true)
+  }
+
+  const handleUnarchiveConfirm = () => {
     unarchiveBoard.mutate(board.id)
+    setShowUnarchiveDialog(false)
   }
 
   // Handler: Delete
@@ -137,7 +149,9 @@ export function useBoardCardHandlers({
       handleManageCollaborators,
       handleSettings,
       handleArchive,
+      handleArchiveConfirm,
       handleUnarchive,
+      handleUnarchiveConfirm,
       handleDelete,
       handleDeleteConfirm,
     },
@@ -146,6 +160,10 @@ export function useBoardCardHandlers({
       setShowRenameDialog,
       showDeleteDialog,
       setShowDeleteDialog,
+      showArchiveDialog,
+      setShowArchiveDialog,
+      showUnarchiveDialog,
+      setShowUnarchiveDialog,
       showAddCollaboratorsDialog,
       setShowAddCollaboratorsDialog,
     },

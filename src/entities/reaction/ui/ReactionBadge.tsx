@@ -1,4 +1,3 @@
-import React from 'react'
 import type { ReactionGroup } from '../model/types'
 import { cn } from '@/shared/lib/utils'
 
