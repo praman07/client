@@ -125,6 +125,9 @@ export const FILES: Record<string, boolean | undefined> = {
   'whiteboard:update-ack': false,
   'whiteboard:board-locked': false,
   'whiteboard:board-unlocked': false,
+  'whiteboard:board-deleted': true, // ✅ board-deleted.ts WS handler
+  'whiteboard:indexeddb-cleanup': true, // ✅ clean-board-indexeddb.ts
+  'whiteboard:delete-board-hook': true, // ✅ use-delete-board.ts mutation hook
   'whiteboard:user-left': false,
   'whiteboard:use-subscribe': false,
   'whiteboard:use-send-update': false,

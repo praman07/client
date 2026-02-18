@@ -12,3 +12,8 @@ export { handleUserLeft } from './user-left'
 export { handleCursorUpdate } from './cursor-update'
 export { handleBoardLocked } from './board-locked'
 export { handleBoardUnlocked } from './board-unlocked'
+export {
+  handleBoardDeleted,
+  registerBoardDeletedCallback,
+  unregisterBoardDeletedCallback,
+} from './board-deleted'

@@ -1,6 +1,7 @@
 export interface Board {
   id: string
   workspaceId: string
+  createdBy: string
   projectId: string | null
   title: string
   description: string | null

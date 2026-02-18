@@ -13,7 +13,13 @@ export const Route = createFileRoute(
  * Displays individual board view at /whiteboard/:boardId
  */
 function WhiteboardBoardRoute() {
-  const { boardId } = Route.useParams()
+  const { boardId, workspaceSlug, projectSlug } = Route.useParams()
 
-  return <BoardViewPage boardId={boardId} />
+  return (
+    <BoardViewPage
+      boardId={boardId}
+      workspaceSlug={workspaceSlug}
+      projectSlug={projectSlug}
+    />
+  )
 }

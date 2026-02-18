@@ -25,3 +25,9 @@ export { sendBoardUpdate, sendCursorMove, clearCursorThrottle } from './api'
 // Phase 2: Y.Doc and Tracker registries (for network sync)
 export { registerYDoc, unregisterYDoc } from './lib/handlers/board-update'
 export { registerTracker, unregisterTracker } from './lib/handlers/update-ack'
+
+// Board deletion callback registry (for board page overlay)
+export {
+  registerBoardDeletedCallback,
+  unregisterBoardDeletedCallback,
+} from './lib/handlers/board-deleted'

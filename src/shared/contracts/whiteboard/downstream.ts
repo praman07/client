@@ -22,6 +22,7 @@ export enum WhiteboardDownstreamEvent {
   BoardLocked = 'whiteboard:board-locked',
   BoardUnlocked = 'whiteboard:board-unlocked',
   SnapshotResponse = 'whiteboard:snapshot-response',
+  BoardDeleted = 'whiteboard:board-deleted',
 }
 
 // ============================================================================
@@ -153,6 +154,16 @@ export interface BoardUnlockedPayload {
 }
 
 /**
+ * Board deleted by creator
+ * All connected users should clean up local state and redirect
+ */
+export interface BoardDeletedPayload {
+  boardId: string
+  deletedBy: string
+  timestamp: string // ISO 8601 datetime
+}
+
+/**
  * Snapshot response (recovery mechanism)
  * Full Y.Doc state for recovery after gap detection
  */
@@ -183,3 +194,4 @@ export type WhiteboardDownstreamPayload =
   | BoardLockedPayload
   | BoardUnlockedPayload
   | SnapshotResponsePayload
+  | BoardDeletedPayload

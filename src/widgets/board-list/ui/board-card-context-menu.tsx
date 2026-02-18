@@ -23,6 +23,7 @@ import type { Board } from '@/entities/whiteboard-board'
 interface BoardCardContextMenuProps {
   children: React.ReactNode
   board: Board
+  isCreator: boolean
   handlers: {
     handleRename: (e?: React.MouseEvent) => void
     handleCopyLink: (e?: React.MouseEvent) => void
@@ -46,6 +47,7 @@ export function BoardCardContextMenu({
   children,
   board,
   handlers,
+  isCreator,
 }: BoardCardContextMenuProps) {
   return (
     <ContextMenu>
@@ -96,28 +98,32 @@ export function BoardCardContextMenu({
           Settings
         </ContextMenuItem>
 
-        <ContextMenuSeparator />
+        {isCreator && (
+          <>
+            <ContextMenuSeparator />
 
-        {board.isArchived ? (
-          <ContextMenuItem onClick={handlers.handleUnarchive}>
-            <ArchiveRestore className="h-4 w-4 mr-2" />
-            Unarchive
-          </ContextMenuItem>
-        ) : (
-          <ContextMenuItem onClick={handlers.handleArchive}>
-            <Archive className="h-4 w-4 mr-2" />
-            Archive
-          </ContextMenuItem>
+            {board.isArchived ? (
+              <ContextMenuItem onClick={handlers.handleUnarchive}>
+                <ArchiveRestore className="h-4 w-4 mr-2" />
+                Unarchive
+              </ContextMenuItem>
+            ) : (
+              <ContextMenuItem onClick={handlers.handleArchive}>
+                <Archive className="h-4 w-4 mr-2" />
+                Archive
+              </ContextMenuItem>
+            )}
+
+            <ContextMenuItem
+              onClick={handlers.handleDelete}
+              className="text-destructive focus:text-destructive"
+            >
+              <Trash2 className="h-4 w-4 mr-2" />
+              Delete
+              <ContextMenuShortcut>⌘⌫</ContextMenuShortcut>
+            </ContextMenuItem>
+          </>
         )}
-
-        <ContextMenuItem
-          onClick={handlers.handleDelete}
-          className="text-destructive focus:text-destructive"
-        >
-          <Trash2 className="h-4 w-4 mr-2" />
-          Delete
-          <ContextMenuShortcut>⌘⌫</ContextMenuShortcut>
-        </ContextMenuItem>
       </ContextMenuContent>
     </ContextMenu>
   )

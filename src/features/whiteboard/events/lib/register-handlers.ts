@@ -16,6 +16,7 @@ import type {
   CursorUpdatePayload,
   BoardLockedPayload,
   BoardUnlockedPayload,
+  BoardDeletedPayload,
 } from '@/shared/contracts/whiteboard/downstream'
 import type { WhiteboardEventHandlerContext } from '../model'
 import {
@@ -27,6 +28,7 @@ import {
   handleCursorUpdate,
   handleBoardLocked,
   handleBoardUnlocked,
+  handleBoardDeleted,
 } from './handlers'
 
 /**
@@ -96,6 +98,13 @@ export function registerWhiteboardHandlers(
   unregisterFns.push(
     registerHandler(WhiteboardDownstreamEvent.BoardUnlocked, (event) => {
       handleBoardUnlocked(event.payload as BoardUnlockedPayload, context)
+    }),
+  )
+
+  // Board Deleted (creator action)
+  unregisterFns.push(
+    registerHandler(WhiteboardDownstreamEvent.BoardDeleted, (event) => {
+      handleBoardDeleted(event.payload as BoardDeletedPayload, context)
     }),
   )
 

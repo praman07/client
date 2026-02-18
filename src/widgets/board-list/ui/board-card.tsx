@@ -15,6 +15,7 @@ import type { Board } from '@/entities/whiteboard-board'
 interface BoardCardProps {
   board: Board
   viewMode: ViewMode
+  isCreator: boolean
 }
 
 /**
@@ -25,7 +26,7 @@ interface BoardCardProps {
  * - Keyboard shortcuts
  * - Rename, copy link, duplicate, lock/unlock, settings, archive, delete
  */
-export function BoardCard({ board, viewMode }: BoardCardProps) {
+export function BoardCard({ board, viewMode, isCreator }: BoardCardProps) {
   // Data fetching for collaborators
   const { data: workspaceMembersData } = useWorkspaceMembers(board.workspaceId)
   const { data: collaboratorsData } = useBoardCollaborators(board.id)
@@ -58,7 +59,7 @@ export function BoardCard({ board, viewMode }: BoardCardProps) {
 
   return (
     <>
-      <BoardCardContextMenu board={board} handlers={handlers}>
+      <BoardCardContextMenu board={board} handlers={handlers} isCreator={isCreator}>
         <ViewComponent
           board={board}
           workspaceSlug={workspaceSlug}

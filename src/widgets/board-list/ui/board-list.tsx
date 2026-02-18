@@ -7,6 +7,7 @@ import { BoardCard } from './board-card'
 import { BoardListHeader } from './board-list-header'
 import { EmptyState } from './empty-state'
 import { Button } from '@/shared/ui/primitives/button'
+import { useAuth } from '@/shared/hooks'
 import { Plus, Loader2 } from 'lucide-react'
 import type { Board } from '@/entities/whiteboard-board'
 
@@ -27,6 +28,7 @@ interface BoardListProps {
  */
 export function BoardList({ workspaceId, projectId }: BoardListProps) {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
+  const { userId } = useAuth()
   const { data, isLoading, refetch } = useUserBoards(workspaceId)
   const {
     searchQuery,
@@ -46,6 +48,7 @@ export function BoardList({ workspaceId, projectId }: BoardListProps) {
       return page.userBoards.boards.map((board: any) => ({
         id: board.id,
         workspaceId: board.workspaceId,
+        createdBy: board.createdBy,
         projectId: board.projectId,
         title: board.title,
         description: board.description,
@@ -124,7 +127,12 @@ export function BoardList({ workspaceId, projectId }: BoardListProps) {
           }
         >
           {sortedBoards.map((board) => (
-            <BoardCard key={board.id} board={board} viewMode={viewMode} />
+            <BoardCard
+              key={board.id}
+              board={board}
+              viewMode={viewMode}
+              isCreator={userId === board.createdBy}
+            />
           ))}
         </div>
       )}

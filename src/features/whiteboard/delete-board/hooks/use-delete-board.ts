@@ -2,7 +2,11 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { GqlClient } from '@/shared/api/graphql-client'
 import { useAuth } from '@/shared/hooks'
 import { boardKeys } from '@/entities/whiteboard-board'
+import { cleanBoardFromIndexedDB } from '../lib'
 import { DELETE_BOARD } from '../api'
+import { createLogger } from '@/shared/lib/logger'
+
+const log = createLogger('whiteboard:delete-board-hook')
 
 export function useDeleteBoard() {
   const { getToken } = useAuth()
@@ -10,6 +14,7 @@ export function useDeleteBoard() {
 
   return useMutation({
     mutationFn: async (boardId: string) => {
+      log.info('Deleting board', { boardId })
       const token = await getToken()
       if (!token) throw new Error('Not authenticated')
 
@@ -17,16 +22,23 @@ export function useDeleteBoard() {
       return client.request(DELETE_BOARD, { boardId })
     },
     onSuccess: (_data, boardId) => {
-      // Remove detail cache immediately
-      queryClient.removeQueries({
-        queryKey: boardKeys.detail(boardId),
-      })
+      log.info('Board deleted — clearing cache and IndexedDB', { boardId })
 
-      // Invalidate all lists that might contain this board
-      // Note: workspaceId not available here, so invalidate all board lists
-      queryClient.invalidateQueries({
-        queryKey: ['whiteboard-board', 'list'],
-      })
+      // 1. Remove detail + snapshot + collaborators cache immediately
+      queryClient.removeQueries({ queryKey: boardKeys.detail(boardId) })
+      queryClient.removeQueries({ queryKey: boardKeys.snapshot(boardId) })
+      queryClient.removeQueries({ queryKey: boardKeys.collaborators(boardId) })
+
+      // 2. Invalidate all board lists so they refresh
+      queryClient.invalidateQueries({ queryKey: boardKeys.lists() })
+
+      // 3. Clean IndexedDB (non-blocking, non-fatal)
+      cleanBoardFromIndexedDB(boardId)
+
+      log.debug('Cache invalidation complete', { boardId })
+    },
+    onError: (err, boardId) => {
+      log.error('Board deletion failed', { boardId, err })
     },
   })
 }
