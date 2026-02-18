@@ -9,5 +9,6 @@ export type {
   ProjectMeta,
   WhiteboardOfflineUpdate,
   WhiteboardBoardCache,
+  WhiteboardThumbnail,
   // ❌ WhiteboardPresence removed - ephemeral (Redux only)
 } from './schema'

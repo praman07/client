@@ -30,6 +30,7 @@ export const GROUPS = {
   auth: false,
   whiteboard: false, // ❌ Disabled - use file-level flags for state sync testing
   'whiteboard-sync': false, // ❌ Disabled - use file-level flags
+  thumbnail: false, // Board thumbnail generation pipeline
 
   // Modules
   websocket: false,
@@ -161,6 +162,12 @@ export const FILES: Record<string, boolean | undefined> = {
   'db:messages': false,
   'db:outbox': false,
   'db:gc': false,
+
+  // ─────────────────────────────────────
+  // Thumbnail Pipeline
+  // ─────────────────────────────────────
+  'thumbnail:read-elements': true, // ✅ read-board-elements.ts — y-indexeddb read + element extraction
+  'thumbnail:hook': true, // ✅ use-board-thumbnail.ts — stale-while-revalidate pipeline
 }
 
 export type GroupFlag = keyof typeof GROUPS

@@ -1,4 +1,5 @@
 export { useBoardFilters } from './use-board-filters'
 export { useViewMode } from './use-view-mode'
+export { useBoardThumbnail } from './use-board-thumbnail'
 export type { SortOption } from './use-board-filters'
 export type { ViewMode } from './use-view-mode'

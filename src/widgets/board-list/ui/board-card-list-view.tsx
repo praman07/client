@@ -28,7 +28,7 @@ export function BoardCardListView({
       className="flex items-center gap-4 p-4 border rounded-lg hover:bg-muted/50 transition-colors group cursor-pointer"
     >
       <div className="w-32 shrink-0">
-        <BoardThumbnail boardId={board.id} thumbnail={board.thumbnail} />
+        <BoardThumbnail boardId={board.id} />
       </div>
 
       <div className="flex-1 min-w-0">

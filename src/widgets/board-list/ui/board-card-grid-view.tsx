@@ -1,5 +1,6 @@
 import { Link } from '@tanstack/react-router'
 import { formatDistanceToNow } from 'date-fns'
+import { Clock } from 'lucide-react'
 import { BoardThumbnail } from './board-thumbnail'
 import type { Board } from '@/entities/whiteboard-board'
 
@@ -25,17 +26,22 @@ export function BoardCardGridView({
         projectSlug,
         boardId: board.id,
       }}
-      className="border rounded-lg overflow-hidden hover:shadow-lg transition-shadow group cursor-pointer"
+      className="group flex flex-col rounded-xl border bg-card overflow-hidden shadow-sm hover:shadow-md hover:border-primary/40 transition-all duration-200 cursor-pointer"
     >
-      <BoardThumbnail boardId={board.id} thumbnail={board.thumbnail} />
+      {/* Thumbnail area — distinct bg so white drawings don't bleed into card */}
+      <div className="border-b bg-muted/40">
+        <BoardThumbnail boardId={board.id} />
+      </div>
 
-      <div className="p-3 flex items-center justify-between">
-        <div className="flex-1 min-w-0">
-          <h3 className="font-semibold truncate">{board.title}</h3>
-          <p className="text-xs text-muted-foreground">
-            {formatDistanceToNow(new Date(board.updatedAt))} ago
-          </p>
-        </div>
+      {/* Card footer */}
+      <div className="px-3 py-2.5 flex items-center justify-between gap-2">
+        <h3 className="font-medium text-sm truncate group-hover:text-primary transition-colors">
+          {board.title}
+        </h3>
+        <span className="flex items-center gap-1 text-xs text-muted-foreground shrink-0">
+          <Clock className="h-3 w-3" />
+          {formatDistanceToNow(new Date(board.updatedAt))}
+        </span>
       </div>
     </Link>
   )

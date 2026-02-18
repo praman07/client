@@ -1,19 +1,23 @@
 import { FileImage } from 'lucide-react'
+import { useBoardThumbnail } from '../hooks'
 
 interface BoardThumbnailProps {
   boardId: string
-  thumbnail?: string | null
 }
 
 /**
  * Board thumbnail preview
  *
- * Shows canvas snapshot or placeholder icon
+ * Uses object-contain so the full drawing is always visible (no cropping).
+ * The muted background frames the thumbnail cleanly regardless of drawing
+ * aspect ratio.
  */
-export function BoardThumbnail({ thumbnail }: BoardThumbnailProps) {
+export function BoardThumbnail({ boardId }: BoardThumbnailProps) {
+  const thumbnail = useBoardThumbnail(boardId)
+
   if (thumbnail) {
     return (
-      <div className="relative w-full aspect-video bg-muted rounded-t-lg overflow-hidden">
+      <div className="relative w-full aspect-video bg-muted/60 overflow-hidden flex items-center justify-center">
         <img
           src={thumbnail}
           alt="Board preview"
@@ -23,10 +27,10 @@ export function BoardThumbnail({ thumbnail }: BoardThumbnailProps) {
     )
   }
 
-  // Placeholder when no thumbnail
+  // Placeholder when no thumbnail available
   return (
-    <div className="relative w-full aspect-video bg-linear-to-br from-muted to-muted/50 rounded-t-lg overflow-hidden flex items-center justify-center">
-      <FileImage className="h-12 w-12 text-muted-foreground/20" />
+    <div className="relative w-full aspect-video bg-muted/60 overflow-hidden flex items-center justify-center">
+      <FileImage className="h-10 w-10 text-muted-foreground/25" />
     </div>
   )
 }

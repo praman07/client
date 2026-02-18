@@ -117,6 +117,24 @@ export interface WhiteboardBoardCache {
   updatedAt: number
 }
 
+/**
+ * Board thumbnail cache
+ *
+ * Architecture Decision: WebP binary (Uint8Array) not data URL
+ * - ~5-15KB per thumbnail vs ~50-200KB PNG
+ * - No Base64 overhead — same binary pattern as WhiteboardOfflineUpdate
+ * - Displayed via URL.createObjectURL, revoked on unmount
+ *
+ * contentHash: djb2 over element id+version pairs — skip regeneration if unchanged
+ */
+export interface WhiteboardThumbnail {
+  boardId: string
+  thumbnail: Uint8Array
+  contentHash: number
+  generatedAt: number
+  sizeBytes: number
+}
+
 // ============================================================================
 // DATABASE SCHEMA
 // ============================================================================
@@ -131,6 +149,7 @@ export class CollabifyDB extends Dexie {
   // Whiteboard tables
   whiteboardOfflineUpdates!: EntityTable<WhiteboardOfflineUpdate, 'id'>
   whiteboardBoardCache!: EntityTable<WhiteboardBoardCache, 'boardId'>
+  whiteboardThumbnails!: EntityTable<WhiteboardThumbnail, 'boardId'>
   // ❌ WhiteboardPresence REMOVED - presence is ephemeral (Redux/WS only)
 
   constructor() {
@@ -172,6 +191,11 @@ export class CollabifyDB extends Dexie {
         '++id, boardId, status, dedupeId, mergedInto, [boardId+status], timestamp, createdAt, size',
 
       whiteboardBoardCache: 'boardId, updatedAt, snapshotSize',
+    })
+
+    // v6: Board thumbnail cache (WebP binary, change-detected via content hash)
+    this.version(6).stores({
+      whiteboardThumbnails: 'boardId, generatedAt, sizeBytes',
     })
   }
 }
