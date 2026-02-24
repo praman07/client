@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { createChatPlugin } from './chat-plugin'
 import { createWhiteboardPlugin } from './whiteboard-plugin'
+import { createPagesPlugin } from './pages-plugin'
 import { registerPlugin, unregisterPlugin } from '@/shared/ws/domains'
 import { createLogger } from '@/shared/lib/logger'
 import { useQueryClient } from '@tanstack/react-query'
@@ -51,6 +52,16 @@ export function DomainRegistry({ projectId }: DomainRegistryProps) {
 
     registerPlugin(whiteboardPlugin)
 
+    // Pages Plugin
+    // Provides: dispatch, queryClient, userId for page event handlers
+    const pagesPlugin = createPagesPlugin({
+      dispatch,
+      queryClient,
+      userId: user?.id ?? null,
+    })
+
+    registerPlugin(pagesPlugin)
+
     log.debug('Domain plugins registered')
 
     // Cleanup on unmount
@@ -58,6 +69,7 @@ export function DomainRegistry({ projectId }: DomainRegistryProps) {
       log.debug('Cleaning up domain plugins')
       unregisterPlugin('chat')
       unregisterPlugin('whiteboard')
+      unregisterPlugin('pages')
     }
   }, [projectId, dispatch, queryClient, user?.id])
 

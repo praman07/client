@@ -58,8 +58,27 @@ export type AddGroupMembersResult = {
   success: Scalars['Boolean']['output'];
 };
 
+export type AddPageCollaboratorsInput = {
+  collaborators: Array<PageCollaboratorInput>;
+  pageId: Scalars['ID']['input'];
+};
+
+export type AddPageCollaboratorsResult = {
+  __typename?: 'AddPageCollaboratorsResult';
+  addedCollaborators: Array<PageCollaborator>;
+};
+
 export type ArchiveChannelInput = {
   channelId: Scalars['ID']['input'];
+};
+
+export type ArchivePageInput = {
+  pageId: Scalars['ID']['input'];
+};
+
+export type ArchivePageResult = {
+  __typename?: 'ArchivePageResult';
+  page: Page;
 };
 
 export type AvailabilityResponse = {
@@ -235,6 +254,24 @@ export type CreateGroupInput = {
   workspaceId: Scalars['ID']['input'];
 };
 
+export type CreatePageInput = {
+  collaboratorIds?: InputMaybe<Array<Scalars['ID']['input']>>;
+  coverUrl?: InputMaybe<Scalars['String']['input']>;
+  icon?: InputMaybe<Scalars['String']['input']>;
+  /** null = root-level page */
+  parentId?: InputMaybe<Scalars['ID']['input']>;
+  /** Fractional index position for sibling ordering */
+  position: Scalars['Float']['input'];
+  projectId: Scalars['ID']['input'];
+  title?: InputMaybe<Scalars['String']['input']>;
+  workspaceId: Scalars['ID']['input'];
+};
+
+export type CreatePageResult = {
+  __typename?: 'CreatePageResult';
+  page: Page;
+};
+
 export type CreateProjectInput = {
   description?: InputMaybe<Scalars['String']['input']>;
   name: Scalars['String']['input'];
@@ -278,6 +315,17 @@ export type DeleteGroupResult = {
   success: Scalars['Boolean']['output'];
 };
 
+export type DeletePageInput = {
+  pageId: Scalars['ID']['input'];
+  workspaceId: Scalars['ID']['input'];
+};
+
+export type DeletePageResult = {
+  __typename?: 'DeletePageResult';
+  pageId: Scalars['ID']['output'];
+  success: Scalars['Boolean']['output'];
+};
+
 export type DeleteThreadResult = {
   __typename?: 'DeleteThreadResult';
   success: Scalars['Boolean']['output'];
@@ -300,6 +348,18 @@ export type DmMember = {
   __typename?: 'DmMember';
   user: UserBasic;
   userId: Scalars['ID']['output'];
+};
+
+/** Returned by getPageSnapshot — everything the client needs to initialise the Y.Doc */
+export type GetPageSnapshotResult = {
+  __typename?: 'GetPageSnapshotResult';
+  /** Last Redis Stream entry ID processed into this snapshot — used for gap-fill on subscribe */
+  lastStreamId: Scalars['String']['output'];
+  pageId: Scalars['ID']['output'];
+  /** base64-encoded Y.encodeStateAsUpdate() — apply on client with Y.applyUpdate() */
+  snapshot: Scalars['String']['output'];
+  /** Unix timestamp (ms) of when this snapshot was compiled */
+  snapshotTimestamp: Scalars['Float']['output'];
 };
 
 export type GroupMemberInfo = {
@@ -348,6 +408,15 @@ export type LeaveGroupResult = {
   success: Scalars['Boolean']['output'];
 };
 
+export type LockPageInput = {
+  pageId: Scalars['ID']['input'];
+};
+
+export type LockPageResult = {
+  __typename?: 'LockPageResult';
+  page: Page;
+};
+
 export type MessageReaction = {
   __typename?: 'MessageReaction';
   count: Scalars['Int']['output'];
@@ -370,8 +439,12 @@ export type Mutation = {
   addBoardCollaborators: AddBoardCollaboratorsResult;
   addChannelMembers: AddChannelMembersResult;
   addGroupMembers: AddGroupMembersResult;
+  /** Upsert-semantics: can be used for both inviting and changing roles. */
+  addPageCollaborators: AddPageCollaboratorsResult;
   archiveBoard: Whiteboard;
   archiveChannel: Conversation;
+  /** Archives a page and all its descendants. */
+  archivePage: ArchivePageResult;
   checkChannelAvailability: ChannelAvailabilityResponse;
   checkProjectSlugAvailability: AvailabilityResponse;
   checkSlugAvailability: AvailabilityResponse;
@@ -381,6 +454,11 @@ export type Mutation = {
   createDm: Conversation;
   createGroup: Conversation;
   createOnboardingWorkspace: Workspace;
+  /**
+   * Creates a new page in a project. Initialises Y.Doc and uploads initial snapshot to S3.
+   * The calling user is automatically added as an EDITOR collaborator.
+   */
+  createPage: CreatePageResult;
   createProject: Project;
   createThread: Conversation;
   createWorkspace: Workspace;
@@ -388,10 +466,21 @@ export type Mutation = {
   deleteChannel: DeleteChannelResult;
   deleteDm: DeleteDmResult;
   deleteGroup: DeleteGroupResult;
+  /**
+   * Soft-deletes a page. Fails with 409 if the page has active subscribers.
+   * Does not cascade to child pages — handle descendants explicitly first.
+   */
+  deletePage: DeletePageResult;
   deleteThread: DeleteThreadResult;
   inviteToWorkspace: InviteResponse;
   leaveGroup: LeaveGroupResult;
   lockBoard: Whiteboard;
+  /**
+   * Acquires an exclusive editor lock on the page.
+   * Returns 423 if another user currently holds the lock.
+   * Lock auto-releases after 1 hour (safety net for crashed clients).
+   */
+  lockPage: LockPageResult;
   /** Mark all notifications as read. */
   markAllNotificationsRead: Scalars['Boolean']['output'];
   /** Mark specific notifications as read. */
@@ -400,16 +489,31 @@ export type Mutation = {
   removeBoardCollaborator: RemoveBoardCollaboratorResult;
   removeChannelMember: RemoveChannelMemberResult;
   removeGroupMember: RemoveGroupMemberResult;
+  /** Cannot remove the page creator. */
+  removePageCollaborator: RemovePageCollaboratorResult;
   removeWorkspaceMember: InviteResponse;
   renameBoard: Whiteboard;
   renameChannel: Conversation;
   renameGroup: RenameGroupResult;
+  renamePage: RenamePageResult;
   reopenThread: ReopenThreadResult;
+  /**
+   * Moves a page to a new position (and optionally a new parent).
+   * Validate no circular nesting before calling (circular guard runs server-side too).
+   */
+  reorderPage: ReorderPageResult;
   subscribeThread: SubscribeThreadResult;
   syncUser: User;
   unarchiveBoard: Whiteboard;
   unarchiveChannel: UnarchiveChannelResult;
+  /**
+   * Unarchives a page. Fails if the parent is still archived.
+   * Child pages are NOT automatically unarchived — handle each explicitly.
+   */
+  unarchivePage: UnarchivePageResult;
   unlockBoard: Whiteboard;
+  /** Lock owner or workspace ADMIN can unlock. */
+  unlockPage: UnlockPageResult;
   unsubscribeThread: UnsubscribeThreadResult;
   updateBoardDescription: Whiteboard;
   updateChannelDescription: UpdateChannelDescriptionResult;
@@ -443,6 +547,11 @@ export type MutationAddGroupMembersArgs = {
 };
 
 
+export type MutationAddPageCollaboratorsArgs = {
+  input: AddPageCollaboratorsInput;
+};
+
+
 export type MutationArchiveBoardArgs = {
   boardId: Scalars['ID']['input'];
 };
@@ -450,6 +559,11 @@ export type MutationArchiveBoardArgs = {
 
 export type MutationArchiveChannelArgs = {
   input: ArchiveChannelInput;
+};
+
+
+export type MutationArchivePageArgs = {
+  input: ArchivePageInput;
 };
 
 
@@ -495,6 +609,11 @@ export type MutationCreateGroupArgs = {
 };
 
 
+export type MutationCreatePageArgs = {
+  input: CreatePageInput;
+};
+
+
 export type MutationCreateProjectArgs = {
   input: CreateProjectInput;
   workspaceId: Scalars['ID']['input'];
@@ -535,6 +654,11 @@ export type MutationDeleteGroupArgs = {
 };
 
 
+export type MutationDeletePageArgs = {
+  input: DeletePageInput;
+};
+
+
 export type MutationDeleteThreadArgs = {
   threadId: Scalars['ID']['input'];
   workspaceId: Scalars['ID']['input'];
@@ -554,6 +678,11 @@ export type MutationLeaveGroupArgs = {
 
 export type MutationLockBoardArgs = {
   boardId: Scalars['ID']['input'];
+};
+
+
+export type MutationLockPageArgs = {
+  input: LockPageInput;
 };
 
 
@@ -588,6 +717,11 @@ export type MutationRemoveGroupMemberArgs = {
 };
 
 
+export type MutationRemovePageCollaboratorArgs = {
+  input: RemovePageCollaboratorInput;
+};
+
+
 export type MutationRemoveWorkspaceMemberArgs = {
   memberId: Scalars['ID']['input'];
   workspaceId: Scalars['ID']['input'];
@@ -612,9 +746,19 @@ export type MutationRenameGroupArgs = {
 };
 
 
+export type MutationRenamePageArgs = {
+  input: RenamePageInput;
+};
+
+
 export type MutationReopenThreadArgs = {
   threadId: Scalars['ID']['input'];
   workspaceId: Scalars['ID']['input'];
+};
+
+
+export type MutationReorderPageArgs = {
+  input: ReorderPageInput;
 };
 
 
@@ -643,8 +787,18 @@ export type MutationUnarchiveChannelArgs = {
 };
 
 
+export type MutationUnarchivePageArgs = {
+  input: UnarchivePageInput;
+};
+
+
 export type MutationUnlockBoardArgs = {
   boardId: Scalars['ID']['input'];
+};
+
+
+export type MutationUnlockPageArgs = {
+  input: UnlockPageInput;
 };
 
 
@@ -726,16 +880,73 @@ export type OnboardingStatus = {
   workspaceSlug?: Maybe<Scalars['String']['output']>;
 };
 
+/**
+ * A collaborative document page within a project.
+ * The Y.Doc content is synced via WebSocket and accessed via getPageSnapshot.
+ */
 export type Page = {
   __typename?: 'Page';
+  /** Populated only by getProjectPages — empty in all other contexts */
+  children: Array<Page>;
+  collaborators: Array<PageCollaborator>;
+  coverUrl?: Maybe<Scalars['String']['output']>;
+  createdAt: Scalars['DateTime']['output'];
+  createdBy: Scalars['ID']['output'];
+  creator: UserBasic;
+  /** Emoji or absolute URL for the page icon */
+  icon?: Maybe<Scalars['String']['output']>;
   id: Scalars['ID']['output'];
+  isArchived: Scalars['Boolean']['output'];
+  isLocked: Scalars['Boolean']['output'];
+  /** null = root-level page (no parent) */
+  parentId?: Maybe<Scalars['ID']['output']>;
+  /** Fractional index position for ordering within parent (e.g., 1.5 between 1.0 and 2.0) */
+  position: Scalars['Float']['output'];
+  projectId: Scalars['ID']['output'];
+  /** S3 key for the latest compiled Yjs snapshot (disaster recovery reference) */
+  s3Key?: Maybe<Scalars['String']['output']>;
   title: Scalars['String']['output'];
+  updatedAt: Scalars['DateTime']['output'];
+  workspaceId: Scalars['ID']['output'];
+};
+
+export type PageCollaborator = {
+  __typename?: 'PageCollaborator';
+  joinedAt: Scalars['DateTime']['output'];
+  role: PageRole;
+  user: UserBasic;
+  userId: Scalars['ID']['output'];
+};
+
+export type PageCollaboratorInput = {
+  role: PageRole;
+  userId: Scalars['ID']['input'];
 };
 
 export type PageInfo = {
   __typename?: 'PageInfo';
   endCursor?: Maybe<Scalars['String']['output']>;
   hasNextPage: Scalars['Boolean']['output'];
+};
+
+export enum PageRole {
+  Commenter = 'COMMENTER',
+  Editor = 'EDITOR',
+  Viewer = 'VIEWER'
+}
+
+/**
+ * Returned by getPageSnapshot.
+ *
+ * snapshot         — base64 Y.js diff. Client calls Y.applyUpdate(localDoc, decode(snapshot)).
+ * lastStreamId     — client passes this to subscribe-page for gap-fill replay.
+ * snapshotTimestamp — when the base snapshot was last compacted by the stream worker. Null for new pages.
+ */
+export type PageSnapshot = {
+  __typename?: 'PageSnapshot';
+  lastStreamId: Scalars['String']['output'];
+  snapshot: Scalars['String']['output'];
+  snapshotTimestamp?: Maybe<Scalars['DateTime']['output']>;
 };
 
 export enum PresenceStatus {
@@ -771,6 +982,8 @@ export type Query = {
   __typename?: 'Query';
   activeCollaborators: Array<ActiveCollaborator>;
   boardCollaborators: Array<BoardCollaborator>;
+  /** Live presence from Redis ZSET (not DB). Reflects current editing sessions. */
+  getActivePageCollaborators: Array<PageCollaborator>;
   getBoard?: Maybe<Whiteboard>;
   getBoardSnapshot: BoardSnapshot;
   getChannelMembers: Array<ChatMemberRecord>;
@@ -780,6 +993,27 @@ export type Query = {
   getMessageById?: Maybe<ChatMessage>;
   getMessagesAfterCursor: Array<ChatMessage>;
   getMissingMessages: Array<ChatMessage>;
+  /** Fetch page metadata. Use getPageSnapshot for Y.Doc content. */
+  getPage: Page;
+  /** DB collaborator list (authoritative). For real-time presence, use getActivePageCollaborators. */
+  getPageCollaborators: Array<PageCollaborator>;
+  /**
+   * Returns the authoritative Y.Doc snapshot diff + a stream cursor for gap-fill.
+   *
+   * First open (no offline state):
+   *   getPageSnapshot(pageId: "cuid")
+   *
+   * Reconnect with offline edits:
+   *   getPageSnapshot(pageId: "cuid", clientSnapshot: "<base64 Y.encodeStateAsUpdate>")
+   *
+   * Client workflow:
+   *   1. Call this query → receive { snapshot, lastStreamId }
+   *   2. Apply snapshot: Y.applyUpdate(localDoc, base64Decode(snapshot))
+   *   3. Open WS: page:subscribe-page { pageId, lastStreamId }  ← gap-fill
+   */
+  getPageSnapshot: PageSnapshot;
+  /** Returns the full nested page tree for a project (non-archived, non-deleted). */
+  getProjectPages: Array<Page>;
   getReadReceipts: ReadReceiptsResponse;
   getThreadMessages: Array<ChatMessage>;
   getUnreadCounts: UnreadCountsResponse;
@@ -815,6 +1049,11 @@ export type QueryActiveCollaboratorsArgs = {
 
 export type QueryBoardCollaboratorsArgs = {
   boardId: Scalars['ID']['input'];
+};
+
+
+export type QueryGetActivePageCollaboratorsArgs = {
+  pageId: Scalars['ID']['input'];
 };
 
 
@@ -869,6 +1108,26 @@ export type QueryGetMissingMessagesArgs = {
   channelId: Scalars['ID']['input'];
   rangeEnd: Scalars['ID']['input'];
   rangeStart: Scalars['ID']['input'];
+};
+
+
+export type QueryGetPageArgs = {
+  pageId: Scalars['ID']['input'];
+};
+
+
+export type QueryGetPageCollaboratorsArgs = {
+  pageId: Scalars['ID']['input'];
+};
+
+
+export type QueryGetPageSnapshotArgs = {
+  pageId: Scalars['ID']['input'];
+};
+
+
+export type QueryGetProjectPagesArgs = {
+  projectId: Scalars['ID']['input'];
 };
 
 
@@ -1023,6 +1282,16 @@ export type RemoveGroupMemberResult = {
   userId: Scalars['ID']['output'];
 };
 
+export type RemovePageCollaboratorInput = {
+  pageId: Scalars['ID']['input'];
+  userId: Scalars['ID']['input'];
+};
+
+export type RemovePageCollaboratorResult = {
+  __typename?: 'RemovePageCollaboratorResult';
+  success: Scalars['Boolean']['output'];
+};
+
 export type RenameChannelInput = {
   channelId: Scalars['ID']['input'];
   name: Scalars['String']['input'];
@@ -1035,10 +1304,32 @@ export type RenameGroupResult = {
   success: Scalars['Boolean']['output'];
 };
 
+export type RenamePageInput = {
+  pageId: Scalars['ID']['input'];
+  title: Scalars['String']['input'];
+};
+
+export type RenamePageResult = {
+  __typename?: 'RenamePageResult';
+  page: Page;
+};
+
 export type ReopenThreadResult = {
   __typename?: 'ReopenThreadResult';
   success: Scalars['Boolean']['output'];
   threadId: Scalars['ID']['output'];
+};
+
+export type ReorderPageInput = {
+  /** null = move to root (remove from parent) */
+  newParentId?: InputMaybe<Scalars['ID']['input']>;
+  newPosition: Scalars['Float']['input'];
+  pageId: Scalars['ID']['input'];
+};
+
+export type ReorderPageResult = {
+  __typename?: 'ReorderPageResult';
+  page: Page;
 };
 
 export type SubscribeThreadResult = {
@@ -1060,6 +1351,24 @@ export type UnarchiveChannelResult = {
   channelId: Scalars['ID']['output'];
   name: Scalars['String']['output'];
   success: Scalars['Boolean']['output'];
+};
+
+export type UnarchivePageInput = {
+  pageId: Scalars['ID']['input'];
+};
+
+export type UnarchivePageResult = {
+  __typename?: 'UnarchivePageResult';
+  page: Page;
+};
+
+export type UnlockPageInput = {
+  pageId: Scalars['ID']['input'];
+};
+
+export type UnlockPageResult = {
+  __typename?: 'UnlockPageResult';
+  page: Page;
 };
 
 export type UnreadCountsResponse = {
@@ -1223,6 +1532,27 @@ export type GetUsersByIdsQueryVariables = Exact<{
 
 
 export type GetUsersByIdsQuery = { __typename?: 'Query', getUsersByIds: Array<{ __typename?: 'UserBasic', id: string, fullName: string, email: string, avatarUrl?: string | null }> };
+
+export type PageFieldsFragment = { __typename?: 'Page', id: string, title: string, workspaceId: string, projectId: string, parentId?: string | null, icon?: string | null, coverUrl?: string | null, position: number, isArchived: boolean, isLocked: boolean, s3Key?: string | null, createdBy: string, createdAt: any, updatedAt: any } & { ' $fragmentName'?: 'PageFieldsFragment' };
+
+export type PageWithCollaboratorsFragment = (
+  { __typename?: 'Page', collaborators: Array<{ __typename?: 'PageCollaborator', userId: string, role: PageRole, joinedAt: any, user: { __typename?: 'UserBasic', id: string, fullName: string, email: string, avatarUrl?: string | null } }> }
+  & { ' $fragmentRefs'?: { 'PageFieldsFragment': PageFieldsFragment } }
+) & { ' $fragmentName'?: 'PageWithCollaboratorsFragment' };
+
+export type PageWithChildrenFragment = (
+  { __typename?: 'Page', children: Array<(
+    { __typename?: 'Page', children: Array<(
+      { __typename?: 'Page', children: Array<(
+        { __typename?: 'Page' }
+        & { ' $fragmentRefs'?: { 'PageFieldsFragment': PageFieldsFragment } }
+      )> }
+      & { ' $fragmentRefs'?: { 'PageFieldsFragment': PageFieldsFragment } }
+    )> }
+    & { ' $fragmentRefs'?: { 'PageFieldsFragment': PageFieldsFragment } }
+  )> }
+  & { ' $fragmentRefs'?: { 'PageFieldsFragment': PageFieldsFragment } }
+) & { ' $fragmentName'?: 'PageWithChildrenFragment' };
 
 export type ProjectFieldsFragment = { __typename?: 'Project', id: string, key: string, name: string, description?: string | null, workspaceId: string, createdAt: string, updatedAt: string, members: Array<{ __typename?: 'ProjectMember', userId: string, role?: string | null, joinedAt: string }> } & { ' $fragmentName'?: 'ProjectFieldsFragment' };
 
@@ -1425,6 +1755,114 @@ export type OnboardingStatusQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type OnboardingStatusQuery = { __typename?: 'Query', onboardingStatus: { __typename?: 'OnboardingStatus', hasUser: boolean, hasWorkspace: boolean, hasProject: boolean, workspaceSlug?: string | null } };
 
+export type AddPageCollaboratorsMutationVariables = Exact<{
+  input: AddPageCollaboratorsInput;
+}>;
+
+
+export type AddPageCollaboratorsMutation = { __typename?: 'Mutation', addPageCollaborators: { __typename?: 'AddPageCollaboratorsResult', addedCollaborators: Array<{ __typename?: 'PageCollaborator', userId: string, role: PageRole, user: { __typename?: 'UserBasic', id: string, fullName: string, avatarUrl?: string | null } }> } };
+
+export type CreatePageMutationVariables = Exact<{
+  input: CreatePageInput;
+}>;
+
+
+export type CreatePageMutation = { __typename?: 'Mutation', createPage: { __typename?: 'CreatePageResult', page: { __typename?: 'Page', id: string, title: string, workspaceId: string, projectId: string, parentId?: string | null, icon?: string | null, coverUrl?: string | null, position: number, isArchived: boolean, isLocked: boolean, s3Key?: string | null, createdBy: string, createdAt: any, updatedAt: any } } };
+
+export type DeletePageMutationVariables = Exact<{
+  input: DeletePageInput;
+}>;
+
+
+export type DeletePageMutation = { __typename?: 'Mutation', deletePage: { __typename?: 'DeletePageResult', success: boolean, pageId: string } };
+
+export type GetActivePageCollaboratorsQueryVariables = Exact<{
+  pageId: Scalars['ID']['input'];
+}>;
+
+
+export type GetActivePageCollaboratorsQuery = { __typename?: 'Query', getActivePageCollaborators: Array<{ __typename?: 'PageCollaborator', userId: string, role: PageRole, user: { __typename?: 'UserBasic', id: string, fullName: string, avatarUrl?: string | null } }> };
+
+export type GetPageCollaboratorsQueryVariables = Exact<{
+  pageId: Scalars['ID']['input'];
+}>;
+
+
+export type GetPageCollaboratorsQuery = { __typename?: 'Query', getPageCollaborators: Array<{ __typename?: 'PageCollaborator', userId: string, role: PageRole, joinedAt: any, user: { __typename?: 'UserBasic', id: string, fullName: string, email: string, avatarUrl?: string | null } }> };
+
+export type GetPageQueryVariables = Exact<{
+  pageId: Scalars['ID']['input'];
+}>;
+
+
+export type GetPageQuery = { __typename?: 'Query', getPage: { __typename?: 'Page', id: string, title: string, workspaceId: string, projectId: string, parentId?: string | null, icon?: string | null, coverUrl?: string | null, position: number, isArchived: boolean, isLocked: boolean, s3Key?: string | null, createdBy: string, createdAt: any, updatedAt: any } };
+
+export type GetProjectPagesQueryVariables = Exact<{
+  projectId: Scalars['ID']['input'];
+}>;
+
+
+export type GetProjectPagesQuery = { __typename?: 'Query', getProjectPages: Array<(
+    { __typename?: 'Page' }
+    & { ' $fragmentRefs'?: { 'PageWithChildrenFragment': PageWithChildrenFragment } }
+  )> };
+
+export type GetPageSnapshotQueryVariables = Exact<{
+  pageId: Scalars['ID']['input'];
+}>;
+
+
+export type GetPageSnapshotQuery = { __typename?: 'Query', getPageSnapshot: { __typename?: 'PageSnapshot', snapshot: string, lastStreamId: string, snapshotTimestamp?: any | null } };
+
+export type RemovePageCollaboratorMutationVariables = Exact<{
+  input: RemovePageCollaboratorInput;
+}>;
+
+
+export type RemovePageCollaboratorMutation = { __typename?: 'Mutation', removePageCollaborator: { __typename?: 'RemovePageCollaboratorResult', success: boolean } };
+
+export type RenamePageMutationVariables = Exact<{
+  input: RenamePageInput;
+}>;
+
+
+export type RenamePageMutation = { __typename?: 'Mutation', renamePage: { __typename?: 'RenamePageResult', page: { __typename?: 'Page', id: string, title: string, projectId: string, parentId?: string | null, icon?: string | null, position: number, isArchived: boolean, isLocked: boolean, updatedAt: any } } };
+
+export type ReorderPageMutationVariables = Exact<{
+  input: ReorderPageInput;
+}>;
+
+
+export type ReorderPageMutation = { __typename?: 'Mutation', reorderPage: { __typename?: 'ReorderPageResult', page: { __typename?: 'Page', id: string, position: number, parentId?: string | null, updatedAt: any } } };
+
+export type ArchivePageMutationVariables = Exact<{
+  input: ArchivePageInput;
+}>;
+
+
+export type ArchivePageMutation = { __typename?: 'Mutation', archivePage: { __typename?: 'ArchivePageResult', page: { __typename?: 'Page', id: string, isArchived: boolean, updatedAt: any } } };
+
+export type UnarchivePageMutationVariables = Exact<{
+  input: UnarchivePageInput;
+}>;
+
+
+export type UnarchivePageMutation = { __typename?: 'Mutation', unarchivePage: { __typename?: 'UnarchivePageResult', page: { __typename?: 'Page', id: string, isArchived: boolean, updatedAt: any } } };
+
+export type LockPageMutationVariables = Exact<{
+  input: LockPageInput;
+}>;
+
+
+export type LockPageMutation = { __typename?: 'Mutation', lockPage: { __typename?: 'LockPageResult', page: { __typename?: 'Page', id: string, isLocked: boolean, updatedAt: any } } };
+
+export type UnlockPageMutationVariables = Exact<{
+  input: UnlockPageInput;
+}>;
+
+
+export type UnlockPageMutation = { __typename?: 'Mutation', unlockPage: { __typename?: 'UnlockPageResult', page: { __typename?: 'Page', id: string, isLocked: boolean, updatedAt: any } } };
+
 export type GetWorkspaceMembersQueryVariables = Exact<{
   workspaceId: Scalars['ID']['input'];
 }>;
@@ -1564,6 +2002,9 @@ export type UpdateBoardDescriptionMutation = { __typename?: 'Mutation', updateBo
 export const MessageRecoveryFieldsFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"MessageRecoveryFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"ChatMessage"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"streamId"}},{"kind":"Field","name":{"kind":"Name","value":"sequence"}},{"kind":"Field","name":{"kind":"Name","value":"conversationId"}},{"kind":"Field","name":{"kind":"Name","value":"authorUserId"}},{"kind":"Field","name":{"kind":"Name","value":"content"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}}]}}]} as unknown as DocumentNode<MessageRecoveryFieldsFragment, unknown>;
 export const ConversationFieldsFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"ConversationFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Conversation"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"type"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","alias":{"kind":"Name","value":"description"},"name":{"kind":"Name","value":"topic"}},{"kind":"Field","name":{"kind":"Name","value":"topic"}},{"kind":"Field","name":{"kind":"Name","value":"isPublic"}},{"kind":"Field","name":{"kind":"Name","value":"workspaceId"}},{"kind":"Field","name":{"kind":"Name","value":"projectId"}},{"kind":"Field","name":{"kind":"Name","value":"parentMessageId"}},{"kind":"Field","name":{"kind":"Name","value":"createdBy"}},{"kind":"Field","name":{"kind":"Name","value":"isArchived"}},{"kind":"Field","name":{"kind":"Name","value":"memberCount"}},{"kind":"Field","name":{"kind":"Name","value":"unreadCount"}},{"kind":"Field","name":{"kind":"Name","value":"lastMessage"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"content"}},{"kind":"Field","name":{"kind":"Name","value":"authorUserId"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}}]}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}},{"kind":"Field","name":{"kind":"Name","value":"deletedAt"}}]}}]} as unknown as DocumentNode<ConversationFieldsFragment, unknown>;
 export const ConversationMemberFieldsFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"ConversationMemberFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"ConversationMember"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"userId"}},{"kind":"Field","name":{"kind":"Name","value":"role"}},{"kind":"Field","name":{"kind":"Name","value":"isMuted"}},{"kind":"Field","name":{"kind":"Name","value":"joinedAt"}},{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"fullName"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"avatarUrl"}}]}}]}}]} as unknown as DocumentNode<ConversationMemberFieldsFragment, unknown>;
+export const PageFieldsFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"PageFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Page"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"workspaceId"}},{"kind":"Field","name":{"kind":"Name","value":"projectId"}},{"kind":"Field","name":{"kind":"Name","value":"parentId"}},{"kind":"Field","name":{"kind":"Name","value":"icon"}},{"kind":"Field","name":{"kind":"Name","value":"coverUrl"}},{"kind":"Field","name":{"kind":"Name","value":"position"}},{"kind":"Field","name":{"kind":"Name","value":"isArchived"}},{"kind":"Field","name":{"kind":"Name","value":"isLocked"}},{"kind":"Field","name":{"kind":"Name","value":"s3Key"}},{"kind":"Field","name":{"kind":"Name","value":"createdBy"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]} as unknown as DocumentNode<PageFieldsFragment, unknown>;
+export const PageWithCollaboratorsFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"PageWithCollaborators"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Page"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"PageFields"}},{"kind":"Field","name":{"kind":"Name","value":"collaborators"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"userId"}},{"kind":"Field","name":{"kind":"Name","value":"role"}},{"kind":"Field","name":{"kind":"Name","value":"joinedAt"}},{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"fullName"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"avatarUrl"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"PageFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Page"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"workspaceId"}},{"kind":"Field","name":{"kind":"Name","value":"projectId"}},{"kind":"Field","name":{"kind":"Name","value":"parentId"}},{"kind":"Field","name":{"kind":"Name","value":"icon"}},{"kind":"Field","name":{"kind":"Name","value":"coverUrl"}},{"kind":"Field","name":{"kind":"Name","value":"position"}},{"kind":"Field","name":{"kind":"Name","value":"isArchived"}},{"kind":"Field","name":{"kind":"Name","value":"isLocked"}},{"kind":"Field","name":{"kind":"Name","value":"s3Key"}},{"kind":"Field","name":{"kind":"Name","value":"createdBy"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]} as unknown as DocumentNode<PageWithCollaboratorsFragment, unknown>;
+export const PageWithChildrenFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"PageWithChildren"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Page"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"PageFields"}},{"kind":"Field","name":{"kind":"Name","value":"children"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"PageFields"}},{"kind":"Field","name":{"kind":"Name","value":"children"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"PageFields"}},{"kind":"Field","name":{"kind":"Name","value":"children"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"PageFields"}}]}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"PageFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Page"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"workspaceId"}},{"kind":"Field","name":{"kind":"Name","value":"projectId"}},{"kind":"Field","name":{"kind":"Name","value":"parentId"}},{"kind":"Field","name":{"kind":"Name","value":"icon"}},{"kind":"Field","name":{"kind":"Name","value":"coverUrl"}},{"kind":"Field","name":{"kind":"Name","value":"position"}},{"kind":"Field","name":{"kind":"Name","value":"isArchived"}},{"kind":"Field","name":{"kind":"Name","value":"isLocked"}},{"kind":"Field","name":{"kind":"Name","value":"s3Key"}},{"kind":"Field","name":{"kind":"Name","value":"createdBy"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]} as unknown as DocumentNode<PageWithChildrenFragment, unknown>;
 export const ProjectFieldsFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"ProjectFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Project"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"key"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"workspaceId"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}},{"kind":"Field","name":{"kind":"Name","value":"members"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"userId"}},{"kind":"Field","name":{"kind":"Name","value":"role"}},{"kind":"Field","name":{"kind":"Name","value":"joinedAt"}}]}}]}}]} as unknown as DocumentNode<ProjectFieldsFragment, unknown>;
 export const SessionUserFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"SessionUser"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"User"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"fullName"}},{"kind":"Field","name":{"kind":"Name","value":"avatarUrl"}}]}}]} as unknown as DocumentNode<SessionUserFragment, unknown>;
 export const UserFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"User"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"User"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"fullName"}},{"kind":"Field","name":{"kind":"Name","value":"avatarUrl"}}]}}]} as unknown as DocumentNode<UserFragment, unknown>;
@@ -1598,6 +2039,21 @@ export const GetWorkspaceInviteInfoDocument = {"kind":"Document","definitions":[
 export const SyncUserDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"SyncUser"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"clerkId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"email"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"fullName"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"avatarUrl"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"syncUser"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"clerkId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"clerkId"}}},{"kind":"Argument","name":{"kind":"Name","value":"email"},"value":{"kind":"Variable","name":{"kind":"Name","value":"email"}}},{"kind":"Argument","name":{"kind":"Name","value":"fullName"},"value":{"kind":"Variable","name":{"kind":"Name","value":"fullName"}}},{"kind":"Argument","name":{"kind":"Name","value":"avatarUrl"},"value":{"kind":"Variable","name":{"kind":"Name","value":"avatarUrl"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<SyncUserMutation, SyncUserMutationVariables>;
 export const CreateOnboardingWorkspaceDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateOnboardingWorkspace"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createOnboardingWorkspace"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}}]}}]}}]} as unknown as DocumentNode<CreateOnboardingWorkspaceMutation, CreateOnboardingWorkspaceMutationVariables>;
 export const OnboardingStatusDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"OnboardingStatus"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"onboardingStatus"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"hasUser"}},{"kind":"Field","name":{"kind":"Name","value":"hasWorkspace"}},{"kind":"Field","name":{"kind":"Name","value":"hasProject"}},{"kind":"Field","name":{"kind":"Name","value":"workspaceSlug"}}]}}]}}]} as unknown as DocumentNode<OnboardingStatusQuery, OnboardingStatusQueryVariables>;
+export const AddPageCollaboratorsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"AddPageCollaborators"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"AddPageCollaboratorsInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"addPageCollaborators"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"addedCollaborators"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"userId"}},{"kind":"Field","name":{"kind":"Name","value":"role"}},{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"fullName"}},{"kind":"Field","name":{"kind":"Name","value":"avatarUrl"}}]}}]}}]}}]}}]} as unknown as DocumentNode<AddPageCollaboratorsMutation, AddPageCollaboratorsMutationVariables>;
+export const CreatePageDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreatePage"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CreatePageInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createPage"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"page"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"workspaceId"}},{"kind":"Field","name":{"kind":"Name","value":"projectId"}},{"kind":"Field","name":{"kind":"Name","value":"parentId"}},{"kind":"Field","name":{"kind":"Name","value":"icon"}},{"kind":"Field","name":{"kind":"Name","value":"coverUrl"}},{"kind":"Field","name":{"kind":"Name","value":"position"}},{"kind":"Field","name":{"kind":"Name","value":"isArchived"}},{"kind":"Field","name":{"kind":"Name","value":"isLocked"}},{"kind":"Field","name":{"kind":"Name","value":"s3Key"}},{"kind":"Field","name":{"kind":"Name","value":"createdBy"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]}}]}}]} as unknown as DocumentNode<CreatePageMutation, CreatePageMutationVariables>;
+export const DeletePageDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"DeletePage"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"DeletePageInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"deletePage"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"success"}},{"kind":"Field","name":{"kind":"Name","value":"pageId"}}]}}]}}]} as unknown as DocumentNode<DeletePageMutation, DeletePageMutationVariables>;
+export const GetActivePageCollaboratorsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetActivePageCollaborators"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"pageId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"getActivePageCollaborators"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"pageId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"pageId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"userId"}},{"kind":"Field","name":{"kind":"Name","value":"role"}},{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"fullName"}},{"kind":"Field","name":{"kind":"Name","value":"avatarUrl"}}]}}]}}]}}]} as unknown as DocumentNode<GetActivePageCollaboratorsQuery, GetActivePageCollaboratorsQueryVariables>;
+export const GetPageCollaboratorsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetPageCollaborators"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"pageId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"getPageCollaborators"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"pageId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"pageId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"userId"}},{"kind":"Field","name":{"kind":"Name","value":"role"}},{"kind":"Field","name":{"kind":"Name","value":"joinedAt"}},{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"fullName"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"avatarUrl"}}]}}]}}]}}]} as unknown as DocumentNode<GetPageCollaboratorsQuery, GetPageCollaboratorsQueryVariables>;
+export const GetPageDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetPage"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"pageId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"getPage"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"pageId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"pageId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"workspaceId"}},{"kind":"Field","name":{"kind":"Name","value":"projectId"}},{"kind":"Field","name":{"kind":"Name","value":"parentId"}},{"kind":"Field","name":{"kind":"Name","value":"icon"}},{"kind":"Field","name":{"kind":"Name","value":"coverUrl"}},{"kind":"Field","name":{"kind":"Name","value":"position"}},{"kind":"Field","name":{"kind":"Name","value":"isArchived"}},{"kind":"Field","name":{"kind":"Name","value":"isLocked"}},{"kind":"Field","name":{"kind":"Name","value":"s3Key"}},{"kind":"Field","name":{"kind":"Name","value":"createdBy"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]}}]} as unknown as DocumentNode<GetPageQuery, GetPageQueryVariables>;
+export const GetProjectPagesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetProjectPages"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"projectId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"getProjectPages"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"projectId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"projectId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"PageWithChildren"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"PageFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Page"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"workspaceId"}},{"kind":"Field","name":{"kind":"Name","value":"projectId"}},{"kind":"Field","name":{"kind":"Name","value":"parentId"}},{"kind":"Field","name":{"kind":"Name","value":"icon"}},{"kind":"Field","name":{"kind":"Name","value":"coverUrl"}},{"kind":"Field","name":{"kind":"Name","value":"position"}},{"kind":"Field","name":{"kind":"Name","value":"isArchived"}},{"kind":"Field","name":{"kind":"Name","value":"isLocked"}},{"kind":"Field","name":{"kind":"Name","value":"s3Key"}},{"kind":"Field","name":{"kind":"Name","value":"createdBy"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"PageWithChildren"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Page"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"PageFields"}},{"kind":"Field","name":{"kind":"Name","value":"children"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"PageFields"}},{"kind":"Field","name":{"kind":"Name","value":"children"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"PageFields"}},{"kind":"Field","name":{"kind":"Name","value":"children"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"PageFields"}}]}}]}}]}}]}}]} as unknown as DocumentNode<GetProjectPagesQuery, GetProjectPagesQueryVariables>;
+export const GetPageSnapshotDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetPageSnapshot"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"pageId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"getPageSnapshot"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"pageId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"pageId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"snapshot"}},{"kind":"Field","name":{"kind":"Name","value":"lastStreamId"}},{"kind":"Field","name":{"kind":"Name","value":"snapshotTimestamp"}}]}}]}}]} as unknown as DocumentNode<GetPageSnapshotQuery, GetPageSnapshotQueryVariables>;
+export const RemovePageCollaboratorDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"RemovePageCollaborator"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"RemovePageCollaboratorInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"removePageCollaborator"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"success"}}]}}]}}]} as unknown as DocumentNode<RemovePageCollaboratorMutation, RemovePageCollaboratorMutationVariables>;
+export const RenamePageDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"RenamePage"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"RenamePageInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"renamePage"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"page"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"projectId"}},{"kind":"Field","name":{"kind":"Name","value":"parentId"}},{"kind":"Field","name":{"kind":"Name","value":"icon"}},{"kind":"Field","name":{"kind":"Name","value":"position"}},{"kind":"Field","name":{"kind":"Name","value":"isArchived"}},{"kind":"Field","name":{"kind":"Name","value":"isLocked"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]}}]}}]} as unknown as DocumentNode<RenamePageMutation, RenamePageMutationVariables>;
+export const ReorderPageDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"ReorderPage"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ReorderPageInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"reorderPage"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"page"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"position"}},{"kind":"Field","name":{"kind":"Name","value":"parentId"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]}}]}}]} as unknown as DocumentNode<ReorderPageMutation, ReorderPageMutationVariables>;
+export const ArchivePageDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"ArchivePage"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ArchivePageInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"archivePage"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"page"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"isArchived"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]}}]}}]} as unknown as DocumentNode<ArchivePageMutation, ArchivePageMutationVariables>;
+export const UnarchivePageDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UnarchivePage"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UnarchivePageInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"unarchivePage"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"page"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"isArchived"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]}}]}}]} as unknown as DocumentNode<UnarchivePageMutation, UnarchivePageMutationVariables>;
+export const LockPageDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"LockPage"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"LockPageInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"lockPage"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"page"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"isLocked"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]}}]}}]} as unknown as DocumentNode<LockPageMutation, LockPageMutationVariables>;
+export const UnlockPageDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UnlockPage"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UnlockPageInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"unlockPage"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"page"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"isLocked"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]}}]}}]} as unknown as DocumentNode<UnlockPageMutation, UnlockPageMutationVariables>;
 export const GetWorkspaceMembersDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetWorkspaceMembers"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"workspaceId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"workspaceMembers"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"workspaceId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"workspaceId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"role"}},{"kind":"Field","name":{"kind":"Name","value":"joinedAt"}},{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"fullName"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"avatarUrl"}}]}}]}}]}}]} as unknown as DocumentNode<GetWorkspaceMembersQuery, GetWorkspaceMembersQueryVariables>;
 export const UpdateWorkspaceMemberRoleDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateWorkspaceMemberRole"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"workspaceId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"memberId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"role"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateWorkspaceMemberRole"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"workspaceId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"workspaceId"}}},{"kind":"Argument","name":{"kind":"Name","value":"memberId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"memberId"}}},{"kind":"Argument","name":{"kind":"Name","value":"role"},"value":{"kind":"Variable","name":{"kind":"Name","value":"role"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"role"}}]}}]}}]} as unknown as DocumentNode<UpdateWorkspaceMemberRoleMutation, UpdateWorkspaceMemberRoleMutationVariables>;
 export const RemoveWorkspaceMemberDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"RemoveWorkspaceMember"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"workspaceId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"memberId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"removeWorkspaceMember"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"workspaceId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"workspaceId"}}},{"kind":"Argument","name":{"kind":"Name","value":"memberId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"memberId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"success"}},{"kind":"Field","name":{"kind":"Name","value":"message"}}]}}]}}]} as unknown as DocumentNode<RemoveWorkspaceMemberMutation, RemoveWorkspaceMemberMutationVariables>;

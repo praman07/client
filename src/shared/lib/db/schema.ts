@@ -136,6 +136,31 @@ export interface WhiteboardThumbnail {
 }
 
 // ============================================================================
+// PAGES DOMAIN
+// ============================================================================
+
+/**
+ * Offline queue for Y.js CRDT updates (Pages)
+ *
+ * Mirrors WhiteboardOfflineUpdate but keyed by pageId.
+ * Binary storage (Uint8Array) — same rationale as whiteboard.
+ */
+export interface PageOfflineUpdate {
+  id?: number
+  pageId: string
+  update: Uint8Array
+  size: number
+  dedupeId: string
+  timestamp: number
+  status: 'pending' | 'sending' | 'failed'
+  retryCount: number
+  lastRetryAt: number | null
+  createdAt: number
+  mergedInto?: string
+  error?: string
+}
+
+// ============================================================================
 // DATABASE SCHEMA
 // ============================================================================
 
@@ -150,7 +175,9 @@ export class CollabifyDB extends Dexie {
   whiteboardOfflineUpdates!: EntityTable<WhiteboardOfflineUpdate, 'id'>
   whiteboardBoardCache!: EntityTable<WhiteboardBoardCache, 'boardId'>
   whiteboardThumbnails!: EntityTable<WhiteboardThumbnail, 'boardId'>
-  // ❌ WhiteboardPresence REMOVED - presence is ephemeral (Redux/WS only)
+
+  // Pages tables
+  pageOfflineUpdates!: EntityTable<PageOfflineUpdate, 'id'>
 
   constructor() {
     super('CollabifyDB')
@@ -196,6 +223,12 @@ export class CollabifyDB extends Dexie {
     // v6: Board thumbnail cache (WebP binary, change-detected via content hash)
     this.version(6).stores({
       whiteboardThumbnails: 'boardId, generatedAt, sizeBytes',
+    })
+
+    // v7: Pages offline queue (same binary blob pattern as whiteboard)
+    this.version(7).stores({
+      pageOfflineUpdates:
+        '++id, pageId, status, dedupeId, mergedInto, [pageId+status], timestamp, createdAt, size',
     })
   }
 }

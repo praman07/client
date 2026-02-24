@@ -22,6 +22,9 @@ type Documents = {
     "\n  query GetUserConversations(\n    $workspaceId: ID!\n    $projectId: ID!\n    $type: ConversationType\n    $includeArchived: Boolean\n    $limit: Int\n    $cursor: String\n  ) {\n    getUserConversations(\n      workspaceId: $workspaceId\n      projectId: $projectId\n      type: $type\n      includeArchived: $includeArchived\n      limit: $limit\n      cursor: $cursor\n    ) {\n      edges {\n        ...ConversationFields\n      }\n      pageInfo {\n        hasNextPage\n        endCursor\n      }\n    }\n  }\n": typeof types.GetUserConversationsDocument,
     "\n  query GetConversation($conversationId: ID!) {\n    getConversation(conversationId: $conversationId) {\n      ...ConversationFields\n      members {\n        ...ConversationMemberFields\n      }\n    }\n  }\n": typeof types.GetConversationDocument,
     "\n  query GetUsersByIds($userIds: [ID!]!) {\n    getUsersByIds(userIds: $userIds) {\n      id\n      fullName\n      email\n      avatarUrl\n    }\n  }\n": typeof types.GetUsersByIdsDocument,
+    "\n  fragment PageFields on Page {\n    id\n    title\n    workspaceId\n    projectId\n    parentId\n    icon\n    coverUrl\n    position\n    isArchived\n    isLocked\n    s3Key\n    createdBy\n    createdAt\n    updatedAt\n  }\n": typeof types.PageFieldsFragmentDoc,
+    "\n  fragment PageWithCollaborators on Page {\n    ...PageFields\n    collaborators {\n      userId\n      role\n      joinedAt\n      user {\n        id\n        fullName\n        email\n        avatarUrl\n      }\n    }\n  }\n": typeof types.PageWithCollaboratorsFragmentDoc,
+    "\n  fragment PageWithChildren on Page {\n    ...PageFields\n    children {\n      ...PageFields\n      children {\n        ...PageFields\n        children {\n          ...PageFields\n        }\n      }\n    }\n  }\n": typeof types.PageWithChildrenFragmentDoc,
     "\n  fragment ProjectFields on Project {\n    id\n    key\n    name\n    description\n    workspaceId\n    createdAt\n    updatedAt\n    members {\n      userId\n      role\n      joinedAt\n    }\n  }\n": typeof types.ProjectFieldsFragmentDoc,
     "\n  query GetProject($id: ID!) {\n    project(id: $id) {\n      ...ProjectFields\n    }\n  }\n": typeof types.GetProjectDocument,
     "\n  query MyProjects($workspaceId: ID!) {\n    myProjects(workspaceId: $workspaceId) {\n      ...ProjectFields\n    }\n  }\n": typeof types.MyProjectsDocument,
@@ -51,6 +54,21 @@ type Documents = {
     "\n  mutation SyncUser(\n    $clerkId: String!\n    $email: String!\n    $fullName: String\n    $avatarUrl: String\n  ) {\n    syncUser(\n      clerkId: $clerkId\n      email: $email\n      fullName: $fullName\n      avatarUrl: $avatarUrl\n    ) {\n      id\n    }\n  }\n": typeof types.SyncUserDocument,
     "\n  mutation CreateOnboardingWorkspace {\n    createOnboardingWorkspace {\n      id\n      slug\n    }\n  }\n": typeof types.CreateOnboardingWorkspaceDocument,
     "\n  query OnboardingStatus {\n    onboardingStatus {\n      hasUser\n      hasWorkspace\n      hasProject\n      workspaceSlug\n    }\n  }\n": typeof types.OnboardingStatusDocument,
+    "\n  mutation AddPageCollaborators($input: AddPageCollaboratorsInput!) {\n    addPageCollaborators(input: $input) {\n      addedCollaborators {\n        userId\n        role\n        user {\n          id\n          fullName\n          avatarUrl\n        }\n      }\n    }\n  }\n": typeof types.AddPageCollaboratorsDocument,
+    "\n  mutation CreatePage($input: CreatePageInput!) {\n    createPage(input: $input) {\n      page {\n        id\n        title\n        workspaceId\n        projectId\n        parentId\n        icon\n        coverUrl\n        position\n        isArchived\n        isLocked\n        s3Key\n        createdBy\n        createdAt\n        updatedAt\n      }\n    }\n  }\n": typeof types.CreatePageDocument,
+    "\n  mutation DeletePage($input: DeletePageInput!) {\n    deletePage(input: $input) {\n      success\n      pageId\n    }\n  }\n": typeof types.DeletePageDocument,
+    "\n  query GetActivePageCollaborators($pageId: ID!) {\n    getActivePageCollaborators(pageId: $pageId) {\n      userId\n      role\n      user {\n        id\n        fullName\n        avatarUrl\n      }\n    }\n  }\n": typeof types.GetActivePageCollaboratorsDocument,
+    "\n  query GetPageCollaborators($pageId: ID!) {\n    getPageCollaborators(pageId: $pageId) {\n      userId\n      role\n      joinedAt\n      user {\n        id\n        fullName\n        email\n        avatarUrl\n      }\n    }\n  }\n": typeof types.GetPageCollaboratorsDocument,
+    "\n  query GetPage($pageId: ID!) {\n    getPage(pageId: $pageId) {\n      id\n      title\n      workspaceId\n      projectId\n      parentId\n      icon\n      coverUrl\n      position\n      isArchived\n      isLocked\n      s3Key\n      createdBy\n      createdAt\n      updatedAt\n    }\n  }\n": typeof types.GetPageDocument,
+    "\n  query GetProjectPages($projectId: ID!) {\n    getProjectPages(projectId: $projectId) {\n      ...PageWithChildren\n    }\n  }\n": typeof types.GetProjectPagesDocument,
+    "\n  query GetPageSnapshot($pageId: ID!) {\n    getPageSnapshot(pageId: $pageId) {\n      snapshot\n      lastStreamId\n      snapshotTimestamp\n    }\n  }\n": typeof types.GetPageSnapshotDocument,
+    "\n  mutation RemovePageCollaborator($input: RemovePageCollaboratorInput!) {\n    removePageCollaborator(input: $input) {\n      success\n    }\n  }\n": typeof types.RemovePageCollaboratorDocument,
+    "\n  mutation RenamePage($input: RenamePageInput!) {\n    renamePage(input: $input) {\n      page {\n        id\n        title\n        projectId\n        parentId\n        icon\n        position\n        isArchived\n        isLocked\n        updatedAt\n      }\n    }\n  }\n": typeof types.RenamePageDocument,
+    "\n  mutation ReorderPage($input: ReorderPageInput!) {\n    reorderPage(input: $input) {\n      page {\n        id\n        position\n        parentId\n        updatedAt\n      }\n    }\n  }\n": typeof types.ReorderPageDocument,
+    "\n  mutation ArchivePage($input: ArchivePageInput!) {\n    archivePage(input: $input) {\n      page {\n        id\n        isArchived\n        updatedAt\n      }\n    }\n  }\n": typeof types.ArchivePageDocument,
+    "\n  mutation UnarchivePage($input: UnarchivePageInput!) {\n    unarchivePage(input: $input) {\n      page {\n        id\n        isArchived\n        updatedAt\n      }\n    }\n  }\n": typeof types.UnarchivePageDocument,
+    "\n  mutation LockPage($input: LockPageInput!) {\n    lockPage(input: $input) {\n      page {\n        id\n        isLocked\n        updatedAt\n      }\n    }\n  }\n": typeof types.LockPageDocument,
+    "\n  mutation UnlockPage($input: UnlockPageInput!) {\n    unlockPage(input: $input) {\n      page {\n        id\n        isLocked\n        updatedAt\n      }\n    }\n  }\n": typeof types.UnlockPageDocument,
     "\n  query GetWorkspaceMembers($workspaceId: ID!) {\n    workspaceMembers(workspaceId: $workspaceId) {\n      id\n      role\n      joinedAt\n      user {\n        id\n        fullName\n        email\n        avatarUrl\n      }\n    }\n  }\n": typeof types.GetWorkspaceMembersDocument,
     "\n  mutation UpdateWorkspaceMemberRole($workspaceId: ID!, $memberId: ID!, $role: String!) {\n    updateWorkspaceMemberRole(workspaceId: $workspaceId, memberId: $memberId, role: $role) {\n      id\n      role\n    }\n  }\n": typeof types.UpdateWorkspaceMemberRoleDocument,
     "\n  mutation RemoveWorkspaceMember($workspaceId: ID!, $memberId: ID!) {\n    removeWorkspaceMember(workspaceId: $workspaceId, memberId: $memberId) {\n      success\n      message\n    }\n  }\n": typeof types.RemoveWorkspaceMemberDocument,
@@ -79,6 +97,9 @@ const documents: Documents = {
     "\n  query GetUserConversations(\n    $workspaceId: ID!\n    $projectId: ID!\n    $type: ConversationType\n    $includeArchived: Boolean\n    $limit: Int\n    $cursor: String\n  ) {\n    getUserConversations(\n      workspaceId: $workspaceId\n      projectId: $projectId\n      type: $type\n      includeArchived: $includeArchived\n      limit: $limit\n      cursor: $cursor\n    ) {\n      edges {\n        ...ConversationFields\n      }\n      pageInfo {\n        hasNextPage\n        endCursor\n      }\n    }\n  }\n": types.GetUserConversationsDocument,
     "\n  query GetConversation($conversationId: ID!) {\n    getConversation(conversationId: $conversationId) {\n      ...ConversationFields\n      members {\n        ...ConversationMemberFields\n      }\n    }\n  }\n": types.GetConversationDocument,
     "\n  query GetUsersByIds($userIds: [ID!]!) {\n    getUsersByIds(userIds: $userIds) {\n      id\n      fullName\n      email\n      avatarUrl\n    }\n  }\n": types.GetUsersByIdsDocument,
+    "\n  fragment PageFields on Page {\n    id\n    title\n    workspaceId\n    projectId\n    parentId\n    icon\n    coverUrl\n    position\n    isArchived\n    isLocked\n    s3Key\n    createdBy\n    createdAt\n    updatedAt\n  }\n": types.PageFieldsFragmentDoc,
+    "\n  fragment PageWithCollaborators on Page {\n    ...PageFields\n    collaborators {\n      userId\n      role\n      joinedAt\n      user {\n        id\n        fullName\n        email\n        avatarUrl\n      }\n    }\n  }\n": types.PageWithCollaboratorsFragmentDoc,
+    "\n  fragment PageWithChildren on Page {\n    ...PageFields\n    children {\n      ...PageFields\n      children {\n        ...PageFields\n        children {\n          ...PageFields\n        }\n      }\n    }\n  }\n": types.PageWithChildrenFragmentDoc,
     "\n  fragment ProjectFields on Project {\n    id\n    key\n    name\n    description\n    workspaceId\n    createdAt\n    updatedAt\n    members {\n      userId\n      role\n      joinedAt\n    }\n  }\n": types.ProjectFieldsFragmentDoc,
     "\n  query GetProject($id: ID!) {\n    project(id: $id) {\n      ...ProjectFields\n    }\n  }\n": types.GetProjectDocument,
     "\n  query MyProjects($workspaceId: ID!) {\n    myProjects(workspaceId: $workspaceId) {\n      ...ProjectFields\n    }\n  }\n": types.MyProjectsDocument,
@@ -108,6 +129,21 @@ const documents: Documents = {
     "\n  mutation SyncUser(\n    $clerkId: String!\n    $email: String!\n    $fullName: String\n    $avatarUrl: String\n  ) {\n    syncUser(\n      clerkId: $clerkId\n      email: $email\n      fullName: $fullName\n      avatarUrl: $avatarUrl\n    ) {\n      id\n    }\n  }\n": types.SyncUserDocument,
     "\n  mutation CreateOnboardingWorkspace {\n    createOnboardingWorkspace {\n      id\n      slug\n    }\n  }\n": types.CreateOnboardingWorkspaceDocument,
     "\n  query OnboardingStatus {\n    onboardingStatus {\n      hasUser\n      hasWorkspace\n      hasProject\n      workspaceSlug\n    }\n  }\n": types.OnboardingStatusDocument,
+    "\n  mutation AddPageCollaborators($input: AddPageCollaboratorsInput!) {\n    addPageCollaborators(input: $input) {\n      addedCollaborators {\n        userId\n        role\n        user {\n          id\n          fullName\n          avatarUrl\n        }\n      }\n    }\n  }\n": types.AddPageCollaboratorsDocument,
+    "\n  mutation CreatePage($input: CreatePageInput!) {\n    createPage(input: $input) {\n      page {\n        id\n        title\n        workspaceId\n        projectId\n        parentId\n        icon\n        coverUrl\n        position\n        isArchived\n        isLocked\n        s3Key\n        createdBy\n        createdAt\n        updatedAt\n      }\n    }\n  }\n": types.CreatePageDocument,
+    "\n  mutation DeletePage($input: DeletePageInput!) {\n    deletePage(input: $input) {\n      success\n      pageId\n    }\n  }\n": types.DeletePageDocument,
+    "\n  query GetActivePageCollaborators($pageId: ID!) {\n    getActivePageCollaborators(pageId: $pageId) {\n      userId\n      role\n      user {\n        id\n        fullName\n        avatarUrl\n      }\n    }\n  }\n": types.GetActivePageCollaboratorsDocument,
+    "\n  query GetPageCollaborators($pageId: ID!) {\n    getPageCollaborators(pageId: $pageId) {\n      userId\n      role\n      joinedAt\n      user {\n        id\n        fullName\n        email\n        avatarUrl\n      }\n    }\n  }\n": types.GetPageCollaboratorsDocument,
+    "\n  query GetPage($pageId: ID!) {\n    getPage(pageId: $pageId) {\n      id\n      title\n      workspaceId\n      projectId\n      parentId\n      icon\n      coverUrl\n      position\n      isArchived\n      isLocked\n      s3Key\n      createdBy\n      createdAt\n      updatedAt\n    }\n  }\n": types.GetPageDocument,
+    "\n  query GetProjectPages($projectId: ID!) {\n    getProjectPages(projectId: $projectId) {\n      ...PageWithChildren\n    }\n  }\n": types.GetProjectPagesDocument,
+    "\n  query GetPageSnapshot($pageId: ID!) {\n    getPageSnapshot(pageId: $pageId) {\n      snapshot\n      lastStreamId\n      snapshotTimestamp\n    }\n  }\n": types.GetPageSnapshotDocument,
+    "\n  mutation RemovePageCollaborator($input: RemovePageCollaboratorInput!) {\n    removePageCollaborator(input: $input) {\n      success\n    }\n  }\n": types.RemovePageCollaboratorDocument,
+    "\n  mutation RenamePage($input: RenamePageInput!) {\n    renamePage(input: $input) {\n      page {\n        id\n        title\n        projectId\n        parentId\n        icon\n        position\n        isArchived\n        isLocked\n        updatedAt\n      }\n    }\n  }\n": types.RenamePageDocument,
+    "\n  mutation ReorderPage($input: ReorderPageInput!) {\n    reorderPage(input: $input) {\n      page {\n        id\n        position\n        parentId\n        updatedAt\n      }\n    }\n  }\n": types.ReorderPageDocument,
+    "\n  mutation ArchivePage($input: ArchivePageInput!) {\n    archivePage(input: $input) {\n      page {\n        id\n        isArchived\n        updatedAt\n      }\n    }\n  }\n": types.ArchivePageDocument,
+    "\n  mutation UnarchivePage($input: UnarchivePageInput!) {\n    unarchivePage(input: $input) {\n      page {\n        id\n        isArchived\n        updatedAt\n      }\n    }\n  }\n": types.UnarchivePageDocument,
+    "\n  mutation LockPage($input: LockPageInput!) {\n    lockPage(input: $input) {\n      page {\n        id\n        isLocked\n        updatedAt\n      }\n    }\n  }\n": types.LockPageDocument,
+    "\n  mutation UnlockPage($input: UnlockPageInput!) {\n    unlockPage(input: $input) {\n      page {\n        id\n        isLocked\n        updatedAt\n      }\n    }\n  }\n": types.UnlockPageDocument,
     "\n  query GetWorkspaceMembers($workspaceId: ID!) {\n    workspaceMembers(workspaceId: $workspaceId) {\n      id\n      role\n      joinedAt\n      user {\n        id\n        fullName\n        email\n        avatarUrl\n      }\n    }\n  }\n": types.GetWorkspaceMembersDocument,
     "\n  mutation UpdateWorkspaceMemberRole($workspaceId: ID!, $memberId: ID!, $role: String!) {\n    updateWorkspaceMemberRole(workspaceId: $workspaceId, memberId: $memberId, role: $role) {\n      id\n      role\n    }\n  }\n": types.UpdateWorkspaceMemberRoleDocument,
     "\n  mutation RemoveWorkspaceMember($workspaceId: ID!, $memberId: ID!) {\n    removeWorkspaceMember(workspaceId: $workspaceId, memberId: $memberId) {\n      success\n      message\n    }\n  }\n": types.RemoveWorkspaceMemberDocument,
@@ -174,6 +210,18 @@ export function gql(source: "\n  query GetConversation($conversationId: ID!) {\n
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "\n  query GetUsersByIds($userIds: [ID!]!) {\n    getUsersByIds(userIds: $userIds) {\n      id\n      fullName\n      email\n      avatarUrl\n    }\n  }\n"): (typeof documents)["\n  query GetUsersByIds($userIds: [ID!]!) {\n    getUsersByIds(userIds: $userIds) {\n      id\n      fullName\n      email\n      avatarUrl\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  fragment PageFields on Page {\n    id\n    title\n    workspaceId\n    projectId\n    parentId\n    icon\n    coverUrl\n    position\n    isArchived\n    isLocked\n    s3Key\n    createdBy\n    createdAt\n    updatedAt\n  }\n"): (typeof documents)["\n  fragment PageFields on Page {\n    id\n    title\n    workspaceId\n    projectId\n    parentId\n    icon\n    coverUrl\n    position\n    isArchived\n    isLocked\n    s3Key\n    createdBy\n    createdAt\n    updatedAt\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  fragment PageWithCollaborators on Page {\n    ...PageFields\n    collaborators {\n      userId\n      role\n      joinedAt\n      user {\n        id\n        fullName\n        email\n        avatarUrl\n      }\n    }\n  }\n"): (typeof documents)["\n  fragment PageWithCollaborators on Page {\n    ...PageFields\n    collaborators {\n      userId\n      role\n      joinedAt\n      user {\n        id\n        fullName\n        email\n        avatarUrl\n      }\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  fragment PageWithChildren on Page {\n    ...PageFields\n    children {\n      ...PageFields\n      children {\n        ...PageFields\n        children {\n          ...PageFields\n        }\n      }\n    }\n  }\n"): (typeof documents)["\n  fragment PageWithChildren on Page {\n    ...PageFields\n    children {\n      ...PageFields\n      children {\n        ...PageFields\n        children {\n          ...PageFields\n        }\n      }\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -290,6 +338,66 @@ export function gql(source: "\n  mutation CreateOnboardingWorkspace {\n    creat
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "\n  query OnboardingStatus {\n    onboardingStatus {\n      hasUser\n      hasWorkspace\n      hasProject\n      workspaceSlug\n    }\n  }\n"): (typeof documents)["\n  query OnboardingStatus {\n    onboardingStatus {\n      hasUser\n      hasWorkspace\n      hasProject\n      workspaceSlug\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation AddPageCollaborators($input: AddPageCollaboratorsInput!) {\n    addPageCollaborators(input: $input) {\n      addedCollaborators {\n        userId\n        role\n        user {\n          id\n          fullName\n          avatarUrl\n        }\n      }\n    }\n  }\n"): (typeof documents)["\n  mutation AddPageCollaborators($input: AddPageCollaboratorsInput!) {\n    addPageCollaborators(input: $input) {\n      addedCollaborators {\n        userId\n        role\n        user {\n          id\n          fullName\n          avatarUrl\n        }\n      }\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation CreatePage($input: CreatePageInput!) {\n    createPage(input: $input) {\n      page {\n        id\n        title\n        workspaceId\n        projectId\n        parentId\n        icon\n        coverUrl\n        position\n        isArchived\n        isLocked\n        s3Key\n        createdBy\n        createdAt\n        updatedAt\n      }\n    }\n  }\n"): (typeof documents)["\n  mutation CreatePage($input: CreatePageInput!) {\n    createPage(input: $input) {\n      page {\n        id\n        title\n        workspaceId\n        projectId\n        parentId\n        icon\n        coverUrl\n        position\n        isArchived\n        isLocked\n        s3Key\n        createdBy\n        createdAt\n        updatedAt\n      }\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation DeletePage($input: DeletePageInput!) {\n    deletePage(input: $input) {\n      success\n      pageId\n    }\n  }\n"): (typeof documents)["\n  mutation DeletePage($input: DeletePageInput!) {\n    deletePage(input: $input) {\n      success\n      pageId\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  query GetActivePageCollaborators($pageId: ID!) {\n    getActivePageCollaborators(pageId: $pageId) {\n      userId\n      role\n      user {\n        id\n        fullName\n        avatarUrl\n      }\n    }\n  }\n"): (typeof documents)["\n  query GetActivePageCollaborators($pageId: ID!) {\n    getActivePageCollaborators(pageId: $pageId) {\n      userId\n      role\n      user {\n        id\n        fullName\n        avatarUrl\n      }\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  query GetPageCollaborators($pageId: ID!) {\n    getPageCollaborators(pageId: $pageId) {\n      userId\n      role\n      joinedAt\n      user {\n        id\n        fullName\n        email\n        avatarUrl\n      }\n    }\n  }\n"): (typeof documents)["\n  query GetPageCollaborators($pageId: ID!) {\n    getPageCollaborators(pageId: $pageId) {\n      userId\n      role\n      joinedAt\n      user {\n        id\n        fullName\n        email\n        avatarUrl\n      }\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  query GetPage($pageId: ID!) {\n    getPage(pageId: $pageId) {\n      id\n      title\n      workspaceId\n      projectId\n      parentId\n      icon\n      coverUrl\n      position\n      isArchived\n      isLocked\n      s3Key\n      createdBy\n      createdAt\n      updatedAt\n    }\n  }\n"): (typeof documents)["\n  query GetPage($pageId: ID!) {\n    getPage(pageId: $pageId) {\n      id\n      title\n      workspaceId\n      projectId\n      parentId\n      icon\n      coverUrl\n      position\n      isArchived\n      isLocked\n      s3Key\n      createdBy\n      createdAt\n      updatedAt\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  query GetProjectPages($projectId: ID!) {\n    getProjectPages(projectId: $projectId) {\n      ...PageWithChildren\n    }\n  }\n"): (typeof documents)["\n  query GetProjectPages($projectId: ID!) {\n    getProjectPages(projectId: $projectId) {\n      ...PageWithChildren\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  query GetPageSnapshot($pageId: ID!) {\n    getPageSnapshot(pageId: $pageId) {\n      snapshot\n      lastStreamId\n      snapshotTimestamp\n    }\n  }\n"): (typeof documents)["\n  query GetPageSnapshot($pageId: ID!) {\n    getPageSnapshot(pageId: $pageId) {\n      snapshot\n      lastStreamId\n      snapshotTimestamp\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation RemovePageCollaborator($input: RemovePageCollaboratorInput!) {\n    removePageCollaborator(input: $input) {\n      success\n    }\n  }\n"): (typeof documents)["\n  mutation RemovePageCollaborator($input: RemovePageCollaboratorInput!) {\n    removePageCollaborator(input: $input) {\n      success\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation RenamePage($input: RenamePageInput!) {\n    renamePage(input: $input) {\n      page {\n        id\n        title\n        projectId\n        parentId\n        icon\n        position\n        isArchived\n        isLocked\n        updatedAt\n      }\n    }\n  }\n"): (typeof documents)["\n  mutation RenamePage($input: RenamePageInput!) {\n    renamePage(input: $input) {\n      page {\n        id\n        title\n        projectId\n        parentId\n        icon\n        position\n        isArchived\n        isLocked\n        updatedAt\n      }\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation ReorderPage($input: ReorderPageInput!) {\n    reorderPage(input: $input) {\n      page {\n        id\n        position\n        parentId\n        updatedAt\n      }\n    }\n  }\n"): (typeof documents)["\n  mutation ReorderPage($input: ReorderPageInput!) {\n    reorderPage(input: $input) {\n      page {\n        id\n        position\n        parentId\n        updatedAt\n      }\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation ArchivePage($input: ArchivePageInput!) {\n    archivePage(input: $input) {\n      page {\n        id\n        isArchived\n        updatedAt\n      }\n    }\n  }\n"): (typeof documents)["\n  mutation ArchivePage($input: ArchivePageInput!) {\n    archivePage(input: $input) {\n      page {\n        id\n        isArchived\n        updatedAt\n      }\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation UnarchivePage($input: UnarchivePageInput!) {\n    unarchivePage(input: $input) {\n      page {\n        id\n        isArchived\n        updatedAt\n      }\n    }\n  }\n"): (typeof documents)["\n  mutation UnarchivePage($input: UnarchivePageInput!) {\n    unarchivePage(input: $input) {\n      page {\n        id\n        isArchived\n        updatedAt\n      }\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation LockPage($input: LockPageInput!) {\n    lockPage(input: $input) {\n      page {\n        id\n        isLocked\n        updatedAt\n      }\n    }\n  }\n"): (typeof documents)["\n  mutation LockPage($input: LockPageInput!) {\n    lockPage(input: $input) {\n      page {\n        id\n        isLocked\n        updatedAt\n      }\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation UnlockPage($input: UnlockPageInput!) {\n    unlockPage(input: $input) {\n      page {\n        id\n        isLocked\n        updatedAt\n      }\n    }\n  }\n"): (typeof documents)["\n  mutation UnlockPage($input: UnlockPageInput!) {\n    unlockPage(input: $input) {\n      page {\n        id\n        isLocked\n        updatedAt\n      }\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

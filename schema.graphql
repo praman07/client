@@ -6,10 +6,7 @@ scalar DateTime
 """
 The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
 """
-scalar JSON
-  @specifiedBy(
-    url: "http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf"
-  )
+scalar JSON @specifiedBy(url: "http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf")
 
 type PageInfo {
   hasNextPage: Boolean!
@@ -25,174 +22,109 @@ type Query {
   workspaceBySlug(slug: String!): Workspace!
   workspaceMembers(workspaceId: ID!): [WorkspaceMember!]!
 
-  """
-  Get paginated notifications for the current user.
-  """
-  notifications(
-    limit: Int
-    cursor: String
-    isRead: Boolean
-  ): NotificationConnection!
+  """Get paginated notifications for the current user."""
+  notifications(limit: Int, cursor: String, isRead: Boolean): NotificationConnection!
 
-  """
-  Get count of unread notifications.
-  """
+  """Get count of unread notifications."""
   unreadNotificationCount: Int!
   myProjects(workspaceId: ID!): [Project!]!
   projectBySlug(workspaceId: ID!, slug: String!): Project
   project(id: ID!): Project
-  getThreadMessages(
-    parentMessageId: ID!
-    limit: Int
-    beforeCursor: ID
-  ): [ChatMessage!]!
+  getThreadMessages(parentMessageId: ID!, limit: Int, beforeCursor: ID): [ChatMessage!]!
   getMessageById(messageId: ID!): ChatMessage
-  getMessagesAfterCursor(
-    channelId: ID!
-    afterCursor: ID!
-    limit: Int
-  ): [ChatMessage!]!
-  getMissingMessages(
-    channelId: ID!
-    rangeStart: ID!
-    rangeEnd: ID!
-  ): [ChatMessage!]!
-  getChannelMembers(
-    channelId: ID!
-    limit: Int
-    offset: Int
-  ): [ChatMemberRecord!]!
+  getMessagesAfterCursor(channelId: ID!, afterCursor: ID!, limit: Int): [ChatMessage!]!
+  getMissingMessages(channelId: ID!, rangeStart: ID!, rangeEnd: ID!): [ChatMessage!]!
+  getChannelMembers(channelId: ID!, limit: Int, offset: Int): [ChatMemberRecord!]!
   getLastReadMessage(channelId: ID!): ID
-  messagesDelta(
-    conversationId: ID!
-    afterSequence: Int
-    afterStreamId: String
-    limit: Int
-  ): MessagesDelta!
-  history(
-    conversationId: ID!
-    beforeSequence: Int!
-    limit: Int
-  ): HistoryPayload!
+  messagesDelta(conversationId: ID!, afterSequence: Int, afterStreamId: String, limit: Int): MessagesDelta!
+  history(conversationId: ID!, beforeSequence: Int!, limit: Int): HistoryPayload!
   messageReactions(messageId: ID!): [MessageReaction!]!
-  reactionUsers(
-    messageId: ID!
-    emoji: String!
-    cursor: Int
-  ): ReactionUsersConnection!
+  reactionUsers(messageId: ID!, emoji: String!, cursor: Int): ReactionUsersConnection!
   getUnreadCounts(workspaceId: ID!, projectId: ID!): UnreadCountsResponse!
   getReadReceipts(messageId: ID!): ReadReceiptsResponse!
-  getUserConversations(
-    workspaceId: ID!
-    projectId: ID!
-    type: ConversationType
-    includeArchived: Boolean
-    limit: Int
-    cursor: String
-  ): ConversationConnection!
+  getUserConversations(workspaceId: ID!, projectId: ID!, type: ConversationType, includeArchived: Boolean, limit: Int, cursor: String): ConversationConnection!
   getConversation(conversationId: ID!): Conversation!
-  getDmByUsers(
-    workspaceId: ID!
-    projectId: ID!
-    otherUserId: ID!
-  ): DmConversation
+  getDmByUsers(workspaceId: ID!, projectId: ID!, otherUserId: ID!): DmConversation
   getUsersByIds(userIds: [ID!]!): [UserBasic!]!
   getBoard(boardId: ID!): Whiteboard
   userBoards(workspaceId: ID!, limit: Int, cursor: ID): BoardConnection!
   boardCollaborators(boardId: ID!): [BoardCollaborator!]!
-  workspaceBoards(
-    workspaceId: ID!
-    includeArchived: Boolean
-    limit: Int
-    cursor: ID
-  ): BoardConnection!
+  workspaceBoards(workspaceId: ID!, includeArchived: Boolean, limit: Int, cursor: ID): BoardConnection!
   getBoardSnapshot(boardId: ID!, clientSnapshot: String): BoardSnapshot!
   activeCollaborators(boardId: ID!): [ActiveCollaborator!]!
+
+  """Fetch page metadata. Use getPageSnapshot for Y.Doc content."""
+  getPage(pageId: ID!): Page!
+
+  """
+  Returns the authoritative Y.Doc snapshot diff + a stream cursor for gap-fill.
+  
+  First open (no offline state):
+    getPageSnapshot(pageId: "cuid")
+  
+  Reconnect with offline edits:
+    getPageSnapshot(pageId: "cuid", clientSnapshot: "<base64 Y.encodeStateAsUpdate>")
+  
+  Client workflow:
+    1. Call this query → receive { snapshot, lastStreamId }
+    2. Apply snapshot: Y.applyUpdate(localDoc, base64Decode(snapshot))
+    3. Open WS: page:subscribe-page { pageId, lastStreamId }  ← gap-fill
+  """
+  getPageSnapshot(pageId: ID!): PageSnapshot!
+
+  """
+  Returns the full nested page tree for a project (non-archived, non-deleted).
+  """
+  getProjectPages(projectId: ID!): [Page!]!
+
+  """
+  DB collaborator list (authoritative). For real-time presence, use getActivePageCollaborators.
+  """
+  getPageCollaborators(pageId: ID!): [PageCollaborator!]!
+
+  """
+  Live presence from Redis ZSET (not DB). Reflects current editing sessions.
+  """
+  getActivePageCollaborators(pageId: ID!): [PageCollaborator!]!
 }
 
 type Mutation {
   _health: String
-  syncUser(
-    clerkId: String!
-    email: String!
-    fullName: String
-    avatarUrl: String
-    emailVerified: Boolean
-  ): User!
+  syncUser(clerkId: String!, email: String!, fullName: String, avatarUrl: String, emailVerified: Boolean): User!
   acceptWorkspaceInvite(input: AcceptInviteInput!): JoinResponse!
   checkSlugAvailability(slug: String!): AvailabilityResponse!
   createOnboardingWorkspace: Workspace!
   createWorkspace(slug: String!, name: String!): Workspace!
   inviteToWorkspace(input: InviteToWorkspaceInput!): InviteResponse!
   removeWorkspaceMember(workspaceId: ID!, memberId: ID!): InviteResponse!
-  updateWorkspaceMemberRole(
-    workspaceId: ID!
-    memberId: ID!
-    role: String!
-  ): WorkspaceMember!
+  updateWorkspaceMemberRole(workspaceId: ID!, memberId: ID!, role: String!): WorkspaceMember!
 
-  """
-  Mark specific notifications as read.
-  """
+  """Mark specific notifications as read."""
   markNotificationRead(ids: [ID!]!): Boolean!
 
-  """
-  Mark all notifications as read.
-  """
+  """Mark all notifications as read."""
   markAllNotificationsRead: Boolean!
   createProject(workspaceId: ID!, input: CreateProjectInput!): Project!
-  checkProjectSlugAvailability(
-    workspaceId: ID!
-    slug: String!
-  ): AvailabilityResponse!
+  checkProjectSlugAvailability(workspaceId: ID!, slug: String!): AvailabilityResponse!
   createChannel(input: CreateChannelInput!): Conversation!
   archiveChannel(input: ArchiveChannelInput!): Conversation!
   renameChannel(input: RenameChannelInput!): Conversation!
   createThread(input: CreateThreadInput!): Conversation!
-  checkChannelAvailability(
-    input: CheckChannelAvailabilityInput!
-  ): ChannelAvailabilityResponse!
+  checkChannelAvailability(input: CheckChannelAvailabilityInput!): ChannelAvailabilityResponse!
   createDm(input: CreateDmInput!): Conversation!
   createGroup(input: CreateGroupInput!): Conversation!
   deleteChannel(workspaceId: ID!, channelId: ID!): DeleteChannelResult!
   unarchiveChannel(workspaceId: ID!, channelId: ID!): UnarchiveChannelResult!
-  updateChannelDescription(
-    workspaceId: ID!
-    channelId: ID!
-    description: String
-  ): UpdateChannelDescriptionResult!
-  updateChannelVisibility(
-    workspaceId: ID!
-    channelId: ID!
-    isPublic: Boolean!
-  ): UpdateChannelVisibilityResult!
-  addChannelMembers(
-    workspaceId: ID!
-    channelId: ID!
-    userIds: [ID!]!
-  ): AddChannelMembersResult!
-  removeChannelMember(
-    workspaceId: ID!
-    channelId: ID!
-    userId: ID!
-  ): RemoveChannelMemberResult!
+  updateChannelDescription(workspaceId: ID!, channelId: ID!, description: String): UpdateChannelDescriptionResult!
+  updateChannelVisibility(workspaceId: ID!, channelId: ID!, isPublic: Boolean!): UpdateChannelVisibilityResult!
+  addChannelMembers(workspaceId: ID!, channelId: ID!, userIds: [ID!]!): AddChannelMembersResult!
+  removeChannelMember(workspaceId: ID!, channelId: ID!, userId: ID!): RemoveChannelMemberResult!
   deleteDm(workspaceId: ID!, dmId: ID!): DeleteDmResult!
-  muteConversation(
-    conversationId: ID!
-    isMuted: Boolean!
-  ): MuteConversationResult!
+  muteConversation(conversationId: ID!, isMuted: Boolean!): MuteConversationResult!
   renameGroup(workspaceId: ID!, groupId: ID!, name: String!): RenameGroupResult!
   deleteGroup(workspaceId: ID!, groupId: ID!): DeleteGroupResult!
-  addGroupMembers(
-    workspaceId: ID!
-    groupId: ID!
-    userIds: [ID!]!
-  ): AddGroupMembersResult!
-  removeGroupMember(
-    workspaceId: ID!
-    groupId: ID!
-    userId: ID!
-  ): RemoveGroupMemberResult!
+  addGroupMembers(workspaceId: ID!, groupId: ID!, userIds: [ID!]!): AddGroupMembersResult!
+  removeGroupMember(workspaceId: ID!, groupId: ID!, userId: ID!): RemoveGroupMemberResult!
   leaveGroup(workspaceId: ID!, groupId: ID!): LeaveGroupResult!
   closeThread(workspaceId: ID!, threadId: ID!): CloseThreadResult!
   reopenThread(workspaceId: ID!, threadId: ID!): ReopenThreadResult!
@@ -203,18 +135,56 @@ type Mutation {
   deleteBoard(boardId: ID!): DeleteBoardResult!
   renameBoard(boardId: ID!, title: String!): Whiteboard!
   updateBoardDescription(boardId: ID!, description: String): Whiteboard!
-  addBoardCollaborators(
-    boardId: ID!
-    userIds: [ID!]!
-  ): AddBoardCollaboratorsResult!
-  removeBoardCollaborator(
-    boardId: ID!
-    userId: ID!
-  ): RemoveBoardCollaboratorResult!
+  addBoardCollaborators(boardId: ID!, userIds: [ID!]!): AddBoardCollaboratorsResult!
+  removeBoardCollaborator(boardId: ID!, userId: ID!): RemoveBoardCollaboratorResult!
   archiveBoard(boardId: ID!): Whiteboard!
   unarchiveBoard(boardId: ID!): Whiteboard!
   lockBoard(boardId: ID!): Whiteboard!
   unlockBoard(boardId: ID!): Whiteboard!
+
+  """
+  Creates a new page in a project. Initialises Y.Doc and uploads initial snapshot to S3.
+  The calling user is automatically added as an EDITOR collaborator.
+  """
+  createPage(input: CreatePageInput!): CreatePageResult!
+
+  """
+  Soft-deletes a page. Fails with 409 if the page has active subscribers.
+  Does not cascade to child pages — handle descendants explicitly first.
+  """
+  deletePage(input: DeletePageInput!): DeletePageResult!
+  renamePage(input: RenamePageInput!): RenamePageResult!
+
+  """Archives a page and all its descendants."""
+  archivePage(input: ArchivePageInput!): ArchivePageResult!
+
+  """
+  Unarchives a page. Fails if the parent is still archived.
+  Child pages are NOT automatically unarchived — handle each explicitly.
+  """
+  unarchivePage(input: UnarchivePageInput!): UnarchivePageResult!
+
+  """
+  Acquires an exclusive editor lock on the page.
+  Returns 423 if another user currently holds the lock.
+  Lock auto-releases after 1 hour (safety net for crashed clients).
+  """
+  lockPage(input: LockPageInput!): LockPageResult!
+
+  """Lock owner or workspace ADMIN can unlock."""
+  unlockPage(input: UnlockPageInput!): UnlockPageResult!
+
+  """
+  Moves a page to a new position (and optionally a new parent).
+  Validate no circular nesting before calling (circular guard runs server-side too).
+  """
+  reorderPage(input: ReorderPageInput!): ReorderPageResult!
+
+  """Upsert-semantics: can be used for both inviting and changing roles."""
+  addPageCollaborators(input: AddPageCollaboratorsInput!): AddPageCollaboratorsResult!
+
+  """Cannot remove the page creator."""
+  removePageCollaborator(input: RemovePageCollaboratorInput!): RemovePageCollaboratorResult!
 }
 
 type User {
@@ -322,9 +292,42 @@ type Task {
   statusName: String!
 }
 
+"""
+A collaborative document page within a project.
+The Y.Doc content is synced via WebSocket and accessed via getPageSnapshot.
+"""
 type Page {
   id: ID!
   title: String!
+  workspaceId: ID!
+  projectId: ID!
+
+  """null = root-level page (no parent)"""
+  parentId: ID
+
+  """Emoji or absolute URL for the page icon"""
+  icon: String
+  coverUrl: String
+
+  """
+  Fractional index position for ordering within parent (e.g., 1.5 between 1.0 and 2.0)
+  """
+  position: Float!
+  isArchived: Boolean!
+  isLocked: Boolean!
+
+  """
+  S3 key for the latest compiled Yjs snapshot (disaster recovery reference)
+  """
+  s3Key: String
+  createdBy: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  collaborators: [PageCollaborator!]!
+  creator: UserBasic!
+
+  """Populated only by getProjectPages — empty in all other contexts"""
+  children: [Page!]!
 }
 
 type ProjectMember {
@@ -704,9 +707,7 @@ input CreateBoardInput {
   title: String!
   description: String
 
-  """
-  Optional: Add workspace members as collaborators during board creation
-  """
+  """Optional: Add workspace members as collaborators during board creation"""
   collaboratorIds: [ID!]
 }
 
@@ -757,4 +758,155 @@ type ActiveCollaborator {
   joinedAt: DateTime!
   lastSeenAt: DateTime!
   cursorPosition: CursorPosition
+}
+
+type PageCollaborator {
+  userId: ID!
+  role: PageRole!
+  joinedAt: DateTime!
+  user: UserBasic!
+}
+
+enum PageRole {
+  EDITOR
+  VIEWER
+  COMMENTER
+}
+
+"""
+Returned by getPageSnapshot — everything the client needs to initialise the Y.Doc
+"""
+type GetPageSnapshotResult {
+  pageId: ID!
+
+  """
+  base64-encoded Y.encodeStateAsUpdate() — apply on client with Y.applyUpdate()
+  """
+  snapshot: String!
+
+  """
+  Last Redis Stream entry ID processed into this snapshot — used for gap-fill on subscribe
+  """
+  lastStreamId: String!
+
+  """Unix timestamp (ms) of when this snapshot was compiled"""
+  snapshotTimestamp: Float!
+}
+
+input CreatePageInput {
+  workspaceId: ID!
+  projectId: ID!
+
+  """null = root-level page"""
+  parentId: ID
+  title: String
+  icon: String
+  coverUrl: String
+
+  """Fractional index position for sibling ordering"""
+  position: Float!
+  collaboratorIds: [ID!]
+}
+
+type CreatePageResult {
+  page: Page!
+}
+
+input DeletePageInput {
+  pageId: ID!
+  workspaceId: ID!
+}
+
+type DeletePageResult {
+  success: Boolean!
+  pageId: ID!
+}
+
+input RenamePageInput {
+  pageId: ID!
+  title: String!
+}
+
+type RenamePageResult {
+  page: Page!
+}
+
+input ArchivePageInput {
+  pageId: ID!
+}
+
+type ArchivePageResult {
+  page: Page!
+}
+
+input UnarchivePageInput {
+  pageId: ID!
+}
+
+type UnarchivePageResult {
+  page: Page!
+}
+
+input LockPageInput {
+  pageId: ID!
+}
+
+type LockPageResult {
+  page: Page!
+}
+
+input UnlockPageInput {
+  pageId: ID!
+}
+
+type UnlockPageResult {
+  page: Page!
+}
+
+input ReorderPageInput {
+  pageId: ID!
+
+  """null = move to root (remove from parent)"""
+  newParentId: ID
+  newPosition: Float!
+}
+
+type ReorderPageResult {
+  page: Page!
+}
+
+input AddPageCollaboratorsInput {
+  pageId: ID!
+  collaborators: [PageCollaboratorInput!]!
+}
+
+input PageCollaboratorInput {
+  userId: ID!
+  role: PageRole!
+}
+
+type AddPageCollaboratorsResult {
+  addedCollaborators: [PageCollaborator!]!
+}
+
+input RemovePageCollaboratorInput {
+  pageId: ID!
+  userId: ID!
+}
+
+type RemovePageCollaboratorResult {
+  success: Boolean!
+}
+
+"""
+Returned by getPageSnapshot.
+
+snapshot         — base64 Y.js diff. Client calls Y.applyUpdate(localDoc, decode(snapshot)).
+lastStreamId     — client passes this to subscribe-page for gap-fill replay.
+snapshotTimestamp — when the base snapshot was last compacted by the stream worker. Null for new pages.
+"""
+type PageSnapshot {
+  snapshot: String!
+  lastStreamId: String!
+  snapshotTimestamp: DateTime
 }
