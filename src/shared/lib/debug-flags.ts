@@ -28,9 +28,10 @@ export const GROUPS = {
   // Features
   chat: false,
   auth: false,
-  whiteboard: false, // ❌ Disabled - use file-level flags for state sync testing
-  'whiteboard-sync': false, // ❌ Disabled - use file-level flags
-  thumbnail: false, // Board thumbnail generation pipeline
+  whiteboard: false,
+  'whiteboard-sync': false,
+  thumbnail: false,
+  pages: true, // ✅ All pages feature logs
 
   // Modules
   websocket: false,
@@ -166,8 +167,53 @@ export const FILES: Record<string, boolean | undefined> = {
   // ─────────────────────────────────────
   // Thumbnail Pipeline
   // ─────────────────────────────────────
-  'thumbnail:read-elements': true, // ✅ read-board-elements.ts — y-indexeddb read + element extraction
-  'thumbnail:hook': true, // ✅ use-board-thumbnail.ts — stale-while-revalidate pipeline
+  'thumbnail:read-elements': false, // read-board-elements.ts
+  'thumbnail:hook': false, // use-board-thumbnail.ts
+
+  // ─────────────────────────────────────
+  // Pages Feature ✅ ENABLED
+  // Widget: page-editor sync phases
+  // ─────────────────────────────────────
+  // Sync orchestrator
+  'pages:use-page-sync': true, // hooks/use-page-sync.ts
+  'pages:page-editor': true, // widgets/page-editor/ui/page-editor.tsx (render + editor mount)
+  // Phase hooks
+  'pages:phase1:server-sync': true, // hooks/sync-phases/use-server-sync.ts
+  'pages:phase2:indexeddb-sync': true, // hooks/sync-phases/use-indexeddb-sync.ts
+  'pages:phase3:client-diff': true, // hooks/sync-phases/use-client-diff.ts
+  'pages:phase4:network-sync': true, // hooks/sync-phases/use-network-sync.ts
+  // WS event handlers (features/pages/events/lib/handlers)
+  'pages:subscribe': true, // handlers/subscribe.ts
+  'pages:subscribe-success': true, // handlers/subscribe-success.ts
+  'pages:unsubscribe': true, // handlers/unsubscribe.ts
+  'pages:page-update': true, // handlers/page-update.ts
+  'pages:update-ack': true, // handlers/update-ack.ts
+  'pages:awareness-update': true, // handlers/awareness-update.ts
+  'pages:user-joined': true, // handlers/user-joined.ts
+  'pages:user-left': true, // handlers/user-left.ts
+  'pages:validation': true, // entities/page-session/lib/validation.ts
+  // Entities
+  'pages:ydoc-registry': true, // entities/page-session/lib/yjs/ydoc-registry.ts
+  'pages:awareness-provider': true, // entities/page-session/lib/yjs/page-awareness-provider.ts
+  'pages:pending-updates-tracker': true, // entities/page-session/lib/pending-updates-tracker.ts
+  'pages:offline-queue': true, // entities/page-session/lib/offline-queue-manager.ts
+  'pages:indexeddb-cleanup': true, // features/pages/clean-page-indexeddb/
+  // Send
+  'pages:send-page-update': true, // features/pages/send-page-update/
+  // UI
+  'pages:page-title': true, // widgets/page-editor/ui/page-title.tsx
+  // Presence
+  'pages:presence': true, // entities/page-presence/
+  // Mutation hooks (less critical — enable individually if needed)
+  'pages:add-page-collaborators-hook': false,
+  'pages:archive-page-hook': false,
+  'pages:delete-page-hook': false,
+  'pages:lock-page-hook': false,
+  'pages:remove-page-collaborator-hook': false,
+  'pages:rename-page-hook': false,
+  'pages:reorder-page-hook': false,
+  'pages:unarchive-page-hook': false,
+  'pages:unlock-page-hook': false,
 }
 
 export type GroupFlag = keyof typeof GROUPS

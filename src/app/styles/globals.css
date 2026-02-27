@@ -1,5 +1,8 @@
 @import 'tailwindcss';
 
+/* BlockNote shadcn — generates Tailwind utility classes for BlockNote components */
+@source "../../node_modules/@blocknote/shadcn";
+
 @import 'tw-animate-css';
 
 @custom-variant dark (&:is(.dark *));
@@ -139,5 +142,9 @@ code {
   }
   body {
     @apply bg-background text-foreground;
+  }
+  /* Required border styles for BlockNote shadcn components */
+  .bn-shadcn * {
+    @apply border-border outline-ring/50;
   }
 }

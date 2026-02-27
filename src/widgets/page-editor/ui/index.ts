@@ -1,0 +1,6 @@
+export { PageEditor } from './page-editor'
+export { PageEditorSkeleton } from './page-editor-skeleton'
+export { PageTitle } from './page-title'
+export { PageCover } from './page-cover'
+export { CollaboratorBar } from './collaborator-bar'
+export { LockedBanner } from './locked-banner'
