@@ -7,6 +7,8 @@ import { Label } from '@/shared/ui/primitives/label'
 import { useCreatePage } from '../hooks/use-create-page'
 import { mapCreatePageError } from '../lib/error-mapping'
 import { createPageSchema, validateZod } from '../model/schema'
+import { CollaboratorPicker } from './collaborator-picker'
+import { useAuth } from '@/shared/hooks'
 import type { Page } from '@/entities/page'
 
 export interface CreatePageFormProps {
@@ -48,11 +50,13 @@ export function CreatePageForm({
 }: CreatePageFormProps) {
   const [rootError, setRootError] = useState<string | null>(null)
   const { mutateAsync: createPage, isPending } = useCreatePage()
+  const { userId } = useAuth()
 
   const form = useForm({
     defaultValues: {
       title: '',
       icon: '',
+      collaboratorIds: userId ? [userId] : ([] as string[]),
     },
     onSubmit: async ({ value }) => {
       setRootError(null)
@@ -64,6 +68,7 @@ export function CreatePageForm({
           position,
           title: value.title || 'Untitled',
           icon: value.icon || undefined,
+          collaboratorIds: value.collaboratorIds,
         })
         toast.success('Page created')
         onSuccess?.(result.createPage.page as Page)
@@ -147,6 +152,18 @@ export function CreatePageForm({
             </p>
             <FieldError field={field} />
           </div>
+        )}
+      </form.Field>
+
+      {/* Collaborators */}
+      <form.Field name="collaboratorIds">
+        {(field) => (
+          <CollaboratorPicker
+            workspaceId={workspaceId}
+            selectedUserIds={field.state.value}
+            onChange={field.handleChange}
+            currentUserId={userId || undefined}
+          />
         )}
       </form.Field>
 

@@ -5,6 +5,8 @@ import {
   Delete01Icon,
   File01Icon,
   MoreVerticalIcon,
+  UserAdd01Icon,
+  UserSharingIcon,
 } from '@hugeicons/core-free-icons'
 import {
   DropdownMenu,
@@ -16,6 +18,8 @@ import {
 import { useArchivePage } from '@/features/pages/toggle-page-archive'
 import { useDeletePage } from '@/features/pages/delete-page'
 import { useCreatePageModal } from '@/features/pages/create-page'
+import { AddPageCollaboratorsDialog } from '@/features/pages/add-page-collaborators'
+import { ManageCollaboratorsDialog } from '@/features/pages/manage-page-collaborators'
 import { useParams } from '@tanstack/react-router'
 import { useAppSelector } from '@/shared/hooks'
 import { selectWorkspaceBySlug } from '@/entities/workspace/model/selectors'
@@ -48,9 +52,12 @@ export function PageTreeItemActions({
   )
   const project = useAppSelector(selectCurrentProject)
   const [open2, setOpen2] = useState(false)
+  const [addCollabOpen, setAddCollabOpen] = useState(false)
+  const [manageCollabOpen, setManageCollabOpen] = useState(false)
 
   return (
-    <DropdownMenu open={open2} onOpenChange={setOpen2}>
+    <>
+      <DropdownMenu open={open2} onOpenChange={setOpen2}>
       <DropdownMenuTrigger
         render={
           <button
@@ -61,10 +68,19 @@ export function PageTreeItemActions({
           </button>
         }
       />
-      <DropdownMenuContent side="right" align="start" className="w-48">
+      <DropdownMenuContent side="right" align="start" className="w-52">
         <DropdownMenuItem onClick={() => open({ parentId: pageId })}>
           <HugeiconsIcon icon={File01Icon} className="mr-2 h-4 w-4" />
           Add child page
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem onClick={() => setAddCollabOpen(true)}>
+          <HugeiconsIcon icon={UserAdd01Icon} className="mr-2 h-4 w-4" />
+          Add Collaborators
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => setManageCollabOpen(true)}>
+          <HugeiconsIcon icon={UserSharingIcon} className="mr-2 h-4 w-4" />
+          Manage Collaborators
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem
@@ -91,5 +107,17 @@ export function PageTreeItemActions({
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
+
+    <AddPageCollaboratorsDialog
+      pageId={pageId}
+      open={addCollabOpen}
+      onOpenChange={setAddCollabOpen}
+    />
+    <ManageCollaboratorsDialog
+      pageId={pageId}
+      open={manageCollabOpen}
+      onOpenChange={setManageCollabOpen}
+    />
+  </>
   )
 }

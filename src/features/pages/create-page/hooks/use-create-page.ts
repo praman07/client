@@ -12,6 +12,8 @@ export interface CreatePageVariables extends CreatePageFormData {
   parentId?: string | null
   /** Fractional index position — pre-computed by caller */
   position: number
+  /** Optional list of user IDs to add as collaborators at creation time */
+  collaboratorIds?: string[]
 }
 
 /**
@@ -37,6 +39,7 @@ export function useCreatePage() {
           title: variables.title,
           icon: variables.icon,
           position: variables.position,
+          collaboratorIds: variables.collaboratorIds ?? [],
         },
       })
     },

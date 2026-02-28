@@ -11,7 +11,6 @@ import { useAppSelector } from '@/shared/hooks'
 import { selectCurrentUser } from '@/entities/user/model/selectors'
 import { PageEditorSkeleton } from './page-editor-skeleton'
 import { PageTitle } from './page-title'
-import { PageCover } from './page-cover'
 import { LockedBanner } from './locked-banner'
 import { CollaboratorBar } from './collaborator-bar'
 import { createLogger } from '@/shared/lib/logger'
@@ -97,6 +96,7 @@ function PageEditorBody({
         name: currentUser?.fullName ?? 'Anonymous',
         color: userColor,
       },
+      showCursorLabels: "always",
     },
   })
 

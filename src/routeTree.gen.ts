@@ -295,6 +295,7 @@ const AppWorkspaceWorkspaceSlugProjectProjectSlugChatConversationIdRoute =
   )
 
 export interface FileRoutesByFullPath {
+  '/': typeof MarketingIndexRoute
   '/$': typeof SplatRoute
   '/onboarding': typeof AppOnboardingRoute
   '/sign-in': typeof AuthSignInRoute
@@ -302,7 +303,6 @@ export interface FileRoutesByFullPath {
   '/about': typeof MarketingAboutRoute
   '/contact': typeof MarketingContactRoute
   '/pricing': typeof MarketingPricingRoute
-  '/': typeof MarketingIndexRoute
   '/workspace/$workspaceSlug': typeof AppWorkspaceWorkspaceSlugMainRouteRouteWithChildren
   '/user-settings/$': typeof AppUserSettingsSplatRoute
   '/workspace/join': typeof AppWorkspaceJoinRoute
@@ -334,6 +334,7 @@ export interface FileRoutesByFullPath {
   '/workspace/$workspaceSlug/project/$projectSlug/whiteboard/': typeof AppWorkspaceWorkspaceSlugProjectProjectSlugWhiteboardIndexRoute
 }
 export interface FileRoutesByTo {
+  '/': typeof MarketingIndexRoute
   '/$': typeof SplatRoute
   '/onboarding': typeof AppOnboardingRoute
   '/sign-in': typeof AuthSignInRoute
@@ -341,7 +342,6 @@ export interface FileRoutesByTo {
   '/about': typeof MarketingAboutRoute
   '/contact': typeof MarketingContactRoute
   '/pricing': typeof MarketingPricingRoute
-  '/': typeof MarketingIndexRoute
   '/workspace/$workspaceSlug': typeof AppWorkspaceWorkspaceSlugMainIndexRoute
   '/user-settings/$': typeof AppUserSettingsSplatRoute
   '/workspace/join': typeof AppWorkspaceJoinRoute
@@ -410,6 +410,7 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
+    | '/'
     | '/$'
     | '/onboarding'
     | '/sign-in'
@@ -417,7 +418,6 @@ export interface FileRouteTypes {
     | '/about'
     | '/contact'
     | '/pricing'
-    | '/'
     | '/workspace/$workspaceSlug'
     | '/user-settings/$'
     | '/workspace/join'
@@ -449,6 +449,7 @@ export interface FileRouteTypes {
     | '/workspace/$workspaceSlug/project/$projectSlug/whiteboard/'
   fileRoutesByTo: FileRoutesByTo
   to:
+    | '/'
     | '/$'
     | '/onboarding'
     | '/sign-in'
@@ -456,7 +457,6 @@ export interface FileRouteTypes {
     | '/about'
     | '/contact'
     | '/pricing'
-    | '/'
     | '/workspace/$workspaceSlug'
     | '/user-settings/$'
     | '/workspace/join'
@@ -541,21 +541,21 @@ declare module '@tanstack/react-router' {
     '/_marketing': {
       id: '/_marketing'
       path: ''
-      fullPath: ''
+      fullPath: '/'
       preLoaderRoute: typeof MarketingRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_auth': {
       id: '/_auth'
       path: ''
-      fullPath: ''
+      fullPath: '/'
       preLoaderRoute: typeof AuthRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_app': {
       id: '/_app'
       path: ''
-      fullPath: ''
+      fullPath: '/'
       preLoaderRoute: typeof AppRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
