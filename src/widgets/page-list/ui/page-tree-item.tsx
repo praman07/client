@@ -8,8 +8,6 @@ import {
 import {
   SidebarMenuItem,
   SidebarMenuButton,
-  SidebarMenuSub,
-  SidebarMenuSubItem,
 } from '@/shared/ui/primitives/sidebar'
 import {
   Collapsible,
@@ -24,8 +22,21 @@ interface PageTreeItemProps {
   depth?: number
 }
 
+/** Returns true if any descendant of `node` has the given id. */
+function hasActiveDescendant(node: PageTreeNode, activeId: string | null): boolean {
+  if (!activeId) return false
+  return node.children.some(
+    (c) => c.page.id === activeId || hasActiveDescendant(c, activeId),
+  )
+}
+
 /**
  * Recursive sidebar item for a single page.
+ *
+ * Supports unlimited nesting depth via a depth-scaled paddingLeft indent
+ * (replacing SidebarMenuSub which clips at level 3+).
+ *
+ * Auto-expands when a descendant is the active page.
  *
  * @layer Widgets
  */
@@ -34,16 +45,18 @@ export function PageTreeItem({ node, depth = 0 }: PageTreeItemProps) {
     workspaceSlug: string
     projectSlug: string
   }
-  // Use useMatch to safely detect active page — avoids accessing $pageId param
-  // outside its route scope (sidebar renders at the layout level above $pageId)
   const matchedPage = useMatch({
     from: '/_app/workspace/$workspaceSlug/project/$projectSlug/pages/$pageId',
     shouldThrow: false,
   })
   const activePageId = matchedPage?.params?.pageId ?? null
-  const [open, setOpen] = useState(false)
   const hasChildren = node.children.length > 0
   const isActive = activePageId === node.page.id
+
+  // Auto-expand if the active page is a descendant of this node
+  const [open, setOpen] = useState(() =>
+    hasActiveDescendant(node, activePageId),
+  )
 
   const icon = node.page.icon ? (
     <span className="text-sm">{node.page.icon}</span>
@@ -83,13 +96,12 @@ export function PageTreeItem({ node, depth = 0 }: PageTreeItemProps) {
             </CollapsibleTrigger>
           </div>
           <CollapsibleContent>
-            <SidebarMenuSub>
+            {/* Depth-scaled indent — works for unlimited nesting levels */}
+            <div style={{ paddingLeft: `${(depth + 1) * 12}px` }}>
               {node.children.map((child) => (
-                <SidebarMenuSubItem key={child.page.id}>
-                  <PageTreeItem node={child} depth={depth + 1} />
-                </SidebarMenuSubItem>
+                <PageTreeItem key={child.page.id} node={child} depth={depth + 1} />
               ))}
-            </SidebarMenuSub>
+            </div>
           </CollapsibleContent>
         </Collapsible>
       ) : (
