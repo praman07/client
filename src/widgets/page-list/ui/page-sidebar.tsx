@@ -1,10 +1,7 @@
 import { useMemo } from 'react'
 import { ScrollArea } from '@/shared/ui'
 import { Skeleton } from '@/shared/ui/primitives/skeleton'
-import {
-  Sidebar,
-  SidebarContent,
-} from '@/shared/ui/primitives/sidebar'
+import { Sidebar, SidebarContent } from '@/shared/ui/primitives/sidebar'
 import { useProjectPages } from '@/features/pages/fetch-project-pages'
 import { CreatePageModal } from '@/features/pages/create-page'
 import type { Page } from '@/entities/page'

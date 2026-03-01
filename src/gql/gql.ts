@@ -33,6 +33,8 @@ type Documents = {
     "\n  mutation SessionSyncUser(\n    $clerkId: String!\n    $email: String!\n    $fullName: String\n    $avatarUrl: String\n  ) {\n    syncUser(\n      clerkId: $clerkId\n      email: $email\n      fullName: $fullName\n      avatarUrl: $avatarUrl\n    ) {\n      id\n      email\n      fullName\n      avatarUrl\n    }\n  }": typeof types.SessionSyncUserDocument,
     "\n  query GetMe {\n    me {\n      ...SessionUser\n    }\n  }\n": typeof types.GetMeDocument,
     "\n  fragment User on User {\n    id\n    email\n    fullName\n    avatarUrl\n  }\n": typeof types.UserFragmentDoc,
+    "\n  fragment VaultFileFields on VaultFile {\n    id\n    projectId\n    workspaceId\n    folderId\n    uploaderUserId\n    name\n    mimeType\n    sizeBytes\n    s3Key\n    source\n    sourceId\n    status\n    uploader {\n      id\n      fullName\n      avatarUrl\n    }\n    confirmedAt\n    createdAt\n    updatedAt\n  }\n": typeof types.VaultFileFieldsFragmentDoc,
+    "\n  fragment VaultFolderFields on VaultFolder {\n    id\n    projectId\n    parentFolderId\n    name\n    isSystem\n    createdAt\n    updatedAt\n  }\n": typeof types.VaultFolderFieldsFragmentDoc,
     "\n  fragment BoardFields on Whiteboard {\n    id\n    workspaceId\n    projectId\n    title\n    description\n    elementCount\n    fileSizeBytes\n    isArchived\n    isLocked\n    createdBy\n    createdAt\n    updatedAt\n  }\n": typeof types.BoardFieldsFragmentDoc,
     "\n  fragment BoardWithCollaborators on Whiteboard {\n    ...BoardFields\n    collaborators {\n      userId\n      joinedAt\n      user {\n        id\n        fullName\n        email\n        avatarUrl\n      }\n    }\n  }\n": typeof types.BoardWithCollaboratorsFragmentDoc,
     "\n  fragment WorkspaceFragment on Workspace {\n    id\n    name\n    slug\n    logoUrl\n  }\n": typeof types.WorkspaceFragmentFragmentDoc,
@@ -69,6 +71,23 @@ type Documents = {
     "\n  mutation UnarchivePage($input: UnarchivePageInput!) {\n    unarchivePage(input: $input) {\n      page {\n        id\n        isArchived\n        updatedAt\n      }\n    }\n  }\n": typeof types.UnarchivePageDocument,
     "\n  mutation LockPage($input: LockPageInput!) {\n    lockPage(input: $input) {\n      page {\n        id\n        isLocked\n        updatedAt\n      }\n    }\n  }\n": typeof types.LockPageDocument,
     "\n  mutation UnlockPage($input: UnlockPageInput!) {\n    unlockPage(input: $input) {\n      page {\n        id\n        isLocked\n        updatedAt\n      }\n    }\n  }\n": typeof types.UnlockPageDocument,
+    "\n  mutation CreateVaultFolder($input: CreateVaultFolderInput!) {\n    createVaultFolder(input: $input) {\n      folder {\n        ...VaultFolderFields\n      }\n    }\n  }\n": typeof types.CreateVaultFolderDocument,
+    "\n  mutation DeleteVaultFile($input: DeleteVaultFileInput!) {\n    deleteVaultFile(input: $input) {\n      success\n      id\n    }\n  }\n": typeof types.DeleteVaultFileDocument,
+    "\n  mutation DeleteVaultFolder($input: DeleteVaultFolderInput!) {\n    deleteVaultFolder(input: $input) {\n      success\n      id\n    }\n  }\n": typeof types.DeleteVaultFolderDocument,
+    "\n  query GetVaultAncestors($folderId: ID!) {\n    getVaultAncestors(folderId: $folderId) {\n      ...VaultFolderFields\n    }\n  }\n": typeof types.GetVaultAncestorsDocument,
+    "\n  query GetVaultChildren(\n    $projectId: ID!\n    $parentFolderId: ID\n    $cursor: ID\n    $limit: Int\n    $sortBy: VaultSortField\n    $sortDir: SortDirection\n  ) {\n    getVaultChildren(\n      projectId: $projectId\n      parentFolderId: $parentFolderId\n      cursor: $cursor\n      limit: $limit\n      sortBy: $sortBy\n      sortDir: $sortDir\n    ) {\n      folders {\n        ...VaultFolderFields\n      }\n      files {\n        ...VaultFileFields\n      }\n      totalFileCount\n      hasNextPage\n      nextCursor\n    }\n  }\n": typeof types.GetVaultChildrenDocument,
+    "\n  query GetVaultDownloadUrl($fileId: ID!) {\n    getVaultDownloadUrl(fileId: $fileId) {\n      url\n      expiresAt\n    }\n  }\n": typeof types.GetVaultDownloadUrlDocument,
+    "\n  query GetVaultNode($id: ID!, $type: VaultNodeType!) {\n    getVaultNode(id: $id, type: $type) {\n      ... on VaultFolder {\n        ...VaultFolderFields\n      }\n      ... on VaultFile {\n        ...VaultFileFields\n      }\n    }\n  }\n": typeof types.GetVaultNodeDocument,
+    "\n  query GetVaultSidebar($projectId: ID!) {\n    getVaultSidebar(projectId: $projectId) {\n      pinnedFolders {\n        ...VaultFolderFields\n      }\n      systemFolders {\n        ...VaultFolderFields\n      }\n    }\n  }\n": typeof types.GetVaultSidebarDocument,
+    "\n  query GetVaultUsage($projectId: ID!) {\n    getVaultUsage(projectId: $projectId) {\n      projectUsedBytes\n      projectLimitBytes\n      workspaceUsedBytes\n      workspaceLimitBytes\n      projectFileCount\n      projectFileCountLimit\n    }\n  }\n": typeof types.GetVaultUsageDocument,
+    "\n  mutation MoveVaultFile($input: MoveVaultFileInput!) {\n    moveVaultFile(input: $input) {\n      file {\n        ...VaultFileFields\n      }\n    }\n  }\n": typeof types.MoveVaultFileDocument,
+    "\n  mutation MoveVaultFolder($input: MoveVaultFolderInput!) {\n    moveVaultFolder(input: $input) {\n      folder {\n        ...VaultFolderFields\n      }\n    }\n  }\n": typeof types.MoveVaultFolderDocument,
+    "\n  mutation PinVaultFolder($input: PinVaultFolderInput!) {\n    pinVaultFolder(input: $input) {\n      folder {\n        ...VaultFolderFields\n      }\n    }\n  }\n": typeof types.PinVaultFolderDocument,
+    "\n  mutation RenameVaultFile($input: RenameVaultFileInput!) {\n    renameVaultFile(input: $input) {\n      file {\n        ...VaultFileFields\n      }\n    }\n  }\n": typeof types.RenameVaultFileDocument,
+    "\n  mutation RenameVaultFolder($input: RenameVaultFolderInput!) {\n    renameVaultFolder(input: $input) {\n      folder {\n        ...VaultFolderFields\n      }\n    }\n  }\n": typeof types.RenameVaultFolderDocument,
+    "\n  mutation UnpinVaultFolder($input: UnpinVaultFolderInput!) {\n    unpinVaultFolder(input: $input) {\n      success\n      id\n    }\n  }\n": typeof types.UnpinVaultFolderDocument,
+    "\n  mutation RequestVaultUpload($input: RequestVaultUploadInput!) {\n    requestVaultUpload(input: $input) {\n      fileId\n      presignedUrl\n      expiresAt\n    }\n  }\n": typeof types.RequestVaultUploadDocument,
+    "\n  mutation ConfirmVaultUpload($input: ConfirmVaultUploadInput!) {\n    confirmVaultUpload(input: $input) {\n      file {\n        id\n        name\n        mimeType\n        sizeBytes\n        status\n        folderId\n        projectId\n        workspaceId\n        source\n        sourceId\n        uploader {\n          id\n          fullName\n          avatarUrl\n        }\n        confirmedAt\n        createdAt\n        updatedAt\n      }\n    }\n  }\n": typeof types.ConfirmVaultUploadDocument,
     "\n  query GetWorkspaceMembers($workspaceId: ID!) {\n    workspaceMembers(workspaceId: $workspaceId) {\n      id\n      role\n      joinedAt\n      user {\n        id\n        fullName\n        email\n        avatarUrl\n      }\n    }\n  }\n": typeof types.GetWorkspaceMembersDocument,
     "\n  mutation UpdateWorkspaceMemberRole($workspaceId: ID!, $memberId: ID!, $role: String!) {\n    updateWorkspaceMemberRole(workspaceId: $workspaceId, memberId: $memberId, role: $role) {\n      id\n      role\n    }\n  }\n": typeof types.UpdateWorkspaceMemberRoleDocument,
     "\n  mutation RemoveWorkspaceMember($workspaceId: ID!, $memberId: ID!) {\n    removeWorkspaceMember(workspaceId: $workspaceId, memberId: $memberId) {\n      success\n      message\n    }\n  }\n": typeof types.RemoveWorkspaceMemberDocument,
@@ -108,6 +127,8 @@ const documents: Documents = {
     "\n  mutation SessionSyncUser(\n    $clerkId: String!\n    $email: String!\n    $fullName: String\n    $avatarUrl: String\n  ) {\n    syncUser(\n      clerkId: $clerkId\n      email: $email\n      fullName: $fullName\n      avatarUrl: $avatarUrl\n    ) {\n      id\n      email\n      fullName\n      avatarUrl\n    }\n  }": types.SessionSyncUserDocument,
     "\n  query GetMe {\n    me {\n      ...SessionUser\n    }\n  }\n": types.GetMeDocument,
     "\n  fragment User on User {\n    id\n    email\n    fullName\n    avatarUrl\n  }\n": types.UserFragmentDoc,
+    "\n  fragment VaultFileFields on VaultFile {\n    id\n    projectId\n    workspaceId\n    folderId\n    uploaderUserId\n    name\n    mimeType\n    sizeBytes\n    s3Key\n    source\n    sourceId\n    status\n    uploader {\n      id\n      fullName\n      avatarUrl\n    }\n    confirmedAt\n    createdAt\n    updatedAt\n  }\n": types.VaultFileFieldsFragmentDoc,
+    "\n  fragment VaultFolderFields on VaultFolder {\n    id\n    projectId\n    parentFolderId\n    name\n    isSystem\n    createdAt\n    updatedAt\n  }\n": types.VaultFolderFieldsFragmentDoc,
     "\n  fragment BoardFields on Whiteboard {\n    id\n    workspaceId\n    projectId\n    title\n    description\n    elementCount\n    fileSizeBytes\n    isArchived\n    isLocked\n    createdBy\n    createdAt\n    updatedAt\n  }\n": types.BoardFieldsFragmentDoc,
     "\n  fragment BoardWithCollaborators on Whiteboard {\n    ...BoardFields\n    collaborators {\n      userId\n      joinedAt\n      user {\n        id\n        fullName\n        email\n        avatarUrl\n      }\n    }\n  }\n": types.BoardWithCollaboratorsFragmentDoc,
     "\n  fragment WorkspaceFragment on Workspace {\n    id\n    name\n    slug\n    logoUrl\n  }\n": types.WorkspaceFragmentFragmentDoc,
@@ -144,6 +165,23 @@ const documents: Documents = {
     "\n  mutation UnarchivePage($input: UnarchivePageInput!) {\n    unarchivePage(input: $input) {\n      page {\n        id\n        isArchived\n        updatedAt\n      }\n    }\n  }\n": types.UnarchivePageDocument,
     "\n  mutation LockPage($input: LockPageInput!) {\n    lockPage(input: $input) {\n      page {\n        id\n        isLocked\n        updatedAt\n      }\n    }\n  }\n": types.LockPageDocument,
     "\n  mutation UnlockPage($input: UnlockPageInput!) {\n    unlockPage(input: $input) {\n      page {\n        id\n        isLocked\n        updatedAt\n      }\n    }\n  }\n": types.UnlockPageDocument,
+    "\n  mutation CreateVaultFolder($input: CreateVaultFolderInput!) {\n    createVaultFolder(input: $input) {\n      folder {\n        ...VaultFolderFields\n      }\n    }\n  }\n": types.CreateVaultFolderDocument,
+    "\n  mutation DeleteVaultFile($input: DeleteVaultFileInput!) {\n    deleteVaultFile(input: $input) {\n      success\n      id\n    }\n  }\n": types.DeleteVaultFileDocument,
+    "\n  mutation DeleteVaultFolder($input: DeleteVaultFolderInput!) {\n    deleteVaultFolder(input: $input) {\n      success\n      id\n    }\n  }\n": types.DeleteVaultFolderDocument,
+    "\n  query GetVaultAncestors($folderId: ID!) {\n    getVaultAncestors(folderId: $folderId) {\n      ...VaultFolderFields\n    }\n  }\n": types.GetVaultAncestorsDocument,
+    "\n  query GetVaultChildren(\n    $projectId: ID!\n    $parentFolderId: ID\n    $cursor: ID\n    $limit: Int\n    $sortBy: VaultSortField\n    $sortDir: SortDirection\n  ) {\n    getVaultChildren(\n      projectId: $projectId\n      parentFolderId: $parentFolderId\n      cursor: $cursor\n      limit: $limit\n      sortBy: $sortBy\n      sortDir: $sortDir\n    ) {\n      folders {\n        ...VaultFolderFields\n      }\n      files {\n        ...VaultFileFields\n      }\n      totalFileCount\n      hasNextPage\n      nextCursor\n    }\n  }\n": types.GetVaultChildrenDocument,
+    "\n  query GetVaultDownloadUrl($fileId: ID!) {\n    getVaultDownloadUrl(fileId: $fileId) {\n      url\n      expiresAt\n    }\n  }\n": types.GetVaultDownloadUrlDocument,
+    "\n  query GetVaultNode($id: ID!, $type: VaultNodeType!) {\n    getVaultNode(id: $id, type: $type) {\n      ... on VaultFolder {\n        ...VaultFolderFields\n      }\n      ... on VaultFile {\n        ...VaultFileFields\n      }\n    }\n  }\n": types.GetVaultNodeDocument,
+    "\n  query GetVaultSidebar($projectId: ID!) {\n    getVaultSidebar(projectId: $projectId) {\n      pinnedFolders {\n        ...VaultFolderFields\n      }\n      systemFolders {\n        ...VaultFolderFields\n      }\n    }\n  }\n": types.GetVaultSidebarDocument,
+    "\n  query GetVaultUsage($projectId: ID!) {\n    getVaultUsage(projectId: $projectId) {\n      projectUsedBytes\n      projectLimitBytes\n      workspaceUsedBytes\n      workspaceLimitBytes\n      projectFileCount\n      projectFileCountLimit\n    }\n  }\n": types.GetVaultUsageDocument,
+    "\n  mutation MoveVaultFile($input: MoveVaultFileInput!) {\n    moveVaultFile(input: $input) {\n      file {\n        ...VaultFileFields\n      }\n    }\n  }\n": types.MoveVaultFileDocument,
+    "\n  mutation MoveVaultFolder($input: MoveVaultFolderInput!) {\n    moveVaultFolder(input: $input) {\n      folder {\n        ...VaultFolderFields\n      }\n    }\n  }\n": types.MoveVaultFolderDocument,
+    "\n  mutation PinVaultFolder($input: PinVaultFolderInput!) {\n    pinVaultFolder(input: $input) {\n      folder {\n        ...VaultFolderFields\n      }\n    }\n  }\n": types.PinVaultFolderDocument,
+    "\n  mutation RenameVaultFile($input: RenameVaultFileInput!) {\n    renameVaultFile(input: $input) {\n      file {\n        ...VaultFileFields\n      }\n    }\n  }\n": types.RenameVaultFileDocument,
+    "\n  mutation RenameVaultFolder($input: RenameVaultFolderInput!) {\n    renameVaultFolder(input: $input) {\n      folder {\n        ...VaultFolderFields\n      }\n    }\n  }\n": types.RenameVaultFolderDocument,
+    "\n  mutation UnpinVaultFolder($input: UnpinVaultFolderInput!) {\n    unpinVaultFolder(input: $input) {\n      success\n      id\n    }\n  }\n": types.UnpinVaultFolderDocument,
+    "\n  mutation RequestVaultUpload($input: RequestVaultUploadInput!) {\n    requestVaultUpload(input: $input) {\n      fileId\n      presignedUrl\n      expiresAt\n    }\n  }\n": types.RequestVaultUploadDocument,
+    "\n  mutation ConfirmVaultUpload($input: ConfirmVaultUploadInput!) {\n    confirmVaultUpload(input: $input) {\n      file {\n        id\n        name\n        mimeType\n        sizeBytes\n        status\n        folderId\n        projectId\n        workspaceId\n        source\n        sourceId\n        uploader {\n          id\n          fullName\n          avatarUrl\n        }\n        confirmedAt\n        createdAt\n        updatedAt\n      }\n    }\n  }\n": types.ConfirmVaultUploadDocument,
     "\n  query GetWorkspaceMembers($workspaceId: ID!) {\n    workspaceMembers(workspaceId: $workspaceId) {\n      id\n      role\n      joinedAt\n      user {\n        id\n        fullName\n        email\n        avatarUrl\n      }\n    }\n  }\n": types.GetWorkspaceMembersDocument,
     "\n  mutation UpdateWorkspaceMemberRole($workspaceId: ID!, $memberId: ID!, $role: String!) {\n    updateWorkspaceMemberRole(workspaceId: $workspaceId, memberId: $memberId, role: $role) {\n      id\n      role\n    }\n  }\n": types.UpdateWorkspaceMemberRoleDocument,
     "\n  mutation RemoveWorkspaceMember($workspaceId: ID!, $memberId: ID!) {\n    removeWorkspaceMember(workspaceId: $workspaceId, memberId: $memberId) {\n      success\n      message\n    }\n  }\n": types.RemoveWorkspaceMemberDocument,
@@ -254,6 +292,14 @@ export function gql(source: "\n  query GetMe {\n    me {\n      ...SessionUser\n
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "\n  fragment User on User {\n    id\n    email\n    fullName\n    avatarUrl\n  }\n"): (typeof documents)["\n  fragment User on User {\n    id\n    email\n    fullName\n    avatarUrl\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  fragment VaultFileFields on VaultFile {\n    id\n    projectId\n    workspaceId\n    folderId\n    uploaderUserId\n    name\n    mimeType\n    sizeBytes\n    s3Key\n    source\n    sourceId\n    status\n    uploader {\n      id\n      fullName\n      avatarUrl\n    }\n    confirmedAt\n    createdAt\n    updatedAt\n  }\n"): (typeof documents)["\n  fragment VaultFileFields on VaultFile {\n    id\n    projectId\n    workspaceId\n    folderId\n    uploaderUserId\n    name\n    mimeType\n    sizeBytes\n    s3Key\n    source\n    sourceId\n    status\n    uploader {\n      id\n      fullName\n      avatarUrl\n    }\n    confirmedAt\n    createdAt\n    updatedAt\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  fragment VaultFolderFields on VaultFolder {\n    id\n    projectId\n    parentFolderId\n    name\n    isSystem\n    createdAt\n    updatedAt\n  }\n"): (typeof documents)["\n  fragment VaultFolderFields on VaultFolder {\n    id\n    projectId\n    parentFolderId\n    name\n    isSystem\n    createdAt\n    updatedAt\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -398,6 +444,74 @@ export function gql(source: "\n  mutation LockPage($input: LockPageInput!) {\n  
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "\n  mutation UnlockPage($input: UnlockPageInput!) {\n    unlockPage(input: $input) {\n      page {\n        id\n        isLocked\n        updatedAt\n      }\n    }\n  }\n"): (typeof documents)["\n  mutation UnlockPage($input: UnlockPageInput!) {\n    unlockPage(input: $input) {\n      page {\n        id\n        isLocked\n        updatedAt\n      }\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation CreateVaultFolder($input: CreateVaultFolderInput!) {\n    createVaultFolder(input: $input) {\n      folder {\n        ...VaultFolderFields\n      }\n    }\n  }\n"): (typeof documents)["\n  mutation CreateVaultFolder($input: CreateVaultFolderInput!) {\n    createVaultFolder(input: $input) {\n      folder {\n        ...VaultFolderFields\n      }\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation DeleteVaultFile($input: DeleteVaultFileInput!) {\n    deleteVaultFile(input: $input) {\n      success\n      id\n    }\n  }\n"): (typeof documents)["\n  mutation DeleteVaultFile($input: DeleteVaultFileInput!) {\n    deleteVaultFile(input: $input) {\n      success\n      id\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation DeleteVaultFolder($input: DeleteVaultFolderInput!) {\n    deleteVaultFolder(input: $input) {\n      success\n      id\n    }\n  }\n"): (typeof documents)["\n  mutation DeleteVaultFolder($input: DeleteVaultFolderInput!) {\n    deleteVaultFolder(input: $input) {\n      success\n      id\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  query GetVaultAncestors($folderId: ID!) {\n    getVaultAncestors(folderId: $folderId) {\n      ...VaultFolderFields\n    }\n  }\n"): (typeof documents)["\n  query GetVaultAncestors($folderId: ID!) {\n    getVaultAncestors(folderId: $folderId) {\n      ...VaultFolderFields\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  query GetVaultChildren(\n    $projectId: ID!\n    $parentFolderId: ID\n    $cursor: ID\n    $limit: Int\n    $sortBy: VaultSortField\n    $sortDir: SortDirection\n  ) {\n    getVaultChildren(\n      projectId: $projectId\n      parentFolderId: $parentFolderId\n      cursor: $cursor\n      limit: $limit\n      sortBy: $sortBy\n      sortDir: $sortDir\n    ) {\n      folders {\n        ...VaultFolderFields\n      }\n      files {\n        ...VaultFileFields\n      }\n      totalFileCount\n      hasNextPage\n      nextCursor\n    }\n  }\n"): (typeof documents)["\n  query GetVaultChildren(\n    $projectId: ID!\n    $parentFolderId: ID\n    $cursor: ID\n    $limit: Int\n    $sortBy: VaultSortField\n    $sortDir: SortDirection\n  ) {\n    getVaultChildren(\n      projectId: $projectId\n      parentFolderId: $parentFolderId\n      cursor: $cursor\n      limit: $limit\n      sortBy: $sortBy\n      sortDir: $sortDir\n    ) {\n      folders {\n        ...VaultFolderFields\n      }\n      files {\n        ...VaultFileFields\n      }\n      totalFileCount\n      hasNextPage\n      nextCursor\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  query GetVaultDownloadUrl($fileId: ID!) {\n    getVaultDownloadUrl(fileId: $fileId) {\n      url\n      expiresAt\n    }\n  }\n"): (typeof documents)["\n  query GetVaultDownloadUrl($fileId: ID!) {\n    getVaultDownloadUrl(fileId: $fileId) {\n      url\n      expiresAt\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  query GetVaultNode($id: ID!, $type: VaultNodeType!) {\n    getVaultNode(id: $id, type: $type) {\n      ... on VaultFolder {\n        ...VaultFolderFields\n      }\n      ... on VaultFile {\n        ...VaultFileFields\n      }\n    }\n  }\n"): (typeof documents)["\n  query GetVaultNode($id: ID!, $type: VaultNodeType!) {\n    getVaultNode(id: $id, type: $type) {\n      ... on VaultFolder {\n        ...VaultFolderFields\n      }\n      ... on VaultFile {\n        ...VaultFileFields\n      }\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  query GetVaultSidebar($projectId: ID!) {\n    getVaultSidebar(projectId: $projectId) {\n      pinnedFolders {\n        ...VaultFolderFields\n      }\n      systemFolders {\n        ...VaultFolderFields\n      }\n    }\n  }\n"): (typeof documents)["\n  query GetVaultSidebar($projectId: ID!) {\n    getVaultSidebar(projectId: $projectId) {\n      pinnedFolders {\n        ...VaultFolderFields\n      }\n      systemFolders {\n        ...VaultFolderFields\n      }\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  query GetVaultUsage($projectId: ID!) {\n    getVaultUsage(projectId: $projectId) {\n      projectUsedBytes\n      projectLimitBytes\n      workspaceUsedBytes\n      workspaceLimitBytes\n      projectFileCount\n      projectFileCountLimit\n    }\n  }\n"): (typeof documents)["\n  query GetVaultUsage($projectId: ID!) {\n    getVaultUsage(projectId: $projectId) {\n      projectUsedBytes\n      projectLimitBytes\n      workspaceUsedBytes\n      workspaceLimitBytes\n      projectFileCount\n      projectFileCountLimit\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation MoveVaultFile($input: MoveVaultFileInput!) {\n    moveVaultFile(input: $input) {\n      file {\n        ...VaultFileFields\n      }\n    }\n  }\n"): (typeof documents)["\n  mutation MoveVaultFile($input: MoveVaultFileInput!) {\n    moveVaultFile(input: $input) {\n      file {\n        ...VaultFileFields\n      }\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation MoveVaultFolder($input: MoveVaultFolderInput!) {\n    moveVaultFolder(input: $input) {\n      folder {\n        ...VaultFolderFields\n      }\n    }\n  }\n"): (typeof documents)["\n  mutation MoveVaultFolder($input: MoveVaultFolderInput!) {\n    moveVaultFolder(input: $input) {\n      folder {\n        ...VaultFolderFields\n      }\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation PinVaultFolder($input: PinVaultFolderInput!) {\n    pinVaultFolder(input: $input) {\n      folder {\n        ...VaultFolderFields\n      }\n    }\n  }\n"): (typeof documents)["\n  mutation PinVaultFolder($input: PinVaultFolderInput!) {\n    pinVaultFolder(input: $input) {\n      folder {\n        ...VaultFolderFields\n      }\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation RenameVaultFile($input: RenameVaultFileInput!) {\n    renameVaultFile(input: $input) {\n      file {\n        ...VaultFileFields\n      }\n    }\n  }\n"): (typeof documents)["\n  mutation RenameVaultFile($input: RenameVaultFileInput!) {\n    renameVaultFile(input: $input) {\n      file {\n        ...VaultFileFields\n      }\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation RenameVaultFolder($input: RenameVaultFolderInput!) {\n    renameVaultFolder(input: $input) {\n      folder {\n        ...VaultFolderFields\n      }\n    }\n  }\n"): (typeof documents)["\n  mutation RenameVaultFolder($input: RenameVaultFolderInput!) {\n    renameVaultFolder(input: $input) {\n      folder {\n        ...VaultFolderFields\n      }\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation UnpinVaultFolder($input: UnpinVaultFolderInput!) {\n    unpinVaultFolder(input: $input) {\n      success\n      id\n    }\n  }\n"): (typeof documents)["\n  mutation UnpinVaultFolder($input: UnpinVaultFolderInput!) {\n    unpinVaultFolder(input: $input) {\n      success\n      id\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation RequestVaultUpload($input: RequestVaultUploadInput!) {\n    requestVaultUpload(input: $input) {\n      fileId\n      presignedUrl\n      expiresAt\n    }\n  }\n"): (typeof documents)["\n  mutation RequestVaultUpload($input: RequestVaultUploadInput!) {\n    requestVaultUpload(input: $input) {\n      fileId\n      presignedUrl\n      expiresAt\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation ConfirmVaultUpload($input: ConfirmVaultUploadInput!) {\n    confirmVaultUpload(input: $input) {\n      file {\n        id\n        name\n        mimeType\n        sizeBytes\n        status\n        folderId\n        projectId\n        workspaceId\n        source\n        sourceId\n        uploader {\n          id\n          fullName\n          avatarUrl\n        }\n        confirmedAt\n        createdAt\n        updatedAt\n      }\n    }\n  }\n"): (typeof documents)["\n  mutation ConfirmVaultUpload($input: ConfirmVaultUploadInput!) {\n    confirmVaultUpload(input: $input) {\n      file {\n        id\n        name\n        mimeType\n        sizeBytes\n        status\n        folderId\n        projectId\n        workspaceId\n        source\n        sourceId\n        uploader {\n          id\n          fullName\n          avatarUrl\n        }\n        confirmedAt\n        createdAt\n        updatedAt\n      }\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

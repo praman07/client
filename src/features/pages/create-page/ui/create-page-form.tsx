@@ -24,7 +24,8 @@ export interface CreatePageFormProps {
 
 /** Row component to display field validation errors */
 function FieldError({ field }: { field: any }) {
-  if (!field.state.meta.isTouched || !field.state.meta.errors.length) return null
+  if (!field.state.meta.isTouched || !field.state.meta.errors.length)
+    return null
   return (
     <p className="text-sm font-medium text-destructive">
       {field.state.meta.errors.join(', ')}
@@ -170,7 +171,12 @@ export function CreatePageForm({
       {/* Submit row */}
       <div className="flex items-center justify-end gap-2 pt-2">
         {onCancel && (
-          <Button type="button" variant="ghost" onClick={onCancel} disabled={isPending}>
+          <Button
+            type="button"
+            variant="ghost"
+            onClick={onCancel}
+            disabled={isPending}
+          >
             Cancel
           </Button>
         )}

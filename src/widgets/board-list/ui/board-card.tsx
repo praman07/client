@@ -59,7 +59,11 @@ export function BoardCard({ board, viewMode, isCreator }: BoardCardProps) {
 
   return (
     <>
-      <BoardCardContextMenu board={board} handlers={handlers} isCreator={isCreator}>
+      <BoardCardContextMenu
+        board={board}
+        handlers={handlers}
+        isCreator={isCreator}
+      >
         <ViewComponent
           board={board}
           workspaceSlug={workspaceSlug}

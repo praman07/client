@@ -19,7 +19,7 @@ interface WorkspaceMember {
   id: string
   user: {
     id: string
-    fullName?: string | null   // matches useWorkspaceMembers GQL type
+    fullName?: string | null // matches useWorkspaceMembers GQL type
     email: string
     avatarUrl?: string | null
   }
@@ -146,9 +146,7 @@ export function AddPageCollaboratorsForm({
                           {member.user.email}
                         </span>
                       </div>
-                      {isSelected && (
-                        <Check className="h-5 w-5 text-primary" />
-                      )}
+                      {isSelected && <Check className="h-5 w-5 text-primary" />}
                     </button>
                   )
                 })}

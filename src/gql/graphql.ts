@@ -173,6 +173,15 @@ export type CloseThreadResult = {
   threadId: Scalars['ID']['output'];
 };
 
+export type ConfirmUploadResult = {
+  __typename?: 'ConfirmUploadResult';
+  file: VaultFile;
+};
+
+export type ConfirmVaultUploadInput = {
+  fileId: Scalars['ID']['input'];
+};
+
 export type Conversation = {
   __typename?: 'Conversation';
   createdAt: Scalars['DateTime']['output'];
@@ -247,6 +256,11 @@ export type CreateDmInput = {
   workspaceId: Scalars['ID']['input'];
 };
 
+export type CreateFolderResult = {
+  __typename?: 'CreateFolderResult';
+  folder: VaultFolder;
+};
+
 export type CreateGroupInput = {
   memberUserIds: Array<Scalars['ID']['input']>;
   name: Scalars['String']['input'];
@@ -283,6 +297,13 @@ export type CreateThreadInput = {
   messageId: Scalars['ID']['input'];
   projectId: Scalars['ID']['input'];
   workspaceId: Scalars['ID']['input'];
+};
+
+export type CreateVaultFolderInput = {
+  name: Scalars['String']['input'];
+  /** null = create at root level (Home) */
+  parentFolderId?: InputMaybe<Scalars['ID']['input']>;
+  projectId: Scalars['ID']['input'];
 };
 
 export type CursorPosition = {
@@ -326,10 +347,26 @@ export type DeletePageResult = {
   success: Scalars['Boolean']['output'];
 };
 
+/** Generic success/id response for delete operations */
+export type DeleteResult = {
+  __typename?: 'DeleteResult';
+  id: Scalars['ID']['output'];
+  success: Scalars['Boolean']['output'];
+};
+
 export type DeleteThreadResult = {
   __typename?: 'DeleteThreadResult';
   success: Scalars['Boolean']['output'];
   threadId: Scalars['ID']['output'];
+};
+
+export type DeleteVaultFileInput = {
+  fileId: Scalars['ID']['input'];
+};
+
+export type DeleteVaultFolderInput = {
+  cascade?: InputMaybe<Scalars['Boolean']['input']>;
+  folderId: Scalars['ID']['input'];
 };
 
 export type DmConversation = {
@@ -432,6 +469,28 @@ export type MessagesDelta = {
   messages: Array<ChatMessage>;
 };
 
+export type MoveFileResult = {
+  __typename?: 'MoveFileResult';
+  file: VaultFile;
+};
+
+export type MoveFolderResult = {
+  __typename?: 'MoveFolderResult';
+  folder: VaultFolder;
+};
+
+export type MoveVaultFileInput = {
+  fileId: Scalars['ID']['input'];
+  /** null = move to root (Home) */
+  targetFolderId?: InputMaybe<Scalars['ID']['input']>;
+};
+
+export type MoveVaultFolderInput = {
+  folderId: Scalars['ID']['input'];
+  /** null = move to root (Home) */
+  targetParentFolderId?: InputMaybe<Scalars['ID']['input']>;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   _health?: Maybe<Scalars['String']['output']>;
@@ -449,6 +508,11 @@ export type Mutation = {
   checkProjectSlugAvailability: AvailabilityResponse;
   checkSlugAvailability: AvailabilityResponse;
   closeThread: CloseThreadResult;
+  /**
+   * Step 2 of 2 for uploading a file to Vault.
+   * Verifies the S3 object (size + MIME), sets the file to ACTIVE, and updates storage usage.
+   */
+  confirmVaultUpload: ConfirmUploadResult;
   createBoard: BoardPayload;
   createChannel: Conversation;
   createDm: Conversation;
@@ -461,6 +525,7 @@ export type Mutation = {
   createPage: CreatePageResult;
   createProject: Project;
   createThread: Conversation;
+  createVaultFolder: CreateFolderResult;
   createWorkspace: Workspace;
   deleteBoard: DeleteBoardResult;
   deleteChannel: DeleteChannelResult;
@@ -472,6 +537,14 @@ export type Mutation = {
    */
   deletePage: DeletePageResult;
   deleteThread: DeleteThreadResult;
+  /** Soft-deletes a vault file and releases its storage quota. */
+  deleteVaultFile: DeleteResult;
+  /**
+   * Soft-deletes a folder.
+   * cascade=false (default): returns error if folder is non-empty.
+   * cascade=true: recursively soft-deletes all child folders and files.
+   */
+  deleteVaultFolder: DeleteResult;
   inviteToWorkspace: InviteResponse;
   leaveGroup: LeaveGroupResult;
   lockBoard: Whiteboard;
@@ -485,7 +558,10 @@ export type Mutation = {
   markAllNotificationsRead: Scalars['Boolean']['output'];
   /** Mark specific notifications as read. */
   markNotificationRead: Scalars['Boolean']['output'];
+  moveVaultFile: MoveFileResult;
+  moveVaultFolder: MoveFolderResult;
   muteConversation: MuteConversationResult;
+  pinVaultFolder: PinFolderResult;
   removeBoardCollaborator: RemoveBoardCollaboratorResult;
   removeChannelMember: RemoveChannelMemberResult;
   removeGroupMember: RemoveGroupMemberResult;
@@ -496,12 +572,21 @@ export type Mutation = {
   renameChannel: Conversation;
   renameGroup: RenameGroupResult;
   renamePage: RenamePageResult;
+  /** Renames a file. S3 key is unchanged — only the display name is updated. */
+  renameVaultFile: RenameFileResult;
+  renameVaultFolder: RenameFolderResult;
   reopenThread: ReopenThreadResult;
   /**
    * Moves a page to a new position (and optionally a new parent).
    * Validate no circular nesting before calling (circular guard runs server-side too).
    */
   reorderPage: ReorderPageResult;
+  /**
+   * Step 1 of 2 for uploading a file to Vault.
+   * Checks quota, creates a PENDING VaultFile row, returns a presigned PUT URL.
+   * The client must PUT the file directly to S3 using this URL, then call confirmVaultUpload.
+   */
+  requestVaultUpload: RequestUploadResult;
   subscribeThread: SubscribeThreadResult;
   syncUser: User;
   unarchiveBoard: Whiteboard;
@@ -514,6 +599,7 @@ export type Mutation = {
   unlockBoard: Whiteboard;
   /** Lock owner or workspace ADMIN can unlock. */
   unlockPage: UnlockPageResult;
+  unpinVaultFolder: DeleteResult;
   unsubscribeThread: UnsubscribeThreadResult;
   updateBoardDescription: Whiteboard;
   updateChannelDescription: UpdateChannelDescriptionResult;
@@ -589,6 +675,11 @@ export type MutationCloseThreadArgs = {
 };
 
 
+export type MutationConfirmVaultUploadArgs = {
+  input: ConfirmVaultUploadInput;
+};
+
+
 export type MutationCreateBoardArgs = {
   input: CreateBoardInput;
 };
@@ -622,6 +713,11 @@ export type MutationCreateProjectArgs = {
 
 export type MutationCreateThreadArgs = {
   input: CreateThreadInput;
+};
+
+
+export type MutationCreateVaultFolderArgs = {
+  input: CreateVaultFolderInput;
 };
 
 
@@ -665,6 +761,16 @@ export type MutationDeleteThreadArgs = {
 };
 
 
+export type MutationDeleteVaultFileArgs = {
+  input: DeleteVaultFileInput;
+};
+
+
+export type MutationDeleteVaultFolderArgs = {
+  input: DeleteVaultFolderInput;
+};
+
+
 export type MutationInviteToWorkspaceArgs = {
   input: InviteToWorkspaceInput;
 };
@@ -691,9 +797,24 @@ export type MutationMarkNotificationReadArgs = {
 };
 
 
+export type MutationMoveVaultFileArgs = {
+  input: MoveVaultFileInput;
+};
+
+
+export type MutationMoveVaultFolderArgs = {
+  input: MoveVaultFolderInput;
+};
+
+
 export type MutationMuteConversationArgs = {
   conversationId: Scalars['ID']['input'];
   isMuted: Scalars['Boolean']['input'];
+};
+
+
+export type MutationPinVaultFolderArgs = {
+  input: PinVaultFolderInput;
 };
 
 
@@ -751,6 +872,16 @@ export type MutationRenamePageArgs = {
 };
 
 
+export type MutationRenameVaultFileArgs = {
+  input: RenameVaultFileInput;
+};
+
+
+export type MutationRenameVaultFolderArgs = {
+  input: RenameVaultFolderInput;
+};
+
+
 export type MutationReopenThreadArgs = {
   threadId: Scalars['ID']['input'];
   workspaceId: Scalars['ID']['input'];
@@ -759,6 +890,11 @@ export type MutationReopenThreadArgs = {
 
 export type MutationReorderPageArgs = {
   input: ReorderPageInput;
+};
+
+
+export type MutationRequestVaultUploadArgs = {
+  input: RequestVaultUploadInput;
 };
 
 
@@ -799,6 +935,11 @@ export type MutationUnlockBoardArgs = {
 
 export type MutationUnlockPageArgs = {
   input: UnlockPageInput;
+};
+
+
+export type MutationUnpinVaultFolderArgs = {
+  input: UnpinVaultFolderInput;
 };
 
 
@@ -949,6 +1090,16 @@ export type PageSnapshot = {
   snapshotTimestamp?: Maybe<Scalars['DateTime']['output']>;
 };
 
+export type PinFolderResult = {
+  __typename?: 'PinFolderResult';
+  folder: VaultFolder;
+};
+
+export type PinVaultFolderInput = {
+  folderId: Scalars['ID']['input'];
+  projectId: Scalars['ID']['input'];
+};
+
 export enum PresenceStatus {
   Away = 'AWAY',
   Offline = 'OFFLINE',
@@ -1019,6 +1170,38 @@ export type Query = {
   getUnreadCounts: UnreadCountsResponse;
   getUserConversations: ConversationConnection;
   getUsersByIds: Array<UserBasic>;
+  /**
+   * Returns the ancestor folder chain for a given folder, ordered root → current.
+   * The last element is the folder itself, the first is the top-level ancestor.
+   * Returns [] when the folder has no parent (it is already at root level).
+   * Used exclusively by the vault breadcrumb (server fallback path for direct URL visits).
+   */
+  getVaultAncestors: Array<VaultFolder>;
+  /**
+   * Returns the immediate children (subfolders + files) of a folder.
+   * parentFolderId = null → Home view (root-level items with no parent).
+   */
+  getVaultChildren: VaultChildrenResult;
+  /**
+   * Returns a short-lived presigned GET URL for downloading or previewing a vault file.
+   * URL is valid for 5 minutes. Never cache — always request fresh.
+   */
+  getVaultDownloadUrl: VaultDownloadUrl;
+  /**
+   * Returns full metadata for a single vault folder or file.
+   * Used for the detail/info side panel. Not used for listing.
+   */
+  getVaultNode: VaultNode;
+  /**
+   * Returns sidebar data: user-pinned folders + system folders (From Chat, From Pages, etc.).
+   * Fetched once on Vault mount. Never re-called during folder navigation.
+   */
+  getVaultSidebar: VaultSidebar;
+  /**
+   * Returns current storage usage for the project and its workspace.
+   * Poll every 60 seconds + invalidate after uploads/deletions.
+   */
+  getVaultUsage: VaultUsage;
   getWorkspaceInviteInfo: WorkspaceInviteInfo;
   health: Scalars['String']['output'];
   history: HistoryPayload;
@@ -1164,6 +1347,42 @@ export type QueryGetUsersByIdsArgs = {
 };
 
 
+export type QueryGetVaultAncestorsArgs = {
+  folderId: Scalars['ID']['input'];
+};
+
+
+export type QueryGetVaultChildrenArgs = {
+  cursor?: InputMaybe<Scalars['ID']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  parentFolderId?: InputMaybe<Scalars['ID']['input']>;
+  projectId: Scalars['ID']['input'];
+  sortBy?: InputMaybe<VaultSortField>;
+  sortDir?: InputMaybe<SortDirection>;
+};
+
+
+export type QueryGetVaultDownloadUrlArgs = {
+  fileId: Scalars['ID']['input'];
+};
+
+
+export type QueryGetVaultNodeArgs = {
+  id: Scalars['ID']['input'];
+  type: VaultNodeType;
+};
+
+
+export type QueryGetVaultSidebarArgs = {
+  projectId: Scalars['ID']['input'];
+};
+
+
+export type QueryGetVaultUsageArgs = {
+  projectId: Scalars['ID']['input'];
+};
+
+
 export type QueryGetWorkspaceInviteInfoArgs = {
   token: Scalars['String']['input'];
 };
@@ -1297,6 +1516,16 @@ export type RenameChannelInput = {
   name: Scalars['String']['input'];
 };
 
+export type RenameFileResult = {
+  __typename?: 'RenameFileResult';
+  file: VaultFile;
+};
+
+export type RenameFolderResult = {
+  __typename?: 'RenameFolderResult';
+  folder: VaultFolder;
+};
+
 export type RenameGroupResult = {
   __typename?: 'RenameGroupResult';
   groupId: Scalars['ID']['output'];
@@ -1312,6 +1541,16 @@ export type RenamePageInput = {
 export type RenamePageResult = {
   __typename?: 'RenamePageResult';
   page: Page;
+};
+
+export type RenameVaultFileInput = {
+  fileId: Scalars['ID']['input'];
+  name: Scalars['String']['input'];
+};
+
+export type RenameVaultFolderInput = {
+  folderId: Scalars['ID']['input'];
+  name: Scalars['String']['input'];
 };
 
 export type ReopenThreadResult = {
@@ -1331,6 +1570,28 @@ export type ReorderPageResult = {
   __typename?: 'ReorderPageResult';
   page: Page;
 };
+
+export type RequestUploadResult = {
+  __typename?: 'RequestUploadResult';
+  expiresAt: Scalars['DateTime']['output'];
+  fileId: Scalars['ID']['output'];
+  presignedUrl: Scalars['String']['output'];
+};
+
+export type RequestVaultUploadInput = {
+  /** null = upload to Home (root level) */
+  folderId?: InputMaybe<Scalars['ID']['input']>;
+  mimeType: Scalars['String']['input'];
+  name: Scalars['String']['input'];
+  projectId: Scalars['ID']['input'];
+  sizeBytes: Scalars['Int']['input'];
+  workspaceId: Scalars['ID']['input'];
+};
+
+export enum SortDirection {
+  Asc = 'ASC',
+  Desc = 'DESC'
+}
 
 export type SubscribeThreadResult = {
   __typename?: 'SubscribeThreadResult';
@@ -1369,6 +1630,10 @@ export type UnlockPageInput = {
 export type UnlockPageResult = {
   __typename?: 'UnlockPageResult';
   page: Page;
+};
+
+export type UnpinVaultFolderInput = {
+  folderId: Scalars['ID']['input'];
 };
 
 export type UnreadCountsResponse = {
@@ -1421,6 +1686,105 @@ export type UserPresence = {
   lastActiveAt?: Maybe<Scalars['DateTime']['output']>;
   status: PresenceStatus;
   userId: Scalars['ID']['output'];
+};
+
+export type VaultChildrenResult = {
+  __typename?: 'VaultChildrenResult';
+  files: Array<VaultFile>;
+  folders: Array<VaultFolder>;
+  hasNextPage: Scalars['Boolean']['output'];
+  nextCursor?: Maybe<Scalars['ID']['output']>;
+  totalFileCount: Scalars['Int']['output'];
+};
+
+export type VaultDownloadUrl = {
+  __typename?: 'VaultDownloadUrl';
+  expiresAt: Scalars['DateTime']['output'];
+  url: Scalars['String']['output'];
+};
+
+export type VaultFile = {
+  __typename?: 'VaultFile';
+  confirmedAt?: Maybe<Scalars['DateTime']['output']>;
+  createdAt: Scalars['DateTime']['output'];
+  deletedAt?: Maybe<Scalars['DateTime']['output']>;
+  folderId?: Maybe<Scalars['ID']['output']>;
+  id: Scalars['ID']['output'];
+  mimeType: Scalars['String']['output'];
+  name: Scalars['String']['output'];
+  projectId: Scalars['ID']['output'];
+  s3Key: Scalars['String']['output'];
+  /** File size in bytes (Float to safely represent large files >2GB) */
+  sizeBytes: Scalars['Float']['output'];
+  source: VaultFileSource;
+  sourceId?: Maybe<Scalars['ID']['output']>;
+  status: Scalars['String']['output'];
+  updatedAt: Scalars['DateTime']['output'];
+  uploader?: Maybe<VaultUploader>;
+  uploaderUserId?: Maybe<Scalars['ID']['output']>;
+  workspaceId: Scalars['ID']['output'];
+};
+
+export enum VaultFileSource {
+  Chat = 'CHAT',
+  Page = 'PAGE',
+  Task = 'TASK',
+  Vault = 'VAULT',
+  Whiteboard = 'WHITEBOARD'
+}
+
+export type VaultFolder = {
+  __typename?: 'VaultFolder';
+  createdAt: Scalars['DateTime']['output'];
+  deletedAt?: Maybe<Scalars['DateTime']['output']>;
+  id: Scalars['ID']['output'];
+  isSystem: Scalars['Boolean']['output'];
+  name: Scalars['String']['output'];
+  parentFolderId?: Maybe<Scalars['ID']['output']>;
+  projectId: Scalars['ID']['output'];
+  updatedAt: Scalars['DateTime']['output'];
+};
+
+export type VaultNode = VaultFile | VaultFolder;
+
+export enum VaultNodeType {
+  File = 'FILE',
+  Folder = 'FOLDER'
+}
+
+export type VaultSidebar = {
+  __typename?: 'VaultSidebar';
+  pinnedFolders: Array<VaultFolder>;
+  systemFolders: Array<VaultFolder>;
+};
+
+export enum VaultSortField {
+  CreatedAt = 'CREATED_AT',
+  Name = 'NAME',
+  Size = 'SIZE',
+  Type = 'TYPE'
+}
+
+export type VaultUploader = {
+  __typename?: 'VaultUploader';
+  avatarUrl?: Maybe<Scalars['String']['output']>;
+  fullName?: Maybe<Scalars['String']['output']>;
+  id: Scalars['ID']['output'];
+};
+
+export type VaultUsage = {
+  __typename?: 'VaultUsage';
+  percentUsed: Scalars['Float']['output'];
+  projectFileCount: Scalars['Int']['output'];
+  projectFileCountLimit: Scalars['Int']['output'];
+  projectLimitBytes: Scalars['Float']['output'];
+  projectReservedBytes: Scalars['Float']['output'];
+  projectUsedBytes: Scalars['Float']['output'];
+  workspaceFileCount: Scalars['Int']['output'];
+  workspaceFileCountLimit: Scalars['Int']['output'];
+  workspaceLimitBytes: Scalars['Float']['output'];
+  workspaceReservedBytes: Scalars['Float']['output'];
+  workspaceUsedBytes: Scalars['Float']['output'];
 };
 
 export type Whiteboard = {
@@ -1608,6 +1972,10 @@ export type GetMeQuery = { __typename?: 'Query', me?: (
   ) | null };
 
 export type UserFragment = { __typename?: 'User', id: string, email: string, fullName?: string | null, avatarUrl?: string | null } & { ' $fragmentName'?: 'UserFragment' };
+
+export type VaultFileFieldsFragment = { __typename?: 'VaultFile', id: string, projectId: string, workspaceId: string, folderId?: string | null, uploaderUserId?: string | null, name: string, mimeType: string, sizeBytes: number, s3Key: string, source: VaultFileSource, sourceId?: string | null, status: string, confirmedAt?: any | null, createdAt: any, updatedAt: any, uploader?: { __typename?: 'VaultUploader', id: string, fullName?: string | null, avatarUrl?: string | null } | null } & { ' $fragmentName'?: 'VaultFileFieldsFragment' };
+
+export type VaultFolderFieldsFragment = { __typename?: 'VaultFolder', id: string, projectId: string, parentFolderId?: string | null, name: string, isSystem: boolean, createdAt: any, updatedAt: any } & { ' $fragmentName'?: 'VaultFolderFieldsFragment' };
 
 export type BoardFieldsFragment = { __typename?: 'Whiteboard', id: string, workspaceId: string, projectId?: string | null, title: string, description?: string | null, elementCount: number, fileSizeBytes: string, isArchived: boolean, isLocked: boolean, createdBy: string, createdAt: any, updatedAt: any } & { ' $fragmentName'?: 'BoardFieldsFragment' };
 
@@ -1863,6 +2231,173 @@ export type UnlockPageMutationVariables = Exact<{
 
 export type UnlockPageMutation = { __typename?: 'Mutation', unlockPage: { __typename?: 'UnlockPageResult', page: { __typename?: 'Page', id: string, isLocked: boolean, updatedAt: any } } };
 
+export type CreateVaultFolderMutationVariables = Exact<{
+  input: CreateVaultFolderInput;
+}>;
+
+
+export type CreateVaultFolderMutation = { __typename?: 'Mutation', createVaultFolder: { __typename?: 'CreateFolderResult', folder: (
+      { __typename?: 'VaultFolder' }
+      & { ' $fragmentRefs'?: { 'VaultFolderFieldsFragment': VaultFolderFieldsFragment } }
+    ) } };
+
+export type DeleteVaultFileMutationVariables = Exact<{
+  input: DeleteVaultFileInput;
+}>;
+
+
+export type DeleteVaultFileMutation = { __typename?: 'Mutation', deleteVaultFile: { __typename?: 'DeleteResult', success: boolean, id: string } };
+
+export type DeleteVaultFolderMutationVariables = Exact<{
+  input: DeleteVaultFolderInput;
+}>;
+
+
+export type DeleteVaultFolderMutation = { __typename?: 'Mutation', deleteVaultFolder: { __typename?: 'DeleteResult', success: boolean, id: string } };
+
+export type GetVaultAncestorsQueryVariables = Exact<{
+  folderId: Scalars['ID']['input'];
+}>;
+
+
+export type GetVaultAncestorsQuery = { __typename?: 'Query', getVaultAncestors: Array<(
+    { __typename?: 'VaultFolder' }
+    & { ' $fragmentRefs'?: { 'VaultFolderFieldsFragment': VaultFolderFieldsFragment } }
+  )> };
+
+export type GetVaultChildrenQueryVariables = Exact<{
+  projectId: Scalars['ID']['input'];
+  parentFolderId?: InputMaybe<Scalars['ID']['input']>;
+  cursor?: InputMaybe<Scalars['ID']['input']>;
+  limit?: InputMaybe<Scalars['Int']['input']>;
+  sortBy?: InputMaybe<VaultSortField>;
+  sortDir?: InputMaybe<SortDirection>;
+}>;
+
+
+export type GetVaultChildrenQuery = { __typename?: 'Query', getVaultChildren: { __typename?: 'VaultChildrenResult', totalFileCount: number, hasNextPage: boolean, nextCursor?: string | null, folders: Array<(
+      { __typename?: 'VaultFolder' }
+      & { ' $fragmentRefs'?: { 'VaultFolderFieldsFragment': VaultFolderFieldsFragment } }
+    )>, files: Array<(
+      { __typename?: 'VaultFile' }
+      & { ' $fragmentRefs'?: { 'VaultFileFieldsFragment': VaultFileFieldsFragment } }
+    )> } };
+
+export type GetVaultDownloadUrlQueryVariables = Exact<{
+  fileId: Scalars['ID']['input'];
+}>;
+
+
+export type GetVaultDownloadUrlQuery = { __typename?: 'Query', getVaultDownloadUrl: { __typename?: 'VaultDownloadUrl', url: string, expiresAt: any } };
+
+export type GetVaultNodeQueryVariables = Exact<{
+  id: Scalars['ID']['input'];
+  type: VaultNodeType;
+}>;
+
+
+export type GetVaultNodeQuery = { __typename?: 'Query', getVaultNode:
+    | (
+      { __typename?: 'VaultFile' }
+      & { ' $fragmentRefs'?: { 'VaultFileFieldsFragment': VaultFileFieldsFragment } }
+    )
+    | (
+      { __typename?: 'VaultFolder' }
+      & { ' $fragmentRefs'?: { 'VaultFolderFieldsFragment': VaultFolderFieldsFragment } }
+    )
+   };
+
+export type GetVaultSidebarQueryVariables = Exact<{
+  projectId: Scalars['ID']['input'];
+}>;
+
+
+export type GetVaultSidebarQuery = { __typename?: 'Query', getVaultSidebar: { __typename?: 'VaultSidebar', pinnedFolders: Array<(
+      { __typename?: 'VaultFolder' }
+      & { ' $fragmentRefs'?: { 'VaultFolderFieldsFragment': VaultFolderFieldsFragment } }
+    )>, systemFolders: Array<(
+      { __typename?: 'VaultFolder' }
+      & { ' $fragmentRefs'?: { 'VaultFolderFieldsFragment': VaultFolderFieldsFragment } }
+    )> } };
+
+export type GetVaultUsageQueryVariables = Exact<{
+  projectId: Scalars['ID']['input'];
+}>;
+
+
+export type GetVaultUsageQuery = { __typename?: 'Query', getVaultUsage: { __typename?: 'VaultUsage', projectUsedBytes: number, projectLimitBytes: number, workspaceUsedBytes: number, workspaceLimitBytes: number, projectFileCount: number, projectFileCountLimit: number } };
+
+export type MoveVaultFileMutationVariables = Exact<{
+  input: MoveVaultFileInput;
+}>;
+
+
+export type MoveVaultFileMutation = { __typename?: 'Mutation', moveVaultFile: { __typename?: 'MoveFileResult', file: (
+      { __typename?: 'VaultFile' }
+      & { ' $fragmentRefs'?: { 'VaultFileFieldsFragment': VaultFileFieldsFragment } }
+    ) } };
+
+export type MoveVaultFolderMutationVariables = Exact<{
+  input: MoveVaultFolderInput;
+}>;
+
+
+export type MoveVaultFolderMutation = { __typename?: 'Mutation', moveVaultFolder: { __typename?: 'MoveFolderResult', folder: (
+      { __typename?: 'VaultFolder' }
+      & { ' $fragmentRefs'?: { 'VaultFolderFieldsFragment': VaultFolderFieldsFragment } }
+    ) } };
+
+export type PinVaultFolderMutationVariables = Exact<{
+  input: PinVaultFolderInput;
+}>;
+
+
+export type PinVaultFolderMutation = { __typename?: 'Mutation', pinVaultFolder: { __typename?: 'PinFolderResult', folder: (
+      { __typename?: 'VaultFolder' }
+      & { ' $fragmentRefs'?: { 'VaultFolderFieldsFragment': VaultFolderFieldsFragment } }
+    ) } };
+
+export type RenameVaultFileMutationVariables = Exact<{
+  input: RenameVaultFileInput;
+}>;
+
+
+export type RenameVaultFileMutation = { __typename?: 'Mutation', renameVaultFile: { __typename?: 'RenameFileResult', file: (
+      { __typename?: 'VaultFile' }
+      & { ' $fragmentRefs'?: { 'VaultFileFieldsFragment': VaultFileFieldsFragment } }
+    ) } };
+
+export type RenameVaultFolderMutationVariables = Exact<{
+  input: RenameVaultFolderInput;
+}>;
+
+
+export type RenameVaultFolderMutation = { __typename?: 'Mutation', renameVaultFolder: { __typename?: 'RenameFolderResult', folder: (
+      { __typename?: 'VaultFolder' }
+      & { ' $fragmentRefs'?: { 'VaultFolderFieldsFragment': VaultFolderFieldsFragment } }
+    ) } };
+
+export type UnpinVaultFolderMutationVariables = Exact<{
+  input: UnpinVaultFolderInput;
+}>;
+
+
+export type UnpinVaultFolderMutation = { __typename?: 'Mutation', unpinVaultFolder: { __typename?: 'DeleteResult', success: boolean, id: string } };
+
+export type RequestVaultUploadMutationVariables = Exact<{
+  input: RequestVaultUploadInput;
+}>;
+
+
+export type RequestVaultUploadMutation = { __typename?: 'Mutation', requestVaultUpload: { __typename?: 'RequestUploadResult', fileId: string, presignedUrl: string, expiresAt: any } };
+
+export type ConfirmVaultUploadMutationVariables = Exact<{
+  input: ConfirmVaultUploadInput;
+}>;
+
+
+export type ConfirmVaultUploadMutation = { __typename?: 'Mutation', confirmVaultUpload: { __typename?: 'ConfirmUploadResult', file: { __typename?: 'VaultFile', id: string, name: string, mimeType: string, sizeBytes: number, status: string, folderId?: string | null, projectId: string, workspaceId: string, source: VaultFileSource, sourceId?: string | null, confirmedAt?: any | null, createdAt: any, updatedAt: any, uploader?: { __typename?: 'VaultUploader', id: string, fullName?: string | null, avatarUrl?: string | null } | null } } };
+
 export type GetWorkspaceMembersQueryVariables = Exact<{
   workspaceId: Scalars['ID']['input'];
 }>;
@@ -2008,6 +2543,8 @@ export const PageWithChildrenFragmentDoc = {"kind":"Document","definitions":[{"k
 export const ProjectFieldsFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"ProjectFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Project"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"key"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"workspaceId"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}},{"kind":"Field","name":{"kind":"Name","value":"members"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"userId"}},{"kind":"Field","name":{"kind":"Name","value":"role"}},{"kind":"Field","name":{"kind":"Name","value":"joinedAt"}}]}}]}}]} as unknown as DocumentNode<ProjectFieldsFragment, unknown>;
 export const SessionUserFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"SessionUser"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"User"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"fullName"}},{"kind":"Field","name":{"kind":"Name","value":"avatarUrl"}}]}}]} as unknown as DocumentNode<SessionUserFragment, unknown>;
 export const UserFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"User"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"User"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"fullName"}},{"kind":"Field","name":{"kind":"Name","value":"avatarUrl"}}]}}]} as unknown as DocumentNode<UserFragment, unknown>;
+export const VaultFileFieldsFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"VaultFileFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"VaultFile"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"projectId"}},{"kind":"Field","name":{"kind":"Name","value":"workspaceId"}},{"kind":"Field","name":{"kind":"Name","value":"folderId"}},{"kind":"Field","name":{"kind":"Name","value":"uploaderUserId"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"mimeType"}},{"kind":"Field","name":{"kind":"Name","value":"sizeBytes"}},{"kind":"Field","name":{"kind":"Name","value":"s3Key"}},{"kind":"Field","name":{"kind":"Name","value":"source"}},{"kind":"Field","name":{"kind":"Name","value":"sourceId"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"uploader"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"fullName"}},{"kind":"Field","name":{"kind":"Name","value":"avatarUrl"}}]}},{"kind":"Field","name":{"kind":"Name","value":"confirmedAt"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]} as unknown as DocumentNode<VaultFileFieldsFragment, unknown>;
+export const VaultFolderFieldsFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"VaultFolderFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"VaultFolder"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"projectId"}},{"kind":"Field","name":{"kind":"Name","value":"parentFolderId"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"isSystem"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]} as unknown as DocumentNode<VaultFolderFieldsFragment, unknown>;
 export const BoardFieldsFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"BoardFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Whiteboard"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"workspaceId"}},{"kind":"Field","name":{"kind":"Name","value":"projectId"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"elementCount"}},{"kind":"Field","name":{"kind":"Name","value":"fileSizeBytes"}},{"kind":"Field","name":{"kind":"Name","value":"isArchived"}},{"kind":"Field","name":{"kind":"Name","value":"isLocked"}},{"kind":"Field","name":{"kind":"Name","value":"createdBy"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]} as unknown as DocumentNode<BoardFieldsFragment, unknown>;
 export const BoardWithCollaboratorsFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"BoardWithCollaborators"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Whiteboard"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"BoardFields"}},{"kind":"Field","name":{"kind":"Name","value":"collaborators"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"userId"}},{"kind":"Field","name":{"kind":"Name","value":"joinedAt"}},{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"fullName"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"avatarUrl"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"BoardFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Whiteboard"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"workspaceId"}},{"kind":"Field","name":{"kind":"Name","value":"projectId"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"elementCount"}},{"kind":"Field","name":{"kind":"Name","value":"fileSizeBytes"}},{"kind":"Field","name":{"kind":"Name","value":"isArchived"}},{"kind":"Field","name":{"kind":"Name","value":"isLocked"}},{"kind":"Field","name":{"kind":"Name","value":"createdBy"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]} as unknown as DocumentNode<BoardWithCollaboratorsFragment, unknown>;
 export const WorkspaceFragmentFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"WorkspaceFragment"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Workspace"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"logoUrl"}}]}}]} as unknown as DocumentNode<WorkspaceFragmentFragment, unknown>;
@@ -2054,6 +2591,23 @@ export const ArchivePageDocument = {"kind":"Document","definitions":[{"kind":"Op
 export const UnarchivePageDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UnarchivePage"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UnarchivePageInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"unarchivePage"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"page"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"isArchived"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]}}]}}]} as unknown as DocumentNode<UnarchivePageMutation, UnarchivePageMutationVariables>;
 export const LockPageDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"LockPage"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"LockPageInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"lockPage"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"page"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"isLocked"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]}}]}}]} as unknown as DocumentNode<LockPageMutation, LockPageMutationVariables>;
 export const UnlockPageDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UnlockPage"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UnlockPageInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"unlockPage"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"page"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"isLocked"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]}}]}}]} as unknown as DocumentNode<UnlockPageMutation, UnlockPageMutationVariables>;
+export const CreateVaultFolderDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateVaultFolder"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CreateVaultFolderInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createVaultFolder"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"folder"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"VaultFolderFields"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"VaultFolderFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"VaultFolder"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"projectId"}},{"kind":"Field","name":{"kind":"Name","value":"parentFolderId"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"isSystem"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]} as unknown as DocumentNode<CreateVaultFolderMutation, CreateVaultFolderMutationVariables>;
+export const DeleteVaultFileDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"DeleteVaultFile"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"DeleteVaultFileInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"deleteVaultFile"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"success"}},{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<DeleteVaultFileMutation, DeleteVaultFileMutationVariables>;
+export const DeleteVaultFolderDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"DeleteVaultFolder"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"DeleteVaultFolderInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"deleteVaultFolder"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"success"}},{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<DeleteVaultFolderMutation, DeleteVaultFolderMutationVariables>;
+export const GetVaultAncestorsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetVaultAncestors"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"folderId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"getVaultAncestors"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"folderId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"folderId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"VaultFolderFields"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"VaultFolderFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"VaultFolder"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"projectId"}},{"kind":"Field","name":{"kind":"Name","value":"parentFolderId"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"isSystem"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]} as unknown as DocumentNode<GetVaultAncestorsQuery, GetVaultAncestorsQueryVariables>;
+export const GetVaultChildrenDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetVaultChildren"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"projectId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"parentFolderId"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"cursor"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"limit"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"sortBy"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"VaultSortField"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"sortDir"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"SortDirection"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"getVaultChildren"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"projectId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"projectId"}}},{"kind":"Argument","name":{"kind":"Name","value":"parentFolderId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"parentFolderId"}}},{"kind":"Argument","name":{"kind":"Name","value":"cursor"},"value":{"kind":"Variable","name":{"kind":"Name","value":"cursor"}}},{"kind":"Argument","name":{"kind":"Name","value":"limit"},"value":{"kind":"Variable","name":{"kind":"Name","value":"limit"}}},{"kind":"Argument","name":{"kind":"Name","value":"sortBy"},"value":{"kind":"Variable","name":{"kind":"Name","value":"sortBy"}}},{"kind":"Argument","name":{"kind":"Name","value":"sortDir"},"value":{"kind":"Variable","name":{"kind":"Name","value":"sortDir"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"folders"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"VaultFolderFields"}}]}},{"kind":"Field","name":{"kind":"Name","value":"files"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"VaultFileFields"}}]}},{"kind":"Field","name":{"kind":"Name","value":"totalFileCount"}},{"kind":"Field","name":{"kind":"Name","value":"hasNextPage"}},{"kind":"Field","name":{"kind":"Name","value":"nextCursor"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"VaultFolderFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"VaultFolder"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"projectId"}},{"kind":"Field","name":{"kind":"Name","value":"parentFolderId"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"isSystem"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"VaultFileFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"VaultFile"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"projectId"}},{"kind":"Field","name":{"kind":"Name","value":"workspaceId"}},{"kind":"Field","name":{"kind":"Name","value":"folderId"}},{"kind":"Field","name":{"kind":"Name","value":"uploaderUserId"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"mimeType"}},{"kind":"Field","name":{"kind":"Name","value":"sizeBytes"}},{"kind":"Field","name":{"kind":"Name","value":"s3Key"}},{"kind":"Field","name":{"kind":"Name","value":"source"}},{"kind":"Field","name":{"kind":"Name","value":"sourceId"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"uploader"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"fullName"}},{"kind":"Field","name":{"kind":"Name","value":"avatarUrl"}}]}},{"kind":"Field","name":{"kind":"Name","value":"confirmedAt"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]} as unknown as DocumentNode<GetVaultChildrenQuery, GetVaultChildrenQueryVariables>;
+export const GetVaultDownloadUrlDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetVaultDownloadUrl"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"fileId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"getVaultDownloadUrl"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"fileId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"fileId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"url"}},{"kind":"Field","name":{"kind":"Name","value":"expiresAt"}}]}}]}}]} as unknown as DocumentNode<GetVaultDownloadUrlQuery, GetVaultDownloadUrlQueryVariables>;
+export const GetVaultNodeDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetVaultNode"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"type"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"VaultNodeType"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"getVaultNode"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}},{"kind":"Argument","name":{"kind":"Name","value":"type"},"value":{"kind":"Variable","name":{"kind":"Name","value":"type"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"VaultFolder"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"VaultFolderFields"}}]}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"VaultFile"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"VaultFileFields"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"VaultFolderFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"VaultFolder"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"projectId"}},{"kind":"Field","name":{"kind":"Name","value":"parentFolderId"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"isSystem"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"VaultFileFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"VaultFile"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"projectId"}},{"kind":"Field","name":{"kind":"Name","value":"workspaceId"}},{"kind":"Field","name":{"kind":"Name","value":"folderId"}},{"kind":"Field","name":{"kind":"Name","value":"uploaderUserId"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"mimeType"}},{"kind":"Field","name":{"kind":"Name","value":"sizeBytes"}},{"kind":"Field","name":{"kind":"Name","value":"s3Key"}},{"kind":"Field","name":{"kind":"Name","value":"source"}},{"kind":"Field","name":{"kind":"Name","value":"sourceId"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"uploader"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"fullName"}},{"kind":"Field","name":{"kind":"Name","value":"avatarUrl"}}]}},{"kind":"Field","name":{"kind":"Name","value":"confirmedAt"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]} as unknown as DocumentNode<GetVaultNodeQuery, GetVaultNodeQueryVariables>;
+export const GetVaultSidebarDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetVaultSidebar"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"projectId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"getVaultSidebar"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"projectId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"projectId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"pinnedFolders"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"VaultFolderFields"}}]}},{"kind":"Field","name":{"kind":"Name","value":"systemFolders"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"VaultFolderFields"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"VaultFolderFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"VaultFolder"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"projectId"}},{"kind":"Field","name":{"kind":"Name","value":"parentFolderId"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"isSystem"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]} as unknown as DocumentNode<GetVaultSidebarQuery, GetVaultSidebarQueryVariables>;
+export const GetVaultUsageDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetVaultUsage"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"projectId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"getVaultUsage"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"projectId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"projectId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"projectUsedBytes"}},{"kind":"Field","name":{"kind":"Name","value":"projectLimitBytes"}},{"kind":"Field","name":{"kind":"Name","value":"workspaceUsedBytes"}},{"kind":"Field","name":{"kind":"Name","value":"workspaceLimitBytes"}},{"kind":"Field","name":{"kind":"Name","value":"projectFileCount"}},{"kind":"Field","name":{"kind":"Name","value":"projectFileCountLimit"}}]}}]}}]} as unknown as DocumentNode<GetVaultUsageQuery, GetVaultUsageQueryVariables>;
+export const MoveVaultFileDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"MoveVaultFile"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"MoveVaultFileInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"moveVaultFile"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"file"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"VaultFileFields"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"VaultFileFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"VaultFile"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"projectId"}},{"kind":"Field","name":{"kind":"Name","value":"workspaceId"}},{"kind":"Field","name":{"kind":"Name","value":"folderId"}},{"kind":"Field","name":{"kind":"Name","value":"uploaderUserId"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"mimeType"}},{"kind":"Field","name":{"kind":"Name","value":"sizeBytes"}},{"kind":"Field","name":{"kind":"Name","value":"s3Key"}},{"kind":"Field","name":{"kind":"Name","value":"source"}},{"kind":"Field","name":{"kind":"Name","value":"sourceId"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"uploader"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"fullName"}},{"kind":"Field","name":{"kind":"Name","value":"avatarUrl"}}]}},{"kind":"Field","name":{"kind":"Name","value":"confirmedAt"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]} as unknown as DocumentNode<MoveVaultFileMutation, MoveVaultFileMutationVariables>;
+export const MoveVaultFolderDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"MoveVaultFolder"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"MoveVaultFolderInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"moveVaultFolder"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"folder"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"VaultFolderFields"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"VaultFolderFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"VaultFolder"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"projectId"}},{"kind":"Field","name":{"kind":"Name","value":"parentFolderId"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"isSystem"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]} as unknown as DocumentNode<MoveVaultFolderMutation, MoveVaultFolderMutationVariables>;
+export const PinVaultFolderDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"PinVaultFolder"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"PinVaultFolderInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"pinVaultFolder"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"folder"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"VaultFolderFields"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"VaultFolderFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"VaultFolder"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"projectId"}},{"kind":"Field","name":{"kind":"Name","value":"parentFolderId"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"isSystem"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]} as unknown as DocumentNode<PinVaultFolderMutation, PinVaultFolderMutationVariables>;
+export const RenameVaultFileDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"RenameVaultFile"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"RenameVaultFileInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"renameVaultFile"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"file"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"VaultFileFields"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"VaultFileFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"VaultFile"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"projectId"}},{"kind":"Field","name":{"kind":"Name","value":"workspaceId"}},{"kind":"Field","name":{"kind":"Name","value":"folderId"}},{"kind":"Field","name":{"kind":"Name","value":"uploaderUserId"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"mimeType"}},{"kind":"Field","name":{"kind":"Name","value":"sizeBytes"}},{"kind":"Field","name":{"kind":"Name","value":"s3Key"}},{"kind":"Field","name":{"kind":"Name","value":"source"}},{"kind":"Field","name":{"kind":"Name","value":"sourceId"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"uploader"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"fullName"}},{"kind":"Field","name":{"kind":"Name","value":"avatarUrl"}}]}},{"kind":"Field","name":{"kind":"Name","value":"confirmedAt"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]} as unknown as DocumentNode<RenameVaultFileMutation, RenameVaultFileMutationVariables>;
+export const RenameVaultFolderDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"RenameVaultFolder"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"RenameVaultFolderInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"renameVaultFolder"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"folder"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"VaultFolderFields"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"VaultFolderFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"VaultFolder"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"projectId"}},{"kind":"Field","name":{"kind":"Name","value":"parentFolderId"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"isSystem"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]} as unknown as DocumentNode<RenameVaultFolderMutation, RenameVaultFolderMutationVariables>;
+export const UnpinVaultFolderDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UnpinVaultFolder"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UnpinVaultFolderInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"unpinVaultFolder"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"success"}},{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<UnpinVaultFolderMutation, UnpinVaultFolderMutationVariables>;
+export const RequestVaultUploadDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"RequestVaultUpload"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"RequestVaultUploadInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"requestVaultUpload"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"fileId"}},{"kind":"Field","name":{"kind":"Name","value":"presignedUrl"}},{"kind":"Field","name":{"kind":"Name","value":"expiresAt"}}]}}]}}]} as unknown as DocumentNode<RequestVaultUploadMutation, RequestVaultUploadMutationVariables>;
+export const ConfirmVaultUploadDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"ConfirmVaultUpload"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ConfirmVaultUploadInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"confirmVaultUpload"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"file"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"mimeType"}},{"kind":"Field","name":{"kind":"Name","value":"sizeBytes"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"folderId"}},{"kind":"Field","name":{"kind":"Name","value":"projectId"}},{"kind":"Field","name":{"kind":"Name","value":"workspaceId"}},{"kind":"Field","name":{"kind":"Name","value":"source"}},{"kind":"Field","name":{"kind":"Name","value":"sourceId"}},{"kind":"Field","name":{"kind":"Name","value":"uploader"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"fullName"}},{"kind":"Field","name":{"kind":"Name","value":"avatarUrl"}}]}},{"kind":"Field","name":{"kind":"Name","value":"confirmedAt"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]}}]}}]} as unknown as DocumentNode<ConfirmVaultUploadMutation, ConfirmVaultUploadMutationVariables>;
 export const GetWorkspaceMembersDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetWorkspaceMembers"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"workspaceId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"workspaceMembers"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"workspaceId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"workspaceId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"role"}},{"kind":"Field","name":{"kind":"Name","value":"joinedAt"}},{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"fullName"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"avatarUrl"}}]}}]}}]}}]} as unknown as DocumentNode<GetWorkspaceMembersQuery, GetWorkspaceMembersQueryVariables>;
 export const UpdateWorkspaceMemberRoleDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateWorkspaceMemberRole"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"workspaceId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"memberId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"role"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateWorkspaceMemberRole"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"workspaceId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"workspaceId"}}},{"kind":"Argument","name":{"kind":"Name","value":"memberId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"memberId"}}},{"kind":"Argument","name":{"kind":"Name","value":"role"},"value":{"kind":"Variable","name":{"kind":"Name","value":"role"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"role"}}]}}]}}]} as unknown as DocumentNode<UpdateWorkspaceMemberRoleMutation, UpdateWorkspaceMemberRoleMutationVariables>;
 export const RemoveWorkspaceMemberDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"RemoveWorkspaceMember"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"workspaceId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"memberId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"removeWorkspaceMember"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"workspaceId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"workspaceId"}}},{"kind":"Argument","name":{"kind":"Name","value":"memberId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"memberId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"success"}},{"kind":"Field","name":{"kind":"Name","value":"message"}}]}}]}}]} as unknown as DocumentNode<RemoveWorkspaceMemberMutation, RemoveWorkspaceMemberMutationVariables>;

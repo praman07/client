@@ -24,7 +24,11 @@ interface BoardViewPageProps {
  * Note: This page is rendered within _app layout which has a header.
  * The h-full class makes it take the remaining space after the header.
  */
-export function BoardViewPage({ boardId, workspaceSlug, projectSlug }: BoardViewPageProps) {
+export function BoardViewPage({
+  boardId,
+  workspaceSlug,
+  projectSlug,
+}: BoardViewPageProps) {
   const [isBoardDeleted, setIsBoardDeleted] = useState(false)
 
   // Register deletion callback so the WS handler can trigger the overlay

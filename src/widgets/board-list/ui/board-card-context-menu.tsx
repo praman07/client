@@ -40,7 +40,7 @@ interface BoardCardContextMenuProps {
 
 /**
  * Context menu for board card actions
- * 
+ *
  * Shared between list and grid views
  */
 export function BoardCardContextMenu({

@@ -114,7 +114,7 @@ function PageEditorBody({
         name: currentUser?.fullName ?? 'Anonymous',
         color: userColor,
       },
-      showCursorLabels: "activity",
+      showCursorLabels: 'activity',
     },
   })
 
@@ -129,11 +129,7 @@ function PageEditorBody({
 
         {isLocked && <LockedBanner />}
 
-        <BlockNoteView
-          editor={editor}
-          theme="light"
-          editable={!isLocked}
-        />
+        <BlockNoteView editor={editor} theme="light" editable={!isLocked} />
       </div>
     </div>
   )

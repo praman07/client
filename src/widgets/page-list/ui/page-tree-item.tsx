@@ -1,10 +1,7 @@
 import { useState } from 'react'
 import { Link, useMatch, useParams } from '@tanstack/react-router'
 import { HugeiconsIcon } from '@hugeicons/react'
-import {
-  ChevronRight,
-  File01Icon,
-} from '@hugeicons/core-free-icons'
+import { ChevronRight, File01Icon } from '@hugeicons/core-free-icons'
 import {
   SidebarMenuItem,
   SidebarMenuButton,
@@ -23,7 +20,10 @@ interface PageTreeItemProps {
 }
 
 /** Returns true if any descendant of `node` has the given id. */
-function hasActiveDescendant(node: PageTreeNode, activeId: string | null): boolean {
+function hasActiveDescendant(
+  node: PageTreeNode,
+  activeId: string | null,
+): boolean {
   if (!activeId) return false
   return node.children.some(
     (c) => c.page.id === activeId || hasActiveDescendant(c, activeId),
@@ -99,7 +99,11 @@ export function PageTreeItem({ node, depth = 0 }: PageTreeItemProps) {
             {/* Depth-scaled indent — works for unlimited nesting levels */}
             <div style={{ paddingLeft: `${(depth + 1) * 12}px` }}>
               {node.children.map((child) => (
-                <PageTreeItem key={child.page.id} node={child} depth={depth + 1} />
+                <PageTreeItem
+                  key={child.page.id}
+                  node={child}
+                  depth={depth + 1}
+                />
               ))}
             </div>
           </CollapsibleContent>

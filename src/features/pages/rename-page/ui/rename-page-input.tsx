@@ -113,11 +113,12 @@ export function RenamePageInput({
               aria-label="Page title"
               className={className}
             />
-            {field.state.meta.isTouched && field.state.meta.errors.length > 0 && (
-              <p className="text-xs text-destructive">
-                {field.state.meta.errors.join(', ')}
-              </p>
-            )}
+            {field.state.meta.isTouched &&
+              field.state.meta.errors.length > 0 && (
+                <p className="text-xs text-destructive">
+                  {field.state.meta.errors.join(', ')}
+                </p>
+              )}
           </div>
         )}
       </form.Field>

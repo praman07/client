@@ -3,7 +3,10 @@ import { Archive, RotateCcw, Loader2 } from 'lucide-react'
 import { Button } from '@/shared/ui/primitives/button'
 import { useArchivePage } from '../hooks/use-archive-page'
 import { useUnarchivePage } from '../hooks/use-unarchive-page'
-import { mapArchivePageError, mapUnarchivePageError } from '../lib/error-mapping'
+import {
+  mapArchivePageError,
+  mapUnarchivePageError,
+} from '../lib/error-mapping'
 
 export interface ArchivePageButtonProps {
   pageId: string

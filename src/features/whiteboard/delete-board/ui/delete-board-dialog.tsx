@@ -48,7 +48,7 @@ export function DeleteBoardDialog({
             variant="destructive"
             onClick={onConfirm}
             disabled={isPending}
-            className='text-white'
+            className="text-white"
           >
             {isPending ? 'Deleting...' : 'Delete'}
           </Button>

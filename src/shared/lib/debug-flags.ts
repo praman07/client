@@ -31,6 +31,7 @@ export const GROUPS = {
   whiteboard: false,
   'whiteboard-sync': false,
   thumbnail: false,
+  vault: false, // ❌ All vault feature logs — flip to true for full vault debug
   pages: true, // ✅ All pages feature logs
 
   // Modules
@@ -214,6 +215,13 @@ export const FILES: Record<string, boolean | undefined> = {
   'pages:reorder-page-hook': false,
   'pages:unarchive-page-hook': false,
   'pages:unlock-page-hook': false,
+
+  // ─────────────────────────────────────
+  // Vault Feature ✅ Upload Flow
+  // ─────────────────────────────────────
+  'vault:upload': true, // use-upload-file.ts  — orchestrator
+  'vault:upload:s3': true, // upload-to-s3.ts     — XHR PUT to S3
+  'vault:upload:validate': true, // validate-file.ts    — client preflight
 }
 
 export type GroupFlag = keyof typeof GROUPS

@@ -1,0 +1,5 @@
+export { useRenameFile } from './hooks/use-rename-file'
+export type { RenameFileVariables } from './model/types'
+export { renameSchema } from './model/schema'
+export type { RenameFormData } from './model/schema'
+export { RenameFileModal, RenameFileForm } from './ui'

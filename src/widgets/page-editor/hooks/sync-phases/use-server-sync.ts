@@ -58,7 +58,6 @@ export function useServerSync(
       log.error('Failed to apply server snapshot', { pageId, err })
       dispatch(setYDocStatus('error'))
     }
-    
   }, [isSuccess, snapshot])
 
   useEffect(() => {
