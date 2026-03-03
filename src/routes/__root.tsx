@@ -10,6 +10,7 @@ import type { QueryClient } from '@tanstack/react-query'
 import { NotFoundPage } from '@/pages/not-found'
 import ClerkProvider from '@/app/providers/clerk/provider'
 import TanStackQueryDevtools from '@/app/providers/tanstack-query/devtools'
+import { Toaster } from '@/shared/ui/primitives/sonner'
 import appCss from '@/app/styles/globals.css?url'
 
 interface MyRouterContext {
@@ -56,6 +57,7 @@ function RootComponent() {
       <body>
         <ClerkProvider>
           <Outlet />
+          <Toaster />
           <TanStackDevtools
             config={{ position: 'bottom-right' }}
             plugins={[

@@ -22,6 +22,10 @@ type Documents = {
     "\n  query GetUserConversations(\n    $workspaceId: ID!\n    $projectId: ID!\n    $type: ConversationType\n    $includeArchived: Boolean\n    $limit: Int\n    $cursor: String\n  ) {\n    getUserConversations(\n      workspaceId: $workspaceId\n      projectId: $projectId\n      type: $type\n      includeArchived: $includeArchived\n      limit: $limit\n      cursor: $cursor\n    ) {\n      edges {\n        ...ConversationFields\n      }\n      pageInfo {\n        hasNextPage\n        endCursor\n      }\n    }\n  }\n": typeof types.GetUserConversationsDocument,
     "\n  query GetConversation($conversationId: ID!) {\n    getConversation(conversationId: $conversationId) {\n      ...ConversationFields\n      members {\n        ...ConversationMemberFields\n      }\n    }\n  }\n": typeof types.GetConversationDocument,
     "\n  query GetUsersByIds($userIds: [ID!]!) {\n    getUsersByIds(userIds: $userIds) {\n      id\n      fullName\n      email\n      avatarUrl\n    }\n  }\n": typeof types.GetUsersByIdsDocument,
+    "\n  fragment IssueLabelFields on IssueLabel {\n    id\n    projectId\n    name\n    color\n    createdAt\n  }\n": typeof types.IssueLabelFieldsFragmentDoc,
+    "\n  fragment IssueStatusFields on IssueStatus {\n    id\n    projectId\n    name\n    color\n    icon\n    position\n    isSystem\n    issueCount\n  }\n": typeof types.IssueStatusFieldsFragmentDoc,
+    "\n  fragment IssueCardFields on Issue {\n    id\n    number\n    title\n    priority\n    position\n    dueDate\n    updatedAt\n    status {\n      id\n      name\n      color\n      icon\n    }\n    assignee {\n      id\n      fullName\n      avatarUrl\n    }\n    labels {\n      id\n      name\n      color\n    }\n  }\n": typeof types.IssueCardFieldsFragmentDoc,
+    "\n  fragment IssueDetailFields on Issue {\n    ...IssueCardFields\n    descriptionS3Key\n    createdBy {\n      id\n      fullName\n      avatarUrl\n    }\n    createdAt\n  }\n": typeof types.IssueDetailFieldsFragmentDoc,
     "\n  fragment PageFields on Page {\n    id\n    title\n    workspaceId\n    projectId\n    parentId\n    icon\n    coverUrl\n    position\n    isArchived\n    isLocked\n    s3Key\n    createdBy\n    createdAt\n    updatedAt\n  }\n": typeof types.PageFieldsFragmentDoc,
     "\n  fragment PageWithCollaborators on Page {\n    ...PageFields\n    collaborators {\n      userId\n      role\n      joinedAt\n      user {\n        id\n        fullName\n        email\n        avatarUrl\n      }\n    }\n  }\n": typeof types.PageWithCollaboratorsFragmentDoc,
     "\n  fragment PageWithChildren on Page {\n    ...PageFields\n    children {\n      ...PageFields\n      children {\n        ...PageFields\n        children {\n          ...PageFields\n        }\n      }\n    }\n  }\n": typeof types.PageWithChildrenFragmentDoc,
@@ -51,6 +55,22 @@ type Documents = {
     "\n  mutation CreateWorkspace($slug: String!, $name: String!) {\n    createWorkspace(slug: $slug, name: $name) {\n      id\n      slug\n      name\n    }\n  }\n": typeof types.CreateWorkspaceDocument,
     "\n  mutation CheckSlugAvailability($slug: String!) {\n    checkSlugAvailability(slug: $slug) {\n      available\n      message\n    }\n  }\n": typeof types.CheckSlugAvailabilityDocument,
     "\n  mutation InviteToWorkspace($input: InviteToWorkspaceInput!) {\n    inviteToWorkspace(input: $input) {\n      success\n      message\n      invitedCount\n    }\n  }\n": typeof types.InviteToWorkspaceDocument,
+    "\n  mutation CreateIssue($input: CreateIssueInput!) {\n    createIssue(input: $input) {\n      issue {\n        ...IssueCardFields\n      }\n    }\n  }\n": typeof types.CreateIssueDocument,
+    "\n  mutation MoveIssueStatus($input: MoveIssueStatusInput!) {\n    moveIssueStatus(input: $input) {\n      issue {\n        ...IssueCardFields\n      }\n    }\n  }\n": typeof types.MoveIssueStatusDocument,
+    "\n  mutation ReorderIssue($input: ReorderIssueInput!) {\n    reorderIssue(input: $input) {\n      issue {\n        ...IssueCardFields\n      }\n    }\n  }\n": typeof types.ReorderIssueDocument,
+    "\n  query GetIssue($issueId: ID!) {\n    getIssue(issueId: $issueId) {\n      ...IssueDetailFields\n    }\n  }\n": typeof types.GetIssueDocument,
+    "\n  query GetIssueDescriptionUrl($issueId: ID!) {\n    getIssueDescriptionUrl(issueId: $issueId) {\n      url\n    }\n  }\n": typeof types.GetIssueDescriptionUrlDocument,
+    "\n  mutation UpdateIssue($input: UpdateIssueInput!) {\n    updateIssue(input: $input) {\n      issue {\n        ...IssueDetailFields\n      }\n    }\n  }\n": typeof types.UpdateIssueDocument,
+    "\n  mutation DeleteIssue($input: DeleteIssueInput!) {\n    deleteIssue(input: $input) {\n      success\n    }\n  }\n": typeof types.DeleteIssueDocument,
+    "\n  mutation RequestIssueDescriptionUpload($input: RequestIssueDescriptionUploadInput!) {\n    requestIssueDescriptionUpload(input: $input) {\n      presignedUrl\n      descriptionFileId\n    }\n  }\n": typeof types.RequestIssueDescriptionUploadDocument,
+    "\n  mutation ConfirmIssueDescriptionUpload($input: ConfirmIssueDescriptionUploadInput!) {\n    confirmIssueDescriptionUpload(input: $input) {\n      issue {\n        ...IssueDetailFields\n      }\n    }\n  }\n": typeof types.ConfirmIssueDescriptionUploadDocument,
+    "\n  mutation CreateIssueLabel($input: CreateIssueLabelInput!) {\n    createIssueLabel(input: $input) {\n      label {\n        ...IssueLabelFields\n      }\n    }\n  }\n": typeof types.CreateIssueLabelDocument,
+    "\n  mutation UpdateIssueLabel($input: UpdateIssueLabelInput!) {\n    updateIssueLabel(input: $input) {\n      label {\n        ...IssueLabelFields\n      }\n    }\n  }\n": typeof types.UpdateIssueLabelDocument,
+    "\n  mutation DeleteIssueLabel($input: DeleteIssueLabelInput!) {\n    deleteIssueLabel(input: $input) {\n      success\n    }\n  }\n": typeof types.DeleteIssueLabelDocument,
+    "\n  mutation CreateIssueStatus($input: CreateIssueStatusInput!) {\n    createIssueStatus(input: $input) {\n      status {\n        ...IssueStatusFields\n      }\n    }\n  }\n": typeof types.CreateIssueStatusDocument,
+    "\n  mutation UpdateIssueStatus($input: UpdateIssueStatusInput!) {\n    updateIssueStatus(input: $input) {\n      status {\n        ...IssueStatusFields\n      }\n    }\n  }\n": typeof types.UpdateIssueStatusDocument,
+    "\n  mutation ReorderIssueStatus($input: ReorderIssueStatusInput!) {\n    reorderIssueStatus(input: $input) {\n      status {\n        ...IssueStatusFields\n      }\n    }\n  }\n": typeof types.ReorderIssueStatusDocument,
+    "\n  mutation DeleteIssueStatus($input: DeleteIssueStatusInput!) {\n    deleteIssueStatus(input: $input) {\n      success\n    }\n  }\n": typeof types.DeleteIssueStatusDocument,
     "\n  mutation AcceptWorkspaceInvite($input: AcceptInviteInput!) {\n    acceptWorkspaceInvite(input: $input) {\n      success\n      message\n      workspaceSlug\n    }\n  }\n": typeof types.AcceptWorkspaceInviteDocument,
     "\n  query GetWorkspaceInviteInfo($token: String!) {\n    getWorkspaceInviteInfo(token: $token) {\n      workspaceName\n      workspaceLogoUrl\n      inviterName\n    }\n  }\n": typeof types.GetWorkspaceInviteInfoDocument,
     "\n  mutation SyncUser(\n    $clerkId: String!\n    $email: String!\n    $fullName: String\n    $avatarUrl: String\n  ) {\n    syncUser(\n      clerkId: $clerkId\n      email: $email\n      fullName: $fullName\n      avatarUrl: $avatarUrl\n    ) {\n      id\n    }\n  }\n": typeof types.SyncUserDocument,
@@ -106,6 +126,9 @@ type Documents = {
     "\n  mutation UnarchiveBoard($boardId: ID!) {\n    unarchiveBoard(boardId: $boardId) {\n      id\n      isArchived\n      updatedAt\n    }\n  }\n": typeof types.UnarchiveBoardDocument,
     "\n  mutation UnlockBoard($boardId: ID!) {\n    unlockBoard(boardId: $boardId) {\n      id\n      isLocked\n      updatedAt\n    }\n  }\n": typeof types.UnlockBoardDocument,
     "\n  mutation UpdateBoardDescription($boardId: ID!, $description: String) {\n    updateBoardDescription(boardId: $boardId, description: $description) {\n      id\n      description\n      updatedAt\n    }\n  }\n": typeof types.UpdateBoardDescriptionDocument,
+    "\n  query GetProjectIssues($projectId: ID!) {\n    getProjectIssues(projectId: $projectId) {\n      ...IssueCardFields\n    }\n  }\n": typeof types.GetProjectIssuesDocument,
+    "\n  query GetIssueStatuses($projectId: ID!) {\n    getIssueStatuses(projectId: $projectId) {\n      ...IssueStatusFields\n    }\n  }\n": typeof types.GetIssueStatusesDocument,
+    "\n  query GetIssueLabels($projectId: ID!) {\n    getIssueLabels(projectId: $projectId) {\n      ...IssueLabelFields\n    }\n  }\n": typeof types.GetIssueLabelsDocument,
 };
 const documents: Documents = {
     "\n  fragment MessageRecoveryFields on ChatMessage {\n    id\n    streamId\n    sequence\n    conversationId\n    authorUserId\n    content\n    type\n    createdAt\n  }\n": types.MessageRecoveryFieldsFragmentDoc,
@@ -116,6 +139,10 @@ const documents: Documents = {
     "\n  query GetUserConversations(\n    $workspaceId: ID!\n    $projectId: ID!\n    $type: ConversationType\n    $includeArchived: Boolean\n    $limit: Int\n    $cursor: String\n  ) {\n    getUserConversations(\n      workspaceId: $workspaceId\n      projectId: $projectId\n      type: $type\n      includeArchived: $includeArchived\n      limit: $limit\n      cursor: $cursor\n    ) {\n      edges {\n        ...ConversationFields\n      }\n      pageInfo {\n        hasNextPage\n        endCursor\n      }\n    }\n  }\n": types.GetUserConversationsDocument,
     "\n  query GetConversation($conversationId: ID!) {\n    getConversation(conversationId: $conversationId) {\n      ...ConversationFields\n      members {\n        ...ConversationMemberFields\n      }\n    }\n  }\n": types.GetConversationDocument,
     "\n  query GetUsersByIds($userIds: [ID!]!) {\n    getUsersByIds(userIds: $userIds) {\n      id\n      fullName\n      email\n      avatarUrl\n    }\n  }\n": types.GetUsersByIdsDocument,
+    "\n  fragment IssueLabelFields on IssueLabel {\n    id\n    projectId\n    name\n    color\n    createdAt\n  }\n": types.IssueLabelFieldsFragmentDoc,
+    "\n  fragment IssueStatusFields on IssueStatus {\n    id\n    projectId\n    name\n    color\n    icon\n    position\n    isSystem\n    issueCount\n  }\n": types.IssueStatusFieldsFragmentDoc,
+    "\n  fragment IssueCardFields on Issue {\n    id\n    number\n    title\n    priority\n    position\n    dueDate\n    updatedAt\n    status {\n      id\n      name\n      color\n      icon\n    }\n    assignee {\n      id\n      fullName\n      avatarUrl\n    }\n    labels {\n      id\n      name\n      color\n    }\n  }\n": types.IssueCardFieldsFragmentDoc,
+    "\n  fragment IssueDetailFields on Issue {\n    ...IssueCardFields\n    descriptionS3Key\n    createdBy {\n      id\n      fullName\n      avatarUrl\n    }\n    createdAt\n  }\n": types.IssueDetailFieldsFragmentDoc,
     "\n  fragment PageFields on Page {\n    id\n    title\n    workspaceId\n    projectId\n    parentId\n    icon\n    coverUrl\n    position\n    isArchived\n    isLocked\n    s3Key\n    createdBy\n    createdAt\n    updatedAt\n  }\n": types.PageFieldsFragmentDoc,
     "\n  fragment PageWithCollaborators on Page {\n    ...PageFields\n    collaborators {\n      userId\n      role\n      joinedAt\n      user {\n        id\n        fullName\n        email\n        avatarUrl\n      }\n    }\n  }\n": types.PageWithCollaboratorsFragmentDoc,
     "\n  fragment PageWithChildren on Page {\n    ...PageFields\n    children {\n      ...PageFields\n      children {\n        ...PageFields\n        children {\n          ...PageFields\n        }\n      }\n    }\n  }\n": types.PageWithChildrenFragmentDoc,
@@ -145,6 +172,22 @@ const documents: Documents = {
     "\n  mutation CreateWorkspace($slug: String!, $name: String!) {\n    createWorkspace(slug: $slug, name: $name) {\n      id\n      slug\n      name\n    }\n  }\n": types.CreateWorkspaceDocument,
     "\n  mutation CheckSlugAvailability($slug: String!) {\n    checkSlugAvailability(slug: $slug) {\n      available\n      message\n    }\n  }\n": types.CheckSlugAvailabilityDocument,
     "\n  mutation InviteToWorkspace($input: InviteToWorkspaceInput!) {\n    inviteToWorkspace(input: $input) {\n      success\n      message\n      invitedCount\n    }\n  }\n": types.InviteToWorkspaceDocument,
+    "\n  mutation CreateIssue($input: CreateIssueInput!) {\n    createIssue(input: $input) {\n      issue {\n        ...IssueCardFields\n      }\n    }\n  }\n": types.CreateIssueDocument,
+    "\n  mutation MoveIssueStatus($input: MoveIssueStatusInput!) {\n    moveIssueStatus(input: $input) {\n      issue {\n        ...IssueCardFields\n      }\n    }\n  }\n": types.MoveIssueStatusDocument,
+    "\n  mutation ReorderIssue($input: ReorderIssueInput!) {\n    reorderIssue(input: $input) {\n      issue {\n        ...IssueCardFields\n      }\n    }\n  }\n": types.ReorderIssueDocument,
+    "\n  query GetIssue($issueId: ID!) {\n    getIssue(issueId: $issueId) {\n      ...IssueDetailFields\n    }\n  }\n": types.GetIssueDocument,
+    "\n  query GetIssueDescriptionUrl($issueId: ID!) {\n    getIssueDescriptionUrl(issueId: $issueId) {\n      url\n    }\n  }\n": types.GetIssueDescriptionUrlDocument,
+    "\n  mutation UpdateIssue($input: UpdateIssueInput!) {\n    updateIssue(input: $input) {\n      issue {\n        ...IssueDetailFields\n      }\n    }\n  }\n": types.UpdateIssueDocument,
+    "\n  mutation DeleteIssue($input: DeleteIssueInput!) {\n    deleteIssue(input: $input) {\n      success\n    }\n  }\n": types.DeleteIssueDocument,
+    "\n  mutation RequestIssueDescriptionUpload($input: RequestIssueDescriptionUploadInput!) {\n    requestIssueDescriptionUpload(input: $input) {\n      presignedUrl\n      descriptionFileId\n    }\n  }\n": types.RequestIssueDescriptionUploadDocument,
+    "\n  mutation ConfirmIssueDescriptionUpload($input: ConfirmIssueDescriptionUploadInput!) {\n    confirmIssueDescriptionUpload(input: $input) {\n      issue {\n        ...IssueDetailFields\n      }\n    }\n  }\n": types.ConfirmIssueDescriptionUploadDocument,
+    "\n  mutation CreateIssueLabel($input: CreateIssueLabelInput!) {\n    createIssueLabel(input: $input) {\n      label {\n        ...IssueLabelFields\n      }\n    }\n  }\n": types.CreateIssueLabelDocument,
+    "\n  mutation UpdateIssueLabel($input: UpdateIssueLabelInput!) {\n    updateIssueLabel(input: $input) {\n      label {\n        ...IssueLabelFields\n      }\n    }\n  }\n": types.UpdateIssueLabelDocument,
+    "\n  mutation DeleteIssueLabel($input: DeleteIssueLabelInput!) {\n    deleteIssueLabel(input: $input) {\n      success\n    }\n  }\n": types.DeleteIssueLabelDocument,
+    "\n  mutation CreateIssueStatus($input: CreateIssueStatusInput!) {\n    createIssueStatus(input: $input) {\n      status {\n        ...IssueStatusFields\n      }\n    }\n  }\n": types.CreateIssueStatusDocument,
+    "\n  mutation UpdateIssueStatus($input: UpdateIssueStatusInput!) {\n    updateIssueStatus(input: $input) {\n      status {\n        ...IssueStatusFields\n      }\n    }\n  }\n": types.UpdateIssueStatusDocument,
+    "\n  mutation ReorderIssueStatus($input: ReorderIssueStatusInput!) {\n    reorderIssueStatus(input: $input) {\n      status {\n        ...IssueStatusFields\n      }\n    }\n  }\n": types.ReorderIssueStatusDocument,
+    "\n  mutation DeleteIssueStatus($input: DeleteIssueStatusInput!) {\n    deleteIssueStatus(input: $input) {\n      success\n    }\n  }\n": types.DeleteIssueStatusDocument,
     "\n  mutation AcceptWorkspaceInvite($input: AcceptInviteInput!) {\n    acceptWorkspaceInvite(input: $input) {\n      success\n      message\n      workspaceSlug\n    }\n  }\n": types.AcceptWorkspaceInviteDocument,
     "\n  query GetWorkspaceInviteInfo($token: String!) {\n    getWorkspaceInviteInfo(token: $token) {\n      workspaceName\n      workspaceLogoUrl\n      inviterName\n    }\n  }\n": types.GetWorkspaceInviteInfoDocument,
     "\n  mutation SyncUser(\n    $clerkId: String!\n    $email: String!\n    $fullName: String\n    $avatarUrl: String\n  ) {\n    syncUser(\n      clerkId: $clerkId\n      email: $email\n      fullName: $fullName\n      avatarUrl: $avatarUrl\n    ) {\n      id\n    }\n  }\n": types.SyncUserDocument,
@@ -200,6 +243,9 @@ const documents: Documents = {
     "\n  mutation UnarchiveBoard($boardId: ID!) {\n    unarchiveBoard(boardId: $boardId) {\n      id\n      isArchived\n      updatedAt\n    }\n  }\n": types.UnarchiveBoardDocument,
     "\n  mutation UnlockBoard($boardId: ID!) {\n    unlockBoard(boardId: $boardId) {\n      id\n      isLocked\n      updatedAt\n    }\n  }\n": types.UnlockBoardDocument,
     "\n  mutation UpdateBoardDescription($boardId: ID!, $description: String) {\n    updateBoardDescription(boardId: $boardId, description: $description) {\n      id\n      description\n      updatedAt\n    }\n  }\n": types.UpdateBoardDescriptionDocument,
+    "\n  query GetProjectIssues($projectId: ID!) {\n    getProjectIssues(projectId: $projectId) {\n      ...IssueCardFields\n    }\n  }\n": types.GetProjectIssuesDocument,
+    "\n  query GetIssueStatuses($projectId: ID!) {\n    getIssueStatuses(projectId: $projectId) {\n      ...IssueStatusFields\n    }\n  }\n": types.GetIssueStatusesDocument,
+    "\n  query GetIssueLabels($projectId: ID!) {\n    getIssueLabels(projectId: $projectId) {\n      ...IssueLabelFields\n    }\n  }\n": types.GetIssueLabelsDocument,
 };
 
 /**
@@ -248,6 +294,22 @@ export function gql(source: "\n  query GetConversation($conversationId: ID!) {\n
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "\n  query GetUsersByIds($userIds: [ID!]!) {\n    getUsersByIds(userIds: $userIds) {\n      id\n      fullName\n      email\n      avatarUrl\n    }\n  }\n"): (typeof documents)["\n  query GetUsersByIds($userIds: [ID!]!) {\n    getUsersByIds(userIds: $userIds) {\n      id\n      fullName\n      email\n      avatarUrl\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  fragment IssueLabelFields on IssueLabel {\n    id\n    projectId\n    name\n    color\n    createdAt\n  }\n"): (typeof documents)["\n  fragment IssueLabelFields on IssueLabel {\n    id\n    projectId\n    name\n    color\n    createdAt\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  fragment IssueStatusFields on IssueStatus {\n    id\n    projectId\n    name\n    color\n    icon\n    position\n    isSystem\n    issueCount\n  }\n"): (typeof documents)["\n  fragment IssueStatusFields on IssueStatus {\n    id\n    projectId\n    name\n    color\n    icon\n    position\n    isSystem\n    issueCount\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  fragment IssueCardFields on Issue {\n    id\n    number\n    title\n    priority\n    position\n    dueDate\n    updatedAt\n    status {\n      id\n      name\n      color\n      icon\n    }\n    assignee {\n      id\n      fullName\n      avatarUrl\n    }\n    labels {\n      id\n      name\n      color\n    }\n  }\n"): (typeof documents)["\n  fragment IssueCardFields on Issue {\n    id\n    number\n    title\n    priority\n    position\n    dueDate\n    updatedAt\n    status {\n      id\n      name\n      color\n      icon\n    }\n    assignee {\n      id\n      fullName\n      avatarUrl\n    }\n    labels {\n      id\n      name\n      color\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  fragment IssueDetailFields on Issue {\n    ...IssueCardFields\n    descriptionS3Key\n    createdBy {\n      id\n      fullName\n      avatarUrl\n    }\n    createdAt\n  }\n"): (typeof documents)["\n  fragment IssueDetailFields on Issue {\n    ...IssueCardFields\n    descriptionS3Key\n    createdBy {\n      id\n      fullName\n      avatarUrl\n    }\n    createdAt\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -364,6 +426,70 @@ export function gql(source: "\n  mutation CheckSlugAvailability($slug: String!) 
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "\n  mutation InviteToWorkspace($input: InviteToWorkspaceInput!) {\n    inviteToWorkspace(input: $input) {\n      success\n      message\n      invitedCount\n    }\n  }\n"): (typeof documents)["\n  mutation InviteToWorkspace($input: InviteToWorkspaceInput!) {\n    inviteToWorkspace(input: $input) {\n      success\n      message\n      invitedCount\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation CreateIssue($input: CreateIssueInput!) {\n    createIssue(input: $input) {\n      issue {\n        ...IssueCardFields\n      }\n    }\n  }\n"): (typeof documents)["\n  mutation CreateIssue($input: CreateIssueInput!) {\n    createIssue(input: $input) {\n      issue {\n        ...IssueCardFields\n      }\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation MoveIssueStatus($input: MoveIssueStatusInput!) {\n    moveIssueStatus(input: $input) {\n      issue {\n        ...IssueCardFields\n      }\n    }\n  }\n"): (typeof documents)["\n  mutation MoveIssueStatus($input: MoveIssueStatusInput!) {\n    moveIssueStatus(input: $input) {\n      issue {\n        ...IssueCardFields\n      }\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation ReorderIssue($input: ReorderIssueInput!) {\n    reorderIssue(input: $input) {\n      issue {\n        ...IssueCardFields\n      }\n    }\n  }\n"): (typeof documents)["\n  mutation ReorderIssue($input: ReorderIssueInput!) {\n    reorderIssue(input: $input) {\n      issue {\n        ...IssueCardFields\n      }\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  query GetIssue($issueId: ID!) {\n    getIssue(issueId: $issueId) {\n      ...IssueDetailFields\n    }\n  }\n"): (typeof documents)["\n  query GetIssue($issueId: ID!) {\n    getIssue(issueId: $issueId) {\n      ...IssueDetailFields\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  query GetIssueDescriptionUrl($issueId: ID!) {\n    getIssueDescriptionUrl(issueId: $issueId) {\n      url\n    }\n  }\n"): (typeof documents)["\n  query GetIssueDescriptionUrl($issueId: ID!) {\n    getIssueDescriptionUrl(issueId: $issueId) {\n      url\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation UpdateIssue($input: UpdateIssueInput!) {\n    updateIssue(input: $input) {\n      issue {\n        ...IssueDetailFields\n      }\n    }\n  }\n"): (typeof documents)["\n  mutation UpdateIssue($input: UpdateIssueInput!) {\n    updateIssue(input: $input) {\n      issue {\n        ...IssueDetailFields\n      }\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation DeleteIssue($input: DeleteIssueInput!) {\n    deleteIssue(input: $input) {\n      success\n    }\n  }\n"): (typeof documents)["\n  mutation DeleteIssue($input: DeleteIssueInput!) {\n    deleteIssue(input: $input) {\n      success\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation RequestIssueDescriptionUpload($input: RequestIssueDescriptionUploadInput!) {\n    requestIssueDescriptionUpload(input: $input) {\n      presignedUrl\n      descriptionFileId\n    }\n  }\n"): (typeof documents)["\n  mutation RequestIssueDescriptionUpload($input: RequestIssueDescriptionUploadInput!) {\n    requestIssueDescriptionUpload(input: $input) {\n      presignedUrl\n      descriptionFileId\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation ConfirmIssueDescriptionUpload($input: ConfirmIssueDescriptionUploadInput!) {\n    confirmIssueDescriptionUpload(input: $input) {\n      issue {\n        ...IssueDetailFields\n      }\n    }\n  }\n"): (typeof documents)["\n  mutation ConfirmIssueDescriptionUpload($input: ConfirmIssueDescriptionUploadInput!) {\n    confirmIssueDescriptionUpload(input: $input) {\n      issue {\n        ...IssueDetailFields\n      }\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation CreateIssueLabel($input: CreateIssueLabelInput!) {\n    createIssueLabel(input: $input) {\n      label {\n        ...IssueLabelFields\n      }\n    }\n  }\n"): (typeof documents)["\n  mutation CreateIssueLabel($input: CreateIssueLabelInput!) {\n    createIssueLabel(input: $input) {\n      label {\n        ...IssueLabelFields\n      }\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation UpdateIssueLabel($input: UpdateIssueLabelInput!) {\n    updateIssueLabel(input: $input) {\n      label {\n        ...IssueLabelFields\n      }\n    }\n  }\n"): (typeof documents)["\n  mutation UpdateIssueLabel($input: UpdateIssueLabelInput!) {\n    updateIssueLabel(input: $input) {\n      label {\n        ...IssueLabelFields\n      }\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation DeleteIssueLabel($input: DeleteIssueLabelInput!) {\n    deleteIssueLabel(input: $input) {\n      success\n    }\n  }\n"): (typeof documents)["\n  mutation DeleteIssueLabel($input: DeleteIssueLabelInput!) {\n    deleteIssueLabel(input: $input) {\n      success\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation CreateIssueStatus($input: CreateIssueStatusInput!) {\n    createIssueStatus(input: $input) {\n      status {\n        ...IssueStatusFields\n      }\n    }\n  }\n"): (typeof documents)["\n  mutation CreateIssueStatus($input: CreateIssueStatusInput!) {\n    createIssueStatus(input: $input) {\n      status {\n        ...IssueStatusFields\n      }\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation UpdateIssueStatus($input: UpdateIssueStatusInput!) {\n    updateIssueStatus(input: $input) {\n      status {\n        ...IssueStatusFields\n      }\n    }\n  }\n"): (typeof documents)["\n  mutation UpdateIssueStatus($input: UpdateIssueStatusInput!) {\n    updateIssueStatus(input: $input) {\n      status {\n        ...IssueStatusFields\n      }\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation ReorderIssueStatus($input: ReorderIssueStatusInput!) {\n    reorderIssueStatus(input: $input) {\n      status {\n        ...IssueStatusFields\n      }\n    }\n  }\n"): (typeof documents)["\n  mutation ReorderIssueStatus($input: ReorderIssueStatusInput!) {\n    reorderIssueStatus(input: $input) {\n      status {\n        ...IssueStatusFields\n      }\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation DeleteIssueStatus($input: DeleteIssueStatusInput!) {\n    deleteIssueStatus(input: $input) {\n      success\n    }\n  }\n"): (typeof documents)["\n  mutation DeleteIssueStatus($input: DeleteIssueStatusInput!) {\n    deleteIssueStatus(input: $input) {\n      success\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -584,6 +710,18 @@ export function gql(source: "\n  mutation UnlockBoard($boardId: ID!) {\n    unlo
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "\n  mutation UpdateBoardDescription($boardId: ID!, $description: String) {\n    updateBoardDescription(boardId: $boardId, description: $description) {\n      id\n      description\n      updatedAt\n    }\n  }\n"): (typeof documents)["\n  mutation UpdateBoardDescription($boardId: ID!, $description: String) {\n    updateBoardDescription(boardId: $boardId, description: $description) {\n      id\n      description\n      updatedAt\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  query GetProjectIssues($projectId: ID!) {\n    getProjectIssues(projectId: $projectId) {\n      ...IssueCardFields\n    }\n  }\n"): (typeof documents)["\n  query GetProjectIssues($projectId: ID!) {\n    getProjectIssues(projectId: $projectId) {\n      ...IssueCardFields\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  query GetIssueStatuses($projectId: ID!) {\n    getIssueStatuses(projectId: $projectId) {\n      ...IssueStatusFields\n    }\n  }\n"): (typeof documents)["\n  query GetIssueStatuses($projectId: ID!) {\n    getIssueStatuses(projectId: $projectId) {\n      ...IssueStatusFields\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  query GetIssueLabels($projectId: ID!) {\n    getIssueLabels(projectId: $projectId) {\n      ...IssueLabelFields\n    }\n  }\n"): (typeof documents)["\n  query GetIssueLabels($projectId: ID!) {\n    getIssueLabels(projectId: $projectId) {\n      ...IssueLabelFields\n    }\n  }\n"];
 
 export function gql(source: string) {
   return (documents as any)[source] ?? {};

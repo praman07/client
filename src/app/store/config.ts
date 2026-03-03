@@ -15,6 +15,7 @@ import pageSessionReducer from '@/entities/page-session/model/slice'
 import pagePresenceReducer from '@/entities/page-presence/model/slice'
 import { createPageModalReducer } from '@/features/pages/create-page/model/create-page-modal-store'
 import uploadTraySlice from '@/widgets/vault/vault-upload-tray/model/upload-tray-slice'
+import issuesReducer from '@/entities/issue/model/slice'
 
 export const store = configureStore({
   reducer: {
@@ -34,6 +35,7 @@ export const store = configureStore({
     pagePresence: pagePresenceReducer, // ✅ Pages collaborator presence
     createPageModal: createPageModalReducer, // ✅ Create page modal state
     uploadTray: uploadTraySlice.reducer, // ✅ Vault upload progress tray
+    issues: issuesReducer, // ✅ Issues Kanban board state
   },
 })
 
