@@ -49,7 +49,7 @@ export function LabelPicker({ labels, value, onToggle }: LabelPickerProps) {
     <DropdownMenu open={open} onOpenChange={handleOpenChange}>
       <DropdownMenuTrigger
         className={cn(
-          'inline-flex items-center gap-1.5 rounded-md border px-2 py-1 text-xs transition-colors cursor-pointer',
+          'inline-flex items-center gap-1.5 rounded-md border px-2 py-1 text-xs whitespace-nowrap transition-colors cursor-pointer',
           isActive
             ? 'border-primary/40 bg-primary/5 text-foreground'
             : 'border-border bg-transparent text-foreground hover:bg-muted/50',

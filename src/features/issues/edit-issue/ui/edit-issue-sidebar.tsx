@@ -1,152 +1,134 @@
 /**
- * Left sidebar of the edit-issue modal.
- * All fields update parent local state only — no mutations fire until [Save].
+ * EditIssueSidebar — Right-hand properties panel in the edit-issue modal.
+ *
+ * Linear-style layout: each property is a flat full-width row with a muted
+ * label on the left and an interactive picker on the right. Rows have a
+ * subtle hover background and a fixed height so nothing ever wraps.
+ *
+ * Pickers reused from create-issue toolbar — now all have whitespace-nowrap
+ * so their triggers stay single-line regardless of content length.
+ *
  * @layer Features
  */
-import React from 'react'
 import { useSelector } from 'react-redux'
-import { StatusPill } from '@/entities/issue-status'
-import { PriorityBadge, DueDateChip, selectIssueLabels } from '@/entities/issue'
-import { LabelPill } from '@/entities/issue-label'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/shared/ui/primitives/select'
-import { cn } from '@/shared/lib/utils'
-import type { IssuePriority, Issue } from '@/entities/issue'
+import { selectIssueLabels, selectIssueStatuses } from '@/entities/issue'
+import { StatusPicker } from '@/features/issues/create-issue/ui/toolbar/status-picker'
+import { PriorityPicker } from '@/features/issues/create-issue/ui/toolbar/priority-picker'
+import { AssigneePicker } from '@/features/issues/create-issue/ui/toolbar/assignee-picker'
+import { LabelPicker } from '@/features/issues/create-issue/ui/toolbar/label-picker'
+import { MoreMenu } from '@/features/issues/create-issue/ui/toolbar/more-menu'
+import { Separator } from '@/shared/ui/primitives/separator'
+import type { IssuePriority } from '@/entities/issue'
 
 interface EditIssueSidebarProps {
-  issue: Issue
-  projectMembers: Array<{ id: string; fullName: string }>
+  projectMembers: Array<{ id: string; fullName: string; avatarUrl?: string }>
+
+  localStatusId: string
+  localPriority: IssuePriority
   localAssigneeId: string | null
   localLabelIds: string[]
-  localPriority: IssuePriority
   localDueDate: string | null
+
+  createdByName: string
+  createdAt: string
+
+  onStatusChange: (id: string) => void
+  onPriorityChange: (p: IssuePriority) => void
   onAssigneeChange: (id: string | null) => void
   onLabelToggle: (id: string) => void
-  onPriorityChange: (p: IssuePriority) => void
   onDueDateChange: (date: string | null) => void
 }
 
-const PRIORITIES: IssuePriority[] = ['URGENT', 'HIGH', 'MEDIUM', 'LOW', 'NO_PRIORITY']
-const PRIORITY_LABELS: Record<IssuePriority, string> = {
-  URGENT: 'Urgent', HIGH: 'High', MEDIUM: 'Medium', LOW: 'Low', NO_PRIORITY: 'No Priority',
-}
-
+/**
+ * A single property row.
+ * - Label: fixed muted text, won't shrink
+ * - Value: flex-1 with min-w-0 overflow-hidden so pickers can't overflow
+ */
 function SidebarRow({ label, children }: { label: string; children: React.ReactNode }) {
   return (
-    <div className="grid grid-cols-[100px_1fr] items-center gap-2 py-1.5">
-      <span className="text-xs text-muted-foreground">{label}</span>
-      {children}
+    <div className="flex items-center gap-2 min-h-7 rounded-md px-1 hover:bg-muted/30 transition-colors">
+      <span className="text-xs text-muted-foreground shrink-0 w-[68px]">{label}</span>
+      <div className="min-w-0 flex-1 overflow-hidden flex items-center">
+        {children}
+      </div>
     </div>
   )
 }
 
 export function EditIssueSidebar({
-  issue,
   projectMembers,
+  localStatusId,
+  localPriority,
   localAssigneeId,
   localLabelIds,
-  localPriority,
   localDueDate,
+  createdByName,
+  createdAt,
+  onStatusChange,
+  onPriorityChange,
   onAssigneeChange,
   onLabelToggle,
-  onPriorityChange,
   onDueDateChange,
 }: EditIssueSidebarProps) {
-  const allLabels = useSelector(selectIssueLabels)
+  const statuses = useSelector(selectIssueStatuses)
+  const labels = useSelector(selectIssueLabels)
+
+  const formattedDate = new Date(createdAt).toLocaleDateString('en-US', {
+    month: 'short',
+    day: 'numeric',
+    year: 'numeric',
+  })
 
   return (
-    <div className="w-56 shrink-0 border-r px-4 py-3 space-y-0.5 overflow-y-auto">
-      {/* Status — display only, changed via drag on the board */}
-      <SidebarRow label="Status">
-        <StatusPill status={issue.status} className="text-xs" />
-      </SidebarRow>
+    <div className="w-72 shrink-0 border-l px-3 py-4 overflow-y-auto flex flex-col">
+      <p className="text-xs font-medium text-muted-foreground mb-1.5 px-1">Properties</p>
 
-      {/* Priority */}
-      <SidebarRow label="Priority">
-        <Select
-          value={localPriority}
-          onValueChange={(v) => onPriorityChange(v as IssuePriority)}
-        >
-          <SelectTrigger className="h-6 border-none bg-transparent p-0 text-xs shadow-none hover:bg-accent">
-            <SelectValue>
-              <PriorityBadge priority={localPriority} showLabel size={12} />
-            </SelectValue>
-          </SelectTrigger>
-          <SelectContent>
-            {PRIORITIES.map((p) => (
-              <SelectItem key={p} value={p}>
-                <span className="flex items-center gap-1.5">
-                  <PriorityBadge priority={p} size={12} />
-                  {PRIORITY_LABELS[p]}
-                </span>
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </SidebarRow>
+      <div className="flex flex-col gap-0.5">
+        <SidebarRow label="Status">
+          <StatusPicker
+            statuses={statuses}
+            value={localStatusId}
+            onChange={onStatusChange}
+          />
+        </SidebarRow>
 
-      {/* Assignee */}
-      <SidebarRow label="Assignee">
-        <Select
-          value={localAssigneeId ?? 'unassigned'}
-          onValueChange={(v) => onAssigneeChange(v === 'unassigned' ? null : v)}
-        >
-          <SelectTrigger className="h-6 border-none bg-transparent p-0 text-xs shadow-none hover:bg-accent">
-            <SelectValue placeholder="Unassigned" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="unassigned">Unassigned</SelectItem>
-            {projectMembers.map((m) => (
-              <SelectItem key={m.id} value={m.id}>{m.fullName}</SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </SidebarRow>
+        <SidebarRow label="Priority">
+          <PriorityPicker value={localPriority} onChange={onPriorityChange} />
+        </SidebarRow>
 
-      {/* Labels */}
-      <SidebarRow label="Labels">
-        <div className="flex flex-wrap gap-1">
-          {allLabels.length === 0 && (
-            <span className="text-xs text-muted-foreground">None</span>
-          )}
-          {allLabels.map((label) => {
-            const active = localLabelIds.includes(label.id)
-            return (
-              <button
-                key={label.id}
-                type="button"
-                onClick={() => onLabelToggle(label.id)}
-                className="focus:outline-none"
-              >
-                <LabelPill
-                  label={label}
-                  className={cn(active ? '' : 'opacity-40')}
-                />
-              </button>
-            )
-          })}
-        </div>
-      </SidebarRow>
+        {projectMembers.length > 0 && (
+          <SidebarRow label="Assignee">
+            <AssigneePicker
+              members={projectMembers}
+              value={localAssigneeId}
+              onChange={onAssigneeChange}
+            />
+          </SidebarRow>
+        )}
 
-      {/* Due date */}
-      <SidebarRow label="Due date">
-        <input
-          type="date"
-          value={localDueDate ?? ''}
-          onChange={(e) => onDueDateChange(e.target.value || null)}
-          className="h-6 rounded border-none bg-transparent text-xs hover:bg-accent focus:outline-none cursor-pointer"
-        />
-        {localDueDate && <DueDateChip dueDate={localDueDate} className="ml-1" />}
-      </SidebarRow>
+        {labels.length > 0 && (
+          <SidebarRow label="Labels">
+            <LabelPicker
+              labels={labels}
+              value={localLabelIds}
+              onToggle={onLabelToggle}
+            />
+          </SidebarRow>
+        )}
 
-      <div className="pt-4 border-t mt-4 space-y-1">
-        <SidebarRow label="Created by">
-          <span className="text-xs">{issue.createdBy.fullName}</span>
+        <SidebarRow label="Due date">
+          <MoreMenu dueDate={localDueDate} onDueDateChange={onDueDateChange} />
+        </SidebarRow>
+      </div>
+
+      <Separator className="my-3" />
+
+      <div className="flex flex-col gap-0.5">
+        <SidebarRow label="Author">
+          <span className="text-xs truncate">{createdByName}</span>
+        </SidebarRow>
+        <SidebarRow label="Created">
+          <span className="text-xs text-muted-foreground whitespace-nowrap">{formattedDate}</span>
         </SidebarRow>
       </div>
     </div>

@@ -37,7 +37,7 @@ export function StatusPill({
         color={status.color}
         size={iconSize}
       />
-      {showName && <span>{status.name}</span>}
+      {showName && <span className="truncate">{status.name}</span>}
     </span>
   )
 }

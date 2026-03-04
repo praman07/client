@@ -1,18 +1,31 @@
 /**
- * Edit Issue Modal — two-panel Dialog (max-w-4xl).
+ * Edit Issue Modal — Linear-style two-panel Dialog (max-w-6xl).
  *
- * Manages local state for all editable fields.
- * Changes are buffered locally; nothing is sent to the server until [Save] is clicked.
+ * Layout:
+ *   ┌──────────────────────────────────────────────────────┐
+ *   │  Header: Issue# | [Save] [⋯] [×]                     │
+ *   ├──────────────────────────────┬───────────────────────┤
+ *   │  Content (flex-1)            │  Sidebar (w-64)       │
+ *   │  - Input title (2xl bold)    │  - Status picker      │
+ *   │  - BlockNote description     │  - Priority picker    │
+ *   │    (loads from S3)           │  - Assignee picker    │
+ *   │                              │  - Labels picker      │
+ *   │                              │  - Due date picker    │
+ *   │                              │  ────────────────     │
+ *   │                              │  - Created by / at    │
+ *   └──────────────────────────────┴───────────────────────┘
  *
- * On Save:
- *   - useUpdateIssue fires if any metadata changed
- *   - useDescriptionUpload fires if blocks changed (skipped if no change)
- *
- * URL deep-linking: parent page should set ?issue=<issueId> when opening.
+ * State strategy:
+ *   - All fields are buffered locally; nothing is sent until Save.
+ *   - isDirty = any metadata field changed OR description blocks changed.
+ *   - originalBlocks are seeded once via onDescriptionLoaded callback
+ *     (fired by EditIssueDescriptionEditor after fetching from S3,
+ *      or immediately with [] if no descriptionS3Key).
+ *   - On Save the modal stays open, originalBlocks are reset to currentBlocks.
  *
  * @layer Features
  */
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import { toast } from 'sonner'
 import {
   Dialog,
@@ -51,51 +64,96 @@ export function EditIssueModal({
   const { mutateAsync: deleteIssue } = useDeleteIssue(projectId)
   const { upload, state: descState } = useDescriptionUpload()
 
-  // ── Local state (buffered until Save) ──────────────────────────────────────
+  // ── Local state (buffered until Save) ────────────────────────────────────────
   const [localTitle, setLocalTitle] = useState('')
+  const [localStatusId, setLocalStatusId] = useState('')
   const [localPriority, setLocalPriority] = useState<IssuePriority>('NO_PRIORITY')
   const [localAssigneeId, setLocalAssigneeId] = useState<string | null>(null)
   const [localLabelIds, setLocalLabelIds] = useState<string[]>([])
   const [localDueDate, setLocalDueDate] = useState<string | null>(null)
-  const [currentBlocks, setCurrentBlocks] = useState<unknown[]>([])
-  const [originalBlocks, setOriginalBlocks] = useState<unknown[]>([])
 
-  // ── Seed local state when issue loads ──────────────────────────────────────
+  // Description blocks: current (editor) vs original (last saved / loaded from S3)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [currentBlocks, setCurrentBlocks] = useState<any[]>([])
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [originalBlocks, setOriginalBlocks] = useState<any[]>([])
+  // Guard so originalBlocks are seeded exactly once per modal open session
+  const descSeeded = useRef(false)
+
+  // ── Seed local state when issue loads ────────────────────────────────────────
   useEffect(() => {
     if (!issue) return
     setLocalTitle(issue.title)
+    setLocalStatusId(issue.status?.id ?? '')
     setLocalPriority(issue.priority as IssuePriority)
     setLocalAssigneeId(issue.assignee?.id ?? null)
     setLocalLabelIds(issue.labels.map((l: { id: string }) => l.id))
     setLocalDueDate(issue.dueDate ?? null)
   }, [issue])
 
-  const isDirty = !!issue && (
+  // Reset description seed guard when issueId changes (new issue opened)
+  useEffect(() => {
+    descSeeded.current = false
+    setCurrentBlocks([])
+    setOriginalBlocks([])
+  }, [issueId])
+
+  // ── onDescriptionLoaded — seeded once after S3 fetch, or immediately if empty
+  const handleDescriptionLoaded = useCallback(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (blocks: any[]) => {
+      if (descSeeded.current) return
+      descSeeded.current = true
+      setOriginalBlocks(blocks)
+      setCurrentBlocks(blocks)
+    },
+    [],
+  )
+
+  // ── Dirty checks ─────────────────────────────────────────────────────────────
+  const isMetaDirty = !!issue && (
     localTitle !== issue.title ||
+    localStatusId !== (issue.status?.id ?? '') ||
     localPriority !== issue.priority ||
     localAssigneeId !== (issue.assignee?.id ?? null) ||
-    JSON.stringify(localLabelIds.sort()) !== JSON.stringify(issue.labels.map((l: { id: string }) => l.id).sort()) ||
+    JSON.stringify([...localLabelIds].sort()) !==
+      JSON.stringify(issue.labels.map((l: { id: string }) => l.id).sort()) ||
     localDueDate !== (issue.dueDate ?? null)
   )
-  const isSaving = isSavingMeta || descState.status === 'uploading' || descState.status === 'requesting' || descState.status === 'confirming'
+  const isDescriptionDirty =
+    JSON.stringify(currentBlocks) !== JSON.stringify(originalBlocks)
+  const isDirty = isMetaDirty || isDescriptionDirty
 
+  const isSaving =
+    isSavingMeta ||
+    descState.status === 'requesting' ||
+    descState.status === 'uploading' ||
+    descState.status === 'confirming'
+
+  // ── Save ─────────────────────────────────────────────────────────────────────
   const handleSave = async () => {
     if (!issue || !issueId) return
     try {
-      const metaChanged = isDirty
-      if (metaChanged) {
+      if (isMetaDirty) {
         await updateIssue({
           issueId,
-          title:      localTitle !== issue.title ? localTitle : undefined,
-          priority:   localPriority !== issue.priority ? localPriority : undefined,
-          assigneeId: localAssigneeId !== (issue.assignee?.id ?? null) ? localAssigneeId : undefined,
-          labelIds:   JSON.stringify(localLabelIds.sort()) !== JSON.stringify(issue.labels.map((l: { id: string }) => l.id).sort()) ? localLabelIds : undefined,
-          dueDate:    localDueDate !== (issue.dueDate ?? null) ? localDueDate : undefined,
+          title:      localTitle      !== issue.title                                 ? localTitle      : undefined,
+          statusId:   localStatusId   !== (issue.status?.id ?? '')                    ? localStatusId   : undefined,
+          priority:   localPriority   !== issue.priority                              ? localPriority   : undefined,
+          assigneeId: localAssigneeId !== (issue.assignee?.id ?? null)                ? localAssigneeId : undefined,
+          labelIds:   JSON.stringify([...localLabelIds].sort()) !==
+                      JSON.stringify(issue.labels.map((l: { id: string }) => l.id).sort())
+                        ? localLabelIds : undefined,
+          dueDate:    localDueDate    !== (issue.dueDate ?? null)                     ? localDueDate    : undefined,
         })
       }
+
       await upload(issueId, currentBlocks, originalBlocks)
+
+      // Reset the description baseline so the save button disables again
+      setOriginalBlocks(currentBlocks)
+
       toast.success('Issue saved')
-      onOpenChange(false)
     } catch (error) {
       toast.error(mapUpdateIssueError(error))
     }
@@ -110,7 +168,7 @@ export function EditIssueModal({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="flex max-w-4xl flex-col p-0 h-[80vh] overflow-hidden">
+      <DialogContent className="flex max-w-6xl sm:max-w-6xl lg:max-w-6xl flex-col p-0 h-[85vh] overflow-hidden gap-0" showCloseButton={false}>
         {isLoading || !issue ? (
           <div className="flex h-full items-center justify-center text-sm text-muted-foreground">
             Loading…
@@ -126,34 +184,39 @@ export function EditIssueModal({
               onDelete={handleDelete}
               onClose={() => onOpenChange(false)}
             />
+
+            {/* Two-panel body */}
             <div className="flex flex-1 overflow-hidden">
+              {/* ── Left: Title + BlockNote description ── */}
+              <EditIssueContent
+                title={localTitle}
+                onTitleChange={setLocalTitle}
+                issueId={issueId!}
+                descriptionS3Key={issue.descriptionS3Key ?? null}
+                editable={!isSaving}
+                onBlocksChange={setCurrentBlocks}
+                onDescriptionLoaded={handleDescriptionLoaded}
+              />
+
+              {/* ── Right: Properties sidebar ── */}
               <EditIssueSidebar
-                issue={issue as any}
                 projectMembers={projectMembers}
+                localStatusId={localStatusId}
+                localPriority={localPriority}
                 localAssigneeId={localAssigneeId}
                 localLabelIds={localLabelIds}
-                localPriority={localPriority}
                 localDueDate={localDueDate}
+                createdByName={issue.createdBy?.fullName ?? 'Unknown'}
+                createdAt={issue.createdAt}
+                onStatusChange={setLocalStatusId}
+                onPriorityChange={setLocalPriority}
                 onAssigneeChange={setLocalAssigneeId}
                 onLabelToggle={(id: string) =>
                   setLocalLabelIds((prev) =>
                     prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id],
                   )
                 }
-                onPriorityChange={setLocalPriority}
                 onDueDateChange={setLocalDueDate}
-              />
-              <EditIssueContent
-                title={localTitle}
-                onTitleChange={setLocalTitle}
-                descriptionS3Key={issue.descriptionS3Key ?? null}
-                issueId={issueId!}
-                onBlocksChange={(blocks: unknown[]) => {
-                  setCurrentBlocks(blocks)
-                  if (originalBlocks.length === 0 && blocks.length > 0) {
-                    setOriginalBlocks(blocks)
-                  }
-                }}
               />
             </div>
           </>

@@ -1,69 +1,57 @@
 /**
- * Main content area of the edit-issue modal.
+ * EditIssueContent — Title + BlockNote description area (left panel).
  *
- * Contains:
- *   1. Title — auto-resize Textarea, onChange → setLocalTitle (no mutation)
- *   2. Description — BlockNote editor placeholder
- *      (BlockNote is a heavy dep; actual integration happens when
- *       BlockNote package is available in the project)
+ * Title:       plain <Input> (single line, large text) — local state only.
+ * Description: EditIssueDescriptionEditor wired to S3 load + change tracking.
  *
- * Both are passive local-state only. No network call until Save.
+ * No mutations fire here — everything is buffered in the parent modal.
  *
  * @layer Features
  */
-import { useEffect, useRef } from 'react'
-import { Textarea } from '@/shared/ui/primitives/textarea'
+import { Input } from '@/shared/ui/primitives/input'
+import { EditIssueDescriptionEditor } from './edit-issue-description-editor'
 
 interface EditIssueContentProps {
   title: string
   onTitleChange: (title: string) => void
-  descriptionS3Key: string | null
   issueId: string
-  /** Called on every BlockNote document change with the current block array */
-  onBlocksChange: (blocks: unknown[]) => void
+  descriptionS3Key: string | null
+  editable: boolean
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  onBlocksChange: (blocks: any[]) => void
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  onDescriptionLoaded: (blocks: any[]) => void
 }
 
 export function EditIssueContent({
   title,
   onTitleChange,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  descriptionS3Key: _descriptionS3Key,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  issueId: _issueId,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  onBlocksChange: _onBlocksChange,
+  issueId,
+  descriptionS3Key,
+  editable,
+  onBlocksChange,
+  onDescriptionLoaded,
 }: EditIssueContentProps) {
-  const textareaRef = useRef<HTMLTextAreaElement>(null)
-
-  // Auto-resize textarea to fit content
-  useEffect(() => {
-    const el = textareaRef.current
-    if (!el) return
-    el.style.height = 'auto'
-    el.style.height = `${el.scrollHeight}px`
-  }, [title])
-
   return (
-    <div className="flex flex-1 flex-col overflow-y-auto px-6 py-4 gap-4">
+    <div className="flex flex-1 flex-col overflow-y-auto px-6 pt-5 pb-4 gap-0">
       {/* Title */}
-      <Textarea
-        ref={textareaRef}
+      <Input
         value={title}
         onChange={(e) => onTitleChange(e.target.value)}
         placeholder="Issue title"
-        className="resize-none border-none bg-transparent px-0 text-xl font-semibold shadow-none focus-visible:ring-0 leading-snug"
-        rows={1}
+        disabled={!editable}
+        className="border-none bg-transparent px-0 h-auto py-0 text-2xl md:text-2xl font-semibold shadow-none focus-visible:ring-0 leading-snug placeholder:text-muted-foreground/50"
       />
 
-      {/* Description placeholder */}
-      {/* TODO: Wire up BlockNote editor when available */}
-      <div
-        className="min-h-[200px] rounded-md border border-dashed border-border px-4 py-3 text-sm text-muted-foreground cursor-text"
-        onClick={() => {
-          // BlockNote editor will mount here
-        }}
-      >
-        Add a description…
+      {/* Description — BlockNote editor wired to S3 */}
+      <div className="mt-1 flex-1">
+        <EditIssueDescriptionEditor
+          issueId={issueId}
+          descriptionS3Key={descriptionS3Key}
+          onChange={onBlocksChange}
+          onDescriptionLoaded={onDescriptionLoaded}
+          editable={editable}
+        />
       </div>
     </div>
   )
