@@ -13,6 +13,11 @@ export const PROJECT_FRAGMENT = gql(`
       userId
       role
       joinedAt
+      user {
+        id
+        fullName
+        avatarUrl
+      }
     }
   }
 `)

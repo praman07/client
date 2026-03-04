@@ -51,7 +51,7 @@ import { CardTunnel } from './issue-card'
 interface IssuesBoardProps {
   projectId: string
   projectKey: string
-  projectMembers: Array<{ id: string; fullName: string }>
+  projectMembers: Array<{ id: string; fullName: string; avatarUrl?: string }>
 }
 
 export function IssuesBoard({
@@ -235,6 +235,7 @@ export function IssuesBoard({
             open={!!createStatusId}
             onOpenChange={(open) => !open && setCreateStatusId(null)}
             projectId={projectId}
+            projectKey={projectKey}
             defaultStatusId={createStatusId}
             projectMembers={projectMembers}
           />

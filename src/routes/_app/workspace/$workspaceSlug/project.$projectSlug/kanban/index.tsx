@@ -21,7 +21,8 @@ function RouteComponent() {
   // This is a known gap to be addressed in the members feature.
   const projectMembers = project.members.map((m) => ({
     id: m.userId,
-    fullName: m.userId, // placeholder — will be replaced when member profiles are fetched
+    fullName: m.user.fullName ?? 'Unknown',
+    avatarUrl: m.user.avatarUrl ?? undefined,
   }))
 
   return (

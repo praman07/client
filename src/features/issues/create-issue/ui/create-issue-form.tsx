@@ -1,291 +1,282 @@
 /**
- * TanStack Form for creating a new issue.
+ * CreateIssueForm — Linear-style issue creation interface.
  *
- * Fields:
- *   1. title      — Input (required, autoFocus)
- *   2. statusId   — Select with StatusPill options
- *   3. priority   — Select with PriorityBadge options
- *   4. assigneeId — Combobox of project members (optional)
- *   5. labelIds   — Multi-select checkbox list of project labels (optional)
- *   6. dueDate    — text input (ISO date string, optional)
+ * Layout:
+ *   ┌──────────────────────────────────────────┐
+ *   │ [icon] ProjectKey › New issue   [⤢] [✕]  │  ← breadcrumb header
+ *   ├──────────────────────────────────────────┤
+ *   │  Issue title                             │  ← auto-resize Textarea
+ *   │  Add description…                        │  ← BlockNote placeholder
+ *   ├──────────────────────────────────────────┤
+ *   │ [● Status] [··· Priority] [👤 Assignee] │  ← toolbar pills
+ *   │ [🏷 Labels] [···]                        │
+ *   ├──────────────────────────────────────────┤
+ *   │ [📎]            [Create more ○] [Create] │  ← footer
+ *   └──────────────────────────────────────────┘
  *
- * Description is NOT included in the create flow.
+ * Description is intentionally a placeholder.
  * It is added via the edit modal after the issue is created.
  *
  * @layer Features
  */
-import { useState } from 'react'
-import { useForm } from '@tanstack/react-form'
+import { useState, useRef } from 'react'
 import { useSelector } from 'react-redux'
 import { toast } from 'sonner'
+import { HugeiconsIcon } from '@hugeicons/react'
+import {
+  NoteIcon,
+  AttachmentIcon,
+  Cancel01Icon,
+  ArrowExpandDiagonal01Icon,
+  ArrowShrink01Icon,
+} from '@hugeicons/core-free-icons'
 import { Button } from '@/shared/ui/primitives/button'
 import { Input } from '@/shared/ui/primitives/input'
-import { Label } from '@/shared/ui/primitives/label'
+import { Switch } from '@/shared/ui/primitives/switch'
+import { Separator } from '@/shared/ui/primitives/separator'
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/shared/ui/primitives/select'
-import { StatusPill } from '@/entities/issue-status'
-import { LabelPill } from '@/entities/issue-label'
-import {
-  PriorityBadge,
   selectIssueStatuses,
   selectIssueLabels,
 } from '@/entities/issue'
 import type { IssuePriority } from '@/entities/issue'
 import { useCreateIssue } from '../hooks/use-create-issue'
+import {
+  useCreateIssueDescription,
+  isDescriptionEmpty,
+} from '../hooks/use-create-issue-description'
 import { createIssueSchema } from '../model/schema'
 import { mapCreateIssueError } from '../lib/error-mapping'
-
-const PRIORITIES: IssuePriority[] = ['URGENT', 'HIGH', 'MEDIUM', 'LOW', 'NO_PRIORITY']
-const PRIORITY_LABELS: Record<IssuePriority, string> = {
-  URGENT: 'Urgent', HIGH: 'High', MEDIUM: 'Medium', LOW: 'Low', NO_PRIORITY: 'No Priority',
-}
+import { CreateIssueToolbar } from './toolbar/create-issue-toolbar'
+import { IssueDescriptionEditor } from './issue-description-editor'
+import type { BlockNoteEditor } from '@blocknote/core'
 
 interface CreateIssueFormProps {
   projectId: string
-  /** Pre-selects the status (column where + was clicked) */
+  projectKey: string
   defaultStatusId: string
-  projectMembers: Array<{ id: string; fullName: string }>
+  projectMembers: Array<{ id: string; fullName: string; avatarUrl?: string }>
+  isExpanded?: boolean
+  onToggleExpand?: () => void
   onSuccess?: () => void
   onCancel?: () => void
 }
 
 export function CreateIssueForm({
   projectId,
+  projectKey,
   defaultStatusId,
   projectMembers,
+  isExpanded = false,
+  onToggleExpand,
   onSuccess,
   onCancel,
 }: CreateIssueFormProps) {
-  const [rootError, setRootError] = useState<string | null>(null)
-  const { mutateAsync: createIssue, isPending } = useCreateIssue()
+  // ── Field state ──────────────────────────────────────────────────────────────
+  const [title, setTitle] = useState('')
+  const [statusId, setStatusId] = useState(defaultStatusId)
+  const [priority, setPriority] = useState<IssuePriority>('NO_PRIORITY')
+  const [assigneeId, setAssigneeId] = useState<string | null>(null)
+  const [labelIds, setLabelIds] = useState<string[]>([])
+  const [dueDate, setDueDate] = useState<string | null>(null)
+  const [createMore, setCreateMore] = useState(false)
+
   const statuses = useSelector(selectIssueStatuses)
   const labels = useSelector(selectIssueLabels)
+  const { mutateAsync: createIssue, isPending } = useCreateIssue()
+  const { upload: uploadDescription, state: descUploadState } = useCreateIssueDescription()
 
-  const form = useForm({
-    defaultValues: {
-      title:      '',
-      statusId:   defaultStatusId,
-      priority:   'NO_PRIORITY' as IssuePriority,
-      assigneeId: null as string | null,
-      labelIds:   [] as string[],
-      dueDate:    null as string | null,
-    },
-    onSubmit: async ({ value }) => {
-      setRootError(null)
-      try {
-        await createIssue({
-          projectId,
-          title:      value.title.trim(),
-          statusId:   value.statusId,
-          priority:   value.priority,
-          assigneeId: value.assigneeId,
-          labelIds:   value.labelIds,
-          dueDate:    value.dueDate,
-        })
-        toast.success('Issue created')
-        onSuccess?.()
-      } catch (error: unknown) {
-        const message = mapCreateIssueError(error)
-        setRootError(message)
-        toast.error(message)
+  // ── BlockNote editor ref ─────────────────────────────────────────────────────
+  // Read editor.document synchronously on submit — avoids stale-closure issues
+  // that come from reading React state captured at callback creation time.
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const editorRef = useRef<BlockNoteEditor<any> | null>(null)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [descriptionBlocks, setDescriptionBlocks] = useState<any[]>([])
+
+  // ── Title ref (for focus on createMore reset) ─────────────────────────────
+  const titleRef = useRef<HTMLInputElement>(null)
+
+  // ── Derived ──────────────────────────────────────────────────────────────────
+  const titleValid = createIssueSchema.shape.title.safeParse(title.trim()).success
+  const isUploading = !['idle', 'done', 'error'].includes(descUploadState.status)
+  const canSubmit = titleValid && !isPending && !isUploading
+
+  // ── Submit ───────────────────────────────────────────────────────────────────
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!canSubmit) return
+    try {
+      // ── Step 1: Create the issue row ─────────────────────────────────────────
+      const result = await createIssue({
+        projectId,
+        title: title.trim(),
+        statusId,
+        priority,
+        assigneeId,
+        labelIds,
+        dueDate,
+      })
+
+      // ── Step 2: Upload description (skipped if editor is empty) ───────────────
+      const issueId = result?.createIssue?.issue?.id
+      const blocks = editorRef.current?.document ?? descriptionBlocks
+      if (issueId && !isDescriptionEmpty(blocks)) {
+        // originalBlocks = [] because this is a brand-new issue (nothing saved yet)
+        await uploadDescription(issueId, blocks, [])
       }
-    },
-  })
+
+      toast.success('Issue created')
+      if (createMore) {
+        // Reset form fields, keep modal open
+        setTitle('')
+        setPriority('NO_PRIORITY')
+        setAssigneeId(null)
+        setLabelIds([])
+        setDueDate(null)
+        setStatusId(defaultStatusId)
+        setDescriptionBlocks([])
+        titleRef.current?.focus()
+      } else {
+        onSuccess?.()
+      }
+    } catch (error: unknown) {
+      toast.error(mapCreateIssueError(error))
+    }
+  }
+
+  // ── Label toggle ─────────────────────────────────────────────────────────────
+  const handleLabelToggle = (id: string) =>
+    setLabelIds((prev) =>
+      prev.includes(id) ? prev.filter((l) => l !== id) : [...prev, id],
+    )
 
   return (
-    <form
-      onSubmit={(e) => {
-        e.preventDefault()
-        e.stopPropagation()
-        form.handleSubmit()
-      }}
-      className="space-y-4"
-    >
-      {rootError && (
-        <div className="rounded-md bg-destructive/15 px-3 py-2 text-sm text-destructive">
-          {rootError}
-        </div>
-      )}
+    <form onSubmit={handleSubmit} className="flex flex-col h-full">
+      {/* ── Header breadcrumb ─────────────────────────────────────────────────── */}
+      <div className="flex items-center gap-2 px-4 py-3 border-b border-border">
+        <HugeiconsIcon
+          icon={NoteIcon}
+          strokeWidth={2}
+          className="size-4 text-muted-foreground shrink-0"
+        />
+        <span className="text-xs text-muted-foreground font-medium">
+          {projectKey}
+        </span>
+        <span className="text-xs text-muted-foreground">›</span>
+        <span className="text-xs text-foreground font-medium">New issue</span>
 
-      {/* Title */}
-      <form.Field
-        name="title"
-        validators={{
-          onChange: ({ value }) => {
-            const result = createIssueSchema.shape.title.safeParse(value)
-            if (!result.success) return result.error.issues[0].message
-            return undefined
-          },
-        }}
-      >
-        {(field) => (
-          <div className="space-y-2">
-            <Label htmlFor={field.name}>Issue title <span className="text-destructive">*</span></Label>
-            <Input
-              id={field.name}
-              name={field.name}
-              value={field.state.value}
-              onBlur={field.handleBlur}
-              onChange={(e) => field.handleChange(e.target.value)}
-              placeholder="What needs to be done?"
-              disabled={isPending}
-              autoFocus
+        {/* Spacer */}
+        <div className="ml-auto flex items-center gap-1">
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            className="size-7"
+            onClick={onToggleExpand}
+            title={isExpanded ? 'Collapse' : 'Expand'}
+          >
+            <HugeiconsIcon
+              icon={isExpanded ? ArrowShrink01Icon : ArrowExpandDiagonal01Icon}
+              strokeWidth={2}
+              className="size-4"
             />
-            {field.state.meta.errors.length > 0 && (
-              <p className="text-sm text-destructive">{field.state.meta.errors.join(', ')}</p>
-            )}
-          </div>
-        )}
-      </form.Field>
-
-      <div className="grid grid-cols-2 gap-3">
-        {/* Status */}
-        <form.Field name="statusId">
-          {(field) => (
-            <div className="space-y-2">
-              <Label>Status</Label>
-              <Select
-                value={field.state.value}
-                onValueChange={(v) => { if (v) field.handleChange(v) }}
-                disabled={isPending}
-              >
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {statuses.map((s) => (
-                    <SelectItem key={s.id} value={s.id}>
-                      <StatusPill status={s} />
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-          )}
-        </form.Field>
-
-        {/* Priority */}
-        <form.Field name="priority">
-          {(field) => (
-            <div className="space-y-2">
-              <Label>Priority</Label>
-              <Select
-                value={field.state.value}
-                onValueChange={(v) => field.handleChange(v as IssuePriority)}
-                disabled={isPending}
-              >
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {PRIORITIES.map((p) => (
-                    <SelectItem key={p} value={p}>
-                      <span className="flex items-center gap-1.5">
-                        <PriorityBadge priority={p} size={12} />
-                        {PRIORITY_LABELS[p]}
-                      </span>
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-          )}
-        </form.Field>
+          </Button>
+          <Button
+            type="button"
+            variant="ghost"
+            size="icon"
+            className="size-7"
+            onClick={onCancel}
+            title="Close"
+          >
+            <HugeiconsIcon icon={Cancel01Icon} strokeWidth={2} className="size-4" />
+          </Button>
+        </div>
       </div>
 
-      {/* Assignee */}
-      {projectMembers.length > 0 && (
-        <form.Field name="assigneeId">
-          {(field) => (
-            <div className="space-y-2">
-              <Label>Assignee</Label>
-              <Select
-                value={field.state.value ?? 'unassigned'}
-                onValueChange={(v) => field.handleChange(() => v === 'unassigned' ? null : v)}
-                disabled={isPending}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Unassigned" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="unassigned">Unassigned</SelectItem>
-                  {projectMembers.map((m) => (
-                    <SelectItem key={m.id} value={m.id}>{m.fullName}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-          )}
-        </form.Field>
-      )}
-
-      {/* Labels */}
-      {labels.length > 0 && (
-        <form.Field name="labelIds">
-          {(field) => (
-            <div className="space-y-2">
-              <Label>Labels</Label>
-              <div className="flex flex-wrap gap-1.5">
-                {labels.map((label) => {
-                  const active = field.state.value.includes(label.id)
-                  return (
-                    <button
-                      key={label.id}
-                      type="button"
-                      disabled={isPending}
-                      onClick={() =>
-                        field.handleChange(
-                          active
-                            ? field.state.value.filter((id) => id !== label.id)
-                            : [...field.state.value, label.id],
-                        )
-                      }
-                    >
-                      <LabelPill label={label} className={active ? 'ring-2 ring-offset-1' : 'opacity-50'} />
-                    </button>
-                  )
-                })}
-              </div>
-            </div>
-          )}
-        </form.Field>
-      )}
-
-      {/* Due date */}
-      <form.Field name="dueDate">
-        {(field) => (
-          <div className="space-y-2">
-            <Label htmlFor={field.name}>Due date</Label>
-            <Input
-              id={field.name}
-              type="date"
-              value={field.state.value ?? ''}
-              onChange={(e) => field.handleChange(() => e.target.value || null)}
-              disabled={isPending}
-            />
-          </div>
-        )}
-      </form.Field>
-
-      <div className="flex justify-end gap-2 pt-2">
-        {onCancel && (
-          <Button type="button" variant="outline" onClick={onCancel} disabled={isPending}>
-            Cancel
-          </Button>
-        )}
-        <form.Subscribe
-          selector={(state) => [state.canSubmit, state.isSubmitting]}
-          children={([canSubmit]) => (
-            <Button type="submit" disabled={!canSubmit || isPending}>
-              {isPending ? 'Creating…' : 'Create issue'}
-            </Button>
-          )}
+      {/* ── Content area ─────────────────────────────────────────────────────── */}
+      <div className="flex flex-col flex-1 overflow-y-auto gap-0 px-4 pt-3 pb-0">
+        {/* Title */}
+        <Input
+          ref={titleRef}
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          placeholder="Issue title"
+          disabled={isPending}
+          autoFocus
+          className="border-none bg-transparent px-0 h-auto py-0 text-4xl md:text-2xl font-medium shadow-none focus-visible:ring-0 leading-snug placeholder:text-muted-foreground/50"
         />
+
+        {/* Description — BlockNote editor */}
+        <div>
+          <IssueDescriptionEditor
+            editorRef={editorRef}
+            onChange={setDescriptionBlocks}
+            editable={!isPending && !isUploading}
+          />
+        </div>
+      </div>
+
+      <Separator />
+
+      {/* ── Toolbar pills ──────────────────────────────────────────────────────── */}
+      <CreateIssueToolbar
+        statuses={statuses}
+        statusId={statusId}
+        onStatusChange={setStatusId}
+        priority={priority}
+        onPriorityChange={setPriority}
+        projectMembers={projectMembers}
+        assigneeId={assigneeId}
+        onAssigneeChange={setAssigneeId}
+        labels={labels}
+        labelIds={labelIds}
+        onLabelToggle={handleLabelToggle}
+        dueDate={dueDate}
+        onDueDateChange={setDueDate}
+      />
+
+      <Separator />
+
+      {/* ── Footer ────────────────────────────────────────────────────────────── */}
+      <div className="flex items-center px-4 py-2.5">
+        {/* Attachment icon — future */}
+        <Button
+          type="button"
+          variant="ghost"
+          size="icon"
+          className="size-7 text-muted-foreground"
+          title="Attach file"
+          disabled
+        >
+          <HugeiconsIcon icon={AttachmentIcon} strokeWidth={2} className="size-4" />
+        </Button>
+
+        {/* Spacer */}
+        <div className="ml-auto flex items-center gap-3">
+          <div className="flex items-center gap-2">
+            <Switch
+              id="create-more"
+              checked={createMore}
+              onCheckedChange={setCreateMore}
+              className="scale-75"
+            />
+            <label
+              htmlFor="create-more"
+              className="text-xs text-muted-foreground select-none cursor-pointer"
+            >
+              Create more
+            </label>
+          </div>
+
+          <Button
+            type="submit"
+            size="sm"
+            disabled={!canSubmit}
+          >
+            {isPending ? 'Creating…' : isUploading ? 'Uploading…' : 'Create issue'}
+          </Button>
+        </div>
       </div>
     </form>
   )

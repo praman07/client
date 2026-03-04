@@ -48,7 +48,7 @@ interface FilterMenuProps {
   filters: IssueFilters
   statuses: IssueStatus[]
   labels: IssueLabel[]
-  projectMembers: Array<{ id: string; fullName: string }>
+  projectMembers: Array<{ id: string; fullName: string; avatarUrl?: string }>
   onSetFilter: (patch: Partial<IssueFilters>) => void
   hasActiveFilters: boolean
 }

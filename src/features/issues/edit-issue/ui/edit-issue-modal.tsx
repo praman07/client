@@ -35,7 +35,7 @@ interface EditIssueModalProps {
   issueId: string | null
   projectId: string
   projectKey: string
-  projectMembers: Array<{ id: string; fullName: string }>
+  projectMembers: Array<{ id: string; fullName: string; avatarUrl?: string }>
 }
 
 export function EditIssueModal({

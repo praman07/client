@@ -15,7 +15,7 @@ import { IssueFilterToolbar } from '@/features/issues/filter-issues'
 import { cn } from '@/shared/lib/utils'
 
 interface BoardToolbarProps {
-  projectMembers: Array<{ id: string; fullName: string }>
+  projectMembers: Array<{ id: string; fullName: string; avatarUrl?: string }>
   isRefreshing: boolean
   onRefresh: () => void
   onManageStatuses: () => void
