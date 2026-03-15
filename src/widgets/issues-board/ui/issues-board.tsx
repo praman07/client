@@ -31,10 +31,17 @@ import {
   type Announcements,
   type DragEndEvent,
 } from '@dnd-kit/core'
-import { SortableContext, horizontalListSortingStrategy } from '@dnd-kit/sortable'
+import {
+  SortableContext,
+  horizontalListSortingStrategy,
+} from '@dnd-kit/sortable'
 import { AlertTriangle, RefreshCw } from 'lucide-react'
 import { Button } from '@/shared/ui/primitives/button'
-import { selectIssueStatuses, selectFilteredIssues, selectIssues } from '@/entities/issue'
+import {
+  selectIssueStatuses,
+  selectFilteredIssues,
+  selectIssues,
+} from '@/entities/issue'
 import { CreateIssueModal } from '@/features/issues/create-issue'
 import { EditIssueModal } from '@/features/issues/edit-issue'
 import { ManageStatusesModal } from '@/features/issues/manage-statuses'
@@ -70,8 +77,12 @@ export function IssuesBoard({
   const allIssues = useSelector(selectIssues)
 
   // ── Drag-drop — cards ──────────────────────────────────────────────────────
-  const { activeCardId, handleDragStart, handleDragOver, handleDragEnd: handleCardDragEnd } =
-    useDragDrop(projectId)
+  const {
+    activeCardId,
+    handleDragStart,
+    handleDragOver,
+    handleDragEnd: handleCardDragEnd,
+  } = useDragDrop(projectId)
 
   // ── Drag-drop — columns ────────────────────────────────────────────────────
   const { handleColumnDragEnd } = useColumnDrag(projectId)

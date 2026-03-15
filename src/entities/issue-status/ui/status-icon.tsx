@@ -31,11 +31,11 @@ import { cn } from '@/shared/lib/utils'
 
 const ICON_MAP: Record<string, LucideIcon> = {
   'circle-dashed': CircleDashed,
-  'circle':        Circle,
-  'circle-half':   Clock,       // In Progress — Clock is the closest semantic match
-  'circle-dot':    CircleDot,
-  'check-circle':  CheckCircle,
-  'x-circle':      XCircle,
+  circle: Circle,
+  'circle-half': Clock, // In Progress — Clock is the closest semantic match
+  'circle-dot': CircleDot,
+  'check-circle': CheckCircle,
+  'x-circle': XCircle,
 }
 
 interface StatusIconProps {
@@ -47,7 +47,12 @@ interface StatusIconProps {
   className?: string
 }
 
-export function StatusIcon({ iconKey, color, size = 14, className }: StatusIconProps) {
+export function StatusIcon({
+  iconKey,
+  color,
+  size = 14,
+  className,
+}: StatusIconProps) {
   const Icon = iconKey ? (ICON_MAP[iconKey] ?? Circle) : Circle
 
   return (

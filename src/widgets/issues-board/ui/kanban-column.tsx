@@ -14,7 +14,11 @@
  */
 import { useDroppable } from '@dnd-kit/core'
 import { useMemo } from 'react'
-import { SortableContext, useSortable, verticalListSortingStrategy } from '@dnd-kit/sortable'
+import {
+  SortableContext,
+  useSortable,
+  verticalListSortingStrategy,
+} from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { GripVertical, Plus } from 'lucide-react'
 import { Badge } from '@/shared/ui/primitives/badge'
@@ -123,9 +127,7 @@ export function KanbanColumn({
             {issues.length === 0 && (
               <div
                 className={`flex min-h-20 items-center justify-center rounded-md border-2 border-dashed py-8 text-xs text-muted-foreground transition-colors ${
-                  isOver
-                    ? 'border-primary/40 text-primary'
-                    : 'border-border/40'
+                  isOver ? 'border-primary/40 text-primary' : 'border-border/40'
                 }`}
               >
                 {isOver ? 'Drop here' : 'No issues'}

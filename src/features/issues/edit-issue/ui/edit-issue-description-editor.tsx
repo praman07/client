@@ -64,7 +64,8 @@ export function EditIssueDescriptionEditor({
     // Zero out the side-menu gutter padding so text aligns with the title
     domAttributes: {
       editor: {
-        style: 'padding-left: 0; padding-right: 0; padding-top: 4px; font-size: 0.875rem;',
+        style:
+          'padding-left: 0; padding-right: 0; padding-top: 4px; font-size: 0.875rem;',
       },
     },
   })

@@ -7,7 +7,5 @@ export const Route = createFileRoute(
 })
 
 function BoardLayout() {
-  return (
-    <Outlet />
-  )
+  return <Outlet />
 }

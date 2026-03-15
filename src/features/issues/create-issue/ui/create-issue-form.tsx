@@ -34,10 +34,7 @@ import { Button } from '@/shared/ui/primitives/button'
 import { Input } from '@/shared/ui/primitives/input'
 import { Switch } from '@/shared/ui/primitives/switch'
 import { Separator } from '@/shared/ui/primitives/separator'
-import {
-  selectIssueStatuses,
-  selectIssueLabels,
-} from '@/entities/issue'
+import { selectIssueStatuses, selectIssueLabels } from '@/entities/issue'
 import type { IssuePriority } from '@/entities/issue'
 import { useCreateIssue } from '../hooks/use-create-issue'
 import {
@@ -83,7 +80,8 @@ export function CreateIssueForm({
   const statuses = useSelector(selectIssueStatuses)
   const labels = useSelector(selectIssueLabels)
   const { mutateAsync: createIssue, isPending } = useCreateIssue()
-  const { upload: uploadDescription, state: descUploadState } = useCreateIssueDescription()
+  const { upload: uploadDescription, state: descUploadState } =
+    useCreateIssueDescription()
 
   // ── BlockNote editor ref ─────────────────────────────────────────────────────
   // Read editor.document synchronously on submit — avoids stale-closure issues
@@ -97,8 +95,12 @@ export function CreateIssueForm({
   const titleRef = useRef<HTMLInputElement>(null)
 
   // ── Derived ──────────────────────────────────────────────────────────────────
-  const titleValid = createIssueSchema.shape.title.safeParse(title.trim()).success
-  const isUploading = !['idle', 'done', 'error'].includes(descUploadState.status)
+  const titleValid = createIssueSchema.shape.title.safeParse(
+    title.trim(),
+  ).success
+  const isUploading = !['idle', 'done', 'error'].includes(
+    descUploadState.status,
+  )
   const canSubmit = titleValid && !isPending && !isUploading
 
   // ── Submit ───────────────────────────────────────────────────────────────────
@@ -189,7 +191,11 @@ export function CreateIssueForm({
             onClick={onCancel}
             title="Close"
           >
-            <HugeiconsIcon icon={Cancel01Icon} strokeWidth={2} className="size-4" />
+            <HugeiconsIcon
+              icon={Cancel01Icon}
+              strokeWidth={2}
+              className="size-4"
+            />
           </Button>
         </div>
       </div>
@@ -249,7 +255,11 @@ export function CreateIssueForm({
           title="Attach file"
           disabled
         >
-          <HugeiconsIcon icon={AttachmentIcon} strokeWidth={2} className="size-4" />
+          <HugeiconsIcon
+            icon={AttachmentIcon}
+            strokeWidth={2}
+            className="size-4"
+          />
         </Button>
 
         {/* Spacer */}
@@ -269,12 +279,12 @@ export function CreateIssueForm({
             </label>
           </div>
 
-          <Button
-            type="submit"
-            size="sm"
-            disabled={!canSubmit}
-          >
-            {isPending ? 'Creating…' : isUploading ? 'Uploading…' : 'Create issue'}
+          <Button type="submit" size="sm" disabled={!canSubmit}>
+            {isPending
+              ? 'Creating…'
+              : isUploading
+                ? 'Uploading…'
+                : 'Create issue'}
           </Button>
         </div>
       </div>

@@ -68,7 +68,12 @@ export function MoreMenu({ dueDate, onDueDateChange }: MoreMenuProps) {
         />
       </DropdownMenuTrigger>
 
-      <DropdownMenuContent align="start" side="bottom" sideOffset={6} className="w-48">
+      <DropdownMenuContent
+        align="start"
+        side="bottom"
+        sideOffset={6}
+        className="w-48"
+      >
         <DropdownMenuSub>
           <DropdownMenuSubTrigger>
             <HugeiconsIcon

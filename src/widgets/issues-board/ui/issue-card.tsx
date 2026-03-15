@@ -17,7 +17,11 @@ import { useContext } from 'react'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import tunnel from 'tunnel-rat'
-import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/primitives/avatar'
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from '@/shared/ui/primitives/avatar'
 import { PriorityBadge, DueDateChip, IssueNumber } from '@/entities/issue'
 import { LabelPill } from '@/entities/issue-label'
 import { cn } from '@/shared/lib/utils'
@@ -36,7 +40,13 @@ interface IssueCardProps {
   onClick: () => void
 }
 
-function CardContent({ issue, projectKey }: { issue: Issue; projectKey: string }) {
+function CardContent({
+  issue,
+  projectKey,
+}: {
+  issue: Issue
+  projectKey: string
+}) {
   const visibleLabels = issue.labels.slice(0, MAX_LABELS)
   const overflow = issue.labels.length - MAX_LABELS
 
@@ -93,11 +103,17 @@ export function IssueCard({ issue, projectKey, onClick }: IssueCardProps) {
   const { activeCardId } = useContext(BoardContext)
   const isActive = activeCardId === issue.id
 
-  const { attributes, listeners, setNodeRef, transform, transition, isDragging } =
-    useSortable({
-      id: issue.id,
-      data: { statusId: issue.status.id },
-    })
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({
+    id: issue.id,
+    data: { statusId: issue.status.id },
+  })
 
   const style = {
     transform: CSS.Transform.toString(transform),

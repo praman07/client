@@ -5,11 +5,11 @@ import { useAppSelector } from '@/shared/hooks'
 import { selectWorkspaceBySlug } from '@/entities/workspace/model/selectors'
 import { useMyProjects } from '@/entities/project/hooks'
 import { ProjectCard } from '@/entities/project/ui/project-card'
-import { CreateProjectModal } from '@/features/create-project/ui/create-project-modal'
+import { CreateProjectModal } from '@/features/project/create-project/ui/create-project-modal'
 import { Button, Skeleton } from '@/shared/ui'
 import { useFragment } from '@/gql'
 import { PROJECT_FRAGMENT } from '@/entities/project/api/fragments'
-import { useCreateProjectModal } from '@/features/create-project/hooks/use-create-project-modal'
+import { useCreateProjectModal } from '@/features/project/create-project/hooks/use-create-project-modal'
 
 interface ProjectsPageProps {
   workspaceSlug: string

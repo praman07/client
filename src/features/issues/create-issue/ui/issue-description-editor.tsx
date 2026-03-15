@@ -24,7 +24,6 @@ import { useEffect, useRef } from 'react'
 import { useCreateBlockNote } from '@blocknote/react'
 import { BlockNoteView } from '@blocknote/shadcn'
 
-
 import type { BlockNoteEditor } from '@blocknote/core'
 import { en } from '@blocknote/core/locales'
 
@@ -42,8 +41,6 @@ export function IssueDescriptionEditor({
   editable = true,
 }: IssueDescriptionEditorProps) {
   const editor = useCreateBlockNote({
-
-
     // ── Placeholder ────────────────────────────────────────────────────────────
     // Spread the default `en` dictionary then override only the one string.
     // A bare partial cast (`as any`) replaces the entire dictionary object,

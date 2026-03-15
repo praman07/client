@@ -44,10 +44,18 @@ interface EditIssueSidebarProps {
  * - Label: fixed muted text, won't shrink
  * - Value: flex-1 with min-w-0 overflow-hidden so pickers can't overflow
  */
-function SidebarRow({ label, children }: { label: string; children: React.ReactNode }) {
+function SidebarRow({
+  label,
+  children,
+}: {
+  label: string
+  children: React.ReactNode
+}) {
   return (
     <div className="flex items-center gap-2 min-h-7 rounded-md px-1 hover:bg-muted/30 transition-colors">
-      <span className="text-xs text-muted-foreground shrink-0 w-[68px]">{label}</span>
+      <span className="text-xs text-muted-foreground shrink-0 w-[68px]">
+        {label}
+      </span>
       <div className="min-w-0 flex-1 overflow-hidden flex items-center">
         {children}
       </div>
@@ -81,7 +89,9 @@ export function EditIssueSidebar({
 
   return (
     <div className="w-72 shrink-0 border-l px-3 py-4 overflow-y-auto flex flex-col">
-      <p className="text-xs font-medium text-muted-foreground mb-1.5 px-1">Properties</p>
+      <p className="text-xs font-medium text-muted-foreground mb-1.5 px-1">
+        Properties
+      </p>
 
       <div className="flex flex-col gap-0.5">
         <SidebarRow label="Status">
@@ -128,7 +138,9 @@ export function EditIssueSidebar({
           <span className="text-xs truncate">{createdByName}</span>
         </SidebarRow>
         <SidebarRow label="Created">
-          <span className="text-xs text-muted-foreground whitespace-nowrap">{formattedDate}</span>
+          <span className="text-xs text-muted-foreground whitespace-nowrap">
+            {formattedDate}
+          </span>
         </SidebarRow>
       </div>
     </div>

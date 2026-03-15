@@ -1,4 +1,4 @@
-"use client"
+'use client'
 
 import type {
   Announcements,
@@ -6,7 +6,7 @@ import type {
   DragEndEvent,
   DragOverEvent,
   DragStartEvent,
-} from "@dnd-kit/core"
+} from '@dnd-kit/core'
 import {
   closestCenter,
   DndContext,
@@ -17,9 +17,9 @@ import {
   useDroppable,
   useSensor,
   useSensors,
-} from "@dnd-kit/core"
-import { arrayMove, SortableContext, useSortable } from "@dnd-kit/sortable"
-import { CSS } from "@dnd-kit/utilities"
+} from '@dnd-kit/core'
+import { arrayMove, SortableContext, useSortable } from '@dnd-kit/sortable'
+import { CSS } from '@dnd-kit/utilities'
 import {
   createContext,
   type HTMLAttributes,
@@ -27,16 +27,16 @@ import {
   useContext,
   useEffect,
   useState,
-} from "react"
-import { createPortal } from "react-dom"
-import tunnel from "tunnel-rat"
-import { Card } from "@/shared/ui/primitives/card"
-import { ScrollArea, ScrollBar } from "@/shared/ui/primitives/scroll-area"
-import { cn } from "@/shared/lib/utils"
+} from 'react'
+import { createPortal } from 'react-dom'
+import tunnel from 'tunnel-rat'
+import { Card } from '@/shared/ui/primitives/card'
+import { ScrollArea, ScrollBar } from '@/shared/ui/primitives/scroll-area'
+import { cn } from '@/shared/lib/utils'
 
 const t = tunnel()
 
-export type { DragEndEvent } from "@dnd-kit/core"
+export type { DragEndEvent } from '@dnd-kit/core'
 
 type KanbanItemProps = {
   id: string
@@ -78,8 +78,8 @@ export const KanbanBoard = ({ id, children, className }: KanbanBoardProps) => {
   return (
     <div
       className={cn(
-        "flex size-full min-h-40 flex-col divide-y overflow-hidden rounded-md border bg-secondary text-xs shadow-sm ring-2 transition-all",
-        isOver ? "ring-primary" : "ring-transparent",
+        'flex size-full min-h-40 flex-col divide-y overflow-hidden rounded-md border bg-secondary text-xs shadow-sm ring-2 transition-all',
+        isOver ? 'ring-primary' : 'ring-transparent',
         className,
       )}
       ref={setNodeRef}
@@ -100,7 +100,14 @@ export const KanbanCard = <T extends KanbanItemProps = KanbanItemProps>({
   children,
   className,
 }: KanbanCardProps<T>) => {
-  const { attributes, listeners, setNodeRef, transition, transform, isDragging } = useSortable({
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transition,
+    transform,
+    isDragging,
+  } = useSortable({
     id,
   })
   const { activeCardId } = useContext(KanbanContext) as KanbanContextProps
@@ -115,8 +122,8 @@ export const KanbanCard = <T extends KanbanItemProps = KanbanItemProps>({
       <div style={style} {...listeners} {...attributes} ref={setNodeRef}>
         <Card
           className={cn(
-            "cursor-grab gap-4 rounded-md p-3 shadow-sm",
-            isDragging && "pointer-events-none cursor-grabbing opacity-30",
+            'cursor-grab gap-4 rounded-md p-3 shadow-sm',
+            isDragging && 'pointer-events-none cursor-grabbing opacity-30',
             className,
           )}
         >
@@ -127,8 +134,8 @@ export const KanbanCard = <T extends KanbanItemProps = KanbanItemProps>({
         <t.In>
           <Card
             className={cn(
-              "cursor-grab gap-4 rounded-md p-3 shadow-sm ring-2 ring-primary",
-              isDragging && "cursor-grabbing",
+              'cursor-grab gap-4 rounded-md p-3 shadow-sm ring-2 ring-primary',
+              isDragging && 'cursor-grabbing',
               className,
             )}
           >
@@ -140,13 +147,11 @@ export const KanbanCard = <T extends KanbanItemProps = KanbanItemProps>({
   )
 }
 
-export type KanbanCardsProps<T extends KanbanItemProps = KanbanItemProps> = Omit<
-  HTMLAttributes<HTMLDivElement>,
-  "children" | "id"
-> & {
-  children: (item: T) => ReactNode
-  id: string
-}
+export type KanbanCardsProps<T extends KanbanItemProps = KanbanItemProps> =
+  Omit<HTMLAttributes<HTMLDivElement>, 'children' | 'id'> & {
+    children: (item: T) => ReactNode
+    id: string
+  }
 
 export const KanbanCards = <T extends KanbanItemProps = KanbanItemProps>({
   children,
@@ -154,13 +159,16 @@ export const KanbanCards = <T extends KanbanItemProps = KanbanItemProps>({
   ...props
 }: KanbanCardsProps<T>) => {
   const { data } = useContext(KanbanContext) as KanbanContextProps<T>
-  const filteredData = data.filter(item => item.column === props.id)
-  const items = filteredData.map(item => item.id)
+  const filteredData = data.filter((item) => item.column === props.id)
+  const items = filteredData.map((item) => item.id)
 
   return (
     <ScrollArea className="overflow-hidden">
       <SortableContext items={items}>
-        <div className={cn("flex grow flex-col gap-2 p-2", className)} {...(props as any)}>
+        <div
+          className={cn('flex grow flex-col gap-2 p-2', className)}
+          {...(props as any)}
+        >
           {filteredData.map(children)}
         </div>
       </SortableContext>
@@ -172,13 +180,16 @@ export const KanbanCards = <T extends KanbanItemProps = KanbanItemProps>({
 export type KanbanHeaderProps = HTMLAttributes<HTMLDivElement>
 
 export const KanbanHeader = ({ className, ...props }: KanbanHeaderProps) => (
-  <div className={cn("m-0 p-2 font-semibold text-sm", className)} {...(props as any)} />
+  <div
+    className={cn('m-0 p-2 font-semibold text-sm', className)}
+    {...(props as any)}
+  />
 )
 
 export type KanbanProviderProps<
   T extends KanbanItemProps = KanbanItemProps,
   C extends KanbanColumnProps = KanbanColumnProps,
-> = Omit<DndContextProps, "children"> & {
+> = Omit<DndContextProps, 'children'> & {
   children: (column: C) => ReactNode
   className?: string
   columns: C[]
@@ -212,7 +223,7 @@ export const KanbanProvider = <
   )
 
   const handleDragStart = (event: DragStartEvent) => {
-    const card = data.find(item => item.id === event.active.id)
+    const card = data.find((item) => item.id === event.active.id)
     if (card) {
       setActiveCardId(event.active.id as string)
     }
@@ -226,8 +237,8 @@ export const KanbanProvider = <
       return
     }
 
-    const activeItem = data.find(item => item.id === active.id)
-    const overItem = data.find(item => item.id === over.id)
+    const activeItem = data.find((item) => item.id === active.id)
+    const overItem = data.find((item) => item.id === over.id)
 
     if (!activeItem) {
       return
@@ -235,12 +246,14 @@ export const KanbanProvider = <
 
     const activeColumn = activeItem.column
     const overColumn =
-      overItem?.column || columns.find(col => col.id === over.id)?.id || columns[0]?.id
+      overItem?.column ||
+      columns.find((col) => col.id === over.id)?.id ||
+      columns[0]?.id
 
     if (activeColumn !== overColumn) {
       let newData = [...data]
-      const activeIndex = newData.findIndex(item => item.id === active.id)
-      const overIndex = newData.findIndex(item => item.id === over.id)
+      const activeIndex = newData.findIndex((item) => item.id === active.id)
+      const overIndex = newData.findIndex((item) => item.id === over.id)
 
       newData[activeIndex].column = overColumn
       newData = arrayMove(newData, activeIndex, overIndex)
@@ -264,8 +277,8 @@ export const KanbanProvider = <
 
     let newData = [...data]
 
-    const oldIndex = newData.findIndex(item => item.id === active.id)
-    const newIndex = newData.findIndex(item => item.id === over.id)
+    const oldIndex = newData.findIndex((item) => item.id === active.id)
+    const newIndex = newData.findIndex((item) => item.id === over.id)
 
     newData = arrayMove(newData, oldIndex, newIndex)
 
@@ -274,24 +287,24 @@ export const KanbanProvider = <
 
   const announcements: Announcements = {
     onDragStart({ active }) {
-      const { name, column } = data.find(item => item.id === active.id) ?? {}
+      const { name, column } = data.find((item) => item.id === active.id) ?? {}
 
       return `Picked up the card "${name}" from the "${column}" column`
     },
     onDragOver({ active, over }) {
-      const { name } = data.find(item => item.id === active.id) ?? {}
-      const newColumn = columns.find(column => column.id === over?.id)?.name
+      const { name } = data.find((item) => item.id === active.id) ?? {}
+      const newColumn = columns.find((column) => column.id === over?.id)?.name
 
       return `Dragged the card "${name}" over the "${newColumn}" column`
     },
     onDragEnd({ active, over }) {
-      const { name } = data.find(item => item.id === active.id) ?? {}
-      const newColumn = columns.find(column => column.id === over?.id)?.name
+      const { name } = data.find((item) => item.id === active.id) ?? {}
+      const newColumn = columns.find((column) => column.id === over?.id)?.name
 
       return `Dropped the card "${name}" into the "${newColumn}" column`
     },
     onDragCancel({ active }) {
-      const { name } = data.find(item => item.id === active.id) ?? {}
+      const { name } = data.find((item) => item.id === active.id) ?? {}
 
       return `Cancelled dragging the card "${name}"`
     },
@@ -308,10 +321,15 @@ export const KanbanProvider = <
         sensors={sensors}
         {...(props as any)}
       >
-        <div className={cn("grid size-full auto-cols-fr grid-flow-col gap-4", className)}>
-          {columns.map(column => children(column))}
+        <div
+          className={cn(
+            'grid size-full auto-cols-fr grid-flow-col gap-4',
+            className,
+          )}
+        >
+          {columns.map((column) => children(column))}
         </div>
-        {typeof window !== "undefined" &&
+        {typeof window !== 'undefined' &&
           createPortal(
             <DragOverlay>
               <t.Out />
@@ -325,23 +343,23 @@ export const KanbanProvider = <
 
 // Demo
 const demoColumns = [
-  { id: "backlog", name: "Backlog" },
-  { id: "todo", name: "To Do" },
-  { id: "in-progress", name: "In Progress" },
-  { id: "done", name: "Done" },
+  { id: 'backlog', name: 'Backlog' },
+  { id: 'todo', name: 'To Do' },
+  { id: 'in-progress', name: 'In Progress' },
+  { id: 'done', name: 'Done' },
 ]
 
 const initialDemoData = [
-  { id: "1", name: "Research competitors", column: "done" },
-  { id: "2", name: "Define user personas", column: "done" },
-  { id: "3", name: "Create wireframes", column: "in-progress" },
-  { id: "4", name: "Design system setup", column: "in-progress" },
-  { id: "5", name: "Build component library", column: "todo" },
-  { id: "6", name: "Implement authentication", column: "todo" },
-  { id: "7", name: "API integration", column: "todo" },
-  { id: "8", name: "Write documentation", column: "backlog" },
-  { id: "9", name: "Set up CI/CD", column: "backlog" },
-  { id: "10", name: "Performance testing", column: "backlog" },
+  { id: '1', name: 'Research competitors', column: 'done' },
+  { id: '2', name: 'Define user personas', column: 'done' },
+  { id: '3', name: 'Create wireframes', column: 'in-progress' },
+  { id: '4', name: 'Design system setup', column: 'in-progress' },
+  { id: '5', name: 'Build component library', column: 'todo' },
+  { id: '6', name: 'Implement authentication', column: 'todo' },
+  { id: '7', name: 'API integration', column: 'todo' },
+  { id: '8', name: 'Write documentation', column: 'backlog' },
+  { id: '9', name: 'Set up CI/CD', column: 'backlog' },
+  { id: '10', name: 'Performance testing', column: 'backlog' },
 ]
 
 export function KanbanDemo() {
@@ -359,12 +377,17 @@ export function KanbanDemo() {
 
   return (
     <div className="h-screen w-screen p-4">
-      <KanbanProvider columns={demoColumns} data={data} onDataChange={setData} className="h-full">
-        {column => (
+      <KanbanProvider
+        columns={demoColumns}
+        data={data}
+        onDataChange={setData}
+        className="h-full"
+      >
+        {(column) => (
           <KanbanBoard id={column.id} key={column.id}>
             <KanbanHeader>{column.name}</KanbanHeader>
             <KanbanCards id={column.id}>
-              {item => <KanbanCard key={item.id} {...item} />}
+              {(item) => <KanbanCard key={item.id} {...item} />}
             </KanbanCards>
           </KanbanBoard>
         )}

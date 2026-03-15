@@ -7,6 +7,7 @@ export const PROJECT_FRAGMENT = gql(`
     name
     description
     workspaceId
+    isArchived
     createdAt
     updatedAt
     members {
@@ -43,5 +44,82 @@ export const GET_PROJECT_BY_SLUG = gql(`
     projectBySlug(workspaceId: $workspaceId, slug: $slug) {
       ...ProjectFields
     }
+  }
+`)
+
+// ── Overview (dashboard) ──────────────────────────────────────────────────────
+
+export const GET_PROJECT_OVERVIEW = gql(`
+  query GetProjectOverview($projectId: ID!) {
+    projectOverview(projectId: $projectId) {
+      totalIssues
+      openIssues
+      completedIssues
+      overdueIssues
+      pageCount
+      issuesByStatus {
+        statusId
+        name
+        color
+        icon
+        issueCount
+      }
+      recentIssues {
+        id
+        number
+        title
+        priority
+        dueDate
+        updatedAt
+        statusName
+        statusColor
+        assigneeId
+        assigneeName
+        assigneeAvatar
+      }
+      members {
+        userId
+        name
+        email
+        avatarUrl
+        roleName
+        roleRank
+        joinedAt
+      }
+    }
+  }
+`)
+
+// ── Mutations (imported by features/manage-project-settings) ─────────────────
+
+export const UPDATE_PROJECT = gql(`
+  mutation UpdateProject($projectId: ID!, $input: UpdateProjectInput!) {
+    updateProject(projectId: $projectId, input: $input) {
+      ...ProjectFields
+    }
+  }
+`)
+
+export const ARCHIVE_PROJECT = gql(`
+  mutation ArchiveProject($projectId: ID!) {
+    archiveProject(projectId: $projectId) {
+      id
+      isArchived
+    }
+  }
+`)
+
+export const UNARCHIVE_PROJECT = gql(`
+  mutation UnarchiveProject($projectId: ID!) {
+    unarchiveProject(projectId: $projectId) {
+      id
+      isArchived
+    }
+  }
+`)
+
+export const DELETE_PROJECT = gql(`
+  mutation DeleteProject($projectId: ID!) {
+    deleteProject(projectId: $projectId)
   }
 `)

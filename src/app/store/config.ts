@@ -5,7 +5,7 @@ import workspaceReducer from '@/entities/workspace/model/slice'
 import createWorkspaceReducer from '@/features/create-workspace/model/slice'
 import userReducer from '@/entities/user/model/slice'
 import projectReducer from '@/entities/project/model/slice'
-import createProjectReducer from '@/features/create-project/model/slice'
+import createProjectReducer from '@/features/project/create-project/model/slice'
 import { createChannelReducer } from '@/features/chat/create-channel/model/slice'
 import conversationReducer from '@/entities/conversation/model/slice'
 import { channelSettingsReducer } from '@/widgets/channel-settings-modal'
@@ -16,6 +16,11 @@ import pagePresenceReducer from '@/entities/page-presence/model/slice'
 import { createPageModalReducer } from '@/features/pages/create-page/model/create-page-modal-store'
 import uploadTraySlice from '@/widgets/vault/vault-upload-tray/model/upload-tray-slice'
 import issuesReducer from '@/entities/issue/model/slice'
+import { addProjectMemberReducer } from '@/features/project/add-project-member/model/slice'
+import { deleteProjectReducer } from '@/features/project/delete-project/model/slice'
+import { leaveProjectReducer } from '@/features/project/leave-project/model/slice'
+import { createProjectRoleReducer } from '@/features/project/create-project-role/model/slice'
+import { updateProjectRoleReducer } from '@/features/project/update-project-role/model/slice'
 
 export const store = configureStore({
   reducer: {
@@ -36,6 +41,11 @@ export const store = configureStore({
     createPageModal: createPageModalReducer, // ✅ Create page modal state
     uploadTray: uploadTraySlice.reducer, // ✅ Vault upload progress tray
     issues: issuesReducer, // ✅ Issues Kanban board state
+    addProjectMember: addProjectMemberReducer, // ✅ Add member dialog state
+    deleteProject: deleteProjectReducer, // ✅ Delete project dialog state
+    leaveProject: leaveProjectReducer, // ✅ Leave project dialog state
+    createProjectRole: createProjectRoleReducer, // ✅ Create role dialog state
+    updateProjectRole: updateProjectRoleReducer, // ✅ Update role dialog state
   },
 })
 

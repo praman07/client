@@ -26,7 +26,11 @@ interface LabelPillProps {
   className?: string
 }
 
-export function LabelPill({ label, dotOnly = false, className }: LabelPillProps) {
+export function LabelPill({
+  label,
+  dotOnly = false,
+  className,
+}: LabelPillProps) {
   return (
     <span
       className={cn(
@@ -37,7 +41,7 @@ export function LabelPill({ label, dotOnly = false, className }: LabelPillProps)
         backgroundColor: `${label.color}1F`, // ~12 % opacity fill
         borderWidth: 1,
         borderStyle: 'solid',
-        borderColor: `${label.color}60`,     // ~38 % opacity border
+        borderColor: `${label.color}60`, // ~38 % opacity border
         color: label.color,
       }}
     >

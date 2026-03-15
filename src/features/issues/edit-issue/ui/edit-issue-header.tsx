@@ -17,7 +17,11 @@ import {
   DropdownMenuTrigger,
 } from '@/shared/ui/primitives/dropdown-menu'
 import { HugeiconsIcon } from '@hugeicons/react'
-import { Cancel01Icon, Delete02Icon, MoreHorizontalIcon } from '@hugeicons/core-free-icons'
+import {
+  Cancel01Icon,
+  Delete02Icon,
+  MoreHorizontalIcon,
+} from '@hugeicons/core-free-icons'
 import { IssueNumber } from '@/entities/issue'
 
 interface EditIssueHeaderProps {
@@ -55,14 +59,22 @@ export function EditIssueHeader({
 
         <DropdownMenu>
           <DropdownMenuTrigger className="inline-flex items-center justify-center h-7 w-7 rounded-md hover:bg-muted/60 transition-colors cursor-pointer">
-            <HugeiconsIcon icon={MoreHorizontalIcon} strokeWidth={2} className="size-4" />
+            <HugeiconsIcon
+              icon={MoreHorizontalIcon}
+              strokeWidth={2}
+              className="size-4"
+            />
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-40">
             <DropdownMenuItem
               className="text-destructive focus:text-destructive"
               onClick={onDelete}
             >
-              <HugeiconsIcon icon={Delete02Icon} strokeWidth={2} className="size-4 mr-2" />
+              <HugeiconsIcon
+                icon={Delete02Icon}
+                strokeWidth={2}
+                className="size-4 mr-2"
+              />
               Delete issue
             </DropdownMenuItem>
           </DropdownMenuContent>
@@ -72,7 +84,11 @@ export function EditIssueHeader({
           onClick={onClose}
           className="inline-flex items-center justify-center h-7 w-7 rounded-md hover:bg-muted/60 transition-colors cursor-pointer"
         >
-          <HugeiconsIcon icon={Cancel01Icon} strokeWidth={2} className="size-4" />
+          <HugeiconsIcon
+            icon={Cancel01Icon}
+            strokeWidth={2}
+            className="size-4"
+          />
         </button>
       </div>
     </div>

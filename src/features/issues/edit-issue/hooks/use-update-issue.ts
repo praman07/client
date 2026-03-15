@@ -46,7 +46,7 @@ export function useUpdateIssue(projectId: string) {
     }: UpdateIssueVariables) => {
       const token = await getToken()
       if (!token) throw new Error('Not authenticated')
-      return GqlClient(token).request(UPDATE_ISSUE, {   
+      return GqlClient(token).request(UPDATE_ISSUE, {
         input: {
           issueId,
           ...(title !== undefined && { title }),

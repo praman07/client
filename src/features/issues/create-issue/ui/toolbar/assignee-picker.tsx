@@ -19,7 +19,11 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
 } from '@/shared/ui/primitives/dropdown-menu'
-import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/primitives/avatar'
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from '@/shared/ui/primitives/avatar'
 import { HugeiconsIcon } from '@hugeicons/react'
 import { Tick02Icon, UserIcon } from '@hugeicons/core-free-icons'
 import { cn } from '@/shared/lib/utils'
@@ -36,7 +40,11 @@ interface AssigneePickerProps {
   onChange: (id: string | null) => void
 }
 
-export function AssigneePicker({ members, value, onChange }: AssigneePickerProps) {
+export function AssigneePicker({
+  members,
+  value,
+  onChange,
+}: AssigneePickerProps) {
   const [open, setOpen] = useState(false)
   const [search, setSearch] = useState('')
 
@@ -121,7 +129,10 @@ export function AssigneePicker({ members, value, onChange }: AssigneePickerProps
             <HugeiconsIcon
               icon={Tick02Icon}
               strokeWidth={2}
-              className={cn('ml-auto size-3.5', value === null ? 'opacity-100' : 'opacity-0')}
+              className={cn(
+                'ml-auto size-3.5',
+                value === null ? 'opacity-100' : 'opacity-0',
+              )}
             />
           </DropdownMenuItem>
 
@@ -136,7 +147,9 @@ export function AssigneePicker({ members, value, onChange }: AssigneePickerProps
               }}
             >
               <Avatar className="size-4">
-                {m.avatarUrl && <AvatarImage src={m.avatarUrl} alt={m.fullName} />}
+                {m.avatarUrl && (
+                  <AvatarImage src={m.avatarUrl} alt={m.fullName} />
+                )}
                 <AvatarFallback className="text-[9px]">
                   {initials(m.fullName)}
                 </AvatarFallback>
@@ -145,7 +158,10 @@ export function AssigneePicker({ members, value, onChange }: AssigneePickerProps
               <HugeiconsIcon
                 icon={Tick02Icon}
                 strokeWidth={2}
-                className={cn('ml-auto size-3.5', value === m.id ? 'opacity-100' : 'opacity-0')}
+                className={cn(
+                  'ml-auto size-3.5',
+                  value === m.id ? 'opacity-100' : 'opacity-0',
+                )}
               />
             </DropdownMenuItem>
           ))}

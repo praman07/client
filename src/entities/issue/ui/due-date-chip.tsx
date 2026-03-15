@@ -21,8 +21,8 @@ interface DueDateChipProps {
 export function DueDateChip({ dueDate, className }: DueDateChipProps) {
   if (!dueDate) return null
   const date = parseISO(dueDate)
-  if (!isValid(date)) return null        // guards unparseable strings
-  if (date.getFullYear() < 2000) return null  // guards epoch/min-date DB artifacts
+  if (!isValid(date)) return null // guards unparseable strings
+  if (date.getFullYear() < 2000) return null // guards epoch/min-date DB artifacts
 
   const overdue = isPast(date)
 

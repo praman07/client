@@ -6,12 +6,12 @@ import {
   rectIntersection,
   useDraggable,
   useDroppable,
-} from "@dnd-kit/core"
-import { restrictToVerticalAxis } from "@dnd-kit/modifiers"
-import type { ReactNode } from "react"
-import { cn } from "@/shared/lib/utils"
+} from '@dnd-kit/core'
+import { restrictToVerticalAxis } from '@dnd-kit/modifiers'
+import type { ReactNode } from 'react'
+import { cn } from '@/shared/lib/utils'
 
-export type { DragEndEvent, DragStartEvent } from "@dnd-kit/core"
+export type { DragEndEvent, DragStartEvent } from '@dnd-kit/core'
 
 interface Status {
   id: string
@@ -33,7 +33,9 @@ export interface ListItemsProps {
 }
 
 export const ListItems = ({ children, className }: ListItemsProps) => (
-  <div className={cn("flex flex-1 flex-col gap-2 p-3", className)}>{children}</div>
+  <div className={cn('flex flex-1 flex-col gap-2 p-3', className)}>
+    {children}
+  </div>
 )
 
 export type ListHeaderProps =
@@ -41,23 +43,31 @@ export type ListHeaderProps =
       children: ReactNode
     }
   | {
-      name: Status["name"]
-      color: Status["color"]
+      name: Status['name']
+      color: Status['color']
       className?: string
     }
 
 export const ListHeader = (props: ListHeaderProps) =>
-  "children" in props ? (
+  'children' in props ? (
     props.children
   ) : (
-    <div className={cn("flex shrink-0 items-center gap-2 bg-foreground/5 p-3", props.className)}>
-      <div className="h-2 w-2 rounded-full" style={{ backgroundColor: props.color }} />
+    <div
+      className={cn(
+        'flex shrink-0 items-center gap-2 bg-foreground/5 p-3',
+        props.className,
+      )}
+    >
+      <div
+        className="h-2 w-2 rounded-full"
+        style={{ backgroundColor: props.color }}
+      />
       <p className="m-0 font-semibold text-sm">{props.name}</p>
     </div>
   )
 
 export interface ListGroupProps {
-  id: Status["id"]
+  id: Status['id']
   children: ReactNode
   className?: string
 }
@@ -67,7 +77,11 @@ export const ListGroup = ({ id, children, className }: ListGroupProps) => {
 
   return (
     <div
-      className={cn("bg-secondary transition-colors", isOver && "bg-foreground/10", className)}
+      className={cn(
+        'bg-secondary transition-colors',
+        isOver && 'bg-foreground/10',
+        className,
+      )}
       ref={setNodeRef}
     >
       {children}
@@ -75,28 +89,38 @@ export const ListGroup = ({ id, children, className }: ListGroupProps) => {
   )
 }
 
-export type ListItemProps = Pick<Feature, "id" | "name"> & {
+export type ListItemProps = Pick<Feature, 'id' | 'name'> & {
   readonly index: number
   readonly parent: string
   readonly children?: ReactNode
   readonly className?: string
 }
 
-export const ListItem = ({ id, name, index, parent, children, className }: ListItemProps) => {
-  const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
-    id,
-    data: { index, parent },
-  })
+export const ListItem = ({
+  id,
+  name,
+  index,
+  parent,
+  children,
+  className,
+}: ListItemProps) => {
+  const { attributes, listeners, setNodeRef, transform, isDragging } =
+    useDraggable({
+      id,
+      data: { index, parent },
+    })
 
   return (
     <div
       className={cn(
-        "flex cursor-grab items-center gap-2 rounded-md border bg-background p-2 shadow-sm",
-        isDragging && "opacity-50",
+        'flex cursor-grab items-center gap-2 rounded-md border bg-background p-2 shadow-sm',
+        isDragging && 'opacity-50',
         className,
       )}
       style={{
-        transform: transform ? `translateX(${transform.x}px) translateY(${transform.y}px)` : "none",
+        transform: transform
+          ? `translateX(${transform.x}px) translateY(${transform.y}px)`
+          : 'none',
       }}
       {...listeners}
       {...attributes}
@@ -113,41 +137,48 @@ export interface ListProviderProps {
   className?: string
 }
 
-export const ListProvider = ({ children, onDragEnd, className }: ListProviderProps) => (
+export const ListProvider = ({
+  children,
+  onDragEnd,
+  className,
+}: ListProviderProps) => (
   <DndContext
     collisionDetection={rectIntersection}
     modifiers={[restrictToVerticalAxis]}
     onDragEnd={onDragEnd}
   >
-    <div className={cn("flex size-full flex-col", className)}>{children}</div>
+    <div className={cn('flex size-full flex-col', className)}>{children}</div>
   </DndContext>
 )
 
 // Demo
-import { useEffect, useState } from "react"
+import { useEffect, useState } from 'react'
 
 const initialData = {
   todo: [
-    { id: "1", name: "Research competitors" },
-    { id: "2", name: "Write documentation" },
+    { id: '1', name: 'Research competitors' },
+    { id: '2', name: 'Write documentation' },
   ],
   inProgress: [
-    { id: "3", name: "Build dashboard" },
-    { id: "4", name: "API integration" },
+    { id: '3', name: 'Build dashboard' },
+    { id: '4', name: 'API integration' },
   ],
-  done: [{ id: "5", name: "Setup project" }],
+  done: [{ id: '5', name: 'Setup project' }],
 }
 
 const statuses = [
-  { id: "todo", name: "To Do", color: "#6b7280" },
-  { id: "inProgress", name: "In Progress", color: "#3b82f6" },
-  { id: "done", name: "Done", color: "#22c55e" },
+  { id: 'todo', name: 'To Do', color: '#6b7280' },
+  { id: 'inProgress', name: 'In Progress', color: '#3b82f6' },
+  { id: 'done', name: 'Done', color: '#22c55e' },
 ]
 
 export function Demo() {
   const [mounted, setMounted] = useState(false)
   const [items, setItems] = useState(initialData)
-  const [activeItem, setActiveItem] = useState<{ id: string; name: string } | null>(null)
+  const [activeItem, setActiveItem] = useState<{
+    id: string
+    name: string
+  } | null>(null)
 
   useEffect(() => {
     setMounted(true)
@@ -158,7 +189,7 @@ export function Demo() {
     const activeId = active.id as string
 
     for (const groupItems of Object.values(items)) {
-      const item = groupItems.find(item => item.id === activeId)
+      const item = groupItems.find((item) => item.id === activeId)
       if (item) {
         setActiveItem(item)
         break
@@ -179,7 +210,7 @@ export function Demo() {
     let sourceGroup: keyof typeof items | null = null
     let sourceIndex = -1
     for (const [group, groupItems] of Object.entries(items)) {
-      const idx = groupItems.findIndex(item => item.id === activeId)
+      const idx = groupItems.findIndex((item) => item.id === activeId)
       if (idx !== -1) {
         sourceGroup = group as keyof typeof items
         sourceIndex = idx
@@ -191,10 +222,10 @@ export function Demo() {
 
     // Determine target group
     let targetGroup: keyof typeof items = overId as keyof typeof items
-    if (!statuses.find(s => s.id === overId)) {
+    if (!statuses.find((s) => s.id === overId)) {
       // Dropped on an item, find its group
       for (const [group, groupItems] of Object.entries(items)) {
-        if (groupItems.find(item => item.id === overId)) {
+        if (groupItems.find((item) => item.id === overId)) {
           targetGroup = group as keyof typeof items
           break
         }
@@ -206,9 +237,11 @@ export function Demo() {
     // Move item
     const item = items[sourceGroup][sourceIndex]
     const src = sourceGroup as keyof typeof items
-    setItems(prev => ({
+    setItems((prev) => ({
       ...prev,
-      [src]: prev[src].filter((_: { id: string; name: string }, i: number) => i !== sourceIndex),
+      [src]: prev[src].filter(
+        (_: { id: string; name: string }, i: number) => i !== sourceIndex,
+      ),
       [targetGroup]: [...prev[targetGroup], item],
     }))
   }
@@ -226,8 +259,12 @@ export function Demo() {
         onDragEnd={handleDragEnd}
       >
         <div className="flex size-full flex-col gap-4 max-w-md mx-auto">
-          {statuses.map(status => (
-            <ListGroup key={status.id} id={status.id} className="rounded-lg overflow-hidden">
+          {statuses.map((status) => (
+            <ListGroup
+              key={status.id}
+              id={status.id}
+              className="rounded-lg overflow-hidden"
+            >
               <ListHeader name={status.name} color={status.color} />
               <ListItems>
                 {items[status.id as keyof typeof items].map((item, index) => (

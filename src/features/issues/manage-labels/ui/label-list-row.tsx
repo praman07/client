@@ -84,9 +84,12 @@ export function LabelListRow({ label, projectId }: LabelListRowProps) {
         />
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Delete label &quot;{label.name}&quot;?</AlertDialogTitle>
+            <AlertDialogTitle>
+              Delete label &quot;{label.name}&quot;?
+            </AlertDialogTitle>
             <AlertDialogDescription>
-              This removes the label from all issues in this project. This action cannot be undone.
+              This removes the label from all issues in this project. This
+              action cannot be undone.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

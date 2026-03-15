@@ -19,7 +19,11 @@ interface IssueNumberProps {
   className?: string
 }
 
-export function IssueNumber({ projectKey, number, className }: IssueNumberProps) {
+export function IssueNumber({
+  projectKey,
+  number,
+  className,
+}: IssueNumberProps) {
   return (
     <span
       className={cn(

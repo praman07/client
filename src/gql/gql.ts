@@ -29,10 +29,31 @@ type Documents = {
     "\n  fragment PageFields on Page {\n    id\n    title\n    workspaceId\n    projectId\n    parentId\n    icon\n    coverUrl\n    position\n    isArchived\n    isLocked\n    s3Key\n    createdBy\n    createdAt\n    updatedAt\n  }\n": typeof types.PageFieldsFragmentDoc,
     "\n  fragment PageWithCollaborators on Page {\n    ...PageFields\n    collaborators {\n      userId\n      role\n      joinedAt\n      user {\n        id\n        fullName\n        email\n        avatarUrl\n      }\n    }\n  }\n": typeof types.PageWithCollaboratorsFragmentDoc,
     "\n  fragment PageWithChildren on Page {\n    ...PageFields\n    children {\n      ...PageFields\n      children {\n        ...PageFields\n        children {\n          ...PageFields\n        }\n      }\n    }\n  }\n": typeof types.PageWithChildrenFragmentDoc,
-    "\n  fragment ProjectFields on Project {\n    id\n    key\n    name\n    description\n    workspaceId\n    createdAt\n    updatedAt\n    members {\n      userId\n      role\n      joinedAt\n      user {\n        id\n        fullName\n        avatarUrl\n      }\n    }\n  }\n": typeof types.ProjectFieldsFragmentDoc,
+    "\n  fragment ProjectMemberFields on ProjectMember {\n    id\n    userId\n    role\n    joinedAt\n    user {\n      id\n      fullName\n      email\n      avatarUrl\n    }\n  }\n": typeof types.ProjectMemberFieldsFragmentDoc,
+    "\n  query GetProjectMembers($projectId: ID!) {\n    projectMembers(projectId: $projectId) {\n      ...ProjectMemberFields\n    }\n  }\n": typeof types.GetProjectMembersDocument,
+    "\n  mutation AddProjectMember($projectId: ID!, $workspaceId: ID!, $userId: ID!) {\n    addProjectMember(projectId: $projectId, workspaceId: $workspaceId, userId: $userId) {\n      ...ProjectMemberFields\n    }\n  }\n": typeof types.AddProjectMemberDocument,
+    "\n  mutation RemoveProjectMember($projectId: ID!, $workspaceId: ID!, $userId: ID!) {\n    removeProjectMember(projectId: $projectId, workspaceId: $workspaceId, userId: $userId)\n  }\n": typeof types.RemoveProjectMemberDocument,
+    "\n  mutation UpdateProjectMemberRole($projectId: ID!, $workspaceId: ID!, $userId: ID!, $roleId: ID!) {\n    updateProjectMemberRole(projectId: $projectId, workspaceId: $workspaceId, userId: $userId, roleId: $roleId) {\n      ...ProjectMemberFields\n    }\n  }\n": typeof types.UpdateProjectMemberRoleDocument,
+    "\n  mutation LeaveProject($projectId: ID!) {\n    leaveProject(projectId: $projectId)\n  }\n": typeof types.LeaveProjectDocument,
+    "\n  fragment ProjectRoleFields on ProjectRole {\n    id\n    name\n    rank\n    description\n    isSystem\n    scopeType\n  }\n": typeof types.ProjectRoleFieldsFragmentDoc,
+    "\n  fragment RolePermissionFields on RolePermission {\n    roleId\n    permissionId\n    effect\n    conditions\n    permission {\n      id\n      resource\n      action\n      description\n      module\n    }\n  }\n": typeof types.RolePermissionFieldsFragmentDoc,
+    "\n  query GetProjectRoles($projectId: ID!, $workspaceId: ID!) {\n    projectRoles(projectId: $projectId, workspaceId: $workspaceId) {\n      ...ProjectRoleFields\n    }\n  }\n": typeof types.GetProjectRolesDocument,
+    "\n  query GetRolePermissions($roleId: ID!, $workspaceId: ID!) {\n    rolePermissions(roleId: $roleId, workspaceId: $workspaceId) {\n      ...RolePermissionFields\n    }\n  }\n": typeof types.GetRolePermissionsDocument,
+    "\n  query GetAllPermissions($workspaceId: ID!) {\n    allPermissions(workspaceId: $workspaceId) {\n      id\n      resource\n      action\n      description\n      module\n    }\n  }\n": typeof types.GetAllPermissionsDocument,
+    "\n  mutation CreateProjectRole(\n    $projectId: ID!\n    $workspaceId: ID!\n    $input: CreateProjectRoleInput!\n  ) {\n    createProjectRole(\n      projectId: $projectId\n      workspaceId: $workspaceId\n      input: $input\n    ) {\n      ...ProjectRoleFields\n    }\n  }\n": typeof types.CreateProjectRoleDocument,
+    "\n  mutation UpdateProjectRole(\n    $roleId: ID!\n    $projectId: ID!\n    $workspaceId: ID!\n    $input: UpdateProjectRoleInput!\n  ) {\n    updateProjectRole(\n      roleId: $roleId\n      projectId: $projectId\n      workspaceId: $workspaceId\n      input: $input\n    ) {\n      ...ProjectRoleFields\n    }\n  }\n": typeof types.UpdateProjectRoleDocument,
+    "\n  mutation DeleteProjectRole($roleId: ID!, $projectId: ID!, $workspaceId: ID!) {\n    deleteProjectRole(roleId: $roleId, projectId: $projectId, workspaceId: $workspaceId)\n  }\n": typeof types.DeleteProjectRoleDocument,
+    "\n  mutation AssignRolePermission(\n    $roleId: ID!\n    $workspaceId: ID!\n    $permissionId: ID!\n    $effect: String!\n    $conditions: String\n  ) {\n    assignRolePermission(\n      roleId: $roleId\n      workspaceId: $workspaceId\n      permissionId: $permissionId\n      effect: $effect\n      conditions: $conditions\n    ) {\n      ...RolePermissionFields\n    }\n  }\n": typeof types.AssignRolePermissionDocument,
+    "\n  mutation RemoveRolePermission($roleId: ID!, $workspaceId: ID!, $permissionId: ID!) {\n    removeRolePermission(roleId: $roleId, workspaceId: $workspaceId, permissionId: $permissionId)\n  }\n": typeof types.RemoveRolePermissionDocument,
+    "\n  fragment ProjectFields on Project {\n    id\n    key\n    name\n    description\n    workspaceId\n    isArchived\n    createdAt\n    updatedAt\n    members {\n      userId\n      role\n      joinedAt\n      user {\n        id\n        fullName\n        avatarUrl\n      }\n    }\n  }\n": typeof types.ProjectFieldsFragmentDoc,
     "\n  query GetProject($id: ID!) {\n    project(id: $id) {\n      ...ProjectFields\n    }\n  }\n": typeof types.GetProjectDocument,
     "\n  query MyProjects($workspaceId: ID!) {\n    myProjects(workspaceId: $workspaceId) {\n      ...ProjectFields\n    }\n  }\n": typeof types.MyProjectsDocument,
     "\n  query GetProjectBySlug($workspaceId: ID!, $slug: String!) {\n    projectBySlug(workspaceId: $workspaceId, slug: $slug) {\n      ...ProjectFields\n    }\n  }\n": typeof types.GetProjectBySlugDocument,
+    "\n  query GetProjectOverview($projectId: ID!) {\n    projectOverview(projectId: $projectId) {\n      totalIssues\n      openIssues\n      completedIssues\n      overdueIssues\n      pageCount\n      issuesByStatus {\n        statusId\n        name\n        color\n        icon\n        issueCount\n      }\n      recentIssues {\n        id\n        number\n        title\n        priority\n        dueDate\n        updatedAt\n        statusName\n        statusColor\n        assigneeId\n        assigneeName\n        assigneeAvatar\n      }\n      members {\n        userId\n        name\n        email\n        avatarUrl\n        roleName\n        roleRank\n        joinedAt\n      }\n    }\n  }\n": typeof types.GetProjectOverviewDocument,
+    "\n  mutation UpdateProject($projectId: ID!, $input: UpdateProjectInput!) {\n    updateProject(projectId: $projectId, input: $input) {\n      ...ProjectFields\n    }\n  }\n": typeof types.UpdateProjectDocument,
+    "\n  mutation ArchiveProject($projectId: ID!) {\n    archiveProject(projectId: $projectId) {\n      id\n      isArchived\n    }\n  }\n": typeof types.ArchiveProjectDocument,
+    "\n  mutation UnarchiveProject($projectId: ID!) {\n    unarchiveProject(projectId: $projectId) {\n      id\n      isArchived\n    }\n  }\n": typeof types.UnarchiveProjectDocument,
+    "\n  mutation DeleteProject($projectId: ID!) {\n    deleteProject(projectId: $projectId)\n  }\n": typeof types.DeleteProjectDocument,
     "\n  fragment SessionUser on User {\n    id\n    email\n    fullName\n    avatarUrl\n  }\n": typeof types.SessionUserFragmentDoc,
     "\n  mutation SessionSyncUser(\n    $clerkId: String!\n    $email: String!\n    $fullName: String\n    $avatarUrl: String\n  ) {\n    syncUser(\n      clerkId: $clerkId\n      email: $email\n      fullName: $fullName\n      avatarUrl: $avatarUrl\n    ) {\n      id\n      email\n      fullName\n      avatarUrl\n    }\n  }": typeof types.SessionSyncUserDocument,
     "\n  query GetMe {\n    me {\n      ...SessionUser\n    }\n  }\n": typeof types.GetMeDocument,
@@ -43,15 +64,13 @@ type Documents = {
     "\n  fragment BoardWithCollaborators on Whiteboard {\n    ...BoardFields\n    collaborators {\n      userId\n      joinedAt\n      user {\n        id\n        fullName\n        email\n        avatarUrl\n      }\n    }\n  }\n": typeof types.BoardWithCollaboratorsFragmentDoc,
     "\n  fragment WorkspaceFragment on Workspace {\n    id\n    name\n    slug\n    logoUrl\n  }\n": typeof types.WorkspaceFragmentFragmentDoc,
     "\n  query GetMyWorkspaces {\n    myWorkspaces {\n      ...WorkspaceFragment\n    }\n  }\n": typeof types.GetMyWorkspacesDocument,
-    "\n  query GetWorkspaceBySlug($slug: String!) {\n    workspaceBySlug(slug: $slug) {\n      ...WorkspaceFragment\n    }\n  }\n": typeof types.GetWorkspaceBySlugDocument,
+    "\n  query GetWorkspaceBySlug($slug: String!) {\n    workspaceBySlug(slug: $slug) {\n      id\n      name\n      slug\n      logoUrl\n    }\n  }\n": typeof types.GetWorkspaceBySlugDocument,
     "\n  mutation ArchiveChannel($input: ArchiveChannelInput!) {\n    archiveChannel(input: $input) {\n      id\n      name\n      type\n      isArchived\n      deletedAt\n      workspaceId\n      projectId\n      updatedAt\n    }\n  }\n": typeof types.ArchiveChannelDocument,
     "\n  mutation CheckChannelAvailability($input: CheckChannelAvailabilityInput!) {\n    checkChannelAvailability(input: $input) {\n      available\n      message\n      reason\n      reservationId\n    }\n  }\n": typeof types.CheckChannelAvailabilityDocument,
     "\n  mutation CreateChannel($input: CreateChannelInput!) {\n    createChannel(input: $input) {\n      id\n      name\n      type\n      workspaceId\n      projectId\n    }\n  }\n": typeof types.CreateChannelDocument,
     "\n  mutation DeleteChannel($workspaceId: ID!, $channelId: ID!) {\n    deleteChannel(workspaceId: $workspaceId, channelId: $channelId) {\n      success\n      channelId\n    }\n  }\n": typeof types.DeleteChannelDocument,
     "\n  mutation RenameChannel($input: RenameChannelInput!) {\n    renameChannel(input: $input) {\n      id\n      name\n      type\n      workspaceId\n      projectId\n      updatedAt\n    }\n  }\n": typeof types.RenameChannelDocument,
     "\n  mutation UnarchiveChannel($workspaceId: ID!, $channelId: ID!) {\n    unarchiveChannel(workspaceId: $workspaceId, channelId: $channelId) {\n      success\n      channelId\n      name\n    }\n  }\n": typeof types.UnarchiveChannelDocument,
-    "\n  mutation CreateProject($workspaceId: ID!, $input: CreateProjectInput!) {\n    createProject(workspaceId: $workspaceId, input: $input) {\n      ...ProjectFields\n    }\n  }\n": typeof types.CreateProjectDocument,
-    "\n  mutation CheckSlug($workspaceId: ID!, $slug: String!) {\n    checkProjectSlugAvailability(workspaceId: $workspaceId, slug: $slug) {\n      available\n      message\n      reason\n      reservationId\n    }\n  }\n": typeof types.CheckSlugDocument,
     "\n  mutation CreateWorkspace($slug: String!, $name: String!) {\n    createWorkspace(slug: $slug, name: $name) {\n      id\n      slug\n      name\n    }\n  }\n": typeof types.CreateWorkspaceDocument,
     "\n  mutation CheckSlugAvailability($slug: String!) {\n    checkSlugAvailability(slug: $slug) {\n      available\n      message\n    }\n  }\n": typeof types.CheckSlugAvailabilityDocument,
     "\n  mutation InviteToWorkspace($input: InviteToWorkspaceInput!) {\n    inviteToWorkspace(input: $input) {\n      success\n      message\n      invitedCount\n    }\n  }\n": typeof types.InviteToWorkspaceDocument,
@@ -91,6 +110,8 @@ type Documents = {
     "\n  mutation UnarchivePage($input: UnarchivePageInput!) {\n    unarchivePage(input: $input) {\n      page {\n        id\n        isArchived\n        updatedAt\n      }\n    }\n  }\n": typeof types.UnarchivePageDocument,
     "\n  mutation LockPage($input: LockPageInput!) {\n    lockPage(input: $input) {\n      page {\n        id\n        isLocked\n        updatedAt\n      }\n    }\n  }\n": typeof types.LockPageDocument,
     "\n  mutation UnlockPage($input: UnlockPageInput!) {\n    unlockPage(input: $input) {\n      page {\n        id\n        isLocked\n        updatedAt\n      }\n    }\n  }\n": typeof types.UnlockPageDocument,
+    "\n  mutation CreateProject($workspaceId: ID!, $input: CreateProjectInput!) {\n    createProject(workspaceId: $workspaceId, input: $input) {\n      ...ProjectFields\n    }\n  }\n": typeof types.CreateProjectDocument,
+    "\n  mutation CheckSlug($workspaceId: ID!, $slug: String!) {\n    checkProjectSlugAvailability(workspaceId: $workspaceId, slug: $slug) {\n      available\n      message\n      reason\n      reservationId\n    }\n  }\n": typeof types.CheckSlugDocument,
     "\n  mutation CreateVaultFolder($input: CreateVaultFolderInput!) {\n    createVaultFolder(input: $input) {\n      folder {\n        ...VaultFolderFields\n      }\n    }\n  }\n": typeof types.CreateVaultFolderDocument,
     "\n  mutation DeleteVaultFile($input: DeleteVaultFileInput!) {\n    deleteVaultFile(input: $input) {\n      success\n      id\n    }\n  }\n": typeof types.DeleteVaultFileDocument,
     "\n  mutation DeleteVaultFolder($input: DeleteVaultFolderInput!) {\n    deleteVaultFolder(input: $input) {\n      success\n      id\n    }\n  }\n": typeof types.DeleteVaultFolderDocument,
@@ -146,10 +167,31 @@ const documents: Documents = {
     "\n  fragment PageFields on Page {\n    id\n    title\n    workspaceId\n    projectId\n    parentId\n    icon\n    coverUrl\n    position\n    isArchived\n    isLocked\n    s3Key\n    createdBy\n    createdAt\n    updatedAt\n  }\n": types.PageFieldsFragmentDoc,
     "\n  fragment PageWithCollaborators on Page {\n    ...PageFields\n    collaborators {\n      userId\n      role\n      joinedAt\n      user {\n        id\n        fullName\n        email\n        avatarUrl\n      }\n    }\n  }\n": types.PageWithCollaboratorsFragmentDoc,
     "\n  fragment PageWithChildren on Page {\n    ...PageFields\n    children {\n      ...PageFields\n      children {\n        ...PageFields\n        children {\n          ...PageFields\n        }\n      }\n    }\n  }\n": types.PageWithChildrenFragmentDoc,
-    "\n  fragment ProjectFields on Project {\n    id\n    key\n    name\n    description\n    workspaceId\n    createdAt\n    updatedAt\n    members {\n      userId\n      role\n      joinedAt\n      user {\n        id\n        fullName\n        avatarUrl\n      }\n    }\n  }\n": types.ProjectFieldsFragmentDoc,
+    "\n  fragment ProjectMemberFields on ProjectMember {\n    id\n    userId\n    role\n    joinedAt\n    user {\n      id\n      fullName\n      email\n      avatarUrl\n    }\n  }\n": types.ProjectMemberFieldsFragmentDoc,
+    "\n  query GetProjectMembers($projectId: ID!) {\n    projectMembers(projectId: $projectId) {\n      ...ProjectMemberFields\n    }\n  }\n": types.GetProjectMembersDocument,
+    "\n  mutation AddProjectMember($projectId: ID!, $workspaceId: ID!, $userId: ID!) {\n    addProjectMember(projectId: $projectId, workspaceId: $workspaceId, userId: $userId) {\n      ...ProjectMemberFields\n    }\n  }\n": types.AddProjectMemberDocument,
+    "\n  mutation RemoveProjectMember($projectId: ID!, $workspaceId: ID!, $userId: ID!) {\n    removeProjectMember(projectId: $projectId, workspaceId: $workspaceId, userId: $userId)\n  }\n": types.RemoveProjectMemberDocument,
+    "\n  mutation UpdateProjectMemberRole($projectId: ID!, $workspaceId: ID!, $userId: ID!, $roleId: ID!) {\n    updateProjectMemberRole(projectId: $projectId, workspaceId: $workspaceId, userId: $userId, roleId: $roleId) {\n      ...ProjectMemberFields\n    }\n  }\n": types.UpdateProjectMemberRoleDocument,
+    "\n  mutation LeaveProject($projectId: ID!) {\n    leaveProject(projectId: $projectId)\n  }\n": types.LeaveProjectDocument,
+    "\n  fragment ProjectRoleFields on ProjectRole {\n    id\n    name\n    rank\n    description\n    isSystem\n    scopeType\n  }\n": types.ProjectRoleFieldsFragmentDoc,
+    "\n  fragment RolePermissionFields on RolePermission {\n    roleId\n    permissionId\n    effect\n    conditions\n    permission {\n      id\n      resource\n      action\n      description\n      module\n    }\n  }\n": types.RolePermissionFieldsFragmentDoc,
+    "\n  query GetProjectRoles($projectId: ID!, $workspaceId: ID!) {\n    projectRoles(projectId: $projectId, workspaceId: $workspaceId) {\n      ...ProjectRoleFields\n    }\n  }\n": types.GetProjectRolesDocument,
+    "\n  query GetRolePermissions($roleId: ID!, $workspaceId: ID!) {\n    rolePermissions(roleId: $roleId, workspaceId: $workspaceId) {\n      ...RolePermissionFields\n    }\n  }\n": types.GetRolePermissionsDocument,
+    "\n  query GetAllPermissions($workspaceId: ID!) {\n    allPermissions(workspaceId: $workspaceId) {\n      id\n      resource\n      action\n      description\n      module\n    }\n  }\n": types.GetAllPermissionsDocument,
+    "\n  mutation CreateProjectRole(\n    $projectId: ID!\n    $workspaceId: ID!\n    $input: CreateProjectRoleInput!\n  ) {\n    createProjectRole(\n      projectId: $projectId\n      workspaceId: $workspaceId\n      input: $input\n    ) {\n      ...ProjectRoleFields\n    }\n  }\n": types.CreateProjectRoleDocument,
+    "\n  mutation UpdateProjectRole(\n    $roleId: ID!\n    $projectId: ID!\n    $workspaceId: ID!\n    $input: UpdateProjectRoleInput!\n  ) {\n    updateProjectRole(\n      roleId: $roleId\n      projectId: $projectId\n      workspaceId: $workspaceId\n      input: $input\n    ) {\n      ...ProjectRoleFields\n    }\n  }\n": types.UpdateProjectRoleDocument,
+    "\n  mutation DeleteProjectRole($roleId: ID!, $projectId: ID!, $workspaceId: ID!) {\n    deleteProjectRole(roleId: $roleId, projectId: $projectId, workspaceId: $workspaceId)\n  }\n": types.DeleteProjectRoleDocument,
+    "\n  mutation AssignRolePermission(\n    $roleId: ID!\n    $workspaceId: ID!\n    $permissionId: ID!\n    $effect: String!\n    $conditions: String\n  ) {\n    assignRolePermission(\n      roleId: $roleId\n      workspaceId: $workspaceId\n      permissionId: $permissionId\n      effect: $effect\n      conditions: $conditions\n    ) {\n      ...RolePermissionFields\n    }\n  }\n": types.AssignRolePermissionDocument,
+    "\n  mutation RemoveRolePermission($roleId: ID!, $workspaceId: ID!, $permissionId: ID!) {\n    removeRolePermission(roleId: $roleId, workspaceId: $workspaceId, permissionId: $permissionId)\n  }\n": types.RemoveRolePermissionDocument,
+    "\n  fragment ProjectFields on Project {\n    id\n    key\n    name\n    description\n    workspaceId\n    isArchived\n    createdAt\n    updatedAt\n    members {\n      userId\n      role\n      joinedAt\n      user {\n        id\n        fullName\n        avatarUrl\n      }\n    }\n  }\n": types.ProjectFieldsFragmentDoc,
     "\n  query GetProject($id: ID!) {\n    project(id: $id) {\n      ...ProjectFields\n    }\n  }\n": types.GetProjectDocument,
     "\n  query MyProjects($workspaceId: ID!) {\n    myProjects(workspaceId: $workspaceId) {\n      ...ProjectFields\n    }\n  }\n": types.MyProjectsDocument,
     "\n  query GetProjectBySlug($workspaceId: ID!, $slug: String!) {\n    projectBySlug(workspaceId: $workspaceId, slug: $slug) {\n      ...ProjectFields\n    }\n  }\n": types.GetProjectBySlugDocument,
+    "\n  query GetProjectOverview($projectId: ID!) {\n    projectOverview(projectId: $projectId) {\n      totalIssues\n      openIssues\n      completedIssues\n      overdueIssues\n      pageCount\n      issuesByStatus {\n        statusId\n        name\n        color\n        icon\n        issueCount\n      }\n      recentIssues {\n        id\n        number\n        title\n        priority\n        dueDate\n        updatedAt\n        statusName\n        statusColor\n        assigneeId\n        assigneeName\n        assigneeAvatar\n      }\n      members {\n        userId\n        name\n        email\n        avatarUrl\n        roleName\n        roleRank\n        joinedAt\n      }\n    }\n  }\n": types.GetProjectOverviewDocument,
+    "\n  mutation UpdateProject($projectId: ID!, $input: UpdateProjectInput!) {\n    updateProject(projectId: $projectId, input: $input) {\n      ...ProjectFields\n    }\n  }\n": types.UpdateProjectDocument,
+    "\n  mutation ArchiveProject($projectId: ID!) {\n    archiveProject(projectId: $projectId) {\n      id\n      isArchived\n    }\n  }\n": types.ArchiveProjectDocument,
+    "\n  mutation UnarchiveProject($projectId: ID!) {\n    unarchiveProject(projectId: $projectId) {\n      id\n      isArchived\n    }\n  }\n": types.UnarchiveProjectDocument,
+    "\n  mutation DeleteProject($projectId: ID!) {\n    deleteProject(projectId: $projectId)\n  }\n": types.DeleteProjectDocument,
     "\n  fragment SessionUser on User {\n    id\n    email\n    fullName\n    avatarUrl\n  }\n": types.SessionUserFragmentDoc,
     "\n  mutation SessionSyncUser(\n    $clerkId: String!\n    $email: String!\n    $fullName: String\n    $avatarUrl: String\n  ) {\n    syncUser(\n      clerkId: $clerkId\n      email: $email\n      fullName: $fullName\n      avatarUrl: $avatarUrl\n    ) {\n      id\n      email\n      fullName\n      avatarUrl\n    }\n  }": types.SessionSyncUserDocument,
     "\n  query GetMe {\n    me {\n      ...SessionUser\n    }\n  }\n": types.GetMeDocument,
@@ -160,15 +202,13 @@ const documents: Documents = {
     "\n  fragment BoardWithCollaborators on Whiteboard {\n    ...BoardFields\n    collaborators {\n      userId\n      joinedAt\n      user {\n        id\n        fullName\n        email\n        avatarUrl\n      }\n    }\n  }\n": types.BoardWithCollaboratorsFragmentDoc,
     "\n  fragment WorkspaceFragment on Workspace {\n    id\n    name\n    slug\n    logoUrl\n  }\n": types.WorkspaceFragmentFragmentDoc,
     "\n  query GetMyWorkspaces {\n    myWorkspaces {\n      ...WorkspaceFragment\n    }\n  }\n": types.GetMyWorkspacesDocument,
-    "\n  query GetWorkspaceBySlug($slug: String!) {\n    workspaceBySlug(slug: $slug) {\n      ...WorkspaceFragment\n    }\n  }\n": types.GetWorkspaceBySlugDocument,
+    "\n  query GetWorkspaceBySlug($slug: String!) {\n    workspaceBySlug(slug: $slug) {\n      id\n      name\n      slug\n      logoUrl\n    }\n  }\n": types.GetWorkspaceBySlugDocument,
     "\n  mutation ArchiveChannel($input: ArchiveChannelInput!) {\n    archiveChannel(input: $input) {\n      id\n      name\n      type\n      isArchived\n      deletedAt\n      workspaceId\n      projectId\n      updatedAt\n    }\n  }\n": types.ArchiveChannelDocument,
     "\n  mutation CheckChannelAvailability($input: CheckChannelAvailabilityInput!) {\n    checkChannelAvailability(input: $input) {\n      available\n      message\n      reason\n      reservationId\n    }\n  }\n": types.CheckChannelAvailabilityDocument,
     "\n  mutation CreateChannel($input: CreateChannelInput!) {\n    createChannel(input: $input) {\n      id\n      name\n      type\n      workspaceId\n      projectId\n    }\n  }\n": types.CreateChannelDocument,
     "\n  mutation DeleteChannel($workspaceId: ID!, $channelId: ID!) {\n    deleteChannel(workspaceId: $workspaceId, channelId: $channelId) {\n      success\n      channelId\n    }\n  }\n": types.DeleteChannelDocument,
     "\n  mutation RenameChannel($input: RenameChannelInput!) {\n    renameChannel(input: $input) {\n      id\n      name\n      type\n      workspaceId\n      projectId\n      updatedAt\n    }\n  }\n": types.RenameChannelDocument,
     "\n  mutation UnarchiveChannel($workspaceId: ID!, $channelId: ID!) {\n    unarchiveChannel(workspaceId: $workspaceId, channelId: $channelId) {\n      success\n      channelId\n      name\n    }\n  }\n": types.UnarchiveChannelDocument,
-    "\n  mutation CreateProject($workspaceId: ID!, $input: CreateProjectInput!) {\n    createProject(workspaceId: $workspaceId, input: $input) {\n      ...ProjectFields\n    }\n  }\n": types.CreateProjectDocument,
-    "\n  mutation CheckSlug($workspaceId: ID!, $slug: String!) {\n    checkProjectSlugAvailability(workspaceId: $workspaceId, slug: $slug) {\n      available\n      message\n      reason\n      reservationId\n    }\n  }\n": types.CheckSlugDocument,
     "\n  mutation CreateWorkspace($slug: String!, $name: String!) {\n    createWorkspace(slug: $slug, name: $name) {\n      id\n      slug\n      name\n    }\n  }\n": types.CreateWorkspaceDocument,
     "\n  mutation CheckSlugAvailability($slug: String!) {\n    checkSlugAvailability(slug: $slug) {\n      available\n      message\n    }\n  }\n": types.CheckSlugAvailabilityDocument,
     "\n  mutation InviteToWorkspace($input: InviteToWorkspaceInput!) {\n    inviteToWorkspace(input: $input) {\n      success\n      message\n      invitedCount\n    }\n  }\n": types.InviteToWorkspaceDocument,
@@ -208,6 +248,8 @@ const documents: Documents = {
     "\n  mutation UnarchivePage($input: UnarchivePageInput!) {\n    unarchivePage(input: $input) {\n      page {\n        id\n        isArchived\n        updatedAt\n      }\n    }\n  }\n": types.UnarchivePageDocument,
     "\n  mutation LockPage($input: LockPageInput!) {\n    lockPage(input: $input) {\n      page {\n        id\n        isLocked\n        updatedAt\n      }\n    }\n  }\n": types.LockPageDocument,
     "\n  mutation UnlockPage($input: UnlockPageInput!) {\n    unlockPage(input: $input) {\n      page {\n        id\n        isLocked\n        updatedAt\n      }\n    }\n  }\n": types.UnlockPageDocument,
+    "\n  mutation CreateProject($workspaceId: ID!, $input: CreateProjectInput!) {\n    createProject(workspaceId: $workspaceId, input: $input) {\n      ...ProjectFields\n    }\n  }\n": types.CreateProjectDocument,
+    "\n  mutation CheckSlug($workspaceId: ID!, $slug: String!) {\n    checkProjectSlugAvailability(workspaceId: $workspaceId, slug: $slug) {\n      available\n      message\n      reason\n      reservationId\n    }\n  }\n": types.CheckSlugDocument,
     "\n  mutation CreateVaultFolder($input: CreateVaultFolderInput!) {\n    createVaultFolder(input: $input) {\n      folder {\n        ...VaultFolderFields\n      }\n    }\n  }\n": types.CreateVaultFolderDocument,
     "\n  mutation DeleteVaultFile($input: DeleteVaultFileInput!) {\n    deleteVaultFile(input: $input) {\n      success\n      id\n    }\n  }\n": types.DeleteVaultFileDocument,
     "\n  mutation DeleteVaultFolder($input: DeleteVaultFolderInput!) {\n    deleteVaultFolder(input: $input) {\n      success\n      id\n    }\n  }\n": types.DeleteVaultFolderDocument,
@@ -325,7 +367,71 @@ export function gql(source: "\n  fragment PageWithChildren on Page {\n    ...Pag
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "\n  fragment ProjectFields on Project {\n    id\n    key\n    name\n    description\n    workspaceId\n    createdAt\n    updatedAt\n    members {\n      userId\n      role\n      joinedAt\n      user {\n        id\n        fullName\n        avatarUrl\n      }\n    }\n  }\n"): (typeof documents)["\n  fragment ProjectFields on Project {\n    id\n    key\n    name\n    description\n    workspaceId\n    createdAt\n    updatedAt\n    members {\n      userId\n      role\n      joinedAt\n      user {\n        id\n        fullName\n        avatarUrl\n      }\n    }\n  }\n"];
+export function gql(source: "\n  fragment ProjectMemberFields on ProjectMember {\n    id\n    userId\n    role\n    joinedAt\n    user {\n      id\n      fullName\n      email\n      avatarUrl\n    }\n  }\n"): (typeof documents)["\n  fragment ProjectMemberFields on ProjectMember {\n    id\n    userId\n    role\n    joinedAt\n    user {\n      id\n      fullName\n      email\n      avatarUrl\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  query GetProjectMembers($projectId: ID!) {\n    projectMembers(projectId: $projectId) {\n      ...ProjectMemberFields\n    }\n  }\n"): (typeof documents)["\n  query GetProjectMembers($projectId: ID!) {\n    projectMembers(projectId: $projectId) {\n      ...ProjectMemberFields\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation AddProjectMember($projectId: ID!, $workspaceId: ID!, $userId: ID!) {\n    addProjectMember(projectId: $projectId, workspaceId: $workspaceId, userId: $userId) {\n      ...ProjectMemberFields\n    }\n  }\n"): (typeof documents)["\n  mutation AddProjectMember($projectId: ID!, $workspaceId: ID!, $userId: ID!) {\n    addProjectMember(projectId: $projectId, workspaceId: $workspaceId, userId: $userId) {\n      ...ProjectMemberFields\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation RemoveProjectMember($projectId: ID!, $workspaceId: ID!, $userId: ID!) {\n    removeProjectMember(projectId: $projectId, workspaceId: $workspaceId, userId: $userId)\n  }\n"): (typeof documents)["\n  mutation RemoveProjectMember($projectId: ID!, $workspaceId: ID!, $userId: ID!) {\n    removeProjectMember(projectId: $projectId, workspaceId: $workspaceId, userId: $userId)\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation UpdateProjectMemberRole($projectId: ID!, $workspaceId: ID!, $userId: ID!, $roleId: ID!) {\n    updateProjectMemberRole(projectId: $projectId, workspaceId: $workspaceId, userId: $userId, roleId: $roleId) {\n      ...ProjectMemberFields\n    }\n  }\n"): (typeof documents)["\n  mutation UpdateProjectMemberRole($projectId: ID!, $workspaceId: ID!, $userId: ID!, $roleId: ID!) {\n    updateProjectMemberRole(projectId: $projectId, workspaceId: $workspaceId, userId: $userId, roleId: $roleId) {\n      ...ProjectMemberFields\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation LeaveProject($projectId: ID!) {\n    leaveProject(projectId: $projectId)\n  }\n"): (typeof documents)["\n  mutation LeaveProject($projectId: ID!) {\n    leaveProject(projectId: $projectId)\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  fragment ProjectRoleFields on ProjectRole {\n    id\n    name\n    rank\n    description\n    isSystem\n    scopeType\n  }\n"): (typeof documents)["\n  fragment ProjectRoleFields on ProjectRole {\n    id\n    name\n    rank\n    description\n    isSystem\n    scopeType\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  fragment RolePermissionFields on RolePermission {\n    roleId\n    permissionId\n    effect\n    conditions\n    permission {\n      id\n      resource\n      action\n      description\n      module\n    }\n  }\n"): (typeof documents)["\n  fragment RolePermissionFields on RolePermission {\n    roleId\n    permissionId\n    effect\n    conditions\n    permission {\n      id\n      resource\n      action\n      description\n      module\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  query GetProjectRoles($projectId: ID!, $workspaceId: ID!) {\n    projectRoles(projectId: $projectId, workspaceId: $workspaceId) {\n      ...ProjectRoleFields\n    }\n  }\n"): (typeof documents)["\n  query GetProjectRoles($projectId: ID!, $workspaceId: ID!) {\n    projectRoles(projectId: $projectId, workspaceId: $workspaceId) {\n      ...ProjectRoleFields\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  query GetRolePermissions($roleId: ID!, $workspaceId: ID!) {\n    rolePermissions(roleId: $roleId, workspaceId: $workspaceId) {\n      ...RolePermissionFields\n    }\n  }\n"): (typeof documents)["\n  query GetRolePermissions($roleId: ID!, $workspaceId: ID!) {\n    rolePermissions(roleId: $roleId, workspaceId: $workspaceId) {\n      ...RolePermissionFields\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  query GetAllPermissions($workspaceId: ID!) {\n    allPermissions(workspaceId: $workspaceId) {\n      id\n      resource\n      action\n      description\n      module\n    }\n  }\n"): (typeof documents)["\n  query GetAllPermissions($workspaceId: ID!) {\n    allPermissions(workspaceId: $workspaceId) {\n      id\n      resource\n      action\n      description\n      module\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation CreateProjectRole(\n    $projectId: ID!\n    $workspaceId: ID!\n    $input: CreateProjectRoleInput!\n  ) {\n    createProjectRole(\n      projectId: $projectId\n      workspaceId: $workspaceId\n      input: $input\n    ) {\n      ...ProjectRoleFields\n    }\n  }\n"): (typeof documents)["\n  mutation CreateProjectRole(\n    $projectId: ID!\n    $workspaceId: ID!\n    $input: CreateProjectRoleInput!\n  ) {\n    createProjectRole(\n      projectId: $projectId\n      workspaceId: $workspaceId\n      input: $input\n    ) {\n      ...ProjectRoleFields\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation UpdateProjectRole(\n    $roleId: ID!\n    $projectId: ID!\n    $workspaceId: ID!\n    $input: UpdateProjectRoleInput!\n  ) {\n    updateProjectRole(\n      roleId: $roleId\n      projectId: $projectId\n      workspaceId: $workspaceId\n      input: $input\n    ) {\n      ...ProjectRoleFields\n    }\n  }\n"): (typeof documents)["\n  mutation UpdateProjectRole(\n    $roleId: ID!\n    $projectId: ID!\n    $workspaceId: ID!\n    $input: UpdateProjectRoleInput!\n  ) {\n    updateProjectRole(\n      roleId: $roleId\n      projectId: $projectId\n      workspaceId: $workspaceId\n      input: $input\n    ) {\n      ...ProjectRoleFields\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation DeleteProjectRole($roleId: ID!, $projectId: ID!, $workspaceId: ID!) {\n    deleteProjectRole(roleId: $roleId, projectId: $projectId, workspaceId: $workspaceId)\n  }\n"): (typeof documents)["\n  mutation DeleteProjectRole($roleId: ID!, $projectId: ID!, $workspaceId: ID!) {\n    deleteProjectRole(roleId: $roleId, projectId: $projectId, workspaceId: $workspaceId)\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation AssignRolePermission(\n    $roleId: ID!\n    $workspaceId: ID!\n    $permissionId: ID!\n    $effect: String!\n    $conditions: String\n  ) {\n    assignRolePermission(\n      roleId: $roleId\n      workspaceId: $workspaceId\n      permissionId: $permissionId\n      effect: $effect\n      conditions: $conditions\n    ) {\n      ...RolePermissionFields\n    }\n  }\n"): (typeof documents)["\n  mutation AssignRolePermission(\n    $roleId: ID!\n    $workspaceId: ID!\n    $permissionId: ID!\n    $effect: String!\n    $conditions: String\n  ) {\n    assignRolePermission(\n      roleId: $roleId\n      workspaceId: $workspaceId\n      permissionId: $permissionId\n      effect: $effect\n      conditions: $conditions\n    ) {\n      ...RolePermissionFields\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation RemoveRolePermission($roleId: ID!, $workspaceId: ID!, $permissionId: ID!) {\n    removeRolePermission(roleId: $roleId, workspaceId: $workspaceId, permissionId: $permissionId)\n  }\n"): (typeof documents)["\n  mutation RemoveRolePermission($roleId: ID!, $workspaceId: ID!, $permissionId: ID!) {\n    removeRolePermission(roleId: $roleId, workspaceId: $workspaceId, permissionId: $permissionId)\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  fragment ProjectFields on Project {\n    id\n    key\n    name\n    description\n    workspaceId\n    isArchived\n    createdAt\n    updatedAt\n    members {\n      userId\n      role\n      joinedAt\n      user {\n        id\n        fullName\n        avatarUrl\n      }\n    }\n  }\n"): (typeof documents)["\n  fragment ProjectFields on Project {\n    id\n    key\n    name\n    description\n    workspaceId\n    isArchived\n    createdAt\n    updatedAt\n    members {\n      userId\n      role\n      joinedAt\n      user {\n        id\n        fullName\n        avatarUrl\n      }\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -338,6 +444,26 @@ export function gql(source: "\n  query MyProjects($workspaceId: ID!) {\n    myPr
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "\n  query GetProjectBySlug($workspaceId: ID!, $slug: String!) {\n    projectBySlug(workspaceId: $workspaceId, slug: $slug) {\n      ...ProjectFields\n    }\n  }\n"): (typeof documents)["\n  query GetProjectBySlug($workspaceId: ID!, $slug: String!) {\n    projectBySlug(workspaceId: $workspaceId, slug: $slug) {\n      ...ProjectFields\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  query GetProjectOverview($projectId: ID!) {\n    projectOverview(projectId: $projectId) {\n      totalIssues\n      openIssues\n      completedIssues\n      overdueIssues\n      pageCount\n      issuesByStatus {\n        statusId\n        name\n        color\n        icon\n        issueCount\n      }\n      recentIssues {\n        id\n        number\n        title\n        priority\n        dueDate\n        updatedAt\n        statusName\n        statusColor\n        assigneeId\n        assigneeName\n        assigneeAvatar\n      }\n      members {\n        userId\n        name\n        email\n        avatarUrl\n        roleName\n        roleRank\n        joinedAt\n      }\n    }\n  }\n"): (typeof documents)["\n  query GetProjectOverview($projectId: ID!) {\n    projectOverview(projectId: $projectId) {\n      totalIssues\n      openIssues\n      completedIssues\n      overdueIssues\n      pageCount\n      issuesByStatus {\n        statusId\n        name\n        color\n        icon\n        issueCount\n      }\n      recentIssues {\n        id\n        number\n        title\n        priority\n        dueDate\n        updatedAt\n        statusName\n        statusColor\n        assigneeId\n        assigneeName\n        assigneeAvatar\n      }\n      members {\n        userId\n        name\n        email\n        avatarUrl\n        roleName\n        roleRank\n        joinedAt\n      }\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation UpdateProject($projectId: ID!, $input: UpdateProjectInput!) {\n    updateProject(projectId: $projectId, input: $input) {\n      ...ProjectFields\n    }\n  }\n"): (typeof documents)["\n  mutation UpdateProject($projectId: ID!, $input: UpdateProjectInput!) {\n    updateProject(projectId: $projectId, input: $input) {\n      ...ProjectFields\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation ArchiveProject($projectId: ID!) {\n    archiveProject(projectId: $projectId) {\n      id\n      isArchived\n    }\n  }\n"): (typeof documents)["\n  mutation ArchiveProject($projectId: ID!) {\n    archiveProject(projectId: $projectId) {\n      id\n      isArchived\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation UnarchiveProject($projectId: ID!) {\n    unarchiveProject(projectId: $projectId) {\n      id\n      isArchived\n    }\n  }\n"): (typeof documents)["\n  mutation UnarchiveProject($projectId: ID!) {\n    unarchiveProject(projectId: $projectId) {\n      id\n      isArchived\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation DeleteProject($projectId: ID!) {\n    deleteProject(projectId: $projectId)\n  }\n"): (typeof documents)["\n  mutation DeleteProject($projectId: ID!) {\n    deleteProject(projectId: $projectId)\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -381,7 +507,7 @@ export function gql(source: "\n  query GetMyWorkspaces {\n    myWorkspaces {\n  
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "\n  query GetWorkspaceBySlug($slug: String!) {\n    workspaceBySlug(slug: $slug) {\n      ...WorkspaceFragment\n    }\n  }\n"): (typeof documents)["\n  query GetWorkspaceBySlug($slug: String!) {\n    workspaceBySlug(slug: $slug) {\n      ...WorkspaceFragment\n    }\n  }\n"];
+export function gql(source: "\n  query GetWorkspaceBySlug($slug: String!) {\n    workspaceBySlug(slug: $slug) {\n      id\n      name\n      slug\n      logoUrl\n    }\n  }\n"): (typeof documents)["\n  query GetWorkspaceBySlug($slug: String!) {\n    workspaceBySlug(slug: $slug) {\n      id\n      name\n      slug\n      logoUrl\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -406,14 +532,6 @@ export function gql(source: "\n  mutation RenameChannel($input: RenameChannelInp
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "\n  mutation UnarchiveChannel($workspaceId: ID!, $channelId: ID!) {\n    unarchiveChannel(workspaceId: $workspaceId, channelId: $channelId) {\n      success\n      channelId\n      name\n    }\n  }\n"): (typeof documents)["\n  mutation UnarchiveChannel($workspaceId: ID!, $channelId: ID!) {\n    unarchiveChannel(workspaceId: $workspaceId, channelId: $channelId) {\n      success\n      channelId\n      name\n    }\n  }\n"];
-/**
- * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function gql(source: "\n  mutation CreateProject($workspaceId: ID!, $input: CreateProjectInput!) {\n    createProject(workspaceId: $workspaceId, input: $input) {\n      ...ProjectFields\n    }\n  }\n"): (typeof documents)["\n  mutation CreateProject($workspaceId: ID!, $input: CreateProjectInput!) {\n    createProject(workspaceId: $workspaceId, input: $input) {\n      ...ProjectFields\n    }\n  }\n"];
-/**
- * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
-export function gql(source: "\n  mutation CheckSlug($workspaceId: ID!, $slug: String!) {\n    checkProjectSlugAvailability(workspaceId: $workspaceId, slug: $slug) {\n      available\n      message\n      reason\n      reservationId\n    }\n  }\n"): (typeof documents)["\n  mutation CheckSlug($workspaceId: ID!, $slug: String!) {\n    checkProjectSlugAvailability(workspaceId: $workspaceId, slug: $slug) {\n      available\n      message\n      reason\n      reservationId\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -570,6 +688,14 @@ export function gql(source: "\n  mutation LockPage($input: LockPageInput!) {\n  
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "\n  mutation UnlockPage($input: UnlockPageInput!) {\n    unlockPage(input: $input) {\n      page {\n        id\n        isLocked\n        updatedAt\n      }\n    }\n  }\n"): (typeof documents)["\n  mutation UnlockPage($input: UnlockPageInput!) {\n    unlockPage(input: $input) {\n      page {\n        id\n        isLocked\n        updatedAt\n      }\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation CreateProject($workspaceId: ID!, $input: CreateProjectInput!) {\n    createProject(workspaceId: $workspaceId, input: $input) {\n      ...ProjectFields\n    }\n  }\n"): (typeof documents)["\n  mutation CreateProject($workspaceId: ID!, $input: CreateProjectInput!) {\n    createProject(workspaceId: $workspaceId, input: $input) {\n      ...ProjectFields\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation CheckSlug($workspaceId: ID!, $slug: String!) {\n    checkProjectSlugAvailability(workspaceId: $workspaceId, slug: $slug) {\n      available\n      message\n      reason\n      reservationId\n    }\n  }\n"): (typeof documents)["\n  mutation CheckSlug($workspaceId: ID!, $slug: String!) {\n    checkProjectSlugAvailability(workspaceId: $workspaceId, slug: $slug) {\n      available\n      message\n      reason\n      reservationId\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

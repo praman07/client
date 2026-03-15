@@ -43,7 +43,11 @@ export function ManageStatusesModal({
 
         <div className="space-y-1">
           {statuses.map((status) => (
-            <StatusListRow key={status.id} status={status} projectId={projectId} />
+            <StatusListRow
+              key={status.id}
+              status={status}
+              projectId={projectId}
+            />
           ))}
         </div>
 

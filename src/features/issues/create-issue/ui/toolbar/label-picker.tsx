@@ -71,7 +71,11 @@ export function LabelPicker({ labels, value, onToggle }: LabelPickerProps) {
           </>
         ) : (
           <>
-            <HugeiconsIcon icon={Tag01Icon} strokeWidth={2} className="size-3" />
+            <HugeiconsIcon
+              icon={Tag01Icon}
+              strokeWidth={2}
+              className="size-3"
+            />
             <span>Labels</span>
           </>
         )}

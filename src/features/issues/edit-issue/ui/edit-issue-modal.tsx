@@ -27,10 +27,7 @@
  */
 import { useState, useEffect, useCallback, useRef } from 'react'
 import { toast } from 'sonner'
-import {
-  Dialog,
-  DialogContent,
-} from '@/shared/ui/primitives/dialog'
+import { Dialog, DialogContent } from '@/shared/ui/primitives/dialog'
 import { useGetIssue } from '../hooks/use-get-issue'
 import { useUpdateIssue } from '../hooks/use-update-issue'
 import { useDeleteIssue } from '../hooks/use-delete-issue'
@@ -60,14 +57,16 @@ export function EditIssueModal({
   projectMembers,
 }: EditIssueModalProps) {
   const { data: issue, isLoading } = useGetIssue(issueId)
-  const { mutateAsync: updateIssue, isPending: isSavingMeta } = useUpdateIssue(projectId)
+  const { mutateAsync: updateIssue, isPending: isSavingMeta } =
+    useUpdateIssue(projectId)
   const { mutateAsync: deleteIssue } = useDeleteIssue(projectId)
   const { upload, state: descState } = useDescriptionUpload()
 
   // ── Local state (buffered until Save) ────────────────────────────────────────
   const [localTitle, setLocalTitle] = useState('')
   const [localStatusId, setLocalStatusId] = useState('')
-  const [localPriority, setLocalPriority] = useState<IssuePriority>('NO_PRIORITY')
+  const [localPriority, setLocalPriority] =
+    useState<IssuePriority>('NO_PRIORITY')
   const [localAssigneeId, setLocalAssigneeId] = useState<string | null>(null)
   const [localLabelIds, setLocalLabelIds] = useState<string[]>([])
   const [localDueDate, setLocalDueDate] = useState<string | null>(null)
@@ -111,15 +110,15 @@ export function EditIssueModal({
   )
 
   // ── Dirty checks ─────────────────────────────────────────────────────────────
-  const isMetaDirty = !!issue && (
-    localTitle !== issue.title ||
-    localStatusId !== (issue.status?.id ?? '') ||
-    localPriority !== issue.priority ||
-    localAssigneeId !== (issue.assignee?.id ?? null) ||
-    JSON.stringify([...localLabelIds].sort()) !==
-      JSON.stringify(issue.labels.map((l: { id: string }) => l.id).sort()) ||
-    localDueDate !== (issue.dueDate ?? null)
-  )
+  const isMetaDirty =
+    !!issue &&
+    (localTitle !== issue.title ||
+      localStatusId !== (issue.status?.id ?? '') ||
+      localPriority !== issue.priority ||
+      localAssigneeId !== (issue.assignee?.id ?? null) ||
+      JSON.stringify([...localLabelIds].sort()) !==
+        JSON.stringify(issue.labels.map((l: { id: string }) => l.id).sort()) ||
+      localDueDate !== (issue.dueDate ?? null))
   const isDescriptionDirty =
     JSON.stringify(currentBlocks) !== JSON.stringify(originalBlocks)
   const isDirty = isMetaDirty || isDescriptionDirty
@@ -137,14 +136,24 @@ export function EditIssueModal({
       if (isMetaDirty) {
         await updateIssue({
           issueId,
-          title:      localTitle      !== issue.title                                 ? localTitle      : undefined,
-          statusId:   localStatusId   !== (issue.status?.id ?? '')                    ? localStatusId   : undefined,
-          priority:   localPriority   !== issue.priority                              ? localPriority   : undefined,
-          assigneeId: localAssigneeId !== (issue.assignee?.id ?? null)                ? localAssigneeId : undefined,
-          labelIds:   JSON.stringify([...localLabelIds].sort()) !==
-                      JSON.stringify(issue.labels.map((l: { id: string }) => l.id).sort())
-                        ? localLabelIds : undefined,
-          dueDate:    localDueDate    !== (issue.dueDate ?? null)                     ? localDueDate    : undefined,
+          title: localTitle !== issue.title ? localTitle : undefined,
+          statusId:
+            localStatusId !== (issue.status?.id ?? '')
+              ? localStatusId
+              : undefined,
+          priority:
+            localPriority !== issue.priority ? localPriority : undefined,
+          assigneeId:
+            localAssigneeId !== (issue.assignee?.id ?? null)
+              ? localAssigneeId
+              : undefined,
+          labelIds:
+            JSON.stringify([...localLabelIds].sort()) !==
+            JSON.stringify(issue.labels.map((l: { id: string }) => l.id).sort())
+              ? localLabelIds
+              : undefined,
+          dueDate:
+            localDueDate !== (issue.dueDate ?? null) ? localDueDate : undefined,
         })
       }
 
@@ -168,7 +177,10 @@ export function EditIssueModal({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="flex max-w-6xl sm:max-w-6xl lg:max-w-6xl flex-col p-0 h-[85vh] overflow-hidden gap-0" showCloseButton={false}>
+      <DialogContent
+        className="flex max-w-6xl sm:max-w-6xl lg:max-w-6xl flex-col p-0 h-[85vh] overflow-hidden gap-0"
+        showCloseButton={false}
+      >
         {isLoading || !issue ? (
           <div className="flex h-full items-center justify-center text-sm text-muted-foreground">
             Loading…
@@ -213,7 +225,9 @@ export function EditIssueModal({
                 onAssigneeChange={setLocalAssigneeId}
                 onLabelToggle={(id: string) =>
                   setLocalLabelIds((prev) =>
-                    prev.includes(id) ? prev.filter((x) => x !== id) : [...prev, id],
+                    prev.includes(id)
+                      ? prev.filter((x) => x !== id)
+                      : [...prev, id],
                   )
                 }
                 onDueDateChange={setLocalDueDate}

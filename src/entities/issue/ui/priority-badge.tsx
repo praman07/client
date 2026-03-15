@@ -21,11 +21,15 @@ interface PriorityConfig {
 }
 
 const PRIORITY_CONFIG: Record<IssuePriority, PriorityConfig> = {
-  URGENT:      { icon: AlertCircle, label: 'Urgent',      className: 'text-red-500' },
-  HIGH:        { icon: ArrowUp,     label: 'High',        className: 'text-orange-500' },
-  MEDIUM:      { icon: Equal,       label: 'Medium',      className: 'text-yellow-500' },
-  LOW:         { icon: ArrowDown,   label: 'Low',         className: 'text-slate-400' },
-  NO_PRIORITY: { icon: Minus,       label: 'No Priority', className: 'text-muted-foreground' },
+  URGENT: { icon: AlertCircle, label: 'Urgent', className: 'text-red-500' },
+  HIGH: { icon: ArrowUp, label: 'High', className: 'text-orange-500' },
+  MEDIUM: { icon: Equal, label: 'Medium', className: 'text-yellow-500' },
+  LOW: { icon: ArrowDown, label: 'Low', className: 'text-slate-400' },
+  NO_PRIORITY: {
+    icon: Minus,
+    label: 'No Priority',
+    className: 'text-muted-foreground',
+  },
 }
 
 interface PriorityBadgeProps {
@@ -46,7 +50,13 @@ export function PriorityBadge({
   const { icon: Icon, label, className: colorClass } = PRIORITY_CONFIG[priority]
 
   return (
-    <span className={cn('inline-flex items-center gap-1 shrink-0', colorClass, className)}>
+    <span
+      className={cn(
+        'inline-flex items-center gap-1 shrink-0',
+        colorClass,
+        className,
+      )}
+    >
       <Icon style={{ width: size, height: size }} />
       {showLabel && <span className="text-xs font-medium">{label}</span>}
     </span>

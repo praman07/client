@@ -2,15 +2,19 @@ import { useQuery } from '@tanstack/react-query'
 import { useAuth } from '@clerk/clerk-react'
 import { setCurrentWorkspaceId } from '../model/slice'
 import { workspaceKeys } from '../api'
-import { WORKSPACE_FRAGMENT } from '../api/fragments'
-import { gql, useFragment } from '@/gql'
+import { gql } from '@/gql'
 import { GqlClient } from '@/shared/api'
 import { useAppDispatch } from '@/shared/hooks'
 
+// Inline all fields — no fragment spread so there is no masking and
+// the response fields are directly accessible outside a React component.
 const GET_WORKSPACE_BY_SLUG_QUERY = gql(`
   query GetWorkspaceBySlug($slug: String!) {
     workspaceBySlug(slug: $slug) {
-      ...WorkspaceFragment
+      id
+      name
+      slug
+      logoUrl
     }
   }
 `)
@@ -29,13 +33,13 @@ export function useSyncWorkspaceContext(slug?: string) {
       const client = GqlClient(token)
 
       try {
-        const data = await client.request(GET_WORKSPACE_BY_SLUG_QUERY, {
-          slug,
-        })
+        const data = await client.request(GET_WORKSPACE_BY_SLUG_QUERY, { slug })
+        const workspace = data.workspaceBySlug
 
-        const workspace = useFragment(WORKSPACE_FRAGMENT, data.workspaceBySlug)
+        if (workspace) {
+          dispatch(setCurrentWorkspaceId(workspace.id))
+        }
 
-        dispatch(setCurrentWorkspaceId(workspace.id))
         return data
       } catch (err) {
         dispatch(setCurrentWorkspaceId(null))

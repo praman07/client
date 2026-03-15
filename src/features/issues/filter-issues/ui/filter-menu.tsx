@@ -36,12 +36,16 @@ import type { IssueLabel } from '@/entities/issue-label'
 import type { FilterCategory } from '../model/types'
 import { FilterSubMenu } from './filter-sub-menu'
 
-const CATEGORIES: { key: FilterCategory; label: string; Icon: React.ElementType }[] = [
-  { key: 'statusIds',   label: 'Status',   Icon: LayoutGrid },
-  { key: 'priorities',  label: 'Priority', Icon: Signal },
+const CATEGORIES: {
+  key: FilterCategory
+  label: string
+  Icon: React.ElementType
+}[] = [
+  { key: 'statusIds', label: 'Status', Icon: LayoutGrid },
+  { key: 'priorities', label: 'Priority', Icon: Signal },
   { key: 'assigneeIds', label: 'Assignee', Icon: User },
-  { key: 'labelIds',    label: 'Label',    Icon: Tag },
-  { key: 'dueDate',     label: 'Due Date', Icon: Calendar },
+  { key: 'labelIds', label: 'Label', Icon: Tag },
+  { key: 'dueDate', label: 'Due Date', Icon: Calendar },
 ]
 
 interface FilterMenuProps {
@@ -62,7 +66,9 @@ export function FilterMenu({
   hasActiveFilters,
 }: FilterMenuProps) {
   const [open, setOpen] = useState(false)
-  const [activeCategory, setActiveCategory] = useState<FilterCategory | null>(null)
+  const [activeCategory, setActiveCategory] = useState<FilterCategory | null>(
+    null,
+  )
 
   const handleOpenChange = (next: boolean) => {
     setOpen(next)
@@ -70,15 +76,17 @@ export function FilterMenu({
   }
 
   const isCategoryActive = (key: FilterCategory) => {
-    if (key === 'statusIds')   return !!filters.statusIds?.length
-    if (key === 'priorities')  return !!filters.priorities?.length
+    if (key === 'statusIds') return !!filters.statusIds?.length
+    if (key === 'priorities') return !!filters.priorities?.length
     if (key === 'assigneeIds') return !!filters.assigneeIds?.length
-    if (key === 'labelIds')    return !!filters.labelIds?.length
-    if (key === 'dueDate')     return !!filters.dueDate
+    if (key === 'labelIds') return !!filters.labelIds?.length
+    if (key === 'dueDate') return !!filters.dueDate
     return false
   }
 
-  const activeCategoryLabel = CATEGORIES.find((c) => c.key === activeCategory)?.label
+  const activeCategoryLabel = CATEGORIES.find(
+    (c) => c.key === activeCategory,
+  )?.label
 
   return (
     <Popover open={open} onOpenChange={handleOpenChange}>

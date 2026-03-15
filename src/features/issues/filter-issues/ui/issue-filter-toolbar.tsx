@@ -20,11 +20,19 @@ interface IssueFilterToolbarProps {
   projectMembers: Array<{ id: string; fullName: string }>
 }
 
-export function IssueFilterToolbar({ projectMembers }: IssueFilterToolbarProps) {
+export function IssueFilterToolbar({
+  projectMembers,
+}: IssueFilterToolbarProps) {
   const statuses = useSelector(selectIssueStatuses)
   const labels = useSelector(selectIssueLabels)
-  const { filters, setFilter, removeOneFilter, clearAllFilters, activeChips, hasActiveFilters } =
-    useFilterIssues()
+  const {
+    filters,
+    setFilter,
+    removeOneFilter,
+    clearAllFilters,
+    activeChips,
+    hasActiveFilters,
+  } = useFilterIssues()
 
   return (
     <div className="flex flex-1 flex-wrap items-center gap-1.5">
@@ -40,7 +48,11 @@ export function IssueFilterToolbar({ projectMembers }: IssueFilterToolbarProps) 
 
       {/* Active filter chips */}
       {activeChips.map((chip) => (
-        <FilterChip key={chip.category} chip={chip} onRemove={removeOneFilter} />
+        <FilterChip
+          key={chip.category}
+          chip={chip}
+          onRemove={removeOneFilter}
+        />
       ))}
 
       {/* Clear all — only visible when filters are active */}

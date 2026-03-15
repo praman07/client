@@ -20,18 +20,21 @@ import type { FilterCategory } from '../model/types'
 import { cn } from '@/shared/lib/utils'
 
 const PRIORITY_OPTIONS: { value: IssuePriority; label: string }[] = [
-  { value: 'URGENT',      label: 'Urgent' },
-  { value: 'HIGH',        label: 'High' },
-  { value: 'MEDIUM',      label: 'Medium' },
-  { value: 'LOW',         label: 'Low' },
+  { value: 'URGENT', label: 'Urgent' },
+  { value: 'HIGH', label: 'High' },
+  { value: 'MEDIUM', label: 'Medium' },
+  { value: 'LOW', label: 'Low' },
   { value: 'NO_PRIORITY', label: 'No Priority' },
 ]
 
-const DUE_DATE_OPTIONS: { value: NonNullable<IssueFilters['dueDate']>; label: string }[] = [
-  { value: 'overdue',   label: 'Overdue' },
-  { value: 'today',     label: 'Due Today' },
+const DUE_DATE_OPTIONS: {
+  value: NonNullable<IssueFilters['dueDate']>
+  label: string
+}[] = [
+  { value: 'overdue', label: 'Overdue' },
+  { value: 'today', label: 'Due Today' },
   { value: 'this-week', label: 'Due This Week' },
-  { value: 'no-date',   label: 'No Due Date' },
+  { value: 'no-date', label: 'No Due Date' },
 ]
 
 interface FilterSubMenuProps {
@@ -117,7 +120,9 @@ export function FilterSubMenu({
             key={p.value}
             checked={filters.priorities?.includes(p.value) ?? false}
             onToggle={() =>
-              onSetFilter({ priorities: toggleArray(filters.priorities, p.value) })
+              onSetFilter({
+                priorities: toggleArray(filters.priorities, p.value),
+              })
             }
           >
             <PriorityBadge priority={p.value} />
@@ -129,7 +134,10 @@ export function FilterSubMenu({
   }
 
   if (category === 'assigneeIds') {
-    const members = [{ id: 'unassigned', fullName: 'Unassigned' }, ...projectMembers]
+    const members = [
+      { id: 'unassigned', fullName: 'Unassigned' },
+      ...projectMembers,
+    ]
     return (
       <ScrollArea className="max-h-56">
         <div className="space-y-0.5 p-0.5">
@@ -138,7 +146,9 @@ export function FilterSubMenu({
               key={m.id}
               checked={filters.assigneeIds?.includes(m.id) ?? false}
               onToggle={() =>
-                onSetFilter({ assigneeIds: toggleArray(filters.assigneeIds, m.id) })
+                onSetFilter({
+                  assigneeIds: toggleArray(filters.assigneeIds, m.id),
+                })
               }
             >
               <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-muted text-[10px] font-medium uppercase">

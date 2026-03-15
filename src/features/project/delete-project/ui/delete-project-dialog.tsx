@@ -1,0 +1,111 @@
+import { useState } from 'react'
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  Input,
+  Label,
+} from '@/shared/ui'
+import { TriangleAlert } from 'lucide-react'
+import { useAppSelector, useAppDispatch } from '@/shared/hooks'
+import {
+  selectIsDeleteProjectDialogOpen,
+  closeDeleteProjectDialog,
+} from '../model/slice'
+import { useDeleteProject } from '../hooks/use-delete-project'
+
+interface DeleteProjectDialogProps {
+  projectId: string
+  projectName: string
+  workspaceId: string
+  workspaceSlug: string
+}
+
+export function DeleteProjectDialog({
+  projectId,
+  projectName,
+  workspaceId,
+  workspaceSlug,
+}: DeleteProjectDialogProps) {
+  const isOpen = useAppSelector(selectIsDeleteProjectDialogOpen)
+  const dispatch = useAppDispatch()
+  const [confirmText, setConfirmText] = useState('')
+  const { mutate: deleteProject, isPending } = useDeleteProject(
+    workspaceId,
+    workspaceSlug,
+  )
+
+  const isConfirmed = confirmText.trim() === projectName.trim()
+
+  function handleClose() {
+    dispatch(closeDeleteProjectDialog())
+    setConfirmText('')
+  }
+
+  function handleDelete() {
+    if (!isConfirmed) return
+    deleteProject(projectId, { onSuccess: handleClose })
+  }
+
+  return (
+    <AlertDialog open={isOpen} onOpenChange={(open) => !open && handleClose()}>
+      <AlertDialogContent className="max-w-md">
+        <AlertDialogHeader>
+          {/* Warning icon + title row */}
+          <div className="flex items-center gap-3">
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-destructive/10">
+              <TriangleAlert className="h-4 w-4 text-destructive" />
+            </div>
+            <AlertDialogTitle className="text-base">
+              Delete Project
+            </AlertDialogTitle>
+          </div>
+
+          <AlertDialogDescription className="text-sm text-muted-foreground pt-1">
+            This will permanently delete{' '}
+            <span className="font-medium text-foreground">{projectName}</span>{' '}
+            and all its issues, pages, boards, and data.{' '}
+            <span className="font-medium text-destructive">
+              This cannot be undone.
+            </span>
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+
+        {/* Confirmation input */}
+        <div className="space-y-1.5 py-1">
+          <Label htmlFor="confirm-delete" className="text-sm">
+            Type{' '}
+            <code className="rounded bg-muted px-1 py-0.5 font-mono text-xs font-medium text-foreground">
+              {projectName}
+            </code>{' '}
+            to confirm
+          </Label>
+          <Input
+            id="confirm-delete"
+            value={confirmText}
+            onChange={(e) => setConfirmText(e.target.value)}
+            placeholder={projectName}
+            autoComplete="off"
+            className="font-mono text-sm"
+          />
+        </div>
+
+        <AlertDialogFooter>
+          <AlertDialogCancel onClick={handleClose}>Cancel</AlertDialogCancel>
+          <AlertDialogAction
+            onClick={handleDelete}
+            disabled={!isConfirmed || isPending}
+            className="bg-destructive text-white hover:bg-destructive/90 disabled:opacity-50"
+          >
+            {isPending ? 'Deleting...' : 'Delete Project'}
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+  )
+}
