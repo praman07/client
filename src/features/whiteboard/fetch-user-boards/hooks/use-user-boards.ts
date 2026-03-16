@@ -15,6 +15,7 @@ import type { GetUserBoardsQuery } from '@/gql/graphql'
  */
 export function useUserBoards(
   workspaceId: string,
+  projectId?: string,
   params?: {
     limit?: number
   },
@@ -27,7 +28,9 @@ export function useUserBoards(
   const { limit = 20 } = params || {}
 
   return useInfiniteQuery({
-    queryKey: boardKeys.list(workspaceId),
+    queryKey: projectId
+      ? [...boardKeys.list(workspaceId), projectId]
+      : boardKeys.list(workspaceId),
     queryFn: async ({ pageParam }) => {
       const token = await getToken()
       if (!token) throw new Error('Not authenticated')
@@ -35,6 +38,7 @@ export function useUserBoards(
       const client = GqlClient(token)
       return client.request(GET_USER_BOARDS, {
         workspaceId,
+        projectId,
         limit,
         cursor: pageParam as string | undefined,
       })

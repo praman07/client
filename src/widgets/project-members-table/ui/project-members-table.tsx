@@ -25,9 +25,12 @@ import { cn } from '@/shared/lib/utils'
 import { useAppDispatch } from '@/shared/hooks'
 import { useProjectMembers } from '@/entities/project-member'
 import { PROJECT_MEMBER_FIELDS } from '@/entities/project-member'
+import { useProjectRoles } from '@/entities/project-role'
+import { PROJECT_ROLE_FIELDS } from '@/entities/project-role'
 import { useRemoveProjectMember } from '@/features/project/remove-project-member/hooks/use-remove-project-member'
 import { openAddMemberDialog } from '@/features/project/add-project-member/model/slice'
 import { openLeaveProjectDialog } from '@/features/project/leave-project/model/slice'
+import { RoleSelectorCell } from '@/features/project/update-project-member-role'
 import { AddMemberDialog } from '@/features/project/add-project-member/ui/add-member-dialog'
 import { LeaveProjectDialog } from '@/features/project/leave-project/ui/leave-project-dialog'
 import { useFragment } from '@/gql'
@@ -86,12 +89,26 @@ export function ProjectMembersTable({
 }: ProjectMembersTableProps) {
   const dispatch = useAppDispatch()
   const { data, isLoading } = useProjectMembers(projectId)
+  const { data: rolesData } = useProjectRoles(projectId, workspaceId)
   const { mutate: removeMember, isPending: removing } = useRemoveProjectMember()
   const [removingUserId, setRemovingUserId] = useState<string | null>(null)
 
   const maskedMembers = data?.projectMembers ?? []
   const members = useFragment(PROJECT_MEMBER_FIELDS, maskedMembers)
   const existingMemberIds = members.map((m) => m.userId)
+
+  // Unmask roles and build a simple list for the selector
+  const maskedRoles = rolesData?.projectRoles ?? []
+  const roles = useFragment(PROJECT_ROLE_FIELDS, maskedRoles)
+  const assignableRoles = roles
+    .filter((r) => !(r as any).isSystem) // exclude system roles (MANAGER)
+    .map((r) => ({ id: r.id, name: r.name, rank: (r as any).rank ?? 99 }))
+    .sort((a, b) => a.rank - b.rank)
+
+  // Derive if the current user is a Manager from their own member row
+  const currentUserMember = members.find((m) => m.userId === currentUserId)
+  const isCurrentUserManager =
+    currentUserMember?.role === 'MANAGER' || currentUserMember?.role === 'Manager'
 
   return (
     <div className="space-y-4">
@@ -190,7 +207,20 @@ export function ProjectMembersTable({
 
                   {/* Role */}
                   <TableCell>
-                    <RoleBadge role={member.role ?? 'VIEWER'} />
+                    {isCurrentUserManager &&
+                    !isCurrentUser &&
+                    member.role !== 'MANAGER' &&
+                    member.role !== 'Manager' ? (
+                      <RoleSelectorCell
+                        userId={member.userId}
+                        projectId={projectId}
+                        workspaceId={workspaceId}
+                        currentRoleName={member.role ?? null}
+                        roles={assignableRoles}
+                      />
+                    ) : (
+                      <RoleBadge role={member.role ?? 'VIEWER'} />
+                    )}
                   </TableCell>
 
                   {/* Joined */}

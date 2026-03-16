@@ -29,7 +29,7 @@ interface BoardListProps {
 export function BoardList({ workspaceId, projectId }: BoardListProps) {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
   const { userId } = useAuth()
-  const { data, isLoading, refetch } = useUserBoards(workspaceId)
+  const { data, isLoading, refetch } = useUserBoards(workspaceId, projectId)
   const {
     searchQuery,
     setSearchQuery,

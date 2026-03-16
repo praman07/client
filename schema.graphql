@@ -6,10 +6,7 @@ scalar DateTime
 """
 The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
 """
-scalar JSON
-  @specifiedBy(
-    url: "http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf"
-  )
+scalar JSON @specifiedBy(url: "http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf")
 
 type PageInfo {
   hasNextPage: Boolean!
@@ -32,18 +29,10 @@ type Query {
   rolePermissions(roleId: ID!, workspaceId: ID!): [RolePermission!]!
   workspaceOverview(workspaceId: ID!): WorkspaceOverview!
 
-  """
-  Get paginated notifications for the current user.
-  """
-  notifications(
-    limit: Int
-    cursor: String
-    isRead: Boolean
-  ): NotificationConnection!
+  """Get paginated notifications for the current user."""
+  notifications(limit: Int, cursor: String, isRead: Boolean): NotificationConnection!
 
-  """
-  Get count of unread notifications.
-  """
+  """Get count of unread notifications."""
   unreadNotificationCount: Int!
   myProjects(workspaceId: ID!): [Project!]!
   projectBySlug(workspaceId: ID!, slug: String!): Project
@@ -52,88 +41,41 @@ type Query {
   projectRoles(projectId: ID!, workspaceId: ID!): [ProjectRole!]!
   projectOverview(projectId: ID!): ProjectOverview!
   allPermissions(workspaceId: ID!): [Permission!]!
-  getThreadMessages(
-    parentMessageId: ID!
-    limit: Int
-    beforeCursor: ID
-  ): [ChatMessage!]!
+  getThreadMessages(parentMessageId: ID!, limit: Int, beforeCursor: ID): [ChatMessage!]!
   getMessageById(messageId: ID!): ChatMessage
-  getMessagesAfterCursor(
-    channelId: ID!
-    afterCursor: ID!
-    limit: Int
-  ): [ChatMessage!]!
-  getMissingMessages(
-    channelId: ID!
-    rangeStart: ID!
-    rangeEnd: ID!
-  ): [ChatMessage!]!
-  getChannelMembers(
-    channelId: ID!
-    limit: Int
-    offset: Int
-  ): [ChatMemberRecord!]!
+  getMessagesAfterCursor(channelId: ID!, afterCursor: ID!, limit: Int): [ChatMessage!]!
+  getMissingMessages(channelId: ID!, rangeStart: ID!, rangeEnd: ID!): [ChatMessage!]!
+  getChannelMembers(channelId: ID!, limit: Int, offset: Int): [ChatMemberRecord!]!
   getLastReadMessage(channelId: ID!): ID
-  messagesDelta(
-    conversationId: ID!
-    afterSequence: Int
-    afterStreamId: String
-    limit: Int
-  ): MessagesDelta!
-  history(
-    conversationId: ID!
-    beforeSequence: Int!
-    limit: Int
-  ): HistoryPayload!
+  messagesDelta(conversationId: ID!, afterSequence: Int, afterStreamId: String, limit: Int): MessagesDelta!
+  history(conversationId: ID!, beforeSequence: Int!, limit: Int): HistoryPayload!
   messageReactions(messageId: ID!): [MessageReaction!]!
-  reactionUsers(
-    messageId: ID!
-    emoji: String!
-    cursor: Int
-  ): ReactionUsersConnection!
+  reactionUsers(messageId: ID!, emoji: String!, cursor: Int): ReactionUsersConnection!
   getUnreadCounts(workspaceId: ID!, projectId: ID!): UnreadCountsResponse!
   getReadReceipts(messageId: ID!): ReadReceiptsResponse!
-  getUserConversations(
-    workspaceId: ID!
-    projectId: ID!
-    type: ConversationType
-    includeArchived: Boolean
-    limit: Int
-    cursor: String
-  ): ConversationConnection!
+  getUserConversations(workspaceId: ID!, projectId: ID!, type: ConversationType, includeArchived: Boolean, limit: Int, cursor: String): ConversationConnection!
   getConversation(conversationId: ID!): Conversation!
-  getDmByUsers(
-    workspaceId: ID!
-    projectId: ID!
-    otherUserId: ID!
-  ): DmConversation
+  getDmByUsers(workspaceId: ID!, projectId: ID!, otherUserId: ID!): DmConversation
   getUsersByIds(userIds: [ID!]!): [UserBasic!]!
   getBoard(boardId: ID!): Whiteboard
-  userBoards(workspaceId: ID!, limit: Int, cursor: ID): BoardConnection!
+  userBoards(workspaceId: ID!, projectId: ID, limit: Int, cursor: ID): BoardConnection!
   boardCollaborators(boardId: ID!): [BoardCollaborator!]!
-  workspaceBoards(
-    workspaceId: ID!
-    includeArchived: Boolean
-    limit: Int
-    cursor: ID
-  ): BoardConnection!
+  workspaceBoards(workspaceId: ID!, includeArchived: Boolean, limit: Int, cursor: ID): BoardConnection!
   getBoardSnapshot(boardId: ID!, clientSnapshot: String): BoardSnapshot!
   activeCollaborators(boardId: ID!): [ActiveCollaborator!]!
 
-  """
-  Fetch page metadata. Use getPageSnapshot for Y.Doc content.
-  """
+  """Fetch page metadata. Use getPageSnapshot for Y.Doc content."""
   getPage(pageId: ID!): Page!
 
   """
   Returns the authoritative Y.Doc snapshot diff + a stream cursor for gap-fill.
-
+  
   First open (no offline state):
     getPageSnapshot(pageId: "cuid")
-
+  
   Reconnect with offline edits:
     getPageSnapshot(pageId: "cuid", clientSnapshot: "<base64 Y.encodeStateAsUpdate>")
-
+  
   Client workflow:
     1. Call this query → receive { snapshot, lastStreamId }
     2. Apply snapshot: Y.applyUpdate(localDoc, base64Decode(snapshot))
@@ -160,14 +102,7 @@ type Query {
   Returns the immediate children (subfolders + files) of a folder.
   parentFolderId = null → Home view (root-level items with no parent).
   """
-  getVaultChildren(
-    projectId: ID!
-    parentFolderId: ID
-    cursor: ID
-    limit: Int
-    sortBy: VaultSortField
-    sortDir: SortDirection
-  ): VaultChildrenResult!
+  getVaultChildren(projectId: ID!, parentFolderId: ID, cursor: ID, limit: Int, sortBy: VaultSortField, sortDir: SortDirection): VaultChildrenResult!
 
   """
   Returns full metadata for a single vault folder or file.
@@ -201,9 +136,7 @@ type Query {
   """
   getVaultAncestors(folderId: ID!): [VaultFolder!]!
 
-  """
-  Returns all Kanban columns for a project, ordered by position.
-  """
+  """Returns all Kanban columns for a project, ordered by position."""
   getIssueStatuses(projectId: ID!): [IssueStatus!]!
 
   """
@@ -211,21 +144,14 @@ type Query {
   then by position within each column.
   Optional filters: assigneeId, labelIds, priority.
   """
-  getProjectIssues(
-    projectId: ID!
-    assigneeId: ID
-    labelIds: [ID!]
-    priority: IssuePriority
-  ): [Issue!]!
+  getProjectIssues(projectId: ID!, assigneeId: ID, labelIds: [ID!], priority: IssuePriority): [Issue!]!
 
   """
   Returns full detail for a single issue. Used when opening the issue modal.
   """
   getIssue(issueId: ID!): Issue!
 
-  """
-  Returns all labels defined in a project.
-  """
+  """Returns all labels defined in a project."""
   getIssueLabels(projectId: ID!): [IssueLabel!]!
 
   """
@@ -237,13 +163,7 @@ type Query {
 
 type Mutation {
   _health: String
-  syncUser(
-    clerkId: String!
-    email: String!
-    fullName: String
-    avatarUrl: String
-    emailVerified: Boolean
-  ): User!
+  syncUser(clerkId: String!, email: String!, fullName: String, avatarUrl: String, emailVerified: Boolean): User!
   updateProfile(input: UpdateProfileInput!): User!
   deleteAccount: Boolean!
   acceptWorkspaceInvite(input: AcceptInviteInput!): JoinResponse!
@@ -255,131 +175,53 @@ type Mutation {
   cancelWorkspaceInvite(inviteId: ID!, workspaceId: ID!): Boolean!
   resendWorkspaceInvite(inviteId: ID!, workspaceId: ID!): Boolean!
   deleteWorkspace(workspaceId: ID!): Boolean!
-  transferWorkspaceOwnership(
-    workspaceId: ID!
-    newOwnerId: ID!
-  ): WorkspaceMember!
+  transferWorkspaceOwnership(workspaceId: ID!, newOwnerId: ID!): WorkspaceMember!
   removeWorkspaceMember(workspaceId: ID!, memberId: ID!): InviteResponse!
-  updateWorkspaceMemberRole(
-    workspaceId: ID!
-    memberId: ID!
-    role: String!
-  ): WorkspaceMember!
+  updateWorkspaceMemberRole(workspaceId: ID!, memberId: ID!, role: String!): WorkspaceMember!
   updateWorkspace(workspaceId: ID!, input: UpdateWorkspaceInput!): Workspace!
-  createWorkspaceRole(
-    workspaceId: ID!
-    input: CreateWorkspaceRoleInput!
-  ): WorkspaceRole!
-  updateWorkspaceRole(
-    roleId: ID!
-    workspaceId: ID!
-    input: UpdateWorkspaceRoleInput!
-  ): WorkspaceRole!
+  createWorkspaceRole(workspaceId: ID!, input: CreateWorkspaceRoleInput!): WorkspaceRole!
+  updateWorkspaceRole(roleId: ID!, workspaceId: ID!, input: UpdateWorkspaceRoleInput!): WorkspaceRole!
   deleteWorkspaceRole(roleId: ID!, workspaceId: ID!): Boolean!
-  assignRolePermission(
-    roleId: ID!
-    workspaceId: ID!
-    permissionId: ID!
-    effect: String
-    conditions: String
-  ): RolePermission!
-  removeRolePermission(
-    roleId: ID!
-    workspaceId: ID!
-    permissionId: ID!
-  ): Boolean!
+  assignRolePermission(roleId: ID!, workspaceId: ID!, permissionId: ID!, effect: String, conditions: String): RolePermission!
+  removeRolePermission(roleId: ID!, workspaceId: ID!, permissionId: ID!): Boolean!
 
-  """
-  Mark specific notifications as read.
-  """
+  """Mark specific notifications as read."""
   markNotificationRead(ids: [ID!]!): Boolean!
 
-  """
-  Mark all notifications as read.
-  """
+  """Mark all notifications as read."""
   markAllNotificationsRead: Boolean!
   createProject(workspaceId: ID!, input: CreateProjectInput!): Project!
-  checkProjectSlugAvailability(
-    workspaceId: ID!
-    slug: String!
-  ): AvailabilityResponse!
+  checkProjectSlugAvailability(workspaceId: ID!, slug: String!): AvailabilityResponse!
   updateProject(projectId: ID!, input: UpdateProjectInput!): Project!
-  addProjectMember(
-    projectId: ID!
-    workspaceId: ID!
-    userId: ID!
-  ): ProjectMember!
+  addProjectMember(projectId: ID!, workspaceId: ID!, userId: ID!): ProjectMember!
   removeProjectMember(projectId: ID!, workspaceId: ID!, userId: ID!): Boolean!
-  updateProjectMemberRole(
-    projectId: ID!
-    workspaceId: ID!
-    userId: ID!
-    roleId: ID!
-  ): ProjectMember!
+  updateProjectMemberRole(projectId: ID!, workspaceId: ID!, userId: ID!, roleId: ID!): ProjectMember!
   archiveProject(projectId: ID!): Project!
   unarchiveProject(projectId: ID!): Project!
   deleteProject(projectId: ID!): Boolean!
   leaveProject(projectId: ID!): Boolean!
-  createProjectRole(
-    projectId: ID!
-    workspaceId: ID!
-    input: CreateProjectRoleInput!
-  ): ProjectRole!
-  updateProjectRole(
-    roleId: ID!
-    projectId: ID!
-    workspaceId: ID!
-    input: UpdateProjectRoleInput!
-  ): ProjectRole!
+  createProjectRole(projectId: ID!, workspaceId: ID!, input: CreateProjectRoleInput!): ProjectRole!
+  updateProjectRole(roleId: ID!, projectId: ID!, workspaceId: ID!, input: UpdateProjectRoleInput!): ProjectRole!
   deleteProjectRole(roleId: ID!, projectId: ID!, workspaceId: ID!): Boolean!
   createChannel(input: CreateChannelInput!): Conversation!
   archiveChannel(input: ArchiveChannelInput!): Conversation!
   renameChannel(input: RenameChannelInput!): Conversation!
   createThread(input: CreateThreadInput!): Conversation!
-  checkChannelAvailability(
-    input: CheckChannelAvailabilityInput!
-  ): ChannelAvailabilityResponse!
+  checkChannelAvailability(input: CheckChannelAvailabilityInput!): ChannelAvailabilityResponse!
   createDm(input: CreateDmInput!): Conversation!
   createGroup(input: CreateGroupInput!): Conversation!
   deleteChannel(workspaceId: ID!, channelId: ID!): DeleteChannelResult!
   unarchiveChannel(workspaceId: ID!, channelId: ID!): UnarchiveChannelResult!
-  updateChannelDescription(
-    workspaceId: ID!
-    channelId: ID!
-    description: String
-  ): UpdateChannelDescriptionResult!
-  updateChannelVisibility(
-    workspaceId: ID!
-    channelId: ID!
-    isPublic: Boolean!
-  ): UpdateChannelVisibilityResult!
-  addChannelMembers(
-    workspaceId: ID!
-    channelId: ID!
-    userIds: [ID!]!
-  ): AddChannelMembersResult!
-  removeChannelMember(
-    workspaceId: ID!
-    channelId: ID!
-    userId: ID!
-  ): RemoveChannelMemberResult!
+  updateChannelDescription(workspaceId: ID!, channelId: ID!, description: String): UpdateChannelDescriptionResult!
+  updateChannelVisibility(workspaceId: ID!, channelId: ID!, isPublic: Boolean!): UpdateChannelVisibilityResult!
+  addChannelMembers(workspaceId: ID!, channelId: ID!, userIds: [ID!]!): AddChannelMembersResult!
+  removeChannelMember(workspaceId: ID!, channelId: ID!, userId: ID!): RemoveChannelMemberResult!
   deleteDm(workspaceId: ID!, dmId: ID!): DeleteDmResult!
-  muteConversation(
-    conversationId: ID!
-    isMuted: Boolean!
-  ): MuteConversationResult!
+  muteConversation(conversationId: ID!, isMuted: Boolean!): MuteConversationResult!
   renameGroup(workspaceId: ID!, groupId: ID!, name: String!): RenameGroupResult!
   deleteGroup(workspaceId: ID!, groupId: ID!): DeleteGroupResult!
-  addGroupMembers(
-    workspaceId: ID!
-    groupId: ID!
-    userIds: [ID!]!
-  ): AddGroupMembersResult!
-  removeGroupMember(
-    workspaceId: ID!
-    groupId: ID!
-    userId: ID!
-  ): RemoveGroupMemberResult!
+  addGroupMembers(workspaceId: ID!, groupId: ID!, userIds: [ID!]!): AddGroupMembersResult!
+  removeGroupMember(workspaceId: ID!, groupId: ID!, userId: ID!): RemoveGroupMemberResult!
   leaveGroup(workspaceId: ID!, groupId: ID!): LeaveGroupResult!
   closeThread(workspaceId: ID!, threadId: ID!): CloseThreadResult!
   reopenThread(workspaceId: ID!, threadId: ID!): ReopenThreadResult!
@@ -390,14 +232,8 @@ type Mutation {
   deleteBoard(boardId: ID!): DeleteBoardResult!
   renameBoard(boardId: ID!, title: String!): Whiteboard!
   updateBoardDescription(boardId: ID!, description: String): Whiteboard!
-  addBoardCollaborators(
-    boardId: ID!
-    userIds: [ID!]!
-  ): AddBoardCollaboratorsResult!
-  removeBoardCollaborator(
-    boardId: ID!
-    userId: ID!
-  ): RemoveBoardCollaboratorResult!
+  addBoardCollaborators(boardId: ID!, userIds: [ID!]!): AddBoardCollaboratorsResult!
+  removeBoardCollaborator(boardId: ID!, userId: ID!): RemoveBoardCollaboratorResult!
   archiveBoard(boardId: ID!): Whiteboard!
   unarchiveBoard(boardId: ID!): Whiteboard!
   lockBoard(boardId: ID!): Whiteboard!
@@ -416,9 +252,7 @@ type Mutation {
   deletePage(input: DeletePageInput!): DeletePageResult!
   renamePage(input: RenamePageInput!): RenamePageResult!
 
-  """
-  Archives a page and all its descendants.
-  """
+  """Archives a page and all its descendants."""
   archivePage(input: ArchivePageInput!): ArchivePageResult!
 
   """
@@ -434,9 +268,7 @@ type Mutation {
   """
   lockPage(input: LockPageInput!): LockPageResult!
 
-  """
-  Lock owner or workspace ADMIN can unlock.
-  """
+  """Lock owner or workspace ADMIN can unlock."""
   unlockPage(input: UnlockPageInput!): UnlockPageResult!
 
   """
@@ -445,19 +277,11 @@ type Mutation {
   """
   reorderPage(input: ReorderPageInput!): ReorderPageResult!
 
-  """
-  Upsert-semantics: can be used for both inviting and changing roles.
-  """
-  addPageCollaborators(
-    input: AddPageCollaboratorsInput!
-  ): AddPageCollaboratorsResult!
+  """Upsert-semantics: can be used for both inviting and changing roles."""
+  addPageCollaborators(input: AddPageCollaboratorsInput!): AddPageCollaboratorsResult!
 
-  """
-  Cannot remove the page creator.
-  """
-  removePageCollaborator(
-    input: RemovePageCollaboratorInput!
-  ): RemovePageCollaboratorResult!
+  """Cannot remove the page creator."""
+  removePageCollaborator(input: RemovePageCollaboratorInput!): RemovePageCollaboratorResult!
 
   """
   Step 1 of 2 for uploading a file to Vault.
@@ -488,9 +312,7 @@ type Mutation {
   """
   renameVaultFile(input: RenameVaultFileInput!): RenameFileResult!
 
-  """
-  Soft-deletes a vault file and releases its storage quota.
-  """
+  """Soft-deletes a vault file and releases its storage quota."""
   deleteVaultFile(input: DeleteVaultFileInput!): DeleteResult!
   pinVaultFolder(input: PinVaultFolderInput!): PinFolderResult!
   unpinVaultFolder(input: UnpinVaultFolderInput!): DeleteResult!
@@ -507,19 +329,11 @@ type Mutation {
   updateIssueLabel(input: UpdateIssueLabelInput!): UpdateIssueLabelResult!
   deleteIssueLabel(input: DeleteIssueLabelInput!): DeleteResult!
 
-  """
-  Step 1 of 2: reserves an S3 slot and returns a presigned PUT URL.
-  """
-  requestIssueDescriptionUpload(
-    input: RequestIssueDescriptionUploadInput!
-  ): RequestIssueDescriptionUploadResult!
+  """Step 1 of 2: reserves an S3 slot and returns a presigned PUT URL."""
+  requestIssueDescriptionUpload(input: RequestIssueDescriptionUploadInput!): RequestIssueDescriptionUploadResult!
 
-  """
-  Step 2 of 2: verifies S3 upload and activates the description.
-  """
-  confirmIssueDescriptionUpload(
-    input: ConfirmIssueDescriptionUploadInput!
-  ): ConfirmIssueDescriptionUploadResult!
+  """Step 2 of 2: verifies S3 upload and activates the description."""
+  confirmIssueDescriptionUpload(input: ConfirmIssueDescriptionUploadInput!): ConfirmIssueDescriptionUploadResult!
 }
 
 input UpdateProfileInput {
@@ -746,14 +560,10 @@ type Page {
   workspaceId: ID!
   projectId: ID!
 
-  """
-  null = root-level page (no parent)
-  """
+  """null = root-level page (no parent)"""
   parentId: ID
 
-  """
-  Emoji or absolute URL for the page icon
-  """
+  """Emoji or absolute URL for the page icon"""
   icon: String
   coverUrl: String
 
@@ -774,9 +584,7 @@ type Page {
   collaborators: [PageCollaborator!]!
   creator: UserBasic!
 
-  """
-  Populated only by getProjectPages — empty in all other contexts
-  """
+  """Populated only by getProjectPages — empty in all other contexts"""
   children: [Page!]!
 }
 
@@ -1231,9 +1039,7 @@ input CreateBoardInput {
   title: String!
   description: String
 
-  """
-  Optional: Add workspace members as collaborators during board creation
-  """
+  """Optional: Add workspace members as collaborators during board creation"""
   collaboratorIds: [ID!]
 }
 
@@ -1315,9 +1121,7 @@ type GetPageSnapshotResult {
   """
   lastStreamId: String!
 
-  """
-  Unix timestamp (ms) of when this snapshot was compiled
-  """
+  """Unix timestamp (ms) of when this snapshot was compiled"""
   snapshotTimestamp: Float!
 }
 
@@ -1325,17 +1129,13 @@ input CreatePageInput {
   workspaceId: ID!
   projectId: ID!
 
-  """
-  null = root-level page
-  """
+  """null = root-level page"""
   parentId: ID
   title: String
   icon: String
   coverUrl: String
 
-  """
-  Fractional index position for sibling ordering
-  """
+  """Fractional index position for sibling ordering"""
   position: Float!
   collaboratorIds: [ID!]
 }
@@ -1398,9 +1198,7 @@ type UnlockPageResult {
 input ReorderPageInput {
   pageId: ID!
 
-  """
-  null = move to root (remove from parent)
-  """
+  """null = move to root (remove from parent)"""
   newParentId: ID
   newPosition: Float!
 }
@@ -1490,9 +1288,7 @@ type VaultFile {
   name: String!
   mimeType: String!
 
-  """
-  File size in bytes (Float to safely represent large files >2GB)
-  """
+  """File size in bytes (Float to safely represent large files >2GB)"""
   sizeBytes: Float!
   s3Key: String!
   status: String!
@@ -1545,9 +1341,7 @@ type VaultUsage {
   percentUsed: Float!
 }
 
-"""
-Generic success/id response for delete operations
-"""
+"""Generic success/id response for delete operations"""
 type DeleteResult {
   success: Boolean!
   id: ID!
@@ -1557,9 +1351,7 @@ input RequestVaultUploadInput {
   projectId: ID!
   workspaceId: ID!
 
-  """
-  null = upload to Home (root level)
-  """
+  """null = upload to Home (root level)"""
   folderId: ID
   name: String!
   mimeType: String!
@@ -1583,9 +1375,7 @@ type ConfirmUploadResult {
 input CreateVaultFolderInput {
   projectId: ID!
 
-  """
-  null = create at root level (Home)
-  """
+  """null = create at root level (Home)"""
   parentFolderId: ID
   name: String!
 }
@@ -1611,9 +1401,7 @@ input DeleteVaultFolderInput {
 input MoveVaultFolderInput {
   folderId: ID!
 
-  """
-  null = move to root (Home)
-  """
+  """null = move to root (Home)"""
   targetParentFolderId: ID
 }
 
@@ -1624,9 +1412,7 @@ type MoveFolderResult {
 input MoveVaultFileInput {
   fileId: ID!
 
-  """
-  null = move to root (Home)
-  """
+  """null = move to root (Home)"""
   targetFolderId: ID
 }
 
