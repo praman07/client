@@ -1,4 +1,4 @@
-import { Home, ChevronRight } from 'lucide-react'
+import { ChevronRight, Home } from 'lucide-react'
 
 export interface BreadcrumbEntry {
   id: string
@@ -6,7 +6,7 @@ export interface BreadcrumbEntry {
 }
 
 interface VaultBreadcrumbProps {
-  trail: BreadcrumbEntry[]
+  trail: Array<BreadcrumbEntry>
   onNavigateTo: (folderId: string | null) => void
 }
 

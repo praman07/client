@@ -1,10 +1,10 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { RENAME_VAULT_FOLDER } from '../api/fragments'
+import type { RenameFolderVariables } from '../model'
 import { useAuth } from '@/shared/hooks'
 import { GqlClient } from '@/shared/api/graphql-client'
 import { vaultFolderKeys } from '@/entities/vault-folder'
 import { vaultNodeKeys } from '@/entities/vault-file'
-import type { RenameFolderVariables } from '../model'
-import { RENAME_VAULT_FOLDER } from '../api/fragments'
 
 /**
  * Renames a user-defined vault folder.

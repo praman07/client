@@ -1,9 +1,10 @@
-import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
-import type { UploadStatus, UploadSlot } from '@/features/vault/upload-file'
+import {  createSlice } from '@reduxjs/toolkit'
+import type {PayloadAction} from '@reduxjs/toolkit';
+import type { UploadSlot, UploadStatus } from '@/features/vault/upload-file'
 import type { RootState } from '@/app/store/config'
 
 interface UploadTrayState {
-  slots: UploadSlot[]
+  slots: Array<UploadSlot>
 }
 
 const initialState: UploadTrayState = {

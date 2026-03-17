@@ -1,10 +1,10 @@
 import { useQuery } from '@tanstack/react-query'
+import { GET_VAULT_NODE } from '../api/fragments'
+import type { VaultNodeType } from '@/gql/graphql'
 import { useAuth } from '@/shared/hooks'
 import { GqlClient } from '@/shared/api/graphql-client'
 import { vaultFolderKeys } from '@/entities/vault-folder'
 import { vaultFileKeys } from '@/entities/vault-file'
-import type { VaultNodeType } from '@/gql/graphql'
-import { GET_VAULT_NODE } from '../api/fragments'
 
 /**
  * Fetches full metadata for a single vault folder or file.

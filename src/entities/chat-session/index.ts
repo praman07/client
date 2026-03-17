@@ -3,6 +3,7 @@ export * from './model/selectors'
 export * from './model/slice'
 export { resequencer, chatResequencer } from './lib/chat-resequencer'
 export * from './hooks'
+export * from './ui'
 
 // Re-export commonly used stream-session types
 export type {

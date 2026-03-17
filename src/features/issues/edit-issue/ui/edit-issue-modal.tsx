@@ -25,18 +25,18 @@
  *
  * @layer Features
  */
-import { useState, useEffect, useCallback, useRef } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { toast } from 'sonner'
-import { Dialog, DialogContent } from '@/shared/ui/primitives/dialog'
 import { useGetIssue } from '../hooks/use-get-issue'
 import { useUpdateIssue } from '../hooks/use-update-issue'
 import { useDeleteIssue } from '../hooks/use-delete-issue'
 import { useDescriptionUpload } from '../hooks/use-description-upload'
+import { mapUpdateIssueError } from '../lib/error-mapping'
 import { EditIssueHeader } from './edit-issue-header'
 import { EditIssueSidebar } from './edit-issue-sidebar'
 import { EditIssueContent } from './edit-issue-content'
-import { mapUpdateIssueError } from '../lib/error-mapping'
 import type { IssuePriority } from '@/entities/issue'
+import { Dialog, DialogContent } from '@/shared/ui/primitives/dialog'
 
 interface EditIssueModalProps {
   open: boolean
@@ -68,14 +68,14 @@ export function EditIssueModal({
   const [localPriority, setLocalPriority] =
     useState<IssuePriority>('NO_PRIORITY')
   const [localAssigneeId, setLocalAssigneeId] = useState<string | null>(null)
-  const [localLabelIds, setLocalLabelIds] = useState<string[]>([])
+  const [localLabelIds, setLocalLabelIds] = useState<Array<string>>([])
   const [localDueDate, setLocalDueDate] = useState<string | null>(null)
 
   // Description blocks: current (editor) vs original (last saved / loaded from S3)
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [currentBlocks, setCurrentBlocks] = useState<any[]>([])
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [originalBlocks, setOriginalBlocks] = useState<any[]>([])
+   
+  const [currentBlocks, setCurrentBlocks] = useState<Array<any>>([])
+   
+  const [originalBlocks, setOriginalBlocks] = useState<Array<any>>([])
   // Guard so originalBlocks are seeded exactly once per modal open session
   const descSeeded = useRef(false)
 
@@ -99,8 +99,8 @@ export function EditIssueModal({
 
   // ── onDescriptionLoaded — seeded once after S3 fetch, or immediately if empty
   const handleDescriptionLoaded = useCallback(
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (blocks: any[]) => {
+     
+    (blocks: Array<any>) => {
       if (descSeeded.current) return
       descSeeded.current = true
       setOriginalBlocks(blocks)

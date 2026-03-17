@@ -1,11 +1,11 @@
+import { CreateFolderForm } from './create-folder-form'
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogDescription,
 } from '@/shared/ui/primitives/dialog'
-import { CreateFolderForm } from './create-folder-form'
 
 interface CreateFolderModalProps {
   open: boolean

@@ -12,20 +12,20 @@
  * @layer Features
  */
 import { useState } from 'react'
+import { HugeiconsIcon } from '@hugeicons/react'
+import { Tick02Icon, UserIcon } from '@hugeicons/core-free-icons'
 import {
   DropdownMenu,
-  DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
+  DropdownMenuTrigger,
 } from '@/shared/ui/primitives/dropdown-menu'
 import {
   Avatar,
   AvatarFallback,
   AvatarImage,
 } from '@/shared/ui/primitives/avatar'
-import { HugeiconsIcon } from '@hugeicons/react'
-import { Tick02Icon, UserIcon } from '@hugeicons/core-free-icons'
 import { cn } from '@/shared/lib/utils'
 
 interface Member {
@@ -35,7 +35,7 @@ interface Member {
 }
 
 interface AssigneePickerProps {
-  members: Member[]
+  members: Array<Member>
   value: string | null
   onChange: (id: string | null) => void
 }

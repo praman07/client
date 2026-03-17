@@ -1,10 +1,10 @@
 import {
   Dialog,
   DialogContent,
-  DialogHeader,
-  DialogTitle,
   DialogDescription,
   DialogFooter,
+  DialogHeader,
+  DialogTitle,
 } from '@/shared/ui/primitives/dialog'
 import { Button } from '@/shared/ui/primitives/button'
 

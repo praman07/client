@@ -1,9 +1,9 @@
 import { useQuery } from '@tanstack/react-query'
+import { GET_VAULT_SIDEBAR } from '../api/fragments'
+import type { VaultSidebar } from '@/entities/vault-folder'
 import { useAuth } from '@/shared/hooks'
 import { GqlClient } from '@/shared/api/graphql-client'
 import { vaultFolderKeys } from '@/entities/vault-folder'
-import type { VaultSidebar } from '@/entities/vault-folder'
-import { GET_VAULT_SIDEBAR } from '../api/fragments'
 
 /**
  * Fetches sidebar data — pinned folders + system folders — for a project.

@@ -1,4 +1,4 @@
-import { Upload, FolderPlus } from 'lucide-react'
+import { FolderPlus, Upload } from 'lucide-react'
 
 interface VaultExplorerEmptyProps {
   onUpload: () => void

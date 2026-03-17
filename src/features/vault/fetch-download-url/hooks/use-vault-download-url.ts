@@ -1,9 +1,9 @@
 import { useQuery } from '@tanstack/react-query'
+import { GET_VAULT_DOWNLOAD_URL } from '../api/fragments'
+import type { VaultDownloadUrl } from '@/entities/vault-file'
 import { useAuth } from '@/shared/hooks'
 import { GqlClient } from '@/shared/api/graphql-client'
 import { vaultFileKeys } from '@/entities/vault-file'
-import type { VaultDownloadUrl } from '@/entities/vault-file'
-import { GET_VAULT_DOWNLOAD_URL } from '../api/fragments'
 
 /**
  * Fetches a short-lived presigned S3 GET URL for downloading or previewing a file.

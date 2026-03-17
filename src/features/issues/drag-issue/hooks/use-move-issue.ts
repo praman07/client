@@ -16,12 +16,12 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useDispatch } from 'react-redux'
 import { toast } from 'sonner'
-import { useAuth } from '@/shared/hooks'
-import { GqlClient } from '@/shared/api/graphql-client'
-import { issueKeys, moveIssue } from '@/entities/issue'
 import { MOVE_ISSUE_STATUS } from '../api/fragments'
 import type { DragIssuePayload } from '../model/types'
 import type { AppDispatch } from '@/app/store'
+import { useAuth } from '@/shared/hooks'
+import { GqlClient } from '@/shared/api/graphql-client'
+import { issueKeys, moveIssue } from '@/entities/issue'
 
 export function useMoveIssue(projectId: string) {
   const { getToken } = useAuth()

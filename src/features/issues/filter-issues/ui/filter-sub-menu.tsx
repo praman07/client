@@ -9,17 +9,17 @@
  *
  * @layer Features
  */
-import { ScrollArea } from '@/shared/ui/primitives/scroll-area'
-import { Checkbox } from '@/shared/ui/primitives/checkbox'
-import { StatusIcon } from '@/entities/issue-status'
-import { PriorityBadge } from '@/entities/issue'
 import type { IssueFilters, IssuePriority } from '@/entities/issue'
 import type { IssueStatus } from '@/entities/issue-status'
 import type { IssueLabel } from '@/entities/issue-label'
 import type { FilterCategory } from '../model/types'
+import { ScrollArea } from '@/shared/ui/primitives/scroll-area'
+import { Checkbox } from '@/shared/ui/primitives/checkbox'
+import { StatusIcon } from '@/entities/issue-status'
+import { PriorityBadge } from '@/entities/issue'
 import { cn } from '@/shared/lib/utils'
 
-const PRIORITY_OPTIONS: { value: IssuePriority; label: string }[] = [
+const PRIORITY_OPTIONS: Array<{ value: IssuePriority; label: string }> = [
   { value: 'URGENT', label: 'Urgent' },
   { value: 'HIGH', label: 'High' },
   { value: 'MEDIUM', label: 'Medium' },
@@ -27,10 +27,10 @@ const PRIORITY_OPTIONS: { value: IssuePriority; label: string }[] = [
   { value: 'NO_PRIORITY', label: 'No Priority' },
 ]
 
-const DUE_DATE_OPTIONS: {
+const DUE_DATE_OPTIONS: Array<{
   value: NonNullable<IssueFilters['dueDate']>
   label: string
-}[] = [
+}> = [
   { value: 'overdue', label: 'Overdue' },
   { value: 'today', label: 'Due Today' },
   { value: 'this-week', label: 'Due This Week' },
@@ -40,8 +40,8 @@ const DUE_DATE_OPTIONS: {
 interface FilterSubMenuProps {
   category: FilterCategory
   filters: IssueFilters
-  statuses: IssueStatus[]
-  labels: IssueLabel[]
+  statuses: Array<IssueStatus>
+  labels: Array<IssueLabel>
   projectMembers: Array<{ id: string; fullName: string }>
   onSetFilter: (patch: Partial<IssueFilters>) => void
   onBack: () => void
@@ -76,7 +76,7 @@ function OptionRow({
   )
 }
 
-function toggleArray<T>(arr: T[] | undefined, value: T): T[] {
+function toggleArray<T>(arr: Array<T> | undefined, value: T): Array<T> {
   const current = arr ?? []
   return current.includes(value)
     ? current.filter((v) => v !== value)

@@ -13,10 +13,9 @@ import {
 } from '@/shared/ui'
 import { cn } from '@/shared/lib/utils'
 import { useAppSelector } from '@/shared/hooks'
-import { selectWorkspaceBySlug } from '@/entities/workspace/model/selectors'
-import { useMyProjects, useProjectBySlug } from '@/entities/project/hooks'
+import { selectWorkspaceBySlug } from '@/entities/workspace'
+import { PROJECT_FRAGMENT, useMyProjects, useProjectBySlug  } from '@/entities/project'
 import { useFragment } from '@/gql'
-import { PROJECT_FRAGMENT } from '@/entities/project/api/fragments'
 
 export function ProjectSwitcher() {
   const { workspaceSlug, projectSlug } = useParams({ strict: false })

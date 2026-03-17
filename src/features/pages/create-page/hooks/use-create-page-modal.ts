@@ -1,10 +1,10 @@
-import { useAppDispatch, useAppSelector } from '@/shared/hooks'
 import {
-  openCreatePageModal,
   closeCreatePageModal,
-  selectIsCreatePageModalOpen,
+  openCreatePageModal,
   selectCreatePageModalParentId,
+  selectIsCreatePageModalOpen,
 } from '../model/create-page-modal-store'
+import { useAppDispatch, useAppSelector } from '@/shared/hooks'
 
 /**
  * Hook for controlling the create-page modal.

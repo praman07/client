@@ -85,6 +85,7 @@ export const eventRouter = {
         type: envelope.type,
         payload: envelope.data || {},
       }
+       
       dispatchEvent(appEvent as any)
     } catch (error) {
       log.error(`Bridge to EventBus failed for ${envelope.type}:`, error)

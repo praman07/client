@@ -12,21 +12,21 @@
  *
  * @layer Widgets
  */
-import { useState, useCallback, useRef } from 'react'
+import { useCallback, useRef, useState } from 'react'
 import { toast } from 'sonner'
-import { useSelector, useDispatch } from 'react-redux'
-import type { DragStartEvent, DragOverEvent, DragEndEvent } from '@dnd-kit/core'
+import { useDispatch, useSelector } from 'react-redux'
+import type { DragEndEvent, DragOverEvent, DragStartEvent } from '@dnd-kit/core'
+import type { AppDispatch } from '@/app/store'
 import {
-  selectIssues,
   moveIssue as moveIssueAction,
   reorderIssue as reorderIssueAction,
+  selectIssues,
 } from '@/entities/issue'
 import {
+  calculateNewPosition,
   useMoveIssue,
   useReorderIssue,
-  calculateNewPosition,
 } from '@/features/issues/drag-issue'
-import type { AppDispatch } from '@/app/store'
 
 export function useDragDrop(projectId: string) {
   const dispatch = useDispatch<AppDispatch>()

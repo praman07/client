@@ -8,7 +8,7 @@ import {
   DialogTitle,
 } from '@/shared/ui/'
 import { useAppSelector } from '@/shared/hooks'
-import { selectCurrentWorkspace } from '@/entities/workspace/model/selectors'
+import { selectCurrentWorkspace } from '@/entities/workspace'
 
 export function CreateProjectModal() {
   const { isOpen, close } = useCreateProjectModal()

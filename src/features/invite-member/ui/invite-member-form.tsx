@@ -11,7 +11,7 @@ import { EmailListField } from './email-list-field'
 import type { InviteMemberFormValues } from '../model'
 import { useAppSelector } from '@/shared/hooks'
 import { Button } from '@/shared/ui'
-import { selectCurrentWorkspace } from '@/entities/workspace/model/selectors'
+import { selectCurrentWorkspace } from '@/entities/workspace'
 
 interface Props {
   onClose: () => void

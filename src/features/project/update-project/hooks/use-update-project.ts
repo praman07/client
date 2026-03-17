@@ -1,10 +1,9 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { UPDATE_PROJECT } from '@/entities/project'
-import { projectKeys } from '@/entities/project'
-import { GqlClient } from '@/shared/api'
-import { useAuth } from '@/shared/hooks'
 import { handleUpdateProjectError } from '../lib/error-mapping'
 import type { UpdateProjectFormValues } from '../model/schema'
+import { UPDATE_PROJECT, projectKeys  } from '@/entities/project'
+import { GqlClient } from '@/shared/api'
+import { useAuth } from '@/shared/hooks'
 
 export function useUpdateProject(projectId: string, workspaceId: string) {
   const { getToken } = useAuth()

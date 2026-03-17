@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
 import { UNARCHIVE_CHANNEL_MUTATION } from '../api'
 import { mapUnarchiveChannelError } from '../lib/error-mapping'
+import type { ConversationFieldsFragment, GetConversationQuery, GetUserConversationsQuery } from '@/gql/graphql'
 import { GqlClient } from '@/shared/api'
 import { useAuth } from '@/shared/hooks'
 import { conversationKeys } from '@/entities/conversation'
@@ -30,7 +31,7 @@ export function useUnarchiveChannel() {
       // 1. Immediately update detail query cache
       queryClient.setQueryData(
         conversationKeys.detail(channelId),
-        (oldData: any) => {
+        (oldData: GetConversationQuery | undefined) => {
           if (!oldData?.getConversation) return oldData
           return {
             ...oldData,
@@ -47,17 +48,18 @@ export function useUnarchiveChannel() {
       if (workspaceId && projectId) {
         queryClient.setQueryData(
           conversationKeys.channels(workspaceId, projectId),
-          (oldData: any) => {
+          (oldData: GetUserConversationsQuery | undefined) => {
             if (!oldData?.getUserConversations?.edges) return oldData
             return {
               ...oldData,
               getUserConversations: {
                 ...oldData.getUserConversations,
-                edges: oldData.getUserConversations.edges.map((conv: any) =>
-                  conv.id === channelId
-                    ? { ...conv, isArchived: false, deletedAt: null }
-                    : conv,
-                ),
+                edges: oldData.getUserConversations.edges.map((conv) => {
+                  const c = conv as unknown as ConversationFieldsFragment
+                  return c.id === channelId
+                    ? { ...c, isArchived: false, deletedAt: null }
+                    : c
+                }),
               },
             }
           },

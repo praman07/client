@@ -1,17 +1,17 @@
 import { useNavigate, useParams } from '@tanstack/react-router'
+import { useCreatePageModal } from '../hooks/use-create-page-modal'
+import { CreatePageForm } from './create-page-form'
+import type { Page } from '@/entities/page'
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogDescription,
 } from '@/shared/ui/primitives/dialog'
-import { CreatePageForm } from './create-page-form'
-import { useCreatePageModal } from '../hooks/use-create-page-modal'
 import { useAppSelector } from '@/shared/hooks'
-import { selectWorkspaceBySlug } from '@/entities/workspace/model/selectors'
-import { selectCurrentProject } from '@/entities/project/model/selectors'
-import type { Page } from '@/entities/page'
+import { selectWorkspaceBySlug } from '@/entities/workspace'
+import { selectCurrentProject } from '@/entities/project'
 
 /**
  * Modal wrapper for CreatePageForm.
@@ -27,10 +27,7 @@ import type { Page } from '@/entities/page'
  */
 export function CreatePageModal() {
   const { isOpen, parentId, close } = useCreatePageModal()
-  const { workspaceSlug, projectSlug } = useParams({ strict: false }) as {
-    workspaceSlug: string
-    projectSlug: string
-  }
+  const { workspaceSlug, projectSlug } = useParams({ strict: false })
   const navigate = useNavigate()
 
   const workspace = useAppSelector((state) =>

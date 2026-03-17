@@ -1,9 +1,9 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { REORDER_PAGE } from '../api/fragments'
+import type { Page } from '@/entities/page'
 import { GqlClient } from '@/shared/api/graphql-client'
 import { useAuth } from '@/shared/hooks'
 import { pageKeys } from '@/entities/page'
-import type { Page } from '@/entities/page'
-import { REORDER_PAGE } from '../api/fragments'
 import { createLogger } from '@/shared/lib/logger'
 
 const log = createLogger('pages:reorder-page-hook')
@@ -56,11 +56,11 @@ export function useReorderPage() {
       await queryClient.cancelQueries({
         queryKey: pageKeys.projectPages(projectId),
       })
-      const snapshot = queryClient.getQueryData<Page[]>(
+      const snapshot = queryClient.getQueryData<Array<Page>>(
         pageKeys.projectPages(projectId),
       )
 
-      queryClient.setQueryData<Page[]>(
+      queryClient.setQueryData<Array<Page>>(
         pageKeys.projectPages(projectId),
         (old) =>
           old
@@ -106,11 +106,11 @@ export function useReorderPage() {
  *  3. Insert it into the correct new parent, sorted by position
  */
 function movePageInTree(
-  pages: Page[],
+  pages: Array<Page>,
   pageId: string,
   newParentId: string | null,
   newPosition: number,
-): Page[] {
+): Array<Page> {
   const { page: extracted, tree: stripped } = extractPage(pages, pageId)
   if (!extracted) return pages
 
@@ -124,9 +124,9 @@ function movePageInTree(
 
 /** Extract a page from any depth in the tree. Returns the page + the tree without it. */
 function extractPage(
-  pages: Page[],
+  pages: Array<Page>,
   pageId: string,
-): { page: Page | null; tree: Page[] } {
+): { page: Page | null; tree: Array<Page> } {
   let found: Page | null = null
 
   const tree = pages
@@ -139,7 +139,7 @@ function extractPage(
     })
     .map((p) => {
       if (!p.children?.length) return p
-      const result = extractPage(p.children as Page[], pageId)
+      const result = extractPage(p.children, pageId)
       if (result.page) found = result.page
       return { ...p, children: result.tree }
     })
@@ -149,10 +149,10 @@ function extractPage(
 
 /** Insert a page under newParentId (or at root if null), sorted by position. */
 function insertPage(
-  pages: Page[],
+  pages: Array<Page>,
   page: Page,
   newParentId: string | null,
-): Page[] {
+): Array<Page> {
   if (newParentId === null) {
     // Insert at root level, sorted by position
     return [...pages, page].sort(
@@ -162,7 +162,7 @@ function insertPage(
 
   return pages.map((p) => {
     if (p.id === newParentId) {
-      const children = [...((p.children as Page[]) ?? []), page].sort(
+      const children = [...((p.children) ?? []), page].sort(
         (a, b) => (a.position ?? 0) - (b.position ?? 0),
       )
       return { ...p, children }
@@ -170,7 +170,7 @@ function insertPage(
     if (p.children?.length) {
       return {
         ...p,
-        children: insertPage(p.children as Page[], page, newParentId),
+        children: insertPage(p.children, page, newParentId),
       }
     }
     return p

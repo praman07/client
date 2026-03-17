@@ -10,12 +10,14 @@
  */
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useDispatch } from 'react-redux'
+import { CREATE_ISSUE } from '../api/fragments'
+import type { AppDispatch } from '@/app/store'
+import type { CreateIssueVariables } from '../model/types'
+import type { CreateIssueInput } from '@/gql/graphql'
+import type { Issue } from '@/entities/issue'
 import { useAuth } from '@/shared/hooks'
 import { GqlClient } from '@/shared/api/graphql-client'
-import { issueKeys, addIssue } from '@/entities/issue'
-import type { AppDispatch } from '@/app/store'
-import { CREATE_ISSUE } from '../api/fragments'
-import type { CreateIssueVariables } from '../model/types'
+import { addIssue, issueKeys } from '@/entities/issue'
 
 /**
  * Converts a date-only string ("YYYY-MM-DD") to a full ISO datetime string
@@ -48,7 +50,7 @@ export function useCreateIssue() {
       const token = await getToken()
       if (!token) throw new Error('Not authenticated')
       return GqlClient(token).request(CREATE_ISSUE, {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+         
         input: {
           projectId,
           title,
@@ -57,13 +59,13 @@ export function useCreateIssue() {
           assigneeId,
           labelIds,
           dueDate: toDateTime(dueDate),
-        } as any,
+        } as CreateIssueInput,
       })
     },
     onSuccess: (data, { projectId }) => {
       const issue = data.createIssue?.issue
       if (issue) {
-        dispatch(addIssue(issue as any))
+        dispatch(addIssue(issue as unknown as Issue))
       }
       queryClient.invalidateQueries({
         queryKey: issueKeys.list(projectId),

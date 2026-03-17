@@ -1,9 +1,8 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { ADD_PROJECT_MEMBER } from '@/entities/project-member'
-import { projectMemberKeys } from '@/entities/project-member'
+import { handleAddProjectMemberError } from '../lib/error-mapping'
+import { ADD_PROJECT_MEMBER, projectMemberKeys  } from '@/entities/project-member'
 import { GqlClient } from '@/shared/api'
 import { useAuth } from '@/shared/hooks'
-import { handleAddProjectMemberError } from '../lib/error-mapping'
 
 interface AddProjectMemberInput {
   projectId: string

@@ -10,12 +10,12 @@ export function getContext() {
 
 export function Provider({
   children,
-  queryClient,
+  client,
 }: {
   children: React.ReactNode
-  queryClient: QueryClient
+  client: QueryClient
 }) {
   return (
-    <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+    <QueryClientProvider client={client}>{children}</QueryClientProvider>
   )
 }

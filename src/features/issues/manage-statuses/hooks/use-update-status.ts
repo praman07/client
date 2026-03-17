@@ -7,14 +7,14 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useDispatch } from 'react-redux'
 import { toast } from 'sonner'
+import { UPDATE_ISSUE_STATUS } from '../api/fragments'
+import { mapStatusError } from '../lib/error-mapping'
+import type { AppDispatch } from '@/app/store'
+import type { UpdateStatusVariables } from '../model/types'
 import { useAuth } from '@/shared/hooks'
 import { GqlClient } from '@/shared/api/graphql-client'
 import { issueStatusKeys } from '@/entities/issue-status'
 import { updateStatus } from '@/entities/issue'
-import type { AppDispatch } from '@/app/store'
-import { UPDATE_ISSUE_STATUS } from '../api/fragments'
-import { mapStatusError } from '../lib/error-mapping'
-import type { UpdateStatusVariables } from '../model/types'
 
 export function useUpdateStatus(projectId: string) {
   const { getToken } = useAuth()

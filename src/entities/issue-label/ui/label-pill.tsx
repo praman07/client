@@ -16,8 +16,8 @@
  *
  * @layer Entity
  */
-import { cn } from '@/shared/lib/utils'
 import type { IssueLabel } from '../model/types'
+import { cn } from '@/shared/lib/utils'
 
 interface LabelPillProps {
   label: IssueLabel

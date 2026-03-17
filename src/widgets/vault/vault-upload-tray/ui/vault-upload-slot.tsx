@@ -1,4 +1,4 @@
-import { X, CheckCircle2, Loader2, AlertCircle } from 'lucide-react'
+import { AlertCircle, CheckCircle2, Loader2, X } from 'lucide-react'
 import type { UploadSlot } from '@/features/vault/upload-file'
 
 interface VaultUploadSlotProps {

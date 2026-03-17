@@ -1,9 +1,8 @@
 import { useMutation } from '@tanstack/react-query'
-import { ARCHIVE_PROJECT, UNARCHIVE_PROJECT } from '@/entities/project'
-import { GqlClient } from '@/shared/api'
-import { useAuth, useAppDispatch } from '@/shared/hooks'
-import { setCurrentProjectArchived } from '@/entities/project'
 import { handleArchiveProjectError } from '../lib/error-mapping'
+import { ARCHIVE_PROJECT, UNARCHIVE_PROJECT, setCurrentProjectArchived  } from '@/entities/project'
+import { GqlClient } from '@/shared/api'
+import { useAppDispatch, useAuth } from '@/shared/hooks'
 
 export function useArchiveProject() {
   const { getToken } = useAuth()

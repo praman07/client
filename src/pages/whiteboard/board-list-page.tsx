@@ -1,4 +1,6 @@
+import { ErrorBoundary } from 'react-error-boundary'
 import { BoardList } from '@/widgets/board-list'
+import { WidgetError } from '@/shared/ui'
 
 interface BoardListPageProps {
   workspaceId: string
@@ -16,7 +18,9 @@ export function BoardListPage({ workspaceId, projectId }: BoardListPageProps) {
     <div className="h-screen w-full flex flex-col overflow-hidden bg-background">
       {/* Main Content - Scrollable */}
       <div className="flex-1 overflow-auto">
-        <BoardList workspaceId={workspaceId} projectId={projectId} />
+        <ErrorBoundary FallbackComponent={WidgetError}>
+          <BoardList workspaceId={workspaceId} projectId={projectId} />
+        </ErrorBoundary>
       </div>
     </div>
   )

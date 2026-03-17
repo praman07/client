@@ -15,12 +15,12 @@
  * Registers chat-specific event handlers and priority rules.
  */
 
+import type { ChatEventHandlerContext } from '@/features/chat/events'
 import { createDomainPlugin } from '@/shared/ws/domains'
 import { registerChatHandlers } from '@/features/chat/events'
-import type { ChatEventHandlerContext } from '@/features/chat/events'
 import {
-  ChatUpstreamEvent,
   ChatDownstreamEvent,
+  ChatUpstreamEvent,
 } from '@/shared/contracts/chat/events'
 import { createLogger } from '@/shared/lib/logger'
 

@@ -1,9 +1,9 @@
 import { useEffect } from 'react'
-import type { RefObject } from 'react'
 import * as Y from 'yjs'
-import type { ExcalidrawImperativeAPI } from '@excalidraw/excalidraw/types'
 import { Awareness } from 'y-protocols/awareness'
 import { ExcalidrawBinding } from '@mizuka-wu/y-excalidraw'
+import type { ExcalidrawImperativeAPI } from '@excalidraw/excalidraw/types'
+import type { RefObject } from 'react'
 import { createLogger } from '@/shared/lib/logger'
 
 const log = createLogger('whiteboard:sync:binding')

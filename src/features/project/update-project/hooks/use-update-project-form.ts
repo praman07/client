@@ -1,16 +1,15 @@
 import { useForm } from '@tanstack/react-form'
-import {
-  updateProjectSchema,
-  type UpdateProjectFormValues,
-} from '../model/schema'
-import { useUpdateProject } from './use-update-project'
+import { updateProjectSchema } from '../model/schema'
 import { handleUpdateProjectError } from '../lib/error-mapping'
+import { useUpdateProject } from './use-update-project'
+import type { ZodIssue, ZodType } from 'zod'
+import type { UpdateProjectFormValues } from '../model/schema'
 
-function validateZod(schema: any) {
+function validateZod(schema: ZodType<unknown>) {
   return ({ value }: { value: unknown }) => {
     const result = schema.safeParse(value)
     if (!result.success) {
-      return result.error.issues.map((e: any) => e.message).join(', ')
+      return result.error.issues.map((e: ZodIssue) => e.message).join(', ')
     }
     return undefined
   }

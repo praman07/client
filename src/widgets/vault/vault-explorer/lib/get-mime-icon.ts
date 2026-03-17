@@ -6,13 +6,13 @@
  */
 import {
   File,
-  FileText,
+  FileArchive,
+  FileAudio,
   FileCode,
   FileImage,
-  FileVideo,
-  FileAudio,
-  FileArchive,
   FileSpreadsheet,
+  FileText,
+  FileVideo,
   Presentation,
 } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'

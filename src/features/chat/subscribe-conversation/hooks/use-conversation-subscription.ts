@@ -1,8 +1,7 @@
 import { useEffect } from 'react'
 import { wsManager } from '@/shared/ws'
 import { useAppDispatch } from '@/shared/hooks'
-import { initChannel } from '@/entities/chat-session/model/slice'
-import { resequencer } from '@/entities/chat-session'
+import { initChannel, resequencer  } from '@/entities/chat-session'
 
 type ConversationType = 'CHANNEL' | 'DM' | 'GROUP_DM' | 'THREAD'
 

@@ -36,6 +36,6 @@ export interface VaultFolder {
  * Never re-fetched during folder navigation.
  */
 export interface VaultSidebar {
-  pinnedFolders: VaultFolder[]
-  systemFolders: VaultFolder[]
+  pinnedFolders: Array<VaultFolder>
+  systemFolders: Array<VaultFolder>
 }

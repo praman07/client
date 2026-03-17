@@ -99,12 +99,12 @@ export function createGapDetectorPlugin<T extends BasePayload>(
     name: 'gap-detector',
     phase: 'post-process',
 
-    async execute(context: PluginContext<T>): Promise<PluginResult> {
+    execute(context: PluginContext<T>): Promise<PluginResult> {
       const { state, payload, isReplay } = context
 
       // Don't set gap timer for replay messages
       if (isReplay) {
-        return { action: 'continue' }
+        return Promise.resolve({ action: 'continue' })
       }
 
       // Check if buffered (gap detected)
@@ -117,7 +117,7 @@ export function createGapDetectorPlugin<T extends BasePayload>(
         }, gapTimeout)
       }
 
-      return { action: 'continue' }
+      return Promise.resolve({ action: 'continue' })
     },
   }
 }

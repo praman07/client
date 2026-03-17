@@ -1,10 +1,10 @@
 import { MoreHorizontal } from 'lucide-react'
 import { formatDistanceToNow } from 'date-fns'
-import { cn } from '@/shared/lib/utils'
 import { formatBytes } from '../lib/format-bytes'
 import { getMimeIcon } from '../lib/get-mime-icon'
-import type { VaultFile } from '@/entities/vault-file'
 import { VaultFileContextMenu } from './vault-file-context-menu'
+import type { VaultFile } from '@/entities/vault-file'
+import { cn } from '@/shared/lib/utils'
 import { useVaultDownloadUrl } from '@/features/vault/fetch-download-url'
 
 interface VaultFileCardProps {

@@ -8,8 +8,8 @@
  * @layer Features
  */
 import { useState } from 'react'
-import { Dialog, DialogContent } from '@/shared/ui/primitives/dialog'
 import { CreateIssueForm } from './create-issue-form'
+import { Dialog, DialogContent } from '@/shared/ui/primitives/dialog'
 
 interface CreateIssueModalProps {
   open: boolean

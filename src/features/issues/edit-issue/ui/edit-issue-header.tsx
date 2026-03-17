@@ -9,6 +9,12 @@
  *
  * @layer Features
  */
+import { HugeiconsIcon } from '@hugeicons/react'
+import {
+  Cancel01Icon,
+  Delete02Icon,
+  MoreHorizontalIcon,
+} from '@hugeicons/core-free-icons'
 import { Button } from '@/shared/ui/primitives/button'
 import {
   DropdownMenu,
@@ -16,12 +22,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/shared/ui/primitives/dropdown-menu'
-import { HugeiconsIcon } from '@hugeicons/react'
-import {
-  Cancel01Icon,
-  Delete02Icon,
-  MoreHorizontalIcon,
-} from '@hugeicons/core-free-icons'
 import { IssueNumber } from '@/entities/issue'
 
 interface EditIssueHeaderProps {

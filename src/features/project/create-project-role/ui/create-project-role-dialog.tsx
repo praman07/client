@@ -1,29 +1,30 @@
 import { useState } from 'react'
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-  Button,
-} from '@/shared/ui'
 import { Check, ChevronRight } from 'lucide-react'
-import { cn } from '@/shared/lib/utils'
-import { useAppSelector, useAppDispatch } from '@/shared/hooks'
 import {
-  selectIsCreateRoleDialogOpen,
   closeCreateRoleDialog,
+  selectIsCreateRoleDialogOpen,
 } from '../model/slice'
 import {
-  createProjectRoleSchema,
-  type CreateProjectRoleFormValues,
+  
+  createProjectRoleSchema
 } from '../model/schema'
-import {
-  StepRoleDetails,
-  StepPermissions,
-  StepMembers,
-} from './create-project-role-form'
 import { useCreateProjectRoleForm } from '../hooks/use-create-project-role-form'
+import {
+  StepMembers,
+  StepPermissions,
+  StepRoleDetails,
+} from './create-project-role-form'
+import type {CreateProjectRoleFormValues} from '../model/schema';
+import { useAppDispatch, useAppSelector } from '@/shared/hooks'
+import { cn } from '@/shared/lib/utils'
+import {
+  Button,
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from '@/shared/ui'
 
 // ─── Step indicator ──────────────────────────────────────────────────────────
 
@@ -167,7 +168,7 @@ export function CreateProjectRoleDialog({
     })
   }
 
-  function handlePermToggleResource(ids: string[]) {
+  function handlePermToggleResource(ids: Array<string>) {
     const allSelected = ids.every((id) => selectedPermissionIds.has(id))
     setSelectedPermissionIds((prev) => {
       const next = new Set(prev)
@@ -178,7 +179,7 @@ export function CreateProjectRoleDialog({
     })
   }
 
-  function handlePermToggleAll(ids: string[], selectAll: boolean) {
+  function handlePermToggleAll(ids: Array<string>, selectAll: boolean) {
     setSelectedPermissionIds((prev) => {
       const next = new Set(prev)
       selectAll

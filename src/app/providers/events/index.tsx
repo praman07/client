@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { registerChatHandlers } from '@/features/chat/events'
 import { store } from '@/app/store/config'
-import { selectCurrentProject } from '@/entities/project/model/selectors'
+import { selectCurrentProject } from '@/entities/project'
 import { startStorageGarbageCollector } from '@/shared/lib/storage-gc'
 import { createLogger } from '@/shared/lib/logger'
 

@@ -9,8 +9,8 @@
  * Returns true if the BlockNote document is effectively empty.
  * BlockNote initialises with a single empty paragraph — that counts as empty.
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function isDescriptionEmpty(blocks: any[]): boolean {
+ 
+export function isDescriptionEmpty(blocks: Array<any>): boolean {
   if (!blocks || blocks.length === 0) return true
   if (blocks.length === 1) {
     const b = blocks[0]

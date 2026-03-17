@@ -22,17 +22,17 @@ import { useEffect, useRef } from 'react'
 import { useCreateBlockNote } from '@blocknote/react'
 import { BlockNoteView } from '@blocknote/shadcn'
 import { en } from '@blocknote/core/locales'
-import type { BlockNoteEditor } from '@blocknote/core'
 import { useGetIssueDescription } from '../hooks/use-get-issue-description'
+import type { BlockNoteEditor } from '@blocknote/core'
 
 interface EditIssueDescriptionEditorProps {
   issueId: string
   descriptionS3Key: string | null
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  onChange: (blocks: any[]) => void
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  onDescriptionLoaded: (blocks: any[]) => void
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+   
+  onChange: (blocks: Array<any>) => void
+   
+  onDescriptionLoaded: (blocks: Array<any>) => void
+   
   editorRef?: React.MutableRefObject<BlockNoteEditor<any> | null>
   editable?: boolean
 }
@@ -79,7 +79,7 @@ export function EditIssueDescriptionEditor({
   useEffect(() => {
     if (!loadedBlocks || hasSeeded.current) return
     hasSeeded.current = true
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+     
     editor.replaceBlocks(editor.document as any, loadedBlocks)
     onDescriptionLoaded(loadedBlocks)
   }, [loadedBlocks, editor, onDescriptionLoaded])

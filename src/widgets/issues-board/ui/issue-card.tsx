@@ -17,16 +17,16 @@ import { useContext } from 'react'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import tunnel from 'tunnel-rat'
+import { BoardContext } from './board-context'
+import type { Issue } from '@/entities/issue'
 import {
   Avatar,
   AvatarFallback,
   AvatarImage,
 } from '@/shared/ui/primitives/avatar'
-import { PriorityBadge, DueDateChip, IssueNumber } from '@/entities/issue'
+import { DueDateChip, IssueNumber, PriorityBadge } from '@/entities/issue'
 import { LabelPill } from '@/entities/issue-label'
 import { cn } from '@/shared/lib/utils'
-import type { Issue } from '@/entities/issue'
-import { BoardContext } from './board-context'
 
 const t = tunnel()
 export const CardTunnel = t

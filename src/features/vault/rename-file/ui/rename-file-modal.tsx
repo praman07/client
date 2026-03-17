@@ -1,11 +1,11 @@
+import { RenameFileForm } from './rename-file-form'
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogDescription,
 } from '@/shared/ui/primitives/dialog'
-import { RenameFileForm } from './rename-file-form'
 
 interface RenameFileModalProps {
   open: boolean

@@ -1,5 +1,29 @@
 'use client'
 
+import {
+  DndContext,
+  DragOverlay,
+  KeyboardSensor,
+  MouseSensor,
+  TouchSensor,
+  closestCenter,
+  useDroppable,
+  useSensor,
+  useSensors,
+} from '@dnd-kit/core'
+import { SortableContext, arrayMove, useSortable } from '@dnd-kit/sortable'
+import { CSS } from '@dnd-kit/utilities'
+import {
+  
+  
+  createContext,
+  useContext,
+  useEffect,
+  useState
+} from 'react'
+import { createPortal } from 'react-dom'
+import tunnel from 'tunnel-rat'
+import type {HTMLAttributes, ReactNode} from 'react';
 import type {
   Announcements,
   DndContextProps,
@@ -7,29 +31,6 @@ import type {
   DragOverEvent,
   DragStartEvent,
 } from '@dnd-kit/core'
-import {
-  closestCenter,
-  DndContext,
-  DragOverlay,
-  KeyboardSensor,
-  MouseSensor,
-  TouchSensor,
-  useDroppable,
-  useSensor,
-  useSensors,
-} from '@dnd-kit/core'
-import { arrayMove, SortableContext, useSortable } from '@dnd-kit/sortable'
-import { CSS } from '@dnd-kit/utilities'
-import {
-  createContext,
-  type HTMLAttributes,
-  type ReactNode,
-  useContext,
-  useEffect,
-  useState,
-} from 'react'
-import { createPortal } from 'react-dom'
-import tunnel from 'tunnel-rat'
 import { Card } from '@/shared/ui/primitives/card'
 import { ScrollArea, ScrollBar } from '@/shared/ui/primitives/scroll-area'
 import { cn } from '@/shared/lib/utils'
@@ -51,10 +52,10 @@ type KanbanColumnProps = {
 
 interface KanbanContextProps<
   T extends KanbanItemProps = KanbanItemProps,
-  C extends KanbanColumnProps = KanbanColumnProps,
+  TColumn extends KanbanColumnProps = KanbanColumnProps,
 > {
-  columns: C[]
-  data: T[]
+  columns: Array<TColumn>
+  data: Array<T>
   activeCardId: string | null
 }
 
@@ -110,7 +111,7 @@ export const KanbanCard = <T extends KanbanItemProps = KanbanItemProps>({
   } = useSortable({
     id,
   })
-  const { activeCardId } = useContext(KanbanContext) as KanbanContextProps
+  const { activeCardId } = useContext(KanbanContext)
 
   const style = {
     transition,
@@ -188,13 +189,13 @@ export const KanbanHeader = ({ className, ...props }: KanbanHeaderProps) => (
 
 export type KanbanProviderProps<
   T extends KanbanItemProps = KanbanItemProps,
-  C extends KanbanColumnProps = KanbanColumnProps,
+  TColumn extends KanbanColumnProps = KanbanColumnProps,
 > = Omit<DndContextProps, 'children'> & {
-  children: (column: C) => ReactNode
+  children: (column: TColumn) => ReactNode
   className?: string
-  columns: C[]
-  data: T[]
-  onDataChange?: (data: T[]) => void
+  columns: Array<TColumn>
+  data: Array<T>
+  onDataChange?: (data: Array<T>) => void
   onDragStart?: (event: DragStartEvent) => void
   onDragEnd?: (event: DragEndEvent) => void
   onDragOver?: (event: DragOverEvent) => void
@@ -202,7 +203,7 @@ export type KanbanProviderProps<
 
 export const KanbanProvider = <
   T extends KanbanItemProps = KanbanItemProps,
-  C extends KanbanColumnProps = KanbanColumnProps,
+  TColumn extends KanbanColumnProps = KanbanColumnProps,
 >({
   children,
   onDragStart,
@@ -213,7 +214,7 @@ export const KanbanProvider = <
   data,
   onDataChange,
   ...props
-}: KanbanProviderProps<T, C>) => {
+}: KanbanProviderProps<T, TColumn>) => {
   const [activeCardId, setActiveCardId] = useState<string | null>(null)
 
   const sensors = useSensors(

@@ -1,8 +1,8 @@
 import { Folder, Pin, PinOff } from 'lucide-react'
+import type { VaultFolder } from '@/entities/vault-folder'
 import { cn } from '@/shared/lib/utils'
 import { usePinFolder } from '@/features/vault/pin-folder'
 import { useUnpinFolder } from '@/features/vault/unpin-folder'
-import type { VaultFolder } from '@/entities/vault-folder'
 
 interface VaultFolderItemProps {
   folder: VaultFolder

@@ -11,13 +11,13 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useDispatch } from 'react-redux'
 import { toast } from 'sonner'
+import { DELETE_ISSUE_STATUS } from '../api/fragments'
+import { mapStatusError } from '../lib/error-mapping'
+import type { AppDispatch } from '@/app/store'
 import { useAuth } from '@/shared/hooks'
 import { GqlClient } from '@/shared/api/graphql-client'
 import { issueStatusKeys } from '@/entities/issue-status'
 import { removeStatus } from '@/entities/issue'
-import type { AppDispatch } from '@/app/store'
-import { DELETE_ISSUE_STATUS } from '../api/fragments'
-import { mapStatusError } from '../lib/error-mapping'
 
 export function useDeleteStatus(projectId: string) {
   const { getToken } = useAuth()

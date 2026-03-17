@@ -13,12 +13,12 @@
  * @layer Widgets
  */
 import { useCallback, useRef } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import type { DragEndEvent } from '@dnd-kit/core'
-import { selectIssueStatuses, reorderStatus } from '@/entities/issue'
+import type { AppDispatch } from '@/app/store'
+import { reorderStatus, selectIssueStatuses } from '@/entities/issue'
 import { useReorderStatus } from '@/features/issues/manage-statuses'
 import { calculateNewPosition } from '@/features/issues/drag-issue'
-import type { AppDispatch } from '@/app/store'
 
 export function useColumnDrag(projectId: string) {
   const dispatch = useDispatch<AppDispatch>()

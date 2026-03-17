@@ -161,6 +161,7 @@ export function createWSManager(): WSManager {
         payload,
       }
 
+       
       const sent = connectionManager.sendEnvelope(envelope as any)
 
       // Queue if not sent

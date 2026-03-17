@@ -1,6 +1,6 @@
-import { Upload, FolderPlus, ArrowUpDown } from 'lucide-react'
-import { Button } from '@/shared/ui/primitives/button'
+import { ArrowUpDown, FolderPlus, Upload } from 'lucide-react'
 import type { VaultSortState } from '@/shared/lib/vault-types'
+import { Button } from '@/shared/ui/primitives/button'
 
 interface VaultExplorerToolbarProps {
   sort: VaultSortState

@@ -1,5 +1,5 @@
 import { Link, useRouterState } from '@tanstack/react-router'
-import { Settings2, Users, Shield } from 'lucide-react'
+import { Settings2, Shield, Users } from 'lucide-react'
 import { cn } from '@/shared/lib/utils'
 
 const SETTINGS_TABS = [

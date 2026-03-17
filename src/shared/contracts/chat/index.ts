@@ -4,6 +4,12 @@
  */
 
 // Event names
+// ═══════════════════════════════════════════════════════════════
+// CONVENIENCE NAMESPACES
+// ═══════════════════════════════════════════════════════════════
+
+import { ChatDownstreamEvent, ChatUpstreamEvent } from './events'
+
 export {
   ChatUpstreamEvent,
   ChatDownstreamEvent,
@@ -53,12 +59,6 @@ export type {
   SubscribeSuccessContract,
   ChatDownstreamContract,
 } from './downstream'
-
-// ═══════════════════════════════════════════════════════════════
-// CONVENIENCE NAMESPACES
-// ═══════════════════════════════════════════════════════════════
-
-import { ChatUpstreamEvent, ChatDownstreamEvent } from './events'
 
 /**
  * Namespace for chat event names

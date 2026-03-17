@@ -1,12 +1,13 @@
-import { ScrollArea } from '@/shared/ui'
-import { Sidebar, SidebarContent } from '@/shared/ui/primitives/sidebar'
-import { useVaultSidebar } from '@/features/vault/fetch-sidebar'
-import { VaultStorageBar } from '@/widgets/vault/vault-storage-bar'
+import { ErrorBoundary } from 'react-error-boundary'
+import { useVaultSidebarState } from '../hooks/use-vault-sidebar-state'
 import { VaultSidebarSection } from './vault-sidebar-section'
 import { VaultFolderItem } from './vault-folder-item'
 import { VaultSidebarSkeleton } from './vault-sidebar-skeleton'
-import { useVaultSidebarState } from '../hooks/use-vault-sidebar-state'
 import type { VaultFolder } from '@/entities/vault-folder'
+import { ScrollArea, WidgetError  } from '@/shared/ui'
+import { Sidebar, SidebarContent } from '@/shared/ui/primitives/sidebar'
+import { useVaultSidebar } from '@/features/vault/fetch-sidebar'
+import { VaultStorageBar } from '@/widgets/vault/vault-storage-bar'
 
 interface VaultSidebarProps {
   projectId: string
@@ -23,8 +24,8 @@ export function VaultSidebar({ projectId }: VaultSidebarProps) {
   const { data, isLoading } = useVaultSidebar(projectId)
   const { activeFolderId, navigate } = useVaultSidebarState()
 
-  const pinnedFolders = (data?.pinnedFolders ?? []) as VaultFolder[]
-  const systemFolders = (data?.systemFolders ?? []) as VaultFolder[]
+  const pinnedFolders = (data?.pinnedFolders ?? [])
+  const systemFolders = (data?.systemFolders ?? [])
   const pinnedIds = new Set(pinnedFolders.map((f: VaultFolder) => f.id))
 
   return (
@@ -71,9 +72,11 @@ export function VaultSidebar({ projectId }: VaultSidebarProps) {
           </div>
         </ScrollArea>
 
-        {/* Storage bar anchored to bottom */}
+        {/* Storage bar — isolated so a usage API failure doesn't crash the sidebar */}
         <div className="border-t mt-auto">
-          <VaultStorageBar projectId={projectId} />
+          <ErrorBoundary FallbackComponent={WidgetError}>
+            <VaultStorageBar projectId={projectId} />
+          </ErrorBoundary>
         </div>
       </SidebarContent>
     </Sidebar>

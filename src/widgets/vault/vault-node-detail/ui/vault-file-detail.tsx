@@ -1,11 +1,11 @@
 import { useState } from 'react'
 import { File } from 'lucide-react'
-import type { VaultFile } from '@/entities/vault-file'
+import { useVaultNodeDetail } from '../hooks/use-vault-node-detail'
 import { VaultDetailMeta } from './vault-detail-meta'
 import { VaultDetailActions } from './vault-detail-actions'
+import type { VaultFile } from '@/entities/vault-file'
 import { RenameFileModal } from '@/features/vault/rename-file'
 import { useDeleteFile } from '@/features/vault/delete-file'
-import { useVaultNodeDetail } from '../hooks/use-vault-node-detail'
 import { VaultNodeType } from '@/gql/graphql'
 
 interface VaultFileDetailProps {

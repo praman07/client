@@ -10,6 +10,6 @@ export interface CreateIssueVariables {
   statusId: string
   priority: IssuePriority
   assigneeId: string | null
-  labelIds: string[]
+  labelIds: Array<string>
   dueDate: string | null
 }

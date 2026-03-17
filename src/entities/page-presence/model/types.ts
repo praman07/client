@@ -22,6 +22,6 @@ export interface PageCollaboratorPresence {
 }
 
 export interface PagePresenceState {
-  collaborators: Record<string, PageCollaboratorPresence>
+  collaborators: Record<string, PageCollaboratorPresence | undefined>
   totalCount: number
 }

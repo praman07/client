@@ -7,9 +7,9 @@
  * @layer Features
  */
 import { X } from 'lucide-react'
+import type { FilterChip as FilterChipType } from '../model/types'
 import { Badge } from '@/shared/ui/primitives/badge'
 import { Button } from '@/shared/ui/primitives/button'
-import type { FilterChip as FilterChipType } from '../model/types'
 
 interface FilterChipProps {
   chip: FilterChipType

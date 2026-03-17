@@ -1,5 +1,4 @@
-import { useOnboardingOrchestrator } from '@/features/onboarding/hooks'
-import { OnboardingWizard } from '@/features/onboarding'
+import { OnboardingWizard, useOnboardingOrchestrator } from '@/features/onboarding'
 import { RouteError } from '@/shared/ui'
 
 export function OnboardingPage() {

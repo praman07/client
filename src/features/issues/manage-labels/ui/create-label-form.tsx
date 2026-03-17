@@ -9,11 +9,11 @@
  */
 import { useForm } from '@tanstack/react-form'
 import { toast } from 'sonner'
+import { useCreateLabel } from '../hooks'
+import { mapLabelError } from '../lib/error-mapping'
 import { Button } from '@/shared/ui/primitives/button'
 import { Input } from '@/shared/ui/primitives/input'
 import { Label } from '@/shared/ui/primitives/label'
-import { useCreateLabel } from '../hooks'
-import { mapLabelError } from '../lib/error-mapping'
 
 interface CreateLabelFormProps {
   projectId: string

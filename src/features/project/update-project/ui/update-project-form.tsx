@@ -1,17 +1,19 @@
-import { Button, Input, Label, Separator, Textarea } from '@/shared/ui'
 import { useUpdateProjectForm } from '../hooks/use-update-project-form'
-import type { UpdateProjectFormValues } from '../model/schema'
 import { updateProjectSchema } from '../model/schema'
+import type { ZodIssue, ZodType } from 'zod'
+import type { UpdateProjectFormValues } from '../model/schema'
+import { Button, Input, Label, Separator, Textarea } from '@/shared/ui'
 
-function validateZod(schema: any) {
+function validateZod(schema: ZodType<unknown>) {
   return ({ value }: { value: unknown }) => {
     const result = schema.safeParse(value)
     if (!result.success)
-      return result.error.issues.map((e: any) => e.message).join(', ')
+      return result.error.issues.map((e: ZodIssue) => e.message).join(', ')
     return undefined
   }
 }
 
+ 
 function FieldError({ field }: { field: any }) {
   if (!field.state.meta.isTouched || !field.state.meta.errors.length)
     return null

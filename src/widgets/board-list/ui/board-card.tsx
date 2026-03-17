@@ -3,14 +3,13 @@ import { useBoardCardHandlers } from './use-board-card-handlers'
 import { BoardCardContextMenu } from './board-card-context-menu'
 import { BoardCardListView } from './board-card-list-view'
 import { BoardCardGridView } from './board-card-grid-view'
+import type { ViewMode } from '../hooks'
+import type { Board } from '@/entities/whiteboard-board'
 import { RenameBoardDialog } from '@/features/whiteboard/rename-board'
 import { DeleteBoardDialog } from '@/features/whiteboard/delete-board'
 import { ArchiveBoardDialog } from '@/features/whiteboard/archive-board'
-import { AddCollaboratorsDialog } from '@/features/whiteboard/add-collaborators'
-import { useBoardCollaborators } from '@/features/whiteboard/add-collaborators/hooks'
+import { AddCollaboratorsDialog, useBoardCollaborators  } from '@/features/whiteboard/add-collaborators'
 import { useWorkspaceMembers } from '@/features/view-members/hooks'
-import type { ViewMode } from '../hooks'
-import type { Board } from '@/entities/whiteboard-board'
 
 interface BoardCardProps {
   board: Board
@@ -31,8 +30,10 @@ export function BoardCard({ board, viewMode, isCreator }: BoardCardProps) {
   const { data: workspaceMembersData } = useWorkspaceMembers(board.workspaceId)
   const { data: collaboratorsData } = useBoardCollaborators(board.id)
 
+   
   const workspaceMembers = (workspaceMembersData?.workspaceMembers || []) as any
   const currentCollaboratorIds =
+     
     collaboratorsData?.boardCollaborators?.map((c: any) => c.userId) || []
 
   // Get route params from router state matches

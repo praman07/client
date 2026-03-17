@@ -1,11 +1,11 @@
 import { useRef } from 'react'
+import type { VaultSortState } from '@/shared/lib/vault-types'
+import type { VaultNodeType } from '@/gql/graphql'
 import { useAppDispatch } from '@/shared/hooks'
 import { useVaultChildren } from '@/features/vault/fetch-children'
 import { useUploadFile } from '@/features/vault/upload-file'
 import { uploadTrayActions } from '@/widgets/vault/vault-upload-tray'
 import { DEFAULT_VAULT_SORT } from '@/shared/lib/vault-types'
-import type { VaultSortState } from '@/shared/lib/vault-types'
-import type { VaultNodeType } from '@/gql/graphql'
 
 interface UseVaultExplorerActionsParams {
   projectId: string
@@ -43,8 +43,8 @@ export function useVaultExplorerActions({
 
   async function handleFilesPicked(fileList: FileList | null) {
     if (!fileList) return
-    const files = Array.from(fileList)
-    for (const file of files) {
+    const fileArray = Array.from(fileList)
+    for (const file of fileArray) {
       const localId = crypto.randomUUID()
       dispatch(
         uploadTrayActions.enqueue({

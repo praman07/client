@@ -2,24 +2,24 @@ import { useState } from 'react'
 import { useVaultExplorerActions } from '../hooks/use-vault-explorer-actions'
 import { useVaultSort } from '../hooks/use-vault-sort'
 import { VaultBreadcrumb } from './vault-breadcrumb'
-import type { BreadcrumbEntry } from './vault-breadcrumb'
 import { VaultExplorerToolbar } from './vault-explorer-toolbar'
 import { VaultExplorerSkeleton } from './vault-explorer-skeleton'
 import { VaultExplorerEmpty } from './vault-explorer-empty'
 import { VaultFolderCard } from './vault-folder-card'
 import { VaultFileCard } from './vault-file-card'
-import { VaultNodeType } from '@/gql/graphql'
-import { CreateFolderModal } from '@/features/vault/create-folder'
-import { RenameFileModal } from '@/features/vault/rename-file'
-import { RenameFolderModal } from '@/features/vault/rename-folder'
+import type { BreadcrumbEntry } from './vault-breadcrumb'
+import type { VaultNodeType } from '@/gql/graphql'
 import type { VaultFolder } from '@/entities/vault-folder'
 import type { VaultFile } from '@/entities/vault-file'
+import { RenameFileModal } from '@/features/vault/rename-file'
+import { RenameFolderModal } from '@/features/vault/rename-folder'
+import { CreateFolderModal } from '@/features/vault/create-folder'
 
 interface VaultExplorerProps {
   projectId: string
   workspaceId: string
   folderId: string | null
-  breadcrumbTrail: BreadcrumbEntry[]
+  breadcrumbTrail: Array<BreadcrumbEntry>
   onSelectNode: (id: string, type: VaultNodeType) => void
   onNavigateInto: (folder: VaultFolder) => void
   onNavigateTo: (folderId: string | null) => void
@@ -77,8 +77,8 @@ export function VaultExplorer({
 
   const isEmpty =
     !childrenQuery.isLoading &&
-    (folders as VaultFolder[]).length === 0 &&
-    (files as VaultFile[]).length === 0
+    (folders).length === 0 &&
+    (files).length === 0
 
   return (
     <div className="flex flex-col h-full overflow-hidden">
@@ -151,13 +151,13 @@ export function VaultExplorer({
         ) : (
           <div className="p-6 space-y-6">
             {/* Folders section */}
-            {(folders as VaultFolder[]).length > 0 && (
+            {(folders).length > 0 && (
               <section>
                 <h2 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-3">
                   Folders
                 </h2>
                 <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-3">
-                  {(folders as VaultFolder[]).map((folder) => (
+                  {(folders).map((folder) => (
                     <VaultFolderCard
                       key={folder.id}
                       folder={folder}
@@ -183,13 +183,13 @@ export function VaultExplorer({
             )}
 
             {/* Files section */}
-            {(files as VaultFile[]).length > 0 && (
+            {(files).length > 0 && (
               <section>
                 <h2 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-3">
                   Files
                 </h2>
                 <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-3">
-                  {(files as VaultFile[]).map((file) => (
+                  {(files).map((file) => (
                     <VaultFileCard
                       key={file.id}
                       file={file}

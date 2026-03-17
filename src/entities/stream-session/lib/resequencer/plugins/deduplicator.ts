@@ -19,14 +19,14 @@ export function createDeduplicatorPlugin<
     name: 'deduplicator',
     phase: 'pre-process',
 
-    async execute(context: PluginContext<T>): Promise<PluginResult> {
+    execute(context: PluginContext<T>): Promise<PluginResult> {
       const { state, payload, isReplay } = context
 
       // IMPORTANT: Skip deduplication for recovery/history batches
       // History messages are OLDER than lastStreamIdSeen by design
       // Only deduplicate realtime messages from WebSocket
       if (isReplay) {
-        return { action: 'continue' }
+        return Promise.resolve({ action: 'continue' })
       }
 
       // Check if we've seen this message already
@@ -34,13 +34,13 @@ export function createDeduplicatorPlugin<
         state.lastStreamIdSeen &&
         compareStreamId(payload.streamId, state.lastStreamIdSeen) <= 0
       ) {
-        return {
+        return Promise.resolve({
           action: 'skip',
           reason: `Duplicate/old message: ${payload.streamId} (last: ${state.lastStreamIdSeen})`,
-        }
+        })
       }
 
-      return { action: 'continue' }
+      return Promise.resolve({ action: 'continue' })
     },
   }
 }

@@ -1,10 +1,10 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { MOVE_VAULT_FOLDER } from '../api/fragments'
+import type { MoveFolderVariables } from '../model'
 import { useAuth } from '@/shared/hooks'
 import { GqlClient } from '@/shared/api/graphql-client'
 import { vaultFolderKeys } from '@/entities/vault-folder'
 import { vaultNodeKeys } from '@/entities/vault-file'
-import type { MoveFolderVariables } from '../model'
-import { MOVE_VAULT_FOLDER } from '../api/fragments'
 
 /**
  * Moves a vault folder to a new parent.

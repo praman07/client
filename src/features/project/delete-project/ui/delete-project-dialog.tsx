@@ -1,4 +1,11 @@
 import { useState } from 'react'
+import { TriangleAlert } from 'lucide-react'
+import {
+  closeDeleteProjectDialog,
+  selectIsDeleteProjectDialogOpen,
+} from '../model/slice'
+import { useDeleteProject } from '../hooks/use-delete-project'
+import { useAppDispatch, useAppSelector } from '@/shared/hooks'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -11,13 +18,6 @@ import {
   Input,
   Label,
 } from '@/shared/ui'
-import { TriangleAlert } from 'lucide-react'
-import { useAppSelector, useAppDispatch } from '@/shared/hooks'
-import {
-  selectIsDeleteProjectDialogOpen,
-  closeDeleteProjectDialog,
-} from '../model/slice'
-import { useDeleteProject } from '../hooks/use-delete-project'
 
 interface DeleteProjectDialogProps {
   projectId: string

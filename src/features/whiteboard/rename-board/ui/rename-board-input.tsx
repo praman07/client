@@ -1,11 +1,11 @@
-import { useState, useRef, useEffect } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useForm } from '@tanstack/react-form'
 import { toast } from 'sonner'
-import { Input } from '@/shared/ui/primitives/input'
+import { Check, X } from 'lucide-react'
 import { useRenameBoard } from '../hooks'
 import { renameBoardSchema } from '../model'
 import { mapRenameBoardError } from '../lib'
-import { Check, X } from 'lucide-react'
+import { Input } from '@/shared/ui/primitives/input'
 
 interface RenameBoardInputProps {
   boardId: string

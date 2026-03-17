@@ -1,18 +1,20 @@
 import { useForm } from '@tanstack/react-form'
 import {
-  updateProjectRoleSchema,
-  type UpdateProjectRoleFormValues,
+  
+  updateProjectRoleSchema
 } from '../model/schema'
-import { useUpdateProjectRole } from './use-update-project-role'
 import { handleUpdateProjectRoleError } from '../lib/error-mapping'
 import { closeUpdateRoleDialog } from '../model/slice'
+import { useUpdateProjectRole } from './use-update-project-role'
+import type { ZodIssue, ZodType } from 'zod'
+import type {UpdateProjectRoleFormValues} from '../model/schema';
 import { useAppDispatch } from '@/shared/hooks'
 
-function validateZod(schema: any) {
+function validateZod(schema: ZodType<unknown>) {
   return ({ value }: { value: unknown }) => {
     const result = schema.safeParse(value)
     if (!result.success) {
-      return result.error.issues.map((e: any) => e.message).join(', ')
+      return result.error.issues.map((e: ZodIssue) => e.message).join(', ')
     }
     return undefined
   }

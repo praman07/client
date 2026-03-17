@@ -16,11 +16,11 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useDispatch } from 'react-redux'
 import { toast } from 'sonner'
+import { REORDER_ISSUE } from '../api/fragments'
+import type { AppDispatch } from '@/app/store'
 import { useAuth } from '@/shared/hooks'
 import { GqlClient } from '@/shared/api/graphql-client'
 import { issueKeys, reorderIssue } from '@/entities/issue'
-import { REORDER_ISSUE } from '../api/fragments'
-import type { AppDispatch } from '@/app/store'
 
 interface ReorderVariables {
   issueId: string

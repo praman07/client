@@ -1,4 +1,9 @@
 import {
+  closeLeaveProjectDialog,
+  selectIsLeaveProjectDialogOpen,
+} from '../model/slice'
+import { useLeaveProject } from '../hooks/use-leave-project'
+import {
   AlertDialog,
   AlertDialogAction,
   AlertDialogCancel,
@@ -8,12 +13,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/shared/ui'
-import { useAppSelector, useAppDispatch } from '@/shared/hooks'
-import {
-  selectIsLeaveProjectDialogOpen,
-  closeLeaveProjectDialog,
-} from '../model/slice'
-import { useLeaveProject } from '../hooks/use-leave-project'
+import { useAppDispatch, useAppSelector } from '@/shared/hooks'
 
 interface LeaveProjectDialogProps {
   projectId: string

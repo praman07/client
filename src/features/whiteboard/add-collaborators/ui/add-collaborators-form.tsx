@@ -2,6 +2,9 @@ import { useState } from 'react'
 import { useForm } from '@tanstack/react-form'
 import { toast } from 'sonner'
 import { Check } from 'lucide-react'
+import { useAddCollaborators } from '../hooks'
+import { addCollaboratorsSchema } from '../model'
+import { mapAddCollaboratorsError } from '../lib'
 import { cn } from '@/shared/lib/utils'
 import { Button } from '@/shared/ui/primitives/button'
 import { DialogFooter } from '@/shared/ui/primitives/dialog'
@@ -11,9 +14,6 @@ import {
   AvatarImage,
 } from '@/shared/ui/primitives/avatar'
 import { ScrollArea } from '@/shared/ui/primitives/scroll-area'
-import { useAddCollaborators } from '../hooks'
-import { addCollaboratorsSchema } from '../model'
-import { mapAddCollaboratorsError } from '../lib'
 
 interface WorkspaceMember {
   id: string
@@ -27,7 +27,7 @@ interface WorkspaceMember {
 
 interface AddCollaboratorsFormProps {
   boardId: string
-  availableMembers: WorkspaceMember[]
+  availableMembers: Array<WorkspaceMember>
   onSuccess?: () => void
   onCancel?: () => void
 }
@@ -49,7 +49,7 @@ export function AddCollaboratorsForm({
   const form = useForm({
     defaultValues: {
       boardId,
-      userIds: [] as string[],
+      userIds: [] as Array<string>,
     },
     onSubmit: async ({ value }) => {
       setRootError(null)

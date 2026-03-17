@@ -7,13 +7,13 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useDispatch } from 'react-redux'
 import { toast } from 'sonner'
+import { REORDER_ISSUE_STATUS } from '../api/fragments'
+import type { AppDispatch } from '@/app/store'
+import type { ReorderStatusVariables } from '../model/types'
 import { useAuth } from '@/shared/hooks'
 import { GqlClient } from '@/shared/api/graphql-client'
 import { issueStatusKeys } from '@/entities/issue-status'
 import { reorderStatus } from '@/entities/issue'
-import type { AppDispatch } from '@/app/store'
-import { REORDER_ISSUE_STATUS } from '../api/fragments'
-import type { ReorderStatusVariables } from '../model/types'
 
 export function useReorderStatus(projectId: string) {
   const { getToken } = useAuth()

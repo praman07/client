@@ -1,5 +1,7 @@
 import { HugeiconsIcon } from '@hugeicons/react'
 import { PlusSignIcon } from '@hugeicons/core-free-icons'
+import { PageTreeItem } from './page-tree-item'
+import type { PageTreeNode } from '../lib/types'
 import {
   SidebarGroup,
   SidebarGroupAction,
@@ -8,11 +10,9 @@ import {
   SidebarMenu,
 } from '@/shared/ui/primitives/sidebar'
 import { useCreatePageModal } from '@/features/pages/create-page'
-import type { PageTreeNode } from '../lib/types'
-import { PageTreeItem } from './page-tree-item'
 
 interface PageTreeSectionProps {
-  pages: PageTreeNode[]
+  pages: Array<PageTreeNode>
 }
 
 /**

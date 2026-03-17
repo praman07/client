@@ -1,9 +1,9 @@
 import { useQuery } from '@tanstack/react-query'
+import { GET_VAULT_USAGE } from '../api/fragments'
+import type { VaultUsage } from '@/entities/vault-file'
 import { useAuth } from '@/shared/hooks'
 import { GqlClient } from '@/shared/api/graphql-client'
 import { vaultFileKeys } from '@/entities/vault-file'
-import type { VaultUsage } from '@/entities/vault-file'
-import { GET_VAULT_USAGE } from '../api/fragments'
 
 /**
  * Fetches current storage usage for a project and its workspace.

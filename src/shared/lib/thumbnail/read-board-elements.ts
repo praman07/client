@@ -34,7 +34,7 @@ export type BoardElement = Record<string, unknown> & {
 
 export async function readBoardElements(
   boardId: string,
-): Promise<BoardElement[]> {
+): Promise<Array<BoardElement>> {
   const ydoc = new Y.Doc()
   const persistence = new IndexeddbPersistence(boardId, ydoc)
 

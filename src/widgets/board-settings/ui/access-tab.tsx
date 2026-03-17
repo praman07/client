@@ -1,9 +1,9 @@
+import { Lock, Unlock } from 'lucide-react'
 import { useBoard } from '@/features/whiteboard/fetch-board'
 import { useLockBoard } from '@/features/whiteboard/lock-board'
 import { useUnlockBoard } from '@/features/whiteboard/unlock-board'
 import { Button } from '@/shared/ui/primitives/button'
 import { Label } from '@/shared/ui/primitives/label'
-import { Lock, Unlock } from 'lucide-react'
 
 interface AccessTabProps {
   boardId: string

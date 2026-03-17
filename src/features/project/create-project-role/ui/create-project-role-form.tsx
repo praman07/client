@@ -1,21 +1,21 @@
-import { useState, useMemo } from 'react'
+import { useMemo, useState } from 'react'
+import { Search } from 'lucide-react'
+import type { CreateProjectRoleFormValues } from '../model/schema'
 import {
-  Badge,
-  Button,
-  Input,
-  Label,
-  Textarea,
-  Checkbox,
-  ScrollArea,
   Avatar,
   AvatarFallback,
   AvatarImage,
+  Badge,
+  Button,
+  Checkbox,
+  Input,
+  Label,
+  ScrollArea,
+  Textarea,
 } from '@/shared/ui'
-import { Search } from 'lucide-react'
 import { cn } from '@/shared/lib/utils'
 import { useAllPermissions } from '@/entities/project-role'
 import { useProjectMembers } from '@/entities/project-member'
-import type { CreateProjectRoleFormValues } from '../model/schema'
 
 // ─── Step 1: Role Details ────────────────────────────────────────────────────
 
@@ -96,8 +96,8 @@ interface StepPermissionsProps {
   workspaceId: string
   selectedIds: Set<string>
   onToggle: (id: string) => void
-  onToggleResource: (ids: string[]) => void
-  onToggleAll: (ids: string[], selectAll: boolean) => void
+  onToggleResource: (ids: Array<string>) => void
+  onToggleAll: (ids: Array<string>, selectAll: boolean) => void
 }
 
 export function StepPermissions({

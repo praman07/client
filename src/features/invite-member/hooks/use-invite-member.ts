@@ -2,7 +2,7 @@ import { useMutation } from '@tanstack/react-query'
 import { INVITE_TO_WORKSPACE } from '../api'
 import { GqlClient } from '@/shared/api/graphql-client'
 import { useAppSelector, useAuth } from '@/shared/hooks'
-import { selectCurrentWorkspace } from '@/entities/workspace/model/selectors'
+import { selectCurrentWorkspace } from '@/entities/workspace'
 
 interface InviteMemberInput {
   emails: Array<{ email: string }>

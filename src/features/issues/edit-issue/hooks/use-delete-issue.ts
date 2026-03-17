@@ -9,12 +9,12 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useDispatch } from 'react-redux'
 import { toast } from 'sonner'
+import { DELETE_ISSUE } from '../api/fragments'
+import { mapUpdateIssueError } from '../lib/error-mapping'
+import type { AppDispatch } from '@/app/store'
 import { useAuth } from '@/shared/hooks'
 import { GqlClient } from '@/shared/api/graphql-client'
 import { issueKeys, removeIssue } from '@/entities/issue'
-import type { AppDispatch } from '@/app/store'
-import { DELETE_ISSUE } from '../api/fragments'
-import { mapUpdateIssueError } from '../lib/error-mapping'
 
 export function useDeleteIssue(projectId: string) {
   const { getToken } = useAuth()

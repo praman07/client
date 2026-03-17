@@ -1,13 +1,17 @@
-import { createFileRoute, Outlet, redirect } from '@tanstack/react-router'
+import { Outlet, createFileRoute, redirect } from '@tanstack/react-router'
+import { Suspense } from 'react'
+import { ErrorBoundary } from 'react-error-boundary'
+import { PageSpinner, RouteError , ScrollArea  } from '@/shared/ui'
 import { ProjectSettingsTabs } from '@/widgets/project-settings-tabs'
-import { ScrollArea } from '@/shared/ui'
 
 export const Route = createFileRoute(
   '/_app/workspace/$workspaceSlug/project/$projectSlug/settings',
 )({
   component: SettingsLayout,
+  errorComponent: ({ error, reset }) => (
+    <RouteError error={error} reset={reset} />
+  ),
   beforeLoad: ({ location }) => {
-    // Redirect bare /settings to /settings/general
     if (location.pathname.endsWith('/settings')) {
       throw redirect({
         to: location.pathname + '/general',
@@ -23,7 +27,6 @@ function SettingsLayout() {
   return (
     <ScrollArea className="h-full w-full">
       <div className="max-w-4xl mx-auto px-6 py-8 min-h-full">
-        {/* Page header */}
         <div className="mb-6">
           <h2 className="text-lg font-semibold">Settings</h2>
           <p className="text-sm text-muted-foreground mt-0.5">
@@ -31,12 +34,17 @@ function SettingsLayout() {
           </p>
         </div>
 
-        {/* Sidebar + content — same width as header */}
         <ProjectSettingsTabs
           workspaceSlug={workspaceSlug}
           projectSlug={projectSlug}
         >
-          <Outlet />
+          <ErrorBoundary FallbackComponent={({ error, resetErrorBoundary }) => (
+            <RouteError error={error} reset={resetErrorBoundary} />
+          )}>
+            <Suspense fallback={<PageSpinner />}>
+              <Outlet />
+            </Suspense>
+          </ErrorBoundary>
         </ProjectSettingsTabs>
       </div>
     </ScrollArea>

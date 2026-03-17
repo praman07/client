@@ -12,6 +12,9 @@
 import { useState } from 'react'
 import { Trash2 } from 'lucide-react'
 import { toast } from 'sonner'
+import { useDeleteLabel, useUpdateLabel } from '../hooks'
+import { mapLabelError } from '../lib/error-mapping'
+import type { IssueLabel } from '@/entities/issue-label'
 import { Button } from '@/shared/ui/primitives/button'
 import { Input } from '@/shared/ui/primitives/input'
 import {
@@ -25,9 +28,6 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/shared/ui/primitives/alert-dialog'
-import type { IssueLabel } from '@/entities/issue-label'
-import { useUpdateLabel, useDeleteLabel } from '../hooks'
-import { mapLabelError } from '../lib/error-mapping'
 
 interface LabelListRowProps {
   label: IssueLabel

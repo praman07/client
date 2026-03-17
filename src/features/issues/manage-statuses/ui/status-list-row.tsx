@@ -10,14 +10,14 @@
  *
  * @layer Features
  */
-import { Trash2, Lock } from 'lucide-react'
+import { Lock, Trash2 } from 'lucide-react'
 import { toast } from 'sonner'
-import { Button } from '@/shared/ui/primitives/button'
-import { Input } from '@/shared/ui/primitives/input'
-import type { IssueStatus } from '@/entities/issue-status'
-import { useUpdateStatus, useDeleteStatus } from '../hooks'
+import { useDeleteStatus, useUpdateStatus } from '../hooks'
 import { mapStatusError } from '../lib/error-mapping'
 import { StatusIconPicker } from './status-icon-picker'
+import type { IssueStatus } from '@/entities/issue-status'
+import { Input } from '@/shared/ui/primitives/input'
+import { Button } from '@/shared/ui/primitives/button'
 
 interface StatusListRowProps {
   status: IssueStatus

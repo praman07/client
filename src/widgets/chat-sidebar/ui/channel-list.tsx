@@ -41,6 +41,7 @@ export function ChannelList({ channels }: ChannelListProps) {
                 render={
                   <Link
                     to="/workspace/$workspaceSlug/project/$projectSlug/chat/$conversationId"
+                     
                     params={(prev: any) => ({
                       ...prev,
                       conversationId: channel.id,

@@ -1,23 +1,23 @@
 import '@blocknote/shadcn/style.css'
 import { reset as resetLinkify } from 'linkifyjs'
-import { useMemo, useRef, useEffect } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 import { useCreateBlockNote } from '@blocknote/react'
 import { BlockNoteView } from '@blocknote/shadcn'
-import * as Y from 'yjs'
 import { usePageSync } from '../hooks/use-page-sync'
-import type { PageAwarenessProvider } from '@/entities/page-session'
-import { assignColor } from '@/entities/page-presence/lib/color-assignment'
-import { useAppSelector } from '@/shared/hooks'
-import { selectCurrentUser } from '@/entities/user/model/selectors'
 import { PageEditorSkeleton } from './page-editor-skeleton'
 import { PageTitle } from './page-title'
 import { LockedBanner } from './locked-banner'
 import { CollaboratorBar } from './collaborator-bar'
+import type * as Y from 'yjs'
+import type { PageAwarenessProvider } from '@/entities/page-session'
+import { assignColor } from '@/entities/page-presence'
+import { useAppSelector } from '@/shared/hooks'
+import { selectCurrentUser } from '@/entities/user'
 import { createLogger } from '@/shared/lib/logger'
 import {
   registerPageAwarenessProvider,
   unregisterPageAwarenessProvider,
-} from '@/features/pages/events/lib/handlers/awareness-update'
+} from '@/features/pages/events'
 
 const log = createLogger('pages:page-editor')
 

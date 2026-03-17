@@ -1,10 +1,9 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { DELETE_PROJECT } from '@/entities/project'
-import { projectKeys, removeFromRecent } from '@/entities/project'
-import { GqlClient } from '@/shared/api'
-import { useAuth, useAppDispatch } from '@/shared/hooks'
-import { handleDeleteProjectError } from '../lib/error-mapping'
 import { useNavigate } from '@tanstack/react-router'
+import { handleDeleteProjectError } from '../lib/error-mapping'
+import { DELETE_PROJECT, projectKeys, removeFromRecent  } from '@/entities/project'
+import { GqlClient } from '@/shared/api'
+import { useAppDispatch, useAuth } from '@/shared/hooks'
 
 export function useDeleteProject(workspaceId: string, workspaceSlug: string) {
   const { getToken } = useAuth()

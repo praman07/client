@@ -1,14 +1,13 @@
 import { useMemo, useRef, useState } from 'react'
 import * as Y from 'yjs'
-import { createPageDoc, PageAwarenessProvider } from '@/entities/page-session'
-import { assignColor } from '@/entities/page-presence/lib/color-assignment'
-import { useAppSelector } from '@/shared/hooks'
-import { selectCurrentUser } from '@/entities/user/model/selectors'
-import { selectIsPageLocked } from '@/entities/page-session/model/selectors'
 import { useServerSync } from './sync-phases/use-server-sync'
 import { useIndexedDBSync } from './sync-phases/use-indexeddb-sync'
 import { useClientDiff } from './sync-phases/use-client-diff'
 import { useNetworkSync } from './sync-phases/use-network-sync'
+import { PageAwarenessProvider, createPageDoc, selectIsPageLocked  } from '@/entities/page-session'
+import { assignColor } from '@/entities/page-presence'
+import { useAppSelector } from '@/shared/hooks'
+import { selectCurrentUser } from '@/entities/user'
 import { createLogger } from '@/shared/lib/logger'
 
 const log = createLogger('pages:use-page-sync')
@@ -37,7 +36,7 @@ export function usePageSync(pageId: string): PageSyncResult {
   const ydoc = useMemo(() => {
     log.debug('Creating Y.Doc', { pageId })
     return createPageDoc({ pageId })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, [pageId])
 
   const awarenessProvider = useMemo(() => {

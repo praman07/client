@@ -8,6 +8,7 @@ import {
   UserAdd01Icon,
   UserSharingIcon,
 } from '@hugeicons/core-free-icons'
+import { useParams } from '@tanstack/react-router'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -20,10 +21,9 @@ import { useDeletePage } from '@/features/pages/delete-page'
 import { useCreatePageModal } from '@/features/pages/create-page'
 import { AddPageCollaboratorsDialog } from '@/features/pages/add-page-collaborators'
 import { ManageCollaboratorsDialog } from '@/features/pages/manage-page-collaborators'
-import { useParams } from '@tanstack/react-router'
 import { useAppSelector } from '@/shared/hooks'
-import { selectWorkspaceBySlug } from '@/entities/workspace/model/selectors'
-import { selectCurrentProject } from '@/entities/project/model/selectors'
+import { selectWorkspaceBySlug } from '@/entities/workspace'
+import { selectCurrentProject } from '@/entities/project'
 
 interface PageTreeItemActionsProps {
   pageId: string
@@ -44,9 +44,7 @@ export function PageTreeItemActions({
   const { open } = useCreatePageModal()
   const { mutate: archivePage } = useArchivePage()
   const { mutate: deletePage } = useDeletePage()
-  const { workspaceSlug } = useParams({ strict: false }) as {
-    workspaceSlug: string
-  }
+  const { workspaceSlug } = useParams({ strict: false })
   const workspace = useAppSelector((state) =>
     selectWorkspaceBySlug(state, workspaceSlug),
   )

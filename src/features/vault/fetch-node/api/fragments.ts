@@ -1,6 +1,6 @@
 import { gql } from '@/gql'
-import '@/entities/vault-folder/api/fragments'
-import '@/entities/vault-file/api/fragments'
+import '@/entities/vault-folder'
+import '@/entities/vault-file'
 
 export const GET_VAULT_NODE = gql(`
   query GetVaultNode($id: ID!, $type: VaultNodeType!) {

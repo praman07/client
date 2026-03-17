@@ -19,33 +19,33 @@
  *
  * @layer Features
  */
-import { useState, useRef } from 'react'
+import { useRef, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { toast } from 'sonner'
 import { HugeiconsIcon } from '@hugeicons/react'
 import {
-  NoteIcon,
-  AttachmentIcon,
-  Cancel01Icon,
   ArrowExpandDiagonal01Icon,
   ArrowShrink01Icon,
+  AttachmentIcon,
+  Cancel01Icon,
+  NoteIcon,
 } from '@hugeicons/core-free-icons'
-import { Button } from '@/shared/ui/primitives/button'
-import { Input } from '@/shared/ui/primitives/input'
-import { Switch } from '@/shared/ui/primitives/switch'
-import { Separator } from '@/shared/ui/primitives/separator'
-import { selectIssueStatuses, selectIssueLabels } from '@/entities/issue'
-import type { IssuePriority } from '@/entities/issue'
 import { useCreateIssue } from '../hooks/use-create-issue'
 import {
-  useCreateIssueDescription,
   isDescriptionEmpty,
+  useCreateIssueDescription,
 } from '../hooks/use-create-issue-description'
 import { createIssueSchema } from '../model/schema'
 import { mapCreateIssueError } from '../lib/error-mapping'
 import { CreateIssueToolbar } from './toolbar/create-issue-toolbar'
 import { IssueDescriptionEditor } from './issue-description-editor'
+import type { IssuePriority } from '@/entities/issue'
 import type { BlockNoteEditor } from '@blocknote/core'
+import { selectIssueLabels, selectIssueStatuses } from '@/entities/issue'
+import { Separator } from '@/shared/ui/primitives/separator'
+import { Switch } from '@/shared/ui/primitives/switch'
+import { Input } from '@/shared/ui/primitives/input'
+import { Button } from '@/shared/ui/primitives/button'
 
 interface CreateIssueFormProps {
   projectId: string
@@ -73,7 +73,7 @@ export function CreateIssueForm({
   const [statusId, setStatusId] = useState(defaultStatusId)
   const [priority, setPriority] = useState<IssuePriority>('NO_PRIORITY')
   const [assigneeId, setAssigneeId] = useState<string | null>(null)
-  const [labelIds, setLabelIds] = useState<string[]>([])
+  const [labelIds, setLabelIds] = useState<Array<string>>([])
   const [dueDate, setDueDate] = useState<string | null>(null)
   const [createMore, setCreateMore] = useState(false)
 
@@ -86,10 +86,10 @@ export function CreateIssueForm({
   // ── BlockNote editor ref ─────────────────────────────────────────────────────
   // Read editor.document synchronously on submit — avoids stale-closure issues
   // that come from reading React state captured at callback creation time.
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+   
   const editorRef = useRef<BlockNoteEditor<any> | null>(null)
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [descriptionBlocks, setDescriptionBlocks] = useState<any[]>([])
+   
+  const [descriptionBlocks, setDescriptionBlocks] = useState<Array<any>>([])
 
   // ── Title ref (for focus on createMore reset) ─────────────────────────────
   const titleRef = useRef<HTMLInputElement>(null)

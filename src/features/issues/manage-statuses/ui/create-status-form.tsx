@@ -9,11 +9,11 @@
  */
 import { useForm } from '@tanstack/react-form'
 import { toast } from 'sonner'
+import { useCreateStatus } from '../hooks'
+import { mapStatusError } from '../lib/error-mapping'
 import { Button } from '@/shared/ui/primitives/button'
 import { Input } from '@/shared/ui/primitives/input'
 import { Label } from '@/shared/ui/primitives/label'
-import { useCreateStatus } from '../hooks'
-import { mapStatusError } from '../lib/error-mapping'
 
 interface CreateStatusFormProps {
   projectId: string

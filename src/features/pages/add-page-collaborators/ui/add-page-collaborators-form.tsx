@@ -2,6 +2,9 @@ import { useState } from 'react'
 import { useForm } from '@tanstack/react-form'
 import { toast } from 'sonner'
 import { Check } from 'lucide-react'
+import { useAddPageCollaborators } from '../hooks/use-add-page-collaborators'
+import { mapAddPageCollaboratorsError } from '../lib/error-mapping'
+import type { PageRole } from '@/gql/graphql'
 import { cn } from '@/shared/lib/utils'
 import { Button } from '@/shared/ui/primitives/button'
 import { DialogFooter } from '@/shared/ui/primitives/dialog'
@@ -11,9 +14,6 @@ import {
   AvatarImage,
 } from '@/shared/ui/primitives/avatar'
 import { ScrollArea } from '@/shared/ui/primitives/scroll-area'
-import { useAddPageCollaborators } from '../hooks/use-add-page-collaborators'
-import { mapAddPageCollaboratorsError } from '../lib/error-mapping'
-import type { PageRole } from '@/gql/graphql'
 
 interface WorkspaceMember {
   id: string
@@ -27,7 +27,7 @@ interface WorkspaceMember {
 
 interface AddPageCollaboratorsFormProps {
   pageId: string
-  availableMembers: WorkspaceMember[]
+  availableMembers: Array<WorkspaceMember>
   onSuccess?: () => void
   onCancel?: () => void
 }
@@ -53,7 +53,7 @@ export function AddPageCollaboratorsForm({
 
   const form = useForm({
     defaultValues: {
-      userIds: [] as string[],
+      userIds: [] as Array<string>,
     },
     onSubmit: async ({ value }) => {
       setRootError(null)

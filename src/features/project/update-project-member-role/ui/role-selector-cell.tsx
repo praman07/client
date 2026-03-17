@@ -1,13 +1,13 @@
 import { useState } from 'react'
+import { Check, ChevronDown, Loader2 } from 'lucide-react'
+import { useUpdateProjectMemberRole } from '../hooks/use-update-project-member-role'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/shared/ui'
-import { ChevronDown, Loader2, Check } from 'lucide-react'
 import { cn } from '@/shared/lib/utils'
-import { useUpdateProjectMemberRole } from '../hooks/use-update-project-member-role'
 
 interface Role {
   id: string
@@ -22,7 +22,7 @@ interface RoleSelectorCellProps {
   /** Member's current role name string (from GraphQL ProjectMember.role) */
   currentRoleName: string | null
   /** Assignable project roles (system roles excluded, sorted by rank) */
-  roles: Role[]
+  roles: Array<Role>
 }
 
 /**

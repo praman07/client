@@ -9,12 +9,12 @@
  */
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
+import { DELETE_ISSUE_LABEL } from '../api/fragments'
+import { mapLabelError } from '../lib/error-mapping'
 import { useAuth } from '@/shared/hooks'
 import { GqlClient } from '@/shared/api/graphql-client'
 import { issueLabelKeys } from '@/entities/issue-label'
 import { issueKeys } from '@/entities/issue'
-import { DELETE_ISSUE_LABEL } from '../api/fragments'
-import { mapLabelError } from '../lib/error-mapping'
 
 export function useDeleteLabel(projectId: string) {
   const { getToken } = useAuth()

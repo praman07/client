@@ -44,12 +44,12 @@ export interface Page {
   createdBy: string
   createdAt: string
   updatedAt: string
-  collaborators: PageCollaborator[]
+  collaborators: Array<PageCollaborator>
   /**
    * Populated only by getProjectPages — empty [] in all other contexts.
    * The page-list widget builds the display tree client-side from this flat+nested structure.
    */
-  children: Page[]
+  children: Array<Page>
 }
 
 /**

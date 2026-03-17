@@ -1,12 +1,11 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { handleRolePermissionError } from '../lib/error-mapping'
 import {
   ASSIGN_ROLE_PERMISSION,
-  REMOVE_ROLE_PERMISSION,
+  REMOVE_ROLE_PERMISSION, rolePermissionKeys 
 } from '@/entities/project-role'
-import { rolePermissionKeys } from '@/entities/project-role'
 import { GqlClient } from '@/shared/api'
 import { useAuth } from '@/shared/hooks'
-import { handleRolePermissionError } from '../lib/error-mapping'
 
 interface AssignPermissionInput {
   roleId: string

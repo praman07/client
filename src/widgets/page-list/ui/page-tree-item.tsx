@@ -2,17 +2,17 @@ import { useState } from 'react'
 import { Link, useMatch, useParams } from '@tanstack/react-router'
 import { HugeiconsIcon } from '@hugeicons/react'
 import { ChevronRight, File01Icon } from '@hugeicons/core-free-icons'
+import { PageTreeItemActions } from './page-tree-item-actions'
+import type { PageTreeNode } from '../lib/types'
 import {
-  SidebarMenuItem,
   SidebarMenuButton,
+  SidebarMenuItem,
 } from '@/shared/ui/primitives/sidebar'
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from '@/shared/ui/primitives/collapsible'
-import type { PageTreeNode } from '../lib/types'
-import { PageTreeItemActions } from './page-tree-item-actions'
 
 interface PageTreeItemProps {
   node: PageTreeNode
@@ -41,10 +41,7 @@ function hasActiveDescendant(
  * @layer Widgets
  */
 export function PageTreeItem({ node, depth = 0 }: PageTreeItemProps) {
-  const { workspaceSlug, projectSlug } = useParams({ strict: false }) as {
-    workspaceSlug: string
-    projectSlug: string
-  }
+  const { workspaceSlug, projectSlug } = useParams({ strict: false })
   const matchedPage = useMatch({
     from: '/_app/workspace/$workspaceSlug/project/$projectSlug/pages/$pageId',
     shouldThrow: false,

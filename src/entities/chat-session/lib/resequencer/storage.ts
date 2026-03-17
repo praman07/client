@@ -14,38 +14,35 @@ export async function commitMessage(
   payload: NewMessagePayload,
   projectId: string,
 ) {
-  try {
-    await db.transaction(
-      'rw',
-      [db.messages, db.conversation_state],
-      async () => {
-        await db.messages.put({
-          ...payload,
-          projectId, // Injected!
-          id: payload.messageId,
-          deliveryStatus: 'sent',
-          replyCount: 0,
-          reactions: [],
-          attachments: [],
+  await db.transaction(
+    'rw',
+    [db.messages, db.conversation_state],
+    async () => {
+      await db.messages.put({
+        ...payload,
+        projectId, // Injected!
+        id: payload.messageId,
+        deliveryStatus: 'sent',
+        replyCount: 0,
+        reactions: [],
+         
         } as any)
 
-        await db.conversation_state.put({
-          conversationId: state.conversationId,
-          projectId,
-          lastStreamIdSeen: payload.streamId,
-          lastSequence: payload.sequence, // Persist Sequence
-          lastOpenedAt: Date.now(),
-        } as any)
-      },
-    )
-    // Updates memory ONLY after DB commit
-    state.expectedStreamId = payload.streamId
-    state.lastSequence = payload.sequence!
-    state.lastStreamIdSeen = payload.streamId // Hybrid: Keep in sync!
-    state.lastCommitTs = Date.now()
-  } catch (err) {
-    throw err
-  }
+      await db.conversation_state.put({
+        conversationId: state.conversationId,
+        projectId,
+        lastStreamIdSeen: payload.streamId,
+        lastSequence: payload.sequence, // Persist Sequence
+        lastOpenedAt: Date.now(),
+         
+      } as any)
+    },
+  )
+  // Updates memory ONLY after DB commit
+  state.expectedStreamId = payload.streamId
+  state.lastSequence = payload.sequence!
+  state.lastStreamIdSeen = payload.streamId // Hybrid: Keep in sync!
+  state.lastCommitTs = Date.now()
 }
 
 /**
@@ -61,7 +58,7 @@ export async function commitMessageBatch(
 
   // Sort by sequence to ensure correct order
   const sorted = [...payloads].sort(
-    (a, b) => (a.sequence ?? 0) - (b.sequence ?? 0),
+    (a, b) => a.sequence - b.sequence,
   )
 
   try {
@@ -80,6 +77,7 @@ export async function commitMessageBatch(
           attachments: [],
         }))
 
+         
         await db.messages.bulkPut(messagesToInsert as any)
 
         // Update conversation state with the LAST (highest sequence) message

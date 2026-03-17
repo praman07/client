@@ -7,20 +7,20 @@
  * @layer Features
  */
 import { useState } from 'react'
-import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-  DropdownMenuItem,
-} from '@/shared/ui/primitives/dropdown-menu'
-import { StatusPill } from '@/entities/issue-status'
 import { HugeiconsIcon } from '@hugeicons/react'
 import { Tick02Icon } from '@hugeicons/core-free-icons'
-import { cn } from '@/shared/lib/utils'
 import type { IssueStatus } from '@/entities/issue-status'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/shared/ui/primitives/dropdown-menu'
+import { StatusPill } from '@/entities/issue-status'
+import { cn } from '@/shared/lib/utils'
 
 interface StatusPickerProps {
-  statuses: IssueStatus[]
+  statuses: Array<IssueStatus>
   value: string
   onChange: (id: string) => void
 }

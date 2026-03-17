@@ -1,5 +1,5 @@
 import { gql } from '@/gql'
-import '@/entities/vault-folder/api/fragments'
+import '@/entities/vault-folder'
 
 export const CREATE_VAULT_FOLDER = gql(`
   mutation CreateVaultFolder($input: CreateVaultFolderInput!) {

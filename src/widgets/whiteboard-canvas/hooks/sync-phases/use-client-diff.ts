@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
-import type { RefObject } from 'react'
 import * as Y from 'yjs'
+import type { RefObject } from 'react'
 import { createLogger } from '@/shared/lib/logger'
 import { useSendBoardUpdate } from '@/features/whiteboard/send-board-update'
 

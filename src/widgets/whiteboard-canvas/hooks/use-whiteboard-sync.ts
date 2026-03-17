@@ -1,16 +1,16 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
+import {
+  useClientDiff,
+  useExcalidrawBinding,
+  useIndexedDBSync,
+  useNetworkSync,
+  useServerSync,
+} from './sync-phases'
 import type { ExcalidrawImperativeAPI } from '@excalidraw/excalidraw/types'
 import type { RefObject } from 'react'
 import type { ExcalidrawBinding } from '@mizuka-wu/y-excalidraw'
 import { createLogger } from '@/shared/lib/logger'
 import { createYDoc } from '@/entities/whiteboard-session'
-import {
-  useServerSync,
-  useIndexedDBSync,
-  useClientDiff,
-  useExcalidrawBinding,
-  useNetworkSync,
-} from './sync-phases'
 
 const log = createLogger('whiteboard:sync')
 

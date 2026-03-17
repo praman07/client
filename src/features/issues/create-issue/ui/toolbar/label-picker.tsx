@@ -11,22 +11,22 @@
  * @layer Features
  */
 import { useState } from 'react'
-import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuGroup,
-  DropdownMenuLabel,
-} from '@/shared/ui/primitives/dropdown-menu'
 import { HugeiconsIcon } from '@hugeicons/react'
 import { Tag01Icon, Tick02Icon } from '@hugeicons/core-free-icons'
-import { cn } from '@/shared/lib/utils'
 import type { IssueLabel } from '@/entities/issue-label'
+import { cn } from '@/shared/lib/utils'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuTrigger,
+} from '@/shared/ui/primitives/dropdown-menu'
 
 interface LabelPickerProps {
-  labels: IssueLabel[]
-  value: string[]
+  labels: Array<IssueLabel>
+  value: Array<string>
   onToggle: (id: string) => void
 }
 

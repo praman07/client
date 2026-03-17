@@ -12,7 +12,7 @@ interface FilterOptions {
  * @param options - Filter options (searchQuery, showArchived)
  * @returns Filtered array
  */
-export function filterBoards(boards: Board[], options: FilterOptions): Board[] {
+export function filterBoards(boards: Array<Board>, options: FilterOptions): Array<Board> {
   let filtered = boards
 
   // Filter by archived status

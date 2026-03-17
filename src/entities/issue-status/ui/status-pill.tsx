@@ -11,9 +11,9 @@
  *
  * @layer Entity
  */
-import { cn } from '@/shared/lib/utils'
 import { StatusIcon } from './status-icon'
 import type { IssueStatus } from '../model/types'
+import { cn } from '@/shared/lib/utils'
 
 interface StatusPillProps {
   status: IssueStatus

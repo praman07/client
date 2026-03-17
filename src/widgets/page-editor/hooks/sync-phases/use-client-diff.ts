@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react'
 import * as Y from 'yjs'
-import { useSendPageUpdate } from '@/features/pages/send-page-update/hooks/use-send-page-update'
+import { useSendPageUpdate } from '@/features/pages/send-page-update'
 import { createLogger } from '@/shared/lib/logger'
 
 const log = createLogger('pages:phase3:client-diff')

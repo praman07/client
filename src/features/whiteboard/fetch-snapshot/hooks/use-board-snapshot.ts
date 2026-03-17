@@ -1,13 +1,13 @@
 import { useQuery } from '@tanstack/react-query'
-import type { UseQueryOptions } from '@tanstack/react-query'
 import { useMemo } from 'react'
-import { useAuth } from '@/shared/hooks'
-import { GqlClient } from '@/shared/api/graphql-client'
-import { boardKeys } from '@/entities/whiteboard-board'
 import { GET_BOARD_SNAPSHOT } from '../api/fragments'
 import { decodeSnapshot } from '../lib/decode-snapshot'
+import type { UseQueryOptions } from '@tanstack/react-query'
 import type { DecodedSnapshot } from '../lib/decode-snapshot'
 import type { GetBoardSnapshotQuery } from '@/gql/graphql'
+import { boardKeys } from '@/entities/whiteboard-board'
+import { GqlClient } from '@/shared/api/graphql-client'
+import { useAuth } from '@/shared/hooks'
 
 /**
  * Fetch Y.js snapshot for board initialization with bidirectional sync

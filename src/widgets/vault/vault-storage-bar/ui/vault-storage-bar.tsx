@@ -1,5 +1,5 @@
-import { useVaultUsage } from '@/features/vault/fetch-vault-usage'
 import { formatBytes } from '../lib/format-bytes'
+import { useVaultUsage } from '@/features/vault/fetch-vault-usage'
 
 interface VaultStorageBarProps {
   projectId: string

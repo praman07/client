@@ -20,20 +20,20 @@
 import { useEffect } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { useDispatch } from 'react-redux'
-import { useAuth } from '@/shared/hooks'
-import { GqlClient } from '@/shared/api/graphql-client'
-import { issueKeys, setStatuses, setIssues, setLabels } from '@/entities/issue'
-import { issueStatusKeys } from '@/entities/issue-status'
-import { issueLabelKeys } from '@/entities/issue-label'
-import type { AppDispatch } from '@/app/store'
-import type { TypedDocumentNode } from '@graphql-typed-document-node/core'
 import {
-  GET_ISSUE_STATUSES,
   GET_ISSUE_LABELS,
+  GET_ISSUE_STATUSES,
   GET_PROJECT_ISSUES,
 } from '../api/fragments'
+import type { AppDispatch } from '@/app/store'
+import type { TypedDocumentNode } from '@graphql-typed-document-node/core'
+import { useAuth } from '@/shared/hooks'
+import { GqlClient } from '@/shared/api/graphql-client'
+import { issueKeys, setIssues, setLabels, setStatuses } from '@/entities/issue'
+import { issueStatusKeys } from '@/entities/issue-status'
+import { issueLabelKeys } from '@/entities/issue-label'
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
+ 
 const _GET_ISSUE_STATUSES = GET_ISSUE_STATUSES as TypedDocumentNode<
   any,
   { projectId: string }
@@ -46,7 +46,7 @@ const _GET_PROJECT_ISSUES = GET_PROJECT_ISSUES as TypedDocumentNode<
   any,
   { projectId: string }
 >
-/* eslint-enable */
+ 
 
 export function useBoardData(projectId: string) {
   const { getToken } = useAuth()
@@ -58,6 +58,7 @@ export function useBoardData(projectId: string) {
     queryFn: async () => {
       const token = await getToken()
       if (!token) throw new Error('Not authenticated')
+       
       const data: any = await GqlClient(token).request(_GET_ISSUE_STATUSES, {
         projectId,
       })
@@ -72,6 +73,7 @@ export function useBoardData(projectId: string) {
     queryFn: async () => {
       const token = await getToken()
       if (!token) throw new Error('Not authenticated')
+       
       const data: any = await GqlClient(token).request(_GET_ISSUE_LABELS, {
         projectId,
       })
@@ -86,6 +88,7 @@ export function useBoardData(projectId: string) {
     queryFn: async () => {
       const token = await getToken()
       if (!token) throw new Error('Not authenticated')
+       
       const data: any = await GqlClient(token).request(_GET_PROJECT_ISSUES, {
         projectId,
       })

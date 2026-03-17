@@ -1,6 +1,6 @@
-import { formatBytes } from '@/widgets/vault/vault-explorer/lib/format-bytes'
 import type { VaultFolder } from '@/entities/vault-folder'
 import type { VaultFile } from '@/entities/vault-file'
+import { formatBytes } from '@/widgets/vault/vault-explorer/lib/format-bytes'
 
 interface VaultDetailMetaProps {
   node: VaultFolder | VaultFile
@@ -14,7 +14,7 @@ interface VaultDetailMetaProps {
 export function VaultDetailMeta({ node, type }: VaultDetailMetaProps) {
   const file = type === 'FILE' ? (node as VaultFile) : null
 
-  const rows: { label: string; value: string }[] = [
+  const rows: Array<{ label: string; value: string }> = [
     {
       label: 'Type',
       value: type === 'FILE' ? (file?.mimeType ?? '—') : 'Folder',

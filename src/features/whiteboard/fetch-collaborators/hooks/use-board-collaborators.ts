@@ -1,8 +1,8 @@
 import { useQuery } from '@tanstack/react-query'
+import { GET_ACTIVE_COLLABORATORS } from '../api'
 import { useAuth } from '@/shared/hooks'
 import { GqlClient } from '@/shared/api/graphql-client'
 import { boardKeys } from '@/entities/whiteboard-board'
-import { GET_ACTIVE_COLLABORATORS } from '../api'
 
 export function useActiveCollaborators(boardId: string) {
   const { getToken } = useAuth()

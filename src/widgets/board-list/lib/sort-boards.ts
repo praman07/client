@@ -8,7 +8,7 @@ import type { Board } from '@/entities/whiteboard-board'
  * @param sortBy - Sort option (recent, name, oldest)
  * @returns Sorted array
  */
-export function sortBoards(boards: Board[], sortBy: SortOption): Board[] {
+export function sortBoards(boards: Array<Board>, sortBy: SortOption): Array<Board> {
   const sorted = [...boards]
 
   switch (sortBy) {

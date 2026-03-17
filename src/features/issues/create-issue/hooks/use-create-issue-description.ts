@@ -7,5 +7,5 @@
  *
  * @layer Features
  */
-export { useDescriptionUpload as useCreateIssueDescription } from '@/features/issues/edit-issue/hooks/use-description-upload'
+export { useDescriptionUpload as useCreateIssueDescription } from '@/features/issues/edit-issue'
 export { isDescriptionEmpty } from '../lib/description-helpers'

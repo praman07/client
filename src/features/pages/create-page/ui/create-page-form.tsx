@@ -1,15 +1,15 @@
 import { useState } from 'react'
 import { useForm } from '@tanstack/react-form'
 import { toast } from 'sonner'
-import { Button } from '@/shared/ui/primitives/button'
-import { Input } from '@/shared/ui/primitives/input'
-import { Label } from '@/shared/ui/primitives/label'
 import { useCreatePage } from '../hooks/use-create-page'
 import { mapCreatePageError } from '../lib/error-mapping'
 import { createPageSchema, validateZod } from '../model/schema'
 import { CollaboratorPicker } from './collaborator-picker'
-import { useAuth } from '@/shared/hooks'
 import type { Page } from '@/entities/page'
+import { useAuth } from '@/shared/hooks'
+import { Label } from '@/shared/ui/primitives/label'
+import { Input } from '@/shared/ui/primitives/input'
+import { Button } from '@/shared/ui/primitives/button'
 
 export interface CreatePageFormProps {
   workspaceId: string
@@ -57,7 +57,7 @@ export function CreatePageForm({
     defaultValues: {
       title: '',
       icon: '',
-      collaboratorIds: userId ? [userId] : ([] as string[]),
+      collaboratorIds: userId ? [userId] : ([] as Array<string>),
     },
     onSubmit: async ({ value }) => {
       setRootError(null)

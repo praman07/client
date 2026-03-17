@@ -1,14 +1,14 @@
 import { useState } from 'react'
 import { useForm } from '@tanstack/react-form'
 import { toast } from 'sonner'
-import { Button } from '@/shared/ui/primitives/button'
-import { Input } from '@/shared/ui/primitives/input'
-import { Label } from '@/shared/ui/primitives/label'
-import { Textarea } from '@/shared/ui/primitives/textarea'
 import { useCreateBoard } from '../hooks'
 import { createBoardSchema } from '../model'
 import { mapCreateBoardError } from '../lib'
 import { CollaboratorPicker } from './collaborator-picker'
+import { Button } from '@/shared/ui/primitives/button'
+import { Input } from '@/shared/ui/primitives/input'
+import { Label } from '@/shared/ui/primitives/label'
+import { Textarea } from '@/shared/ui/primitives/textarea'
 import { useAuth } from '@/shared/hooks'
 
 interface CreateBoardFormProps {
@@ -39,7 +39,7 @@ export function CreateBoardForm({
       projectId,
       title: '',
       description: '',
-      collaboratorIds: userId ? [userId] : ([] as string[]),
+      collaboratorIds: userId ? [userId] : ([] as Array<string>),
     },
     onSubmit: async ({ value }) => {
       setRootError(null)

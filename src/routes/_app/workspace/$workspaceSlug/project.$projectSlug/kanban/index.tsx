@@ -1,24 +1,28 @@
 import { createFileRoute } from '@tanstack/react-router'
+import { Suspense } from 'react'
+import { ErrorBoundary } from 'react-error-boundary'
 import { useAppSelector } from '@/shared/hooks'
 import { selectCurrentProject } from '@/entities/project'
 import { IssuesBoard } from '@/widgets/issues-board'
+import { IssuesBoardSkeleton, PageSpinner, RouteError, WidgetError  } from '@/shared/ui'
 
 export const Route = createFileRoute(
   '/_app/workspace/$workspaceSlug/project/$projectSlug/kanban/',
 )({
   component: RouteComponent,
+  pendingComponent: IssuesBoardSkeleton,
+  errorComponent: ({ error, reset }) => (
+    <RouteError error={error} reset={reset} />
+  ),
 })
 
 function RouteComponent() {
   const project = useAppSelector(selectCurrentProject)
 
-  // Project is always loaded by the parent route (project.$projectSlug/route.tsx)
-  // before this component renders — the parent shows a loading state otherwise.
-  if (!project) return null
+  // Project is always loaded by the parent layout before this renders.
+  // PageSpinner handles the rare edge case where Redux hasn't synced yet.
+  if (!project) return <PageSpinner label="Loading project…" />
 
-  // Note: project.members only contains { userId, role, joinedAt } — no fullName.
-  // Assignee picker will show empty until a dedicated getProjectMembers query is wired.
-  // This is a known gap to be addressed in the members feature.
   const projectMembers = project.members.map((m) => ({
     id: m.userId,
     fullName: m.user.fullName ?? 'Unknown',
@@ -26,12 +30,16 @@ function RouteComponent() {
   }))
 
   return (
-    <div className="h-full overflow-hidden">
-      <IssuesBoard
-        projectId={project.id}
-        projectKey={project.key}
-        projectMembers={projectMembers}
-      />
-    </div>
+    <ErrorBoundary FallbackComponent={WidgetError}>
+      <Suspense fallback={<IssuesBoardSkeleton />}>
+        <div className="h-full overflow-hidden">
+          <IssuesBoard
+            projectId={project.id}
+            projectKey={project.key}
+            projectMembers={projectMembers}
+          />
+        </div>
+      </Suspense>
+    </ErrorBoundary>
   )
 }

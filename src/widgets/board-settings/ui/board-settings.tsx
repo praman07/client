@@ -1,3 +1,7 @@
+import { AlertTriangle, Lock, Settings } from 'lucide-react'
+import { GeneralTab } from './general-tab'
+import { AccessTab } from './access-tab'
+import { DangerZone } from './danger-zone'
 import {
   Dialog,
   DialogContent,
@@ -10,10 +14,6 @@ import {
   TabsList,
   TabsTrigger,
 } from '@/shared/ui/primitives/tabs'
-import { GeneralTab } from './general-tab'
-import { AccessTab } from './access-tab'
-import { DangerZone } from './danger-zone'
-import { Settings, Lock, AlertTriangle } from 'lucide-react'
 
 interface BoardSettingsProps {
   boardId: string

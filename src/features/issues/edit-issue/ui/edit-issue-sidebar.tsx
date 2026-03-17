@@ -11,14 +11,16 @@
  * @layer Features
  */
 import { useSelector } from 'react-redux'
-import { selectIssueLabels, selectIssueStatuses } from '@/entities/issue'
-import { StatusPicker } from '@/features/issues/create-issue/ui/toolbar/status-picker'
-import { PriorityPicker } from '@/features/issues/create-issue/ui/toolbar/priority-picker'
-import { AssigneePicker } from '@/features/issues/create-issue/ui/toolbar/assignee-picker'
-import { LabelPicker } from '@/features/issues/create-issue/ui/toolbar/label-picker'
-import { MoreMenu } from '@/features/issues/create-issue/ui/toolbar/more-menu'
-import { Separator } from '@/shared/ui/primitives/separator'
 import type { IssuePriority } from '@/entities/issue'
+import { selectIssueLabels, selectIssueStatuses } from '@/entities/issue'
+import {
+  AssigneePicker,
+  LabelPicker,
+  MoreMenu,
+  PriorityPicker,
+  StatusPicker,
+} from '@/features/issues/create-issue'
+import { Separator } from '@/shared/ui/primitives/separator'
 
 interface EditIssueSidebarProps {
   projectMembers: Array<{ id: string; fullName: string; avatarUrl?: string }>
@@ -26,7 +28,7 @@ interface EditIssueSidebarProps {
   localStatusId: string
   localPriority: IssuePriority
   localAssigneeId: string | null
-  localLabelIds: string[]
+  localLabelIds: Array<string>
   localDueDate: string | null
 
   createdByName: string

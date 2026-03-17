@@ -9,6 +9,8 @@
 import { useState } from 'react'
 import { Plus } from 'lucide-react'
 import { useSelector } from 'react-redux'
+import { LabelListRow } from './label-list-row'
+import { CreateLabelForm } from './create-label-form'
 import {
   Dialog,
   DialogContent,
@@ -17,8 +19,6 @@ import {
 } from '@/shared/ui/primitives/dialog'
 import { Button } from '@/shared/ui/primitives/button'
 import { selectIssueLabels } from '@/entities/issue'
-import { LabelListRow } from './label-list-row'
-import { CreateLabelForm } from './create-label-form'
 
 interface ManageLabelsModalProps {
   open: boolean

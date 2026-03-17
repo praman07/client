@@ -11,9 +11,9 @@
 import type { SubscribeSuccessPayload } from '@/shared/contracts/pages'
 import type { PageEventHandlerContext } from '../../model'
 import {
+  pageOfflineQueue,
   setConnectionStatus,
   setPageLocked,
-  pageOfflineQueue,
 } from '@/entities/page-session'
 import { setActivePageCollaborators } from '@/entities/page-presence'
 import { createLogger } from '@/shared/lib/logger'

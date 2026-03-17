@@ -1,31 +1,31 @@
 import { useState } from 'react'
 import { Check } from 'lucide-react'
+import {
+  closeAddMemberDialog,
+  selectIsAddMemberDialogOpen,
+} from '../model/slice'
+import { useAddProjectMember } from '../hooks/use-add-project-member'
 import { cn } from '@/shared/lib/utils'
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogFooter,
-  Button,
   Avatar,
   AvatarFallback,
   AvatarImage,
+  Button,
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
   ScrollArea,
 } from '@/shared/ui'
-import { useAppSelector, useAppDispatch } from '@/shared/hooks'
-import {
-  selectIsAddMemberDialogOpen,
-  closeAddMemberDialog,
-} from '../model/slice'
-import { useAddProjectMember } from '../hooks/use-add-project-member'
+import { useAppDispatch, useAppSelector } from '@/shared/hooks'
 import { useWorkspaceMembers } from '@/features/view-members/hooks'
 
 interface AddMemberDialogProps {
   projectId: string
   workspaceId: string
-  existingMemberIds: string[]
+  existingMemberIds: Array<string>
 }
 
 function getInitials(name: string) {

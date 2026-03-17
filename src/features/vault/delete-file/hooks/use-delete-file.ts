@@ -1,9 +1,9 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { DELETE_VAULT_FILE } from '../api/fragments'
+import type { DeleteFileVariables } from '../model'
 import { useAuth } from '@/shared/hooks'
 import { GqlClient } from '@/shared/api/graphql-client'
 import { vaultFileKeys, vaultNodeKeys } from '@/entities/vault-file'
-import type { DeleteFileVariables } from '../model'
-import { DELETE_VAULT_FILE } from '../api/fragments'
 
 /**
  * Soft-deletes a vault file.

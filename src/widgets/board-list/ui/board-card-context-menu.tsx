@@ -1,24 +1,24 @@
 import {
+  Archive,
+  ArchiveRestore,
+  Copy,
+  Link2,
+  Lock,
+  Pencil,
+  Settings,
+  Trash2,
+  Unlock,
+  Users,
+} from 'lucide-react'
+import type { Board } from '@/entities/whiteboard-board'
+import {
   ContextMenu,
-  ContextMenuTrigger,
   ContextMenuContent,
   ContextMenuItem,
   ContextMenuSeparator,
   ContextMenuShortcut,
+  ContextMenuTrigger,
 } from '@/shared/ui/primitives/context-menu'
-import {
-  Pencil,
-  Link2,
-  Copy,
-  Lock,
-  Unlock,
-  Users,
-  Settings,
-  Archive,
-  ArchiveRestore,
-  Trash2,
-} from 'lucide-react'
-import type { Board } from '@/entities/whiteboard-board'
 
 interface BoardCardContextMenuProps {
   children: React.ReactNode

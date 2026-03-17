@@ -1,21 +1,20 @@
-import { useState, useCallback } from 'react'
+import { useCallback, useState } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
-import { useCreateProjectRole } from './use-create-project-role'
+import { toast } from 'sonner'
 import { handleCreateProjectRoleError } from '../lib/error-mapping'
 import { closeCreateRoleDialog } from '../model/slice'
-import { useAppDispatch } from '@/shared/hooks'
-import { useAssignRolePermission } from '@/features/project/manage-role-permissions/hooks/use-role-permissions-mutations'
-import { useUpdateProjectMemberRole } from '@/entities/project-member'
-import { rolePermissionKeys } from '@/entities/project-role'
-import { projectMemberKeys } from '@/entities/project-member/api/query-keys'
-import { toast } from 'sonner'
+import { useCreateProjectRole } from './use-create-project-role'
 import type { CreateProjectRoleFormValues } from '../model/schema'
+import { useAppDispatch } from '@/shared/hooks'
+import { useAssignRolePermission } from '@/features/project/manage-role-permissions'
+import { projectMemberKeys, useUpdateProjectMemberRole  } from '@/entities/project-member'
+import { rolePermissionKeys } from '@/entities/project-role'
 
 interface UseCreateProjectRoleFormProps {
   projectId: string
   workspaceId: string
-  selectedPermissionIds: string[]
-  selectedMemberIds: string[]
+  selectedPermissionIds: Array<string>
+  selectedMemberIds: Array<string>
   onSuccess?: () => void
 }
 

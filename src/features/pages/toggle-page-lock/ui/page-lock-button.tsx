@@ -1,9 +1,9 @@
 import { toast } from 'sonner'
-import { Lock, LockOpen, Loader2 } from 'lucide-react'
-import { Button } from '@/shared/ui/primitives/button'
+import { Loader2, Lock, LockOpen } from 'lucide-react'
 import { useLockPage } from '../hooks/use-lock-page'
 import { useUnlockPage } from '../hooks/use-unlock-page'
 import { mapLockPageError, mapUnlockPageError } from '../lib/error-mapping'
+import { Button } from '@/shared/ui/primitives/button'
 
 export interface PageLockButtonProps {
   pageId: string

@@ -1,12 +1,12 @@
 import { useState } from 'react'
 import { useForm } from '@tanstack/react-form'
 import { toast } from 'sonner'
-import { Button } from '@/shared/ui/primitives/button'
-import { Input } from '@/shared/ui/primitives/input'
-import { Label } from '@/shared/ui/primitives/label'
 import { useRenameFolder } from '../hooks/use-rename-folder'
 import { renameSchema } from '../model/schema'
 import { mapRenameFolderError } from '../lib/error-mapping'
+import { Button } from '@/shared/ui/primitives/button'
+import { Input } from '@/shared/ui/primitives/input'
+import { Label } from '@/shared/ui/primitives/label'
 
 interface RenameFolderFormProps {
   folderId: string

@@ -1,4 +1,4 @@
-import { VAULT_ALLOWED_MIME_TYPES, MAX_FILE_SIZE_BYTES } from './mime-allowlist'
+import { MAX_FILE_SIZE_BYTES, VAULT_ALLOWED_MIME_TYPES } from './mime-allowlist'
 
 export type FileValidationError =
   | { kind: 'SIZE_EXCEEDED'; maxBytes: number }

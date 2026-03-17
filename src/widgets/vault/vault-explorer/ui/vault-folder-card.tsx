@@ -1,7 +1,7 @@
 import { Folder } from 'lucide-react'
-import { cn } from '@/shared/lib/utils'
-import type { VaultFolder } from '@/entities/vault-folder'
 import { VaultFolderContextMenu } from './vault-folder-context-menu'
+import type { VaultFolder } from '@/entities/vault-folder'
+import { cn } from '@/shared/lib/utils'
 
 interface VaultFolderCardProps {
   folder: VaultFolder

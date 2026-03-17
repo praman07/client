@@ -1,9 +1,9 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { CREATE_VAULT_FOLDER } from '../api/fragments'
+import type { CreateFolderVariables } from '../model'
 import { useAuth } from '@/shared/hooks'
 import { GqlClient } from '@/shared/api/graphql-client'
 import { vaultNodeKeys } from '@/entities/vault-file'
-import type { CreateFolderVariables } from '../model'
-import { CREATE_VAULT_FOLDER } from '../api/fragments'
 
 /**
  * Creates a new user-defined vault folder.

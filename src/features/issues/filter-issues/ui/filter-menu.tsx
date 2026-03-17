@@ -13,15 +13,20 @@
  */
 import { useState } from 'react'
 import {
+  Calendar,
+  ChevronLeft,
+  ChevronRight,
   LayoutGrid,
   Signal,
-  User,
-  Tag,
-  Calendar,
-  ChevronRight,
-  ChevronLeft,
   SlidersHorizontal,
+  Tag,
+  User,
 } from 'lucide-react'
+import { FilterSubMenu } from './filter-sub-menu'
+import type { IssueFilters } from '@/entities/issue'
+import type { IssueStatus } from '@/entities/issue-status'
+import type { IssueLabel } from '@/entities/issue-label'
+import type { FilterCategory } from '../model/types'
 import {
   Popover,
   PopoverContent,
@@ -30,17 +35,12 @@ import {
 import { Separator } from '@/shared/ui/primitives/separator'
 import { Button } from '@/shared/ui/primitives/button'
 import { cn } from '@/shared/lib/utils'
-import type { IssueFilters } from '@/entities/issue'
-import type { IssueStatus } from '@/entities/issue-status'
-import type { IssueLabel } from '@/entities/issue-label'
-import type { FilterCategory } from '../model/types'
-import { FilterSubMenu } from './filter-sub-menu'
 
-const CATEGORIES: {
+const CATEGORIES: Array<{
   key: FilterCategory
   label: string
   Icon: React.ElementType
-}[] = [
+}> = [
   { key: 'statusIds', label: 'Status', Icon: LayoutGrid },
   { key: 'priorities', label: 'Priority', Icon: Signal },
   { key: 'assigneeIds', label: 'Assignee', Icon: User },
@@ -50,8 +50,8 @@ const CATEGORIES: {
 
 interface FilterMenuProps {
   filters: IssueFilters
-  statuses: IssueStatus[]
-  labels: IssueLabel[]
+  statuses: Array<IssueStatus>
+  labels: Array<IssueLabel>
   projectMembers: Array<{ id: string; fullName: string; avatarUrl?: string }>
   onSetFilter: (patch: Partial<IssueFilters>) => void
   hasActiveFilters: boolean

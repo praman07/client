@@ -1,7 +1,7 @@
-import { useAppSelector, useAppDispatch } from '@/shared/hooks'
+import { X } from 'lucide-react'
 import { selectUploadSlots, uploadTrayActions } from '../model'
 import { VaultUploadSlot } from './vault-upload-slot'
-import { X } from 'lucide-react'
+import { useAppDispatch, useAppSelector } from '@/shared/hooks'
 
 /**
  * Floating upload progress tray — fixed bottom-right, always mounted in VaultPage.

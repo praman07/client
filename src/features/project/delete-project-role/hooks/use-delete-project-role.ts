@@ -1,9 +1,8 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { DELETE_PROJECT_ROLE } from '@/entities/project-role'
-import { projectRoleKeys } from '@/entities/project-role'
+import { handleDeleteProjectRoleError } from '../lib/error-mapping'
+import { DELETE_PROJECT_ROLE, projectRoleKeys  } from '@/entities/project-role'
 import { GqlClient } from '@/shared/api'
 import { useAuth } from '@/shared/hooks'
-import { handleDeleteProjectRoleError } from '../lib/error-mapping'
 
 interface DeleteProjectRoleInput {
   roleId: string

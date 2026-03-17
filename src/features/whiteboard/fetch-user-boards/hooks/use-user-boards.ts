@@ -1,10 +1,10 @@
 import { useInfiniteQuery } from '@tanstack/react-query'
+import { GET_USER_BOARDS } from '../api/fragments'
 import type { UseInfiniteQueryOptions } from '@tanstack/react-query'
+import type { GetUserBoardsQuery } from '@/gql/graphql'
 import { useAuth } from '@/shared/hooks'
 import { GqlClient } from '@/shared/api/graphql-client'
 import { boardKeys } from '@/entities/whiteboard-board'
-import { GET_USER_BOARDS } from '../api/fragments'
-import type { GetUserBoardsQuery } from '@/gql/graphql'
 
 /**
  * Fetch paginated list of boards user has access to in workspace

@@ -1,9 +1,9 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { UPDATE_BOARD_DESCRIPTION } from '../api'
+import type { GetBoardQuery } from '@/gql/graphql'
 import { GqlClient } from '@/shared/api/graphql-client'
 import { useAuth } from '@/shared/hooks'
 import { boardKeys } from '@/entities/whiteboard-board'
-import type { GetBoardQuery } from '@/gql/graphql'
-import { UPDATE_BOARD_DESCRIPTION } from '../api'
 
 interface UpdateDescriptionVariables {
   boardId: string

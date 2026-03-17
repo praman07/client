@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { WhiteboardCanvas } from '@/widgets/whiteboard-canvas'
 import { CollaborationSidebar } from '@/widgets/collaboration-sidebar'
 import { SidebarProvider } from '@/shared/ui/primitives/sidebar'

@@ -1,9 +1,9 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { MOVE_VAULT_FILE } from '../api/fragments'
+import type { MoveFileVariables } from '../model'
 import { useAuth } from '@/shared/hooks'
 import { GqlClient } from '@/shared/api/graphql-client'
 import { vaultNodeKeys } from '@/entities/vault-file'
-import type { MoveFileVariables } from '../model'
-import { MOVE_VAULT_FILE } from '../api/fragments'
 
 /**
  * Moves a vault file to a different folder.

@@ -51,7 +51,7 @@ export interface Issue {
   /** null = unassigned */
   assignee: IssueUserBasic | null
 
-  labels: IssueLabel[]
+  labels: Array<IssueLabel>
 
   /** ISO datetime string. null = no due date set */
   dueDate: string | null
@@ -64,13 +64,13 @@ export interface Issue {
 /** Active filter state for the board toolbar (client-side only) */
 export interface IssueFilters {
   /** Filter to one or more status column IDs */
-  statusIds?: string[]
+  statusIds?: Array<string>
   /** Filter to one or more assignee user IDs (empty array = unassigned only) */
-  assigneeIds?: string[]
+  assigneeIds?: Array<string>
   /** Filter to one or more priority levels */
-  priorities?: IssuePriority[]
+  priorities?: Array<IssuePriority>
   /** Issue must have ALL of these label IDs to pass the filter */
-  labelIds?: string[]
+  labelIds?: Array<string>
   /** Due-date preset filter */
   dueDate?: 'overdue' | 'today' | 'this-week' | 'no-date'
 }

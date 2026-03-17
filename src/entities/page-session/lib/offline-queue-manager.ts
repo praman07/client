@@ -1,8 +1,8 @@
-import { db } from '@/shared/lib/db'
 import * as Y from 'yjs'
+import { uint8ArrayToBase64 } from './encoding'
+import { db } from '@/shared/lib/db'
 import { createLogger } from '@/shared/lib/logger'
 import { wsManager } from '@/shared/ws/manager'
-import { uint8ArrayToBase64 } from './encoding'
 
 const log = createLogger('pages:offline-queue')
 
@@ -72,7 +72,7 @@ class PageOfflineQueueManager {
   /**
    * Flush pending updates for a page (online path, with debounce)
    */
-  async flush(pageId: string): Promise<void> {
+  flush(pageId: string): void {
     const existing = this.flushTimers.get(pageId)
     if (existing) clearTimeout(existing)
 

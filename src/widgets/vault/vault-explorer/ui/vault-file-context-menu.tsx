@@ -1,3 +1,5 @@
+import { Download, Pencil, Trash2 } from 'lucide-react'
+import type { VaultFile } from '@/entities/vault-file'
 import {
   ContextMenu,
   ContextMenuContent,
@@ -5,9 +7,7 @@ import {
   ContextMenuSeparator,
   ContextMenuTrigger,
 } from '@/shared/ui/primitives/context-menu'
-import { Pencil, Trash2, Download } from 'lucide-react'
 import { useDeleteFile } from '@/features/vault/delete-file'
-import type { VaultFile } from '@/entities/vault-file'
 
 interface VaultFileContextMenuProps {
   file: VaultFile

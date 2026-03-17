@@ -1,15 +1,15 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { CREATE_BOARD } from '../api'
 import { GqlClient } from '@/shared/api/graphql-client'
 import { useAuth } from '@/shared/hooks'
 import { boardKeys } from '@/entities/whiteboard-board'
-import { CREATE_BOARD } from '../api'
 
 interface CreateBoardInput {
   workspaceId: string
   projectId?: string
   title: string
   description?: string
-  collaboratorIds?: string[]
+  collaboratorIds?: Array<string>
 }
 
 export function useCreateBoard() {

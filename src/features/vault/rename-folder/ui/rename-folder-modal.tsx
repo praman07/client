@@ -1,11 +1,11 @@
+import { RenameFolderForm } from './rename-folder-form'
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogDescription,
 } from '@/shared/ui/primitives/dialog'
-import { RenameFolderForm } from './rename-folder-form'
 
 interface RenameFolderModalProps {
   open: boolean

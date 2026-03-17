@@ -1,21 +1,25 @@
 import { createFileRoute } from '@tanstack/react-router'
+import { Suspense } from 'react'
+import { ErrorBoundary } from 'react-error-boundary'
 import { VaultPage } from '@/pages/vault'
 import { useAppSelector } from '@/shared/hooks'
-import { selectWorkspaceBySlug } from '@/entities/workspace/model/selectors'
-import { selectCurrentProject } from '@/entities/project/model/selectors'
+import { selectWorkspaceBySlug } from '@/entities/workspace'
+import { selectCurrentProject } from '@/entities/project'
+import { PageSpinner, RouteError, VaultSkeleton, WidgetError  } from '@/shared/ui'
 
 export const Route = createFileRoute(
   '/_app/workspace/$workspaceSlug/project/$projectSlug/vault/',
 )({
   component: VaultIndexRoute,
+  validateSearch: (search: Record<string, unknown>) => ({
+    folderId: typeof search.folderId === 'string' ? search.folderId : undefined,
+  }),
+  pendingComponent: VaultSkeleton,
+  errorComponent: ({ error, reset }) => (
+    <RouteError error={error} reset={reset} />
+  ),
 })
 
-/**
- * Vault Index Route
- *
- * Reads workspaceId + projectId from Redux (synced by parent layout)
- * and renders the full VaultPage.
- */
 function VaultIndexRoute() {
   const { workspaceSlug } = Route.useParams()
 
@@ -25,12 +29,14 @@ function VaultIndexRoute() {
   const project = useAppSelector(selectCurrentProject)
 
   if (!workspace?.id || !project?.id) {
-    return (
-      <div className="flex items-center justify-center h-screen">
-        <p className="text-muted-foreground">Loading workspace...</p>
-      </div>
-    )
+    return <PageSpinner label="Loading workspace…" />
   }
 
-  return <VaultPage workspaceId={workspace.id} projectId={project.id} />
+  return (
+    <ErrorBoundary FallbackComponent={WidgetError}>
+      <Suspense fallback={<VaultSkeleton />}>
+        <VaultPage workspaceId={workspace.id} projectId={project.id} />
+      </Suspense>
+    </ErrorBoundary>
+  )
 }

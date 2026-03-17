@@ -24,13 +24,13 @@ import { useEffect, useRef } from 'react'
 import { useCreateBlockNote } from '@blocknote/react'
 import { BlockNoteView } from '@blocknote/shadcn'
 
-import type { BlockNoteEditor } from '@blocknote/core'
 import { en } from '@blocknote/core/locales'
+import type { BlockNoteEditor } from '@blocknote/core'
 
 interface IssueDescriptionEditorProps {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  onChange: (blocks: any[]) => void
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+   
+  onChange: (blocks: Array<any>) => void
+   
   editorRef: React.MutableRefObject<BlockNoteEditor<any> | null>
   editable?: boolean
 }

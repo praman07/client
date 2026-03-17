@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
-import * as Y from 'yjs'
 import { IndexeddbPersistence } from 'y-indexeddb'
+import type * as Y from 'yjs'
 import { createLogger } from '@/shared/lib/logger'
 
 const log = createLogger('whiteboard:sync:indexeddb')

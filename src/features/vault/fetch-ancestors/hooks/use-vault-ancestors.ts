@@ -1,9 +1,9 @@
 import { useQuery } from '@tanstack/react-query'
+import { GET_VAULT_ANCESTORS } from '../api/fragments'
+import type { VaultFolder } from '@/entities/vault-folder'
 import { useAuth } from '@/shared/hooks'
 import { GqlClient } from '@/shared/api/graphql-client'
 import { vaultFolderKeys } from '@/entities/vault-folder'
-import type { VaultFolder } from '@/entities/vault-folder'
-import { GET_VAULT_ANCESTORS } from '../api/fragments'
 
 /**
  * Fetches the ancestor folder chain for a given folderId (root → current).
@@ -21,7 +21,7 @@ import { GET_VAULT_ANCESTORS } from '../api/fragments'
 export function useVaultAncestors(
   folderId: string | null,
   enabled: boolean,
-): VaultFolder[] {
+): Array<VaultFolder> {
   const { getToken } = useAuth()
 
   const query = useQuery({
@@ -34,7 +34,7 @@ export function useVaultAncestors(
       const result = await GqlClient(token).request(GET_VAULT_ANCESTORS, {
         folderId: folderId!,
       })
-      return result.getVaultAncestors as VaultFolder[]
+      return result.getVaultAncestors as Array<VaultFolder>
     },
     enabled: enabled && !!folderId,
     staleTime: 30_000,

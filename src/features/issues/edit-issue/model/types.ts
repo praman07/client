@@ -11,7 +11,7 @@ export interface UpdateIssueVariables {
   statusId?: string
   priority?: IssuePriority
   assigneeId?: string | null
-  labelIds?: string[]
+  labelIds?: Array<string>
   dueDate?: string | null
 }
 

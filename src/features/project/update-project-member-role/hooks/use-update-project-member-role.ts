@@ -1,9 +1,8 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { UPDATE_PROJECT_MEMBER_ROLE } from '@/entities/project-member'
-import { projectMemberKeys } from '@/entities/project-member'
+import { handleUpdateProjectMemberRoleError } from '../lib/error-mapping'
+import { UPDATE_PROJECT_MEMBER_ROLE, projectMemberKeys  } from '@/entities/project-member'
 import { GqlClient } from '@/shared/api'
 import { useAuth } from '@/shared/hooks'
-import { handleUpdateProjectMemberRoleError } from '../lib/error-mapping'
 
 interface UpdateProjectMemberRoleInput {
   projectId: string

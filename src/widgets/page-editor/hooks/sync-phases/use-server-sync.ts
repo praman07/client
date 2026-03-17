@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import * as Y from 'yjs'
 import { usePageSnapshot } from '@/features/pages/fetch-snapshot'
-import { setYDocStatus } from '@/entities/page-session/model/slice'
+import { setYDocStatus } from '@/entities/page-session'
 import { useAppDispatch } from '@/shared/hooks'
 import { createLogger } from '@/shared/lib/logger'
 

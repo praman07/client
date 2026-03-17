@@ -18,16 +18,16 @@
  *
  * @layer Features
  */
-import { useState, useCallback } from 'react'
-import { useAuth } from '@/shared/hooks'
-import { GqlClient } from '@/shared/api/graphql-client'
+import { useCallback, useState } from 'react'
 import {
-  REQUEST_ISSUE_DESCRIPTION_UPLOAD,
   CONFIRM_ISSUE_DESCRIPTION_UPLOAD,
+  REQUEST_ISSUE_DESCRIPTION_UPLOAD,
 } from '../api/fragments'
 import { hasDescriptionChanged } from '../lib/description-change-detector'
 import { mapDescriptionUploadError } from '../lib/error-mapping'
 import type { DescriptionUploadStatus } from '../model/types'
+import { GqlClient } from '@/shared/api/graphql-client'
+import { useAuth } from '@/shared/hooks'
 
 export function useDescriptionUpload() {
   const { getToken } = useAuth()
@@ -37,8 +37,8 @@ export function useDescriptionUpload() {
   const upload = useCallback(
     async (
       issueId: string,
-      currentBlocks: unknown[],
-      originalBlocks: unknown[],
+      currentBlocks: Array<unknown>,
+      originalBlocks: Array<unknown>,
     ): Promise<boolean> => {
       // Skip upload if content hasn't changed
       if (!hasDescriptionChanged(currentBlocks, originalBlocks)) {

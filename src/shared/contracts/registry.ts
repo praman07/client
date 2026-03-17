@@ -86,6 +86,8 @@
 // DOMAIN NAMESPACES
 // ═══════════════════════════════════════════════════════════════
 
+import type { DomainPrefix } from './types'
+
 export * as Chat from './chat'
 export * as Whiteboard from './whiteboard'
 
@@ -165,10 +167,10 @@ export function isValidEvent(eventType: string): boolean {
  */
 export function getDomain(
   eventType: string,
-): import('./types').DomainPrefix | null {
+): DomainPrefix | null {
   const [domain] = eventType.split(':')
   if (domain === 'chat' || domain === 'whiteboard' || domain === 'presence') {
-    return domain as import('./types').DomainPrefix
+    return domain as DomainPrefix
   }
   return null
 }

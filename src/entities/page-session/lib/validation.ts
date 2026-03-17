@@ -1,6 +1,6 @@
 import * as Y from 'yjs'
-import { createLogger } from '@/shared/lib/logger'
 import { createPageDoc } from './yjs/create-ydoc'
+import { createLogger } from '@/shared/lib/logger'
 
 const log = createLogger('pages:validation')
 

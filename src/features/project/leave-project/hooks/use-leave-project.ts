@@ -1,10 +1,9 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { LEAVE_PROJECT } from '@/entities/project-member'
-import { projectMemberKeys } from '@/entities/project-member'
+import { useNavigate } from '@tanstack/react-router'
+import { handleLeaveProjectError } from '../lib/error-mapping'
+import { LEAVE_PROJECT, projectMemberKeys  } from '@/entities/project-member'
 import { GqlClient } from '@/shared/api'
 import { useAuth } from '@/shared/hooks'
-import { handleLeaveProjectError } from '../lib/error-mapping'
-import { useNavigate } from '@tanstack/react-router'
 
 export function useLeaveProject(projectId: string, workspaceSlug: string) {
   const { getToken } = useAuth()

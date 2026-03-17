@@ -1,5 +1,5 @@
-import { useProjectOverview } from '@/entities/project'
 import { AlertCircle, CheckCircle2, Clock, FileText, Users } from 'lucide-react'
+import { useProjectOverview } from '@/entities/project'
 
 interface ProjectOverviewStatsProps {
   projectId: string
@@ -12,7 +12,7 @@ function StatCard({
 }: {
   label: string
   value: number | string
-  icon: any
+  icon: React.ComponentType<{ className?: string }>
 }) {
   return (
     <div className="rounded-lg border bg-card p-4 space-y-2">

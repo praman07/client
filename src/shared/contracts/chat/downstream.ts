@@ -3,8 +3,8 @@
  * All server-sent WebSocket events
  */
 
+import type { ChatDownstreamEvent } from './events'
 import type { DownstreamContract } from '../types'
-import { ChatDownstreamEvent } from './events'
 
 // ═══════════════════════════════════════════════════════════════
 // PAYLOADS
@@ -58,14 +58,14 @@ export interface MessageDeletedPayload {
 export interface MessageReadPayload {
   conversationId: string
   userId: string
-  messageIds: string[]
+  messageIds: Array<string>
   readAt: string
 }
 
 export interface MessageDeliveredPayload {
   conversationId: string
   userId: string
-  messageIds: string[]
+  messageIds: Array<string>
   deliveredAt: string
 }
 

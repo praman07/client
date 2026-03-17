@@ -8,8 +8,8 @@
  *
  * @layer Features
  */
-import { Input } from '@/shared/ui/primitives/input'
 import { EditIssueDescriptionEditor } from './edit-issue-description-editor'
+import { Input } from '@/shared/ui/primitives/input'
 
 interface EditIssueContentProps {
   title: string
@@ -17,10 +17,10 @@ interface EditIssueContentProps {
   issueId: string
   descriptionS3Key: string | null
   editable: boolean
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  onBlocksChange: (blocks: any[]) => void
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  onDescriptionLoaded: (blocks: any[]) => void
+   
+  onBlocksChange: (blocks: Array<any>) => void
+   
+  onDescriptionLoaded: (blocks: Array<any>) => void
 }
 
 export function EditIssueContent({

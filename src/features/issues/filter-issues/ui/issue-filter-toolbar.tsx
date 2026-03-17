@@ -10,11 +10,11 @@
  *
  * @layer Features
  */
-import { selectIssueStatuses, selectIssueLabels } from '@/entities/issue'
 import { useSelector } from 'react-redux'
+import { useFilterIssues } from '../hooks/use-filter-issues'
 import { FilterMenu } from './filter-menu'
 import { FilterChip } from './filter-chip'
-import { useFilterIssues } from '../hooks/use-filter-issues'
+import { selectIssueLabels, selectIssueStatuses } from '@/entities/issue'
 
 interface IssueFilterToolbarProps {
   projectMembers: Array<{ id: string; fullName: string }>

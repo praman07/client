@@ -3,8 +3,8 @@
  * All client-initiated WebSocket commands
  */
 
-import type { UpstreamContract } from '../types'
 import { ChatUpstreamEvent } from './events'
+import type { UpstreamContract } from '../types'
 
 // Re-export event enum for convenience
 export { ChatUpstreamEvent }
@@ -41,7 +41,7 @@ export interface RemoveReactionPayload {
 
 export interface MarkReadPayload {
   conversationId: string
-  messageIds: string[]
+  messageIds: Array<string>
 }
 
 export interface SubscribePayload {

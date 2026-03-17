@@ -1,9 +1,9 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { cleanBoardFromIndexedDB } from '../lib'
+import { DELETE_BOARD } from '../api'
 import { GqlClient } from '@/shared/api/graphql-client'
 import { useAuth } from '@/shared/hooks'
 import { boardKeys } from '@/entities/whiteboard-board'
-import { cleanBoardFromIndexedDB } from '../lib'
-import { DELETE_BOARD } from '../api'
 import { createLogger } from '@/shared/lib/logger'
 
 const log = createLogger('whiteboard:delete-board-hook')

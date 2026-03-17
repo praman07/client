@@ -16,6 +16,6 @@ export interface CollaboratorPresence {
 }
 
 export interface WhiteboardPresenceState {
-  remoteCursors: Record<string, CollaboratorPresence>
+  remoteCursors: Record<string, CollaboratorPresence | undefined>
   totalCount: number
 }

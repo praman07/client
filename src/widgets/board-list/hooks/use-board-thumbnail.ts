@@ -13,7 +13,7 @@
  * Object URLs are always revoked on unmount to prevent memory leaks.
  */
 
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { db } from '@/shared/lib/db'
 import { createLogger } from '@/shared/lib/logger'
 import {
@@ -57,6 +57,7 @@ export function useBoardThumbnail(boardId: string): string | null {
       }
 
       // 3. Skip regeneration if content unchanged
+       
       const hash = hashElements(elements as any)
       if (cached?.contentHash === hash) {
         log.debug('Content unchanged, skipping regeneration', { boardId })
@@ -74,6 +75,7 @@ export function useBoardThumbnail(boardId: string): string | null {
         boardId,
         elementCount: elements.length,
       })
+       
       const webpBytes = await generateBoardThumbnail(elements as any)
       if (revoked) return
 

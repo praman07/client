@@ -1,9 +1,9 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { UNPIN_VAULT_FOLDER } from '../api/fragments'
+import type { UnpinFolderVariables } from '../model'
 import { useAuth } from '@/shared/hooks'
 import { GqlClient } from '@/shared/api/graphql-client'
 import { vaultFolderKeys } from '@/entities/vault-folder'
-import type { UnpinFolderVariables } from '../model'
-import { UNPIN_VAULT_FOLDER } from '../api/fragments'
 
 /**
  * Unpins a vault folder from the current user's sidebar.

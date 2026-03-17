@@ -1,8 +1,8 @@
-import { useAppSelector } from '@/shared/hooks'
 import {
-  selectCollaboratorList,
   selectCollaboratorCount,
+  selectCollaboratorList,
 } from '../model/selectors'
+import { useAppSelector } from '@/shared/hooks'
 
 export function useActiveCollaborators() {
   const collaborators = useAppSelector(selectCollaboratorList)

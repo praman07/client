@@ -13,17 +13,17 @@
  */
 import { useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import {
-  selectIssueFilters,
-  selectIssueStatuses,
-  selectIssueLabels,
-  setFilters,
-  clearFilters,
-  removeFilter,
-} from '@/entities/issue'
 import type { IssueFilters } from '@/entities/issue'
 import type { AppDispatch } from '@/app/store'
 import type { FilterChip } from '../model/types'
+import {
+  clearFilters,
+  removeFilter,
+  selectIssueFilters,
+  selectIssueLabels,
+  selectIssueStatuses,
+  setFilters,
+} from '@/entities/issue'
 
 const PRIORITY_LABELS: Record<string, string> = {
   URGENT: 'Urgent',
@@ -65,7 +65,7 @@ export function useFilterIssues() {
   }, [dispatch])
 
   // ── Compute active chips from current filters ──────────────────────────────
-  const activeChips: FilterChip[] = []
+  const activeChips: Array<FilterChip> = []
 
   if (filters.statusIds?.length) {
     const names = filters.statusIds

@@ -1,5 +1,5 @@
-import { useState, useMemo } from 'react'
-import { Check, X, Search } from 'lucide-react'
+import { useMemo, useState } from 'react'
+import { Check, Search, X } from 'lucide-react'
 import { cn } from '@/shared/lib/utils'
 import {
   Avatar,
@@ -14,8 +14,8 @@ import { useWorkspaceMembers } from '@/features/view-members/hooks'
 
 interface CollaboratorPickerProps {
   workspaceId: string
-  selectedUserIds: string[]
-  onChange: (userIds: string[]) => void
+  selectedUserIds: Array<string>
+  onChange: (userIds: Array<string>) => void
   currentUserId?: string
 }
 

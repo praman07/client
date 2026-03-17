@@ -1,11 +1,6 @@
 import { useState } from 'react'
 import { UserPlus } from 'lucide-react'
 import {
-  Button,
-  Skeleton,
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
   AlertDialog,
   AlertDialogAction,
   AlertDialogCancel,
@@ -14,6 +9,11 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+  Button,
+  Skeleton,
   Table,
   TableBody,
   TableCell,
@@ -23,16 +23,18 @@ import {
 } from '@/shared/ui'
 import { cn } from '@/shared/lib/utils'
 import { useAppDispatch } from '@/shared/hooks'
-import { useProjectMembers } from '@/entities/project-member'
-import { PROJECT_MEMBER_FIELDS } from '@/entities/project-member'
-import { useProjectRoles } from '@/entities/project-role'
-import { PROJECT_ROLE_FIELDS } from '@/entities/project-role'
-import { useRemoveProjectMember } from '@/features/project/remove-project-member/hooks/use-remove-project-member'
-import { openAddMemberDialog } from '@/features/project/add-project-member/model/slice'
-import { openLeaveProjectDialog } from '@/features/project/leave-project/model/slice'
+import { PROJECT_MEMBER_FIELDS, useProjectMembers  } from '@/entities/project-member'
+import { PROJECT_ROLE_FIELDS, useProjectRoles  } from '@/entities/project-role'
+import { useRemoveProjectMember } from '@/features/project/remove-project-member'
+import {
+  AddMemberDialog,
+  openAddMemberDialog,
+} from '@/features/project/add-project-member'
+import {
+  LeaveProjectDialog,
+  openLeaveProjectDialog,
+} from '@/features/project/leave-project'
 import { RoleSelectorCell } from '@/features/project/update-project-member-role'
-import { AddMemberDialog } from '@/features/project/add-project-member/ui/add-member-dialog'
-import { LeaveProjectDialog } from '@/features/project/leave-project/ui/leave-project-dialog'
 import { useFragment } from '@/gql'
 
 interface ProjectMembersTableProps {
@@ -101,8 +103,8 @@ export function ProjectMembersTable({
   const maskedRoles = rolesData?.projectRoles ?? []
   const roles = useFragment(PROJECT_ROLE_FIELDS, maskedRoles)
   const assignableRoles = roles
-    .filter((r) => !(r as any).isSystem) // exclude system roles (MANAGER)
-    .map((r) => ({ id: r.id, name: r.name, rank: (r as any).rank ?? 99 }))
+    .filter((r) => !(r as unknown as { isSystem: boolean }).isSystem)
+    .map((r) => ({ id: r.id, name: r.name, rank: (r as unknown as { rank: number }).rank ?? 99 }))
     .sort((a, b) => a.rank - b.rank)
 
   // Derive if the current user is a Manager from their own member row

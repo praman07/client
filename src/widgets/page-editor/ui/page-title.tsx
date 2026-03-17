@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from 'react'
-import * as Y from 'yjs'
-import { useRenamePage } from '@/features/pages/rename-page'
 import { useParams } from '@tanstack/react-router'
+import type * as Y from 'yjs'
+import { useRenamePage } from '@/features/pages/rename-page'
 import { useAppSelector } from '@/shared/hooks'
-import { selectCurrentProject } from '@/entities/project/model/selectors'
+import { selectCurrentProject } from '@/entities/project'
 import { createLogger } from '@/shared/lib/logger'
 
 const log = createLogger('pages:page-title')
@@ -23,7 +23,7 @@ interface PageTitleProps {
  * @layer Widgets
  */
 export function PageTitle({ ydoc, isLocked }: PageTitleProps) {
-  const { pageId } = useParams({ strict: false }) as { pageId: string }
+  const { pageId } = useParams({ strict: false })
   const project = useAppSelector(selectCurrentProject)
   const metaMap = ydoc.getMap<string>('meta')
   const [title, setTitle] = useState<string>(() => metaMap.get('title') ?? '')

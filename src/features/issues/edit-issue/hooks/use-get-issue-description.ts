@@ -12,10 +12,10 @@
  * @layer Features
  */
 import { useQuery } from '@tanstack/react-query'
+import { GET_ISSUE_DESCRIPTION_URL } from '../api/fragments'
 import { useAuth } from '@/shared/hooks'
 import { GqlClient } from '@/shared/api/graphql-client'
 import { issueKeys } from '@/entities/issue'
-import { GET_ISSUE_DESCRIPTION_URL } from '../api/fragments'
 
 export function useGetIssueDescription(
   issueId: string | null,
@@ -42,8 +42,8 @@ export function useGetIssueDescription(
       if (!res.ok) throw new Error(`S3 fetch failed: ${res.status}`)
 
       const text = await res.text()
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      return JSON.parse(text) as any[]
+       
+      return JSON.parse(text) as Array<any>
     },
     enabled: !!issueId && !!descriptionS3Key,
     staleTime: 0, // signed URL TTL = 5 min — always re-fetch on open

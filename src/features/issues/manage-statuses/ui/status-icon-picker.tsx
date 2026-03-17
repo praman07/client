@@ -12,7 +12,10 @@
  *
  * @layer Features
  */
-import { useState, useCallback } from 'react'
+import { useCallback, useState } from 'react'
+import { useUpdateStatus } from '../hooks'
+import { COLOR_PRESETS, ICON_OPTIONS } from '../lib/status-presets'
+import type { IssueStatus } from '@/entities/issue-status'
 import {
   Popover,
   PopoverContent,
@@ -21,9 +24,6 @@ import {
 import { Input } from '@/shared/ui/primitives/input'
 import { cn } from '@/shared/lib/utils'
 import { StatusIcon } from '@/entities/issue-status'
-import type { IssueStatus } from '@/entities/issue-status'
-import { useUpdateStatus } from '../hooks'
-import { ICON_OPTIONS, COLOR_PRESETS } from '../lib/status-presets'
 
 interface StatusIconPickerProps {
   status: IssueStatus

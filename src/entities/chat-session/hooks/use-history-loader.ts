@@ -50,7 +50,7 @@ export function useHistoryLoader() {
         })
 
         const historyData = data.history
-        if (historyData?.messages && historyData.messages.length > 0) {
+        if (historyData.messages && historyData.messages.length > 0) {
           // ARCHITECTURE: Unidirectional Data Flow
           // 1. Fetch from Network (GQL)
           // 2. Ingest via Resequencer (Normalizes & Persists to Dexie)
@@ -60,6 +60,7 @@ export function useHistoryLoader() {
           // The resequencer expects the same shape as live updates.
           const payloadBatch: Array<NewMessagePayload> =
             historyData.messages.map((maskedMsg) => {
+              // eslint-disable-next-line react-hooks/rules-of-hooks -- useFragment is a codegen utility, not a real hook
               const msg = useFragment(
                 MessageRecoveryFieldsFragmentDoc,
                 maskedMsg,

@@ -11,9 +11,9 @@
  * @module whiteboard/events/api
  */
 
+import type { CursorMovePayload } from '@/shared/contracts/whiteboard/upstream'
 import { wsManager } from '@/shared/ws/manager'
 import { WhiteboardUpstreamEvent } from '@/shared/contracts/whiteboard/events'
-import type { CursorMovePayload } from '@/shared/contracts/whiteboard/upstream'
 
 // Throttle state per board
 const throttleState = new Map<
@@ -64,9 +64,9 @@ export function sendCursorMove(
 
   // Schedule sending on next animation frame
   state.rafId = requestAnimationFrame(() => {
-    const cursor = state!.pendingCursor
+    const cursor = state.pendingCursor
     if (!cursor) {
-      state!.rafId = null
+      state.rafId = null
       return
     }
 
@@ -81,8 +81,8 @@ export function sendCursorMove(
     wsManager.emit(WhiteboardUpstreamEvent.CursorMove, payload)
 
     // Reset state
-    state!.rafId = null
-    state!.pendingCursor = null
+    state.rafId = null
+    state.pendingCursor = null
   })
 }
 

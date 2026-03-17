@@ -1,9 +1,9 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { RENAME_VAULT_FILE } from '../api/fragments'
+import type { RenameFileVariables } from '../model'
 import { useAuth } from '@/shared/hooks'
 import { GqlClient } from '@/shared/api/graphql-client'
 import { vaultFileKeys, vaultNodeKeys } from '@/entities/vault-file'
-import type { RenameFileVariables } from '../model'
-import { RENAME_VAULT_FILE } from '../api/fragments'
 
 /**
  * Renames a vault file (metadata only — S3 key is unchanged).

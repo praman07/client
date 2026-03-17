@@ -1,12 +1,11 @@
-import { Button, Separator, Badge } from '@/shared/ui'
+import { Badge, Button, Separator } from '@/shared/ui'
 import { useAppDispatch, useAppSelector } from '@/shared/hooks'
-import { UpdateProjectForm } from '@/features/project/update-project/ui/update-project-form'
-import { DeleteProjectDialog } from '@/features/project/delete-project/ui/delete-project-dialog'
-import { openDeleteProjectDialog } from '@/features/project/delete-project/model/slice'
+import { UpdateProjectForm } from '@/features/project/update-project'
+import { DeleteProjectDialog, openDeleteProjectDialog } from '@/features/project/delete-project'
 import {
   useArchiveProject,
   useUnarchiveProject,
-} from '@/features/project/archive-project/hooks/use-archive-project'
+} from '@/features/project/archive-project'
 import {
   selectCurrentProject,
   selectCurrentProjectIsArchived,

@@ -54,6 +54,18 @@
  * @see {@link file://./contracts/chat/events.ts} for chat event enums
  */
 
+import type {
+  AckMessagePayload,
+  MessageDeletedPayload,
+  MessageEditedPayload,
+  MessageReadPayload,
+  NewMessagePayload,
+  SubscribeSuccessPayload,
+  SyncRequiredPayload,
+  UserTypingPayload,
+} from '@/shared/contracts/chat/downstream'
+import type { ServerMessage } from './protocol/core-protocol'
+
 // Re-export core protocol
 export * from './protocol/core-protocol'
 
@@ -133,19 +145,17 @@ export type ServerEventName =
 
 // For backward compatibility with mapped types
 export interface ServerEventPayloads {
-  [ServerEventName.AckMessage]: import('@/shared/contracts/chat/downstream').AckMessagePayload
-  [ServerEventName.NewMessage]: import('@/shared/contracts/chat/downstream').NewMessagePayload
-  [ServerEventName.SyncRequired]: import('@/shared/contracts/chat/downstream').SyncRequiredPayload
-  [ServerEventName.MessageRead]: import('@/shared/contracts/chat/downstream').MessageReadPayload
-  [ServerEventName.MessageEdited]: import('@/shared/contracts/chat/downstream').MessageEditedPayload
-  [ServerEventName.MessageDeleted]: import('@/shared/contracts/chat/downstream').MessageDeletedPayload
-  [ServerEventName.UserTyping]: import('@/shared/contracts/chat/downstream').UserTypingPayload
-  [ServerEventName.SubscribeSuccess]: import('@/shared/contracts/chat/downstream').SubscribeSuccessPayload
+  [ServerEventName.AckMessage]: AckMessagePayload
+  [ServerEventName.NewMessage]: NewMessagePayload
+  [ServerEventName.SyncRequired]: SyncRequiredPayload
+  [ServerEventName.MessageRead]: MessageReadPayload
+  [ServerEventName.MessageEdited]: MessageEditedPayload
+  [ServerEventName.MessageDeleted]: MessageDeletedPayload
+  [ServerEventName.UserTyping]: UserTypingPayload
+  [ServerEventName.SubscribeSuccess]: SubscribeSuccessPayload
   // Add others as needed
 }
 
 export type ServerMessageUnion = {
-  [K in ServerEventName]: import('./protocol/core-protocol').ServerMessage<
-    ServerEventPayloads[K]
-  >
-}[ServerEventName]
+  [K in keyof ServerEventPayloads]: ServerMessage<ServerEventPayloads[K]>
+}[keyof ServerEventPayloads]

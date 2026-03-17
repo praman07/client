@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import { Folder } from 'lucide-react'
-import type { VaultFolder } from '@/entities/vault-folder'
 import { VaultDetailMeta } from './vault-detail-meta'
 import { VaultDetailActions } from './vault-detail-actions'
+import type { VaultFolder } from '@/entities/vault-folder'
 import { RenameFolderModal } from '@/features/vault/rename-folder'
 import { useDeleteFolder } from '@/features/vault/delete-folder'
 

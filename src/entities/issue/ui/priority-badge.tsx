@@ -9,10 +9,10 @@
  *
  * @layer Entity
  */
-import { AlertCircle, ArrowUp, Equal, ArrowDown, Minus } from 'lucide-react'
-import { cn } from '@/shared/lib/utils'
+import { AlertCircle, ArrowDown, ArrowUp, Equal, Minus } from 'lucide-react'
 import type { IssuePriority } from '../model/types'
 import type { LucideIcon } from 'lucide-react'
+import { cn } from '@/shared/lib/utils'
 
 interface PriorityConfig {
   icon: LucideIcon

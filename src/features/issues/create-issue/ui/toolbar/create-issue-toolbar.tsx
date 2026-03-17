@@ -16,7 +16,7 @@ import type { IssueLabel } from '@/entities/issue-label'
 import type { IssuePriority } from '@/entities/issue'
 
 interface CreateIssueToolbarProps {
-  statuses: IssueStatus[]
+  statuses: Array<IssueStatus>
   statusId: string
   onStatusChange: (id: string) => void
 
@@ -27,8 +27,8 @@ interface CreateIssueToolbarProps {
   assigneeId: string | null
   onAssigneeChange: (id: string | null) => void
 
-  labels: IssueLabel[]
-  labelIds: string[]
+  labels: Array<IssueLabel>
+  labelIds: Array<string>
   onLabelToggle: (id: string) => void
 
   dueDate: string | null

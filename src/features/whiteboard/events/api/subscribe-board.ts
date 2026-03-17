@@ -8,9 +8,9 @@
  * @module whiteboard/events/api
  */
 
+import type { SubscribeBoardPayload } from '@/shared/contracts/whiteboard/upstream'
 import { wsManager } from '@/shared/ws/manager'
 import { WhiteboardUpstreamEvent } from '@/shared/contracts/whiteboard/events'
-import type { SubscribeBoardPayload } from '@/shared/contracts/whiteboard/upstream'
 import { createLogger } from '@/shared/lib/logger'
 
 const log = createLogger('whiteboard:subscribe')

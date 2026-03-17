@@ -1,19 +1,18 @@
 import {
+  closeUpdateRoleDialog,
+  selectIsUpdateRoleDialogOpen,
+  selectUpdateRoleId,
+} from '../model/slice'
+import { UpdateProjectRoleForm } from './update-project-role-form'
+import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
 } from '@/shared/ui'
-import { useAppSelector, useAppDispatch } from '@/shared/hooks'
-import {
-  selectIsUpdateRoleDialogOpen,
-  selectUpdateRoleId,
-  closeUpdateRoleDialog,
-} from '../model/slice'
-import { UpdateProjectRoleForm } from './update-project-role-form'
-import { useProjectRoles } from '@/entities/project-role'
-import { PROJECT_ROLE_FIELDS } from '@/entities/project-role'
+import { useAppDispatch, useAppSelector } from '@/shared/hooks'
+import { PROJECT_ROLE_FIELDS, useProjectRoles  } from '@/entities/project-role'
 import { useFragment } from '@/gql'
 
 interface UpdateProjectRoleDialogProps {

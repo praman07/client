@@ -1,12 +1,12 @@
 import { useState } from 'react'
 import { useForm } from '@tanstack/react-form'
 import { toast } from 'sonner'
-import { Button } from '@/shared/ui/primitives/button'
-import { Input } from '@/shared/ui/primitives/input'
-import { Label } from '@/shared/ui/primitives/label'
 import { useCreateFolder } from '../hooks/use-create-folder'
 import { createFolderSchema } from '../model/schema'
 import { mapCreateFolderError } from '../lib/error-mapping'
+import { Button } from '@/shared/ui/primitives/button'
+import { Input } from '@/shared/ui/primitives/input'
+import { Label } from '@/shared/ui/primitives/label'
 
 interface CreateFolderFormProps {
   projectId: string

@@ -1,9 +1,9 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { LOCK_PAGE } from '../api/fragments'
+import type { Page } from '@/entities/page'
 import { GqlClient } from '@/shared/api/graphql-client'
 import { useAuth } from '@/shared/hooks'
 import { pageKeys } from '@/entities/page'
-import type { Page } from '@/entities/page'
-import { LOCK_PAGE } from '../api/fragments'
 import { createLogger } from '@/shared/lib/logger'
 
 const log = createLogger('pages:lock-page-hook')
@@ -43,11 +43,11 @@ export function useLockPage() {
       await queryClient.cancelQueries({
         queryKey: pageKeys.projectPages(projectId),
       })
-      const snapshot = queryClient.getQueryData<Page[]>(
+      const snapshot = queryClient.getQueryData<Array<Page>>(
         pageKeys.projectPages(projectId),
       )
 
-      queryClient.setQueryData<Page[]>(
+      queryClient.setQueryData<Array<Page>>(
         pageKeys.projectPages(projectId),
         (old) => (old ? setPageLocked(old, pageId, true) : old),
       )
@@ -76,16 +76,16 @@ export function useLockPage() {
 
 /** Pure recursive helper — sets isLocked on the target page in the nested tree */
 export function setPageLocked(
-  pages: Page[],
+  pages: Array<Page>,
   pageId: string,
   locked: boolean,
-): Page[] {
+): Array<Page> {
   return pages.map((p) => {
     if (p.id === pageId) return { ...p, isLocked: locked }
     if (p.children?.length) {
       return {
         ...p,
-        children: setPageLocked(p.children as Page[], pageId, locked),
+        children: setPageLocked(p.children, pageId, locked),
       }
     }
     return p

@@ -9,6 +9,8 @@
 import { useState } from 'react'
 import { Plus } from 'lucide-react'
 import { useSelector } from 'react-redux'
+import { StatusListRow } from './status-list-row'
+import { CreateStatusForm } from './create-status-form'
 import {
   Dialog,
   DialogContent,
@@ -17,8 +19,6 @@ import {
 } from '@/shared/ui/primitives/dialog'
 import { Button } from '@/shared/ui/primitives/button'
 import { selectIssueStatuses } from '@/entities/issue'
-import { StatusListRow } from './status-list-row'
-import { CreateStatusForm } from './create-status-form'
 
 interface ManageStatusesModalProps {
   open: boolean

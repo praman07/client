@@ -9,7 +9,7 @@ import type { Conversation, ConversationDetail } from './types'
  */
 interface ConversationState {
   // Normalized conversation cache (keyed by conversation ID)
-  conversations: Record<string, Conversation>
+  conversations: Record<string, Conversation | undefined>
 
   // Current active conversation ID
   activeConversationId: string | null
@@ -107,8 +107,9 @@ export const conversationSlice = createSlice({
       action: PayloadAction<{ conversationId: string; unreadCount: number }>,
     ) => {
       const { conversationId, unreadCount } = action.payload
-      if (state.conversations[conversationId]) {
-        state.conversations[conversationId].unreadCount = unreadCount
+      const conversation = state.conversations[conversationId]
+      if (conversation) {
+        conversation.unreadCount = unreadCount
       }
     },
 
@@ -117,9 +118,10 @@ export const conversationSlice = createSlice({
      */
     incrementUnreadCount: (state, action: PayloadAction<string>) => {
       const conversationId = action.payload
-      if (state.conversations[conversationId]) {
-        const current = state.conversations[conversationId].unreadCount || 0
-        state.conversations[conversationId].unreadCount = current + 1
+      const conversation = state.conversations[conversationId]
+      if (conversation) {
+        const current = conversation.unreadCount || 0
+        conversation.unreadCount = current + 1
       }
     },
 
@@ -128,8 +130,9 @@ export const conversationSlice = createSlice({
      */
     clearUnreadCount: (state, action: PayloadAction<string>) => {
       const conversationId = action.payload
-      if (state.conversations[conversationId]) {
-        state.conversations[conversationId].unreadCount = 0
+      const conversation = state.conversations[conversationId]
+      if (conversation) {
+        conversation.unreadCount = 0
       }
     },
 

@@ -7,19 +7,19 @@
  * @layer Features
  */
 import { useState } from 'react'
-import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-  DropdownMenuItem,
-} from '@/shared/ui/primitives/dropdown-menu'
-import { PriorityBadge } from '@/entities/issue'
 import { HugeiconsIcon } from '@hugeicons/react'
 import { Tick02Icon } from '@hugeicons/core-free-icons'
-import { cn } from '@/shared/lib/utils'
 import type { IssuePriority } from '@/entities/issue'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/shared/ui/primitives/dropdown-menu'
+import { PriorityBadge } from '@/entities/issue'
+import { cn } from '@/shared/lib/utils'
 
-const PRIORITIES: IssuePriority[] = [
+const PRIORITIES: Array<IssuePriority> = [
   'URGENT',
   'HIGH',
   'MEDIUM',

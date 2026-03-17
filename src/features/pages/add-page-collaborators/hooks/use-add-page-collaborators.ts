@@ -1,13 +1,13 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { ADD_PAGE_COLLABORATORS } from '../api/fragments'
+import type {PageRole} from '@/gql/graphql';
 import { GqlClient } from '@/shared/api/graphql-client'
 import { useAuth } from '@/shared/hooks'
 import { pageKeys } from '@/entities/page'
-import { ADD_PAGE_COLLABORATORS } from '../api/fragments'
 import { createLogger } from '@/shared/lib/logger'
 
-const log = createLogger('pages:add-page-collaborators-hook')
 
-import { type PageRole } from '@/gql/graphql'
+const log = createLogger('pages:add-page-collaborators-hook')
 
 export interface AddPageCollaboratorsVariables {
   pageId: string

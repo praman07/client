@@ -11,13 +11,15 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useDispatch } from 'react-redux'
 import { toast } from 'sonner'
+import { UPDATE_ISSUE } from '../api/fragments'
+import { mapUpdateIssueError } from '../lib/error-mapping'
+import type { AppDispatch } from '@/app/store'
+import type { UpdateIssueVariables } from '../model/types'
+import type { UpdateIssueInput } from '@/gql/graphql'
+import type { Issue } from '@/entities/issue'
 import { useAuth } from '@/shared/hooks'
 import { GqlClient } from '@/shared/api/graphql-client'
 import { issueKeys, updateIssue } from '@/entities/issue'
-import type { AppDispatch } from '@/app/store'
-import { UPDATE_ISSUE } from '../api/fragments'
-import { mapUpdateIssueError } from '../lib/error-mapping'
-import type { UpdateIssueVariables } from '../model/types'
 
 /**
  * Converts a date-only string ("YYYY-MM-DD") to a full ISO datetime string
@@ -54,11 +56,11 @@ export function useUpdateIssue(projectId: string) {
           ...(assigneeId !== undefined && { assigneeId }),
           ...(labelIds !== undefined && { labelIds }),
           ...(dueDate !== undefined && { dueDate: toDateTime(dueDate) }),
-        } as any,
+        } as UpdateIssueInput,
       })
     },
     onMutate: ({ issueId, ...patch }) => {
-      dispatch(updateIssue({ id: issueId, patch: patch as any }))
+      dispatch(updateIssue({ id: issueId, patch: patch as Partial<Issue> }))
     },
     onSuccess: (_, { issueId }) => {
       queryClient.invalidateQueries({ queryKey: issueKeys.list(projectId) })

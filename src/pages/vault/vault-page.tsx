@@ -1,13 +1,15 @@
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate, useSearch } from '@tanstack/react-router'
+import { ErrorBoundary } from 'react-error-boundary'
+import type { VaultFolder } from '@/entities/vault-folder'
+import type { VaultNodeType } from '@/gql/graphql'
 import { SidebarProvider } from '@/shared/ui/primitives/sidebar'
 import { VaultSidebar } from '@/widgets/vault/vault-sidebar'
 import { VaultExplorer } from '@/widgets/vault/vault-explorer'
 import { VaultNodeDetail } from '@/widgets/vault/vault-node-detail'
 import { VaultUploadTray } from '@/widgets/vault/vault-upload-tray'
 import { useVaultAncestors } from '@/features/vault/fetch-ancestors'
-import type { VaultFolder } from '@/entities/vault-folder'
-import type { VaultNodeType } from '@/gql/graphql'
+import { WidgetError } from '@/shared/ui'
 
 type BreadcrumbEntry = Pick<VaultFolder, 'id' | 'name'>
 
@@ -34,10 +36,10 @@ interface VaultPageProps {
  */
 export function VaultPage({ workspaceId, projectId }: VaultPageProps) {
   const navigate = useNavigate()
-  const search = useSearch({ strict: false }) as { folderId?: string }
+  const search = useSearch({ strict: false })
   const folderId = search.folderId ?? null
 
-  const [breadcrumbTrail, setBreadcrumbTrail] = useState<BreadcrumbEntry[]>([])
+  const [breadcrumbTrail, setBreadcrumbTrail] = useState<Array<BreadcrumbEntry>>([])
   const [selectedNode, setSelectedNode] = useState<{
     id: string
     type: VaultNodeType
@@ -62,7 +64,8 @@ export function VaultPage({ workspaceId, projectId }: VaultPageProps) {
       ...prev,
       { id: folder.id, name: folder.name },
     ])
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+     
+     
     void (navigate as any)({
       search: (prev: Record<string, unknown>) => ({
         ...prev,
@@ -79,7 +82,8 @@ export function VaultPage({ workspaceId, projectId }: VaultPageProps) {
       const idx = breadcrumbTrail.findIndex((f) => f.id === targetFolderId)
       setBreadcrumbTrail((prev) => prev.slice(0, idx + 1))
     }
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+     
+     
     void (navigate as any)({
       search: (prev: Record<string, unknown>) => ({
         ...prev,
@@ -95,33 +99,41 @@ export function VaultPage({ workspaceId, projectId }: VaultPageProps) {
   return (
     <SidebarProvider>
       <div className="h-screen w-full flex overflow-hidden bg-background">
-        {/* Left: Sidebar */}
-        <VaultSidebar projectId={projectId} />
+        {/* Left: Sidebar — isolated so sidebar failure doesn't kill explorer */}
+        <ErrorBoundary FallbackComponent={WidgetError}>
+          <VaultSidebar projectId={projectId} />
+        </ErrorBoundary>
 
-        {/* Center: Explorer */}
+        {/* Center: Explorer — isolated failure */}
         <main className="flex-1 overflow-hidden flex flex-col min-w-0">
-          <VaultExplorer
-            projectId={projectId}
-            workspaceId={workspaceId}
-            folderId={folderId}
-            breadcrumbTrail={breadcrumbTrail}
-            onSelectNode={handleSelectNode}
-            onNavigateInto={handleNavigateInto}
-            onNavigateTo={handleNavigateTo}
-          />
+          <ErrorBoundary FallbackComponent={WidgetError}>
+            <VaultExplorer
+              projectId={projectId}
+              workspaceId={workspaceId}
+              folderId={folderId}
+              breadcrumbTrail={breadcrumbTrail}
+              onSelectNode={handleSelectNode}
+              onNavigateInto={handleNavigateInto}
+              onNavigateTo={handleNavigateTo}
+            />
+          </ErrorBoundary>
         </main>
 
-        {/* Right: Detail drawer (conditional) */}
+        {/* Right: Detail drawer — conditional, isolated */}
         {selectedNode && (
-          <VaultNodeDetail
-            selectedNodeId={selectedNode.id}
-            selectedNodeType={selectedNode.type}
-            onClose={() => setSelectedNode(null)}
-          />
+          <ErrorBoundary FallbackComponent={WidgetError}>
+            <VaultNodeDetail
+              selectedNodeId={selectedNode.id}
+              selectedNodeType={selectedNode.type}
+              onClose={() => setSelectedNode(null)}
+            />
+          </ErrorBoundary>
         )}
 
-        {/* Always-mounted upload progress tray */}
-        <VaultUploadTray />
+        {/* Upload tray — isolated */}
+        <ErrorBoundary FallbackComponent={WidgetError}>
+          <VaultUploadTray />
+        </ErrorBoundary>
       </div>
     </SidebarProvider>
   )

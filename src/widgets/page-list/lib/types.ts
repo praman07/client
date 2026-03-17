@@ -1,8 +1,8 @@
 // widgets/page-list lib types
 
-import { Page } from '@/entities/page'
+import type { Page } from '@/entities/page'
 
 export interface PageTreeNode {
   page: Page
-  children: PageTreeNode[]
+  children: Array<PageTreeNode>
 }

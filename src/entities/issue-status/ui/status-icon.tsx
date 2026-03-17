@@ -19,14 +19,15 @@
  * @layer Entity
  */
 import {
-  CircleDashed,
-  Circle,
-  Clock,
-  CircleDot,
   CheckCircle,
-  XCircle,
-  type LucideIcon,
+  Circle,
+  CircleDashed,
+  CircleDot,
+  Clock,
+  
+  XCircle
 } from 'lucide-react'
+import type {LucideIcon} from 'lucide-react';
 import { cn } from '@/shared/lib/utils'
 
 const ICON_MAP: Record<string, LucideIcon> = {

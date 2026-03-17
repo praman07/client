@@ -13,11 +13,12 @@ export function useVaultSidebarState() {
 
   // Search params — using any because vault route search types
   // are not yet declared in route type definitions
-  const search = useSearch({ strict: false }) as { folderId?: string }
+  const search = useSearch({ strict: false })
   const activeFolderId = search.folderId ?? null
 
   function navigateToFolder(folderId: string | null) {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+     
+     
     void (navigate as any)({
       search: (prev: Record<string, unknown>) => ({
         ...prev,

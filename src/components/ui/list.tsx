@@ -1,15 +1,19 @@
 import {
   DndContext,
-  type DragEndEvent,
+  
   DragOverlay,
-  type DragStartEvent,
+  
   rectIntersection,
   useDraggable,
-  useDroppable,
+  useDroppable
 } from '@dnd-kit/core'
 import { restrictToVerticalAxis } from '@dnd-kit/modifiers'
+import { useEffect, useState } from 'react'
+import type {DragEndEvent, DragStartEvent} from '@dnd-kit/core';
 import type { ReactNode } from 'react'
 import { cn } from '@/shared/lib/utils'
+
+// Demo
 
 export type { DragEndEvent, DragStartEvent } from '@dnd-kit/core'
 
@@ -151,9 +155,6 @@ export const ListProvider = ({
   </DndContext>
 )
 
-// Demo
-import { useEffect, useState } from 'react'
-
 const initialData = {
   todo: [
     { id: '1', name: 'Research competitors' },
@@ -189,7 +190,7 @@ export function Demo() {
     const activeId = active.id as string
 
     for (const groupItems of Object.values(items)) {
-      const item = groupItems.find((item) => item.id === activeId)
+      const item = groupItems.find((entry) => entry.id === activeId)
       if (item) {
         setActiveItem(item)
         break
@@ -236,7 +237,7 @@ export function Demo() {
 
     // Move item
     const item = items[sourceGroup][sourceIndex]
-    const src = sourceGroup as keyof typeof items
+    const src = sourceGroup
     setItems((prev) => ({
       ...prev,
       [src]: prev[src].filter(

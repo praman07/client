@@ -19,4 +19,4 @@ export const CHECK_SLUG = gql(`
   }
 `)
 
-export { PROJECT_FRAGMENT } from '@/entities/project/api/fragments'
+export { PROJECT_FRAGMENT } from '@/entities/project'

@@ -1,9 +1,9 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { REMOVE_PAGE_COLLABORATOR } from '../api/fragments'
+import type { PageCollaborator } from '@/entities/page'
 import { GqlClient } from '@/shared/api/graphql-client'
 import { useAuth } from '@/shared/hooks'
 import { pageKeys } from '@/entities/page'
-import type { PageCollaborator } from '@/entities/page'
-import { REMOVE_PAGE_COLLABORATOR } from '../api/fragments'
 import { createLogger } from '@/shared/lib/logger'
 
 const log = createLogger('pages:remove-page-collaborator-hook')
@@ -44,12 +44,12 @@ export function useRemovePageCollaborator() {
       await queryClient.cancelQueries({
         queryKey: pageKeys.collaborators(pageId),
       })
-      const snapshot = queryClient.getQueryData<PageCollaborator[]>(
+      const snapshot = queryClient.getQueryData<Array<PageCollaborator>>(
         pageKeys.collaborators(pageId),
       )
 
       // Optimistically remove from list
-      queryClient.setQueryData<PageCollaborator[]>(
+      queryClient.setQueryData<Array<PageCollaborator>>(
         pageKeys.collaborators(pageId),
         (old) => old?.filter((c) => c.userId !== userId),
       )

@@ -23,14 +23,6 @@ import {
 import { atom, useAtom } from 'jotai'
 import throttle from 'lodash.throttle'
 import { PlusIcon, TrashIcon } from 'lucide-react'
-import type {
-  CSSProperties,
-  FC,
-  KeyboardEventHandler,
-  MouseEventHandler,
-  ReactNode,
-  RefObject,
-} from 'react'
 import {
   createContext,
   memo,
@@ -41,6 +33,14 @@ import {
   useMemo,
   useRef,
   useState,
+} from 'react'
+import type {
+  CSSProperties,
+  FC,
+  KeyboardEventHandler,
+  MouseEventHandler,
+  ReactNode,
+  RefObject,
 } from 'react'
 import { Card } from '@/shared/ui/primitives/card'
 import {
@@ -80,14 +80,14 @@ export interface GanttMarkerProps {
 
 export type Range = 'daily' | 'monthly' | 'quarterly'
 
-export type TimelineData = {
+export type TimelineData = Array<{
   year: number
-  quarters: {
-    months: {
+  quarters: Array<{
+    months: Array<{
       days: number
-    }[]
-  }[]
-}[]
+    }>
+  }>
+}>
 
 export interface GanttContextProps {
   zoom: number
@@ -189,7 +189,7 @@ const createInitialTimelineData = (today: Date) => {
   )
 
   for (const yearObj of data) {
-    yearObj.quarters = new Array(4).fill(null).map((_, quarterIndex) => ({
+    yearObj.quarters = new Array(4).fill(null).map((_fill, quarterIndex) => ({
       months: new Array(3).fill(null).map((_, monthIndex) => {
         const month = quarterIndex * 3 + monthIndex
         return {
@@ -466,12 +466,10 @@ export const GanttSidebarItem: FC<GanttSidebarItemProps> = ({
 }) => {
   const gantt = useContext(GanttContext)
   const tempEndAt =
-    feature.endAt && isSameDay(feature.startAt, feature.endAt)
+    isSameDay(feature.startAt, feature.endAt)
       ? addDays(feature.endAt, 1)
       : feature.endAt
-  const duration = tempEndAt
-    ? formatDistance(feature.startAt, tempEndAt)
-    : `${formatDistance(feature.startAt, new Date())} so far`
+  const duration = formatDistance(feature.startAt, tempEndAt)
 
   const handleClick: MouseEventHandler<HTMLDivElement> = (event) => {
     if (event.target === event.currentTarget) {
@@ -640,7 +638,7 @@ export const GanttColumn: FC<GanttColumnProps> = ({
 
   const top = useThrottle(
     mousePosition.y -
-      (mouseRef.current?.getBoundingClientRect().y ?? 0) -
+      mouseRef.current.getBoundingClientRect().y -
       (windowScroll.y ?? 0),
     10,
   )
@@ -707,7 +705,7 @@ export const GanttCreateMarkerTrigger: FC<GanttCreateMarkerTriggerProps> = ({
   const [windowScroll] = useWindowScroll()
   const x = useThrottle(
     mousePosition.x -
-      (mouseRef.current?.getBoundingClientRect().x ?? 0) -
+      mouseRef.current.getBoundingClientRect().x -
       (windowScroll.x ?? 0),
     10,
   )
@@ -989,7 +987,7 @@ export const GanttFeatureListGroup: FC<GanttFeatureListGroupProps> = ({
 )
 
 export interface GanttFeatureRowProps {
-  features: GanttFeature[]
+  features: Array<GanttFeature>
   onMove?: (id: string, startAt: Date, endAt: Date | null) => void
   children?: (feature: GanttFeature) => ReactNode
   className?: string
@@ -1008,7 +1006,7 @@ export const GanttFeatureRow: FC<GanttFeatureRowProps> = ({
 
   // Calculate sub-row positions for overlapping features using a proper algorithm
   const featureWithPositions = []
-  const subRowEndTimes: Date[] = [] // Track when each sub-row becomes free
+  const subRowEndTimes: Array<Date> = [] // Track when each sub-row becomes free
 
   for (const feature of sortedFeatures) {
     let subRow = 0
@@ -1259,7 +1257,7 @@ export const GanttProvider: FC<GanttProviderProps> = ({
         const newTimelineData: TimelineData = [...timelineData]
         newTimelineData.unshift({
           year: firstYear - 1,
-          quarters: new Array(4).fill(null).map((_, quarterIndex) => ({
+          quarters: new Array(4).fill(null).map((_fill, quarterIndex) => ({
             months: new Array(3).fill(null).map((_, monthIndex) => {
               const month = quarterIndex * 3 + monthIndex
               return {
@@ -1285,7 +1283,7 @@ export const GanttProvider: FC<GanttProviderProps> = ({
         const newTimelineData: TimelineData = [...timelineData]
         newTimelineData.push({
           year: lastYear + 1,
-          quarters: new Array(4).fill(null).map((_, quarterIndex) => ({
+          quarters: new Array(4).fill(null).map((_fill, quarterIndex) => ({
             months: new Array(3).fill(null).map((_, monthIndex) => {
               const month = quarterIndex * 3 + monthIndex
               return {
@@ -1476,13 +1474,13 @@ export const GanttToday: FC<GanttTodayProps> = ({ className }) => {
 // Demo - uses function to generate dates at runtime to avoid SSR/client mismatch
 function createDemoData() {
   const today = new Date()
-  const statuses: GanttStatus[] = [
+  const statuses: Array<GanttStatus> = [
     { id: '1', name: 'Planned', color: '#6B7280' },
     { id: '2', name: 'In Progress', color: '#F59E0B' },
     { id: '3', name: 'Done', color: '#10B981' },
   ]
 
-  const features: GanttFeature[] = [
+  const features: Array<GanttFeature> = [
     {
       id: '1',
       name: 'Design System Setup',
@@ -1554,7 +1552,7 @@ function createDemoData() {
 export function GanttDemo() {
   const [mounted, setMounted] = useState(false)
   const [data, setData] = useState<{
-    features: GanttFeature[]
+    features: Array<GanttFeature>
     markers: typeof demoMarkers
   } | null>(null)
 
@@ -1620,9 +1618,9 @@ export function GanttDemo() {
   )
 }
 
-const demoMarkers: {
+const demoMarkers: Array<{
   id: string
   date: Date
   label: string
   className: string
-}[] = []
+}> = []

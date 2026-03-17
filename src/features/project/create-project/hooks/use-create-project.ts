@@ -3,7 +3,7 @@ import { CREATE_PROJECT } from '../api'
 import type { CreateProjectFormValues } from '../model/types'
 import { GqlClient } from '@/shared/api'
 import { useAuth } from '@/shared/hooks'
-import { projectKeys } from '@/entities/project/api/query-keys'
+import { projectKeys } from '@/entities/project'
 
 export function useCreateProject() {
   const { getToken } = useAuth()

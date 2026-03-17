@@ -1,5 +1,6 @@
-import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
-import type { PageSessionState, ConnectionStatus, SyncStatus } from './types'
+import {  createSlice } from '@reduxjs/toolkit'
+import type {PayloadAction} from '@reduxjs/toolkit';
+import type { ConnectionStatus, PageSessionState, SyncStatus } from './types'
 
 const initialState: PageSessionState = {
   activePageId: null,

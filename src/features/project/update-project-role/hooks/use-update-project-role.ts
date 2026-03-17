@@ -1,10 +1,9 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { UPDATE_PROJECT_ROLE } from '@/entities/project-role'
-import { projectRoleKeys } from '@/entities/project-role'
-import { GqlClient } from '@/shared/api'
-import { useAuth } from '@/shared/hooks'
 import { handleUpdateProjectRoleError } from '../lib/error-mapping'
 import type { UpdateProjectRoleFormValues } from '../model/schema'
+import { UPDATE_PROJECT_ROLE, projectRoleKeys  } from '@/entities/project-role'
+import { GqlClient } from '@/shared/api'
+import { useAuth } from '@/shared/hooks'
 
 interface UpdateProjectRoleInput extends UpdateProjectRoleFormValues {
   roleId: string

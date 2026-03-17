@@ -11,7 +11,7 @@ export interface IconOption {
 }
 
 /** All 6 supported icon keys. */
-export const ICON_OPTIONS: IconOption[] = [
+export const ICON_OPTIONS: Array<IconOption> = [
   { key: 'circle-dashed', label: 'Backlog' },
   { key: 'circle', label: 'Todo' },
   { key: 'circle-half', label: 'In Progress' },
@@ -21,7 +21,7 @@ export const ICON_OPTIONS: IconOption[] = [
 ]
 
 /** 12-color Kanban palette (hex). */
-export const COLOR_PRESETS: string[] = [
+export const COLOR_PRESETS: Array<string> = [
   '#6B7280',
   '#EF4444',
   '#F97316',

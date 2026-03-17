@@ -9,8 +9,7 @@
 
 import { wsManager } from '@/shared/ws/manager'
 import { PageUpstreamEvent } from '@/shared/contracts/pages'
-import { pageOfflineQueue } from '@/entities/page-session'
-import { uint8ArrayToBase64 } from '@/entities/page-session'
+import { pageOfflineQueue, uint8ArrayToBase64  } from '@/entities/page-session'
 import { createLogger } from '@/shared/lib/logger'
 
 const log = createLogger('pages:send-page-update')

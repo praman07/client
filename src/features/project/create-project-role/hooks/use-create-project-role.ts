@@ -1,10 +1,9 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { CREATE_PROJECT_ROLE } from '@/entities/project-role'
-import { projectRoleKeys } from '@/entities/project-role'
-import { GqlClient } from '@/shared/api'
-import { useAuth } from '@/shared/hooks'
 import { handleCreateProjectRoleError } from '../lib/error-mapping'
 import type { CreateProjectRoleFormValues } from '../model/schema'
+import { CREATE_PROJECT_ROLE, projectRoleKeys  } from '@/entities/project-role'
+import { GqlClient } from '@/shared/api'
+import { useAuth } from '@/shared/hooks'
 
 interface CreateProjectRoleInput extends CreateProjectRoleFormValues {
   projectId: string

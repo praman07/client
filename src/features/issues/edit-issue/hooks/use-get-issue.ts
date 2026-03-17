@@ -7,10 +7,10 @@
  * @layer Features
  */
 import { useQuery } from '@tanstack/react-query'
+import { GET_ISSUE } from '../api/fragments'
 import { useAuth } from '@/shared/hooks'
 import { GqlClient } from '@/shared/api/graphql-client'
 import { issueKeys } from '@/entities/issue'
-import { GET_ISSUE } from '../api/fragments'
 
 export function useGetIssue(issueId: string | null) {
   const { getToken } = useAuth()
@@ -24,7 +24,7 @@ export function useGetIssue(issueId: string | null) {
     },
     enabled: !!issueId,
     staleTime: 30_000,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+     
     select: (data) => data.getIssue as any,
   })
 }

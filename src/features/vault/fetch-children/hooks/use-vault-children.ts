@@ -1,13 +1,13 @@
 import { useInfiniteQuery } from '@tanstack/react-query'
+import { GET_VAULT_CHILDREN } from '../api/fragments'
+import type { VaultFile } from '@/entities/vault-file'
+import type { VaultFolder } from '@/entities/vault-folder'
+import type { SortDirection, VaultSortField } from '@/gql/graphql'
+import type { VaultSortState } from '@/shared/lib/vault-types'
 import { useAuth } from '@/shared/hooks'
 import { GqlClient } from '@/shared/api/graphql-client'
 import { vaultNodeKeys } from '@/entities/vault-file'
-import type { VaultFile } from '@/entities/vault-file'
-import type { VaultFolder } from '@/entities/vault-folder'
-import type { VaultSortField, SortDirection } from '@/gql/graphql'
-import type { VaultSortState } from '@/shared/lib/vault-types'
 import { DEFAULT_VAULT_SORT } from '@/shared/lib/vault-types'
-import { GET_VAULT_CHILDREN } from '../api/fragments'
 
 /**
  * Fetches immediate children (folders + paginated files) of a vault folder.
@@ -45,8 +45,8 @@ export function useVaultChildren(
       return result.hasNextPage ? (result.nextCursor ?? undefined) : undefined
     },
     select: (data) => ({
-      folders: (data.pages[0]?.getVaultChildren.folders ?? []) as VaultFolder[],
-      files: data.pages.flatMap((p) => p.getVaultChildren.files) as VaultFile[],
+      folders: (data.pages[0]?.getVaultChildren.folders ?? []) as Array<VaultFolder>,
+      files: data.pages.flatMap((p) => p.getVaultChildren.files) as Array<VaultFile>,
       totalFileCount: data.pages[0]?.getVaultChildren.totalFileCount ?? 0,
     }),
     enabled: !!projectId,

@@ -1,8 +1,8 @@
 import { useQuery } from '@tanstack/react-query'
+import { GET_BOARD_COLLABORATORS } from '../api'
 import { GqlClient } from '@/shared/api/graphql-client'
 import { useAuth } from '@/shared/hooks'
 import { boardKeys } from '@/entities/whiteboard-board'
-import { GET_BOARD_COLLABORATORS } from '../api'
 
 /**
  * Fetch current board collaborators

@@ -1,17 +1,19 @@
-import { Button, Input, Label, Textarea } from '@/shared/ui'
 import { useUpdateProjectRoleForm } from '../hooks/use-update-project-role-form'
 import { updateProjectRoleSchema } from '../model/schema'
+import type { ZodIssue, ZodType } from 'zod'
 import type { UpdateProjectRoleFormValues } from '../model/schema'
+import { Button, Input, Label, Textarea } from '@/shared/ui'
 
-function validateZod(schema: any) {
+function validateZod(schema: ZodType<unknown>) {
   return ({ value }: { value: unknown }) => {
     const result = schema.safeParse(value)
     if (!result.success)
-      return result.error.issues.map((e: any) => e.message).join(', ')
+      return result.error.issues.map((e: ZodIssue) => e.message).join(', ')
     return undefined
   }
 }
 
+ 
 function FieldError({ field }: { field: any }) {
   if (!field.state.meta.isTouched || !field.state.meta.errors.length)
     return null

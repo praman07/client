@@ -1,14 +1,14 @@
 import { useEffect, useRef } from 'react'
-import * as Y from 'yjs'
+import type * as Y from 'yjs'
 import { useSendBoardUpdate } from '@/features/whiteboard/send-board-update'
-import { PendingUpdatesTracker } from '../../lib/pending-updates-tracker'
-import { isLocalOrigin, isIndexedDBOrigin } from '@/shared/lib/yjs/constants'
+import { PendingUpdatesTracker } from '@/shared/lib/yjs'
+import { isIndexedDBOrigin, isLocalOrigin } from '@/shared/lib/yjs/constants'
 import {
-  registerYDoc,
-  unregisterYDoc,
   registerTracker,
-  unregisterTracker,
+  registerYDoc,
   subscribeBoard,
+  unregisterTracker,
+  unregisterYDoc,
   unsubscribeBoard,
 } from '@/features/whiteboard/events'
 import { createLogger } from '@/shared/lib/logger'
@@ -51,6 +51,7 @@ export function useNetworkSync(
 
     const tracker = pendingTracker.current
 
+     
     const handleUpdate = (update: Uint8Array, origin: any) => {
       if (isIndexedDBOrigin(origin)) {
         log.debug('Skipping IndexedDB origin update', { boardId })

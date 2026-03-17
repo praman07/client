@@ -1,15 +1,16 @@
 import { useState } from 'react'
-import { useUserBoards } from '@/features/whiteboard/fetch-user-boards'
-import { CreateBoardModal } from '@/features/whiteboard/create-board'
+import { Plus } from 'lucide-react'
 import { useBoardFilters, useViewMode } from '../hooks'
-import { sortBoards, filterBoards } from '../lib'
+import { filterBoards, sortBoards } from '../lib'
 import { BoardCard } from './board-card'
 import { BoardListHeader } from './board-list-header'
 import { EmptyState } from './empty-state'
+import type { Board } from '@/entities/whiteboard-board'
 import { Button } from '@/shared/ui/primitives/button'
 import { useAuth } from '@/shared/hooks'
-import { Plus, Loader2 } from 'lucide-react'
-import type { Board } from '@/entities/whiteboard-board'
+import { CreateBoardModal } from '@/features/whiteboard/create-board'
+import { useUserBoards } from '@/features/whiteboard/fetch-user-boards'
+import { BoardListSkeleton } from '@/shared/ui'
 
 interface BoardListProps {
   workspaceId: string
@@ -42,9 +43,11 @@ export function BoardList({ workspaceId, projectId }: BoardListProps) {
 
   // Extract boards from infinite query data
   // useUserBoards returns InfiniteQueryResult, data.pages is the array of page results
-  const boards: Board[] =
+  const boards: Array<Board> =
+     
     (data as any)?.pages?.flatMap((page: any) => {
       // Each page has shape: { userBoards: { boards: Board[], nextCursor: string | null } }
+       
       return page.userBoards.boards.map((board: any) => ({
         id: board.id,
         workspaceId: board.workspaceId,
@@ -67,11 +70,7 @@ export function BoardList({ workspaceId, projectId }: BoardListProps) {
   const sortedBoards = sortBoards(filteredBoards, sortBy)
 
   if (isLoading) {
-    return (
-      <div className="flex items-center justify-center py-16">
-        <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
-      </div>
-    )
+    return <BoardListSkeleton />
   }
 
   if (boards.length === 0) {

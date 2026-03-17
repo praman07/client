@@ -1,7 +1,7 @@
 import { useState } from 'react'
+import type { VaultNodeType } from '@/gql/graphql'
 import { useVaultNode } from '@/features/vault/fetch-node'
 import { useVaultDownloadUrl } from '@/features/vault/fetch-download-url'
-import { VaultNodeType } from '@/gql/graphql'
 
 /**
  * Combines useVaultNode + lazy useVaultDownloadUrl for the detail panel.

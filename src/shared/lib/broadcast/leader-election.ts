@@ -14,6 +14,7 @@ type BroadcastEvent =
   | { type: 'HELLO'; tabId: string }
   | { type: 'HEARTBEAT'; tabId: string }
   | { type: 'LEADER_CLAIM'; tabId: string }
+   
   | { type: 'WS_RELAY'; payload: any }
 // WS Relay events can be added later
 
@@ -29,6 +30,7 @@ export class LeaderElection {
   private boundHandleMessage: (ev: MessageEvent<BroadcastEvent>) => void
 
   private listeners: Array<(state: LeaderState) => void> = []
+   
   private relayListeners: Array<(payload: any) => void> = []
 
   constructor(channelName = 'collabify_leader_election') {
@@ -161,6 +163,7 @@ export class LeaderElection {
     this.listeners.forEach((cb) => cb(this.state))
   }
 
+   
   private notifyRelay(payload: any) {
     this.relayListeners.forEach((cb) => cb(payload))
   }
@@ -178,10 +181,12 @@ export class LeaderElection {
   }
 
   // API for Event Router
+   
   relay(payload: any) {
     this.channel.postMessage({ type: 'WS_RELAY', payload })
   }
 
+   
   onRelay(cb: (payload: any) => void) {
     this.relayListeners.push(cb)
     return () => {

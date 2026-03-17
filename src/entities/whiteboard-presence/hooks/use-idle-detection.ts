@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
+import { setUserActive, setUserIdle } from '../model/slice'
 import { useAppDispatch, useAppSelector } from '@/shared/hooks'
-import { setUserIdle, setUserActive } from '../model/slice'
 
 const IDLE_TIMEOUT_MS = 5 * 60 * 1000 // 5 minutes
 

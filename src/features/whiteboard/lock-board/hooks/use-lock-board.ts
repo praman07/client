@@ -1,10 +1,10 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
+import { LOCK_BOARD } from '../api'
+import type { GetBoardQuery } from '@/gql/graphql'
 import { GqlClient } from '@/shared/api/graphql-client'
 import { useAuth } from '@/shared/hooks'
 import { boardKeys } from '@/entities/whiteboard-board'
-import type { GetBoardQuery } from '@/gql/graphql'
-import { LOCK_BOARD } from '../api'
 
 export function useLockBoard() {
   const { getToken } = useAuth()

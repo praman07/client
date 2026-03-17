@@ -5,12 +5,12 @@
  */
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
-import { useAuth } from '@/shared/hooks'
-import { GqlClient } from '@/shared/api/graphql-client'
-import { issueLabelKeys } from '@/entities/issue-label'
 import { CREATE_ISSUE_LABEL } from '../api/fragments'
 import { mapLabelError } from '../lib/error-mapping'
 import type { CreateLabelVariables } from '../model/types'
+import { useAuth } from '@/shared/hooks'
+import { GqlClient } from '@/shared/api/graphql-client'
+import { issueLabelKeys } from '@/entities/issue-label'
 
 export function useCreateLabel() {
   const { getToken } = useAuth()

@@ -18,8 +18,8 @@ export interface CollaboratorPresence {
  * Active users appear first, then sorted by most recent activity
  */
 export function sortByActivity(
-  collaborators: CollaboratorPresence[],
-): CollaboratorPresence[] {
+  collaborators: Array<CollaboratorPresence>,
+): Array<CollaboratorPresence> {
   return [...collaborators].sort((a, b) => {
     // Active users first
     if (a.isActive && !b.isActive) return -1

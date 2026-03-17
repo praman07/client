@@ -1,19 +1,14 @@
 import { useState } from 'react'
 import {
+  ChevronDown,
+  ChevronUp,
   Lock,
   Pencil,
   Trash2,
-  ChevronDown,
-  ChevronUp,
   UserPlus,
 } from 'lucide-react'
 import { cn } from '@/shared/lib/utils'
 import {
-  Button,
-  Badge,
-  Skeleton,
-  Checkbox,
-  ScrollArea,
   AlertDialog,
   AlertDialogAction,
   AlertDialogCancel,
@@ -22,26 +17,27 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
+  Badge,
+  Button,
+  Checkbox,
+  ScrollArea,
+  Skeleton,
 } from '@/shared/ui'
 import { useAppDispatch } from '@/shared/hooks'
 import {
-  useProjectRoles,
-  useRolePermissions,
-  useAllPermissions,
-} from '@/entities/project-role'
-import {
   PROJECT_ROLE_FIELDS,
   ROLE_PERMISSION_FIELDS,
+  useAllPermissions,
+  useProjectRoles,
+  useRolePermissions
 } from '@/entities/project-role'
-import { useDeleteProjectRole } from '@/features/project/delete-project-role/hooks/use-delete-project-role'
+import { useDeleteProjectRole } from '@/features/project/delete-project-role'
 import {
   useAssignRolePermission,
   useRemoveRolePermission,
-} from '@/features/project/manage-role-permissions/hooks/use-role-permissions-mutations'
-import { openCreateRoleDialog } from '@/features/project/create-project-role/model/slice'
-import { openUpdateRoleDialog } from '@/features/project/update-project-role/model/slice'
-import { CreateProjectRoleDialog } from '@/features/project/create-project-role/ui/create-project-role-dialog'
-import { UpdateProjectRoleDialog } from '@/features/project/update-project-role/ui/update-project-role-dialog'
+} from '@/features/project/manage-role-permissions'
+import { CreateProjectRoleDialog, openCreateRoleDialog  } from '@/features/project/create-project-role'
+import { UpdateProjectRoleDialog, openUpdateRoleDialog  } from '@/features/project/update-project-role'
 import { useFragment } from '@/gql'
 
 interface ProjectRolesListProps {

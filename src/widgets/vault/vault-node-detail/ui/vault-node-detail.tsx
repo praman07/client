@@ -1,11 +1,11 @@
 import { X } from 'lucide-react'
+import { VaultFolderDetail } from './vault-folder-detail'
+import { VaultFileDetail } from './vault-file-detail'
+import type { VaultFolder } from '@/entities/vault-folder'
+import type { VaultFile } from '@/entities/vault-file'
 import { Skeleton } from '@/shared/ui/primitives/skeleton'
 import { useVaultNode } from '@/features/vault/fetch-node'
 import { VaultNodeType } from '@/gql/graphql'
-import type { VaultFolder } from '@/entities/vault-folder'
-import type { VaultFile } from '@/entities/vault-file'
-import { VaultFolderDetail } from './vault-folder-detail'
-import { VaultFileDetail } from './vault-file-detail'
 
 interface VaultNodeDetailProps {
   selectedNodeId: string

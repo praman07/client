@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { DEFAULT_VAULT_SORT } from '@/shared/lib/vault-types'
 import type { VaultSortState } from '@/shared/lib/vault-types'
+import { DEFAULT_VAULT_SORT } from '@/shared/lib/vault-types'
 
 /**
  * Local sort state for vault-explorer. No URL persistence.

@@ -21,18 +21,18 @@ import {
 } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { GripVertical, Plus } from 'lucide-react'
+import { IssueCard } from './issue-card'
+import type { IssueStatus } from '@/entities/issue-status'
+import type { Issue } from '@/entities/issue'
 import { Badge } from '@/shared/ui/primitives/badge'
 import { Button } from '@/shared/ui/primitives/button'
 import { ScrollArea, ScrollBar } from '@/shared/ui/primitives/scroll-area'
 import { cn } from '@/shared/lib/utils'
 import { StatusPill } from '@/entities/issue-status'
-import type { IssueStatus } from '@/entities/issue-status'
-import type { Issue } from '@/entities/issue'
-import { IssueCard } from './issue-card'
 
 interface KanbanColumnProps {
   status: IssueStatus
-  issues: Issue[]
+  issues: Array<Issue>
   projectKey: string
   onCardClick: (issueId: string) => void
   onAddIssue: (statusId: string) => void

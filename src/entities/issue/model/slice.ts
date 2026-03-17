@@ -18,11 +18,11 @@ import type { IssueLabel } from '@/entities/issue-label'
 
 interface IssuesBoardState {
   /** Columns ordered by position (fractional index) */
-  statuses: IssueStatus[]
+  statuses: Array<IssueStatus>
   /** All issues for the project — flat list, across all statuses */
-  issues: Issue[]
+  issues: Array<Issue>
   /** Project labels — for label picker popovers in create/edit modals */
-  labels: IssueLabel[]
+  labels: Array<IssueLabel>
   /** Active board filters — client-side only, no refetch on change */
   filters: IssueFilters
 }
@@ -39,15 +39,15 @@ export const issuesSlice = createSlice({
   initialState,
   reducers: {
     // ── Seed actions (called once on board mount) ───────────────────────────
-    setStatuses(state, action: PayloadAction<IssueStatus[]>) {
+    setStatuses(state, action: PayloadAction<Array<IssueStatus>>) {
       state.statuses = [...action.payload].sort(
         (a, b) => a.position - b.position,
       )
     },
-    setIssues(state, action: PayloadAction<Issue[]>) {
+    setIssues(state, action: PayloadAction<Array<Issue>>) {
       state.issues = action.payload
     },
-    setLabels(state, action: PayloadAction<IssueLabel[]>) {
+    setLabels(state, action: PayloadAction<Array<IssueLabel>>) {
       state.labels = action.payload
     },
 

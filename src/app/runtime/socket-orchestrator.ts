@@ -97,7 +97,8 @@ class SocketOrchestrator {
     this.connecting = true
 
     try {
-      // Double check state after lock
+      // Guard: disable() may have been called while awaiting the lock
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
       if (!this.state.enabled) return
 
       log.debug('Fetching token...')
@@ -106,7 +107,8 @@ class SocketOrchestrator {
 
       if (!token) return
 
-      // Check again before connecting (async gap)
+      // Guard: disable() may have been called during the async token fetch
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
       if (!this.state.enabled || !this.state.workspaceId) return
 
       log.debug('Calling wsManager.connect()')

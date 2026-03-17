@@ -1,5 +1,5 @@
 import { IndexeddbPersistence } from 'y-indexeddb'
-import * as Y from 'yjs'
+import type * as Y from 'yjs'
 
 export interface IndexedDBSyncResult {
   provider: IndexeddbPersistence

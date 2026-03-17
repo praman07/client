@@ -20,9 +20,9 @@ const PRIORITY_ORDER: Record<IssuePriority, number> = {
 
 interface IssuesStateShape {
   issues: {
-    statuses: IssueStatus[]
-    issues: Issue[]
-    labels: IssueLabel[]
+    statuses: Array<IssueStatus>
+    issues: Array<Issue>
+    labels: Array<IssueLabel>
     filters: IssueFilters
   }
 }
@@ -43,7 +43,7 @@ export const selectIssueFilters = (state: IssuesStateShape) =>
   state.issues.filters
 
 /** Issues filtered by the active filter state — computed client-side */
-export const selectFilteredIssues = (state: IssuesStateShape): Issue[] => {
+export const selectFilteredIssues = (state: IssuesStateShape): Array<Issue> => {
   const { issues, filters } = state.issues
 
   const filtered = issues.filter((issue) => {

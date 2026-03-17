@@ -1,5 +1,5 @@
 import { Loader2 } from 'lucide-react'
-import type { OnboardingStep } from '@/features/onboarding/model/types'
+import type { OnboardingStep } from '@/features/onboarding'
 import {
   Card,
   CardContent,

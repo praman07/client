@@ -17,35 +17,24 @@
  *
  * @layer Widgets
  */
-import { useState, useCallback } from 'react'
+import { useCallback, useState } from 'react'
 import { createPortal } from 'react-dom'
-import { useSelector, shallowEqual } from 'react-redux'
-import { ScrollArea, ScrollBar } from '@/shared/ui/primitives/scroll-area'
+import { shallowEqual, useSelector } from 'react-redux'
 import {
+  
   DndContext,
+  
   DragOverlay,
   PointerSensor,
-  useSensor,
-  useSensors,
   closestCenter,
-  type Announcements,
-  type DragEndEvent,
+  useSensor,
+  useSensors
 } from '@dnd-kit/core'
 import {
   SortableContext,
   horizontalListSortingStrategy,
 } from '@dnd-kit/sortable'
 import { AlertTriangle, RefreshCw } from 'lucide-react'
-import { Button } from '@/shared/ui/primitives/button'
-import {
-  selectIssueStatuses,
-  selectFilteredIssues,
-  selectIssues,
-} from '@/entities/issue'
-import { CreateIssueModal } from '@/features/issues/create-issue'
-import { EditIssueModal } from '@/features/issues/edit-issue'
-import { ManageStatusesModal } from '@/features/issues/manage-statuses'
-import { ManageLabelsModal } from '@/features/issues/manage-labels'
 import { useBoardData } from '../hooks/use-board-data'
 import { useDragDrop } from '../hooks/use-drag-drop'
 import { useColumnDrag } from '../hooks/use-column-drag'
@@ -54,6 +43,18 @@ import { BoardToolbar } from './board-toolbar'
 import { KanbanColumn } from './kanban-column'
 import { BoardContext } from './board-context'
 import { CardTunnel } from './issue-card'
+import type {Announcements, DragEndEvent} from '@dnd-kit/core';
+import { ManageLabelsModal } from '@/features/issues/manage-labels'
+import { ManageStatusesModal } from '@/features/issues/manage-statuses'
+import { EditIssueModal } from '@/features/issues/edit-issue'
+import { CreateIssueModal } from '@/features/issues/create-issue'
+import {
+  selectFilteredIssues,
+  selectIssueStatuses,
+  selectIssues,
+} from '@/entities/issue'
+import { Button } from '@/shared/ui/primitives/button'
+import { ScrollArea, ScrollBar } from '@/shared/ui/primitives/scroll-area'
 
 interface IssuesBoardProps {
   projectId: string

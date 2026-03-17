@@ -8,8 +8,8 @@
  * @layer Features
  */
 export function hasDescriptionChanged(
-  current: unknown[],
-  original: unknown[],
+  current: Array<unknown>,
+  original: Array<unknown>,
 ): boolean {
   return JSON.stringify(current) !== JSON.stringify(original)
 }

@@ -1,15 +1,15 @@
-import { useActiveCollaborators } from '@/entities/whiteboard-presence'
+import { ChevronRight, Users } from 'lucide-react'
+import { useEffect } from 'react'
 import { useSortedCollaborators } from '../hooks/use-sorted-collaborators'
 import { CollaboratorItem } from './collaborator-item'
 import { EmptyCollaborators } from './empty-collaborators'
-import { Users, ChevronRight } from 'lucide-react'
-import { useEffect } from 'react'
+import { useActiveCollaborators } from '@/entities/whiteboard-presence'
 import { createLogger } from '@/shared/lib/logger'
 import {
-  SidebarHeader,
   SidebarContent,
   SidebarGroup,
   SidebarGroupContent,
+  SidebarHeader,
   SidebarMenu,
   SidebarMenuItem,
   SidebarSeparator,
