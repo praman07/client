@@ -34,11 +34,6 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
     ],
     links: [
       {
-        rel: 'preload',
-        href: appCss,
-        as: 'style',
-      },
-      {
         rel: 'stylesheet',
         href: appCss,
       },

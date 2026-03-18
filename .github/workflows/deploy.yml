@@ -4,57 +4,55 @@ on:
   push:
     branches: [main]
 
-env:
-  IMAGE: ghcr.io/official-collabify/client
-
 jobs:
   deploy:
-    name: Build & Deploy Frontend
+    name: Build & Deploy Frontend (PM2 + Rsync)
     runs-on: ubuntu-latest
     environment: production
 
     steps:
       - uses: actions/checkout@v4
 
-      - name: Login to GHCR
-        run: |
-          echo "${{ secrets.GHCR_TOKEN }}" | docker login ghcr.io \
-            -u ${{ github.actor }} --password-stdin
-
-      - name: Build & Push Frontend Image
-        run: |
-          docker build \
-            -f Dockerfile \
-            --build-arg VITE_SERVER_URL=${{ secrets.VITE_SERVER_URL }} \
-            --build-arg VITE_WS_URL=${{ secrets.VITE_WS_URL }} \
-            --build-arg VITE_CLERK_PUBLISHABLE_KEY=${{ secrets.VITE_CLERK_PUBLISHABLE_KEY }} \
-            -t ${{ env.IMAGE }}:${{ github.sha }} \
-            -t ${{ env.IMAGE }}:latest \
-            .
-          docker push ${{ env.IMAGE }}:${{ github.sha }}
-          docker push ${{ env.IMAGE }}:latest
-
-      - name: Deploy Frontend
-        uses: appleboy/ssh-action@v1
+      - name: Install pnpm
+        uses: pnpm/action-setup@v3
         with:
-          host: ${{ secrets.PROD_HOST }}
-          username: deploy
-          key: ${{ secrets.PROD_SSH_KEY }}
-          script: |
-            cp /opt/collabify/.image-tags /opt/collabify/.image-tags.prev 2>/dev/null || true
-            PREV_BACKEND=$(grep BACKEND_TAG /opt/collabify/.image-tags 2>/dev/null | cut -d= -f2 || echo latest)
-            echo "BACKEND_TAG=$PREV_BACKEND" > /opt/collabify/.image-tags
-            echo "FRONTEND_TAG=${{ github.sha }}" >> /opt/collabify/.image-tags
+          version: 10
 
-            cd /opt/collabify
-            FRONTEND_TAG=${{ github.sha }} docker compose pull frontend
-            FRONTEND_TAG=${{ github.sha }} docker compose up -d --no-deps --force-recreate frontend
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'pnpm'
 
-            sleep 30
-            curl -sf http://localhost:3000/ || \
-              (source /opt/collabify/.image-tags.prev && \
-               docker compose up -d --no-deps frontend && \
-               echo "\u274c Frontend rollback done" && exit 1)
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
 
-            docker image prune -f
-            echo "\u2705 Frontend deploy: ${{ github.sha }}"
+      - name: Build Frontend
+        env:
+          VITE_SERVER_URL: ${{ secrets.VITE_SERVER_URL }}
+          VITE_WS_URL: ${{ secrets.VITE_WS_URL }}
+          VITE_CLERK_PUBLISHABLE_KEY: ${{ secrets.VITE_CLERK_PUBLISHABLE_KEY }}
+        run: pnpm build
+
+      - name: Deploy to Server & Restart PM2
+        env:
+          SSH_KEY: ${{ secrets.PROD_SSH_KEY }}
+          HOST: ${{ secrets.PROD_HOST }}
+        run: |
+          mkdir -p ~/.ssh
+          echo "$SSH_KEY" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H $HOST >> ~/.ssh/known_hosts
+          
+          echo "📂 Preparing remote directory..."
+          ssh deploy@$HOST "mkdir -p /opt/collabify-frontend"
+          
+          echo "🚀 Syncing build output via Rsync..."
+          rsync -avz --delete .output/ deploy@$HOST:/opt/collabify-frontend/.output/
+          
+          echo "♻️ Restarting PM2 process..."
+          ssh deploy@$HOST '
+            export PATH=$PATH:/usr/local/bin:/usr/bin
+            pm2 restart collabify-frontend || pm2 start /opt/collabify-frontend/.output/server/index.mjs --name collabify-frontend
+            pm2 save
+          '
