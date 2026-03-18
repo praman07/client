@@ -15,8 +15,8 @@ COPY . .
 ARG VITE_SERVER_URL
 ARG VITE_WS_URL
 ARG VITE_CLERK_PUBLISHABLE_KEY
-# Clear Vite cache + build — prevents stale cached hashes causing CSS mismatch
-RUN node_modules/.bin/vite build --force
+# Delete Vite cache before build — prevents stale cached hashes causing CSS mismatch
+RUN rm -rf node_modules/.vite && pnpm build
 
 # ── Production stage ──────────────────────────────────────────
 # Nitro (.output/) is self-contained — only needs node, not pnpm
