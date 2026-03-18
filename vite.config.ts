@@ -4,6 +4,7 @@ import { tanstackStart } from '@tanstack/react-start/plugin/vite'
 import viteReact from '@vitejs/plugin-react'
 import viteTsConfigPaths from 'vite-tsconfig-paths'
 import tailwindcss from '@tailwindcss/vite'
+import { nitro } from 'nitro/vite'
 
 /**
  * Only isolate the truly standalone, heavy libraries that have no
@@ -54,12 +55,12 @@ function manualChunks(id: string): string | undefined {
 const config = defineConfig({
   plugins: [
     devtools(),
-    // viteTsConfigPaths enables path aliases from tsconfig.json
+    nitro(),
     viteTsConfigPaths({
       projects: ['./tsconfig.json'],
     }),
     tailwindcss(),
-    tanstackStart(), // includes Nitro SSR — do NOT add nitro() separately
+    tanstackStart(),
     viteReact({
       babel: {
         plugins: ['babel-plugin-react-compiler'],
