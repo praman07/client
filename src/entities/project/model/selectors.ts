@@ -4,6 +4,7 @@ interface ProjectStateShape {
   project: {
     currentProject: Project | null
     recentProjects: Array<Project>
+    currentProjectIsArchived: boolean
   }
 }
 
@@ -12,3 +13,6 @@ export const selectCurrentProject = (state: ProjectStateShape) =>
 
 export const selectRecentProjects = (state: ProjectStateShape) =>
   state.project.recentProjects
+
+export const selectCurrentProjectIsArchived = (state: ProjectStateShape) =>
+  state.project.currentProjectIsArchived

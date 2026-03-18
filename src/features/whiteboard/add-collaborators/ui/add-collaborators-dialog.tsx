@@ -1,13 +1,13 @@
+import { AddCollaboratorsForm } from './add-collaborators-form'
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogFooter,
-  DialogDescription,
 } from '@/shared/ui/primitives/dialog'
 import { Button } from '@/shared/ui/primitives/button'
-import { AddCollaboratorsForm } from './add-collaborators-form'
 
 interface WorkspaceMember {
   id: string
@@ -21,8 +21,8 @@ interface WorkspaceMember {
 
 interface AddCollaboratorsDialogProps {
   boardId: string
-  workspaceMembers: WorkspaceMember[]
-  currentCollaboratorIds: string[]
+  workspaceMembers: Array<WorkspaceMember>
+  currentCollaboratorIds: Array<string>
   open: boolean
   onOpenChange: (open: boolean) => void
 }

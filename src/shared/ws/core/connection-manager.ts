@@ -123,6 +123,7 @@ function handleMessage(event: MessageEvent): void {
 
     if (isValidServerMessage(data)) {
       log.debug('Dispatching event:', data.type)
+       
       eventRouter.dispatch(data as any)
     } else {
       log.warn('Invalid envelope:', data)

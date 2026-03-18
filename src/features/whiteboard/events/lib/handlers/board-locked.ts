@@ -5,10 +5,10 @@
  * Responsibility: Update lock state, show toast notification
  */
 
+import { toast } from 'sonner'
 import type { BoardLockedPayload } from '@/shared/contracts/whiteboard/downstream'
 import type { WhiteboardEventHandlerContext } from '../../model'
 import { setConnectionStatus } from '@/entities/whiteboard-session'
-import { toast } from 'sonner'
 import { createLogger } from '@/shared/lib/logger'
 
 const log = createLogger('whiteboard:board-locked')

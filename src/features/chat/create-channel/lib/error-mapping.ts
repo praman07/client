@@ -17,11 +17,17 @@ export interface ErrorResponse {
   field?: string
 }
 
+interface GqlErrorShape {
+  extensions?: { code?: string }
+  code?: string
+  message?: string
+}
+
 export function getChannelErrorMessage(error: unknown): ErrorResponse {
   // Handle GraphQL errors
   if (error && typeof error === 'object' && 'graphQLErrors' in error) {
-    const gqlError = error as any
-    if (gqlError.graphQLErrors?.length > 0) {
+    const gqlError = error as { graphQLErrors?: Array<GqlErrorShape> }
+    if (gqlError.graphQLErrors && gqlError.graphQLErrors.length > 0) {
       const firstError = gqlError.graphQLErrors[0]
       return mapGraphQLError(firstError)
     }
@@ -49,9 +55,9 @@ export function getChannelErrorMessage(error: unknown): ErrorResponse {
   }
 }
 
-function mapGraphQLError(error: any): ErrorResponse {
-  const code = error.extensions?.code || error.code
-  const message = error.message || ''
+function mapGraphQLError(error: GqlErrorShape): ErrorResponse {
+  const code = error.extensions?.code ?? error.code
+  const message = error.message ?? ''
 
   switch (code) {
     case 'CHANNEL_NAME_TAKEN':

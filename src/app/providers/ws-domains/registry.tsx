@@ -1,10 +1,10 @@
 import { useEffect } from 'react'
+import { useQueryClient } from '@tanstack/react-query'
 import { createChatPlugin } from './chat-plugin'
 import { createWhiteboardPlugin } from './whiteboard-plugin'
 import { createPagesPlugin } from './pages-plugin'
 import { registerPlugin, unregisterPlugin } from '@/shared/ws/domains'
 import { createLogger } from '@/shared/lib/logger'
-import { useQueryClient } from '@tanstack/react-query'
 import { useAppDispatch, useUser } from '@/shared/hooks'
 
 const log = createLogger('ws:domain-registry')

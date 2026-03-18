@@ -1,5 +1,5 @@
 import { useCallback } from 'react'
-import { sendAwarenessUpdate } from '@/features/pages/events/api/send-awareness-update'
+import { sendAwarenessUpdate } from '@/features/pages/events'
 
 /**
  * Stable callback hook for sending awareness updates.

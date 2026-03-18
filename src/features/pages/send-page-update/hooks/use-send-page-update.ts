@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
-import { sendPageUpdate } from '@/features/pages/events/api/send-page-update'
+import { sendPageUpdate } from '@/features/pages/events'
 import { useAppSelector } from '@/shared/hooks'
-import { selectIsPageOnline } from '@/entities/page-session/model/selectors'
+import { selectIsPageOnline } from '@/entities/page-session'
 
 /**
  * Stable callback hook for sending page Yjs updates.

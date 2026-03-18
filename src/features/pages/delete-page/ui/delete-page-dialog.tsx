@@ -1,10 +1,10 @@
 import {
   Dialog,
   DialogContent,
-  DialogHeader,
-  DialogTitle,
   DialogDescription,
   DialogFooter,
+  DialogHeader,
+  DialogTitle,
 } from '@/shared/ui/primitives/dialog'
 import { Button } from '@/shared/ui/primitives/button'
 
@@ -35,8 +35,9 @@ export function DeletePageDialog({
         <DialogHeader>
           <DialogTitle>Delete Page</DialogTitle>
           <DialogDescription>
-            Are you sure you want to delete &ldquo;{pageTitle}&rdquo;? This action
-            cannot be undone. Child pages will not be deleted automatically.
+            Are you sure you want to delete &ldquo;{pageTitle}&rdquo;? This
+            action cannot be undone. Child pages will not be deleted
+            automatically.
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>

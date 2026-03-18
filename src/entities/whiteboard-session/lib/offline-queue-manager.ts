@@ -1,5 +1,5 @@
-import { db } from '@/shared/lib/db'
 import * as Y from 'yjs'
+import { db } from '@/shared/lib/db'
 import { createLogger } from '@/shared/lib/logger'
 import { wsManager } from '@/shared/ws/manager'
 import { WhiteboardUpstreamEvent } from '@/shared/contracts/whiteboard/upstream'
@@ -78,7 +78,7 @@ class OfflineQueueManager {
    *
    * @param boardId - Board ID to flush
    */
-  async flush(boardId: string): Promise<void> {
+  flush(boardId: string): void {
     // Debounce to avoid flushing on rapid reconnects
     const existingTimer = this.flushTimers.get(boardId)
     if (existingTimer) clearTimeout(existingTimer)

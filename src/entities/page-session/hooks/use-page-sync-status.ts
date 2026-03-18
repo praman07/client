@@ -1,11 +1,11 @@
-import { useAppSelector } from '@/shared/hooks'
 import {
-  selectPageConnectionStatus,
-  selectPageYdocStatus,
   selectIsPageLocked,
   selectIsPageOnline,
   selectIsSyncing,
+  selectPageConnectionStatus,
+  selectPageYdocStatus,
 } from '../model/selectors'
+import { useAppSelector } from '@/shared/hooks'
 
 /**
  * Convenience hook for reading page sync status from Redux.

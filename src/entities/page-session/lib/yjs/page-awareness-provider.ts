@@ -1,13 +1,11 @@
-import { Awareness } from 'y-protocols/awareness'
-import {
-  encodeAwarenessUpdate,
+import { Awareness,
   applyAwarenessUpdate,
-  removeAwarenessStates,
-} from 'y-protocols/awareness'
-import * as Y from 'yjs'
+  encodeAwarenessUpdate,
+  removeAwarenessStates } from 'y-protocols/awareness'
+import { base64ToUint8Array, uint8ArrayToBase64 } from '../encoding'
+import type * as Y from 'yjs'
 import { wsManager } from '@/shared/ws/manager'
 import { createLogger } from '@/shared/lib/logger'
-import { uint8ArrayToBase64, base64ToUint8Array } from '../encoding'
 
 const log = createLogger('pages:awareness-provider')
 
@@ -33,9 +31,9 @@ const log = createLogger('pages:awareness-provider')
 const PAGE_AWARENESS_EVENT = 'page:awareness-update'
 
 interface AwarenessUpdate {
-  added: number[]
-  updated: number[]
-  removed: number[]
+  added: Array<number>
+  updated: Array<number>
+  removed: Array<number>
 }
 
 export class PageAwarenessProvider {

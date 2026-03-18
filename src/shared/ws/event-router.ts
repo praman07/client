@@ -83,7 +83,8 @@ export const eventRouter = {
     try {
       const appEvent = {
         type: envelope.type,
-        payload: envelope.data || {},
+         
+        payload: envelope.data ?? {},
       }
       dispatchEvent(appEvent as any)
     } catch (error) {
@@ -93,17 +94,16 @@ export const eventRouter = {
 
   // Debug helper
   getListenerCount(type: EventType) {
-    return handlers.get(type)?.size || 0
+    return handlers.get(type)?.size ?? 0
   },
 }
 
 // --- Relay Listener (Singleton Guard for HMR) ---
-let relayListenerRegistered = false
-
-if (!relayListenerRegistered) {
+const g = globalThis as any
+if (!g.__relayListenerRegistered) {
   leaderElection.onRelay((payload) => {
     // Prevent cycles by flagging as fromRelay
     eventRouter.dispatch(payload as ServerMessage, true)
   })
-  relayListenerRegistered = true
+  g.__relayListenerRegistered = true
 }

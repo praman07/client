@@ -10,7 +10,7 @@
 
 import type { UpdateAckPayload } from '@/shared/contracts/whiteboard/downstream'
 import type { WhiteboardEventHandlerContext } from '../../model'
-import type { PendingUpdatesTracker } from '@/widgets/whiteboard-canvas/lib/pending-updates-tracker'
+import type { PendingUpdatesTracker } from '@/shared/lib/yjs'
 import { createLogger } from '@/shared/lib/logger'
 
 const log = createLogger('whiteboard:update-ack')

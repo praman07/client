@@ -44,7 +44,7 @@ export interface BoardCollaborator {
  */
 export interface BoardInitPayload {
   boardId: string
-  collaborators: BoardCollaborator[]
+  collaborators: Array<BoardCollaborator>
   isLocked: boolean
   isArchived: boolean
 }
@@ -118,7 +118,7 @@ export interface CursorUpdatePayload {
 export interface SelectionUpdatePayload {
   boardId: string
   userId: string
-  elementIds: string[]
+  elementIds: Array<string>
   timestamp: string // ISO 8601 datetime
 }
 

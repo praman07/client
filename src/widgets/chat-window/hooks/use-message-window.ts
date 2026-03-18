@@ -65,7 +65,8 @@ export function useMessageWindow({
   ) // Default empty array
 
   return {
-    messages: messages || [],
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- useLiveQuery returns undefined before first Dexie resolve despite the default value
+    messages: messages ?? [],
     isLoading: !messages,
   }
 }

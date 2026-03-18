@@ -18,6 +18,7 @@ export function NavTabs({ items, from }: NavTabsProps) {
       {items.map((item) => (
         <Link
           key={item.href}
+           
           to={item.href as any}
           from={from}
           activeOptions={item.activeOptions}

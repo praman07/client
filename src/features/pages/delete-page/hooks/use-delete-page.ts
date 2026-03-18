@@ -1,9 +1,9 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { DELETE_PAGE } from '../api/fragments'
+import { cleanPageFromIndexedDB } from '../lib/clean-page-indexeddb'
 import { GqlClient } from '@/shared/api/graphql-client'
 import { useAuth } from '@/shared/hooks'
 import { pageKeys } from '@/entities/page'
-import { DELETE_PAGE } from '../api/fragments'
-import { cleanPageFromIndexedDB } from '../lib/clean-page-indexeddb'
 import { createLogger } from '@/shared/lib/logger'
 
 const log = createLogger('pages:delete-page-hook')

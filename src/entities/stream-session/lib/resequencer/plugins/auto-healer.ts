@@ -21,7 +21,7 @@ export function createAutoHealerPlugin<
     name: 'auto-healer',
     phase: 'pre-process',
 
-    async execute(context: PluginContext<T>): Promise<PluginResult> {
+    execute(context: PluginContext<T>): Promise<PluginResult> {
       const { state, payload } = context
 
       // Detect server reset: sequence 1 when we're way ahead
@@ -46,7 +46,7 @@ export function createAutoHealerPlugin<
         }
       }
 
-      return { action: 'continue' }
+      return Promise.resolve({ action: 'continue' })
     },
   }
 }

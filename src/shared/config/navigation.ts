@@ -11,9 +11,9 @@ export const PROJECT_TABS = [
   { label: 'Whiteboard', href: './whiteboard' },
   { label: 'Pages', href: './pages' },
   { label: 'Vault', href: './vault' },
-  { label: 'Kanban', href: './kanban' },
-  { label: 'List', href: './list' },
-  { label: 'Timeline', href: './timeline' },
-  { label: 'Meet', href: './meet' },
+  { label: 'Issues', href: './kanban' },
+  // { label: 'List', href: './list' },
+  // { label: 'Timeline', href: './timeline' },
+  // { label: 'Meet', href: './meet' },
   { label: 'Settings', href: './settings' },
 ]

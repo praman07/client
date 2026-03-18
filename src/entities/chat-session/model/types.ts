@@ -16,6 +16,6 @@ export interface ChannelSessionState {
 }
 
 export interface ChatSessionState {
-  sessions: Record<string, ChannelSessionState>
+  sessions: Record<string, ChannelSessionState | undefined>
   globalConnectionState: 'connected' | 'disconnected' | 'reconnecting'
 }

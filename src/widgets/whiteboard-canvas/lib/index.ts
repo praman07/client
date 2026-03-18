@@ -1,1 +1,1 @@
-export { PendingUpdatesTracker } from './pending-updates-tracker'
+export { PendingUpdatesTracker } from '@/shared/lib/yjs'

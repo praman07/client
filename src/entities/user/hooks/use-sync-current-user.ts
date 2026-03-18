@@ -1,12 +1,9 @@
 import { useQuery } from '@tanstack/react-query'
-import { setCurrentUser } from '@/entities/user/model/slice'
+import { USER_FRAGMENT, setCurrentUser } from '@/entities/user'
 import { sessionKeys } from '@/entities/session/api'
-import {
-  GET_ME_QUERY,
-  SESSION_USER_FRAGMENT,
-} from '@/entities/session/api/fragments'
+import { GET_ME_QUERY } from '@/entities/session'
 import { useAppDispatch, useAuth } from '@/shared/hooks'
-import { useFragment } from '@/gql'
+import { getFragmentData } from '@/shared/api'
 import { GqlClient } from '@/shared/api/graphql-client'
 
 export function useSyncCurrentUser() {
@@ -21,7 +18,7 @@ export function useSyncCurrentUser() {
       const client = GqlClient(token)
       const data = await client.request(GET_ME_QUERY)
 
-      const user = useFragment(SESSION_USER_FRAGMENT, data.me)
+      const user = getFragmentData(USER_FRAGMENT, data.me)
 
       if (user) {
         dispatch(setCurrentUser(user))

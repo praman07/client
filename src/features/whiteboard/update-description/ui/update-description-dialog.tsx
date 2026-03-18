@@ -1,19 +1,19 @@
 import { useState } from 'react'
 import { useForm } from '@tanstack/react-form'
 import { toast } from 'sonner'
+import { useUpdateDescription } from '../hooks'
+import { updateDescriptionSchema } from '../model'
+import { mapUpdateDescriptionError } from '../lib'
 import {
   Dialog,
   DialogContent,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogFooter,
 } from '@/shared/ui/primitives/dialog'
 import { Button } from '@/shared/ui/primitives/button'
 import { Textarea } from '@/shared/ui/primitives/textarea'
 import { Label } from '@/shared/ui/primitives/label'
-import { useUpdateDescription } from '../hooks'
-import { updateDescriptionSchema } from '../model'
-import { mapUpdateDescriptionError } from '../lib'
 
 interface UpdateDescriptionDialogProps {
   boardId: string

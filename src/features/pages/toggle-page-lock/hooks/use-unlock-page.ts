@@ -1,10 +1,10 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { UNLOCK_PAGE } from '../api/fragments'
+import { setPageLocked } from './use-lock-page'
+import type { Page } from '@/entities/page'
 import { GqlClient } from '@/shared/api/graphql-client'
 import { useAuth } from '@/shared/hooks'
 import { pageKeys } from '@/entities/page'
-import type { Page } from '@/entities/page'
-import { UNLOCK_PAGE } from '../api/fragments'
-import { setPageLocked } from './use-lock-page'
 import { createLogger } from '@/shared/lib/logger'
 
 const log = createLogger('pages:unlock-page-hook')
@@ -43,11 +43,11 @@ export function useUnlockPage() {
       await queryClient.cancelQueries({
         queryKey: pageKeys.projectPages(projectId),
       })
-      const snapshot = queryClient.getQueryData<Page[]>(
+      const snapshot = queryClient.getQueryData<Array<Page>>(
         pageKeys.projectPages(projectId),
       )
 
-      queryClient.setQueryData<Page[]>(
+      queryClient.setQueryData<Array<Page>>(
         pageKeys.projectPages(projectId),
         (old) => (old ? setPageLocked(old, pageId, false) : old),
       )

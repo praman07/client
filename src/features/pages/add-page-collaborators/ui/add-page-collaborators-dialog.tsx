@@ -1,18 +1,18 @@
+import { useParams } from '@tanstack/react-router'
+import { AddPageCollaboratorsForm } from './add-page-collaborators-form'
 import {
   Dialog,
   DialogContent,
-  DialogHeader,
-  DialogTitle,
   DialogDescription,
   DialogFooter,
+  DialogHeader,
+  DialogTitle,
 } from '@/shared/ui/primitives/dialog'
 import { Button } from '@/shared/ui/primitives/button'
-import { AddPageCollaboratorsForm } from './add-page-collaborators-form'
-import { usePageCollaborators } from '@/features/pages/fetch-page-collaborators/hooks'
+import { usePageCollaborators } from '@/features/pages/fetch-page-collaborators'
 import { useWorkspaceMembers } from '@/features/view-members/hooks'
 import { useAppSelector } from '@/shared/hooks'
-import { selectWorkspaceBySlug } from '@/entities/workspace/model/selectors'
-import { useParams } from '@tanstack/react-router'
+import { selectWorkspaceBySlug } from '@/entities/workspace'
 
 interface AddPageCollaboratorsDialogProps {
   pageId: string
@@ -37,9 +37,7 @@ export function AddPageCollaboratorsDialog({
   open,
   onOpenChange,
 }: AddPageCollaboratorsDialogProps) {
-  const { workspaceSlug } = useParams({ strict: false }) as {
-    workspaceSlug: string
-  }
+  const { workspaceSlug } = useParams({ strict: false })
   const workspace = useAppSelector((state) =>
     selectWorkspaceBySlug(state, workspaceSlug),
   )

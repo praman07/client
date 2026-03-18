@@ -1,3 +1,5 @@
+'use no memo'
+
 import { useCallback, useLayoutEffect, useRef, useState } from 'react'
 import { useVirtualizer } from '@tanstack/react-virtual'
 import { createLogger } from '@/shared/lib/logger'
@@ -13,6 +15,7 @@ interface UseChatScrollProps {
   onLoadMore?: () => void
 }
 
+'use no memo'
 /**
  * Production-Grade Chat Scroll Controller
  *
@@ -34,6 +37,7 @@ export function useChatScroll({
   const [showScrollButton, setShowScrollButton] = useState(false)
 
   // Virtualizer
+  // eslint-disable-next-line react-hooks/incompatible-library
   const rowVirtualizer = useVirtualizer({
     count,
     getScrollElement: () => parentRef.current,
@@ -82,11 +86,12 @@ export function useChatScroll({
       // Update Anchor Key in FREE_SCROLL (for potential prepend recovery)
       if (mode === 'FREE_SCROLL') {
         const virtualHandler = rowVirtualizer // Access current instance
-        const firstVisibleIndex = virtualHandler.getVirtualItems()[0]?.index
-        if (firstVisibleIndex !== undefined) {
+        const items = virtualHandler.getVirtualItems()
+        if (items.length > 0) {
+          const firstItem = items[0]
           anchorRef.current = {
-            key: getItemKey(firstVisibleIndex),
-            index: firstVisibleIndex,
+            key: getItemKey(firstItem.index),
+            index: firstItem.index,
           }
         }
       }

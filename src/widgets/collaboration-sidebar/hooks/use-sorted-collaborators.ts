@@ -21,8 +21,8 @@ export interface CollaboratorPresence {
  * @returns Sorted collaborators array
  */
 export function useSortedCollaborators(
-  collaborators: CollaboratorPresence[],
-): CollaboratorPresence[] {
+  collaborators: Array<CollaboratorPresence>,
+): Array<CollaboratorPresence> {
   return useMemo(() => {
     return [...collaborators].sort((a, b) => {
       // Active users first

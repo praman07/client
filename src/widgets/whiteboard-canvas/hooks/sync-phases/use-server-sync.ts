@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 import * as Y from 'yjs'
 import { createLogger } from '@/shared/lib/logger'
 import { useBoardSnapshot } from '@/features/whiteboard/fetch-snapshot'
@@ -21,16 +21,7 @@ export function useServerSync(
   boardId: string,
   onSynced: (serverStateVector: Uint8Array) => void,
 ) {
-  const [synced, setSynced] = useState(false)
-  const ydocRef = useRef(ydoc)
-
-  useEffect(() => {
-    if (ydocRef.current !== ydoc) {
-      log.debug('Y.Doc instance changed, resetting sync state', { boardId })
-      setSynced(false)
-      ydocRef.current = ydoc
-    }
-  }, [ydoc, boardId])
+  const syncedRef = useRef(false)
 
   const clientSnapshot = useMemo(
     () => uint8ArrayToBase64(Y.encodeStateAsUpdate(ydoc)),
@@ -44,7 +35,8 @@ export function useServerSync(
 
   // Apply diff once
   useEffect(() => {
-    if (synced || !isSuccess || !data?.diff) return
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- data can be undefined even when isSuccess=true (new empty board), and diff can be null/empty
+    if (syncedRef.current || !isSuccess || !data?.diff) return
 
     log.info('📥 Applying server snapshot', {
       boardId,
@@ -72,14 +64,14 @@ export function useServerSync(
         elementsAfter: result.elementsAfter,
       })
 
-      setSynced(true)
+      syncedRef.current = true
       onSynced(serverState)
     } else {
       log.error('Server sync failed', { boardId, error: result.error })
       // Still mark as synced for graceful degradation
       const serverState = Y.encodeStateVector(ydoc)
-      setSynced(true)
+      syncedRef.current = true
       onSynced(serverState)
     }
-  }, [data, isSuccess, synced, ydoc, boardId, onSynced])
+  }, [data, isSuccess, ydoc, boardId, onSynced])
 }

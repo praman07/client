@@ -8,7 +8,7 @@ import {
   DialogTitle,
 } from '@/shared/ui'
 import { useAppSelector } from '@/shared/hooks'
-import { selectCurrentProject } from '@/entities/project/model/selectors'
+import { selectCurrentProject } from '@/entities/project'
 
 export function CreateChannelModal() {
   const { isOpen, close } = useCreateChannelModal()

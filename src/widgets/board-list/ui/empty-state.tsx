@@ -1,4 +1,4 @@
-import { Folder, Clock, FileText } from 'lucide-react'
+import { Clock, FileText, Folder } from 'lucide-react'
 
 export function EmptyState() {
   return (

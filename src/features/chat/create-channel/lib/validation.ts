@@ -1,7 +1,7 @@
 // Channel name validation constants
 export const CHANNEL_NAME_MIN_LENGTH = 2
 export const CHANNEL_NAME_MAX_LENGTH = 25
-export const CHANNEL_NAME_REGEX = /^[a-z0-9][a-z0-9\-]*[a-z0-9]$|^[a-z0-9]$/
+export const CHANNEL_NAME_REGEX = /^[a-z0-9][a-z0-9-]*[a-z0-9]$|^[a-z0-9]$/
 
 // Topic validation constants
 export const TOPIC_MAX_LENGTH = 250

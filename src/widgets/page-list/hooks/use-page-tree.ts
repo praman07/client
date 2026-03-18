@@ -11,8 +11,9 @@ import type { PageTreeNode } from '../lib/types'
  *
  * @layer Widgets
  */
-export function buildPageTree(pages: Page[]): PageTreeNode[] {
+export function buildPageTree(pages: Array<Page>): Array<PageTreeNode> {
   function toNode(page: Page): PageTreeNode {
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- GraphQL can return null for children field
     const sorted = [...(page.children ?? [])].sort(
       (a, b) => a.position - b.position,
     )
@@ -32,7 +33,7 @@ export function buildPageTree(pages: Page[]): PageTreeNode[] {
  * Hook — wraps buildPageTree as a stable reference.
  * Used by PageSidebar to build the tree from useProjectPages data.
  */
-export function usePageTree(pages: Page[]): PageTreeNode[] {
+export function usePageTree(pages: Array<Page>): Array<PageTreeNode> {
   // Memoisation happens in the parent via useMemo; this is just the pure fn call.
   return buildPageTree(pages)
 }

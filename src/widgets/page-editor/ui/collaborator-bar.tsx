@@ -1,12 +1,16 @@
+import type { PageCollaboratorPresence } from '@/entities/page-presence'
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from '@/shared/ui/primitives/tooltip'
-import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/primitives/avatar'
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from '@/shared/ui/primitives/avatar'
 import { useAppSelector } from '@/shared/hooks'
-import { selectPageCollaborators } from '@/entities/page-presence/model/selectors'
-import type { PageCollaboratorPresence } from '@/entities/page-presence/model/types'
+import { selectPageCollaborators } from '@/entities/page-presence'
 
 /**
  * CollaboratorBar — shows who is currently viewing/editing this page.
@@ -34,11 +38,7 @@ export function CollaboratorBar() {
   )
 }
 
-function CollaboratorAvatar({
-  collab,
-}: {
-  collab: PageCollaboratorPresence
-}) {
+function CollaboratorAvatar({ collab }: { collab: PageCollaboratorPresence }) {
   const initials = collab.fullName
     .split(' ')
     .map((n) => n[0])

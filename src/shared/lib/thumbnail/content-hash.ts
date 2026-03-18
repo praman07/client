@@ -6,10 +6,9 @@
  * at ~10x less cost than hashing full geometry JSON.
  */
 
-import { ExcalidrawElement } from "@excalidraw/excalidraw/element/types"
+import type { ExcalidrawElement } from '@excalidraw/excalidraw/element/types'
 
-
-export function hashElements(elements: readonly ExcalidrawElement[]): number {
+export function hashElements(elements: ReadonlyArray<ExcalidrawElement>): number {
   const str = JSON.stringify(
     elements.map((e) => ({ id: e.id, version: e.version })),
   )

@@ -44,6 +44,7 @@ export function DMList({ items }: DMListProps) {
                 render={
                   <Link
                     to="/workspace/$workspaceSlug/project/$projectSlug/chat/$conversationId"
+                     
                     params={(prev: any) => ({ ...prev, conversationId: dm.id })}
                   />
                 }

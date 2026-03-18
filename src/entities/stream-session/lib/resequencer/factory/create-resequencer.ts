@@ -50,6 +50,7 @@ export interface ResequencerAPI<T extends BasePayload> {
     projectId?: string,
   ) => Promise<SubscriptionState>
   refreshAllActive: () => Promise<void>
+  subscribe: (conversationId: string, listener: () => void) => () => void
 }
 
 export function createStreamResequencer<T extends BasePayload>(
@@ -61,6 +62,16 @@ export function createStreamResequencer<T extends BasePayload>(
   const commitHandler = createCommitHandler(config.storageAdapter)
   const bufferManager = createBufferManager(commitHandler)
   const messageProcessor = createMessageProcessor(commitHandler, bufferManager)
+
+  // Listeners for useSyncExternalStore support
+  const listeners = new Map<string, Set<() => void>>()
+
+  function notifyListeners(conversationId: string) {
+    const subs = listeners.get(conversationId)
+    if (subs) {
+      subs.forEach((listener) => listener())
+    }
+  }
 
   // Create plugins
   const builtInPlugins = [
@@ -116,6 +127,7 @@ export function createStreamResequencer<T extends BasePayload>(
         log.error(`Buffer overflow (${state.buffer.size})`)
         state.buffer.clear()
         state.status = 'DESYNCED'
+        notifyListeners(payload.conversationId)
         config.recoveryAdapter.triggerRecovery({
           conversationId: state.conversationId,
           projectId: state.projectId,
@@ -168,6 +180,7 @@ export function createStreamResequencer<T extends BasePayload>(
         })
       }
       state.status = 'SYNCED'
+      notifyListeners(sorted[0].conversationId)
     }
 
     state.processingChain = state.processingChain.then(task).catch((err) => {
@@ -186,6 +199,7 @@ export function createStreamResequencer<T extends BasePayload>(
     const state = await stateManager.getOrInit(conversationId)
     state.buffer.clear()
     state.status = 'DESYNCED'
+    notifyListeners(conversationId)
 
     config.recoveryAdapter.triggerRecovery({
       conversationId: state.conversationId,
@@ -208,6 +222,7 @@ export function createStreamResequencer<T extends BasePayload>(
 
     const state = await stateManager.getOrInit(conversationId, projectId)
     state.status = 'DESYNCED'
+    notifyListeners(conversationId)
 
     config.recoveryAdapter.triggerRecovery({
       conversationId: state.conversationId,
@@ -230,6 +245,7 @@ export function createStreamResequencer<T extends BasePayload>(
 
     await bufferManager.flush(state, projectId, 'force')
     state.status = 'SYNCED'
+    notifyListeners(conversationId)
 
     log.warn(`Force-healed gap for ${conversationId}`)
   }
@@ -276,6 +292,24 @@ export function createStreamResequencer<T extends BasePayload>(
     await Promise.all(activeIds.map((id) => stateManager.reload(id)))
   }
 
+  function subscribe(conversationId: string, listener: () => void) {
+    let subs = listeners.get(conversationId)
+    if (!subs) {
+      subs = new Set()
+      listeners.set(conversationId, subs)
+    }
+    subs.add(listener)
+    return () => {
+      const currentSubs = listeners.get(conversationId)
+      if (currentSubs) {
+        currentSubs.delete(listener)
+        if (currentSubs.size === 0) {
+          listeners.delete(conversationId)
+        }
+      }
+    }
+  }
+
   return {
     processNewMessage,
     processRecoveryBatch,
@@ -285,5 +319,6 @@ export function createStreamResequencer<T extends BasePayload>(
     getStatus,
     getSubscriptionState,
     refreshAllActive,
+    subscribe,
   }
 }

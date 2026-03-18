@@ -22,16 +22,25 @@ export const selectCollaboratorById = (userId: string) =>
 export const selectActiveCollaborators = createSelector(
   [selectPresenceDomain],
   (presence) =>
-    Object.values(presence.remoteCursors).filter((collab) => !collab.isIdle),
+    (Object.values(presence.remoteCursors).filter(
+      (collab): collab is NonNullable<typeof collab> =>
+        collab !== undefined && !collab.isIdle,
+    )),
 )
 
 export const selectIdleCollaborators = createSelector(
   [selectPresenceDomain],
   (presence) =>
-    Object.values(presence.remoteCursors).filter((collab) => collab.isIdle),
+    (Object.values(presence.remoteCursors).filter(
+      (collab): collab is NonNullable<typeof collab> =>
+        collab !== undefined && collab.isIdle,
+    )),
 )
 
 export const selectCollaboratorList = createSelector(
   [selectPresenceDomain],
-  (presence) => Object.values(presence.remoteCursors),
+  (presence) =>
+    (Object.values(presence.remoteCursors).filter(
+      (collab): collab is NonNullable<typeof collab> => collab !== undefined,
+    )),
 )

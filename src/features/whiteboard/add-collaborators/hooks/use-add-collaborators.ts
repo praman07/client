@@ -1,9 +1,9 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { ADD_BOARD_COLLABORATORS } from '../api'
+import type { AddCollaboratorsFormData } from '../model'
 import { GqlClient } from '@/shared/api/graphql-client'
 import { useAuth } from '@/shared/hooks'
 import { boardKeys } from '@/entities/whiteboard-board'
-import { ADD_BOARD_COLLABORATORS } from '../api'
-import type { AddCollaboratorsFormData } from '../model'
 
 export function useAddCollaborators() {
   const { getToken } = useAuth()

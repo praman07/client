@@ -1,6 +1,7 @@
 import { useState } from 'react'
-import { useArchiveBoard } from '@/features/whiteboard/archive-board/hooks'
-import { useDeleteBoard } from '@/features/whiteboard/delete-board/hooks'
+import { AlertTriangle, Archive, Trash2 } from 'lucide-react'
+import { useArchiveBoard } from '@/features/whiteboard/archive-board'
+import { useDeleteBoard } from '@/features/whiteboard/delete-board'
 import { Button } from '@/shared/ui/primitives/button'
 import {
   AlertDialog,
@@ -12,7 +13,6 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/shared/ui/primitives/alert-dialog'
-import { Archive, Trash2, AlertTriangle } from 'lucide-react'
 
 interface DangerZoneProps {
   boardId: string

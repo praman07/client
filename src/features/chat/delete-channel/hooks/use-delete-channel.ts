@@ -3,6 +3,7 @@ import { useNavigate, useParams } from '@tanstack/react-router'
 import { toast } from 'sonner'
 import { DELETE_CHANNEL_MUTATION } from '../api'
 import { mapDeleteChannelError } from '../lib/error-mapping'
+import type { ConversationFieldsFragment, GetUserConversationsQuery } from '@/gql/graphql'
 import { GqlClient } from '@/shared/api'
 import { useAuth } from '@/shared/hooks'
 import { conversationKeys } from '@/entities/conversation'
@@ -41,14 +42,14 @@ export function useDeleteChannel() {
       if (workspaceId && projectId) {
         queryClient.setQueryData(
           conversationKeys.channels(workspaceId, projectId),
-          (oldData: any) => {
-            if (!oldData?.getUserConversations?.edges) return oldData
+          (oldData: GetUserConversationsQuery | undefined) => {
+            if (!oldData?.getUserConversations.edges) return oldData
             return {
               ...oldData,
               getUserConversations: {
                 ...oldData.getUserConversations,
                 edges: oldData.getUserConversations.edges.filter(
-                  (conv: any) => conv.id !== channelId,
+                  (conv) => (conv as unknown as ConversationFieldsFragment).id !== channelId,
                 ),
               },
             }

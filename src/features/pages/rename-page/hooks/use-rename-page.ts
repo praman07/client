@@ -1,9 +1,9 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { RENAME_PAGE } from '../api/fragments'
+import type { Page } from '@/entities/page'
 import { GqlClient } from '@/shared/api/graphql-client'
 import { useAuth } from '@/shared/hooks'
 import { pageKeys } from '@/entities/page'
-import type { Page } from '@/entities/page'
-import { RENAME_PAGE } from '../api/fragments'
 import { createLogger } from '@/shared/lib/logger'
 
 const log = createLogger('pages:rename-page-hook')
@@ -47,12 +47,12 @@ export function useRenamePage() {
       })
 
       // Snapshot current tree for rollback
-      const snapshot = queryClient.getQueryData<Page[]>(
+      const snapshot = queryClient.getQueryData<Array<Page>>(
         pageKeys.projectPages(projectId),
       )
 
       // Optimistically update title in the nested page tree
-      queryClient.setQueryData<Page[]>(
+      queryClient.setQueryData<Array<Page>>(
         pageKeys.projectPages(projectId),
         (old) => (old ? updatePageTitle(old, pageId, title) : old),
       )
@@ -84,13 +84,13 @@ export function useRenamePage() {
  * Pure recursive tree updater.
  * Traverses nested children to find and update the target page title.
  */
-function updatePageTitle(pages: Page[], pageId: string, title: string): Page[] {
+function updatePageTitle(pages: Array<Page>, pageId: string, title: string): Array<Page> {
   return pages.map((p) => {
     if (p.id === pageId) return { ...p, title }
-    if (p.children?.length) {
+    if (p.children.length) {
       return {
         ...p,
-        children: updatePageTitle(p.children as Page[], pageId, title),
+        children: updatePageTitle(p.children, pageId, title),
       }
     }
     return p

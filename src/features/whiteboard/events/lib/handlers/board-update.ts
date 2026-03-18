@@ -1,11 +1,11 @@
-import * as Y from 'yjs'
+import type * as Y from 'yjs'
 import type { BoardUpdatePayload } from '@/shared/contracts/whiteboard/downstream'
 import type { WhiteboardEventHandlerContext } from '../../model'
+import type { PendingUpdatesTracker } from '@/shared/lib/yjs'
 import {
-  isValidYjsUpdate,
   base64ToUint8Array,
+  isValidYjsUpdate,
 } from '@/entities/whiteboard-session'
-import type { PendingUpdatesTracker } from '@/widgets/whiteboard-canvas/lib/pending-updates-tracker'
 import { YjsOrigin } from '@/shared/lib/yjs/constants'
 import { createLogger } from '@/shared/lib/logger'
 import { safeApplyUpdate } from '@/shared/lib/yjs/safe-apply-update'

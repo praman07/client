@@ -13,7 +13,7 @@
  * Object URLs are always revoked on unmount to prevent memory leaks.
  */
 
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { db } from '@/shared/lib/db'
 import { createLogger } from '@/shared/lib/logger'
 import {
@@ -28,13 +28,12 @@ export function useBoardThumbnail(boardId: string): string | null {
   const [blobUrl, setBlobUrl] = useState<string | null>(null)
 
   useEffect(() => {
-    let revoked = false
     let objectUrl: string | null = null
 
     async function run() {
       // 1. Show stale cache immediately (stale-while-revalidate)
       const cached = await db.whiteboardThumbnails.get(boardId)
-      if (cached && !revoked) {
+      if (cached) {
         objectUrl = URL.createObjectURL(
           new Blob([cached.thumbnail.buffer as ArrayBuffer], {
             type: 'image/webp',
@@ -51,12 +50,13 @@ export function useBoardThumbnail(boardId: string): string | null {
       const elements = await readBoardElements(boardId)
       log.debug('Read elements', { boardId, count: elements.length })
 
-      if (revoked || elements.length === 0) {
-        log.debug('Skipping generation — no elements or unmounted', { boardId })
+      if (elements.length === 0) {
+        log.debug('Skipping generation — no elements', { boardId })
         return
       }
 
       // 3. Skip regeneration if content unchanged
+       
       const hash = hashElements(elements as any)
       if (cached?.contentHash === hash) {
         log.debug('Content unchanged, skipping regeneration', { boardId })
@@ -67,15 +67,15 @@ export function useBoardThumbnail(boardId: string): string | null {
       await new Promise<void>((resolve) =>
         requestIdleCallback(() => resolve(), { timeout: 2000 }),
       )
-      if (revoked) return
 
       // 5. Generate WebP thumbnail
       log.debug('Generating thumbnail', {
         boardId,
         elementCount: elements.length,
       })
+       
       const webpBytes = await generateBoardThumbnail(elements as any)
-      if (revoked) return
+      // (generateBoardThumbnail takes a bit of time)
 
       log.debug('Thumbnail generated', {
         boardId,
@@ -92,13 +92,7 @@ export function useBoardThumbnail(boardId: string): string | null {
       })
 
       // 7. Update display with fresh thumbnail
-      if (!revoked) {
-        if (objectUrl) URL.revokeObjectURL(objectUrl)
-        objectUrl = URL.createObjectURL(
-          new Blob([webpBytes.buffer as ArrayBuffer], { type: 'image/webp' }),
-        )
         setBlobUrl(objectUrl)
-      }
     }
 
     run().catch((err) => {
@@ -106,7 +100,6 @@ export function useBoardThumbnail(boardId: string): string | null {
     })
 
     return () => {
-      revoked = true
       if (objectUrl) URL.revokeObjectURL(objectUrl)
     }
   }, [boardId])

@@ -1,12 +1,12 @@
 import { useState } from 'react'
 import { toast } from 'sonner'
-import { useDeleteBoard } from '@/features/whiteboard/delete-board/hooks'
-import { useArchiveBoard } from '@/features/whiteboard/archive-board/hooks'
-import { useUnarchiveBoard } from '@/features/whiteboard/unarchive-board/hooks'
-import { useLockBoard } from '@/features/whiteboard/lock-board/hooks'
-import { useUnlockBoard } from '@/features/whiteboard/unlock-board/hooks'
-import { useRenameBoard } from '@/features/whiteboard/rename-board/hooks'
 import type { Board } from '@/entities/whiteboard-board'
+import { useDeleteBoard } from '@/features/whiteboard/delete-board'
+import { useArchiveBoard } from '@/features/whiteboard/archive-board'
+import { useUnarchiveBoard } from '@/features/whiteboard/unarchive-board'
+import { useLockBoard } from '@/features/whiteboard/lock-board'
+import { useUnlockBoard } from '@/features/whiteboard/unlock-board'
+import { useRenameBoard } from '@/features/whiteboard/rename-board'
 
 interface UseBoardCardHandlersOptions {
   board: Board

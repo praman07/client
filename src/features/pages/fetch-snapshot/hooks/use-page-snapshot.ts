@@ -1,12 +1,12 @@
 import { useQuery } from '@tanstack/react-query'
+import { GET_PAGE_SNAPSHOT } from '../api/fragments'
+import { decodePageSnapshot } from '../lib/decode-snapshot'
 import type { UseQueryOptions } from '@tanstack/react-query'
+import type { DecodedPageSnapshot } from '../lib/decode-snapshot'
+import type { GetPageSnapshotQuery } from '@/gql/graphql'
 import { useAuth } from '@/shared/hooks'
 import { GqlClient } from '@/shared/api/graphql-client'
 import { pageKeys } from '@/entities/page'
-import { GET_PAGE_SNAPSHOT } from '../api/fragments'
-import { decodePageSnapshot } from '../lib/decode-snapshot'
-import type { DecodedPageSnapshot } from '../lib/decode-snapshot'
-import type { GetPageSnapshotQuery } from '@/gql/graphql'
 
 /**
  * Fetch the Y.Doc snapshot for a page.

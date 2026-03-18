@@ -43,6 +43,7 @@ export function ArchivedChannelList({ channels }: ArchivedChannelListProps) {
                 render={
                   <Link
                     to="/workspace/$workspaceSlug/project/$projectSlug/chat/$conversationId"
+                     
                     params={(prev: any) => ({
                       ...prev,
                       conversationId: channel.id,

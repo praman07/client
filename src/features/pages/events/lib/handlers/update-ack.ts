@@ -8,10 +8,10 @@
  * @layer Features
  */
 
+import { addPendingStreamId } from './page-update'
 import type { UpdateAckPayload } from '@/shared/contracts/pages'
 import type { PageEventHandlerContext } from '../../model'
 import { pageOfflineQueue } from '@/entities/page-session'
-import { addPendingStreamId } from './page-update'
 import { createLogger } from '@/shared/lib/logger'
 
 const log = createLogger('pages:update-ack')

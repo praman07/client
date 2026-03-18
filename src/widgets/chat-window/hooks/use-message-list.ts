@@ -1,3 +1,5 @@
+'use no memo'
+
 import { useCallback, useEffect, useRef } from 'react'
 import { useVirtualizer } from '@tanstack/react-virtual'
 import { useMessageWindow } from '../hooks/use-message-window'
@@ -63,12 +65,13 @@ export function useMessageList({
   }, [conversationId, projectId, loadMore, messages, loadOlder])
 
   // 4. Virtualizer
+  // eslint-disable-next-line react-hooks/incompatible-library
   const virtualizer = useVirtualizer({
     count: messages.length,
     getScrollElement: () => containerRef.current,
     estimateSize: () => 60, // Default row height
     overscan: 5,
-    getItemKey: (index) => messages[index].virtualId,
+    getItemKey: (index) => messages[index]?.virtualId ?? `msg-${index}`,
   })
 
   // 5. Scroll Controller

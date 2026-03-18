@@ -1,13 +1,7 @@
 import { gql } from '@/gql'
+import { USER_FRAGMENT } from '@/entities/user'
 
-export const SESSION_USER_FRAGMENT = gql(`
-  fragment SessionUser on User {
-    id
-    email
-    fullName
-    avatarUrl
-  }
-`)
+export { USER_FRAGMENT }
 
 export const SYNC_USER_MUTATION = gql(`
   mutation SessionSyncUser(
@@ -32,7 +26,7 @@ export const SYNC_USER_MUTATION = gql(`
 export const GET_ME_QUERY = gql(`
   query GetMe {
     me {
-      ...SessionUser
+      ...User
     }
   }
 `)

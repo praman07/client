@@ -5,25 +5,25 @@
  * @layer Features
  */
 
-import { registerHandler } from '@/shared/ws/event-bus'
-import { PageDownstreamEvent } from '@/shared/contracts/pages'
-import type {
-  SubscribeSuccessPayload,
-  PageUpdateBroadcastPayload,
-  UpdateAckPayload,
-  UserJoinedPayload,
-  UserLeftPayload,
-  AwarenessUpdateBroadcastPayload,
-} from '@/shared/contracts/pages'
-import type { PageEventHandlerContext } from '../model'
 import {
-  handleSubscribeSuccess,
+  handleAwarenessUpdate,
   handlePageUpdate,
+  handleSubscribeSuccess,
   handleUpdateAck,
   handleUserJoined,
   handleUserLeft,
-  handleAwarenessUpdate,
 } from './handlers'
+import type {
+  AwarenessUpdateBroadcastPayload,
+  PageUpdateBroadcastPayload,
+  SubscribeSuccessPayload,
+  UpdateAckPayload,
+  UserJoinedPayload,
+  UserLeftPayload,
+} from '@/shared/contracts/pages'
+import type { PageEventHandlerContext } from '../model'
+import { registerHandler } from '@/shared/ws/event-bus'
+import { PageDownstreamEvent } from '@/shared/contracts/pages'
 
 export function registerPageHandlers(
   context: PageEventHandlerContext,

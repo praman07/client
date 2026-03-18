@@ -1,4 +1,6 @@
 import { toast } from 'sonner'
+import { useRemoveCollaborator } from '../hooks'
+import { mapRemoveCollaboratorError } from '../lib'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -14,8 +16,6 @@ import {
   AvatarFallback,
   AvatarImage,
 } from '@/shared/ui/primitives/avatar'
-import { useRemoveCollaborator } from '../hooks'
-import { mapRemoveCollaboratorError } from '../lib'
 
 interface Collaborator {
   userId: string

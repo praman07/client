@@ -1,9 +1,9 @@
 import { useEffect } from 'react'
-import type { RefObject } from 'react'
 import * as Y from 'yjs'
-import type { ExcalidrawImperativeAPI } from '@excalidraw/excalidraw/types'
 import { Awareness } from 'y-protocols/awareness'
 import { ExcalidrawBinding } from '@mizuka-wu/y-excalidraw'
+import type { ExcalidrawImperativeAPI } from '@excalidraw/excalidraw/types'
+import type { RefObject } from 'react'
 import { createLogger } from '@/shared/lib/logger'
 
 const log = createLogger('whiteboard:sync:binding')
@@ -40,6 +40,7 @@ export function useExcalidrawBinding(
     const yAssets = ydoc.getMap('assets')
     const awareness = new Awareness(ydoc)
 
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- excalidrawRef.current may be null on first mount before the ref is assigned
     const undoManagerOptions = excalidrawRef.current
       ? {
           excalidrawDom: excalidrawRef.current,

@@ -9,8 +9,8 @@ import type { BoardInitPayload } from '@/shared/contracts/whiteboard/downstream'
 import type { WhiteboardEventHandlerContext } from '../../model'
 import { setActiveCollaborators } from '@/entities/whiteboard-presence'
 import {
-  setConnectionStatus,
   offlineQueue,
+  setConnectionStatus,
 } from '@/entities/whiteboard-session'
 import { createLogger } from '@/shared/lib/logger'
 

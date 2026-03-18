@@ -11,12 +11,12 @@
  * @layer App
  */
 
+import type { PageEventHandlerContext } from '@/features/pages/events'
 import { createDomainPlugin } from '@/shared/ws/domains'
 import { registerPageHandlers } from '@/features/pages/events'
-import type { PageEventHandlerContext } from '@/features/pages/events'
 import {
-  PageUpstreamEvent,
   PageDownstreamEvent,
+  PageUpstreamEvent,
 } from '@/shared/contracts/pages/events'
 import { createLogger } from '@/shared/lib/logger'
 

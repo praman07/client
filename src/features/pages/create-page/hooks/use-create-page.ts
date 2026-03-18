@@ -1,9 +1,9 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { CREATE_PAGE } from '../api/fragments'
+import type { CreatePageFormData } from '../model'
 import { GqlClient } from '@/shared/api/graphql-client'
 import { useAuth } from '@/shared/hooks'
 import { pageKeys } from '@/entities/page'
-import { CREATE_PAGE } from '../api/fragments'
-import type { CreatePageFormData } from '../model'
 
 export interface CreatePageVariables extends CreatePageFormData {
   workspaceId: string
@@ -13,7 +13,7 @@ export interface CreatePageVariables extends CreatePageFormData {
   /** Fractional index position — pre-computed by caller */
   position: number
   /** Optional list of user IDs to add as collaborators at creation time */
-  collaboratorIds?: string[]
+  collaboratorIds?: Array<string>
 }
 
 /**

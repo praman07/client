@@ -1,21 +1,21 @@
 import { useEffect } from 'react'
-import type { RefObject } from 'react'
-import * as Y from 'yjs'
-import {
-  registerPageYDoc,
-  unregisterPageYDoc,
-} from '@/features/pages/events/lib/handlers/page-update'
-import { registerPageHandlers } from '@/features/pages/events/lib/register-handlers'
-import { subscribePage, unsubscribePage } from '@/features/pages/events/api'
-import {
-  setConnectionStatus,
-  setActivePageId,
-} from '@/entities/page-session/model/slice'
-import { selectPageConnectionStatus } from '@/entities/page-session/model/selectors'
-import { useSendPageUpdate } from '@/features/pages/send-page-update/hooks/use-send-page-update'
-import { useAppDispatch, useAppSelector } from '@/shared/hooks'
 import { useQueryClient } from '@tanstack/react-query'
-import { selectCurrentUser } from '@/entities/user/model/selectors'
+import type * as Y from 'yjs'
+import type { RefObject } from 'react'
+import {
+  registerPageHandlers,
+  registerPageYDoc,
+  subscribePage,
+  unregisterPageYDoc,
+  unsubscribePage,
+} from '@/features/pages/events'
+import {
+  selectPageConnectionStatus,
+  setActivePageId, setConnectionStatus 
+} from '@/entities/page-session'
+import { useSendPageUpdate } from '@/features/pages/send-page-update'
+import { useAppDispatch, useAppSelector } from '@/shared/hooks'
+import { selectCurrentUser } from '@/entities/user'
 import { createLogger } from '@/shared/lib/logger'
 
 const log = createLogger('pages:phase4:network-sync')
@@ -80,7 +80,7 @@ export function useNetworkSync(
     dispatch(setActivePageId(pageId))
     // Read ref at fire-time — always the real lastStreamId from the snapshot,
     // never the '0-0' initial value even if state batching delayed the setter.
-    subscribePage(pageId, lastStreamIdRef.current ?? '0-0')
+    subscribePage(pageId, lastStreamIdRef.current)
 
     return () => {
       log.info('Phase 4A: Cleanup — unsubscribing', { pageId })

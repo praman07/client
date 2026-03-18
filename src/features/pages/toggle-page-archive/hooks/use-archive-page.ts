@@ -1,9 +1,9 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { ARCHIVE_PAGE } from '../api/fragments'
+import type { Page } from '@/entities/page'
 import { GqlClient } from '@/shared/api/graphql-client'
 import { useAuth } from '@/shared/hooks'
 import { pageKeys } from '@/entities/page'
-import type { Page } from '@/entities/page'
-import { ARCHIVE_PAGE } from '../api/fragments'
 import { createLogger } from '@/shared/lib/logger'
 
 const log = createLogger('pages:archive-page-hook')
@@ -40,11 +40,11 @@ export function useArchivePage() {
       await queryClient.cancelQueries({
         queryKey: pageKeys.projectPages(projectId),
       })
-      const snapshot = queryClient.getQueryData<Page[]>(
+      const snapshot = queryClient.getQueryData<Array<Page>>(
         pageKeys.projectPages(projectId),
       )
 
-      queryClient.setQueryData<Page[]>(
+      queryClient.setQueryData<Array<Page>>(
         pageKeys.projectPages(projectId),
         (old) => (old ? setPageArchived(old, pageId, true) : old),
       )
@@ -76,16 +76,16 @@ export function useArchivePage() {
  * Exported for reuse in use-unarchive-page.ts.
  */
 export function setPageArchived(
-  pages: Page[],
+  pages: Array<Page>,
   pageId: string,
   archived: boolean,
-): Page[] {
+): Array<Page> {
   return pages.map((p) => {
     if (p.id === pageId) return { ...p, isArchived: archived }
-    if (p.children?.length) {
+    if (p.children.length) {
       return {
         ...p,
-        children: setPageArchived(p.children as Page[], pageId, archived),
+        children: setPageArchived(p.children, pageId, archived),
       }
     }
     return p

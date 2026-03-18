@@ -1,7 +1,7 @@
 import { useCallback, useEffect } from 'react'
 import {
-  sendCursorMove as sendCursor,
   clearCursorThrottle,
+  sendCursorMove as sendCursor,
 } from '@/features/whiteboard/events'
 
 /**

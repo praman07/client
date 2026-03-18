@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
-import * as Y from 'yjs'
-import { createIndexedDBProvider } from '@/entities/page-session'
+import type * as Y from 'yjs'
 import type { IndexeddbPersistence } from 'y-indexeddb'
+import { createIndexedDBProvider } from '@/entities/page-session'
 import { createLogger } from '@/shared/lib/logger'
 
 const log = createLogger('pages:phase2:indexeddb-sync')

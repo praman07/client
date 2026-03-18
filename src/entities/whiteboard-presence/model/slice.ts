@@ -1,11 +1,12 @@
-import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
+import {  createSlice } from '@reduxjs/toolkit'
 import { assignColor } from '../lib/color-assignment'
-import { createLogger } from '@/shared/lib/logger'
+import type {PayloadAction} from '@reduxjs/toolkit';
 import type {
-  WhiteboardPresenceState,
   CollaboratorPresence,
   CursorPosition,
+  WhiteboardPresenceState,
 } from './types'
+import { createLogger } from '@/shared/lib/logger'
 
 const log = createLogger('whiteboard:presence')
 
@@ -20,7 +21,7 @@ export const whiteboardPresenceSlice = createSlice({
   reducers: {
     setActiveCollaborators(
       state,
-      action: PayloadAction<Omit<CollaboratorPresence, 'color'>[]>,
+      action: PayloadAction<Array<Omit<CollaboratorPresence, 'color'>>>,
     ) {
       log.debug('🔄 Setting active collaborators', {
         count: action.payload.length,

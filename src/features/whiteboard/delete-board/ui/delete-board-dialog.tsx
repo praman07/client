@@ -1,10 +1,10 @@
 import {
   Dialog,
   DialogContent,
-  DialogHeader,
-  DialogTitle,
   DialogDescription,
   DialogFooter,
+  DialogHeader,
+  DialogTitle,
 } from '@/shared/ui/primitives/dialog'
 import { Button } from '@/shared/ui/primitives/button'
 
@@ -48,7 +48,7 @@ export function DeleteBoardDialog({
             variant="destructive"
             onClick={onConfirm}
             disabled={isPending}
-            className='text-white'
+            className="text-white"
           >
             {isPending ? 'Deleting...' : 'Delete'}
           </Button>

@@ -1,12 +1,12 @@
+import { useEffect } from 'react'
+import { useSettingsForm } from '../hooks/use-settings-form'
 import { useBoard } from '@/features/whiteboard/fetch-board'
-import { useRenameBoard } from '@/features/whiteboard/rename-board/hooks'
-import { useUpdateDescription } from '@/features/whiteboard/update-description/hooks'
+import { useRenameBoard } from '@/features/whiteboard/rename-board'
+import { useUpdateDescription } from '@/features/whiteboard/update-description'
 import { Input } from '@/shared/ui/primitives/input'
 import { Textarea } from '@/shared/ui/primitives/textarea'
 import { Button } from '@/shared/ui/primitives/button'
 import { Label } from '@/shared/ui/primitives/label'
-import { useSettingsForm } from '../hooks/use-settings-form'
-import { useEffect } from 'react'
 
 interface GeneralTabProps {
   boardId: string

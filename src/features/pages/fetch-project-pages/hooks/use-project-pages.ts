@@ -1,11 +1,11 @@
 import { useQuery } from '@tanstack/react-query'
+import { GET_PROJECT_PAGES } from '../api/fragments'
 import type { UseQueryOptions } from '@tanstack/react-query'
+import type { Page } from '@/entities/page'
+import type { GetProjectPagesQuery } from '@/gql/graphql'
 import { useAuth } from '@/shared/hooks'
 import { GqlClient } from '@/shared/api/graphql-client'
 import { pageKeys } from '@/entities/page'
-import type { Page } from '@/entities/page'
-import type { GetProjectPagesQuery } from '@/gql/graphql'
-import { GET_PROJECT_PAGES } from '../api/fragments'
 
 /**
  * Fetch the nested page tree for a project.
@@ -21,7 +21,7 @@ import { GET_PROJECT_PAGES } from '../api/fragments'
 export function useProjectPages(
   projectId: string,
   options?: Omit<
-    UseQueryOptions<GetProjectPagesQuery, Error, Page[]>,
+    UseQueryOptions<GetProjectPagesQuery, Error, Array<Page>>,
     'queryKey' | 'queryFn' | 'select'
   >,
 ) {
@@ -34,7 +34,7 @@ export function useProjectPages(
       if (!token) throw new Error('Not authenticated')
       return GqlClient(token).request(GET_PROJECT_PAGES, { projectId })
     },
-    select: (data) => data.getProjectPages as Page[],
+    select: (data) => data.getProjectPages as Array<Page>,
     enabled: !!projectId,
     staleTime: 30_000, // 30s — page tree rarely changes mid-session
     ...options,

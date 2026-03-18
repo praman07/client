@@ -5,31 +5,31 @@
  * Pattern: Matches chat domain registration pattern
  */
 
-import { registerHandler } from '@/shared/ws/event-bus'
-import { WhiteboardDownstreamEvent } from '@/shared/contracts/whiteboard/events'
-import type {
-  BoardInitPayload,
-  BoardUpdatePayload,
-  UpdateAckPayload,
-  UserJoinedPayload,
-  UserLeftPayload,
-  CursorUpdatePayload,
-  BoardLockedPayload,
-  BoardUnlockedPayload,
-  BoardDeletedPayload,
-} from '@/shared/contracts/whiteboard/downstream'
-import type { WhiteboardEventHandlerContext } from '../model'
 import {
+  handleBoardDeleted,
+  handleBoardLocked,
+  handleBoardUnlocked,
   handleBoardUpdate,
+  handleCursorUpdate,
   handleSubscribeSuccess,
   handleUpdateAck,
   handleUserJoined,
   handleUserLeft,
-  handleCursorUpdate,
-  handleBoardLocked,
-  handleBoardUnlocked,
-  handleBoardDeleted,
 } from './handlers'
+import type {
+  BoardDeletedPayload,
+  BoardInitPayload,
+  BoardLockedPayload,
+  BoardUnlockedPayload,
+  BoardUpdatePayload,
+  CursorUpdatePayload,
+  UpdateAckPayload,
+  UserJoinedPayload,
+  UserLeftPayload,
+} from '@/shared/contracts/whiteboard/downstream'
+import type { WhiteboardEventHandlerContext } from '../model'
+import { registerHandler } from '@/shared/ws/event-bus'
+import { WhiteboardDownstreamEvent } from '@/shared/contracts/whiteboard/events'
 
 /**
  * Register all whiteboard event handlers

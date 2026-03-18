@@ -21,14 +21,31 @@ export {
 // Offline queue (consumed by: features/pages/events/api/send-page-update.ts + subscribe-success handler)
 export { pageOfflineQueue } from './lib/offline-queue-manager'
 
-// Redux model (consumed by: features/pages/events/handlers/page-locked.ts, page-unlocked.ts)
+// Redux model
 export {
   pageSessionSlice,
+  setActivePageId,
   setConnectionStatus,
   setPageLocked,
+  setOnlineStatus,
+  setSyncing,
+  setYDocStatus,
+  resetPageState,
 } from './model/slice'
 export type {
   PageSessionState,
   ConnectionStatus,
   SyncStatus,
 } from './model/types'
+
+// Redux selectors (consumed by: features/pages/events/*, widgets/page-editor/*)
+export {
+  selectActivePageId,
+  selectPageConnectionStatus,
+  selectIsPageLocked,
+  selectIsPageOnline,
+  selectPageYdocStatus,
+  selectIsSyncing,
+  selectSnapshotLoadedAt,
+  selectPendingUpdateCount,
+} from './model/selectors'

@@ -68,7 +68,7 @@ export interface CursorMovePayload {
  */
 export interface SelectionChangePayload {
   boardId: string
-  elementIds: string[] // Array of Excalidraw element IDs
+  elementIds: Array<string> // Array of Excalidraw element IDs
 }
 
 /**

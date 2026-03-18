@@ -1,10 +1,10 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { UNARCHIVE_PAGE } from '../api/fragments'
+import { setPageArchived } from './use-archive-page'
+import type { Page } from '@/entities/page'
 import { GqlClient } from '@/shared/api/graphql-client'
 import { useAuth } from '@/shared/hooks'
 import { pageKeys } from '@/entities/page'
-import type { Page } from '@/entities/page'
-import { UNARCHIVE_PAGE } from '../api/fragments'
-import { setPageArchived } from './use-archive-page'
 import { createLogger } from '@/shared/lib/logger'
 
 const log = createLogger('pages:unarchive-page-hook')
@@ -44,11 +44,11 @@ export function useUnarchivePage() {
       await queryClient.cancelQueries({
         queryKey: pageKeys.projectPages(projectId),
       })
-      const snapshot = queryClient.getQueryData<Page[]>(
+      const snapshot = queryClient.getQueryData<Array<Page>>(
         pageKeys.projectPages(projectId),
       )
 
-      queryClient.setQueryData<Page[]>(
+      queryClient.setQueryData<Array<Page>>(
         pageKeys.projectPages(projectId),
         (old) => (old ? setPageArchived(old, pageId, false) : old),
       )

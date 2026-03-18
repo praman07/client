@@ -1,4 +1,4 @@
-import * as Y from 'yjs'
+import type * as Y from 'yjs'
 import { createLogger } from '@/shared/lib/logger'
 
 const log = createLogger('pages:ydoc-registry')

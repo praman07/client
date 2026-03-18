@@ -8,11 +8,11 @@
  * allows the stateless WS handler to trigger React state on the active board page.
  */
 
+import { toast } from 'sonner'
 import type { BoardDeletedPayload } from '@/shared/contracts/whiteboard/downstream'
 import type { WhiteboardEventHandlerContext } from '../../model'
 import { boardKeys } from '@/entities/whiteboard-board'
 import { cleanBoardFromIndexedDB } from '@/features/whiteboard/delete-board'
-import { toast } from 'sonner'
 import { createLogger } from '@/shared/lib/logger'
 
 const log = createLogger('whiteboard:board-deleted')

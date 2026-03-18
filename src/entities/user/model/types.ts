@@ -1,3 +1,3 @@
-import type { UserFragmentFragment } from '@/gql/graphql'
+import type { UserFragment } from '@/gql/graphql'
 
-export type User = UserFragmentFragment
+export type User = UserFragment

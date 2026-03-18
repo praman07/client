@@ -48,7 +48,7 @@ export const RecoveryListener = () => {
             fetchLimit,
           )
 
-          if (!messages || messages.length === 0) {
+          if (messages.length === 0) {
             log.warn(
               `No messages found for ${conversationId}. Server history missing? Forcing cursor advance.`,
             )

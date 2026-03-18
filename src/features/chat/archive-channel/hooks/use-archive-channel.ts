@@ -3,7 +3,7 @@ import { useNavigate, useParams } from '@tanstack/react-router'
 import { toast } from 'sonner'
 import { ARCHIVE_CHANNEL_MUTATION } from '../api'
 import { mapArchiveChannelError } from '../lib/error-mapping'
-import type { ArchiveChannelInput } from '@/gql/graphql'
+import type { ArchiveChannelInput, ConversationFieldsFragment, GetConversationQuery, GetUserConversationsQuery } from '@/gql/graphql'
 import { GqlClient } from '@/shared/api'
 import { useAuth } from '@/shared/hooks'
 import { conversationKeys } from '@/entities/conversation'
@@ -25,7 +25,7 @@ export function useArchiveChannel() {
       const { workspaceId, projectId, id } = data.archiveChannel
 
       // 1. Immediately update detail query cache
-      queryClient.setQueryData(conversationKeys.detail(id), (oldData: any) => {
+      queryClient.setQueryData(conversationKeys.detail(id), (oldData: GetConversationQuery | undefined) => {
         if (!oldData?.getConversation) return oldData
         return {
           ...oldData,
@@ -41,21 +41,18 @@ export function useArchiveChannel() {
       if (workspaceId && projectId) {
         queryClient.setQueryData(
           conversationKeys.channels(workspaceId, projectId),
-          (oldData: any) => {
-            if (!oldData?.getUserConversations?.edges) return oldData
+          (oldData: GetUserConversationsQuery | undefined) => {
+            if (!oldData?.getUserConversations.edges) return oldData
             return {
               ...oldData,
               getUserConversations: {
                 ...oldData.getUserConversations,
-                edges: oldData.getUserConversations.edges.map((conv: any) =>
-                  conv.id === id
-                    ? {
-                        ...conv,
-                        isArchived: true,
-                        deletedAt: data.archiveChannel.deletedAt,
-                      }
-                    : conv,
-                ),
+                edges: oldData.getUserConversations.edges.map((conv) => {
+                  const c = conv as unknown as ConversationFieldsFragment
+                  return c.id === id
+                    ? { ...c, isArchived: true, deletedAt: data.archiveChannel.deletedAt }
+                    : c
+                }),
               },
             }
           },

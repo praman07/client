@@ -1,4 +1,4 @@
-import * as Y from 'yjs'
+import type * as Y from 'yjs'
 import type { ExcalidrawImperativeAPI } from '@excalidraw/excalidraw/types'
 import { createLogger } from '@/shared/lib/logger'
 

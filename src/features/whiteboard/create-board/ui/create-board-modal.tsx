@@ -1,10 +1,10 @@
+import { CreateBoardForm } from './create-board-form'
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
 } from '@/shared/ui/primitives/dialog'
-import { CreateBoardForm } from './create-board-form'
 
 interface CreateBoardModalProps {
   workspaceId: string

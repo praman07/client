@@ -1,5 +1,5 @@
+import { selectSnapshotLoadedAt, selectYDocStatus } from '../model/selectors'
 import { useAppSelector } from '@/shared/hooks'
-import { selectYDocStatus, selectSnapshotLoadedAt } from '../model/selectors'
 
 export function useSyncStatus() {
   const status = useAppSelector(selectYDocStatus)

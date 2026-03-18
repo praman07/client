@@ -1,6 +1,6 @@
 import * as Y from 'yjs'
-import { createLogger } from '@/shared/lib/logger'
 import { createYDoc } from './yjs/create-ydoc' // ✅ Import centralized factory
+import { createLogger } from '@/shared/lib/logger'
 
 const log = createLogger('whiteboard:validation')
 

@@ -1,10 +1,10 @@
 import { useQuery } from '@tanstack/react-query'
+import { GET_BOARD } from '../api/fragments'
 import type { UseQueryOptions } from '@tanstack/react-query'
+import type { GetBoardQuery } from '@/gql/graphql'
 import { useAuth } from '@/shared/hooks'
 import { GqlClient } from '@/shared/api/graphql-client'
 import { boardKeys } from '@/entities/whiteboard-board'
-import { GET_BOARD } from '../api/fragments'
-import type { GetBoardQuery } from '@/gql/graphql'
 
 /**
  * Fetch a single whiteboard board by ID

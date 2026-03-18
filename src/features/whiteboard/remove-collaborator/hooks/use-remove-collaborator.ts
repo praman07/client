@@ -1,8 +1,8 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { REMOVE_BOARD_COLLABORATOR } from '../api'
 import { GqlClient } from '@/shared/api/graphql-client'
 import { useAuth } from '@/shared/hooks'
 import { boardKeys } from '@/entities/whiteboard-board'
-import { REMOVE_BOARD_COLLABORATOR } from '../api'
 
 export function useRemoveCollaborator() {
   const { getToken } = useAuth()

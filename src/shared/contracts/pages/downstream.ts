@@ -43,7 +43,7 @@ export interface SubscribeSuccessPayload {
   pageId: string
   isLocked: boolean
   subscriberCount: number
-  collaborators: PageCollaboratorInfo[]
+  collaborators: Array<PageCollaboratorInfo>
 }
 
 /** Remote Y.Doc delta from another collaborator. Apply with Y.applyUpdate. */

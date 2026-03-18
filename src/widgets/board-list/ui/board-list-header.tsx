@@ -1,3 +1,5 @@
+import { Grid, List, Search, SlidersHorizontal } from 'lucide-react'
+import type { SortOption, ViewMode } from '../hooks'
 import { Input } from '@/shared/ui/primitives/input'
 import { Button } from '@/shared/ui/primitives/button'
 import {
@@ -7,8 +9,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/shared/ui/primitives/select'
-import { Search, Grid, List, SlidersHorizontal } from 'lucide-react'
-import type { ViewMode, SortOption } from '../hooks'
 
 interface BoardListHeaderProps {
   searchQuery: string

@@ -25,7 +25,7 @@ export function useFetchDelta() {
       try {
         const data = await client.request(GET_MISSING_MESSAGES, {
           conversationId,
-          afterSequence: afterSequence ?? 0, // Use Sequence Cursor (Safety Default)
+          afterSequence, // Sequence cursor — always a number per function signature
           limit,
         })
         return data.messagesDelta

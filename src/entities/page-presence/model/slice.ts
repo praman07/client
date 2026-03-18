@@ -1,7 +1,8 @@
-import { createSlice, type PayloadAction } from '@reduxjs/toolkit'
-import { createLogger } from '@/shared/lib/logger'
+import {  createSlice } from '@reduxjs/toolkit'
 import { assignColor } from '../lib/color-assignment'
-import type { PagePresenceState, PageCollaboratorPresence } from './types'
+import type {PayloadAction} from '@reduxjs/toolkit';
+import type { PageCollaboratorPresence, PagePresenceState } from './types'
+import { createLogger } from '@/shared/lib/logger'
 
 const log = createLogger('pages:presence')
 
@@ -35,7 +36,7 @@ export const pagePresenceSlice = createSlice({
      */
     setActivePageCollaborators(
       state,
-      action: PayloadAction<Omit<PageCollaboratorPresence, 'color'>[]>,
+      action: PayloadAction<Array<Omit<PageCollaboratorPresence, 'color'>>>,
     ) {
       state.collaborators = {}
       action.payload.forEach((collab) => {

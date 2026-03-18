@@ -9,7 +9,7 @@
  */
 
 import * as Y from 'yjs'
-import { type Logger } from '@/shared/lib/logger'
+import type {Logger} from '@/shared/lib/logger';
 
 /**
  * Result of applying a Y.js update

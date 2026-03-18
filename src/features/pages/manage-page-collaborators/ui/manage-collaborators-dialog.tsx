@@ -4,9 +4,9 @@ import { toast } from 'sonner'
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogDescription,
 } from '@/shared/ui/primitives/dialog'
 import { Button } from '@/shared/ui/primitives/button'
 import {
@@ -15,10 +15,9 @@ import {
   AvatarImage,
 } from '@/shared/ui/primitives/avatar'
 import { ScrollArea } from '@/shared/ui/primitives/scroll-area'
-import { usePageCollaborators } from '@/features/pages/fetch-page-collaborators/hooks'
-import { useRemovePageCollaborator } from '@/features/pages/remove-page-collaborator'
-import { mapRemovePageCollaboratorError } from '@/features/pages/remove-page-collaborator'
-import { AddPageCollaboratorsDialog } from '@/features/pages/add-page-collaborators/ui/add-page-collaborators-dialog'
+import { usePageCollaborators } from '@/features/pages/fetch-page-collaborators'
+import { mapRemovePageCollaboratorError, useRemovePageCollaborator  } from '@/features/pages/remove-page-collaborator'
+import { AddPageCollaboratorsDialog } from '@/features/pages/add-page-collaborators'
 import { useAuth } from '@/shared/hooks'
 
 interface ManageCollaboratorsDialogProps {
@@ -91,9 +90,9 @@ export function ManageCollaboratorsDialog({
               <div className="space-y-1">
                 {collaborators.map((collab) => {
                   const isCreator = collab.userId === userId
-                  const name = collab.user?.fullName ?? 'Unknown'
-                  const email = collab.user?.email ?? ''
-                  const avatar = collab.user?.avatarUrl ?? ''
+                  const name = collab.user.fullName
+                  const email = collab.user.email
+                  const avatar = collab.user.avatarUrl ?? ''
                   return (
                     <div
                       key={collab.userId}

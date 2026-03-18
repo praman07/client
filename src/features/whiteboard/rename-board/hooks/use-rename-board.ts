@@ -1,9 +1,9 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { RENAME_BOARD } from '../api'
+import type { GetBoardQuery } from '@/gql/graphql'
 import { GqlClient } from '@/shared/api/graphql-client'
 import { useAuth } from '@/shared/hooks'
 import { boardKeys } from '@/entities/whiteboard-board'
-import type { GetBoardQuery } from '@/gql/graphql'
-import { RENAME_BOARD } from '../api'
 
 interface RenameBoardVariables {
   boardId: string

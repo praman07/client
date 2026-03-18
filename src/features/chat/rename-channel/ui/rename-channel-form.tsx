@@ -62,7 +62,7 @@ export function RenameChannelForm({
             if (!result.success) return result.error.issues[0].message
             return undefined
           },
-          onChangeAsync: async ({ value }: { value: string }) => {
+          onChangeAsync: ({ value }: { value: string }) => {
             // Skip if name hasn't changed
             if (value === currentName) return null
 

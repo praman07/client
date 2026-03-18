@@ -1,4 +1,4 @@
-import { useRef, useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { useForm } from '@tanstack/react-form'
 import { toast } from 'sonner'
 import { useRenamePage } from '../hooks/use-rename-page'
@@ -113,11 +113,12 @@ export function RenamePageInput({
               aria-label="Page title"
               className={className}
             />
-            {field.state.meta.isTouched && field.state.meta.errors.length > 0 && (
-              <p className="text-xs text-destructive">
-                {field.state.meta.errors.join(', ')}
-              </p>
-            )}
+            {field.state.meta.isTouched &&
+              field.state.meta.errors.length > 0 && (
+                <p className="text-xs text-destructive">
+                  {field.state.meta.errors.join(', ')}
+                </p>
+              )}
           </div>
         )}
       </form.Field>

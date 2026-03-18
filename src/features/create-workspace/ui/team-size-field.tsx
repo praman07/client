@@ -15,7 +15,7 @@ export function TeamSizeField({ form }: Props) {
           <Label className="text-base font-medium">Team Size</Label>
           <RadioGroup
             value={field.state.value}
-            onValueChange={(val) => field.handleChange(val as any)}
+            onValueChange={(val) => field.handleChange(val)}
             className="grid grid-cols-4 gap-3"
           >
             {TEAM_SIZES.map((size) => {

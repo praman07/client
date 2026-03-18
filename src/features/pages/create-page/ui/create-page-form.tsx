@@ -1,15 +1,15 @@
 import { useState } from 'react'
 import { useForm } from '@tanstack/react-form'
 import { toast } from 'sonner'
-import { Button } from '@/shared/ui/primitives/button'
-import { Input } from '@/shared/ui/primitives/input'
-import { Label } from '@/shared/ui/primitives/label'
 import { useCreatePage } from '../hooks/use-create-page'
 import { mapCreatePageError } from '../lib/error-mapping'
 import { createPageSchema, validateZod } from '../model/schema'
 import { CollaboratorPicker } from './collaborator-picker'
-import { useAuth } from '@/shared/hooks'
 import type { Page } from '@/entities/page'
+import { useAuth } from '@/shared/hooks'
+import { Label } from '@/shared/ui/primitives/label'
+import { Input } from '@/shared/ui/primitives/input'
+import { Button } from '@/shared/ui/primitives/button'
 
 export interface CreatePageFormProps {
   workspaceId: string
@@ -24,7 +24,8 @@ export interface CreatePageFormProps {
 
 /** Row component to display field validation errors */
 function FieldError({ field }: { field: any }) {
-  if (!field.state.meta.isTouched || !field.state.meta.errors.length) return null
+  if (!field.state.meta.isTouched || !field.state.meta.errors.length)
+    return null
   return (
     <p className="text-sm font-medium text-destructive">
       {field.state.meta.errors.join(', ')}
@@ -56,7 +57,7 @@ export function CreatePageForm({
     defaultValues: {
       title: '',
       icon: '',
-      collaboratorIds: userId ? [userId] : ([] as string[]),
+      collaboratorIds: userId ? [userId] : ([] as Array<string>),
     },
     onSubmit: async ({ value }) => {
       setRootError(null)
@@ -170,7 +171,12 @@ export function CreatePageForm({
       {/* Submit row */}
       <div className="flex items-center justify-end gap-2 pt-2">
         {onCancel && (
-          <Button type="button" variant="ghost" onClick={onCancel} disabled={isPending}>
+          <Button
+            type="button"
+            variant="ghost"
+            onClick={onCancel}
+            disabled={isPending}
+          >
             Cancel
           </Button>
         )}

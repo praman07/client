@@ -65,6 +65,7 @@ export type YjsOriginType = (typeof YjsOrigin)[keyof typeof YjsOrigin]
  * })
  * ```
  */
+ 
 export function isLocalOrigin(origin: any): boolean {
   // Exclude: IndexedDB and Remote
   // Everything else (undefined, null, 'local', ExcalidrawBinding) is local
@@ -86,6 +87,7 @@ export function isLocalOrigin(origin: any): boolean {
  * })
  * ```
  */
+ 
 export function isIndexedDBOrigin(origin: any): boolean {
   return origin === YjsOrigin.IndexedDB
 }

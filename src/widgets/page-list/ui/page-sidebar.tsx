@@ -1,15 +1,11 @@
 import { useMemo } from 'react'
-import { ScrollArea } from '@/shared/ui'
-import { Skeleton } from '@/shared/ui/primitives/skeleton'
-import {
-  Sidebar,
-  SidebarContent,
-} from '@/shared/ui/primitives/sidebar'
-import { useProjectPages } from '@/features/pages/fetch-project-pages'
-import { CreatePageModal } from '@/features/pages/create-page'
-import type { Page } from '@/entities/page'
 import { buildPageTree } from '../hooks/use-page-tree'
 import { PageTreeSection } from './page-tree-section'
+import { ScrollArea } from '@/shared/ui'
+import { Skeleton } from '@/shared/ui/primitives/skeleton'
+import { Sidebar, SidebarContent } from '@/shared/ui/primitives/sidebar'
+import { useProjectPages } from '@/features/pages/fetch-project-pages'
+import { CreatePageModal } from '@/features/pages/create-page'
 
 interface PageSidebarProps {
   workspaceId: string
@@ -28,7 +24,7 @@ export function PageSidebar({ projectId }: PageSidebarProps) {
   const { data, isLoading } = useProjectPages(projectId)
 
   const tree = useMemo(() => {
-    const pages = (data ?? []) as Page[]
+    const pages = (data ?? [])
     return buildPageTree(pages)
   }, [data])
 

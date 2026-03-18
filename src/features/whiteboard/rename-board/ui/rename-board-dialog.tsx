@@ -1,15 +1,15 @@
 import { useState } from 'react'
+import type { Board } from '@/entities/whiteboard-board'
 import {
   Dialog,
   DialogContent,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogFooter,
 } from '@/shared/ui/primitives/dialog'
 import { Button } from '@/shared/ui/primitives/button'
 import { Input } from '@/shared/ui/primitives/input'
 import { Label } from '@/shared/ui/primitives/label'
-import type { Board } from '@/entities/whiteboard-board'
 
 interface RenameBoardDialogProps {
   board: Board

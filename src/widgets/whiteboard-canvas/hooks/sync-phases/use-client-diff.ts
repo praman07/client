@@ -1,6 +1,6 @@
-import { useEffect, useRef, useState } from 'react'
-import type { RefObject } from 'react'
+import { useEffect, useRef } from 'react'
 import * as Y from 'yjs'
+import type { RefObject } from 'react'
 import { createLogger } from '@/shared/lib/logger'
 import { useSendBoardUpdate } from '@/features/whiteboard/send-board-update'
 
@@ -22,22 +22,11 @@ export function useClientDiff(
   serverStateVectorRef: RefObject<Uint8Array | null>,
 ) {
   const sendUpdate = useSendBoardUpdate(boardId)
-  const [sent, setSent] = useState(false)
-  const ydocRef = useRef(ydoc)
-
-  useEffect(() => {
-    if (ydocRef.current !== ydoc) {
-      log.debug('Y.Doc instance changed, resetting client diff state', {
-        boardId,
-      })
-      setSent(false)
-      ydocRef.current = ydoc
-    }
-  }, [ydoc, boardId])
+  const sentRef = useRef(false)
 
   useEffect(() => {
     const serverStateVector = serverStateVectorRef.current
-    if (!indexeddbSynced || !serverStateVector || sent) {
+    if (!indexeddbSynced || !serverStateVector || sentRef.current) {
       return
     }
 
@@ -56,6 +45,6 @@ export function useClientDiff(
       log.debug('No offline edits to send', { boardId })
     }
 
-    setSent(true)
-  }, [ydoc, boardId, indexeddbSynced, serverStateVectorRef, sent, sendUpdate])
+    sentRef.current = true
+  }, [ydoc, boardId, indexeddbSynced, serverStateVectorRef, sendUpdate])
 }

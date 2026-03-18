@@ -2,10 +2,9 @@ import { MemberCacheProvider } from '../lib/member-cache-context'
 import { ChatHeader } from './chat-header'
 import { MessageInput } from './message-input'
 import { ChatContainer } from './components/chat-layout'
-import { MessageList } from '@/widgets/chat-window/ui/message-list'
+import { MessageList } from './message-list'
 import { useConversationSubscription } from '@/features/chat/subscribe-conversation'
-import { useResequencerStatus } from '@/entities/chat-session'
-import { SyncStatusIndicator } from '@/entities/chat-session/ui/SyncStatusIndicator'
+import { SyncStatusIndicator, useResequencerStatus  } from '@/entities/chat-session'
 import { useConversation } from '@/entities/conversation'
 import { createLogger } from '@/shared/lib/logger'
 
@@ -34,10 +33,8 @@ export function ChatWindow({
   })
 
   // Extract members array (undefined if not loaded yet, filter out nulls and unwrap fragment refs)
-  const members = conversationData?.getConversation?.members
-    ? (conversationData.getConversation.members.filter(
-        (m): m is NonNullable<typeof m> => m != null,
-      ) as unknown as Array<{
+  const members = conversationData?.getConversation.members
+    ? (conversationData.getConversation.members.filter(Boolean) as unknown as Array<{
         userId: string
         role: string
         isMuted: boolean
@@ -57,10 +54,10 @@ export function ChatWindow({
   log.debug('Members:', members)
 
   // 1. Activate Subscription (Data Plane)
-  useConversationSubscription(channelId || '', projectId, 'CHANNEL')
+  useConversationSubscription(channelId, projectId, 'CHANNEL')
 
   // 2. Monitoring (Control Plane)
-  const status = useResequencerStatus(channelId || '')
+  const status = useResequencerStatus(channelId)
 
   return (
     <MemberCacheProvider members={members}>
@@ -75,8 +72,8 @@ export function ChatWindow({
         >
           <SyncStatusIndicator status={status} />
         </ChatHeader>
-        <MessageList channelId={channelId || ''} projectId={projectId} />
-        <MessageInput channelId={channelId || ''} projectId={projectId} />
+        <MessageList channelId={channelId} projectId={projectId} />
+        <MessageInput channelId={channelId} projectId={projectId} />
       </ChatContainer>
     </MemberCacheProvider>
   )

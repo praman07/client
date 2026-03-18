@@ -3,8 +3,8 @@ import { ChevronsUpDown, Plus } from 'lucide-react'
 import { ErrorBoundary } from 'react-error-boundary'
 import {
   selectCurrentWorkspace,
-  selectMyWorkspaces,
-} from '@/entities/workspace/model/selectors'
+  selectMyWorkspaces, useMyWorkspaces 
+} from '@/entities/workspace'
 import { useAppSelector } from '@/shared/hooks'
 import { cn } from '@/shared/lib/utils'
 import {
@@ -21,7 +21,6 @@ import {
   WidgetError,
   buttonVariants,
 } from '@/shared/ui'
-import { useMyWorkspaces } from '@/entities/workspace'
 
 export function WorkspaceSwitcher() {
   return (

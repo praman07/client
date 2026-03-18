@@ -1,23 +1,23 @@
 import '@blocknote/shadcn/style.css'
 import { reset as resetLinkify } from 'linkifyjs'
-import { useMemo, useRef, useEffect } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useCreateBlockNote } from '@blocknote/react'
 import { BlockNoteView } from '@blocknote/shadcn'
-import * as Y from 'yjs'
 import { usePageSync } from '../hooks/use-page-sync'
-import type { PageAwarenessProvider } from '@/entities/page-session'
-import { assignColor } from '@/entities/page-presence/lib/color-assignment'
-import { useAppSelector } from '@/shared/hooks'
-import { selectCurrentUser } from '@/entities/user/model/selectors'
 import { PageEditorSkeleton } from './page-editor-skeleton'
 import { PageTitle } from './page-title'
 import { LockedBanner } from './locked-banner'
 import { CollaboratorBar } from './collaborator-bar'
+import type * as Y from 'yjs'
+import type { PageAwarenessProvider } from '@/entities/page-session'
+import { assignColor } from '@/entities/page-presence'
+import { useAppSelector } from '@/shared/hooks'
+import { selectCurrentUser } from '@/entities/user'
 import { createLogger } from '@/shared/lib/logger'
 import {
   registerPageAwarenessProvider,
   unregisterPageAwarenessProvider,
-} from '@/features/pages/events/lib/handlers/awareness-update'
+} from '@/features/pages/events'
 
 const log = createLogger('pages:page-editor')
 
@@ -71,12 +71,10 @@ function PageEditorBody({
 }: PageEditorBodyProps) {
   // Reset linkifyjs before each mount so BlockNote can re-register all schemes
   // (http, https, ftp, mailto, tel...) without 'already initialized' warnings.
-  // useRef guard: runs once per mount, skipped on re-renders.
-  const linkifyResetDone = useRef(false)
-  if (!linkifyResetDone.current) {
-    linkifyResetDone.current = true
+  // Using lazy component state initialization to run only once per mount.
+  useState(() => {
     resetLinkify()
-  }
+  })
 
   const currentUser = useAppSelector(selectCurrentUser)
 
@@ -91,9 +89,10 @@ function PageEditorBody({
     }
   }, [pageId, awarenessProvider])
 
+  const currentUserId = currentUser?.id ?? null
   const userColor = useMemo(
-    () => (currentUser?.id ? assignColor(currentUser.id) : '#6366f1'),
-    [currentUser?.id],
+    () => (currentUserId ? assignColor(currentUserId) : '#6366f1'),
+    [currentUserId],
   )
 
   log.debug('PageEditorBody mount — binding BlockNote to ydoc fragment', {
@@ -114,7 +113,7 @@ function PageEditorBody({
         name: currentUser?.fullName ?? 'Anonymous',
         color: userColor,
       },
-      showCursorLabels: "activity",
+      showCursorLabels: 'activity',
     },
   })
 
@@ -129,11 +128,7 @@ function PageEditorBody({
 
         {isLocked && <LockedBanner />}
 
-        <BlockNoteView
-          editor={editor}
-          theme="light"
-          editable={!isLocked}
-        />
+        <BlockNoteView editor={editor} theme="light" editable={!isLocked} />
       </div>
     </div>
   )

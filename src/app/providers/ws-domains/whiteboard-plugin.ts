@@ -11,12 +11,12 @@
  * - Delegates to existing whiteboard event handlers in features/whiteboard/events
  */
 
+import type { WhiteboardEventHandlerContext } from '@/features/whiteboard/events'
 import { createDomainPlugin } from '@/shared/ws/domains'
 import { registerWhiteboardHandlers } from '@/features/whiteboard/events'
-import type { WhiteboardEventHandlerContext } from '@/features/whiteboard/events'
 import {
-  WhiteboardUpstreamEvent,
   WhiteboardDownstreamEvent,
+  WhiteboardUpstreamEvent,
 } from '@/shared/contracts/whiteboard/events'
 import { createLogger } from '@/shared/lib/logger'
 

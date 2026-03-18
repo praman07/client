@@ -1,5 +1,5 @@
 import { gql } from '@/gql'
-import '@/entities/page/api/fragments'
+import '@/entities/page'
 
 export const GET_PROJECT_PAGES = gql(`
   query GetProjectPages($projectId: ID!) {

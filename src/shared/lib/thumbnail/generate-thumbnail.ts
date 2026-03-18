@@ -17,8 +17,8 @@ const WEBP_QUALITY = 0.7
 const EXPORT_PADDING = 16
 
 export async function generateBoardThumbnail(
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  elements: readonly any[],
+   
+  elements: ReadonlyArray<any>,
 ): Promise<Uint8Array> {
   const blob = await exportToBlob({
     elements: elements as any,

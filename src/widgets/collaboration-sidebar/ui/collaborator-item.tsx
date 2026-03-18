@@ -1,7 +1,9 @@
+import { CursorPreview } from './cursor-preview'
+import type { CollaboratorPresence } from '../hooks/use-sorted-collaborators'
 import {
   Avatar,
-  AvatarImage,
   AvatarFallback,
+  AvatarImage,
 } from '@/shared/ui/primitives/avatar'
 import { Badge } from '@/shared/ui/primitives/badge'
 import {
@@ -9,8 +11,6 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/shared/ui/primitives/tooltip'
-import { CursorPreview } from './cursor-preview'
-import type { CollaboratorPresence } from '../hooks/use-sorted-collaborators'
 
 interface CollaboratorItemProps {
   collaborator: CollaboratorPresence

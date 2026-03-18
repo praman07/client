@@ -1,0 +1,5 @@
+export { PendingUpdatesTracker } from './pending-updates-tracker'
+export { YjsOrigin, isLocalOrigin, isIndexedDBOrigin } from './constants'
+export type { YjsOriginType } from './constants'
+export { safeApplyUpdate } from './safe-apply-update'
+export type { SafeApplyUpdateResult, SafeApplyUpdateOptions } from './safe-apply-update'

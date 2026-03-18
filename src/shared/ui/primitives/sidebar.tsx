@@ -509,7 +509,7 @@ function SidebarMenuButton({
   const { isMobile, state } = useSidebar()
   const finalRender = React.useMemo(() => {
     if (!tooltip) return render
-    return (props: any) => <TooltipTrigger {...props} render={render} />
+    return (btnProps: any) => <TooltipTrigger {...btnProps} render={render} />
   }, [tooltip, render])
 
   const comp = useRender({

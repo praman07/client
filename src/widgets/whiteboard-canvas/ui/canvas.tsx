@@ -1,8 +1,8 @@
 import '@excalidraw/excalidraw/index.css'
-import { useRef, useState, useEffect } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Excalidraw } from '@excalidraw/excalidraw'
-import type { ExcalidrawImperativeAPI } from '@excalidraw/excalidraw/types'
 import { useWhiteboardSync } from '../hooks/use-whiteboard-sync'
+import type { ExcalidrawImperativeAPI } from '@excalidraw/excalidraw/types'
 import { createLogger } from '@/shared/lib/logger'
 
 const log = createLogger('whiteboard:canvas')

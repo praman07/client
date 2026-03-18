@@ -25,6 +25,7 @@ export function useScrollController({
   // Refs for debouncing and state tracking without re-renders
   const isFetchingRef = useRef(false)
   const modeRef = useRef(mode)
+  // eslint-disable-next-line react-hooks/refs -- must sync before scroll events fire; useEffect introduces a one-frame stale read
   modeRef.current = mode
 
   // 1. Detect Scroll Intent

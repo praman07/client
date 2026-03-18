@@ -11,10 +11,10 @@
  * @layer Features
  * @module whiteboard/events/api
  */
+import type { BoardUpdatePayload } from '@/shared/contracts/whiteboard/upstream'
 import { wsManager } from '@/shared/ws/manager'
 import { WhiteboardUpstreamEvent } from '@/shared/contracts/whiteboard/events'
-import type { BoardUpdatePayload } from '@/shared/contracts/whiteboard/upstream'
-import { uint8ArrayToBase64, offlineQueue } from '@/entities/whiteboard-session'
+import { offlineQueue, uint8ArrayToBase64 } from '@/entities/whiteboard-session'
 import { createLogger } from '@/shared/lib/logger'
 
 const log = createLogger('whiteboard:send-update')

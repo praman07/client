@@ -2,6 +2,9 @@ import { useState } from 'react'
 import { useForm } from '@tanstack/react-form'
 import { toast } from 'sonner'
 import { Check } from 'lucide-react'
+import { useAddCollaborators } from '../hooks'
+import { addCollaboratorsSchema } from '../model'
+import { mapAddCollaboratorsError } from '../lib'
 import { cn } from '@/shared/lib/utils'
 import { Button } from '@/shared/ui/primitives/button'
 import { DialogFooter } from '@/shared/ui/primitives/dialog'
@@ -11,9 +14,6 @@ import {
   AvatarImage,
 } from '@/shared/ui/primitives/avatar'
 import { ScrollArea } from '@/shared/ui/primitives/scroll-area'
-import { useAddCollaborators } from '../hooks'
-import { addCollaboratorsSchema } from '../model'
-import { mapAddCollaboratorsError } from '../lib'
 
 interface WorkspaceMember {
   id: string
@@ -27,7 +27,7 @@ interface WorkspaceMember {
 
 interface AddCollaboratorsFormProps {
   boardId: string
-  availableMembers: WorkspaceMember[]
+  availableMembers: Array<WorkspaceMember>
   onSuccess?: () => void
   onCancel?: () => void
 }
@@ -49,7 +49,7 @@ export function AddCollaboratorsForm({
   const form = useForm({
     defaultValues: {
       boardId,
-      userIds: [] as string[],
+      userIds: [] as Array<string>,
     },
     onSubmit: async ({ value }) => {
       setRootError(null)
@@ -89,7 +89,6 @@ export function AddCollaboratorsForm({
     return 'h-[440px]' // Full scrollable
   }
 
-
   return (
     <form
       onSubmit={(e) => {
@@ -108,8 +107,7 @@ export function AddCollaboratorsForm({
         name="userIds"
         validators={{
           onChange: ({ value }) => {
-            const result =
-              addCollaboratorsSchema.shape.userIds.safeParse(value)
+            const result = addCollaboratorsSchema.shape.userIds.safeParse(value)
             if (!result.success) return result.error.issues[0].message
             return undefined
           },
@@ -117,17 +115,15 @@ export function AddCollaboratorsForm({
       >
         {(field) => (
           <div className="space-y-2">
-            <ScrollArea 
+            <ScrollArea
               className={cn(
                 getScrollAreaHeight(availableMembers.length),
-                'rounded-md border p-4'
+                'rounded-md border p-4',
               )}
             >
               <div className="space-y-2">
                 {availableMembers.map((member) => {
-                  const isSelected = field.state.value.includes(
-                    member.user.id,
-                  )
+                  const isSelected = field.state.value.includes(member.user.id)
                   return (
                     <button
                       key={member.user.id}
@@ -159,9 +155,7 @@ export function AddCollaboratorsForm({
                           {member.user.email}
                         </span>
                       </div>
-                      {isSelected && (
-                        <Check className="h-5 w-5 text-primary" />
-                      )}
+                      {isSelected && <Check className="h-5 w-5 text-primary" />}
                     </button>
                   )
                 })}

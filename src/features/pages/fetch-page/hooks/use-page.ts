@@ -1,11 +1,11 @@
 import { useQuery } from '@tanstack/react-query'
+import { GET_PAGE } from '../api/fragments'
 import type { UseQueryOptions } from '@tanstack/react-query'
+import type { Page } from '@/entities/page'
+import type { GetPageQuery } from '@/gql/graphql'
 import { useAuth } from '@/shared/hooks'
 import { GqlClient } from '@/shared/api/graphql-client'
 import { pageKeys } from '@/entities/page'
-import type { Page } from '@/entities/page'
-import type { GetPageQuery } from '@/gql/graphql'
-import { GET_PAGE } from '../api/fragments'
 
 /**
  * Fetches full page metadata by pageId.

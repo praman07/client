@@ -1,21 +1,18 @@
 import { useState } from 'react'
 import { Link, useMatch, useParams } from '@tanstack/react-router'
 import { HugeiconsIcon } from '@hugeicons/react'
+import { ChevronRight, File01Icon } from '@hugeicons/core-free-icons'
+import { PageTreeItemActions } from './page-tree-item-actions'
+import type { PageTreeNode } from '../lib/types'
 import {
-  ChevronRight,
-  File01Icon,
-} from '@hugeicons/core-free-icons'
-import {
-  SidebarMenuItem,
   SidebarMenuButton,
+  SidebarMenuItem,
 } from '@/shared/ui/primitives/sidebar'
 import {
   Collapsible,
   CollapsibleContent,
   CollapsibleTrigger,
 } from '@/shared/ui/primitives/collapsible'
-import type { PageTreeNode } from '../lib/types'
-import { PageTreeItemActions } from './page-tree-item-actions'
 
 interface PageTreeItemProps {
   node: PageTreeNode
@@ -23,7 +20,10 @@ interface PageTreeItemProps {
 }
 
 /** Returns true if any descendant of `node` has the given id. */
-function hasActiveDescendant(node: PageTreeNode, activeId: string | null): boolean {
+function hasActiveDescendant(
+  node: PageTreeNode,
+  activeId: string | null,
+): boolean {
   if (!activeId) return false
   return node.children.some(
     (c) => c.page.id === activeId || hasActiveDescendant(c, activeId),
@@ -41,15 +41,12 @@ function hasActiveDescendant(node: PageTreeNode, activeId: string | null): boole
  * @layer Widgets
  */
 export function PageTreeItem({ node, depth = 0 }: PageTreeItemProps) {
-  const { workspaceSlug, projectSlug } = useParams({ strict: false }) as {
-    workspaceSlug: string
-    projectSlug: string
-  }
+  const { workspaceSlug, projectSlug } = useParams({ strict: false })
   const matchedPage = useMatch({
     from: '/_app/workspace/$workspaceSlug/project/$projectSlug/pages/$pageId',
     shouldThrow: false,
   })
-  const activePageId = matchedPage?.params?.pageId ?? null
+  const activePageId = matchedPage ? (matchedPage.params.pageId as string | undefined) ?? null : null
   const hasChildren = node.children.length > 0
   const isActive = activePageId === node.page.id
 
@@ -75,7 +72,7 @@ export function PageTreeItem({ node, depth = 0 }: PageTreeItemProps) {
               render={
                 <Link
                   to="/workspace/$workspaceSlug/project/$projectSlug/pages/$pageId"
-                  params={{ workspaceSlug, projectSlug, pageId: node.page.id }}
+                  params={{ workspaceSlug: workspaceSlug ?? '', projectSlug: projectSlug ?? '', pageId: node.page.id }}
                 />
               }
             >
@@ -99,7 +96,11 @@ export function PageTreeItem({ node, depth = 0 }: PageTreeItemProps) {
             {/* Depth-scaled indent — works for unlimited nesting levels */}
             <div style={{ paddingLeft: `${(depth + 1) * 12}px` }}>
               {node.children.map((child) => (
-                <PageTreeItem key={child.page.id} node={child} depth={depth + 1} />
+                <PageTreeItem
+                  key={child.page.id}
+                  node={child}
+                  depth={depth + 1}
+                />
               ))}
             </div>
           </CollapsibleContent>
@@ -111,7 +112,7 @@ export function PageTreeItem({ node, depth = 0 }: PageTreeItemProps) {
           render={
             <Link
               to="/workspace/$workspaceSlug/project/$projectSlug/pages/$pageId"
-              params={{ workspaceSlug, projectSlug, pageId: node.page.id }}
+              params={{ workspaceSlug: workspaceSlug ?? '', projectSlug: projectSlug ?? '', pageId: node.page.id }}
             />
           }
         >
