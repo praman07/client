@@ -43,9 +43,7 @@ export const projectSlice = createSlice({
       if (state.currentProject) {
         state.currentProject = {
           ...state.currentProject,
-          ...(action.payload !== undefined
-            ? { isArchived: action.payload }
-            : {}),
+          isArchived: action.payload,
         } as typeof state.currentProject
       }
     },

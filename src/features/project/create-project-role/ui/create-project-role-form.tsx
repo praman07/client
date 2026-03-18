@@ -109,7 +109,10 @@ export function StepPermissions({
 }: StepPermissionsProps) {
   const [search, setSearch] = useState('')
   const { data, isLoading } = useAllPermissions(workspaceId)
-  const allPermissions = data?.allPermissions ?? []
+  const allPermissions = useMemo(
+    () => data?.allPermissions ?? [],
+    [data?.allPermissions],
+  )
 
   const byResource = useMemo(() => {
     const lower = search.toLowerCase()
@@ -247,17 +250,21 @@ export function StepMembers({
 }: StepMembersProps) {
   const [search, setSearch] = useState('')
   const { data, isLoading } = useProjectMembers(projectId)
-  const allMembers = (data?.projectMembers ?? []) as Array<{
-    id: string
-    userId: string
-    role: string | null
-    user: {
-      id: string
-      fullName: string | null
-      email: string
-      avatarUrl: string | null
-    }
-  }>
+  const allMembers = useMemo(
+    () =>
+      (data?.projectMembers ?? []) as Array<{
+        id: string
+        userId: string
+        role: string | null
+        user: {
+          id: string
+          fullName: string | null
+          email: string
+          avatarUrl: string | null
+        }
+      }>,
+    [data?.projectMembers],
+  )
 
   const assignable = useMemo(() => {
     const lower = search.toLowerCase()

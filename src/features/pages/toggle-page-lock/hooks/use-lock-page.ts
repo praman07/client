@@ -82,7 +82,7 @@ export function setPageLocked(
 ): Array<Page> {
   return pages.map((p) => {
     if (p.id === pageId) return { ...p, isLocked: locked }
-    if (p.children?.length) {
+    if (p.children.length) {
       return {
         ...p,
         children: setPageLocked(p.children, pageId, locked),

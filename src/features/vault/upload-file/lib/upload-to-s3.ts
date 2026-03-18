@@ -100,6 +100,7 @@ export function uploadToS3(
         log.error('S3 PUT failed with HTTP error', {
           status: xhr.status,
           statusText: xhr.statusText,
+          // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- xhr.responseText can be null in network-level failures
           responseText: xhr.responseText?.slice(0, 500),
         })
         reject(

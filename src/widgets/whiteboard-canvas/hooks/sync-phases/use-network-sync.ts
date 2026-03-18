@@ -99,5 +99,5 @@ export function useNetworkSync(
         log.info('Unsubscribed from board updates', { boardId })
       }
     }
-  }, [ydoc, boardId, stateSynced, sendUpdate])
+  }, [ydoc, boardId, stateSynced, sendUpdate, lastStreamId])
 }

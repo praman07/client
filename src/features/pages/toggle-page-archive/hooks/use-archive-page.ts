@@ -82,7 +82,7 @@ export function setPageArchived(
 ): Array<Page> {
   return pages.map((p) => {
     if (p.id === pageId) return { ...p, isArchived: archived }
-    if (p.children?.length) {
+    if (p.children.length) {
       return {
         ...p,
         children: setPageArchived(p.children, pageId, archived),

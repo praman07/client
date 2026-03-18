@@ -87,7 +87,7 @@ export function useRenamePage() {
 function updatePageTitle(pages: Array<Page>, pageId: string, title: string): Array<Page> {
   return pages.map((p) => {
     if (p.id === pageId) return { ...p, title }
-    if (p.children?.length) {
+    if (p.children.length) {
       return {
         ...p,
         children: updatePageTitle(p.children, pageId, title),

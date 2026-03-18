@@ -59,14 +59,14 @@ export function ChatSidebar() {
   // ──────────────────────────────────────────────────────────────────────────
 
   const channels = useMemo(() => {
-    const edges = channelsData?.getUserConversations?.edges || []
+    const edges = channelsData?.getUserConversations.edges ?? []
     const allChannels = sortConversations(edges as Array<Conversation>)
     // Filter out archived channels from active channels list
     return allChannels.filter((channel) => !channel.isArchived)
   }, [channelsData])
 
   const archivedChannels = useMemo(() => {
-    const edges = archivedChannelsData?.getUserConversations?.edges || []
+    const edges = archivedChannelsData?.getUserConversations.edges ?? []
     const allChannels = sortConversations(edges as Array<Conversation>)
     // Filter to only show archived channels
     const filtered = allChannels.filter((channel) => channel.isArchived)
@@ -88,12 +88,12 @@ export function ChatSidebar() {
   }, [archivedChannelsData])
 
   const dms = useMemo(() => {
-    const edges = dmsData?.getUserConversations?.edges || []
+    const edges = dmsData?.getUserConversations.edges ?? []
     return sortConversations(edges as Array<Conversation>)
   }, [dmsData])
 
   const groups = useMemo(() => {
-    const edges = groupsData?.getUserConversations?.edges || []
+    const edges = groupsData?.getUserConversations.edges ?? []
     return sortConversations(edges as Array<Conversation>)
   }, [groupsData])
 

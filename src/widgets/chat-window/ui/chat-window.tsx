@@ -33,10 +33,8 @@ export function ChatWindow({
   })
 
   // Extract members array (undefined if not loaded yet, filter out nulls and unwrap fragment refs)
-  const members = conversationData?.getConversation?.members
-    ? (conversationData.getConversation.members.filter(
-        (m): m is NonNullable<typeof m> => m != null,
-      ) as unknown as Array<{
+  const members = conversationData?.getConversation.members
+    ? (conversationData.getConversation.members.filter(Boolean) as unknown as Array<{
         userId: string
         role: string
         isMuted: boolean
@@ -56,10 +54,10 @@ export function ChatWindow({
   log.debug('Members:', members)
 
   // 1. Activate Subscription (Data Plane)
-  useConversationSubscription(channelId || '', projectId, 'CHANNEL')
+  useConversationSubscription(channelId, projectId, 'CHANNEL')
 
   // 2. Monitoring (Control Plane)
-  const status = useResequencerStatus(channelId || '')
+  const status = useResequencerStatus(channelId)
 
   return (
     <MemberCacheProvider members={members}>
@@ -74,8 +72,8 @@ export function ChatWindow({
         >
           <SyncStatusIndicator status={status} />
         </ChatHeader>
-        <MessageList channelId={channelId || ''} projectId={projectId} />
-        <MessageInput channelId={channelId || ''} projectId={projectId} />
+        <MessageList channelId={channelId} projectId={projectId} />
+        <MessageInput channelId={channelId} projectId={projectId} />
       </ChatContainer>
     </MemberCacheProvider>
   )

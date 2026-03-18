@@ -18,7 +18,6 @@ import {
   
   createContext,
   useContext,
-  useEffect,
   useState
 } from 'react'
 import { createPortal } from 'react-dom'
@@ -33,6 +32,7 @@ import type {
 } from '@dnd-kit/core'
 import { Card } from '@/shared/ui/primitives/card'
 import { ScrollArea, ScrollBar } from '@/shared/ui/primitives/scroll-area'
+import { useIsClient } from '@/shared/hooks'
 import { cn } from '@/shared/lib/utils'
 
 const t = tunnel()
@@ -364,15 +364,10 @@ const initialDemoData = [
 ]
 
 export function KanbanDemo() {
-  const [mounted, setMounted] = useState(false)
+  const isClient = useIsClient()
   const [data, setData] = useState(initialDemoData)
 
-  // Prevent SSR to avoid dnd-kit hydration mismatch
-  useEffect(() => {
-    setMounted(true)
-  }, [])
-
-  if (!mounted) {
+  if (!isClient) {
     return <div className="h-screen w-screen bg-muted/50 animate-pulse" />
   }
 

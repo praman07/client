@@ -50,6 +50,7 @@ import {
   ContextMenuTrigger,
 } from '@/shared/ui/primitives/context-menu'
 import { cn } from '@/shared/lib/utils'
+import { useIsClient } from '@/shared/hooks'
 
 const draggingAtom = atom(false)
 const scrollXAtom = atom(0)
@@ -636,12 +637,17 @@ export const GanttColumn: FC<GanttColumnProps> = ({
   const handleMouseEnter = () => setHovering(true)
   const handleMouseLeave = () => setHovering(false)
 
-  const top = useThrottle(
-    mousePosition.y -
-      mouseRef.current.getBoundingClientRect().y -
-      (windowScroll.y ?? 0),
-    10,
-  )
+  const [rawTop, setRawTop] = useState(0)
+
+  useEffect(() => {
+    setRawTop(
+      mousePosition.y -
+        mouseRef.current.getBoundingClientRect().y -
+        (windowScroll.y ?? 0),
+    )
+  }, [mousePosition.y, windowScroll.y, mouseRef])
+
+  const top = useThrottle(rawTop, 10)
 
   return (
     <div
@@ -703,12 +709,17 @@ export const GanttCreateMarkerTrigger: FC<GanttCreateMarkerTriggerProps> = ({
   const gantt = useContext(GanttContext)
   const [mousePosition, mouseRef] = useMouse<HTMLDivElement>()
   const [windowScroll] = useWindowScroll()
-  const x = useThrottle(
-    mousePosition.x -
-      mouseRef.current.getBoundingClientRect().x -
-      (windowScroll.x ?? 0),
-    10,
-  )
+  const [rawX, setRawX] = useState(0)
+
+  useEffect(() => {
+    setRawX(
+      mousePosition.x -
+        mouseRef.current.getBoundingClientRect().x -
+        (windowScroll.x ?? 0),
+    )
+  }, [mousePosition.x, windowScroll.x, mouseRef])
+
+  const x = useThrottle(rawX, 10)
 
   const date = getDateByMousePosition(gantt, x)
 
@@ -1235,65 +1246,65 @@ export const GanttProvider: FC<GanttProviderProps> = ({
     }
   }, [])
 
-  // Fix the useCallback to include all dependencies
-  const handleScroll = useCallback(
-    throttle(() => {
-      const scrollElement = scrollRef.current
-      if (!scrollElement) {
-        return
-      }
+  // Fix the useCallback to include all dependencies. We use useMemo to memoize the throttled function.
+  const throttledScroll = useMemo(
+    () => throttle((scrollElement: HTMLElement) => {
 
       const { scrollLeft, scrollWidth, clientWidth } = scrollElement
       setScrollX(scrollLeft)
 
       if (scrollLeft === 0) {
         // Extend timelineData to the past
-        const firstYear = timelineData[0]?.year
+        setTimelineData((prev) => {
+          const firstYear = prev[0]?.year
 
-        if (!firstYear) {
-          return
-        }
+          if (!firstYear) {
+            return prev
+          }
 
-        const newTimelineData: TimelineData = [...timelineData]
-        newTimelineData.unshift({
-          year: firstYear - 1,
-          quarters: new Array(4).fill(null).map((_fill, quarterIndex) => ({
-            months: new Array(3).fill(null).map((_, monthIndex) => {
-              const month = quarterIndex * 3 + monthIndex
-              return {
-                days: getDaysInMonth(new Date(firstYear, month, 1)),
-              }
-            }),
-          })),
+          const newTimelineData: TimelineData = [...prev]
+          newTimelineData.unshift({
+            year: firstYear - 1,
+            quarters: new Array(4).fill(null).map((_fill, quarterIndex) => ({
+              months: new Array(3).fill(null).map((_, monthIndex) => {
+                const month = quarterIndex * 3 + monthIndex
+                return {
+                  days: getDaysInMonth(new Date(firstYear, month, 1)),
+                }
+              }),
+            })),
+          })
+
+          return newTimelineData
         })
-
-        setTimelineData(newTimelineData)
 
         // Scroll a bit forward so it's not at the very start
         scrollElement.scrollLeft = scrollElement.clientWidth
         setScrollX(scrollElement.scrollLeft)
       } else if (scrollLeft + clientWidth >= scrollWidth) {
         // Extend timelineData to the future
-        const lastYear = timelineData.at(-1)?.year
+        setTimelineData((prev) => {
+          const lastYear = prev.at(-1)?.year
 
-        if (!lastYear) {
-          return
-        }
+          if (!lastYear) {
+            return prev
+          }
 
-        const newTimelineData: TimelineData = [...timelineData]
-        newTimelineData.push({
-          year: lastYear + 1,
-          quarters: new Array(4).fill(null).map((_fill, quarterIndex) => ({
-            months: new Array(3).fill(null).map((_, monthIndex) => {
-              const month = quarterIndex * 3 + monthIndex
-              return {
-                days: getDaysInMonth(new Date(lastYear, month, 1)),
-              }
-            }),
-          })),
+          const newTimelineData: TimelineData = [...prev]
+          newTimelineData.push({
+            year: lastYear + 1,
+            quarters: new Array(4).fill(null).map((_fill, quarterIndex) => ({
+              months: new Array(3).fill(null).map((_, monthIndex) => {
+                const month = quarterIndex * 3 + monthIndex
+                return {
+                  days: getDaysInMonth(new Date(lastYear, month, 1)),
+                }
+              }),
+            })),
+          })
+
+          return newTimelineData
         })
-
-        setTimelineData(newTimelineData)
 
         // Scroll a bit back so it's not at the very end
         scrollElement.scrollLeft =
@@ -1301,8 +1312,14 @@ export const GanttProvider: FC<GanttProviderProps> = ({
         setScrollX(scrollElement.scrollLeft)
       }
     }, 100),
-    [],
+    [setScrollX, setTimelineData],
   )
+
+  const handleScroll = useCallback(() => {
+    if (scrollRef.current) {
+      throttledScroll(scrollRef.current)
+    }
+  }, [throttledScroll])
 
   useEffect(() => {
     const scrollElement = scrollRef.current
@@ -1550,16 +1567,11 @@ function createDemoData() {
 }
 
 export function GanttDemo() {
-  const [mounted, setMounted] = useState(false)
+  const isClient = useIsClient()
   const [data, setData] = useState<{
     features: Array<GanttFeature>
     markers: typeof demoMarkers
-  } | null>(null)
-
-  useEffect(() => {
-    setMounted(true)
-    setData(createDemoData())
-  }, [])
+  } | null>(createDemoData)
 
   const handleMoveFeature = useCallback(
     (id: string, startAt: Date, endAt: Date | null) => {
@@ -1579,7 +1591,7 @@ export function GanttDemo() {
   )
 
   // Prevent SSR to avoid dnd-kit hydration mismatch
-  if (!mounted || !data) {
+  if (!isClient || !data) {
     return <div className="h-screen w-screen bg-muted/50 animate-pulse" />
   }
 

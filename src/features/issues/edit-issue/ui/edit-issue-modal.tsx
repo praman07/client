@@ -79,23 +79,29 @@ export function EditIssueModal({
   // Guard so originalBlocks are seeded exactly once per modal open session
   const descSeeded = useRef(false)
 
-  // ── Seed local state when issue loads ────────────────────────────────────────
-  useEffect(() => {
-    if (!issue) return
+  // Seed state exactly once per issue ID
+  const [seededIssueId, setSeededIssueId] = useState<string | null>(null)
+  
+  if (issue && issue.id !== seededIssueId) {
+    setSeededIssueId(issue.id)
     setLocalTitle(issue.title)
     setLocalStatusId(issue.status?.id ?? '')
     setLocalPriority(issue.priority as IssuePriority)
     setLocalAssigneeId(issue.assignee?.id ?? null)
     setLocalLabelIds(issue.labels.map((l: { id: string }) => l.id))
     setLocalDueDate(issue.dueDate ?? null)
-  }, [issue])
-
-  // Reset description seed guard when issueId changes (new issue opened)
-  useEffect(() => {
-    descSeeded.current = false
+    
+    // reset description blocks
     setCurrentBlocks([])
     setOriginalBlocks([])
-  }, [issueId])
+  }
+
+  // Hook to reset descSeeded ref when issue changes
+  useEffect(() => {
+    if (issue) {
+      descSeeded.current = false
+    }
+  }, [issue])
 
   // ── onDescriptionLoaded — seeded once after S3 fetch, or immediately if empty
   const handleDescriptionLoaded = useCallback(

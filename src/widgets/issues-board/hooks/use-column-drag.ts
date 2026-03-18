@@ -12,7 +12,7 @@
  *
  * @layer Widgets
  */
-import { useCallback, useRef } from 'react'
+import { useCallback, useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import type { DragEndEvent } from '@dnd-kit/core'
 import type { AppDispatch } from '@/app/store'
@@ -26,7 +26,9 @@ export function useColumnDrag(projectId: string) {
   const { mutate: reorderStatusMutation } = useReorderStatus(projectId)
 
   const statusesRef = useRef(statuses)
-  statusesRef.current = statuses
+  useEffect(() => {
+    statusesRef.current = statuses
+  }, [statuses])
 
   const handleColumnDragEnd = useCallback(
     (event: DragEndEvent) => {

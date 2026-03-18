@@ -49,7 +49,7 @@ export function useUnarchiveChannel() {
         queryClient.setQueryData(
           conversationKeys.channels(workspaceId, projectId),
           (oldData: GetUserConversationsQuery | undefined) => {
-            if (!oldData?.getUserConversations?.edges) return oldData
+            if (!oldData?.getUserConversations.edges) return oldData
             return {
               ...oldData,
               getUserConversations: {

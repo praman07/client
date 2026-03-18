@@ -41,7 +41,7 @@ export function CreatePageModal() {
     close()
     navigate({
       to: '/workspace/$workspaceSlug/project/$projectSlug/pages/$pageId',
-      params: { workspaceSlug, projectSlug, pageId: page.id },
+      params: { workspaceSlug: workspaceSlug!, projectSlug: projectSlug!, pageId: page.id },
     })
   }
 

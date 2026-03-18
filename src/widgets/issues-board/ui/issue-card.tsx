@@ -90,6 +90,7 @@ function CardContent({
           <Avatar className="h-5 w-5">
             <AvatarImage src={issue.assignee.avatarUrl ?? undefined} />
             <AvatarFallback className="text-[9px]">
+              {/* eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- GQL fullName is nullable */}
               {issue.assignee.fullName?.charAt(0) ?? '?'}
             </AvatarFallback>
           </Avatar>

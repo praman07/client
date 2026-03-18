@@ -138,7 +138,7 @@ function extractPage(
       return true
     })
     .map((p) => {
-      if (!p.children?.length) return p
+      if (!p.children.length) return p
       const result = extractPage(p.children, pageId)
       if (result.page) found = result.page
       return { ...p, children: result.tree }
@@ -156,18 +156,18 @@ function insertPage(
   if (newParentId === null) {
     // Insert at root level, sorted by position
     return [...pages, page].sort(
-      (a, b) => (a.position ?? 0) - (b.position ?? 0),
+      (a, b) => a.position - b.position,
     )
   }
 
   return pages.map((p) => {
     if (p.id === newParentId) {
-      const children = [...((p.children) ?? []), page].sort(
-        (a, b) => (a.position ?? 0) - (b.position ?? 0),
+      const children = [...p.children, page].sort(
+        (a, b) => a.position - b.position,
       )
       return { ...p, children }
     }
-    if (p.children?.length) {
+    if (p.children.length) {
       return {
         ...p,
         children: insertPage(p.children, page, newParentId),

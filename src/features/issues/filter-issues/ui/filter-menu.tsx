@@ -80,8 +80,7 @@ export function FilterMenu({
     if (key === 'priorities') return !!filters.priorities?.length
     if (key === 'assigneeIds') return !!filters.assigneeIds?.length
     if (key === 'labelIds') return !!filters.labelIds?.length
-    if (key === 'dueDate') return !!filters.dueDate
-    return false
+    return !!filters.dueDate
   }
 
   const activeCategoryLabel = CATEGORIES.find(

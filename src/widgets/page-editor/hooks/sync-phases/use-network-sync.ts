@@ -80,7 +80,7 @@ export function useNetworkSync(
     dispatch(setActivePageId(pageId))
     // Read ref at fire-time — always the real lastStreamId from the snapshot,
     // never the '0-0' initial value even if state batching delayed the setter.
-    subscribePage(pageId, lastStreamIdRef.current ?? '0-0')
+    subscribePage(pageId, lastStreamIdRef.current)
 
     return () => {
       log.info('Phase 4A: Cleanup — unsubscribing', { pageId })

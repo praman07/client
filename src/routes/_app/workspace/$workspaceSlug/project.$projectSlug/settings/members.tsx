@@ -4,7 +4,7 @@ import { useAppSelector, useAuth } from '@/shared/hooks'
 import { selectCurrentProject } from '@/entities/project'
 import { selectCurrentWorkspace } from '@/entities/workspace'
 import { ProjectMembersTable } from '@/widgets/project-members-table'
-import { MembersPageSkeleton, PageSpinner, WidgetError  } from '@/shared/ui'
+import { MembersPageSkeleton, WidgetError  } from '@/shared/ui'
 
 export const Route = createFileRoute(
   '/_app/workspace/$workspaceSlug/project/$projectSlug/settings/members',

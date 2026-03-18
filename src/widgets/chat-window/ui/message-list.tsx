@@ -89,10 +89,13 @@ export function MessageList({ projectId, channelId }: MessageListProps) {
     count: virtualData.length,
     estimateSize: (index) => {
       const item = virtualData[index]
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- virtualizer calls estimateSize with stale indices during transitions
       if (item?.type === 'DATE') return 40
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- same as above
       return item?.isPrimary ? 64 : 28
     },
-    getItemKey: (index) => virtualData[index]?.id ?? index,
+     
+    getItemKey: (index) => virtualData[index]?.id ?? String(index),
     onLoadMore: handleLoadMore,
   })
 
@@ -102,6 +105,7 @@ export function MessageList({ projectId, channelId }: MessageListProps) {
   const handledMessageRef = useRef<string | null>(null)
 
   useEffect(() => {
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- lastMessage is undefined when Dexie window is loading
     if (!lastMessage || !user) return
 
     const msgId = lastMessage.virtualId
@@ -127,6 +131,7 @@ export function MessageList({ projectId, channelId }: MessageListProps) {
       >
         {rowVirtualizer.getVirtualItems().map((virtualRow) => {
           const item = virtualData[virtualRow.index]
+          // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- item can be undefined during virtualizer transitions
           if (!item) return null
 
           return (

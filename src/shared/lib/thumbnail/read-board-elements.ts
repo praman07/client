@@ -53,8 +53,7 @@ export async function readBoardElements(
     })
     // Extract the actual element from the "el" key
     .map((m) => m.get('el') as BoardElement)
-    // Filter out null/undefined and deleted elements
-    .filter((el): el is BoardElement => !!el && !el.isDeleted)
+    .filter((el): el is BoardElement => !el.isDeleted)
 
   log.debug('Read board elements', { boardId, count: elements.length })
 

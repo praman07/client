@@ -186,8 +186,7 @@ export function FilterSubMenu({
     )
   }
 
-  if (category === 'dueDate') {
-    return (
+  return (
       <div className="space-y-0.5 p-0.5">
         {DUE_DATE_OPTIONS.map((opt) => (
           <OptionRow
@@ -204,7 +203,4 @@ export function FilterSubMenu({
         ))}
       </div>
     )
-  }
-
-  return null
 }

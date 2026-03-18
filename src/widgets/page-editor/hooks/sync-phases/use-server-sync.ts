@@ -30,14 +30,21 @@ export function useServerSync(
   onServerSynced: (lastStreamId: string) => void,
 ): ServerSyncState {
   const dispatch = useAppDispatch()
-  const [serverSynced, setServerSynced] = useState(false)
-  const [lastStreamId, setLastStreamId] = useState('0-0')
+  const [syncState, setSyncState] = useState<ServerSyncState>({
+    serverSynced: false,
+    lastStreamId: '0-0',
+  })
   const appliedRef = useRef(false)
+  const onServerSyncedRef = useRef(onServerSynced)
+  
+  useEffect(() => {
+    onServerSyncedRef.current = onServerSynced
+  }, [onServerSynced])
 
   const { data: snapshot, isSuccess, isError } = usePageSnapshot(pageId)
 
   useEffect(() => {
-    if (!isSuccess || !snapshot || appliedRef.current) return
+    if (!isSuccess || appliedRef.current) return
     appliedRef.current = true
 
     try {
@@ -49,16 +56,17 @@ export function useServerSync(
         diffSize: snapshot.diff.byteLength,
       })
 
-      const streamId = snapshot.lastStreamId || '0-0'
-      setLastStreamId(streamId)
-      setServerSynced(true)
+      const streamId = snapshot.lastStreamId
       dispatch(setYDocStatus('synced'))
-      onServerSynced(streamId)
+      setTimeout(() => {
+        setSyncState({ serverSynced: true, lastStreamId: streamId })
+      }, 0)
+      onServerSyncedRef.current(streamId)
     } catch (err) {
       log.error('Failed to apply server snapshot', { pageId, err })
       dispatch(setYDocStatus('error'))
     }
-  }, [isSuccess, snapshot])
+  }, [isSuccess, snapshot, ydoc, pageId, dispatch])
 
   useEffect(() => {
     if (isError) {
@@ -67,5 +75,5 @@ export function useServerSync(
     }
   }, [isError, dispatch, pageId])
 
-  return { serverSynced, lastStreamId }
+  return syncState
 }

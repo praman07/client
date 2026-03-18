@@ -40,6 +40,7 @@ export function useExcalidrawBinding(
     const yAssets = ydoc.getMap('assets')
     const awareness = new Awareness(ydoc)
 
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- excalidrawRef.current may be null on first mount before the ref is assigned
     const undoManagerOptions = excalidrawRef.current
       ? {
           excalidrawDom: excalidrawRef.current,

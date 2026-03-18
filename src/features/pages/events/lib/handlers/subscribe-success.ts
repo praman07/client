@@ -53,7 +53,6 @@ export function handleSubscribeSuccess(
   )
 
   // Flush offline queue — drain any edits made while disconnected
-  pageOfflineQueue.flush(pageId).catch((err) => {
-    log.error('Failed to flush offline queue', { pageId, err })
-  })
+  // Note: flush() returns void and handles errors internally via flushImmediate
+  pageOfflineQueue.flush(pageId)
 }

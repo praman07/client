@@ -35,8 +35,10 @@ export function useCreateStatus() {
       })
     },
     onSuccess: (data, { projectId }) => {
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- GQL mutation result is nullable on auth/validation errors
       const status = data.createIssueStatus?.status
-      if (status) dispatch(addStatus(status as any))
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- status can be null/undefined when createIssueStatus itself is null
+      if (status != null) dispatch(addStatus(status as any))
       queryClient.invalidateQueries({
         queryKey: issueStatusKeys.list(projectId),
       })

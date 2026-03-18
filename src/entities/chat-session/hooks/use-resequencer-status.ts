@@ -1,31 +1,20 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useSyncExternalStore } from 'react'
 import { resequencer } from '../lib/chat-resequencer'
-import type { ResequencerStatus } from '@/entities/stream-session'
 
 /**
- * Hook to subscribe to resequencer status changes.
- * Currently uses polling (simple) or relies on resequencer updates.
- * Ideally, Resequencer should emit 'status-changed' events.
- * For now, we poll on mount and expose a getter.
+ * Hook to subscribe to resequencer status changes using useSyncExternalStore.
  */
 export function useResequencerStatus(conversationId: string) {
-  const [status, setStatus] = useState<ResequencerStatus>(
-    resequencer.getStatus(conversationId),
+  const subscribe = useCallback(
+    (onStoreChange: () => void) => {
+      return resequencer.subscribe(conversationId, onStoreChange)
+    },
+    [conversationId],
   )
 
-  useEffect(() => {
-    // Initial fetch
-    setStatus(resequencer.getStatus(conversationId))
-
-    // Poll every 1s for status updates (Simple Observer)
-    // TODO: Switch to EventBus 'resequencer:status-changed' for reactivity
-    const interval = setInterval(() => {
-      const current = resequencer.getStatus(conversationId)
-      setStatus((prev) => (prev !== current ? current : prev))
-    }, 1000)
-
-    return () => clearInterval(interval)
+  const getSnapshot = useCallback(() => {
+    return resequencer.getStatus(conversationId)
   }, [conversationId])
 
-  return status
+  return useSyncExternalStore(subscribe, getSnapshot, getSnapshot)
 }

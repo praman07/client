@@ -23,7 +23,7 @@ export function transformMessages(
 
   for (let i = 0; i < messages.length; i++) {
     const current = messages[i]
-    const prev = messages[i - 1]
+    const prev: MessageRowData | undefined = i > 0 ? messages[i - 1] : undefined
 
     const currentTs = new Date(current.createdAt).getTime()
     const prevTs = prev ? new Date(prev.createdAt).getTime() : 0
@@ -46,7 +46,7 @@ export function transformMessages(
 
     // Check if message should be grouped with previous
     const isConsecutive =
-      prev &&
+      prev !== undefined &&
       prev.authorId === current.authorId &&
       currentTs - prevTs < 5 * 60 * 1000 // 5 minutes
 

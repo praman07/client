@@ -90,9 +90,9 @@ export function ManageCollaboratorsDialog({
               <div className="space-y-1">
                 {collaborators.map((collab) => {
                   const isCreator = collab.userId === userId
-                  const name = collab.user?.fullName ?? 'Unknown'
-                  const email = collab.user?.email ?? ''
-                  const avatar = collab.user?.avatarUrl ?? ''
+                  const name = collab.user.fullName
+                  const email = collab.user.email
+                  const avatar = collab.user.avatarUrl ?? ''
                   return (
                     <div
                       key={collab.userId}

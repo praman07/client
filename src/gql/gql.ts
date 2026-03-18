@@ -54,9 +54,8 @@ type Documents = {
     "\n  mutation ArchiveProject($projectId: ID!) {\n    archiveProject(projectId: $projectId) {\n      id\n      isArchived\n    }\n  }\n": typeof types.ArchiveProjectDocument,
     "\n  mutation UnarchiveProject($projectId: ID!) {\n    unarchiveProject(projectId: $projectId) {\n      id\n      isArchived\n    }\n  }\n": typeof types.UnarchiveProjectDocument,
     "\n  mutation DeleteProject($projectId: ID!) {\n    deleteProject(projectId: $projectId)\n  }\n": typeof types.DeleteProjectDocument,
-    "\n  fragment SessionUser on User {\n    id\n    email\n    fullName\n    avatarUrl\n  }\n": typeof types.SessionUserFragmentDoc,
     "\n  mutation SessionSyncUser(\n    $clerkId: String!\n    $email: String!\n    $fullName: String\n    $avatarUrl: String\n  ) {\n    syncUser(\n      clerkId: $clerkId\n      email: $email\n      fullName: $fullName\n      avatarUrl: $avatarUrl\n    ) {\n      id\n      email\n      fullName\n      avatarUrl\n    }\n  }": typeof types.SessionSyncUserDocument,
-    "\n  query GetMe {\n    me {\n      ...SessionUser\n    }\n  }\n": typeof types.GetMeDocument,
+    "\n  query GetMe {\n    me {\n      ...User\n    }\n  }\n": typeof types.GetMeDocument,
     "\n  fragment User on User {\n    id\n    email\n    fullName\n    avatarUrl\n  }\n": typeof types.UserFragmentDoc,
     "\n  fragment VaultFileFields on VaultFile {\n    id\n    projectId\n    workspaceId\n    folderId\n    uploaderUserId\n    name\n    mimeType\n    sizeBytes\n    s3Key\n    source\n    sourceId\n    status\n    uploader {\n      id\n      fullName\n      avatarUrl\n    }\n    confirmedAt\n    createdAt\n    updatedAt\n  }\n": typeof types.VaultFileFieldsFragmentDoc,
     "\n  fragment VaultFolderFields on VaultFolder {\n    id\n    projectId\n    parentFolderId\n    name\n    isSystem\n    createdAt\n    updatedAt\n  }\n": typeof types.VaultFolderFieldsFragmentDoc,
@@ -192,9 +191,8 @@ const documents: Documents = {
     "\n  mutation ArchiveProject($projectId: ID!) {\n    archiveProject(projectId: $projectId) {\n      id\n      isArchived\n    }\n  }\n": types.ArchiveProjectDocument,
     "\n  mutation UnarchiveProject($projectId: ID!) {\n    unarchiveProject(projectId: $projectId) {\n      id\n      isArchived\n    }\n  }\n": types.UnarchiveProjectDocument,
     "\n  mutation DeleteProject($projectId: ID!) {\n    deleteProject(projectId: $projectId)\n  }\n": types.DeleteProjectDocument,
-    "\n  fragment SessionUser on User {\n    id\n    email\n    fullName\n    avatarUrl\n  }\n": types.SessionUserFragmentDoc,
     "\n  mutation SessionSyncUser(\n    $clerkId: String!\n    $email: String!\n    $fullName: String\n    $avatarUrl: String\n  ) {\n    syncUser(\n      clerkId: $clerkId\n      email: $email\n      fullName: $fullName\n      avatarUrl: $avatarUrl\n    ) {\n      id\n      email\n      fullName\n      avatarUrl\n    }\n  }": types.SessionSyncUserDocument,
-    "\n  query GetMe {\n    me {\n      ...SessionUser\n    }\n  }\n": types.GetMeDocument,
+    "\n  query GetMe {\n    me {\n      ...User\n    }\n  }\n": types.GetMeDocument,
     "\n  fragment User on User {\n    id\n    email\n    fullName\n    avatarUrl\n  }\n": types.UserFragmentDoc,
     "\n  fragment VaultFileFields on VaultFile {\n    id\n    projectId\n    workspaceId\n    folderId\n    uploaderUserId\n    name\n    mimeType\n    sizeBytes\n    s3Key\n    source\n    sourceId\n    status\n    uploader {\n      id\n      fullName\n      avatarUrl\n    }\n    confirmedAt\n    createdAt\n    updatedAt\n  }\n": types.VaultFileFieldsFragmentDoc,
     "\n  fragment VaultFolderFields on VaultFolder {\n    id\n    projectId\n    parentFolderId\n    name\n    isSystem\n    createdAt\n    updatedAt\n  }\n": types.VaultFolderFieldsFragmentDoc,
@@ -467,15 +465,11 @@ export function gql(source: "\n  mutation DeleteProject($projectId: ID!) {\n    
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "\n  fragment SessionUser on User {\n    id\n    email\n    fullName\n    avatarUrl\n  }\n"): (typeof documents)["\n  fragment SessionUser on User {\n    id\n    email\n    fullName\n    avatarUrl\n  }\n"];
-/**
- * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
 export function gql(source: "\n  mutation SessionSyncUser(\n    $clerkId: String!\n    $email: String!\n    $fullName: String\n    $avatarUrl: String\n  ) {\n    syncUser(\n      clerkId: $clerkId\n      email: $email\n      fullName: $fullName\n      avatarUrl: $avatarUrl\n    ) {\n      id\n      email\n      fullName\n      avatarUrl\n    }\n  }"): (typeof documents)["\n  mutation SessionSyncUser(\n    $clerkId: String!\n    $email: String!\n    $fullName: String\n    $avatarUrl: String\n  ) {\n    syncUser(\n      clerkId: $clerkId\n      email: $email\n      fullName: $fullName\n      avatarUrl: $avatarUrl\n    ) {\n      id\n      email\n      fullName\n      avatarUrl\n    }\n  }"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "\n  query GetMe {\n    me {\n      ...SessionUser\n    }\n  }\n"): (typeof documents)["\n  query GetMe {\n    me {\n      ...SessionUser\n    }\n  }\n"];
+export function gql(source: "\n  query GetMe {\n    me {\n      ...User\n    }\n  }\n"): (typeof documents)["\n  query GetMe {\n    me {\n      ...User\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

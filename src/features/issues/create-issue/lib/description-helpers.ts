@@ -11,7 +11,7 @@
  */
  
 export function isDescriptionEmpty(blocks: Array<any>): boolean {
-  if (!blocks || blocks.length === 0) return true
+  if (blocks.length === 0) return true
   if (blocks.length === 1) {
     const b = blocks[0]
     // A single paragraph with no content array or an empty one

@@ -36,6 +36,7 @@ export function useSyncWorkspaceContext(slug?: string) {
         const data = await client.request(GET_WORKSPACE_BY_SLUG_QUERY, { slug })
         const workspace = data.workspaceBySlug
 
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- GQL workspaceBySlug returns null for missing/forbidden slug
         if (workspace) {
           dispatch(setCurrentWorkspaceId(workspace.id))
         }

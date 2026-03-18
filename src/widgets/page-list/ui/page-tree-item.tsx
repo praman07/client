@@ -46,7 +46,7 @@ export function PageTreeItem({ node, depth = 0 }: PageTreeItemProps) {
     from: '/_app/workspace/$workspaceSlug/project/$projectSlug/pages/$pageId',
     shouldThrow: false,
   })
-  const activePageId = matchedPage?.params?.pageId ?? null
+  const activePageId = matchedPage ? (matchedPage.params.pageId as string | undefined) ?? null : null
   const hasChildren = node.children.length > 0
   const isActive = activePageId === node.page.id
 
@@ -72,7 +72,7 @@ export function PageTreeItem({ node, depth = 0 }: PageTreeItemProps) {
               render={
                 <Link
                   to="/workspace/$workspaceSlug/project/$projectSlug/pages/$pageId"
-                  params={{ workspaceSlug, projectSlug, pageId: node.page.id }}
+                  params={{ workspaceSlug: workspaceSlug ?? '', projectSlug: projectSlug ?? '', pageId: node.page.id }}
                 />
               }
             >
@@ -112,7 +112,7 @@ export function PageTreeItem({ node, depth = 0 }: PageTreeItemProps) {
           render={
             <Link
               to="/workspace/$workspaceSlug/project/$projectSlug/pages/$pageId"
-              params={{ workspaceSlug, projectSlug, pageId: node.page.id }}
+              params={{ workspaceSlug: workspaceSlug ?? '', projectSlug: projectSlug ?? '', pageId: node.page.id }}
             />
           }
         >

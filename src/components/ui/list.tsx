@@ -8,7 +8,7 @@ import {
   useDroppable
 } from '@dnd-kit/core'
 import { restrictToVerticalAxis } from '@dnd-kit/modifiers'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import type {DragEndEvent, DragStartEvent} from '@dnd-kit/core';
 import type { ReactNode } from 'react'
 import { cn } from '@/shared/lib/utils'
@@ -174,16 +174,11 @@ const statuses = [
 ]
 
 export function Demo() {
-  const [mounted, setMounted] = useState(false)
   const [items, setItems] = useState(initialData)
   const [activeItem, setActiveItem] = useState<{
     id: string
     name: string
   } | null>(null)
-
-  useEffect(() => {
-    setMounted(true)
-  }, [])
 
   const handleDragStart = (event: DragStartEvent) => {
     const { active } = event
@@ -247,9 +242,7 @@ export function Demo() {
     }))
   }
 
-  if (!mounted) {
-    return <div className="fixed inset-0 bg-muted/50 animate-pulse" />
-  }
+
 
   return (
     <div className="fixed inset-0 p-4 overflow-auto">

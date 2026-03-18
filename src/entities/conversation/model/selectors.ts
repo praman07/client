@@ -16,7 +16,7 @@ const selectConversationDomain = (state: RootState) => state.conversation
  */
 export const selectAllConversations = createSelector(
   selectConversationDomain,
-  (state) => Object.values(state?.conversations ?? {}),
+  (state) => Object.values(state.conversations).filter((c): c is NonNullable<typeof c> => !!c),
 )
 
 /**
@@ -69,7 +69,7 @@ export const selectAllThreads = createSelector(
 export const selectConversationById = (conversationId: string) =>
   createSelector(
     selectConversationDomain,
-    (state) => state?.conversations?.[conversationId],
+    (state) => state.conversations[conversationId],
   )
 
 // ──────────────────────────────────────────────────────────────────────────────
@@ -81,7 +81,7 @@ export const selectConversationById = (conversationId: string) =>
  */
 export const selectActiveConversationId = createSelector(
   selectConversationDomain,
-  (state) => state?.activeConversationId,
+  (state) => state.activeConversationId,
 )
 
 /**
@@ -89,7 +89,7 @@ export const selectActiveConversationId = createSelector(
  */
 export const selectActiveConversationType = createSelector(
   selectConversationDomain,
-  (state) => state?.activeConversationType,
+  (state) => state.activeConversationType,
 )
 
 /**
@@ -100,7 +100,7 @@ export const selectActiveConversation = createSelector(
   selectActiveConversationId,
   (state, activeId) => {
     if (!activeId) return null
-    return state?.conversations?.[activeId] ?? null
+    return state.conversations[activeId] ?? null
   },
 )
 
@@ -109,7 +109,7 @@ export const selectActiveConversation = createSelector(
  */
 export const selectActiveConversationDetail = createSelector(
   selectConversationDomain,
-  (state) => state?.activeConversationDetail,
+  (state) => state.activeConversationDetail,
 )
 
 // ──────────────────────────────────────────────────────────────────────────────
@@ -152,7 +152,7 @@ export const selectConversationsWithUnread = createSelector(
  */
 export const selectSidebarFilter = createSelector(
   selectConversationDomain,
-  (state) => state?.sidebarFilter ?? 'ALL',
+  (state) => state.sidebarFilter,
 )
 
 /**

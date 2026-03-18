@@ -36,6 +36,7 @@ export function useDragDrop(projectId: string) {
 
   // Keep a stable ref so callbacks always see the freshest issues array
   const issuesRef = useRef(issues)
+  // eslint-disable-next-line react-hooks/refs -- must sync before next drag event fires; useEffect introduces one-frame stale read in synchronous handlers
   issuesRef.current = issues
 
   // Captures the ORIGINAL status of the dragged card at drag-start.
@@ -196,7 +197,7 @@ export function useDragDrop(projectId: string) {
         })
       }
     },
-    [moveIssue, reorderIssue],
+    [dispatch, moveIssue, reorderIssue],
   )
 
   return { activeCardId, handleDragStart, handleDragOver, handleDragEnd }

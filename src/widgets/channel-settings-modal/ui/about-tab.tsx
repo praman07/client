@@ -36,7 +36,7 @@ export function AboutTab({ conversation }: AboutTabProps) {
   )
 
   const existingChannelNames = extractChannelNames(
-    channelsData?.getUserConversations?.edges as Array<Conversation>,
+    channelsData?.getUserConversations.edges as Array<Conversation>,
   )
 
   const handleSuccess = () => {

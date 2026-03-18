@@ -1,7 +1,6 @@
 import { useMemo } from 'react'
 import { buildPageTree } from '../hooks/use-page-tree'
 import { PageTreeSection } from './page-tree-section'
-import type { Page } from '@/entities/page'
 import { ScrollArea } from '@/shared/ui'
 import { Skeleton } from '@/shared/ui/primitives/skeleton'
 import { Sidebar, SidebarContent } from '@/shared/ui/primitives/sidebar'

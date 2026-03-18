@@ -37,7 +37,7 @@ export function ProjectOverviewStats({ projectId }: ProjectOverviewStatsProps) {
         {Array.from({ length: 4 }).map((_, i) => (
           <div
             key={i}
-            className="rounded-lg border bg-card p-4 h-20 animate-pulse bg-muted"
+            className="rounded-lg border p-4 h-20 animate-pulse bg-muted"
           />
         ))}
       </div>
@@ -65,6 +65,7 @@ export function ProjectOverviewStats({ projectId }: ProjectOverviewStatsProps) {
       </div>
 
       {/* Recent issues */}
+      {/* eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- overview.recentIssues can be undefined before query resolves */}
       {overview.recentIssues && overview.recentIssues.length > 0 && (
         <div className="space-y-2">
           <h3 className="text-sm font-semibold">Recent Issues</h3>
@@ -76,7 +77,7 @@ export function ProjectOverviewStats({ projectId }: ProjectOverviewStatsProps) {
               >
                 <span
                   className="h-2 w-2 rounded-full shrink-0"
-                  style={{ background: issue.statusColor ?? '#888' }}
+                  style={{ background: issue.statusColor }}
                 />
                 <span className="text-sm flex-1 truncate">{issue.title}</span>
                 <span className="text-xs text-muted-foreground shrink-0">
@@ -89,6 +90,7 @@ export function ProjectOverviewStats({ projectId }: ProjectOverviewStatsProps) {
       )}
 
       {/* Members avatars */}
+      {/* eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- overview.members can be undefined before query resolves */}
       {overview.members && overview.members.length > 0 && (
         <div className="space-y-2">
           <h3 className="text-sm font-semibold flex items-center gap-2">
@@ -98,10 +100,11 @@ export function ProjectOverviewStats({ projectId }: ProjectOverviewStatsProps) {
             {overview.members.slice(0, 8).map((m) => (
               <div
                 key={m.userId}
-                title={m.name ?? ''}
+                title={m.name}
                 className="h-8 w-8 rounded-full border-2 border-background bg-muted flex items-center justify-center text-xs font-medium"
               >
-                {m.name?.[0]?.toUpperCase() ?? '?'}
+                {/* eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- m.name is nullable in GQL */}
+                {m.name?.charAt(0).toUpperCase() ?? '?'}
               </div>
             ))}
             {overview.members.length > 8 && (

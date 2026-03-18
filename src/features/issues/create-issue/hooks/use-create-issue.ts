@@ -63,10 +63,8 @@ export function useCreateIssue() {
       })
     },
     onSuccess: (data, { projectId }) => {
-      const issue = data.createIssue?.issue
-      if (issue) {
-        dispatch(addIssue(issue as unknown as Issue))
-      }
+      const issue = data.createIssue.issue
+      dispatch(addIssue(issue as unknown as Issue))
       queryClient.invalidateQueries({
         queryKey: issueKeys.list(projectId),
       })

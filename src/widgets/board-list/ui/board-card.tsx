@@ -33,8 +33,7 @@ export function BoardCard({ board, viewMode, isCreator }: BoardCardProps) {
    
   const workspaceMembers = (workspaceMembersData?.workspaceMembers || []) as any
   const currentCollaboratorIds =
-     
-    collaboratorsData?.boardCollaborators?.map((c: any) => c.userId) || []
+    collaboratorsData?.boardCollaborators.map((c: any) => c.userId) ?? []
 
   // Get route params from router state matches
   const routerState = useRouterState()

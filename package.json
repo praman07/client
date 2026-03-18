@@ -6,7 +6,7 @@
     "gen": "graphql-codegen",
     "schema:sync": "cd ../server && bun run scripts/sync-schema.ts",
     "dev": "vite dev --port 3000",
-    "build": "vite build",
+    "build": "NODE_OPTIONS='--max-old-space-size=6144' vite build",
     "preview": "vite preview",
     "test": "vitest run",
     "lint": "eslint",

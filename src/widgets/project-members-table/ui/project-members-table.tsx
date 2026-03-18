@@ -104,7 +104,7 @@ export function ProjectMembersTable({
   const roles = useFragment(PROJECT_ROLE_FIELDS, maskedRoles)
   const assignableRoles = roles
     .filter((r) => !(r as unknown as { isSystem: boolean }).isSystem)
-    .map((r) => ({ id: r.id, name: r.name, rank: (r as unknown as { rank: number }).rank ?? 99 }))
+    .map((r) => ({ id: r.id, name: r.name, rank: (r as unknown as { rank: number }).rank }))
     .sort((a, b) => a.rank - b.rank)
 
   // Derive if the current user is a Manager from their own member row
@@ -186,14 +186,14 @@ export function ProjectMembersTable({
                   <TableCell>
                     <div className="flex items-center gap-3">
                       <Avatar className="h-8 w-8 shrink-0">
-                        <AvatarImage src={member.user?.avatarUrl ?? ''} />
+                        <AvatarImage src={member.user.avatarUrl ?? undefined} />
                         <AvatarFallback className="text-xs">
-                          {getInitials(member.user?.fullName ?? 'U')}
+                          {getInitials(member.user.fullName)}
                         </AvatarFallback>
                       </Avatar>
                       <div className="min-w-0">
                         <p className="text-sm font-medium truncate">
-                          {member.user?.fullName ?? '—'}
+                          {member.user.fullName}
                           {isCurrentUser && (
                             <span className="ml-1.5 text-xs text-muted-foreground font-normal">
                               (you)
@@ -201,7 +201,7 @@ export function ProjectMembersTable({
                           )}
                         </p>
                         <p className="text-xs text-muted-foreground truncate">
-                          {member.user?.email ?? ''}
+                          {member.user.email}
                         </p>
                       </div>
                     </div>
@@ -264,7 +264,7 @@ export function ProjectMembersTable({
                               </AlertDialogTitle>
                               <AlertDialogDescription>
                                 <strong>
-                                  {member.user?.fullName ?? 'This member'}
+                                  {member.user.fullName}
                                 </strong>{' '}
                                 will lose access to all content in this project.
                               </AlertDialogDescription>

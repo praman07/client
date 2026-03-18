@@ -120,7 +120,7 @@ export function CreateIssueForm({
       })
 
       // ── Step 2: Upload description (skipped if editor is empty) ───────────────
-      const issueId = result?.createIssue?.issue?.id
+      const issueId = result.createIssue.issue.id
       const blocks = editorRef.current?.document ?? descriptionBlocks
       if (issueId && !isDescriptionEmpty(blocks)) {
         // originalBlocks = [] because this is a brand-new issue (nothing saved yet)

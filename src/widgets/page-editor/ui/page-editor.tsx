@@ -1,6 +1,6 @@
 import '@blocknote/shadcn/style.css'
 import { reset as resetLinkify } from 'linkifyjs'
-import { useEffect, useMemo, useRef } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useCreateBlockNote } from '@blocknote/react'
 import { BlockNoteView } from '@blocknote/shadcn'
 import { usePageSync } from '../hooks/use-page-sync'
@@ -71,12 +71,10 @@ function PageEditorBody({
 }: PageEditorBodyProps) {
   // Reset linkifyjs before each mount so BlockNote can re-register all schemes
   // (http, https, ftp, mailto, tel...) without 'already initialized' warnings.
-  // useRef guard: runs once per mount, skipped on re-renders.
-  const linkifyResetDone = useRef(false)
-  if (!linkifyResetDone.current) {
-    linkifyResetDone.current = true
+  // Using lazy component state initialization to run only once per mount.
+  useState(() => {
     resetLinkify()
-  }
+  })
 
   const currentUser = useAppSelector(selectCurrentUser)
 
@@ -91,9 +89,10 @@ function PageEditorBody({
     }
   }, [pageId, awarenessProvider])
 
+  const currentUserId = currentUser?.id ?? null
   const userColor = useMemo(
-    () => (currentUser?.id ? assignColor(currentUser.id) : '#6366f1'),
-    [currentUser?.id],
+    () => (currentUserId ? assignColor(currentUserId) : '#6366f1'),
+    [currentUserId],
   )
 
   log.debug('PageEditorBody mount — binding BlockNote to ydoc fragment', {

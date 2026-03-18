@@ -35,7 +35,7 @@ export function useGetIssueDescription(
         { issueId: issueId! },
       )
 
-      if (!getIssueDescriptionUrl?.url) return []
+      if (!getIssueDescriptionUrl.url) return []
 
       // Step 2+3: Fetch and parse BlockNote JSON from S3
       const res = await fetch(getIssueDescriptionUrl.url)

@@ -37,7 +37,7 @@ export function StatusPicker({ statuses, value, onChange }: StatusPickerProps) {
           'border-primary/40 bg-primary/5 text-foreground hover:bg-primary/10',
         )}
       >
-        {selected && <StatusPill status={selected} iconSize={12} />}
+        <StatusPill status={selected} iconSize={12} />
       </DropdownMenuTrigger>
 
       <DropdownMenuContent

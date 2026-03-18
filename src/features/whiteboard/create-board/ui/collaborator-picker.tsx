@@ -40,7 +40,10 @@ export function CollaboratorPicker({
   const [searchQuery, setSearchQuery] = useState('')
   const { data, isLoading } = useWorkspaceMembers(workspaceId)
 
-  const members = data?.workspaceMembers || []
+  const members = useMemo(
+    () => data?.workspaceMembers || [],
+    [data?.workspaceMembers],
+  )
 
   // Filter by search query
   const filteredMembers = useMemo(() => {

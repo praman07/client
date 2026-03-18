@@ -65,13 +65,14 @@ export function mergeMessages(
         conversationId: p.conversationId,
         streamId: `temp-${p.dedupeId}`, // Placeholder streamId
         sequence: Infinity, // Optimistic items always at end
-        content: p.payload?.content || '', // Extract content from payload
+        content: (p.payload as Record<string, any>).content || '', // Extract content from payload
         type: 'text', // Default type for user messages
         authorId: p.authorId,
         createdAt: new Date(p.createdAt).toISOString(), // Convert timestamp to ISO
         updatedAt: new Date(p.createdAt).toISOString(),
         projectId: p.projectId,
-        deliveryStatus: p.status || 'pending',
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- p.status can be undefined for legacy Dexie-hydrated outbox entries
+        deliveryStatus: p.status ?? 'pending',
         isOptimistic: true,
         virtualId: p.dedupeId,
         reactions: [],

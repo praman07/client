@@ -22,17 +22,17 @@ export function useIndexedDBSync(
 ) {
   const persistenceRef = useRef<IndexeddbPersistence | null>(null)
   const [initialized, setInitialized] = useState(false)
-  const ydocRef = useRef(ydoc)
+  const prevBoardIdRef = useRef(boardId)
 
+  // Reset when boardId changes (user navigates to a different whiteboard)
+  // Without this, initialized stays true from the previous board and IndexedDB never re-runs.
   useEffect(() => {
-    if (ydocRef.current !== ydoc) {
-      log.debug('Y.Doc instance changed, resetting IndexedDB state', {
-        boardId,
-      })
+    if (prevBoardIdRef.current !== boardId) {
+      prevBoardIdRef.current = boardId
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- intentional lifecycle reset on boardId change; not a cascading loop
       setInitialized(false)
-      ydocRef.current = ydoc
     }
-  }, [ydoc, boardId])
+  }, [boardId])
 
   useEffect(() => {
     if (!serverSynced || initialized) {
