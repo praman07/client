@@ -48,7 +48,7 @@ jobs:
 
             cd /opt/collabify
             FRONTEND_TAG=${{ github.sha }} docker compose pull frontend
-            FRONTEND_TAG=${{ github.sha }} docker compose up -d --no-deps frontend
+            FRONTEND_TAG=${{ github.sha }} docker compose up -d --no-deps --force-recreate frontend
 
             sleep 30
             curl -sf http://localhost:3000/ || \
