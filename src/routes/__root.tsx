@@ -34,6 +34,11 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
     ],
     links: [
       {
+        rel: 'preload',
+        href: appCss,
+        as: 'style',
+      },
+      {
         rel: 'stylesheet',
         href: appCss,
       },
@@ -58,16 +63,16 @@ function RootComponent() {
         <ClerkProvider>
           <Outlet />
           <Toaster />
-          <TanStackDevtools
-            config={{ position: 'bottom-right' }}
-            plugins={[
-              {
-                name: 'Tanstack Router',
-                render: <TanStackRouterDevtoolsPanel />,
-              },
-              TanStackQueryDevtools,
-            ]}
-          />
+            <TanStackDevtools
+              config={{ position: 'bottom-right' }}
+              plugins={[
+                {
+                  name: 'Tanstack Router',
+                  render: <TanStackRouterDevtoolsPanel />,
+                },
+                TanStackQueryDevtools,
+              ]}
+            />
         </ClerkProvider>
         <Scripts />
       </body>
