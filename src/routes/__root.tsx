@@ -4,6 +4,7 @@ import {
   Scripts,
   createRootRouteWithContext,
 } from '@tanstack/react-router'
+import { useEffect } from 'react'
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 import { TanStackDevtools } from '@tanstack/react-devtools'
 import type { QueryClient } from '@tanstack/react-query'
@@ -12,6 +13,8 @@ import ClerkProvider from '@/app/providers/clerk/provider'
 import TanStackQueryDevtools from '@/app/providers/tanstack-query/devtools'
 import { Toaster } from '@/shared/ui/primitives/sonner'
 import appCss from '@/app/styles/globals.css?url'
+import { env } from '@/shared/config/env'
+
 
 interface MyRouterContext {
   queryClient: QueryClient
@@ -49,6 +52,18 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 })
 
 function RootComponent() {
+  useEffect(() => {
+    if (!env.VITE_CLARITY_PROJECT_ID || typeof window === 'undefined') return
+    // Microsoft Clarity — session recordings, heatmaps, rage/dead click tracking
+    ;(function (c: any, l: Document, a: string, r: string, i: string) {
+      c[a] = c[a] || function () { (c[a].q = c[a].q || []).push(arguments) }
+      const t = l.createElement(r) as HTMLScriptElement
+      t.async = true
+      t.src = 'https://www.clarity.ms/tag/' + i
+      l.getElementsByTagName(r)[0]?.parentNode?.insertBefore(t, l.getElementsByTagName(r)[0])
+    })(window, document, 'clarity', 'script', env.VITE_CLARITY_PROJECT_ID)
+  }, [])
+
   return (
     <html lang="en">
       <head>

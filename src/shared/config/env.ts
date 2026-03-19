@@ -17,6 +17,7 @@ export const env = createEnv({
     VITE_SERVER_URL: z.string().url().optional(),
     VITE_WS_URL: z.string().url().optional(),
     VITE_CLERK_PUBLISHABLE_KEY: z.string().min(1),
+    VITE_CLARITY_PROJECT_ID: z.string().min(1).optional(),
   },
 
   /**

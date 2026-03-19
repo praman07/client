@@ -32,6 +32,7 @@ jobs:
           VITE_SERVER_URL: ${{ secrets.VITE_SERVER_URL }}
           VITE_WS_URL: ${{ secrets.VITE_WS_URL }}
           VITE_CLERK_PUBLISHABLE_KEY: ${{ secrets.VITE_CLERK_PUBLISHABLE_KEY }}
+          VITE_CLARITY_PROJECT_ID: ${{ secrets.VITE_CLARITY_PROJECT_ID }}
         run: pnpm build
 
       - name: Deploy to Server & Restart PM2
