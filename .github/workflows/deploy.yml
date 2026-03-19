@@ -54,6 +54,7 @@ jobs:
           echo "♻️ Restarting PM2 process..."
           ssh deploy@$HOST '
             export PATH=$PATH:/usr/local/bin:/usr/bin
-            pm2 restart collabify-frontend || pm2 start /opt/collabify-frontend/.output/server/index.mjs --name collabify-frontend
+            pm2 delete collabify-frontend 2>/dev/null || true
+            pm2 start /opt/collabify-frontend/.output/server/index.mjs --name collabify-frontend
             pm2 save
           '
