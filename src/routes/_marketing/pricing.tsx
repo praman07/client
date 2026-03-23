@@ -1,7 +1,6 @@
-import { createFileRoute } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router';
+import { PricingPage } from '@/pages/marketing';
 
 export const Route = createFileRoute('/_marketing/pricing')({
-  component: () => (
-    <div className="p-10 text-center text-2xl">Pricing Page</div>
-  ),
-})
+  component: PricingPage,
+});

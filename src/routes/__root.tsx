@@ -60,7 +60,7 @@ function RootComponent() {
       const t = l.createElement(r) as HTMLScriptElement
       t.async = true
       t.src = 'https://www.clarity.ms/tag/' + i
-      l.getElementsByTagName(r)[0]?.parentNode?.insertBefore(t, l.getElementsByTagName(r)[0])
+      l.head.appendChild(t)
     })(window, document, 'clarity', 'script', env.VITE_CLARITY_PROJECT_ID)
   }, [])
 

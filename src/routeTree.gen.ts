@@ -16,10 +16,13 @@ import { Route as AppRouteRouteImport } from './routes/_app/route'
 import { Route as MarketingIndexRouteImport } from './routes/_marketing/index'
 import { Route as MarketingPricingRouteImport } from './routes/_marketing/pricing'
 import { Route as MarketingContactRouteImport } from './routes/_marketing/contact'
+import { Route as MarketingChangelogRouteImport } from './routes/_marketing/changelog'
 import { Route as MarketingAboutRouteImport } from './routes/_marketing/about'
 import { Route as AuthSignUpRouteImport } from './routes/_auth/sign-up'
 import { Route as AuthSignInRouteImport } from './routes/_auth/sign-in'
 import { Route as AppOnboardingRouteImport } from './routes/_app/onboarding'
+import { Route as MarketingFeaturesChatRouteImport } from './routes/_marketing/features/chat'
+import { Route as MarketingCompareSlackRouteImport } from './routes/_marketing/compare/slack'
 import { Route as AppWorkspaceNewRouteImport } from './routes/_app/workspace/new'
 import { Route as AppWorkspaceJoinRouteImport } from './routes/_app/workspace/join'
 import { Route as AppUserSettingsSplatRouteImport } from './routes/_app/user-settings.$'
@@ -86,6 +89,11 @@ const MarketingContactRoute = MarketingContactRouteImport.update({
   path: '/contact',
   getParentRoute: () => MarketingRouteRoute,
 } as any)
+const MarketingChangelogRoute = MarketingChangelogRouteImport.update({
+  id: '/changelog',
+  path: '/changelog',
+  getParentRoute: () => MarketingRouteRoute,
+} as any)
 const MarketingAboutRoute = MarketingAboutRouteImport.update({
   id: '/about',
   path: '/about',
@@ -105,6 +113,16 @@ const AppOnboardingRoute = AppOnboardingRouteImport.update({
   id: '/onboarding',
   path: '/onboarding',
   getParentRoute: () => AppRouteRoute,
+} as any)
+const MarketingFeaturesChatRoute = MarketingFeaturesChatRouteImport.update({
+  id: '/features/chat',
+  path: '/features/chat',
+  getParentRoute: () => MarketingRouteRoute,
+} as any)
+const MarketingCompareSlackRoute = MarketingCompareSlackRouteImport.update({
+  id: '/compare/slack',
+  path: '/compare/slack',
+  getParentRoute: () => MarketingRouteRoute,
 } as any)
 const AppWorkspaceNewRoute = AppWorkspaceNewRouteImport.update({
   id: '/workspace/new',
@@ -325,12 +343,15 @@ export interface FileRoutesByFullPath {
   '/sign-in': typeof AuthSignInRoute
   '/sign-up': typeof AuthSignUpRoute
   '/about': typeof MarketingAboutRoute
+  '/changelog': typeof MarketingChangelogRoute
   '/contact': typeof MarketingContactRoute
   '/pricing': typeof MarketingPricingRoute
   '/workspace/$workspaceSlug': typeof AppWorkspaceWorkspaceSlugMainRouteRouteWithChildren
   '/user-settings/$': typeof AppUserSettingsSplatRoute
   '/workspace/join': typeof AppWorkspaceJoinRoute
   '/workspace/new': typeof AppWorkspaceNewRoute
+  '/compare/slack': typeof MarketingCompareSlackRoute
+  '/features/chat': typeof MarketingFeaturesChatRoute
   '/workspace/$workspaceSlug/project/$projectSlug': typeof AppWorkspaceWorkspaceSlugProjectProjectSlugRouteRouteWithChildren
   '/workspace/$workspaceSlug/members': typeof AppWorkspaceWorkspaceSlugMainMembersRoute
   '/workspace/$workspaceSlug/projects': typeof AppWorkspaceWorkspaceSlugMainProjectsRoute
@@ -367,12 +388,15 @@ export interface FileRoutesByTo {
   '/sign-in': typeof AuthSignInRoute
   '/sign-up': typeof AuthSignUpRoute
   '/about': typeof MarketingAboutRoute
+  '/changelog': typeof MarketingChangelogRoute
   '/contact': typeof MarketingContactRoute
   '/pricing': typeof MarketingPricingRoute
   '/workspace/$workspaceSlug': typeof AppWorkspaceWorkspaceSlugMainIndexRoute
   '/user-settings/$': typeof AppUserSettingsSplatRoute
   '/workspace/join': typeof AppWorkspaceJoinRoute
   '/workspace/new': typeof AppWorkspaceNewRoute
+  '/compare/slack': typeof MarketingCompareSlackRoute
+  '/features/chat': typeof MarketingFeaturesChatRoute
   '/workspace/$workspaceSlug/members': typeof AppWorkspaceWorkspaceSlugMainMembersRoute
   '/workspace/$workspaceSlug/projects': typeof AppWorkspaceWorkspaceSlugMainProjectsRoute
   '/workspace/$workspaceSlug/settings': typeof AppWorkspaceWorkspaceSlugMainSettingsRoute
@@ -403,6 +427,7 @@ export interface FileRoutesById {
   '/_auth/sign-in': typeof AuthSignInRoute
   '/_auth/sign-up': typeof AuthSignUpRoute
   '/_marketing/about': typeof MarketingAboutRoute
+  '/_marketing/changelog': typeof MarketingChangelogRoute
   '/_marketing/contact': typeof MarketingContactRoute
   '/_marketing/pricing': typeof MarketingPricingRoute
   '/_marketing/': typeof MarketingIndexRoute
@@ -410,6 +435,8 @@ export interface FileRoutesById {
   '/_app/user-settings/$': typeof AppUserSettingsSplatRoute
   '/_app/workspace/join': typeof AppWorkspaceJoinRoute
   '/_app/workspace/new': typeof AppWorkspaceNewRoute
+  '/_marketing/compare/slack': typeof MarketingCompareSlackRoute
+  '/_marketing/features/chat': typeof MarketingFeaturesChatRoute
   '/_app/workspace/$workspaceSlug/_main': typeof AppWorkspaceWorkspaceSlugMainRouteRouteWithChildren
   '/_app/workspace/$workspaceSlug/project/$projectSlug': typeof AppWorkspaceWorkspaceSlugProjectProjectSlugRouteRouteWithChildren
   '/_app/workspace/$workspaceSlug/_main/members': typeof AppWorkspaceWorkspaceSlugMainMembersRoute
@@ -449,12 +476,15 @@ export interface FileRouteTypes {
     | '/sign-in'
     | '/sign-up'
     | '/about'
+    | '/changelog'
     | '/contact'
     | '/pricing'
     | '/workspace/$workspaceSlug'
     | '/user-settings/$'
     | '/workspace/join'
     | '/workspace/new'
+    | '/compare/slack'
+    | '/features/chat'
     | '/workspace/$workspaceSlug/project/$projectSlug'
     | '/workspace/$workspaceSlug/members'
     | '/workspace/$workspaceSlug/projects'
@@ -491,12 +521,15 @@ export interface FileRouteTypes {
     | '/sign-in'
     | '/sign-up'
     | '/about'
+    | '/changelog'
     | '/contact'
     | '/pricing'
     | '/workspace/$workspaceSlug'
     | '/user-settings/$'
     | '/workspace/join'
     | '/workspace/new'
+    | '/compare/slack'
+    | '/features/chat'
     | '/workspace/$workspaceSlug/members'
     | '/workspace/$workspaceSlug/projects'
     | '/workspace/$workspaceSlug/settings'
@@ -526,6 +559,7 @@ export interface FileRouteTypes {
     | '/_auth/sign-in'
     | '/_auth/sign-up'
     | '/_marketing/about'
+    | '/_marketing/changelog'
     | '/_marketing/contact'
     | '/_marketing/pricing'
     | '/_marketing/'
@@ -533,6 +567,8 @@ export interface FileRouteTypes {
     | '/_app/user-settings/$'
     | '/_app/workspace/join'
     | '/_app/workspace/new'
+    | '/_marketing/compare/slack'
+    | '/_marketing/features/chat'
     | '/_app/workspace/$workspaceSlug/_main'
     | '/_app/workspace/$workspaceSlug/project/$projectSlug'
     | '/_app/workspace/$workspaceSlug/_main/members'
@@ -622,6 +658,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MarketingContactRouteImport
       parentRoute: typeof MarketingRouteRoute
     }
+    '/_marketing/changelog': {
+      id: '/_marketing/changelog'
+      path: '/changelog'
+      fullPath: '/changelog'
+      preLoaderRoute: typeof MarketingChangelogRouteImport
+      parentRoute: typeof MarketingRouteRoute
+    }
     '/_marketing/about': {
       id: '/_marketing/about'
       path: '/about'
@@ -649,6 +692,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/onboarding'
       preLoaderRoute: typeof AppOnboardingRouteImport
       parentRoute: typeof AppRouteRoute
+    }
+    '/_marketing/features/chat': {
+      id: '/_marketing/features/chat'
+      path: '/features/chat'
+      fullPath: '/features/chat'
+      preLoaderRoute: typeof MarketingFeaturesChatRouteImport
+      parentRoute: typeof MarketingRouteRoute
+    }
+    '/_marketing/compare/slack': {
+      id: '/_marketing/compare/slack'
+      path: '/compare/slack'
+      fullPath: '/compare/slack'
+      preLoaderRoute: typeof MarketingCompareSlackRouteImport
+      parentRoute: typeof MarketingRouteRoute
     }
     '/_app/workspace/new': {
       id: '/_app/workspace/new'
@@ -1140,16 +1197,22 @@ const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
 
 interface MarketingRouteRouteChildren {
   MarketingAboutRoute: typeof MarketingAboutRoute
+  MarketingChangelogRoute: typeof MarketingChangelogRoute
   MarketingContactRoute: typeof MarketingContactRoute
   MarketingPricingRoute: typeof MarketingPricingRoute
   MarketingIndexRoute: typeof MarketingIndexRoute
+  MarketingCompareSlackRoute: typeof MarketingCompareSlackRoute
+  MarketingFeaturesChatRoute: typeof MarketingFeaturesChatRoute
 }
 
 const MarketingRouteRouteChildren: MarketingRouteRouteChildren = {
   MarketingAboutRoute: MarketingAboutRoute,
+  MarketingChangelogRoute: MarketingChangelogRoute,
   MarketingContactRoute: MarketingContactRoute,
   MarketingPricingRoute: MarketingPricingRoute,
   MarketingIndexRoute: MarketingIndexRoute,
+  MarketingCompareSlackRoute: MarketingCompareSlackRoute,
+  MarketingFeaturesChatRoute: MarketingFeaturesChatRoute,
 }
 
 const MarketingRouteRouteWithChildren = MarketingRouteRoute._addFileChildren(
