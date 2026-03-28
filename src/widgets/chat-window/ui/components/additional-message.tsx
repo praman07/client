@@ -19,9 +19,15 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/shared/ui/primitives/alert-dialog'
-import { Pencil, Trash2 } from 'lucide-react'
+import { useLiveQuery } from 'dexie-react-hooks'
+import { db } from '@/shared/lib/db'
+import type { DBMessage } from '@/shared/lib/db/schema'
+import { Pencil, Trash2, Reply, MessageSquare } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { deleteMessage } from '@/features/chat/events/api'
+import { useReplyRequest } from '../../lib/reply-request-context'
+import { useMemberCache } from '../../lib/member-cache-context'
+import { useScrollToMessage } from '../../lib/scroll-to-message-context'
 
 function getSafeContent(content: unknown): string {
   if (typeof content === 'string') return content
@@ -37,12 +43,25 @@ interface AdditionalMessageProps {
 
 export function AdditionalMessage({ message }: AdditionalMessageProps) {
   const { user } = useUser()
+  const { getMemberInfo } = useMemberCache()
+  const { requestReply } = useReplyRequest()
+  const { scrollToMessage } = useScrollToMessage()
 
   const currentContent = getSafeContent(message.content)
   const { isEditing, editValue, setEditValue, startEdit, cancelEdit, submitEdit } =
     useMessageEdit(message.id, currentContent)
 
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
+
+  // Resolve parent message from Dexie for the inline reply reference.
+  // IMPORTANT: .get(id) uses compound PK — use where('id').equals() instead (v8 index).
+  const parentMessage = useLiveQuery<DBMessage | undefined>(
+    async () =>
+      message.parentMessageId
+        ? db.messages.where('id').equals(message.parentMessageId).first()
+        : undefined,
+    [message.parentMessageId],
+  )
 
   const isAuthor = user?.id === message.authorId
   const canEdit = isAuthor && !message.deletedAt
@@ -107,6 +126,30 @@ export function AdditionalMessage({ message }: AdditionalMessageProps) {
           ) : (
             /* ── Read mode ─────────────────────────────────────── */
             <div className="relative">
+              {/* ── Inline Reply Reference ─────────────────────────── */}
+              {message.parentMessageId && (
+                <button
+                  onClick={() => scrollToMessage(message.parentMessageId!)}
+                  className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground mb-0.5 border-l-2 border-muted hover:border-primary/60 pl-2 py-0.5 w-full text-left transition-colors"
+                >
+                  <Reply className="h-3 w-3 shrink-0" />
+                  {parentMessage ? (
+                    <span>
+                      Replying to{' '}
+                      <strong className="text-foreground/70">
+                        @{getMemberInfo(parentMessage.authorId)?.fullName ?? parentMessage.authorId}
+                      </strong>
+                      {' '}
+                      <span className="text-muted-foreground/60 truncate">
+                        {getSafeContent(parentMessage.content).slice(0, 60)}
+                      </span>
+                    </span>
+                  ) : (
+                    <span>Replying to a message</span>
+                  )}
+                </button>
+              )}
+
               <MessageEventContent>
                 {currentContent}
                 {message.isEdited && (
@@ -126,9 +169,25 @@ export function AdditionalMessage({ message }: AdditionalMessageProps) {
                 )}
               </MessageEventContent>
 
-              {/* Hover action bar */}
-              {(canEdit || canDelete) && (
+              {/* Hover action bar — visible to everyone on non-deleted messages */}
+              {!message.deletedAt && (
                 <div className="absolute -top-2 right-0 hidden group-hover/msg:flex items-center gap-0.5 bg-background border rounded-md shadow-sm px-1 py-0.5">
+                  <button
+                    onClick={() =>
+                      requestReply({
+                        id: message.id,
+                        authorId: message.authorId,
+                        content: currentContent,
+                        displayName: getMemberInfo(message.authorId)?.fullName ?? message.authorId,
+                        contentSnippet: currentContent.slice(0, 80),
+                      })
+                    }
+                    className="p-1 rounded hover:bg-accent text-muted-foreground hover:text-foreground transition-colors"
+                    title="Reply"
+                    aria-label="Reply to message"
+                  >
+                    <Reply className="h-3.5 w-3.5" />
+                  </button>
                   {canEdit && (
                     <button
                       onClick={startEdit}
@@ -150,6 +209,16 @@ export function AdditionalMessage({ message }: AdditionalMessageProps) {
                     </button>
                   )}
                 </div>
+              )}
+
+              {/* ── Reply Count Badge ─────────────────────────────── */}
+              {(message.replyCount ?? 0) > 0 && (
+                <button className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground mt-0.5 transition-colors">
+                  <MessageSquare className="h-3 w-3" />
+                  <span>
+                    {message.replyCount} {message.replyCount === 1 ? 'reply' : 'replies'}
+                  </span>
+                </button>
               )}
             </div>
           )}

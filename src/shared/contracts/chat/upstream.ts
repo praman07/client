@@ -17,7 +17,7 @@ export interface SendMessagePayload {
   conversationId: string
   content: string
   dedupeId: string
-  replyToId?: string
+  parentMessageId?: string
 }
 
 export interface EditMessagePayload {

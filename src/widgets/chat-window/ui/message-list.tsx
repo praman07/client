@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef } from 'react'
+import { useEffect, useMemo, useRef, useCallback } from 'react'
 import { useMessageWindow } from '../hooks/use-message-window'
 import { useWindowController } from '../hooks/use-window-controller'
 import { MESSAGE_WINDOW_SIZE } from '../lib/constants'
@@ -14,6 +14,7 @@ import {
 import { useHistoryLoader } from '@/entities/chat-session'
 import { useUser } from '@/shared/hooks'
 import { createLogger } from '@/shared/lib/logger'
+import { useScrollToMessage } from '../lib/scroll-to-message-context'
 
 const log = createLogger('chat:messageList')
 
@@ -99,6 +100,27 @@ export function MessageList({ projectId, channelId }: MessageListProps) {
     onLoadMore: handleLoadMore,
   })
 
+  // Register scroll-to-message with the context so message components can trigger it.
+  // Uses virtualizer index lookup: finds which index corresponds to the given messageId
+  // by scanning virtualData (already in memory, O(n) but bounded by window size).
+  const { registerScroll, highlightedMessageId } = useScrollToMessage()
+
+  const scrollToMessageFn = useCallback((messageId: string): boolean => {
+    // item.id = virtualId (dedupeId||streamId) — NOT the server UUID.
+    // item.message.id is the server-assigned UUID that parentMessageId references.
+    const idx = virtualData.findIndex(
+      (item) => item.type === 'MESSAGE' && item.message?.id === messageId,
+    )
+    if (idx === -1) return false
+    rowVirtualizer.scrollToIndex(idx, { behavior: 'smooth', align: 'center' })
+    return true
+  }, [virtualData, rowVirtualizer])
+
+  // Re-register whenever the function reference changes
+  useEffect(() => {
+    registerScroll(scrollToMessageFn)
+  }, [registerScroll, scrollToMessageFn])
+
   // 6. Auto-Scroll on My Message (Slack Behavior)
   const { user } = useUser()
   const lastMessage = messages[messages.length - 1]
@@ -147,6 +169,11 @@ export function MessageList({ projectId, channelId }: MessageListProps) {
                 width: '100%',
                 transform: `translateY(${virtualRow.start}px)`,
               }}
+              className={
+                item.type === 'MESSAGE' && item.message?.id === highlightedMessageId
+                  ? 'bg-amber-500/10 border-l-2 border-amber-400/70 rounded-r transition-colors duration-1000'
+                  : 'transition-colors duration-1000'
+              }
             >
               {item.type === 'DATE' && item.timestamp !== undefined ? (
                 <DateSeparator timestamp={item.timestamp} />

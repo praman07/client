@@ -9,6 +9,7 @@ export async function sendMessage(
   channelId: string,
   projectId: string,
   authorId: string,
+  parentMessageId?: string,
 ) {
   if (!content.trim()) return
 
@@ -24,7 +25,7 @@ export async function sendMessage(
     conversationId: channelId,
     dedupeId,
     authorId,
-    payload: { content }, // Minimal payload for now
+    payload: { content, parentMessageId },
     status: 'pending',
     createdAt: now,
   }
@@ -46,7 +47,7 @@ export async function sendMessage(
       conversationId: channelId,
       content,
       dedupeId,
-      replyToId: undefined, // Explicitly undefined if not present, to match shape if needed
+      parentMessageId,
     },
   }
 

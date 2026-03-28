@@ -19,6 +19,7 @@ export interface NewMessagePayload {
   content: string
   createdAt: string
   sequence: number
+  parentMessageId?: string
   threadId?: string
   meta?: {
     replay?: boolean

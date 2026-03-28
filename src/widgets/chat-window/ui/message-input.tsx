@@ -18,6 +18,7 @@ import { useAuth } from '@/shared/hooks'
 import { Button } from '@/shared/ui/primitives/button'
 import { db } from '@/shared/lib/db'
 import { useEditRequest } from '../lib/edit-request-context'
+import { useReplyRequest } from '../lib/reply-request-context'
 
 import { sendMessage } from '@/features/chat/events'
 
@@ -31,12 +32,15 @@ export function MessageInput({ channelId, projectId }: MessageInputProps) {
   const [content, setContent] = useState('')
   const textareaRef = useRef<HTMLTextAreaElement>(null)
   const { requestEdit } = useEditRequest()
+  const { replyingTo, clearReply } = useReplyRequest()
 
   const handleSend = async () => {
     if (!content.trim()) return
     const msg = content
+    const parentMessageId = replyingTo?.id
     setContent('') // Optimistic clear
-    await sendMessage(msg, channelId, projectId, userId || 'ANONYMOUS')
+    clearReply()   // Dismiss reply banner
+    await sendMessage(msg, channelId, projectId, userId || 'ANONYMOUS', parentMessageId)
 
     // Reset height
     if (textareaRef.current) {
@@ -82,8 +86,34 @@ export function MessageInput({ channelId, projectId }: MessageInputProps) {
     }
   }, [content])
 
+  // Auto-focus input when reply is requested
+  useEffect(() => {
+    if (replyingTo) {
+      textareaRef.current?.focus()
+    }
+  }, [replyingTo])
+
   return (
     <div className="flex flex-col w-full shrink-0 z-20">
+      {/* ── Replying-To Banner ───────────────────────── */}
+      {replyingTo && (
+        <div className="flex items-center justify-between px-3 py-1.5 bg-muted/60 border-b text-xs">
+          <div className="flex items-center gap-1.5 min-w-0">
+            <span className="text-muted-foreground shrink-0">Replying to</span>
+            <strong className="text-foreground shrink-0">{replyingTo.displayName}</strong>
+            <span className="text-muted-foreground/60 truncate">
+              {replyingTo.contentSnippet}
+            </span>
+          </div>
+          <button
+            onClick={clearReply}
+            className="ml-2 shrink-0 text-muted-foreground hover:text-destructive transition-colors"
+            aria-label="Cancel reply"
+          >
+            ✕
+          </button>
+        </div>
+      )}
       <ChatToolbar className="border-t pb-safe overflow-visible">
         <div className="flex flex-col w-full bg-background border rounded-2xl shadow-sm focus-within:ring-1 ring-ring transition-all">
           <div className="flex items-end gap-2 p-2">

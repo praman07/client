@@ -23,7 +23,6 @@ export async function commitMessage(
         projectId, // Injected!
         id: payload.messageId,
         deliveryStatus: 'sent',
-        replyCount: 0,
         reactions: [],
          
         } as any)
@@ -72,7 +71,6 @@ export async function commitMessageBatch(
           projectId,
           id: payload.messageId,
           deliveryStatus: 'sent' as const,
-          replyCount: 0,
           reactions: [],
           attachments: [],
         }))

@@ -67,6 +67,7 @@ export function registerAckMessageHandler(context: ChatEventHandlerContext) {
           content: outboxItem.payload.content,
           createdAt: new Date(outboxItem.createdAt).toISOString(),
           sequence: payload.sequence, // CRITICAL: Required for resequencer gap detection
+          parentMessageId: outboxItem.payload.parentMessageId,
         }
 
         log.debug('Fast-Tracking Message:', payload.streamId)

@@ -29,9 +29,14 @@ import {
 import { cn } from '@/shared/lib/utils'
 import { createLogger } from '@/shared/lib/logger'
 import { useUser } from '@/shared/hooks'
-import { Pencil, Trash2 } from 'lucide-react'
+import { Pencil, Trash2, Reply, MessageSquare } from 'lucide-react'
 import { useEffect, useState } from 'react'
+import { useLiveQuery } from 'dexie-react-hooks'
+import { db } from '@/shared/lib/db'
+import type { DBMessage } from '@/shared/lib/db/schema'
 import { deleteMessage } from '@/features/chat/events/api'
+import { useReplyRequest } from '../../lib/reply-request-context'
+import { useScrollToMessage } from '../../lib/scroll-to-message-context'
 
 const log = createLogger('chat:message')
 
@@ -52,12 +57,25 @@ export function PrimaryMessage({ message, className }: PrimaryMessageProps) {
   const { getMemberInfo } = useMemberCache()
   const memberInfo = getMemberInfo(message.authorId)
   const { user } = useUser()
+  const { requestReply } = useReplyRequest()
+  const { scrollToMessage } = useScrollToMessage()
 
   const currentContent = getSafeContent(message.content)
   const { isEditing, editValue, setEditValue, startEdit, cancelEdit, submitEdit } =
     useMessageEdit(message.id, currentContent)
 
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
+
+  // Resolve parent message from Dexie for the inline reply reference (P6.3).
+  // IMPORTANT: db.messages.get(id) uses the compound PK [projectId+conversationId+streamId],
+  // NOT the server message UUID. Use where('id').equals() with the secondary index (added v8).
+  const parentMessage = useLiveQuery<DBMessage | undefined>(
+    async () =>
+      message.parentMessageId
+        ? db.messages.where('id').equals(message.parentMessageId).first()
+        : undefined,
+    [message.parentMessageId],
+  )
 
   // ↑ shortcut listener: enter edit mode when MessageInput requests it
   const { requestedEditId, clearEditRequest } = useEditRequest()
@@ -144,6 +162,30 @@ export function PrimaryMessage({ message, className }: PrimaryMessageProps) {
           ) : (
             /* ── Read mode ─────────────────────────────────────── */
             <div className="relative">
+              {/* ── Inline Reply Reference (P6.3) ─────────────────── */}
+              {message.parentMessageId && (
+                <button
+                  onClick={() => scrollToMessage(message.parentMessageId!)}
+                  className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground mb-0.5 border-l-2 border-muted hover:border-primary/60 pl-2 py-0.5 w-full text-left transition-colors"
+                >
+                  <Reply className="h-3 w-3 shrink-0" />
+                  {parentMessage ? (
+                    <span>
+                      Replying to{' '}
+                      <strong className="text-foreground/70">
+                        @{getMemberInfo(parentMessage.authorId)?.fullName ?? parentMessage.authorId}
+                      </strong>
+                      {' '}
+                      <span className="text-muted-foreground/60 truncate">
+                        {getSafeContent(parentMessage.content).slice(0, 60)}
+                      </span>
+                    </span>
+                  ) : (
+                    <span>Replying to a message</span>
+                  )}
+                </button>
+              )}
+
               <MessageEventContent>
                 {currentContent}
                 {message.isEdited && (
@@ -163,9 +205,25 @@ export function PrimaryMessage({ message, className }: PrimaryMessageProps) {
                 )}
               </MessageEventContent>
 
-              {/* Hover action bar */}
-              {(canEdit || canDelete) && (
+              {/* Hover action bar — visible to everyone on non-deleted messages */}
+              {!message.deletedAt && (
                 <div className="absolute -top-2 right-0 hidden group-hover/msg:flex items-center gap-0.5 bg-background border rounded-md shadow-sm px-1 py-0.5">
+                  <button
+                    onClick={() =>
+                      requestReply({
+                        id: message.id,
+                        authorId: message.authorId,
+                        content: currentContent,
+                        displayName: memberInfo?.fullName ?? message.authorId,
+                        contentSnippet: currentContent.slice(0, 80),
+                      })
+                    }
+                    className="p-1 rounded hover:bg-accent text-muted-foreground hover:text-foreground transition-colors"
+                    title="Reply"
+                    aria-label="Reply to message"
+                  >
+                    <Reply className="h-3.5 w-3.5" />
+                  </button>
                   {canEdit && (
                     <button
                       onClick={startEdit}
@@ -187,6 +245,16 @@ export function PrimaryMessage({ message, className }: PrimaryMessageProps) {
                     </button>
                   )}
                 </div>
+              )}
+
+              {/* ── Reply Count Badge (P6.1) ─────────────────────── */}
+              {(message.replyCount ?? 0) > 0 && (
+                <button className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground mt-0.5 transition-colors">
+                  <MessageSquare className="h-3 w-3" />
+                  <span>
+                    {message.replyCount} {message.replyCount === 1 ? 'reply' : 'replies'}
+                  </span>
+                </button>
               )}
             </div>
           )}

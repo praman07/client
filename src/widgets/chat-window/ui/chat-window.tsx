@@ -1,5 +1,7 @@
 import { MemberCacheProvider } from '../lib/member-cache-context'
 import { EditRequestProvider } from '../lib/edit-request-context'
+import { ReplyRequestProvider } from '../lib/reply-request-context'
+import { ScrollToMessageProvider } from '../lib/scroll-to-message-context'
 import { ChatHeader } from './chat-header'
 import { MessageInput } from './message-input'
 import { ChatContainer } from './components/chat-layout'
@@ -63,20 +65,24 @@ export function ChatWindow({
   return (
     <MemberCacheProvider members={members}>
       <EditRequestProvider>
-        <ChatContainer>
-          <ChatHeader
-            channelId={channelId}
-            channelName={channelName}
-            isPrivate={isPrivate}
-            description={
-              description || 'Topic: General discussion about the project'
-            }
-          >
-            <SyncStatusIndicator status={status} />
-          </ChatHeader>
-          <MessageList channelId={channelId} projectId={projectId} />
-          <MessageInput channelId={channelId} projectId={projectId} />
-        </ChatContainer>
+        <ReplyRequestProvider>
+          <ScrollToMessageProvider>
+            <ChatContainer>
+              <ChatHeader
+                channelId={channelId}
+                channelName={channelName}
+                isPrivate={isPrivate}
+                description={
+                  description || 'Topic: General discussion about the project'
+                }
+              >
+                <SyncStatusIndicator status={status} />
+              </ChatHeader>
+              <MessageList channelId={channelId} projectId={projectId} />
+              <MessageInput channelId={channelId} projectId={projectId} />
+            </ChatContainer>
+          </ScrollToMessageProvider>
+        </ReplyRequestProvider>
       </EditRequestProvider>
     </MemberCacheProvider>
   )

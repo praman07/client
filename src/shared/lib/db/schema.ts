@@ -32,7 +32,11 @@ export interface OutboxItem {
   conversationId: string
   dedupeId: string
   authorId: string
-  payload: unknown
+  payload: {
+    content: string
+    parentMessageId?: string
+    [key: string]: unknown
+  }
   status: 'pending' | 'sending' | 'failed'
   retryCount?: number
   createdAt: number
@@ -225,10 +229,19 @@ export class CollabifyDB extends Dexie {
       whiteboardThumbnails: 'boardId, generatedAt, sizeBytes',
     })
 
-    // v7: Pages offline queue (same binary blob pattern as whiteboard)
+      // v7: Pages offline queue (same binary blob pattern as whiteboard)
     this.version(7).stores({
       pageOfflineUpdates:
         '++id, pageId, status, dedupeId, mergedInto, [pageId+status], timestamp, createdAt, size',
+    })
+
+    // v8: Message ID index for O(1) parentMessageId lookup (inline reply resolution)
+    // The messages store PK is compound [projectId+conversationId+streamId];
+    // this adds a standalone secondary index on the server-assigned UUID so
+    // db.messages.where('id').equals(uuid) resolves parent messages correctly.
+    this.version(8).stores({
+      messages:
+        '[projectId+conversationId+streamId], [projectId+conversationId+sequence], id, dedupeId, projectId, conversationId, streamId, sequence',
     })
   }
 }
