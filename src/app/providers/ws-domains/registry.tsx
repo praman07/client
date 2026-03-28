@@ -38,6 +38,7 @@ export function DomainRegistry({ projectId }: DomainRegistryProps) {
     // Provides: projectId for message persistence
     const chatPlugin = createChatPlugin({
       getProjectId: () => projectId ?? undefined,
+      getCurrentUserId: () => user?.id ?? '',
     })
 
     registerPlugin(chatPlugin)

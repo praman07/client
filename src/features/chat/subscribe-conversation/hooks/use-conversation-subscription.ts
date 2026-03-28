@@ -30,6 +30,20 @@ export function useConversationSubscription(
           conversationId,
           projectId,
         )
+
+        // Delta sync: replay any reaction events missed while offline.
+        // The reaction-events Redis Stream holds entries for 7 days;
+        // we replay from the lastOpenedAt cursor (converted to stream
+        // millisecond format: "<ms>-0").
+        const lastReactionEventId = state.lastOpenedAt
+          ? `${state.lastOpenedAt}-0`
+          : '0-0'
+
+        wsManager.emit('chat:sync-reactions' as any, {
+          conversationId,
+          lastEventId: lastReactionEventId,
+        })
+
         return {
           conversationId,
           conversationType,

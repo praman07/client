@@ -29,14 +29,24 @@ import {
 import { cn } from '@/shared/lib/utils'
 import { createLogger } from '@/shared/lib/logger'
 import { useUser } from '@/shared/hooks'
-import { Pencil, Trash2, Reply, MessageSquare } from 'lucide-react'
-import { useEffect, useState } from 'react'
+import { Pencil, Trash2, Reply, MessageSquare, SmilePlus } from 'lucide-react'
+import { useEffect, useState, useCallback, lazy, Suspense, useRef } from 'react'
 import { useLiveQuery } from 'dexie-react-hooks'
 import { db } from '@/shared/lib/db'
 import type { DBMessage } from '@/shared/lib/db/schema'
-import { deleteMessage } from '@/features/chat/events/api'
+import { deleteMessage, addReaction, removeReaction } from '@/features/chat/events/api'
 import { useReplyRequest } from '../../lib/reply-request-context'
 import { useScrollToMessage } from '../../lib/scroll-to-message-context'
+import { ReactionBadge, mergeReactionAdd, mergeReactionRemove } from '@/entities/reaction'
+import type { ReactionGroup } from '@/entities/reaction'
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/shared/ui/primitives/popover'
+
+// Lazy-load the heavy emoji picker only when opened
+const EmojiPicker = lazy(() => import('@emoji-mart/react'))
 
 const log = createLogger('chat:message')
 
@@ -65,6 +75,7 @@ export function PrimaryMessage({ message, className }: PrimaryMessageProps) {
     useMessageEdit(message.id, currentContent)
 
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
+  const [isPickerOpen, setIsPickerOpen] = useState(false)
 
   // Resolve parent message from Dexie for the inline reply reference (P6.3).
   // IMPORTANT: db.messages.get(id) uses the compound PK [projectId+conversationId+streamId],
@@ -97,6 +108,65 @@ export function PrimaryMessage({ message, className }: PrimaryMessageProps) {
   // Tombstoned messages: no actions allowed
   const canEdit = isAuthor && !message.deletedAt
   const canDelete = isAuthor && !message.deletedAt
+
+  // One-reaction-per-user toggle (WhatsApp / Telegram style):
+  // - Pick an emoji you haven't reacted with → adds it (removes any previous reaction first)
+  // - Pick the same emoji you already have → removes it (toggle off)
+  // The whole read-decide-write runs inside a Dexie rw transaction so
+  // rapid double-clicks can never produce duplicate state.
+  const isTogglingRef = useRef(false)
+  const handleReactionToggle = useCallback(
+    async (emoji: string) => {
+      if (!user?.id) return
+      if (isTogglingRef.current) return
+      isTogglingRef.current = true
+
+      // Emit ops to run after the DB commit (ordered: remove first, then add)
+      const emitOps: Array<() => void> = []
+
+      try {
+        await db.transaction('rw', db.messages, async () => {
+          const current = await db.messages.where('id').equals(message.id).first()
+          let reactions = (current?.reactions ?? []) as ReactionGroup[]
+
+          // Find any emoji this user has already reacted with
+          const userPrevReaction = reactions.find((r) =>
+            r.authorIds != null
+              ? r.authorIds.includes(user.id)
+              : r.hasReacted, // fallback for server-loaded reactions
+          )
+
+          const isSameEmoji = userPrevReaction?.emoji === emoji
+
+          if (isSameEmoji) {
+            // Toggle OFF: remove existing reaction
+            reactions = mergeReactionRemove(reactions, emoji, user.id, user.id)
+            emitOps.push(() => removeReaction(message.id, emoji))
+          } else {
+            if (userPrevReaction) {
+              // Replace: remove old emoji first, then add new
+              reactions = mergeReactionRemove(reactions, userPrevReaction.emoji, user.id, user.id)
+              emitOps.push(() => removeReaction(message.id, userPrevReaction.emoji))
+            }
+            // Add the newly picked emoji
+            reactions = mergeReactionAdd(reactions, emoji, user.id, user.id)
+            emitOps.push(() => addReaction(message.id, emoji))
+          }
+
+          await db.messages
+            .where('id')
+            .equals(message.id)
+            .modify((msg) => { msg.reactions = reactions })
+        })
+
+        // Emit WS events after successful DB commit, in order
+        emitOps.forEach((fn) => fn())
+      } finally {
+        isTogglingRef.current = false
+      }
+    },
+    [message.id, user?.id],
+  )
 
   const handleConfirmDelete = () => {
     deleteMessage(message.id, crypto.randomUUID())
@@ -207,7 +277,37 @@ export function PrimaryMessage({ message, className }: PrimaryMessageProps) {
 
               {/* Hover action bar — visible to everyone on non-deleted messages */}
               {!message.deletedAt && (
-                <div className="absolute -top-2 right-0 hidden group-hover/msg:flex items-center gap-0.5 bg-background border rounded-md shadow-sm px-1 py-0.5">
+                <div className={`absolute -top-2 right-0 items-center gap-0.5 bg-background border rounded-md shadow-sm px-1 py-0.5 ${isPickerOpen ? 'flex' : 'hidden group-hover/msg:flex'}`}>
+                  {/* Emoji picker — lazy loaded, no bundle impact until opened */}
+                  <Popover open={isPickerOpen} onOpenChange={setIsPickerOpen}>
+                    <PopoverTrigger
+                      className="p-1 rounded hover:bg-accent text-muted-foreground hover:text-foreground transition-colors"
+                      aria-label="Add reaction"
+                    >
+                      <SmilePlus className="h-3.5 w-3.5" />
+                    </PopoverTrigger>
+                    <PopoverContent
+                      side="top"
+                      align="end"
+                      className="p-0 w-auto border-0 shadow-none bg-transparent ring-0"
+                    >
+                      <Suspense fallback={<div className="p-4 text-xs text-muted-foreground">Loading…</div>}>
+                        <EmojiPicker
+                          data={async () => {
+                            const response = await import('@emoji-mart/data')
+                            return response.default
+                          }}
+                          onEmojiSelect={(e: { native: string }) => {
+                            handleReactionToggle(e.native)
+                            setIsPickerOpen(false)
+                          }}
+                          theme="auto"
+                          previewPosition="none"
+                          skinTonePosition="none"
+                        />
+                      </Suspense>
+                    </PopoverContent>
+                  </Popover>
                   <button
                     onClick={() =>
                       requestReply({
@@ -244,6 +344,19 @@ export function PrimaryMessage({ message, className }: PrimaryMessageProps) {
                       <Trash2 className="h-3.5 w-3.5" />
                     </button>
                   )}
+                </div>
+              )}
+
+              {/* ── Reaction Badges ───────────────────────────────── */}
+              {!message.deletedAt && (message.reactions ?? []).length > 0 && (
+                <div className="flex flex-wrap gap-1 mt-1.5">
+                  {message.reactions!.map((reaction) => (
+                    <ReactionBadge
+                      key={reaction.emoji}
+                      reaction={reaction}
+                      onClick={() => handleReactionToggle(reaction.emoji)}
+                    />
+                  ))}
                 </div>
               )}
 

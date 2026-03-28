@@ -22,12 +22,22 @@ import {
 import { useLiveQuery } from 'dexie-react-hooks'
 import { db } from '@/shared/lib/db'
 import type { DBMessage } from '@/shared/lib/db/schema'
-import { Pencil, Trash2, Reply, MessageSquare } from 'lucide-react'
-import { useEffect, useState } from 'react'
-import { deleteMessage } from '@/features/chat/events/api'
+import { Pencil, Trash2, Reply, MessageSquare, SmilePlus } from 'lucide-react'
+import { useEffect, useState, useCallback, lazy, Suspense, useRef } from 'react'
+import { deleteMessage, addReaction, removeReaction } from '@/features/chat/events/api'
 import { useReplyRequest } from '../../lib/reply-request-context'
 import { useMemberCache } from '../../lib/member-cache-context'
 import { useScrollToMessage } from '../../lib/scroll-to-message-context'
+import { ReactionBadge, mergeReactionAdd, mergeReactionRemove } from '@/entities/reaction'
+import type { ReactionGroup } from '@/entities/reaction'
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/shared/ui/primitives/popover'
+
+// Lazy-load the heavy emoji picker only when opened
+const EmojiPicker = lazy(() => import('@emoji-mart/react'))
 
 function getSafeContent(content: unknown): string {
   if (typeof content === 'string') return content
@@ -52,6 +62,7 @@ export function AdditionalMessage({ message }: AdditionalMessageProps) {
     useMessageEdit(message.id, currentContent)
 
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
+  const [isPickerOpen, setIsPickerOpen] = useState(false)
 
   // Resolve parent message from Dexie for the inline reply reference.
   // IMPORTANT: .get(id) uses compound PK — use where('id').equals() instead (v8 index).
@@ -66,6 +77,58 @@ export function AdditionalMessage({ message }: AdditionalMessageProps) {
   const isAuthor = user?.id === message.authorId
   const canEdit = isAuthor && !message.deletedAt
   const canDelete = isAuthor && !message.deletedAt
+
+  // One-reaction-per-user toggle (WhatsApp / Telegram style):
+  // - Pick an emoji you haven't reacted with → adds it (removes any previous reaction first)
+  // - Pick the same emoji you already have → removes it (toggle off)
+  const isTogglingRef = useRef(false)
+  const handleReactionToggle = useCallback(
+    async (emoji: string) => {
+      if (!user?.id) return
+      if (isTogglingRef.current) return
+      isTogglingRef.current = true
+
+      const emitOps: Array<() => void> = []
+
+      try {
+        await db.transaction('rw', db.messages, async () => {
+          const current = await db.messages.where('id').equals(message.id).first()
+          let reactions = (current?.reactions ?? []) as ReactionGroup[]
+
+          // Find any emoji this user has already reacted with
+          const userPrevReaction = reactions.find((r) =>
+            r.authorIds != null
+              ? r.authorIds.includes(user.id)
+              : r.hasReacted,
+          )
+
+          const isSameEmoji = userPrevReaction?.emoji === emoji
+
+          if (isSameEmoji) {
+            reactions = mergeReactionRemove(reactions, emoji, user.id, user.id)
+            emitOps.push(() => removeReaction(message.id, emoji))
+          } else {
+            if (userPrevReaction) {
+              reactions = mergeReactionRemove(reactions, userPrevReaction.emoji, user.id, user.id)
+              emitOps.push(() => removeReaction(message.id, userPrevReaction.emoji))
+            }
+            reactions = mergeReactionAdd(reactions, emoji, user.id, user.id)
+            emitOps.push(() => addReaction(message.id, emoji))
+          }
+
+          await db.messages
+            .where('id')
+            .equals(message.id)
+            .modify((msg) => { msg.reactions = reactions })
+        })
+
+        emitOps.forEach((fn) => fn())
+      } finally {
+        isTogglingRef.current = false
+      }
+    },
+    [message.id, user?.id],
+  )
 
   // ↑ shortcut listener: enter edit mode when MessageInput requests it
   const { requestedEditId, clearEditRequest } = useEditRequest()
@@ -171,7 +234,37 @@ export function AdditionalMessage({ message }: AdditionalMessageProps) {
 
               {/* Hover action bar — visible to everyone on non-deleted messages */}
               {!message.deletedAt && (
-                <div className="absolute -top-2 right-0 hidden group-hover/msg:flex items-center gap-0.5 bg-background border rounded-md shadow-sm px-1 py-0.5">
+                <div className={`absolute -top-2 right-0 items-center gap-0.5 bg-background border rounded-md shadow-sm px-1 py-0.5 ${isPickerOpen ? 'flex' : 'hidden group-hover/msg:flex'}`}>
+                  {/* Emoji picker — lazy loaded */}
+                  <Popover open={isPickerOpen} onOpenChange={setIsPickerOpen}>
+                    <PopoverTrigger
+                      className="p-1 rounded hover:bg-accent text-muted-foreground hover:text-foreground transition-colors"
+                      aria-label="Add reaction"
+                    >
+                      <SmilePlus className="h-3.5 w-3.5" />
+                    </PopoverTrigger>
+                    <PopoverContent
+                      side="top"
+                      align="end"
+                      className="p-0 w-auto border-0 shadow-none bg-transparent ring-0"
+                    >
+                      <Suspense fallback={<div className="p-4 text-xs text-muted-foreground">Loading…</div>}>
+                        <EmojiPicker
+                          data={async () => {
+                            const response = await import('@emoji-mart/data')
+                            return response.default
+                          }}
+                          onEmojiSelect={(e: { native: string }) => {
+                            handleReactionToggle(e.native)
+                            setIsPickerOpen(false)
+                          }}
+                          theme="auto"
+                          previewPosition="none"
+                          skinTonePosition="none"
+                        />
+                      </Suspense>
+                    </PopoverContent>
+                  </Popover>
                   <button
                     onClick={() =>
                       requestReply({
@@ -208,6 +301,19 @@ export function AdditionalMessage({ message }: AdditionalMessageProps) {
                       <Trash2 className="h-3.5 w-3.5" />
                     </button>
                   )}
+                </div>
+              )}
+
+              {/* ── Reaction Badges ───────────────────────────────── */}
+              {!message.deletedAt && (message.reactions ?? []).length > 0 && (
+                <div className="flex flex-wrap gap-1 mt-1.5">
+                  {message.reactions!.map((reaction) => (
+                    <ReactionBadge
+                      key={reaction.emoji}
+                      reaction={reaction}
+                      onClick={() => handleReactionToggle(reaction.emoji)}
+                    />
+                  ))}
                 </div>
               )}
 

@@ -81,6 +81,20 @@ export interface SubscribeSuccessPayload {
   conversationType: 'CHANNEL' | 'DM' | 'GROUP_DM' | 'THREAD'
 }
 
+export interface ReactionAddedPayload {
+  messageId: string
+  userId: string
+  emoji: string
+  timestamp: number
+}
+
+export interface ReactionRemovedPayload {
+  messageId: string
+  userId: string
+  emoji: string
+  timestamp: number
+}
+
 // ═══════════════════════════════════════════════════════════════
 // CONTRACTS
 // ═══════════════════════════════════════════════════════════════
@@ -130,6 +144,16 @@ export type SubscribeSuccessContract = DownstreamContract<
   SubscribeSuccessPayload
 >
 
+export type ReactionAddedContract = DownstreamContract<
+  ChatDownstreamEvent.ReactionAdded,
+  ReactionAddedPayload
+>
+
+export type ReactionRemovedContract = DownstreamContract<
+  ChatDownstreamEvent.ReactionRemoved,
+  ReactionRemovedPayload
+>
+
 // ═══════════════════════════════════════════════════════════════
 // UNION TYPE
 // ═══════════════════════════════════════════════════════════════
@@ -144,6 +168,8 @@ export type ChatDownstreamContract =
   | MessageDeliveredContract
   | UserTypingContract
   | SubscribeSuccessContract
+  | ReactionAddedContract
+  | ReactionRemovedContract
 
 // ═══════════════════════════════════════════════════════════════
 // BACKWARD COMPATIBILITY - Event type aliases

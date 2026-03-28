@@ -13,6 +13,7 @@ import {
   registerSyncRequiredHandler,
   registerEditMessageHandler,
   registerDeleteMessageHandler,
+  registerReactionHandlers,
 } from './handlers'
 import { startOutboxRetryWorker } from './outbox-worker'
 import type { ChatEventHandlerContext } from '../model'
@@ -33,6 +34,7 @@ export function registerChatHandlers(context: ChatEventHandlerContext) {
     registerSyncRequiredHandler(context),
     registerEditMessageHandler(),
     registerDeleteMessageHandler(),
+    registerReactionHandlers(() => context.getCurrentUserId()),
   ]
 
   return () => {
