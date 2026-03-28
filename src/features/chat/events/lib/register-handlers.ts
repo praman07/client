@@ -12,6 +12,7 @@ import {
   registerNewMessageHandler,
   registerSyncRequiredHandler,
   registerEditMessageHandler,
+  registerDeleteMessageHandler,
 } from './handlers'
 import { startOutboxRetryWorker } from './outbox-worker'
 import type { ChatEventHandlerContext } from '../model'
@@ -29,8 +30,9 @@ export function registerChatHandlers(context: ChatEventHandlerContext) {
   const unsubs = [
     registerNewMessageHandler(context),
     registerAckMessageHandler(context),
-    registerSyncRequiredHandler(),
+    registerSyncRequiredHandler(context),
     registerEditMessageHandler(),
+    registerDeleteMessageHandler(),
   ]
 
   return () => {

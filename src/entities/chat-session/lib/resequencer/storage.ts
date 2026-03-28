@@ -103,7 +103,7 @@ export async function commitMessageBatch(
 export async function getConversationCursor(
   conversationId: string,
   projectId?: string,
-): Promise<{ streamId: string | null; sequence: number }> {
+): Promise<{ streamId: string | null; sequence: number; lastOpenedAt?: number }> {
   try {
     let cursor: DBConversationState | undefined
 
@@ -154,6 +154,7 @@ export async function getConversationCursor(
     return {
       streamId,
       sequence,
+      lastOpenedAt: cursor?.lastOpenedAt,
     }
   } catch (e) {
     log.error('Failed to get cursor', e)

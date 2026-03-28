@@ -34,6 +34,7 @@ const chatStorageAdapter: StorageAdapter<ChatPayload> = {
       lastSequence: cursor.sequence,
       expectedStreamId: cursor.streamId,
       epoch: null,
+      lastOpenedAt: cursor.lastOpenedAt,
     }
   },
 

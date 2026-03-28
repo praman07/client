@@ -24,6 +24,7 @@ const log = createLogger('reseq:factory')
 export interface SubscriptionState {
   lastSequence: number
   epoch: string | undefined
+  lastOpenedAt?: number // epoch ms — mutation delta cursor sent to server on subscribe
 }
 
 export interface ResequencerAPI<T extends BasePayload> {
@@ -267,18 +268,26 @@ export function createStreamResequencer<T extends BasePayload>(
   ): Promise<SubscriptionState> {
     const state = stateManager.get(conversationId)
 
+    // lastOpenedAt is NOT tracked in the in-memory StreamSessionState —
+    // it only lives in Dexie (committed by storage.ts commitMessage).
+    // We must always load it from the cursor (single indexed key lookup)
+    // so the server can run the mutation delta on subscribe.
+    // This extra read is acceptable: subscribe happens once per connection.
+    const cursor = await cursorLoader.load(conversationId, projectId)
+
     if (state) {
       return {
         lastSequence: state.lastSequence,
         epoch: state.expectedStreamId || undefined,
+        lastOpenedAt: cursor.lastOpenedAt,
       }
     }
 
-    // Slow path: load from storage
-    const cursor = await cursorLoader.load(conversationId, projectId)
+    // Slow path: in-memory state not yet initialised (fresh page load)
     return {
       lastSequence: cursor.lastSequence,
       epoch: cursor.expectedStreamId || undefined,
+      lastOpenedAt: cursor.lastOpenedAt,
     }
   }
 
