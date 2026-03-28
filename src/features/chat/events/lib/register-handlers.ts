@@ -11,6 +11,7 @@ import {
   registerAckMessageHandler,
   registerNewMessageHandler,
   registerSyncRequiredHandler,
+  registerEditMessageHandler,
 } from './handlers'
 import { startOutboxRetryWorker } from './outbox-worker'
 import type { ChatEventHandlerContext } from '../model'
@@ -29,6 +30,7 @@ export function registerChatHandlers(context: ChatEventHandlerContext) {
     registerNewMessageHandler(context),
     registerAckMessageHandler(context),
     registerSyncRequiredHandler(),
+    registerEditMessageHandler(),
   ]
 
   return () => {

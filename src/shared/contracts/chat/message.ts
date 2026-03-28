@@ -30,6 +30,7 @@ export interface Message {
   createdAt: string
   updatedAt?: string
   editedAt?: string
+  isEdited?: boolean
   deletedAt?: string
   parentMessageId?: string
   replyCount?: number

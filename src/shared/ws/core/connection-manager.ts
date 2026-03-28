@@ -91,27 +91,24 @@ function setState(newState: InternalState): void {
 
 /**
  * Validates server message structure.
+ *
+ * Minimum contract: { type: string }.
+ * - ACK frames also carry { success: boolean, data? }
+ * - Broadcast events (e.g. chat:message-edited) may omit success
+ *
+ * We only reject non-objects and messages without a string type.
+ * Unknown types are handled gracefully by the event-router (no-op dispatch).
  */
 function isValidServerMessage(data: unknown): data is ServerMessage {
-  if (typeof data !== 'object' || data === null) {
-    log.debug('Validation failed: not an object or null')
+  if (typeof data !== 'object' || data === null) return false
+
+  const { type } = data as Record<string, unknown>
+  if (typeof type !== 'string' || type === '') {
+    log.debug('Dropped message: missing or empty type field')
     return false
   }
 
-  const { type, success } = data as Record<string, unknown>
-
-  const isValid = typeof type === 'string' && typeof success === 'boolean'
-
-  if (!isValid) {
-    log.debug('Validation failed:', {
-      type,
-      typeIsString: typeof type === 'string',
-      success,
-      successIsBoolean: typeof success === 'boolean',
-    })
-  }
-
-  return isValid
+  return true
 }
 
 /**

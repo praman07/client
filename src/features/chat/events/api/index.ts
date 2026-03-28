@@ -3,3 +3,4 @@
  */
 
 export { sendMessage } from './send-message'
+export { editMessage } from './edit-message'

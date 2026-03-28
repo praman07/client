@@ -16,6 +16,8 @@ import {
 } from './components/chat-layout'
 import { useAuth } from '@/shared/hooks'
 import { Button } from '@/shared/ui/primitives/button'
+import { db } from '@/shared/lib/db'
+import { useEditRequest } from '../lib/edit-request-context'
 
 import { sendMessage } from '@/features/chat/events'
 
@@ -28,6 +30,7 @@ export function MessageInput({ channelId, projectId }: MessageInputProps) {
   const { userId } = useAuth()
   const [content, setContent] = useState('')
   const textareaRef = useRef<HTMLTextAreaElement>(null)
+  const { requestEdit } = useEditRequest()
 
   const handleSend = async () => {
     if (!content.trim()) return
@@ -41,10 +44,33 @@ export function MessageInput({ channelId, projectId }: MessageInputProps) {
     }
   }
 
-  const handleKeyDown = (e: React.KeyboardEvent) => {
+  const handleKeyDown = async (e: React.KeyboardEvent) => {
+    // ↑ shortcut: edit last own message when input is empty
+    if (e.key === 'ArrowUp' && !content.trim()) {
+      e.preventDefault()
+
+      if (!userId) return
+
+      // Find the last non-deleted message in this conversation authored by current user.
+      // The compound index [projectId+conversationId+sequence] powers this query.
+      const lastOwn = await db.messages
+        .where('[projectId+conversationId+sequence]')
+        .between(
+          [projectId, channelId, 0],
+          [projectId, channelId, Infinity],
+        )
+        .filter((msg) => msg.authorId === userId && !msg.deletedAt)
+        .last()
+
+      if (lastOwn) {
+        requestEdit(lastOwn.id)
+      }
+      return
+    }
+
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault()
-      handleSend()
+      void handleSend()
     }
   }
 
