@@ -67,7 +67,9 @@ type Documents = {
     "\n  mutation ArchiveChannel($input: ArchiveChannelInput!) {\n    archiveChannel(input: $input) {\n      id\n      name\n      type\n      isArchived\n      deletedAt\n      workspaceId\n      projectId\n      updatedAt\n    }\n  }\n": typeof types.ArchiveChannelDocument,
     "\n  mutation CheckChannelAvailability($input: CheckChannelAvailabilityInput!) {\n    checkChannelAvailability(input: $input) {\n      available\n      message\n      reason\n      reservationId\n    }\n  }\n": typeof types.CheckChannelAvailabilityDocument,
     "\n  mutation CreateChannel($input: CreateChannelInput!) {\n    createChannel(input: $input) {\n      id\n      name\n      type\n      workspaceId\n      projectId\n    }\n  }\n": typeof types.CreateChannelDocument,
+    "\n  mutation CreateDm($input: CreateDmInput!) {\n    createDm(input: $input) {\n      id\n      type\n      workspaceId\n      projectId\n    }\n  }\n": typeof types.CreateDmDocument,
     "\n  mutation DeleteChannel($workspaceId: ID!, $channelId: ID!) {\n    deleteChannel(workspaceId: $workspaceId, channelId: $channelId) {\n      success\n      channelId\n    }\n  }\n": typeof types.DeleteChannelDocument,
+    "\n  query GetProjectDms($projectId: ID!, $workspaceId: ID!) {\n    getProjectDms(projectId: $projectId, workspaceId: $workspaceId) {\n      id\n      otherUser {\n        id\n        fullName\n        avatarUrl\n      }\n      unreadCount\n      updatedAt\n    }\n  }\n": typeof types.GetProjectDmsDocument,
     "\n  mutation RenameChannel($input: RenameChannelInput!) {\n    renameChannel(input: $input) {\n      id\n      name\n      type\n      workspaceId\n      projectId\n      updatedAt\n    }\n  }\n": typeof types.RenameChannelDocument,
     "\n  mutation UnarchiveChannel($workspaceId: ID!, $channelId: ID!) {\n    unarchiveChannel(workspaceId: $workspaceId, channelId: $channelId) {\n      success\n      channelId\n      name\n    }\n  }\n": typeof types.UnarchiveChannelDocument,
     "\n  mutation CreateWorkspace($slug: String!, $name: String!) {\n    createWorkspace(slug: $slug, name: $name) {\n      id\n      slug\n      name\n    }\n  }\n": typeof types.CreateWorkspaceDocument,
@@ -204,7 +206,9 @@ const documents: Documents = {
     "\n  mutation ArchiveChannel($input: ArchiveChannelInput!) {\n    archiveChannel(input: $input) {\n      id\n      name\n      type\n      isArchived\n      deletedAt\n      workspaceId\n      projectId\n      updatedAt\n    }\n  }\n": types.ArchiveChannelDocument,
     "\n  mutation CheckChannelAvailability($input: CheckChannelAvailabilityInput!) {\n    checkChannelAvailability(input: $input) {\n      available\n      message\n      reason\n      reservationId\n    }\n  }\n": types.CheckChannelAvailabilityDocument,
     "\n  mutation CreateChannel($input: CreateChannelInput!) {\n    createChannel(input: $input) {\n      id\n      name\n      type\n      workspaceId\n      projectId\n    }\n  }\n": types.CreateChannelDocument,
+    "\n  mutation CreateDm($input: CreateDmInput!) {\n    createDm(input: $input) {\n      id\n      type\n      workspaceId\n      projectId\n    }\n  }\n": types.CreateDmDocument,
     "\n  mutation DeleteChannel($workspaceId: ID!, $channelId: ID!) {\n    deleteChannel(workspaceId: $workspaceId, channelId: $channelId) {\n      success\n      channelId\n    }\n  }\n": types.DeleteChannelDocument,
+    "\n  query GetProjectDms($projectId: ID!, $workspaceId: ID!) {\n    getProjectDms(projectId: $projectId, workspaceId: $workspaceId) {\n      id\n      otherUser {\n        id\n        fullName\n        avatarUrl\n      }\n      unreadCount\n      updatedAt\n    }\n  }\n": types.GetProjectDmsDocument,
     "\n  mutation RenameChannel($input: RenameChannelInput!) {\n    renameChannel(input: $input) {\n      id\n      name\n      type\n      workspaceId\n      projectId\n      updatedAt\n    }\n  }\n": types.RenameChannelDocument,
     "\n  mutation UnarchiveChannel($workspaceId: ID!, $channelId: ID!) {\n    unarchiveChannel(workspaceId: $workspaceId, channelId: $channelId) {\n      success\n      channelId\n      name\n    }\n  }\n": types.UnarchiveChannelDocument,
     "\n  mutation CreateWorkspace($slug: String!, $name: String!) {\n    createWorkspace(slug: $slug, name: $name) {\n      id\n      slug\n      name\n    }\n  }\n": types.CreateWorkspaceDocument,
@@ -517,7 +521,15 @@ export function gql(source: "\n  mutation CreateChannel($input: CreateChannelInp
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
+export function gql(source: "\n  mutation CreateDm($input: CreateDmInput!) {\n    createDm(input: $input) {\n      id\n      type\n      workspaceId\n      projectId\n    }\n  }\n"): (typeof documents)["\n  mutation CreateDm($input: CreateDmInput!) {\n    createDm(input: $input) {\n      id\n      type\n      workspaceId\n      projectId\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
 export function gql(source: "\n  mutation DeleteChannel($workspaceId: ID!, $channelId: ID!) {\n    deleteChannel(workspaceId: $workspaceId, channelId: $channelId) {\n      success\n      channelId\n    }\n  }\n"): (typeof documents)["\n  mutation DeleteChannel($workspaceId: ID!, $channelId: ID!) {\n    deleteChannel(workspaceId: $workspaceId, channelId: $channelId) {\n      success\n      channelId\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  query GetProjectDms($projectId: ID!, $workspaceId: ID!) {\n    getProjectDms(projectId: $projectId, workspaceId: $workspaceId) {\n      id\n      otherUser {\n        id\n        fullName\n        avatarUrl\n      }\n      unreadCount\n      updatedAt\n    }\n  }\n"): (typeof documents)["\n  query GetProjectDms($projectId: ID!, $workspaceId: ID!) {\n    getProjectDms(projectId: $projectId, workspaceId: $workspaceId) {\n      id\n      otherUser {\n        id\n        fullName\n        avatarUrl\n      }\n      unreadCount\n      updatedAt\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

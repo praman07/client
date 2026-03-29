@@ -1,7 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { Suspense } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
-import { Lock, MessageSquare } from 'lucide-react'
+import { MessageSquare } from 'lucide-react'
 import type { Conversation } from '@/entities/conversation'
 import { ChatWindow } from '@/widgets/chat-window'
 import { RecoveryListener } from '@/entities/chat-session'
@@ -65,17 +65,18 @@ function ConversationPage() {
     case 'DM':
     case 'GROUP_DM':
       return (
-        <div className="h-full flex items-center justify-center p-8">
-          <ErrorStateCard
-            icon={Lock}
-            title="Coming Soon"
-            description={
-              conversation.type === 'DM'
-                ? 'Direct messages are not yet implemented.'
-                : 'Group conversations are not yet implemented.'
-            }
-          />
-        </div>
+        <ErrorBoundary FallbackComponent={WidgetError}>
+          <Suspense fallback={<ChatSkeleton />}>
+            <RecoveryListener />
+            <ChatWindow
+              channelId={conversation.id}
+              projectId={conversation.projectId || ''}
+              channelName={conversation.name || 'Direct Message'}
+              isPrivate={true}
+              description={conversation.description ?? undefined}
+            />
+          </Suspense>
+        </ErrorBoundary>
       )
 
     default:

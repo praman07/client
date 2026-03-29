@@ -56,6 +56,7 @@ type Query {
   getUserConversations(workspaceId: ID!, projectId: ID!, type: ConversationType, includeArchived: Boolean, limit: Int, cursor: String): ConversationConnection!
   getConversation(conversationId: ID!): Conversation!
   getDmByUsers(workspaceId: ID!, projectId: ID!, otherUserId: ID!): DmConversation
+  getProjectDms(projectId: ID!, workspaceId: ID!): [ProjectDmItem!]!
   getUsersByIds(userIds: [ID!]!): [UserBasic!]!
   getBoard(boardId: ID!): Whiteboard
   userBoards(workspaceId: ID!, projectId: ID, limit: Int, cursor: ID): BoardConnection!
@@ -1007,6 +1008,24 @@ type DmConversation {
 type DmMember {
   userId: ID!
   user: UserBasic!
+}
+
+"""
+A 1:1 DM conversation with the other participant's profile resolved.
+The caller's own userId must be used to identify 'otherUser' on the client.
+"""
+type ProjectDmItem {
+  id: ID!
+  otherUser: DmUserProfile!
+  unreadCount: Int!
+  updatedAt: DateTime!
+}
+
+type DmUserProfile {
+  id: ID!
+  fullName: String!
+  email: String
+  avatarUrl: String
 }
 
 type Whiteboard {

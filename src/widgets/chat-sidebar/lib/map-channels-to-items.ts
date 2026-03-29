@@ -15,17 +15,28 @@ export function mapConversationsToItems(
   }))
 }
 
+export interface ProjectDmItem {
+  id: string
+  otherUser: {
+    id: string
+    fullName: string
+    avatarUrl?: string | null
+  }
+  unreadCount: number
+  updatedAt: string
+}
+
 /**
- * Map DM conversations to sidebar item format
- * Note: Currently uses conversation name. For full user details, use Phase 2 implementation.
+ * Map ProjectDmItem[] (from getProjectDms) to sidebar DMItem format.
+ * Replaces the old stub that used Conversation.name as a fallback.
  */
-export function mapDmsToItems(dms: Array<Conversation>): Array<DMItem> {
+export function mapDmsToItems(dms: ProjectDmItem[]): Array<DMItem> {
   return dms.map((dm) => ({
     id: dm.id,
-    userId: dm.id, // Placeholder - in Phase 2, extract actual other user ID
-    name: dm.name || dm.description || 'Direct Message',
-    avatarUrl: undefined, // Phase 2: Get from user data
-    status: 'offline' as const, // Phase 2: Integrate presence
+    userId: dm.otherUser.id,
+    name: dm.otherUser.fullName || 'Deleted User',
+    avatarUrl: dm.otherUser.avatarUrl ?? undefined,
+    status: 'offline' as const, // Phase 3: integrate presence
     unreadCount: dm.unreadCount,
   }))
 }

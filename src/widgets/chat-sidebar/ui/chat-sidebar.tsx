@@ -10,6 +10,7 @@ import { DMList } from './dm-list'
 import type { DMItem, GroupItem } from '../model/types'
 import type { Conversation } from '@/entities/conversation'
 import { CreateChannelModal } from '@/features/chat/create-channel'
+import { useGetProjectDms } from '@/features/chat/get-project-dms'
 import { Sidebar, SidebarContent } from '@/shared/ui/primitives/sidebar'
 import { Separator } from '@/shared/ui/primitives/separator'
 import { ScrollArea } from '@/shared/ui'
@@ -44,10 +45,8 @@ export function ChatSidebar() {
       includeArchived: true,
     })
 
-  // Fetch DMs
-  const { data: dmsData, isLoading: dmsLoading } = useUserConversations({
-    type: ConversationType.Dm,
-  })
+  // Fetch DMs — uses getProjectDms which returns the other user's profile
+  const { data: dmsData, isLoading: dmsLoading } = useGetProjectDms()
 
   // Fetch group DMs
   const { data: groupsData, isLoading: groupsLoading } = useUserConversations({
@@ -87,11 +86,6 @@ export function ChatSidebar() {
     return filtered
   }, [archivedChannelsData])
 
-  const dms = useMemo(() => {
-    const edges = dmsData?.getUserConversations.edges ?? []
-    return sortConversations(edges as Array<Conversation>)
-  }, [dmsData])
-
   const groups = useMemo(() => {
     const edges = groupsData?.getUserConversations.edges ?? []
     return sortConversations(edges as Array<Conversation>)
@@ -111,7 +105,10 @@ export function ChatSidebar() {
     [archivedChannels],
   )
 
-  const dmItems = useMemo(() => mapDmsToItems(dms), [dms])
+  const dmItems = useMemo(
+    () => mapDmsToItems(dmsData?.getProjectDms ?? []),
+    [dmsData],
+  )
 
   const groupItems = useMemo(() => mapGroupsToItems(groups), [groups])
 
