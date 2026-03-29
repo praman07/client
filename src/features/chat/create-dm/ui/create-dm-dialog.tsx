@@ -1,28 +1,27 @@
 import { useState } from 'react'
+import { Loader2 } from 'lucide-react'
+import { useCreateDmModal } from '../hooks/use-create-dm-modal'
+import { useCreateDm } from '../hooks/use-create-dm'
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogDescription,
 } from '@/shared/ui/primitives/dialog'
 import {
   Command,
-  CommandInput,
-  CommandList,
-  CommandItem,
   CommandEmpty,
   CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
 } from '@/shared/ui/primitives/command'
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/primitives/avatar'
-import { useCreateDmModal } from '../hooks/use-create-dm-modal'
-import { useCreateDm } from '../hooks/use-create-dm'
-import { useProjectMembers, PROJECT_MEMBER_FIELDS } from '@/entities/project-member'
+import { PROJECT_MEMBER_FIELDS, useProjectMembers } from '@/entities/project-member'
 import { useFragment } from '@/gql'
-import { useAppSelector } from '@/shared/hooks'
+import { useAppSelector, useUser  } from '@/shared/hooks'
 import { selectCurrentProject } from '@/entities/project'
-import { Loader2 } from 'lucide-react'
-import { useUser } from '@/shared/hooks'
 
 /**
  * CreateDmDialog

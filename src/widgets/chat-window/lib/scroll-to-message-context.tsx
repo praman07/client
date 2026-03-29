@@ -8,7 +8,8 @@
  * The MessageList component registers the scroll function via `registerScroll`.
  * Message components call `scrollToMessage(id)`.
  */
-import { createContext, useContext, useRef, useState, useCallback, type ReactNode } from 'react'
+import {  createContext, useCallback, useContext, useRef, useState } from 'react'
+import type {ReactNode} from 'react';
 
 interface ScrollToMessageContextValue {
   /**

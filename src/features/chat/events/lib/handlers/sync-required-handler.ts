@@ -19,11 +19,11 @@
  */
 
 import type { SyncRequiredEvent } from '@/shared/contracts/chat/downstream'
+import type { ChatEventHandlerContext } from '../../model'
 import { ChatDownstreamEvent } from '@/shared/contracts/chat/events'
-import { registerHandler, dispatchEvent } from '@/shared/ws/event-bus'
+import { dispatchEvent, registerHandler } from '@/shared/ws/event-bus'
 import { resequencer } from '@/entities/chat-session'
 import { createLogger } from '@/shared/lib/logger'
-import type { ChatEventHandlerContext } from '../../model'
 
 const log = createLogger('chat:sync-required-handler')
 

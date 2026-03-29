@@ -60,12 +60,13 @@ export function mergeMessages(
     // but the outbox entry hasn't been deleted yet (race condition).
     // Trust History.
     if (!historyMap.has(p.dedupeId)) {
+      const outboxPayload = p.payload as Record<string, any>
       rows.push({
         id: p.id ? String(p.id) : `opt-${p.dedupeId}`, // ID must be string
         conversationId: p.conversationId,
         streamId: `temp-${p.dedupeId}`, // Placeholder streamId
         sequence: Infinity, // Optimistic items always at end
-        content: (p.payload as Record<string, any>).content || '', // Extract content from payload
+        content: outboxPayload.content || '',
         type: 'text', // Default type for user messages
         authorId: p.authorId,
         createdAt: new Date(p.createdAt).toISOString(), // Convert timestamp to ISO
@@ -77,6 +78,20 @@ export function mergeMessages(
         virtualId: p.dedupeId,
         reactions: [],
         replyCount: 0,
+        parentMessageId: outboxPayload.parentMessageId,
+        // Carry metadata (attachments) from the outbox payload so the sender sees
+        // media previews immediately while the message is still in-flight.
+        // url fields are stripped: renderer calls useDownloadUrl(fileId) which has
+        // the live URL primed in React Query from the ACK handler.
+        metadata: outboxPayload.metadata
+          ? {
+              ...outboxPayload.metadata,
+              attachments: outboxPayload.metadata.attachments?.map(
+                 
+                ({ url: _url, ...rest }: any) => rest,
+              ),
+            }
+          : undefined,
       })
     }
   }

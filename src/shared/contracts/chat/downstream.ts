@@ -5,6 +5,7 @@
 
 import type { ChatDownstreamEvent } from './events'
 import type { DownstreamContract } from '../types'
+import type { ChatAttachment } from './message'
 
 // ═══════════════════════════════════════════════════════════════
 // PAYLOADS
@@ -25,6 +26,15 @@ export interface NewMessagePayload {
     replay?: boolean
   }
   projectId?: string
+  /**
+   * Optional Vault file attachments carried with this message.
+   * url fields in attachments are short-lived (1-hour TTL).
+   * Renderers: call batchGetDownloadUrls(fileIds) to refresh urls after 55 min.
+   * DO NOT persist url to IndexedDB — only fileId, name, mimeType, sizeBytes.
+   */
+  metadata?: {
+    attachments?: Array<ChatAttachment>
+  }
 }
 
 export interface AckMessagePayload {

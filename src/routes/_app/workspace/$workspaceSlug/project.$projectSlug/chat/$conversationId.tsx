@@ -53,6 +53,7 @@ function ConversationPage() {
             <ChatWindow
               channelId={conversation.id}
               projectId={conversation.projectId || ''}
+              workspaceId={conversation.workspaceId}
               channelName={conversation.name || 'Unnamed Channel'}
               isPrivate={!conversation.isPublic}
               description={conversation.description ?? undefined}
@@ -71,6 +72,7 @@ function ConversationPage() {
             <ChatWindow
               channelId={conversation.id}
               projectId={conversation.projectId || ''}
+              workspaceId={conversation.workspaceId}
               channelName={conversation.name || 'Direct Message'}
               isPrivate={true}
               description={conversation.description ?? undefined}

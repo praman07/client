@@ -9,11 +9,11 @@
 
 import {
   registerAckMessageHandler,
-  registerNewMessageHandler,
-  registerSyncRequiredHandler,
-  registerEditMessageHandler,
   registerDeleteMessageHandler,
+  registerEditMessageHandler,
+  registerNewMessageHandler,
   registerReactionHandlers,
+  registerSyncRequiredHandler,
 } from './handlers'
 import { startOutboxRetryWorker } from './outbox-worker'
 import type { ChatEventHandlerContext } from '../model'

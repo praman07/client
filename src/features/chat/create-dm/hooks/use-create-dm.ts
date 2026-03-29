@@ -1,13 +1,12 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useNavigate, useParams } from '@tanstack/react-router'
 import { CREATE_DM_MUTATION } from '../api/fragments'
+import { useCreateDmModal } from './use-create-dm-modal'
 import { GqlClient } from '@/shared/api'
-import { useAuth } from '@/shared/hooks'
-import { useAppSelector } from '@/shared/hooks'
+import { useAppSelector, useAuth  } from '@/shared/hooks'
 import { selectCurrentWorkspaceId } from '@/entities/workspace'
 import { selectCurrentProject } from '@/entities/project'
 import { projectDmsKeys } from '@/features/chat/get-project-dms'
-import { useCreateDmModal } from './use-create-dm-modal'
-import { useNavigate, useParams } from '@tanstack/react-router'
 
 /**
  * Mutation hook for creating a 1:1 DM conversation.
@@ -27,10 +26,7 @@ export function useCreateDm() {
   const navigate = useNavigate()
 
   // Read current route params to preserve workspaceSlug/projectSlug in navigation
-  const currentParams = useParams({ strict: false }) as {
-    workspaceSlug?: string
-    projectSlug?: string
-  }
+  const currentParams = useParams({ strict: false })
 
   return useMutation({
     mutationFn: async (recipientUserId: string) => {

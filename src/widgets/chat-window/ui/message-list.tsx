@@ -1,20 +1,18 @@
-import { useEffect, useMemo, useRef, useCallback } from 'react'
+import { useCallback, useEffect, useMemo, useRef } from 'react'
 import { useMessageWindow } from '../hooks/use-message-window'
 import { useWindowController } from '../hooks/use-window-controller'
 import { MESSAGE_WINDOW_SIZE } from '../lib/constants'
 import { transformMessages } from '../lib/transform-messages'
 import { useChatScroll } from '../hooks/use-chat-scroll'
 import { useMessageAuthors } from '../hooks/use-message-authors'
+import { useScrollToMessage } from '../lib/scroll-to-message-context'
 import {
-  AdditionalMessage,
-  DateSeparator,
-  PrimaryMessage,
   ScrollToBottomButton,
+  VirtualRow,
 } from './components'
 import { useHistoryLoader } from '@/entities/chat-session'
 import { useUser } from '@/shared/hooks'
 import { createLogger } from '@/shared/lib/logger'
-import { useScrollToMessage } from '../lib/scroll-to-message-context'
 
 const log = createLogger('chat:messageList')
 
@@ -91,11 +89,22 @@ export function MessageList({ projectId, channelId }: MessageListProps) {
     estimateSize: (index) => {
       const item = virtualData[index]
       // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- virtualizer calls estimateSize with stale indices during transitions
-      if (item?.type === 'DATE') return 40
-      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- same as above
-      return item?.isPrimary ? 64 : 28
+      if (!item) return 40
+      if (item.type === 'DATE') return 40
+
+      // Media-aware estimates: images use a 4:3 aspect-ratio container (320×240 + label).
+      // Without this, all messages estimate at 28-64px, causing aggressive remeasurement
+      // when image containers expand from 0px to ~260px on load (primary jank source).
+      const attachments = item.message?.metadata?.attachments ?? []
+      if (attachments.length > 0) {
+        const firstMime = attachments[0]?.mimeType ?? ''
+        if (firstMime.startsWith('image/')) return 280  // 4:3 at 320px wide ≈ 240px + text + padding
+        if (firstMime.startsWith('video/') || firstMime.startsWith('audio/')) return 76  // card height
+        return 70  // generic file card
+      }
+
+      return item.isPrimary ? 72 : 36
     },
-     
     getItemKey: (index) => virtualData[index]?.id ?? String(index),
     onLoadMore: handleLoadMore,
   })
@@ -157,32 +166,13 @@ export function MessageList({ projectId, channelId }: MessageListProps) {
           if (!item) return null
 
           return (
-            <div
+            <VirtualRow
               key={virtualRow.key}
-              data-index={virtualRow.index}
-              data-message-id={item.type === 'MESSAGE' ? item.id : undefined}
-              ref={rowVirtualizer.measureElement}
-              style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                width: '100%',
-                transform: `translateY(${virtualRow.start}px)`,
-              }}
-              className={
-                item.type === 'MESSAGE' && item.message?.id === highlightedMessageId
-                  ? 'bg-amber-500/10 border-l-2 border-amber-400/70 rounded-r transition-colors duration-1000'
-                  : 'transition-colors duration-1000'
-              }
-            >
-              {item.type === 'DATE' && item.timestamp !== undefined ? (
-                <DateSeparator timestamp={item.timestamp} />
-              ) : item.isPrimary && item.message ? (
-                <PrimaryMessage message={item.message} className="mt-4" />
-              ) : item.message ? (
-                <AdditionalMessage message={item.message} />
-              ) : null}
-            </div>
+              item={item}
+              virtualRow={virtualRow}
+              measureElement={rowVirtualizer.measureElement}
+              highlightedMessageId={highlightedMessageId}
+            />
           )
         })}
       </div>

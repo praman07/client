@@ -148,6 +148,9 @@ type Documents = {
     "\n  mutation UnarchiveBoard($boardId: ID!) {\n    unarchiveBoard(boardId: $boardId) {\n      id\n      isArchived\n      updatedAt\n    }\n  }\n": typeof types.UnarchiveBoardDocument,
     "\n  mutation UnlockBoard($boardId: ID!) {\n    unlockBoard(boardId: $boardId) {\n      id\n      isLocked\n      updatedAt\n    }\n  }\n": typeof types.UnlockBoardDocument,
     "\n  mutation UpdateBoardDescription($boardId: ID!, $description: String) {\n    updateBoardDescription(boardId: $boardId, description: $description) {\n      id\n      description\n      updatedAt\n    }\n  }\n": typeof types.UpdateBoardDescriptionDocument,
+    "\n  mutation RegisterExternalFile($input: RegisterExternalFileInput!) {\n    registerExternalFile(input: $input) {\n      fileId\n      presignedUrl\n      expiresAt\n    }\n  }\n": typeof types.RegisterExternalFileDocument,
+    "\n  mutation ConfirmVaultUploadExternal($input: ConfirmVaultUploadInput!) {\n    confirmVaultUpload(input: $input) {\n      file {\n        id\n        name\n        mimeType\n        sizeBytes\n        status\n      }\n    }\n  }\n": typeof types.ConfirmVaultUploadExternalDocument,
+    "\n  query GetBatchDownloadUrls($fileIds: [ID!]!) {\n    getBatchDownloadUrls(fileIds: $fileIds) {\n      fileId\n      url\n      status\n      name\n      mimeType\n      sizeBytes\n    }\n  }\n": typeof types.GetBatchDownloadUrlsDocument,
     "\n  query GetProjectIssues($projectId: ID!) {\n    getProjectIssues(projectId: $projectId) {\n      ...IssueCardFields\n    }\n  }\n": typeof types.GetProjectIssuesDocument,
     "\n  query GetIssueStatuses($projectId: ID!) {\n    getIssueStatuses(projectId: $projectId) {\n      ...IssueStatusFields\n    }\n  }\n": typeof types.GetIssueStatusesDocument,
     "\n  query GetIssueLabels($projectId: ID!) {\n    getIssueLabels(projectId: $projectId) {\n      ...IssueLabelFields\n    }\n  }\n": typeof types.GetIssueLabelsDocument,
@@ -287,6 +290,9 @@ const documents: Documents = {
     "\n  mutation UnarchiveBoard($boardId: ID!) {\n    unarchiveBoard(boardId: $boardId) {\n      id\n      isArchived\n      updatedAt\n    }\n  }\n": types.UnarchiveBoardDocument,
     "\n  mutation UnlockBoard($boardId: ID!) {\n    unlockBoard(boardId: $boardId) {\n      id\n      isLocked\n      updatedAt\n    }\n  }\n": types.UnlockBoardDocument,
     "\n  mutation UpdateBoardDescription($boardId: ID!, $description: String) {\n    updateBoardDescription(boardId: $boardId, description: $description) {\n      id\n      description\n      updatedAt\n    }\n  }\n": types.UpdateBoardDescriptionDocument,
+    "\n  mutation RegisterExternalFile($input: RegisterExternalFileInput!) {\n    registerExternalFile(input: $input) {\n      fileId\n      presignedUrl\n      expiresAt\n    }\n  }\n": types.RegisterExternalFileDocument,
+    "\n  mutation ConfirmVaultUploadExternal($input: ConfirmVaultUploadInput!) {\n    confirmVaultUpload(input: $input) {\n      file {\n        id\n        name\n        mimeType\n        sizeBytes\n        status\n      }\n    }\n  }\n": types.ConfirmVaultUploadExternalDocument,
+    "\n  query GetBatchDownloadUrls($fileIds: [ID!]!) {\n    getBatchDownloadUrls(fileIds: $fileIds) {\n      fileId\n      url\n      status\n      name\n      mimeType\n      sizeBytes\n    }\n  }\n": types.GetBatchDownloadUrlsDocument,
     "\n  query GetProjectIssues($projectId: ID!) {\n    getProjectIssues(projectId: $projectId) {\n      ...IssueCardFields\n    }\n  }\n": types.GetProjectIssuesDocument,
     "\n  query GetIssueStatuses($projectId: ID!) {\n    getIssueStatuses(projectId: $projectId) {\n      ...IssueStatusFields\n    }\n  }\n": types.GetIssueStatusesDocument,
     "\n  query GetIssueLabels($projectId: ID!) {\n    getIssueLabels(projectId: $projectId) {\n      ...IssueLabelFields\n    }\n  }\n": types.GetIssueLabelsDocument,
@@ -842,6 +848,18 @@ export function gql(source: "\n  mutation UnlockBoard($boardId: ID!) {\n    unlo
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "\n  mutation UpdateBoardDescription($boardId: ID!, $description: String) {\n    updateBoardDescription(boardId: $boardId, description: $description) {\n      id\n      description\n      updatedAt\n    }\n  }\n"): (typeof documents)["\n  mutation UpdateBoardDescription($boardId: ID!, $description: String) {\n    updateBoardDescription(boardId: $boardId, description: $description) {\n      id\n      description\n      updatedAt\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation RegisterExternalFile($input: RegisterExternalFileInput!) {\n    registerExternalFile(input: $input) {\n      fileId\n      presignedUrl\n      expiresAt\n    }\n  }\n"): (typeof documents)["\n  mutation RegisterExternalFile($input: RegisterExternalFileInput!) {\n    registerExternalFile(input: $input) {\n      fileId\n      presignedUrl\n      expiresAt\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation ConfirmVaultUploadExternal($input: ConfirmVaultUploadInput!) {\n    confirmVaultUpload(input: $input) {\n      file {\n        id\n        name\n        mimeType\n        sizeBytes\n        status\n      }\n    }\n  }\n"): (typeof documents)["\n  mutation ConfirmVaultUploadExternal($input: ConfirmVaultUploadInput!) {\n    confirmVaultUpload(input: $input) {\n      file {\n        id\n        name\n        mimeType\n        sizeBytes\n        status\n      }\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  query GetBatchDownloadUrls($fileIds: [ID!]!) {\n    getBatchDownloadUrls(fileIds: $fileIds) {\n      fileId\n      url\n      status\n      name\n      mimeType\n      sizeBytes\n    }\n  }\n"): (typeof documents)["\n  query GetBatchDownloadUrls($fileIds: [ID!]!) {\n    getBatchDownloadUrls(fileIds: $fileIds) {\n      fileId\n      url\n      status\n      name\n      mimeType\n      sizeBytes\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

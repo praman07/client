@@ -18,6 +18,7 @@ const log = createLogger('chat:window')
 interface ChatWindowProps {
   channelId: string
   projectId: string
+  workspaceId: string
   channelName: string
   isPrivate: boolean
   description?: string
@@ -26,6 +27,7 @@ interface ChatWindowProps {
 export function ChatWindow({
   channelId,
   projectId,
+  workspaceId,
   channelName,
   isPrivate,
   description,
@@ -79,7 +81,7 @@ export function ChatWindow({
                 <SyncStatusIndicator status={status} />
               </ChatHeader>
               <MessageList channelId={channelId} projectId={projectId} />
-              <MessageInput channelId={channelId} projectId={projectId} />
+              <MessageInput channelId={channelId} projectId={projectId} workspaceId={workspaceId} />
             </ChatContainer>
           </ScrollToMessageProvider>
         </ReplyRequestProvider>

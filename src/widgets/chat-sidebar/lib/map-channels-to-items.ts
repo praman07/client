@@ -30,7 +30,7 @@ export interface ProjectDmItem {
  * Map ProjectDmItem[] (from getProjectDms) to sidebar DMItem format.
  * Replaces the old stub that used Conversation.name as a fallback.
  */
-export function mapDmsToItems(dms: ProjectDmItem[]): Array<DMItem> {
+export function mapDmsToItems(dms: Array<ProjectDmItem>): Array<DMItem> {
   return dms.map((dm) => ({
     id: dm.id,
     userId: dm.otherUser.id,

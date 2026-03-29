@@ -1,3 +1,11 @@
+import { useLiveQuery } from 'dexie-react-hooks'
+import { MessageSquare, Pencil, Reply, SmilePlus, Trash2 } from 'lucide-react'
+import { Suspense, lazy, useCallback, useEffect, useRef, useState } from 'react'
+import { useMessageEdit } from '../../lib/use-message-edit'
+import { useEditRequest } from '../../lib/edit-request-context'
+import { useReplyRequest } from '../../lib/reply-request-context'
+import { useMemberCache } from '../../lib/member-cache-context'
+import { useScrollToMessage } from '../../lib/scroll-to-message-context'
 import {
   MessageEvent,
   MessageEventAddon,
@@ -6,8 +14,8 @@ import {
   MessageEventDescription,
 } from './message'
 import type { MessageRowData } from '../../model/message-list.types'
-import { useMessageEdit } from '../../lib/use-message-edit'
-import { useEditRequest } from '../../lib/edit-request-context'
+import type { DBMessage } from '@/shared/lib/db/schema'
+import type { ReactionGroup } from '@/entities/reaction'
 import { useUser } from '@/shared/hooks'
 import {
   AlertDialog,
@@ -19,22 +27,16 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/shared/ui/primitives/alert-dialog'
-import { useLiveQuery } from 'dexie-react-hooks'
 import { db } from '@/shared/lib/db'
-import type { DBMessage } from '@/shared/lib/db/schema'
-import { Pencil, Trash2, Reply, MessageSquare, SmilePlus } from 'lucide-react'
-import { useEffect, useState, useCallback, lazy, Suspense, useRef } from 'react'
-import { deleteMessage, addReaction, removeReaction } from '@/features/chat/events/api'
-import { useReplyRequest } from '../../lib/reply-request-context'
-import { useMemberCache } from '../../lib/member-cache-context'
-import { useScrollToMessage } from '../../lib/scroll-to-message-context'
+import { addReaction, deleteMessage, removeReaction } from '@/features/chat/events/api'
 import { ReactionBadge, mergeReactionAdd, mergeReactionRemove } from '@/entities/reaction'
-import type { ReactionGroup } from '@/entities/reaction'
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from '@/shared/ui/primitives/popover'
+import { ChatAttachmentRenderer } from '@/features/chat/media'
+
 
 // Lazy-load the heavy emoji picker only when opened
 const EmojiPicker = lazy(() => import('@emoji-mart/react'))
@@ -93,7 +95,7 @@ export function AdditionalMessage({ message }: AdditionalMessageProps) {
       try {
         await db.transaction('rw', db.messages, async () => {
           const current = await db.messages.where('id').equals(message.id).first()
-          let reactions = (current?.reactions ?? []) as ReactionGroup[]
+          let reactions = (current?.reactions ?? []) as Array<ReactionGroup>
 
           // Find any emoji this user has already reacted with
           const userPrevReaction = reactions.find((r) =>
@@ -231,6 +233,18 @@ export function AdditionalMessage({ message }: AdditionalMessageProps) {
                   </span>
                 )}
               </MessageEventContent>
+
+              {/* ── Attachments ─────────────────────────────────────── */}
+              {!message.deletedAt && (message.metadata?.attachments ?? []).length > 0 && (
+                <div className="flex flex-col gap-1.5 mt-1.5">
+                  {message.metadata!.attachments!.map((attachment) => (
+                    <ChatAttachmentRenderer
+                      key={attachment.fileId}
+                      attachment={attachment}
+                    />
+                  ))}
+                </div>
+              )}
 
               {/* Hover action bar — visible to everyone on non-deleted messages */}
               {!message.deletedAt && (

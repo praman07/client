@@ -746,6 +746,17 @@ export type Mutation = {
   moveVaultFolder: MoveFolderResult;
   muteConversation: MuteConversationResult;
   pinVaultFolder: PinFolderResult;
+  /**
+   * Register a file upload initiated outside the standard Vault UI flow.
+   * Used by Chat (attachments), Pages/Issues (BlockNote uploadFile adapter),
+   * and Whiteboard (Excalidraw onAddFile).
+   *
+   * Enforces storage quota before issuing the presigned URL.
+   * Creates a PENDING VaultFile row. The caller must:
+   *   1. PUT bytes to presignedUrl
+   *   2. Call confirmVaultUpload(fileId) to activate
+   */
+  registerExternalFile: RegisterExternalFileResult;
   removeBoardCollaborator: RemoveBoardCollaboratorResult;
   removeChannelMember: RemoveChannelMemberResult;
   removeGroupMember: RemoveGroupMemberResult;
@@ -1130,6 +1141,11 @@ export type MutationMuteConversationArgs = {
 
 export type MutationPinVaultFolderArgs = {
   input: PinVaultFolderInput;
+};
+
+
+export type MutationRegisterExternalFileArgs = {
+  input: RegisterExternalFileInput;
 };
 
 
@@ -1633,6 +1649,14 @@ export type Query = {
   boardCollaborators: Array<BoardCollaborator>;
   /** Live presence from Redis ZSET (not DB). Reflects current editing sessions. */
   getActivePageCollaborators: Array<PageCollaborator>;
+  /**
+   * Batch-fetch presigned GET URLs for a list of fileIds.
+   * Returns one result entry per fileId in the same order as the input.
+   * Failed or deleted files return a non-null entry with status != ACTIVE.
+   *
+   * Max 50 fileIds per call.
+   */
+  getBatchDownloadUrls: Array<VaultBatchDownloadResult>;
   getBoard?: Maybe<Whiteboard>;
   getBoardSnapshot: BoardSnapshot;
   getChannelMembers: Array<ChatMemberRecord>;
@@ -1768,6 +1792,11 @@ export type QueryBoardCollaboratorsArgs = {
 
 export type QueryGetActivePageCollaboratorsArgs = {
   pageId: Scalars['ID']['input'];
+};
+
+
+export type QueryGetBatchDownloadUrlsArgs = {
+  fileIds: Array<Scalars['ID']['input']>;
 };
 
 
@@ -2101,6 +2130,35 @@ export type ReadReceiptsResponse = {
   totalReads: Scalars['Int']['output'];
 };
 
+export type RegisterExternalFileInput = {
+  /** Optional override folder. Defaults to the source module's system folder. */
+  folderId?: InputMaybe<Scalars['ID']['input']>;
+  mimeType: Scalars['String']['input'];
+  name: Scalars['String']['input'];
+  projectId: Scalars['ID']['input'];
+  /** File size in bytes. Use Float to stay JS-safe (no BigInt serialisation issues). */
+  sizeBytes: Scalars['Float']['input'];
+  /** Which module is uploading the file. Determines the system folder it lands in. */
+  source: VaultFileSource;
+  /**
+   * ID of the originating entity (conversationId, pageId, boardId, issueId).
+   * Nullable — may not yet exist when uploading before the entity is created.
+   */
+  sourceId?: InputMaybe<Scalars['ID']['input']>;
+  workspaceId: Scalars['ID']['input'];
+};
+
+/**
+ * Returned by registerExternalFile and requestVaultUpload.
+ * The client must PUT the file bytes to presignedUrl, then call confirmVaultUpload.
+ */
+export type RegisterExternalFileResult = {
+  __typename?: 'RegisterExternalFileResult';
+  expiresAt: Scalars['DateTime']['output'];
+  fileId: Scalars['ID']['output'];
+  presignedUrl: Scalars['String']['output'];
+};
+
 export type RemoveBoardCollaboratorResult = {
   __typename?: 'RemoveBoardCollaboratorResult';
   success: Scalars['Boolean']['output'];
@@ -2412,6 +2470,27 @@ export type UserPresence = {
   lastActiveAt?: Maybe<Scalars['DateTime']['output']>;
   status: PresenceStatus;
   userId: Scalars['ID']['output'];
+};
+
+/**
+ * Result entry for a single file in a batch download URL request.
+ * Clients must check status before using the url.
+ */
+export type VaultBatchDownloadResult = {
+  __typename?: 'VaultBatchDownloadResult';
+  fileId: Scalars['ID']['output'];
+  mimeType: Scalars['String']['output'];
+  name: Scalars['String']['output'];
+  sizeBytes: Scalars['Float']['output'];
+  /**
+   * ACTIVE    — url is valid, render normally
+   * DELETED   — file was removed; render tombstone ("Attachment deleted")
+   * PENDING   — upload not yet confirmed; render placeholder
+   * FORBIDDEN — caller is not a member of this file's project
+   */
+  status: Scalars['String']['output'];
+  /** Presigned GET URL valid for 1 hour. Null when status != ACTIVE. */
+  url?: Maybe<Scalars['String']['output']>;
 };
 
 export type VaultChildrenResult = {
@@ -3678,6 +3757,27 @@ export type UpdateBoardDescriptionMutationVariables = Exact<{
 
 export type UpdateBoardDescriptionMutation = { __typename?: 'Mutation', updateBoardDescription: { __typename?: 'Whiteboard', id: string, description?: string | null, updatedAt: any } };
 
+export type RegisterExternalFileMutationVariables = Exact<{
+  input: RegisterExternalFileInput;
+}>;
+
+
+export type RegisterExternalFileMutation = { __typename?: 'Mutation', registerExternalFile: { __typename?: 'RegisterExternalFileResult', fileId: string, presignedUrl: string, expiresAt: any } };
+
+export type ConfirmVaultUploadExternalMutationVariables = Exact<{
+  input: ConfirmVaultUploadInput;
+}>;
+
+
+export type ConfirmVaultUploadExternalMutation = { __typename?: 'Mutation', confirmVaultUpload: { __typename?: 'ConfirmUploadResult', file: { __typename?: 'VaultFile', id: string, name: string, mimeType: string, sizeBytes: number, status: string } } };
+
+export type GetBatchDownloadUrlsQueryVariables = Exact<{
+  fileIds: Array<Scalars['ID']['input']> | Scalars['ID']['input'];
+}>;
+
+
+export type GetBatchDownloadUrlsQuery = { __typename?: 'Query', getBatchDownloadUrls: Array<{ __typename?: 'VaultBatchDownloadResult', fileId: string, url?: string | null, status: string, name: string, mimeType: string, sizeBytes: number }> };
+
 export type GetProjectIssuesQueryVariables = Exact<{
   projectId: Scalars['ID']['input'];
 }>;
@@ -3842,6 +3942,9 @@ export const RenameBoardDocument = {"kind":"Document","definitions":[{"kind":"Op
 export const UnarchiveBoardDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UnarchiveBoard"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"boardId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"unarchiveBoard"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"boardId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"boardId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"isArchived"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]}}]} as unknown as DocumentNode<UnarchiveBoardMutation, UnarchiveBoardMutationVariables>;
 export const UnlockBoardDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UnlockBoard"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"boardId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"unlockBoard"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"boardId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"boardId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"isLocked"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]}}]} as unknown as DocumentNode<UnlockBoardMutation, UnlockBoardMutationVariables>;
 export const UpdateBoardDescriptionDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateBoardDescription"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"boardId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"description"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateBoardDescription"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"boardId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"boardId"}}},{"kind":"Argument","name":{"kind":"Name","value":"description"},"value":{"kind":"Variable","name":{"kind":"Name","value":"description"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}}]}}]}}]} as unknown as DocumentNode<UpdateBoardDescriptionMutation, UpdateBoardDescriptionMutationVariables>;
+export const RegisterExternalFileDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"RegisterExternalFile"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"RegisterExternalFileInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"registerExternalFile"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"fileId"}},{"kind":"Field","name":{"kind":"Name","value":"presignedUrl"}},{"kind":"Field","name":{"kind":"Name","value":"expiresAt"}}]}}]}}]} as unknown as DocumentNode<RegisterExternalFileMutation, RegisterExternalFileMutationVariables>;
+export const ConfirmVaultUploadExternalDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"ConfirmVaultUploadExternal"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"input"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ConfirmVaultUploadInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"confirmVaultUpload"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"Variable","name":{"kind":"Name","value":"input"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"file"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"mimeType"}},{"kind":"Field","name":{"kind":"Name","value":"sizeBytes"}},{"kind":"Field","name":{"kind":"Name","value":"status"}}]}}]}}]}}]} as unknown as DocumentNode<ConfirmVaultUploadExternalMutation, ConfirmVaultUploadExternalMutationVariables>;
+export const GetBatchDownloadUrlsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetBatchDownloadUrls"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"fileIds"}},"type":{"kind":"NonNullType","type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"getBatchDownloadUrls"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"fileIds"},"value":{"kind":"Variable","name":{"kind":"Name","value":"fileIds"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"fileId"}},{"kind":"Field","name":{"kind":"Name","value":"url"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"mimeType"}},{"kind":"Field","name":{"kind":"Name","value":"sizeBytes"}}]}}]}}]} as unknown as DocumentNode<GetBatchDownloadUrlsQuery, GetBatchDownloadUrlsQueryVariables>;
 export const GetProjectIssuesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetProjectIssues"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"projectId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"getProjectIssues"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"projectId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"projectId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"IssueCardFields"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"IssueCardFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Issue"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"number"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"priority"}},{"kind":"Field","name":{"kind":"Name","value":"position"}},{"kind":"Field","name":{"kind":"Name","value":"dueDate"}},{"kind":"Field","name":{"kind":"Name","value":"updatedAt"}},{"kind":"Field","name":{"kind":"Name","value":"status"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"color"}},{"kind":"Field","name":{"kind":"Name","value":"icon"}}]}},{"kind":"Field","name":{"kind":"Name","value":"assignee"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"fullName"}},{"kind":"Field","name":{"kind":"Name","value":"avatarUrl"}}]}},{"kind":"Field","name":{"kind":"Name","value":"labels"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"color"}}]}}]}}]} as unknown as DocumentNode<GetProjectIssuesQuery, GetProjectIssuesQueryVariables>;
 export const GetIssueStatusesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetIssueStatuses"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"projectId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"getIssueStatuses"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"projectId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"projectId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"IssueStatusFields"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"IssueStatusFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"IssueStatus"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"projectId"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"color"}},{"kind":"Field","name":{"kind":"Name","value":"icon"}},{"kind":"Field","name":{"kind":"Name","value":"position"}},{"kind":"Field","name":{"kind":"Name","value":"isSystem"}},{"kind":"Field","name":{"kind":"Name","value":"issueCount"}}]}}]} as unknown as DocumentNode<GetIssueStatusesQuery, GetIssueStatusesQueryVariables>;
 export const GetIssueLabelsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"GetIssueLabels"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"projectId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"getIssueLabels"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"projectId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"projectId"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"IssueLabelFields"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"IssueLabelFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"IssueLabel"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"projectId"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"color"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}}]}}]} as unknown as DocumentNode<GetIssueLabelsQuery, GetIssueLabelsQueryVariables>;

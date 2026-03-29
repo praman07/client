@@ -42,7 +42,10 @@ export function useChatScroll({
     count,
     getScrollElement: () => parentRef.current,
     estimateSize,
-    overscan: 25,
+    // overscan:5 renders 5 rows above and below the viewport (10 total off-screen).
+    // Previous value of 25 (50 off-screen rows) caused a massive I/O burst on load:
+    // each row fires IndexDB cache reads, useLiveQuery parent lookups, and URL hooks.
+    overscan: 5,
     getItemKey,
   })
 

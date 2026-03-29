@@ -18,14 +18,26 @@ export async function commitMessage(
     'rw',
     [db.messages, db.conversation_state],
     async () => {
+      // Strip url from attachments — presigned URLs are short-lived (1h TTL).
+      // Only fileId, name, mimeType, sizeBytes are safe to persist in IndexDB.
+      const safeMetadata = payload.metadata
+        ? {
+            ...payload.metadata,
+            attachments: payload.metadata.attachments?.map(
+               
+              ({ url: _url, ...rest }) => rest,
+            ),
+          }
+        : undefined
+
       await db.messages.put({
         ...payload,
+        metadata: safeMetadata,
         projectId, // Injected!
         id: payload.messageId,
         deliveryStatus: 'sent',
         reactions: [],
-         
-        } as any)
+      } as any)
 
       await db.conversation_state.put({
         conversationId: state.conversationId,
@@ -66,15 +78,25 @@ export async function commitMessageBatch(
       [db.messages, db.conversation_state],
       async () => {
         // Batch insert all messages
-        const messagesToInsert = sorted.map((payload) => ({
-          ...payload,
-          projectId,
-          id: payload.messageId,
-          deliveryStatus: 'sent' as const,
-          reactions: [],
-          attachments: [],
-        }))
-
+        const messagesToInsert = sorted.map((payload) => {
+          const safeMetadata = payload.metadata
+            ? {
+                ...payload.metadata,
+                attachments: payload.metadata.attachments?.map(
+                   
+                  ({ url: _url, ...rest }) => rest,
+                ),
+              }
+            : undefined
+          return {
+            ...payload,
+            metadata: safeMetadata,
+            projectId,
+            id: payload.messageId,
+            deliveryStatus: 'sent' as const,
+            reactions: [],
+          }
+        })
          
         await db.messages.bulkPut(messagesToInsert as any)
 

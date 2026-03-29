@@ -17,11 +17,11 @@ import type { ReactionGroup } from '../model/schema'
  * the array unchanged (dedup guard against double-broadcast).
  */
 export function mergeReactionAdd(
-  current: ReactionGroup[],
+  current: Array<ReactionGroup>,
   emoji: string,
   userId: string,
   currentUserId: string,
-): ReactionGroup[] {
+): Array<ReactionGroup> {
   const existing = current.find((r) => r.emoji === emoji)
 
   if (existing) {
@@ -63,11 +63,11 @@ export function mergeReactionAdd(
  * Removes the emoji group entirely when count reaches 0.
  */
 export function mergeReactionRemove(
-  current: ReactionGroup[],
+  current: Array<ReactionGroup>,
   emoji: string,
   userId: string,
   currentUserId: string,
-): ReactionGroup[] {
+): Array<ReactionGroup> {
   return current
     .map((r) => {
       if (r.emoji !== emoji) return r

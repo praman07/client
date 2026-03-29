@@ -137,6 +137,15 @@ type Query {
   """
   getVaultAncestors(folderId: ID!): [VaultFolder!]!
 
+  """
+  Batch-fetch presigned GET URLs for a list of fileIds.
+  Returns one result entry per fileId in the same order as the input.
+  Failed or deleted files return a non-null entry with status != ACTIVE.
+  
+  Max 50 fileIds per call.
+  """
+  getBatchDownloadUrls(fileIds: [ID!]!): [VaultBatchDownloadResult!]!
+
   """Returns all Kanban columns for a project, ordered by position."""
   getIssueStatuses(projectId: ID!): [IssueStatus!]!
 
@@ -296,6 +305,18 @@ type Mutation {
   Verifies the S3 object (size + MIME), sets the file to ACTIVE, and updates storage usage.
   """
   confirmVaultUpload(input: ConfirmVaultUploadInput!): ConfirmUploadResult!
+
+  """
+  Register a file upload initiated outside the standard Vault UI flow.
+  Used by Chat (attachments), Pages/Issues (BlockNote uploadFile adapter),
+  and Whiteboard (Excalidraw onAddFile).
+  
+  Enforces storage quota before issuing the presigned URL.
+  Creates a PENDING VaultFile row. The caller must:
+    1. PUT bytes to presignedUrl
+    2. Call confirmVaultUpload(fileId) to activate
+  """
+  registerExternalFile(input: RegisterExternalFileInput!): RegisterExternalFileResult!
   createVaultFolder(input: CreateVaultFolderInput!): CreateFolderResult!
   renameVaultFolder(input: RenameVaultFolderInput!): RenameFolderResult!
 
@@ -1366,6 +1387,28 @@ type DeleteResult {
   id: ID!
 }
 
+"""
+Result entry for a single file in a batch download URL request.
+Clients must check status before using the url.
+"""
+type VaultBatchDownloadResult {
+  fileId: ID!
+
+  """Presigned GET URL valid for 1 hour. Null when status != ACTIVE."""
+  url: String
+
+  """
+  ACTIVE    — url is valid, render normally
+  DELETED   — file was removed; render tombstone ("Attachment deleted")
+  PENDING   — upload not yet confirmed; render placeholder
+  FORBIDDEN — caller is not a member of this file's project
+  """
+  status: String!
+  name: String!
+  mimeType: String!
+  sizeBytes: Float!
+}
+
 input RequestVaultUploadInput {
   projectId: ID!
   workspaceId: ID!
@@ -1389,6 +1432,44 @@ input ConfirmVaultUploadInput {
 
 type ConfirmUploadResult {
   file: VaultFile!
+}
+
+input RegisterExternalFileInput {
+  workspaceId: ID!
+  projectId: ID!
+
+  """
+  Which module is uploading the file. Determines the system folder it lands in.
+  """
+  source: VaultFileSource!
+
+  """
+  ID of the originating entity (conversationId, pageId, boardId, issueId).
+  Nullable — may not yet exist when uploading before the entity is created.
+  """
+  sourceId: ID
+  name: String!
+  mimeType: String!
+
+  """
+  File size in bytes. Use Float to stay JS-safe (no BigInt serialisation issues).
+  """
+  sizeBytes: Float!
+
+  """
+  Optional override folder. Defaults to the source module's system folder.
+  """
+  folderId: ID
+}
+
+"""
+Returned by registerExternalFile and requestVaultUpload.
+The client must PUT the file bytes to presignedUrl, then call confirmVaultUpload.
+"""
+type RegisterExternalFileResult {
+  fileId: ID!
+  presignedUrl: String!
+  expiresAt: DateTime!
 }
 
 input CreateVaultFolderInput {
