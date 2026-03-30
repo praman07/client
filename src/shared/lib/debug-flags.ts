@@ -1,9 +1,10 @@
 /**
- * HIERARCHICAL DEBUG FLAGS
+ * HIERARCHICAL DEBUG FLAGS (Client)
  *
  * Resolution Priority: FILE > GROUP > ALL
- * - Set to `true` to enable logging
- * - Set to `undefined` to inherit from parent
+ * - true      → always enabled
+ * - false     → always disabled
+ * - undefined → inherit from parent group / ALL
  *
  * @example
  * // Enable just one file
@@ -25,67 +26,62 @@ export const ALL = false
 // GROUP FLAGS (enable entire feature/module)
 // ═══════════════════════════════════════════════════════════════
 export const GROUPS = {
-  // Features
+  // ─── Feature groups ──────────────────────────────────────────
   chat: false,
   auth: false,
   whiteboard: false,
   'whiteboard-sync': false,
   thumbnail: false,
-  vault: false, // ❌ All vault feature logs — flip to true for full vault debug
-  pages: true, // ✅ All pages feature logs
+  vault: false,         // all vault feature logs
+  pages: true,          // ✅ all pages feature logs
+  issues: false,        // all issues feature logs
 
-  // Modules
-  websocket: false,
-  resequencer: false,
+  // ─── Module groups ────────────────────────────────────────────
+  websocket: false,     // all ws:* logs
+  resequencer: false,   // all reseq:* logs
+  shared: false,        // all shared:* utility logs
+  yjs: false,           // all yjs:* logs
 
-  // Infrastructure
+  // ─── Infrastructure ───────────────────────────────────────────
   db: false,
   api: false,
 } as const
 
 // ═══════════════════════════════════════════════════════════════
-// FILE FLAGS (granular per-file control)
+// FILE FLAGS (granular per-file control, highest priority)
 // ═══════════════════════════════════════════════════════════════
 export const FILES: Record<string, boolean | undefined> = {
-  // ─────────────────────────────────────
-  // Chat Feature
-  // ─────────────────────────────────────
-  'chat:scroll': false,
-  'chat:history': false,
-  'chat:storage': false,
-  'chat:window': false,
-  'chat:messageList': false,
-  'chat:memberCache': false,
-  'chat:message': false,
-  'chat:authors': false,
-  'chat:sidebar': false,
-  'chat:outbox': false,
-  'chat:ack': false,
-  'chat:handler': false,
-  'chat:sync-required-handler': false,
+  // ─────────────────────────────────────────────────────────────
+  // App Layer
+  // ─────────────────────────────────────────────────────────────
+  'app:events': false,
+  'app:onboarding': false,
+  'app:workspace': false,
 
-  // ─────────────────────────────────────
+  // ─────────────────────────────────────────────────────────────
   // WebSocket Module
-  // ─────────────────────────────────────
+  // ─────────────────────────────────────────────────────────────
   'ws:connection': false,
+  'ws:conn-mgr': false,
   'ws:registry': false,
   'ws:plugin': false,
-  'ws:bridge': false,
+  'ws:plugin-registry': false,
+  'ws:domain-registry': false,
   'ws:orchestrator': false,
   'ws:manager': false,
   'ws:bus': false,
   'ws:router': false,
-  'ws:conn-mgr': false,
   'ws:reconnect': false,
   'ws:queue': false,
   'ws:leader': false,
   'ws:sub-mgr': false,
   'ws:sub-rec': false,
-  'ws:plugin-registry': false,
+  'ws:pages-plugin': false,
+  'ws:whiteboard-plugin': false,
 
-  // ─────────────────────────────────────
+  // ─────────────────────────────────────────────────────────────
   // Resequencer Module
-  // ─────────────────────────────────────
+  // ─────────────────────────────────────────────────────────────
   'reseq:processor': false,
   'reseq:dedup': false,
   'reseq:factory': false,
@@ -97,115 +93,118 @@ export const FILES: Record<string, boolean | undefined> = {
   'reseq:healer': false,
   'reseq:cursor': false,
 
-  // ─────────────────────────────────────
-  // Chat Recovery & Features
-  // ─────────────────────────────────────
+  // ─────────────────────────────────────────────────────────────
+  // Database / Storage
+  // ─────────────────────────────────────────────────────────────
+  'db:gc': false,
+  'db:messages': false,
+  'db:outbox': false,
+
+  // ─────────────────────────────────────────────────────────────
+  // YJS
+  // ─────────────────────────────────────────────────────────────
+  'yjs:pending-updates-tracker': false,
+
+  // ─────────────────────────────────────────────────────────────
+  // Chat Feature
+  // ─────────────────────────────────────────────────────────────
+  'chat:scroll': false,
+  'chat:history': false,
+  'chat:window': false,
+  'chat:messageList': false,
+  'chat:memberCache': false,
+  'chat:message': false,
+  'chat:authors': false,
+  'chat:sidebar': false,
+  'chat:outbox': false,
+  'chat:ack': false,
+  // WS event handlers
+  'chat:handler': false,                 // send-message handler
+  'chat:edit-handler': false,            // edit-message handler
+  'chat:delete-handler': false,          // delete-message handler
+  'chat:reaction-handler': false,        // reaction handler
+  'chat:sync-required-handler': false,
+  // Recovery / sync
   'chat:recovery': false,
   'chat:sync': false,
-  'app:events': false,
-  'app:onboarding': false,
-  'app:workspace': false,
 
-  // ─────────────────────────────────────
+  // ─────────────────────────────────────────────────────────────
+  // Thumbnail Pipeline
+  // ─────────────────────────────────────────────────────────────
+  'thumbnail:read-elements': false,
+  'thumbnail:hook': false,
+
+  // ─────────────────────────────────────────────────────────────
   // Whiteboard Feature
-  // ─────────────────────────────────────
+  // ─────────────────────────────────────────────────────────────
+  // Core
+  'whiteboard:canvas': false,
   'whiteboard:presence': false,
   'whiteboard:sidebar': false,
-  'whiteboard:events': false,
-  'whiteboard:user-joined': false,
-  'whiteboard:subscribe': false,
-  'whiteboard:plugin': false,
-  'whiteboard:ydoc': false,
   'whiteboard:validation': false,
-  'whiteboard:ydoc-instance': false,
-  'whiteboard:ydoc-registry': false, // NEW: ydoc-registry.ts
-
-  // ─────────────────────────────────────
-  // Whiteboard Board Update Flow
-  // ─────────────────────────────────────
+  'whiteboard:ydoc-registry': false,
+  // WS events
+  'whiteboard:subscribe': false,
+  'whiteboard:unsubscribe': false,
   'whiteboard:board-update': false,
   'whiteboard:send-update': false,
   'whiteboard:update-ack': false,
+  'whiteboard:use-send-update': false,
+  'whiteboard:user-joined': false,
+  'whiteboard:user-left': false,
+  // Board lifecycle
   'whiteboard:board-locked': false,
   'whiteboard:board-unlocked': false,
-  'whiteboard:board-deleted': true, // ✅ board-deleted.ts WS handler
-  'whiteboard:indexeddb-cleanup': true, // ✅ clean-board-indexeddb.ts
-  'whiteboard:delete-board-hook': true, // ✅ use-delete-board.ts mutation hook
-  'whiteboard:user-left': false,
-  'whiteboard:use-subscribe': false,
-  'whiteboard:use-send-update': false,
-  'whiteboard:unsubscribe': false,
-  'whiteboard:cache': false, // Disabled for testing
-  'whiteboard:cache-hook': false, // Disabled for testing
-  'whiteboard:offline-queue': false, // Disabled for testing
-  'whiteboard:sync-engine': false,
-  'whiteboard:canvas-lifecycle': false,
-  'whiteboard:conflict-resolver': false,
-  'whiteboard:pending-tracker': false, // NEW: pending-updates-tracker.ts
-
-  // ─────────────────────────────────────
-  // ✅ STATE SYNC TESTING (ENABLED)
-  // ─────────────────────────────────────
-  'whiteboard:canvas': false, // Main canvas component
-  'whiteboard:collab-v2': false, // NEW: use-collab-v2.ts - Y.Doc initialization
-  'whiteboard:state-vector-sync': false, // NEW: use-state-vector-sync.ts - GraphQL diff sync
-  'whiteboard:network-sync': false, // WebSocket real-time sync
-  'whiteboard:init-state': false, // NEW: use-board-initialization.ts - Board initialization
-
-  // ─────────────────────────────────────
-  // Additional Whiteboard
-  // ─────────────────────────────────────
-  'whiteboard:flush-queue': false,
+  'whiteboard:board-deleted': true,        // ✅ board-deleted.ts WS handler
+  'whiteboard:delete-board-hook': true,    // ✅ use-delete-board.ts
+  // Sync subsystem
   'whiteboard:sync': false,
+  'whiteboard:sync:binding': false,
+  'whiteboard:sync:client-diff': false,
+  'whiteboard:sync:indexeddb': false,
+  'whiteboard:sync:server': false,
+  'whiteboard:network-sync': false,
+  'whiteboard:offline-queue': false,
+  'whiteboard:indexeddb-cleanup': true,    // ✅ clean-board-indexeddb.ts
+  // Misc
+  'whiteboard:flush-queue': false,
+  'whiteboard:collab-v2': false,
+  'whiteboard:state-vector-sync': false,
+  'whiteboard:init-state': false,
 
-  // ─────────────────────────────────────
-  // Database/Storage
-  // ─────────────────────────────────────
-  'db:messages': false,
-  'db:outbox': false,
-  'db:gc': false,
-
-  // ─────────────────────────────────────
-  // Thumbnail Pipeline
-  // ─────────────────────────────────────
-  'thumbnail:read-elements': false, // read-board-elements.ts
-  'thumbnail:hook': false, // use-board-thumbnail.ts
-
-  // ─────────────────────────────────────
-  // Pages Feature ✅ ENABLED
-  // Widget: page-editor sync phases
-  // ─────────────────────────────────────
+  // ─────────────────────────────────────────────────────────────
+  // Pages Feature
+  // ─────────────────────────────────────────────────────────────
   // Sync orchestrator
-  'pages:use-page-sync': true, // hooks/use-page-sync.ts
-  'pages:page-editor': true, // widgets/page-editor/ui/page-editor.tsx (render + editor mount)
-  // Phase hooks
-  'pages:phase1:server-sync': true, // hooks/sync-phases/use-server-sync.ts
-  'pages:phase2:indexeddb-sync': true, // hooks/sync-phases/use-indexeddb-sync.ts
-  'pages:phase3:client-diff': true, // hooks/sync-phases/use-client-diff.ts
-  'pages:phase4:network-sync': true, // hooks/sync-phases/use-network-sync.ts
-  // WS event handlers (features/pages/events/lib/handlers)
-  'pages:subscribe': true, // handlers/subscribe.ts
-  'pages:subscribe-success': true, // handlers/subscribe-success.ts
-  'pages:unsubscribe': true, // handlers/unsubscribe.ts
-  'pages:page-update': true, // handlers/page-update.ts
-  'pages:update-ack': true, // handlers/update-ack.ts
-  'pages:awareness-update': true, // handlers/awareness-update.ts
-  'pages:user-joined': true, // handlers/user-joined.ts
-  'pages:user-left': true, // handlers/user-left.ts
-  'pages:validation': true, // entities/page-session/lib/validation.ts
+  'pages:use-page-sync': true,
+  'pages:page-editor': true,
+  // Sync phases
+  'pages:phase1:server-sync': true,
+  'pages:phase2:indexeddb-sync': true,
+  'pages:phase3:client-diff': true,
+  'pages:phase4:network-sync': true,
+  // WS event handlers
+  'pages:subscribe': true,
+  'pages:subscribe-success': true,
+  'pages:unsubscribe': true,
+  'pages:page-update': true,
+  'pages:update-ack': true,
+  'pages:awareness-update': true,
+  'pages:user-joined': true,
+  'pages:user-left': true,
+  'pages:validation': true,
   // Entities
-  'pages:ydoc-registry': true, // entities/page-session/lib/yjs/ydoc-registry.ts
-  'pages:awareness-provider': true, // entities/page-session/lib/yjs/page-awareness-provider.ts
-  'pages:pending-updates-tracker': true, // entities/page-session/lib/pending-updates-tracker.ts
-  'pages:offline-queue': true, // entities/page-session/lib/offline-queue-manager.ts
-  'pages:indexeddb-cleanup': true, // features/pages/clean-page-indexeddb/
+  'pages:ydoc-registry': true,
+  'pages:awareness-provider': true,
+  'pages:offline-queue': true,
+  'pages:indexeddb-cleanup': true,
   // Send
-  'pages:send-page-update': true, // features/pages/send-page-update/
+  'pages:send-page-update': true,
   // UI
-  'pages:page-title': true, // widgets/page-editor/ui/page-title.tsx
+  'pages:page-title': true,
   // Presence
-  'pages:presence': true, // entities/page-presence/
-  // Mutation hooks (less critical — enable individually if needed)
+  'pages:presence': true,
+  // Mutation hooks (enable individually as needed)
   'pages:add-page-collaborators-hook': false,
   'pages:archive-page-hook': false,
   'pages:delete-page-hook': false,
@@ -216,12 +215,25 @@ export const FILES: Record<string, boolean | undefined> = {
   'pages:unarchive-page-hook': false,
   'pages:unlock-page-hook': false,
 
-  // ─────────────────────────────────────
-  // Vault Feature ✅ Upload Flow
-  // ─────────────────────────────────────
-  'vault:upload': true, // use-upload-file.ts  — orchestrator
-  'vault:upload:s3': true, // upload-to-s3.ts     — XHR PUT to S3
-  'vault:upload:validate': true, // validate-file.ts    — client preflight
+  // ─────────────────────────────────────────────────────────────
+  // Issues Feature
+  // ─────────────────────────────────────────────────────────────
+  'issues:edit-issue-description-editor': false,  // edit-issue-description-editor.tsx
+
+  // ─────────────────────────────────────────────────────────────
+  // Vault Feature
+  // ─────────────────────────────────────────────────────────────
+  // Upload pipeline
+  'vault:upload': true,           // use-upload-file.ts
+  'vault:upload:s3': true,        // upload-to-s3.ts
+  'vault:upload:validate': true,  // validate-file.ts
+
+  // ─────────────────────────────────────────────────────────────
+  // Shared Utilities
+  // ─────────────────────────────────────────────────────────────
+  // BlockNote integration
+  'shared:blocknote:upload-adapter': false,  // blocknote-upload-adapter.ts
+  'shared:blocknote:url-refresher': false,   // blocknote-url-refresher.ts
 }
 
 export type GroupFlag = keyof typeof GROUPS

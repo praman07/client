@@ -9,7 +9,7 @@
  *   projectLimitBytes - projectUsedBytes - projectReservedBytes
  */
 export const GET_VAULT_USAGE = /* GraphQL */ `
-  query GetVaultUsage($projectId: ID!) {
+  query GetVaultUsageShared($projectId: ID!) {
     getVaultUsage(projectId: $projectId) {
       projectUsedBytes
       projectReservedBytes
@@ -23,3 +23,4 @@ export const GET_VAULT_USAGE = /* GraphQL */ `
     }
   }
 `
+

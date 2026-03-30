@@ -57,3 +57,40 @@ export interface UploadToVaultResult {
   mimeType: string
   sizeBytes: number
 }
+
+/**
+ * MIME type allowlist for client-side upload preflight.
+ * Mirrors VAULT_ALLOWED_MIME_PREFIXES + VAULT_BLOCKED_EXTENSIONS from
+ * server/src/modules/vault/lib/constants.ts.
+ *
+ * Canonical source: features/vault/upload-file/lib/mime-allowlist.ts
+ * Re-exported here so shared/ utilities (e.g. shared/lib/blocknote) can
+ * import it without crossing the features/ boundary.
+ *
+ * Update this list whenever the server allowlist changes (keep both in sync).
+ */
+export const VAULT_ALLOWED_MIME_TYPES = new Set([
+  // Images
+  'image/jpeg', 'image/png', 'image/gif', 'image/webp',
+  'image/svg+xml', 'image/bmp', 'image/tiff', 'image/heic', 'image/avif',
+  // Video
+  'video/mp4', 'video/webm', 'video/quicktime',
+  'video/x-msvideo', 'video/x-matroska',
+  // Audio
+  'audio/mpeg', 'audio/wav', 'audio/ogg',
+  'audio/webm', 'audio/flac', 'audio/aac',
+  // Documents
+  'application/pdf',
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+  'application/msword', 'application/vnd.ms-excel', 'application/vnd.ms-powerpoint',
+  // Archives
+  'application/zip', 'application/x-tar', 'application/gzip',
+  'application/x-7z-compressed', 'application/x-rar-compressed',
+  // Text & Code
+  'text/plain', 'text/csv', 'text/markdown', 'text/html',
+  'text/css', 'text/javascript', 'application/json', 'application/xml',
+  // Design
+  'image/vnd.adobe.photoshop', 'application/postscript', 'image/x-xcf',
+])

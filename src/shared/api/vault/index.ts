@@ -22,12 +22,17 @@ import {
   CONFIRM_VAULT_UPLOAD_EXTERNAL,
   GET_BATCH_DOWNLOAD_URLS,
   GET_DOWNLOAD_URL,
+  MARK_FILES_UNREFERENCED,
   REGISTER_EXTERNAL_FILE,
 } from './mutations'
-import type { RegisterExternalFileInput } from '@/gql/graphql'
+import { VAULT_ALLOWED_MIME_TYPES } from './types'
 import type { FileUrlResult, UploadToVaultResult } from './types'
+import type { RegisterExternalFileInput } from '@/gql/graphql'
+import { VaultFileSource } from '@/gql/graphql'
 import { uploadToS3 } from '@/features/vault/upload-file'
 import { GqlClient } from '@/shared/api/graphql-client'
+
+export { VAULT_ALLOWED_MIME_TYPES }
 
 // ─── Step 1: Register ────────────────────────────────────────────────────────
 
@@ -108,6 +113,40 @@ export async function batchGetDownloadUrls(
     fileIds,
   })
   return result.getBatchDownloadUrls as Array<FileUrlResult>
+}
+
+// ─── Unreferenced tracking ────────────────────────────────────────────────────
+
+/**
+ * Re-exported so callers don't need to import from @/gql/graphql directly.
+ * Only PAGE and TASK are valid for editor-side unreferenced tracking.
+ */
+export { VaultFileSource }
+
+/**
+ * Mark vault files as unreferenced after they are removed from saved content.
+ *
+ * Called by the editor on save — fire-and-forget. Failures are caught and
+ * logged but never propagate to the caller so the save flow is never blocked.
+ *
+ * The server sets unrefAt on each file. The cleanup job picks them up after
+ * a 30-minute grace period and verifies they are still absent before deleting.
+ *
+ * @param fileIds    - vault fileIds that are no longer in the saved document
+ * @param entityId   - the pageId or issueId that was just saved
+ * @param entityType - VaultFileSource.Page or VaultFileSource.Task
+ * @param token      - Clerk session JWT
+ */
+export async function markFilesUnreferenced(
+  fileIds: Array<string>,
+  entityId: string,
+  entityType: VaultFileSource,
+  token: string,
+): Promise<void> {
+  if (fileIds.length === 0) return
+  await GqlClient(token).request(MARK_FILES_UNREFERENCED, {
+    input: { fileIds, entityId, entityType },
+  })
 }
 
 // ─── Full Upload Orchestrator ─────────────────────────────────────────────────

@@ -24,6 +24,16 @@ import { BlockNoteView } from '@blocknote/shadcn'
 import { en } from '@blocknote/core/locales'
 import { useGetIssueDescription } from '../hooks/use-get-issue-description'
 import type { BlockNoteEditor } from '@blocknote/core'
+import { useAppSelector, useAuth } from '@/shared/hooks'
+import { selectCurrentProject } from '@/entities/project'
+import {
+  createBlockNoteUploadAdapter,
+  extractVaultFileIds,
+  extractTrackedFileIds,
+  refreshVaultUrls,
+} from '@/shared/lib/blocknote'
+import { markFilesUnreferenced, VaultFileSource } from '@/shared/api/vault'
+import { createLogger } from '@/shared/lib/logger'
 
 interface EditIssueDescriptionEditorProps {
   issueId: string
@@ -36,6 +46,8 @@ interface EditIssueDescriptionEditorProps {
   editorRef?: React.MutableRefObject<BlockNoteEditor<any> | null>
   editable?: boolean
 }
+
+const log = createLogger('issues:edit-issue-description-editor')
 
 export function EditIssueDescriptionEditor({
   issueId,
@@ -52,13 +64,32 @@ export function EditIssueDescriptionEditor({
 
   const hasSeeded = useRef(false)
 
+  // Read project context from Redux — same pattern used throughout the codebase
+  // (e.g., page-title.tsx:27). ProjectFieldsFragment includes both id + workspaceId.
+  const project = useAppSelector(selectCurrentProject)
+  const { getToken } = useAuth()
+
+  // ── Vault upload adapter ───────────────────────────────────────────────────
+  // Must be declared BEFORE useCreateBlockNote so it can be passed as an option.
+  // If project is not yet in Redux (edge case), uploadFile is undefined —
+  // the editor simply won't show the file upload UI (graceful degradation).
+  const uploadAdapter = project?.id
+    ? createBlockNoteUploadAdapter({
+        workspaceId: project.workspaceId,
+        projectId: project.id,
+        source: 'TASK',
+        sourceId: issueId,
+        getToken,
+      })
+    : undefined
+
   const editor = useCreateBlockNote({
     // Spread full en dictionary, override only placeholder
     dictionary: {
       ...en,
       placeholders: {
         ...en.placeholders,
-        default: 'Add description\u2026',
+        default: 'Add description…',
       },
     },
     // Zero out the side-menu gutter padding so text aligns with the title
@@ -68,6 +99,9 @@ export function EditIssueDescriptionEditor({
           'padding-left: 0; padding-right: 0; padding-top: 4px; font-size: 0.875rem;',
       },
     },
+    // uploadFile is an editor-level capability — handles paste, D&D, and
+    // the /image slash command. Undefined if project context is not loaded.
+    uploadFile: uploadAdapter,
   })
 
   // Expose editor instance to parent for synchronous reads on save
@@ -75,14 +109,35 @@ export function EditIssueDescriptionEditor({
     if (editorRef) editorRef.current = editor
   }, [editor, editorRef])
 
-  // Load S3 content into editor once it arrives
+  // Vault unreferenced tracking: seed savedFileIdsRef when S3 content loads.
+  // The ref is updated on every onChange so the parent's save handler always
+  // gets the latest diff when it calls editor.document.
+  const savedFileIdsRef = useRef<Set<string>>(new Set())
+
+  // blockFileMap: Map<blockId, fileId> — populated by refreshVaultUrls BEFORE
+  // vault://fileId is replaced with presigned URLs in the editor blocks.
+  // Lets extractTrackedFileIds detect deletions by blockId presence.
+  const blockFileMapRef = useRef<Map<string, string>>(new Map())
+
+  // Load S3 content into editor once it arrives.
+  // Also triggers refreshVaultUrls so vault:// references resolve on load.
   useEffect(() => {
     if (!loadedBlocks || hasSeeded.current) return
     hasSeeded.current = true
-     
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-argument
     editor.replaceBlocks(editor.document as any, loadedBlocks)
     onDescriptionLoaded(loadedBlocks)
-  }, [loadedBlocks, editor, onDescriptionLoaded])
+    // Seed the saved fileIds snapshot from the loaded content.
+    const initialIds = extractVaultFileIds(editor.document)
+    savedFileIdsRef.current = initialIds
+    log.debug('[SNAPSHOT_SEEDED]', {
+      issueId,
+      fileIds: [...initialIds],
+      count: initialIds.size,
+    })
+    // Resolve vault:// URL refs now that the S3 content has been seeded.
+    void refreshVaultUrls(editor, getToken, blockFileMapRef.current)
+  }, [loadedBlocks, editor, onDescriptionLoaded, getToken, issueId])
 
   // If no descriptionS3Key → seed parent with empty blocks baseline
   useEffect(() => {
@@ -91,7 +146,18 @@ export function EditIssueDescriptionEditor({
     onDescriptionLoaded([])
   }, [descriptionS3Key, onDescriptionLoaded])
 
-  // Propagate content changes to parent
+  // Propagate content changes to parent + resolve newly uploaded vault:// URLs.
+  // A single editor.onChange subscription handles both to avoid double-subscriptions.
+  // Vault URL resolution: uploadFile returns `vault://fileId`; BlockNote writes it to
+  // the block; onChange fires; we detect the vault:// scheme and resolve immediately
+  // so the image appears without a page reload.
+  //
+  // Unreferenced tracking: on every change we diff saved vs current fileIds.
+  // If files were removed, we call markFilesUnreferenced (fire-and-forget).
+  // Issues have an explicit Save button — onChange fires before save, so the
+  // diff here represents the editor's current in-flight state. We call mark
+  // here (not at save time) so the grace period window starts from the LAST
+  // time the user deleted the block, not from when they click Save.
   const prevBlocks = useRef<string>('')
   useEffect(() => {
     return editor.onChange(() => {
@@ -99,9 +165,51 @@ export function EditIssueDescriptionEditor({
       if (serialised !== prevBlocks.current) {
         prevBlocks.current = serialised
         onChange(editor.document)
+
+        // Resolve any vault:// refs introduced by this change (e.g. fresh uploads)
+        const hasVaultUrl = (editor.document as Array<any>).some(
+          (b: any) =>
+            typeof b.props?.url === 'string' && b.props.url.startsWith('vault://'),
+        )
+        if (hasVaultUrl) void refreshVaultUrls(editor, getToken, blockFileMapRef.current)
+
+        // Diff for unreferenced tracking — use blockFileMap to detect removals
+        // by blockId presence (works after vault:// is replaced with presigned URL).
+        const trackedIds = extractTrackedFileIds(editor.document, blockFileMapRef.current)
+        const currentIds = trackedIds.size > 0 || blockFileMapRef.current.size > 0
+          ? trackedIds
+          : extractVaultFileIds(editor.document)
+        const removed = [...savedFileIdsRef.current].filter(
+          (id) => !currentIds.has(id),
+        )
+        savedFileIdsRef.current = currentIds
+
+        log.debug('[UNREF_DIFF]', {
+          issueId,
+          currentIds: [...currentIds],
+          removedIds: removed,
+          hasRemovals: removed.length > 0,
+        })
+
+        if (removed.length > 0) {
+          void getToken().then((token) => {
+            if (!token) return
+            markFilesUnreferenced(removed, issueId, VaultFileSource.Task, token)
+              .then(() => {
+                log.info('[FILE_MARKED_UNREFERENCED]', {
+                  issueId,
+                  removedIds: removed,
+                  markedCount: removed.length,
+                })
+              })
+              .catch((err) => {
+                log.warn('[UNREF_MARK_FAILED]', { err, removedIds: removed, issueId })
+              })
+          })
+        }
       }
     })
-  }, [editor, onChange])
+  }, [editor, onChange, getToken, issueId])
 
   if (isLoading) {
     return (

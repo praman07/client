@@ -151,6 +151,8 @@ type Documents = {
     "\n  mutation RegisterExternalFile($input: RegisterExternalFileInput!) {\n    registerExternalFile(input: $input) {\n      fileId\n      presignedUrl\n      expiresAt\n    }\n  }\n": typeof types.RegisterExternalFileDocument,
     "\n  mutation ConfirmVaultUploadExternal($input: ConfirmVaultUploadInput!) {\n    confirmVaultUpload(input: $input) {\n      file {\n        id\n        name\n        mimeType\n        sizeBytes\n        status\n      }\n    }\n  }\n": typeof types.ConfirmVaultUploadExternalDocument,
     "\n  query GetBatchDownloadUrls($fileIds: [ID!]!) {\n    getBatchDownloadUrls(fileIds: $fileIds) {\n      fileId\n      url\n      status\n      name\n      mimeType\n      sizeBytes\n    }\n  }\n": typeof types.GetBatchDownloadUrlsDocument,
+    "\n  mutation MarkFilesUnreferenced($input: MarkFilesUnreferencedInput!) {\n    markFilesUnreferenced(input: $input) {\n      markedCount\n    }\n  }\n": typeof types.MarkFilesUnreferencedDocument,
+    "\n  query GetVaultUsageShared($projectId: ID!) {\n    getVaultUsage(projectId: $projectId) {\n      projectUsedBytes\n      projectReservedBytes\n      projectLimitBytes\n      projectFileCount\n      projectFileCountLimit\n      workspaceUsedBytes\n      workspaceReservedBytes\n      workspaceLimitBytes\n      percentUsed\n    }\n  }\n": typeof types.GetVaultUsageSharedDocument,
     "\n  query GetProjectIssues($projectId: ID!) {\n    getProjectIssues(projectId: $projectId) {\n      ...IssueCardFields\n    }\n  }\n": typeof types.GetProjectIssuesDocument,
     "\n  query GetIssueStatuses($projectId: ID!) {\n    getIssueStatuses(projectId: $projectId) {\n      ...IssueStatusFields\n    }\n  }\n": typeof types.GetIssueStatusesDocument,
     "\n  query GetIssueLabels($projectId: ID!) {\n    getIssueLabels(projectId: $projectId) {\n      ...IssueLabelFields\n    }\n  }\n": typeof types.GetIssueLabelsDocument,
@@ -293,6 +295,8 @@ const documents: Documents = {
     "\n  mutation RegisterExternalFile($input: RegisterExternalFileInput!) {\n    registerExternalFile(input: $input) {\n      fileId\n      presignedUrl\n      expiresAt\n    }\n  }\n": types.RegisterExternalFileDocument,
     "\n  mutation ConfirmVaultUploadExternal($input: ConfirmVaultUploadInput!) {\n    confirmVaultUpload(input: $input) {\n      file {\n        id\n        name\n        mimeType\n        sizeBytes\n        status\n      }\n    }\n  }\n": types.ConfirmVaultUploadExternalDocument,
     "\n  query GetBatchDownloadUrls($fileIds: [ID!]!) {\n    getBatchDownloadUrls(fileIds: $fileIds) {\n      fileId\n      url\n      status\n      name\n      mimeType\n      sizeBytes\n    }\n  }\n": types.GetBatchDownloadUrlsDocument,
+    "\n  mutation MarkFilesUnreferenced($input: MarkFilesUnreferencedInput!) {\n    markFilesUnreferenced(input: $input) {\n      markedCount\n    }\n  }\n": types.MarkFilesUnreferencedDocument,
+    "\n  query GetVaultUsageShared($projectId: ID!) {\n    getVaultUsage(projectId: $projectId) {\n      projectUsedBytes\n      projectReservedBytes\n      projectLimitBytes\n      projectFileCount\n      projectFileCountLimit\n      workspaceUsedBytes\n      workspaceReservedBytes\n      workspaceLimitBytes\n      percentUsed\n    }\n  }\n": types.GetVaultUsageSharedDocument,
     "\n  query GetProjectIssues($projectId: ID!) {\n    getProjectIssues(projectId: $projectId) {\n      ...IssueCardFields\n    }\n  }\n": types.GetProjectIssuesDocument,
     "\n  query GetIssueStatuses($projectId: ID!) {\n    getIssueStatuses(projectId: $projectId) {\n      ...IssueStatusFields\n    }\n  }\n": types.GetIssueStatusesDocument,
     "\n  query GetIssueLabels($projectId: ID!) {\n    getIssueLabels(projectId: $projectId) {\n      ...IssueLabelFields\n    }\n  }\n": types.GetIssueLabelsDocument,
@@ -860,6 +864,14 @@ export function gql(source: "\n  mutation ConfirmVaultUploadExternal($input: Con
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "\n  query GetBatchDownloadUrls($fileIds: [ID!]!) {\n    getBatchDownloadUrls(fileIds: $fileIds) {\n      fileId\n      url\n      status\n      name\n      mimeType\n      sizeBytes\n    }\n  }\n"): (typeof documents)["\n  query GetBatchDownloadUrls($fileIds: [ID!]!) {\n    getBatchDownloadUrls(fileIds: $fileIds) {\n      fileId\n      url\n      status\n      name\n      mimeType\n      sizeBytes\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation MarkFilesUnreferenced($input: MarkFilesUnreferencedInput!) {\n    markFilesUnreferenced(input: $input) {\n      markedCount\n    }\n  }\n"): (typeof documents)["\n  mutation MarkFilesUnreferenced($input: MarkFilesUnreferencedInput!) {\n    markFilesUnreferenced(input: $input) {\n      markedCount\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  query GetVaultUsageShared($projectId: ID!) {\n    getVaultUsage(projectId: $projectId) {\n      projectUsedBytes\n      projectReservedBytes\n      projectLimitBytes\n      projectFileCount\n      projectFileCountLimit\n      workspaceUsedBytes\n      workspaceReservedBytes\n      workspaceLimitBytes\n      percentUsed\n    }\n  }\n"): (typeof documents)["\n  query GetVaultUsageShared($projectId: ID!) {\n    getVaultUsage(projectId: $projectId) {\n      projectUsedBytes\n      projectReservedBytes\n      projectLimitBytes\n      projectFileCount\n      projectFileCountLimit\n      workspaceUsedBytes\n      workspaceReservedBytes\n      workspaceLimitBytes\n      percentUsed\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

@@ -64,3 +64,18 @@ export const GET_BATCH_DOWNLOAD_URLS = gql(`
     }
   }
 `)
+
+/**
+ * Mark one or more vault files as unreferenced after they are removed from
+ * saved document content. Called by the editor on save — does NOT delete
+ * files immediately. The cleanup job handles deferred deletion after a
+ * 30-minute grace period, preserving in-session undo.
+ */
+export const MARK_FILES_UNREFERENCED = gql(`
+  mutation MarkFilesUnreferenced($input: MarkFilesUnreferencedInput!) {
+    markFilesUnreferenced(input: $input) {
+      markedCount
+    }
+  }
+`)
+
