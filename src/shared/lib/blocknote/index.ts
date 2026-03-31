@@ -9,4 +9,4 @@ export type {
   BlockNoteUploadAdapterOptions,
   BlockNoteUploadError,
 } from './blocknote-upload-adapter'
-export { refreshVaultUrls, extractVaultFileIds, extractTrackedFileIds } from './blocknote-url-refresher'
+export { extractActiveFileIds, migrateDocumentUrls } from './blocknote-file-utils'

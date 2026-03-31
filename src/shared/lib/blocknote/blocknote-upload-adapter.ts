@@ -1,28 +1,19 @@
 /**
  * blocknote-upload-adapter.ts
  *
- * Factory that produces the `uploadFile` function BlockNote expects.
+ * System Design Decision: Centralized Vault Integration
+ *   Acts as the unified upload bridge for BlockNote (handling toolbar, drag-drop, and paste natively).
+ *   Injects the `uploadToVault` orchestrator without leaking S3/Vault mechanics into the editor logic.
  *
- * BlockNote's `uploadFile` editor option is the SINGLE entry point for all
- * file insertions — slash command, paste, and drag-and-drop. We bridge it to
- * the shared Vault 3-step pipeline (`uploadToVault`) without exposing any Vault
- * internals to the editor.
+ * System Design Decision: Permanent URL Persistence
+ *   Returns a long-lived proxy URL (`getVaultFileUrl`) instead of a raw S3 presigned URL.
+ *   This prevents link rot inside the eternal CRDT document, ensuring the asset never expires for future peers.
  *
- * URL persistence strategy — `vault://` scheme:
- *   BlockNote stores whatever string `uploadFile` returns as the image node's
- *   `url` attribute inside the YJS document. Presigned GET URLs expire in 1
- *   hour, breaking persistent documents. To avoid this we return a stable
- *   opaque reference: `vault://<fileId>`.
- *
- *   The `blocknote-url-refresher` resolves these references to real presigned
- *   URLs — both on editor mount (existing content) and immediately after each
- *   upload (new content), via `editor.onChange`.
- *
- * @layer Shared → lib/blocknote
+ * @layer Shared
  */
 
 import { toast } from 'sonner'
-import { VAULT_ALLOWED_MIME_TYPES, uploadToVault } from '@/shared/api/vault'
+import { VAULT_ALLOWED_MIME_TYPES, uploadToVault, getVaultFileUrl } from '@/shared/api/vault'
 import { VaultFileSource } from '@/gql/graphql'
 import {
   getUploadErrorMessage,
@@ -59,16 +50,9 @@ export class BlockNoteUploadError extends Error {
 // ── Factory ──────────────────────────────────────────────────────────────────
 
 /**
- * Returns a `(file: File) => Promise<string>` ready to pass to
- * `useCreateBlockNote({ uploadFile: adapter })`.
- *
- * The returned string is ALWAYS a `vault://<fileId>` reference — never a raw
- * presigned URL — so the YJS document remains valid after the 1-hour URL TTL.
- *
- * After `uploadFile` resolves, the editor writes `vault://<fileId>` into the
- * block and renders an image. The caller MUST subscribe via `editor.onChange`
- * and call `refreshVaultUrls(editor, getToken)` to resolve the opaque ref to a
- * live URL — making the image visible without a page reload.
+ * System Design Decision: Adapter Factory
+ * Returns an asynchronous file-handler directly ingestible by BlockNote.
+ * Designed as a factory to lock in strict external context (workspace, project) before rendering.
  */
 export function createBlockNoteUploadAdapter(
   options: BlockNoteUploadAdapterOptions,
@@ -129,9 +113,10 @@ export function createBlockNoteUploadAdapter(
       log.debug('[UPLOAD_SUCCESS]', { fileId: result.fileId, fileName: file.name })
       toast.success(`${file.name} ready`, { id: toastId })
 
-      const vaultRef = `vault://${result.fileId}`
-      log.debug('[ADAPTER_RETURN]', { vaultRef })
-      return vaultRef
+      // System Design Decision: We strictly return the permanent proxy string so the eternal CRDT doesn't calcify dead presigned URLs.
+      const permanentUrl = getVaultFileUrl(result.fileId)
+      log.debug('[ADAPTER_RETURN]', { permanentUrl, fileId: result.fileId })
+      return permanentUrl
     } catch (err) {
       const msg =
         err instanceof BlockNoteUploadError

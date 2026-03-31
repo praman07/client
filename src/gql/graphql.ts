@@ -2532,7 +2532,7 @@ export type VaultChildrenResult = {
 
 export type VaultDownloadUrl = {
   __typename?: 'VaultDownloadUrl';
-  expiresAt: Scalars['DateTime']['output'];
+  expiresAt?: Maybe<Scalars['DateTime']['output']>;
   url: Scalars['String']['output'];
 };
 
@@ -3538,7 +3538,7 @@ export type GetVaultDownloadUrlQueryVariables = Exact<{
 }>;
 
 
-export type GetVaultDownloadUrlQuery = { __typename?: 'Query', getVaultDownloadUrl: { __typename?: 'VaultDownloadUrl', url: string, expiresAt: any } };
+export type GetVaultDownloadUrlQuery = { __typename?: 'Query', getVaultDownloadUrl: { __typename?: 'VaultDownloadUrl', url: string, expiresAt?: any | null } };
 
 export type GetVaultNodeQueryVariables = Exact<{
   id: Scalars['ID']['input'];

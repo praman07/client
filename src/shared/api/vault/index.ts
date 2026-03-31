@@ -1,22 +1,17 @@
 /**
  * Vault Shared Client API — Public Surface
  *
- * Plain async functions (no React hooks, no context) for all Vault operations.
- * Used by Chat, Pages, Whiteboard, and Issues modules.
+ * System Design Decision: Framework-Agnostic Core
+ *   All Vault operations are plain async functions requiring an explicit `token`.
+ *   This decouples the storage layer from React context (`useAuth`), enabling
+ *   use in background workers, raw event listeners, and unit tests.
  *
- * All functions take an explicit `token` parameter — callers inside React
- * components obtain the token via `useAuth().getToken()` and pass it down.
- * This keeps the shared layer framework-agnostic and unit-testable.
+ * System Design Decision: 3-Phase Upload Pipeline
+ *   1. Register: Server validates MIME/Quota → Provisions S3 PUT slot.
+ *   2. Push: Client streams bytes directly to S3 (Server bypass).
+ *   3. Confirm: Server asserts S3 HeadObject → Activates DB record.
  *
- * Upload flow (full 3-step):
- *   1. registerExternalFile  → server validates MIME, size, quota → returns presigned PUT slot
- *   2. PUT bytes directly to S3 (browser → S3; server is NOT in the upload path)
- *   3. confirmVaultUpload    → server HeadObject → activates VaultFile → increments usedBytes
- *
- * For convenience, uploadToVault() runs all 3 steps and returns a result
- * ready for embedding in message metadata or YJS document nodes.
- *
- * @layer Shared — no React, no hooks
+ * @layer Shared
  */
 import {
   CONFIRM_VAULT_UPLOAD_EXTERNAL,
@@ -31,18 +26,16 @@ import type { RegisterExternalFileInput } from '@/gql/graphql'
 import { VaultFileSource } from '@/gql/graphql'
 import { uploadToS3 } from '@/features/vault/upload-file'
 import { GqlClient } from '@/shared/api/graphql-client'
+import { env } from '@/shared/config/env'
 
 export { VAULT_ALLOWED_MIME_TYPES }
 
 // ─── Step 1: Register ────────────────────────────────────────────────────────
 
 /**
- * Register a file in Vault and get a presigned S3 PUT URL.
- *
- * Server-side: validates MIME type, enforces max file size, checks
- * project/workspace quota atomically, creates a PENDING VaultFile row.
- *
- * Throws on: MIME rejected, file too large, quota exceeded, auth failure.
+ * System Design Decision: Pre-Flight Validation
+ * Reserves quota atomically and asserts file constraints before any bytes
+ * hit the network. Returns a short-lived presigned PUT URL.
  */
 export async function registerExternalFile(
   input: RegisterExternalFileInput,
@@ -57,12 +50,9 @@ export async function registerExternalFile(
 // ─── Step 3: Confirm ─────────────────────────────────────────────────────────
 
 /**
- * Confirm an upload after the S3 PUT has completed.
- *
- * Server-side: HeadObject verifies the file landed; transitions
- * VaultFile status PENDING → ACTIVE; increments usedBytes.
- *
- * Idempotent: safe to retry if the network drops between PUT and confirm.
+ * System Design Decision: Asynchronous Activation
+ * Verifies S3 `HeadObject` and transitions the record to ACTIVE.
+ * Designed to be idempotent to survive network drops between the PUT and the confirm.
  */
 export async function confirmVaultUpload(
   fileId: string,
@@ -75,11 +65,24 @@ export async function confirmVaultUpload(
 
 // ─── URL Fetching ─────────────────────────────────────────────────────────────
 
+// ─── URL Builder ─────────────────────────────────────────────────────────────
+
 /**
- * Get a fresh presigned GET URL for a single file.
- *
- * TTL: 1 hour. Callers should cache by fileId with a 55-minute stale time
- * (React Query staleTime: 55 * 60 * 1000).
+ * System Design Decision: Deterministic Proxy Routing
+ * Returns a permanent, stateless URL (`{SERVER_URL}/vault/file/{fileId}`) 
+ * without requiring network resolution. The server proxy enforces RBAC and streams 
+ * the S3 bytes globally, allowing deep integration into eternal stores like Y.Docs.
+ */
+export function getVaultFileUrl(fileId: string): string {
+  const base = env.VITE_SERVER_URL ?? ''
+  return `${base}/vault/file/${fileId}`
+}
+
+/**
+ * System Design Decision: Ephemeral Read Access
+ * Returns a short-lived presigned URL. Primarily used by the Chat pipeline
+ * to load temporary assets immediately without the proxy overhead.
+ * // TODO (Architecture): Consider migrating the Chat media pipeline to the permanent proxy (`getVaultFileUrl`) to unify the media architecture.
  */
 export async function getDownloadUrl(
   fileId: string,
@@ -94,15 +97,10 @@ export async function getDownloadUrl(
 }
 
 /**
- * Batch-fetch presigned GET URLs for multiple files in a single round-trip.
- *
- * Returns per-file status — callers MUST handle DELETED and FORBIDDEN:
- *   - DELETED  → render tombstone: "Attachment deleted"
- *   - FORBIDDEN→ render tombstone: "No access"
- *   - PENDING  → file not yet confirmed (show loading or skip)
- *   - ACTIVE   → render url
- *
- * Short-circuits and returns [] without a network call when fileIds is empty.
+ * System Design Decision: Batched Resolution
+ * Optimizes network overhead by resolving multiple ephemeral URLs at once.
+ * Callers are structurally forced to handle the finite state machine of asset availability (e.g. DELETED, FORBIDDEN).
+ * // TODO (Architecture): Deprecate and remove once old BlockNote `vault://` strings are fully migrated.
  */
 export async function batchGetDownloadUrls(
   fileIds: Array<string>,
@@ -124,18 +122,15 @@ export async function batchGetDownloadUrls(
 export { VaultFileSource }
 
 /**
- * Mark vault files as unreferenced after they are removed from saved content.
+ * System Design Decision: Deferred Garbage Collection
+ * Client issues a fire-and-forget mutation when an asset reference is dropped.
+ * The server does NOT immediately delete the S3 object; it marks `unrefAt` and waits
+ * for a 30-minute background job grace period to prevent data loss on erratic network drops or client undone actions.
  *
- * Called by the editor on save — fire-and-forget. Failures are caught and
- * logged but never propagate to the caller so the save flow is never blocked.
- *
- * The server sets unrefAt on each file. The cleanup job picks them up after
- * a 30-minute grace period and verifies they are still absent before deleting.
- *
- * @param fileIds    - vault fileIds that are no longer in the saved document
- * @param entityId   - the pageId or issueId that was just saved
- * @param entityType - VaultFileSource.Page or VaultFileSource.Task
- * @param token      - Clerk session JWT
+ * @param fileIds    - Array of unreferenced vault file IDs
+ * @param entityId   - Co-located entity (e.g., pageId, issueId)
+ * @param entityType - Source catalog (Page, Task, Whiteboard)
+ * @param token      - Auth context
  */
 export async function markFilesUnreferenced(
   fileIds: Array<string>,
@@ -152,27 +147,14 @@ export async function markFilesUnreferenced(
 // ─── Full Upload Orchestrator ─────────────────────────────────────────────────
 
 /**
- * Full 3-step upload orchestrator.
+ * System Design Decision: Upload Orchestrator
+ * Encapsulates the 3-Phase Upload Pipeline (Register → S3 Stream → Confirm) into a single asynchronous operation.
+ * Automatically injects the permanent proxy URL (`getVaultFileUrl`) into the returned structure for immediate display via immutable CRDTs.
  *
- * Steps:
- *   1. registerExternalFile  — reserve quota, get presigned PUT URL
- *   2. PUT bytes to S3 via XHR (with progress) + fetch fallback
- *   3. confirmVaultUpload    — activate file
- *   4. getDownloadUrl        — fetch short-lived URL for immediate display
- *
- * Returns UploadToVaultResult — safe to embed in message metadata or YJS nodes.
- *
- * IMPORTANT: The returned `url` is a short-lived presigned GET URL (1-hour).
- * - For Chat:       embed url in ChatAttachment.url for immediate display; cache
- *                   by fileId via useDownloadUrl() hook (4-min stale time)
- * - For Pages/WB:   store only fileId in the YJS document; refresh urls on load
- *                   via batchGetDownloadUrls()
- * DO NOT persist `url` to IndexedDB or YJS documents.
- *
- * @param file     - The File object from the browser (input, paste, or drop)
- * @param options  - RegisterExternalFileInput (source, sourceId, projectId, etc.)
- * @param token    - Clerk session JWT for auth
- * @param onProgress - Optional 0–100 progress callback for upload UI
+ * @param file       - Raw browser file Blob
+ * @param options    - Pre-flight constraints (project, source)
+ * @param token      - Auth context
+ * @param onProgress - XHR progress emitter
  */
 export async function uploadToVault(
   file: File,
@@ -180,7 +162,7 @@ export async function uploadToVault(
   token: string,
   onProgress?: (percent: number) => void,
 ): Promise<UploadToVaultResult> {
-  // Step 1: Register in Vault (validate + reserve quota + get presigned URL)
+  // Step 1: Register in Vault (validate + reserve quota + get presigned PUT URL)
   const { fileId, presignedUrl } = await registerExternalFile(options, token)
 
   // Step 2: PUT bytes directly to S3 (reuses existing XHR helper with fetch fallback)
@@ -189,8 +171,8 @@ export async function uploadToVault(
   // Step 3: Confirm upload (HeadObject + activate)
   await confirmVaultUpload(fileId, token)
 
-  // Step 4: Get download URL for immediate display
-  const url = await getDownloadUrl(fileId, token)
+  // Step 4: Build permanent URL — no network call needed
+  const url = getVaultFileUrl(fileId)
 
   return {
     fileId,

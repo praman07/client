@@ -171,6 +171,10 @@ export const FILES: Record<string, boolean | undefined> = {
   'whiteboard:collab-v2': false,
   'whiteboard:state-vector-sync': false,
   'whiteboard:init-state': false,
+  // Media lifecycle
+  'whiteboard:media:vault-upload': true,    // generateIdForFile S3 pipeline
+  'whiteboard:media:lifecycle': true,       // yElements observer + markFilesUnreferenced
+
 
   // ─────────────────────────────────────────────────────────────
   // Pages Feature
