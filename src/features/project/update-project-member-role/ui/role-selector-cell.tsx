@@ -58,11 +58,15 @@ export function RoleSelectorCell({
   }
 
   const displayName = optimisticRoleName ?? 'No role'
+  const optimisticRole = roles.find(
+    (r) => r.name.toLowerCase() === (optimisticRoleName ?? '').toLowerCase(),
+  )
 
-  // Badge colour — mirrors RoleBadge in the table
+  // Badge colour based on rank: lower-rank roles (Contributor-equivalent) use green
+  const isLowerRank = optimisticRole ? optimisticRole.rank <= 1 : false
   const badgeClass = cn(
     'inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium transition-colors',
-    displayName.toUpperCase() === 'CONTRIBUTOR'
+    isLowerRank
       ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300'
       : 'bg-secondary text-secondary-foreground',
     // Hover ring to hint it's interactive

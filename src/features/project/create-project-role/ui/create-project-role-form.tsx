@@ -269,7 +269,11 @@ export function StepMembers({
   const assignable = useMemo(() => {
     const lower = search.toLowerCase()
     return allMembers.filter((m) => {
-      if (m.role === 'MANAGER' || m.role === 'Manager') return false
+      // Exclude members who already hold the top project role (MANAGER).
+      // They outrank any new role being created so assigning them is a no-op.
+      // TODO: filter by roleRank when projectMembers query exposes rank field.
+      if (m.role?.toLowerCase() === 'manager') return false
+
       if (!lower) return true
       return (
         (m.user.fullName ?? '').toLowerCase().includes(lower) ||

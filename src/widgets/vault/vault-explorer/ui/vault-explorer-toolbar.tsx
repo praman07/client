@@ -1,6 +1,7 @@
 import { ArrowUpDown, FolderPlus, Upload } from 'lucide-react'
 import type { VaultSortState } from '@/shared/lib/vault-types'
 import { Button } from '@/shared/ui/primitives/button'
+import { Guard } from '@/shared/lib/auth'
 
 interface VaultExplorerToolbarProps {
   sort: VaultSortState
@@ -19,15 +20,19 @@ export function VaultExplorerToolbar({
 }: VaultExplorerToolbarProps) {
   return (
     <div className="flex items-center gap-2 px-6 py-3 border-b bg-background/80 backdrop-blur-sm">
-      <Button variant="outline" size="sm" onClick={onCreateFolder}>
-        <FolderPlus className="h-4 w-4 mr-1.5" />
-        New Folder
-      </Button>
+      <Guard permission="vault:folder:create">
+        <Button variant="outline" size="sm" onClick={onCreateFolder}>
+          <FolderPlus className="h-4 w-4 mr-1.5" />
+          New Folder
+        </Button>
+      </Guard>
 
-      <Button size="sm" onClick={onUpload}>
-        <Upload className="h-4 w-4 mr-1.5" />
-        Upload
-      </Button>
+      <Guard permission="vault:file:upload">
+        <Button size="sm" onClick={onUpload}>
+          <Upload className="h-4 w-4 mr-1.5" />
+          Upload
+        </Button>
+      </Guard>
 
       <div className="ml-auto flex items-center gap-1.5 text-xs text-muted-foreground">
         <ArrowUpDown className="h-3.5 w-3.5" />

@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SplatRouteImport } from './routes/$'
+import { Route as UnauthorizedRouteRouteImport } from './routes/unauthorized/route'
 import { Route as MarketingRouteRouteImport } from './routes/_marketing/route'
 import { Route as AuthRouteRouteImport } from './routes/_auth/route'
 import { Route as AppRouteRouteImport } from './routes/_app/route'
@@ -60,6 +61,11 @@ import { Route as AppWorkspaceWorkspaceSlugProjectProjectSlugChatConversationIdR
 const SplatRoute = SplatRouteImport.update({
   id: '/$',
   path: '/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const UnauthorizedRouteRoute = UnauthorizedRouteRouteImport.update({
+  id: '/unauthorized',
+  path: '/unauthorized',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MarketingRouteRoute = MarketingRouteRouteImport.update({
@@ -338,6 +344,7 @@ const AppWorkspaceWorkspaceSlugProjectProjectSlugChatConversationIdRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof MarketingIndexRoute
+  '/unauthorized': typeof UnauthorizedRouteRoute
   '/$': typeof SplatRoute
   '/onboarding': typeof AppOnboardingRoute
   '/sign-in': typeof AuthSignInRoute
@@ -383,6 +390,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof MarketingIndexRoute
+  '/unauthorized': typeof UnauthorizedRouteRoute
   '/$': typeof SplatRoute
   '/onboarding': typeof AppOnboardingRoute
   '/sign-in': typeof AuthSignInRoute
@@ -422,6 +430,7 @@ export interface FileRoutesById {
   '/_app': typeof AppRouteRouteWithChildren
   '/_auth': typeof AuthRouteRouteWithChildren
   '/_marketing': typeof MarketingRouteRouteWithChildren
+  '/unauthorized': typeof UnauthorizedRouteRoute
   '/$': typeof SplatRoute
   '/_app/onboarding': typeof AppOnboardingRoute
   '/_auth/sign-in': typeof AuthSignInRoute
@@ -471,6 +480,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/unauthorized'
     | '/$'
     | '/onboarding'
     | '/sign-in'
@@ -516,6 +526,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/unauthorized'
     | '/$'
     | '/onboarding'
     | '/sign-in'
@@ -554,6 +565,7 @@ export interface FileRouteTypes {
     | '/_app'
     | '/_auth'
     | '/_marketing'
+    | '/unauthorized'
     | '/$'
     | '/_app/onboarding'
     | '/_auth/sign-in'
@@ -604,6 +616,7 @@ export interface RootRouteChildren {
   AppRouteRoute: typeof AppRouteRouteWithChildren
   AuthRouteRoute: typeof AuthRouteRouteWithChildren
   MarketingRouteRoute: typeof MarketingRouteRouteWithChildren
+  UnauthorizedRouteRoute: typeof UnauthorizedRouteRoute
   SplatRoute: typeof SplatRoute
 }
 
@@ -614,6 +627,13 @@ declare module '@tanstack/react-router' {
       path: '/$'
       fullPath: '/$'
       preLoaderRoute: typeof SplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/unauthorized': {
+      id: '/unauthorized'
+      path: '/unauthorized'
+      fullPath: '/unauthorized'
+      preLoaderRoute: typeof UnauthorizedRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_marketing': {
@@ -1223,6 +1243,7 @@ const rootRouteChildren: RootRouteChildren = {
   AppRouteRoute: AppRouteRouteWithChildren,
   AuthRouteRoute: AuthRouteRouteWithChildren,
   MarketingRouteRoute: MarketingRouteRouteWithChildren,
+  UnauthorizedRouteRoute: UnauthorizedRouteRoute,
   SplatRoute: SplatRoute,
 }
 export const routeTree = rootRouteImport

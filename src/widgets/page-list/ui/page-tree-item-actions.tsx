@@ -24,6 +24,7 @@ import { ManageCollaboratorsDialog } from '@/features/pages/manage-page-collabor
 import { useAppSelector } from '@/shared/hooks'
 import { selectWorkspaceBySlug } from '@/entities/workspace'
 import { selectCurrentProject } from '@/entities/project'
+import { Guard } from '@/shared/lib/auth'
 
 interface PageTreeItemActionsProps {
   pageId: string
@@ -67,42 +68,48 @@ export function PageTreeItemActions({
           }
         />
         <DropdownMenuContent side="right" align="start" className="w-52">
-          <DropdownMenuItem onClick={() => open({ parentId: pageId })}>
-            <HugeiconsIcon icon={File01Icon} className="mr-2 h-4 w-4" />
-            Add child page
-          </DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={() => setAddCollabOpen(true)}>
-            <HugeiconsIcon icon={UserAdd01Icon} className="mr-2 h-4 w-4" />
-            Add Collaborators
-          </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => setManageCollabOpen(true)}>
-            <HugeiconsIcon icon={UserSharingIcon} className="mr-2 h-4 w-4" />
-            Manage Collaborators
-          </DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem
-            onClick={() => {
-              if (project?.id) archivePage({ pageId, projectId: project.id })
-            }}
-          >
-            <HugeiconsIcon icon={Archive01Icon} className="mr-2 h-4 w-4" />
-            Archive
-          </DropdownMenuItem>
-          <DropdownMenuItem
-            className="text-destructive focus:text-destructive"
-            onClick={() => {
-              if (workspace?.id && project?.id)
-                deletePage({
-                  pageId,
-                  workspaceId: workspace.id,
-                  projectId: project.id,
-                })
-            }}
-          >
-            <HugeiconsIcon icon={Delete01Icon} className="mr-2 h-4 w-4" />
-            Delete
-          </DropdownMenuItem>
+          <Guard permission="page:create">
+            <DropdownMenuItem onClick={() => open({ parentId: pageId })}>
+              <HugeiconsIcon icon={File01Icon} className="mr-2 h-4 w-4" />
+              Add child page
+            </DropdownMenuItem>
+          </Guard>
+          <Guard permission="page:update">
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onClick={() => setAddCollabOpen(true)}>
+              <HugeiconsIcon icon={UserAdd01Icon} className="mr-2 h-4 w-4" />
+              Add Collaborators
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setManageCollabOpen(true)}>
+              <HugeiconsIcon icon={UserSharingIcon} className="mr-2 h-4 w-4" />
+              Manage Collaborators
+            </DropdownMenuItem>
+          </Guard>
+          <Guard permission="page:delete">
+            <DropdownMenuSeparator />
+            <DropdownMenuItem
+              onClick={() => {
+                if (project?.id) archivePage({ pageId, projectId: project.id })
+              }}
+            >
+              <HugeiconsIcon icon={Archive01Icon} className="mr-2 h-4 w-4" />
+              Archive
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              className="text-destructive focus:text-destructive"
+              onClick={() => {
+                if (workspace?.id && project?.id)
+                  deletePage({
+                    pageId,
+                    workspaceId: workspace.id,
+                    projectId: project.id,
+                  })
+              }}
+            >
+              <HugeiconsIcon icon={Delete01Icon} className="mr-2 h-4 w-4" />
+              Delete
+            </DropdownMenuItem>
+          </Guard>
         </DropdownMenuContent>
       </DropdownMenu>
 

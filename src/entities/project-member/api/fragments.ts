@@ -36,8 +36,8 @@ export const GET_PROJECT_MEMBERS = gql(`
 // ── Mutations (imported by features/manage-project-members) ───────────────────
 
 export const ADD_PROJECT_MEMBER = gql(`
-  mutation AddProjectMember($projectId: ID!, $workspaceId: ID!, $userId: ID!) {
-    addProjectMember(projectId: $projectId, workspaceId: $workspaceId, userId: $userId) {
+  mutation AddProjectMember($projectId: ID!, $workspaceId: ID!, $userId: ID!, $roleId: ID!) {
+    addProjectMember(projectId: $projectId, workspaceId: $workspaceId, userId: $userId, roleId: $roleId) {
       ...ProjectMemberFields
     }
   }

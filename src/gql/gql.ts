@@ -31,7 +31,7 @@ type Documents = {
     "\n  fragment PageWithChildren on Page {\n    ...PageFields\n    children {\n      ...PageFields\n      children {\n        ...PageFields\n        children {\n          ...PageFields\n        }\n      }\n    }\n  }\n": typeof types.PageWithChildrenFragmentDoc,
     "\n  fragment ProjectMemberFields on ProjectMember {\n    id\n    userId\n    role\n    joinedAt\n    user {\n      id\n      fullName\n      email\n      avatarUrl\n    }\n  }\n": typeof types.ProjectMemberFieldsFragmentDoc,
     "\n  query GetProjectMembers($projectId: ID!) {\n    projectMembers(projectId: $projectId) {\n      ...ProjectMemberFields\n    }\n  }\n": typeof types.GetProjectMembersDocument,
-    "\n  mutation AddProjectMember($projectId: ID!, $workspaceId: ID!, $userId: ID!) {\n    addProjectMember(projectId: $projectId, workspaceId: $workspaceId, userId: $userId) {\n      ...ProjectMemberFields\n    }\n  }\n": typeof types.AddProjectMemberDocument,
+    "\n  mutation AddProjectMember($projectId: ID!, $workspaceId: ID!, $userId: ID!, $roleId: ID!) {\n    addProjectMember(projectId: $projectId, workspaceId: $workspaceId, userId: $userId, roleId: $roleId) {\n      ...ProjectMemberFields\n    }\n  }\n": typeof types.AddProjectMemberDocument,
     "\n  mutation RemoveProjectMember($projectId: ID!, $workspaceId: ID!, $userId: ID!) {\n    removeProjectMember(projectId: $projectId, workspaceId: $workspaceId, userId: $userId)\n  }\n": typeof types.RemoveProjectMemberDocument,
     "\n  mutation UpdateProjectMemberRole($projectId: ID!, $workspaceId: ID!, $userId: ID!, $roleId: ID!) {\n    updateProjectMemberRole(projectId: $projectId, workspaceId: $workspaceId, userId: $userId, roleId: $roleId) {\n      ...ProjectMemberFields\n    }\n  }\n": typeof types.UpdateProjectMemberRoleDocument,
     "\n  mutation LeaveProject($projectId: ID!) {\n    leaveProject(projectId: $projectId)\n  }\n": typeof types.LeaveProjectDocument,
@@ -153,6 +153,7 @@ type Documents = {
     "\n  query GetBatchDownloadUrls($fileIds: [ID!]!) {\n    getBatchDownloadUrls(fileIds: $fileIds) {\n      fileId\n      url\n      status\n      name\n      mimeType\n      sizeBytes\n    }\n  }\n": typeof types.GetBatchDownloadUrlsDocument,
     "\n  mutation MarkFilesUnreferenced($input: MarkFilesUnreferencedInput!) {\n    markFilesUnreferenced(input: $input) {\n      markedCount\n    }\n  }\n": typeof types.MarkFilesUnreferencedDocument,
     "\n  query GetVaultUsageShared($projectId: ID!) {\n    getVaultUsage(projectId: $projectId) {\n      projectUsedBytes\n      projectReservedBytes\n      projectLimitBytes\n      projectFileCount\n      projectFileCountLimit\n      workspaceUsedBytes\n      workspaceReservedBytes\n      workspaceLimitBytes\n      percentUsed\n    }\n  }\n": typeof types.GetVaultUsageSharedDocument,
+    "\n  query GetActiveContext($workspaceId: ID!, $projectId: ID) {\n    activeContext(workspaceId: $workspaceId, projectId: $projectId) {\n      userId\n      workspaceId\n      projectId\n      workspaceRole\n      projectRole\n      grantedPermissions\n      featureFlags {\n        key\n        enabled\n      }\n    }\n  }\n": typeof types.GetActiveContextDocument,
     "\n  query GetProjectIssues($projectId: ID!) {\n    getProjectIssues(projectId: $projectId) {\n      ...IssueCardFields\n    }\n  }\n": typeof types.GetProjectIssuesDocument,
     "\n  query GetIssueStatuses($projectId: ID!) {\n    getIssueStatuses(projectId: $projectId) {\n      ...IssueStatusFields\n    }\n  }\n": typeof types.GetIssueStatusesDocument,
     "\n  query GetIssueLabels($projectId: ID!) {\n    getIssueLabels(projectId: $projectId) {\n      ...IssueLabelFields\n    }\n  }\n": typeof types.GetIssueLabelsDocument,
@@ -175,7 +176,7 @@ const documents: Documents = {
     "\n  fragment PageWithChildren on Page {\n    ...PageFields\n    children {\n      ...PageFields\n      children {\n        ...PageFields\n        children {\n          ...PageFields\n        }\n      }\n    }\n  }\n": types.PageWithChildrenFragmentDoc,
     "\n  fragment ProjectMemberFields on ProjectMember {\n    id\n    userId\n    role\n    joinedAt\n    user {\n      id\n      fullName\n      email\n      avatarUrl\n    }\n  }\n": types.ProjectMemberFieldsFragmentDoc,
     "\n  query GetProjectMembers($projectId: ID!) {\n    projectMembers(projectId: $projectId) {\n      ...ProjectMemberFields\n    }\n  }\n": types.GetProjectMembersDocument,
-    "\n  mutation AddProjectMember($projectId: ID!, $workspaceId: ID!, $userId: ID!) {\n    addProjectMember(projectId: $projectId, workspaceId: $workspaceId, userId: $userId) {\n      ...ProjectMemberFields\n    }\n  }\n": types.AddProjectMemberDocument,
+    "\n  mutation AddProjectMember($projectId: ID!, $workspaceId: ID!, $userId: ID!, $roleId: ID!) {\n    addProjectMember(projectId: $projectId, workspaceId: $workspaceId, userId: $userId, roleId: $roleId) {\n      ...ProjectMemberFields\n    }\n  }\n": types.AddProjectMemberDocument,
     "\n  mutation RemoveProjectMember($projectId: ID!, $workspaceId: ID!, $userId: ID!) {\n    removeProjectMember(projectId: $projectId, workspaceId: $workspaceId, userId: $userId)\n  }\n": types.RemoveProjectMemberDocument,
     "\n  mutation UpdateProjectMemberRole($projectId: ID!, $workspaceId: ID!, $userId: ID!, $roleId: ID!) {\n    updateProjectMemberRole(projectId: $projectId, workspaceId: $workspaceId, userId: $userId, roleId: $roleId) {\n      ...ProjectMemberFields\n    }\n  }\n": types.UpdateProjectMemberRoleDocument,
     "\n  mutation LeaveProject($projectId: ID!) {\n    leaveProject(projectId: $projectId)\n  }\n": types.LeaveProjectDocument,
@@ -297,6 +298,7 @@ const documents: Documents = {
     "\n  query GetBatchDownloadUrls($fileIds: [ID!]!) {\n    getBatchDownloadUrls(fileIds: $fileIds) {\n      fileId\n      url\n      status\n      name\n      mimeType\n      sizeBytes\n    }\n  }\n": types.GetBatchDownloadUrlsDocument,
     "\n  mutation MarkFilesUnreferenced($input: MarkFilesUnreferencedInput!) {\n    markFilesUnreferenced(input: $input) {\n      markedCount\n    }\n  }\n": types.MarkFilesUnreferencedDocument,
     "\n  query GetVaultUsageShared($projectId: ID!) {\n    getVaultUsage(projectId: $projectId) {\n      projectUsedBytes\n      projectReservedBytes\n      projectLimitBytes\n      projectFileCount\n      projectFileCountLimit\n      workspaceUsedBytes\n      workspaceReservedBytes\n      workspaceLimitBytes\n      percentUsed\n    }\n  }\n": types.GetVaultUsageSharedDocument,
+    "\n  query GetActiveContext($workspaceId: ID!, $projectId: ID) {\n    activeContext(workspaceId: $workspaceId, projectId: $projectId) {\n      userId\n      workspaceId\n      projectId\n      workspaceRole\n      projectRole\n      grantedPermissions\n      featureFlags {\n        key\n        enabled\n      }\n    }\n  }\n": types.GetActiveContextDocument,
     "\n  query GetProjectIssues($projectId: ID!) {\n    getProjectIssues(projectId: $projectId) {\n      ...IssueCardFields\n    }\n  }\n": types.GetProjectIssuesDocument,
     "\n  query GetIssueStatuses($projectId: ID!) {\n    getIssueStatuses(projectId: $projectId) {\n      ...IssueStatusFields\n    }\n  }\n": types.GetIssueStatusesDocument,
     "\n  query GetIssueLabels($projectId: ID!) {\n    getIssueLabels(projectId: $projectId) {\n      ...IssueLabelFields\n    }\n  }\n": types.GetIssueLabelsDocument,
@@ -387,7 +389,7 @@ export function gql(source: "\n  query GetProjectMembers($projectId: ID!) {\n   
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "\n  mutation AddProjectMember($projectId: ID!, $workspaceId: ID!, $userId: ID!) {\n    addProjectMember(projectId: $projectId, workspaceId: $workspaceId, userId: $userId) {\n      ...ProjectMemberFields\n    }\n  }\n"): (typeof documents)["\n  mutation AddProjectMember($projectId: ID!, $workspaceId: ID!, $userId: ID!) {\n    addProjectMember(projectId: $projectId, workspaceId: $workspaceId, userId: $userId) {\n      ...ProjectMemberFields\n    }\n  }\n"];
+export function gql(source: "\n  mutation AddProjectMember($projectId: ID!, $workspaceId: ID!, $userId: ID!, $roleId: ID!) {\n    addProjectMember(projectId: $projectId, workspaceId: $workspaceId, userId: $userId, roleId: $roleId) {\n      ...ProjectMemberFields\n    }\n  }\n"): (typeof documents)["\n  mutation AddProjectMember($projectId: ID!, $workspaceId: ID!, $userId: ID!, $roleId: ID!) {\n    addProjectMember(projectId: $projectId, workspaceId: $workspaceId, userId: $userId, roleId: $roleId) {\n      ...ProjectMemberFields\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -872,6 +874,10 @@ export function gql(source: "\n  mutation MarkFilesUnreferenced($input: MarkFile
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "\n  query GetVaultUsageShared($projectId: ID!) {\n    getVaultUsage(projectId: $projectId) {\n      projectUsedBytes\n      projectReservedBytes\n      projectLimitBytes\n      projectFileCount\n      projectFileCountLimit\n      workspaceUsedBytes\n      workspaceReservedBytes\n      workspaceLimitBytes\n      percentUsed\n    }\n  }\n"): (typeof documents)["\n  query GetVaultUsageShared($projectId: ID!) {\n    getVaultUsage(projectId: $projectId) {\n      projectUsedBytes\n      projectReservedBytes\n      projectLimitBytes\n      projectFileCount\n      projectFileCountLimit\n      workspaceUsedBytes\n      workspaceReservedBytes\n      workspaceLimitBytes\n      percentUsed\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  query GetActiveContext($workspaceId: ID!, $projectId: ID) {\n    activeContext(workspaceId: $workspaceId, projectId: $projectId) {\n      userId\n      workspaceId\n      projectId\n      workspaceRole\n      projectRole\n      grantedPermissions\n      featureFlags {\n        key\n        enabled\n      }\n    }\n  }\n"): (typeof documents)["\n  query GetActiveContext($workspaceId: ID!, $projectId: ID) {\n    activeContext(workspaceId: $workspaceId, projectId: $projectId) {\n      userId\n      workspaceId\n      projectId\n      workspaceRole\n      projectRole\n      grantedPermissions\n      featureFlags {\n        key\n        enabled\n      }\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

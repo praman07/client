@@ -169,6 +169,8 @@ type Query {
   TTL: 5 minutes. Always request fresh — never cache.
   """
   getIssueDescriptionUrl(issueId: ID!): IssueDescriptionUrl!
+  activeContext(workspaceId: ID!, projectId: ID): ActiveUserContext!
+  featureFlags: [FeatureFlagRecord!]!
 }
 
 type Mutation {
@@ -203,7 +205,7 @@ type Mutation {
   createProject(workspaceId: ID!, input: CreateProjectInput!): Project!
   checkProjectSlugAvailability(workspaceId: ID!, slug: String!): AvailabilityResponse!
   updateProject(projectId: ID!, input: UpdateProjectInput!): Project!
-  addProjectMember(projectId: ID!, workspaceId: ID!, userId: ID!): ProjectMember!
+  addProjectMember(projectId: ID!, workspaceId: ID!, userId: ID!, roleId: ID!): ProjectMember!
   removeProjectMember(projectId: ID!, workspaceId: ID!, userId: ID!): Boolean!
   updateProjectMemberRole(projectId: ID!, workspaceId: ID!, userId: ID!, roleId: ID!): ProjectMember!
   archiveProject(projectId: ID!): Project!
@@ -365,6 +367,7 @@ type Mutation {
 
   """Step 2 of 2: verifies S3 upload and activates the description."""
   confirmIssueDescriptionUpload(input: ConfirmIssueDescriptionUploadInput!): ConfirmIssueDescriptionUploadResult!
+  toggleFeatureFlag(input: ToggleFeatureFlagInput!): ToggleFlagResult!
 }
 
 input UpdateProfileInput {
@@ -449,6 +452,7 @@ type AvailabilityResponse {
 input InviteToWorkspaceInput {
   workspaceId: ID!
   emails: [String!]!
+  roleId: ID!
 }
 
 type InviteResponse {
@@ -1755,4 +1759,54 @@ input ConfirmIssueDescriptionUploadInput {
 
 type ConfirmIssueDescriptionUploadResult {
   issue: Issue!
+}
+
+type ActiveUserContext {
+  userId: ID!
+  workspaceId: ID!
+  projectId: ID
+  workspaceRole: String
+  projectRole: String
+  grantedPermissions: [String!]!
+  featureFlags: [ActiveFeatureFlag!]!
+}
+
+type ActiveFeatureFlag {
+  key: String!
+  enabled: Boolean!
+}
+
+type FeatureFlagRecord {
+  id: ID!
+  key: String!
+  defaultEnabled: Boolean!
+  description: String
+  overrides: [FlagOverrideRecord!]!
+}
+
+type FlagOverrideRecord {
+  id: ID!
+  contextType: FlagContextType!
+  contextId: ID
+  enabled: Boolean!
+}
+
+input ToggleFeatureFlagInput {
+  flagKey: String!
+  contextType: FlagContextType!
+  contextId: ID
+  enabled: Boolean!
+}
+
+enum FlagContextType {
+  GLOBAL
+  WORKSPACE
+  PROJECT
+  USER
+}
+
+type ToggleFlagResult {
+  success: Boolean!
+  flagKey: String!
+  enabled: Boolean!
 }

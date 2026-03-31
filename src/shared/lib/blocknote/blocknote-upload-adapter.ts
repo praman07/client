@@ -13,7 +13,7 @@
  */
 
 import { toast } from 'sonner'
-import { VAULT_ALLOWED_MIME_TYPES, uploadToVault, getVaultFileUrl } from '@/shared/api/vault'
+import { VAULT_ALLOWED_MIME_TYPES, getVaultFileUrl, uploadToVault } from '@/shared/api/vault'
 import { VaultFileSource } from '@/gql/graphql'
 import {
   getUploadErrorMessage,

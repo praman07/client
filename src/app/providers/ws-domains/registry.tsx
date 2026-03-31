@@ -3,6 +3,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import { createChatPlugin } from './chat-plugin'
 import { createWhiteboardPlugin } from './whiteboard-plugin'
 import { createPagesPlugin } from './pages-plugin'
+import { createAuthPlugin } from './auth-plugin'
 import { registerPlugin, unregisterPlugin } from '@/shared/ws/domains'
 import { createLogger } from '@/shared/lib/logger'
 import { useAppDispatch, useUser } from '@/shared/hooks'
@@ -63,6 +64,11 @@ export function DomainRegistry({ projectId }: DomainRegistryProps) {
 
     registerPlugin(pagesPlugin)
 
+    // Auth Plugin
+    // Handles auth.invalidated + flags.invalidated → invalidates activeContext query
+    const authPlugin = createAuthPlugin({ queryClient })
+    registerPlugin(authPlugin)
+
     log.debug('Domain plugins registered')
 
     // Cleanup on unmount
@@ -71,6 +77,7 @@ export function DomainRegistry({ projectId }: DomainRegistryProps) {
       unregisterPlugin('chat')
       unregisterPlugin('whiteboard')
       unregisterPlugin('pages')
+      unregisterPlugin('auth')
     }
   }, [projectId, dispatch, queryClient, user?.id])
 

@@ -23,6 +23,7 @@ import {
 } from '@/shared/ui'
 import { cn } from '@/shared/lib/utils'
 import { useAppDispatch } from '@/shared/hooks'
+import { usePermission } from '@/shared/lib/auth'
 import { PROJECT_MEMBER_FIELDS, useProjectMembers  } from '@/entities/project-member'
 import { PROJECT_ROLE_FIELDS, useProjectRoles  } from '@/entities/project-role'
 import { useRemoveProjectMember } from '@/features/project/remove-project-member'
@@ -53,12 +54,23 @@ function getInitials(name: string) {
     .slice(0, 2)
 }
 
-function RoleBadge({ role }: { role: string }) {
-  const label = role.charAt(0) + role.slice(1).toLowerCase()
+interface RoleBadgeProps {
+  role: string
+  /**
+   * Role rank from the role table.
+   * undefined = system role (MANAGER-level) → indigo
+   * rank <= 1  = lowest non-system role (CONTRIBUTOR-equivalent) → green
+   * otherwise  = secondary badge
+   */
+  rank?: number
+}
+
+function RoleBadge({ role, rank }: RoleBadgeProps) {
+  const label = role.charAt(0).toUpperCase() + role.slice(1).toLowerCase()
   const colorClass =
-    role === 'MANAGER'
+    rank === undefined
       ? 'bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-300'
-      : role === 'CONTRIBUTOR'
+      : rank <= 1
         ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300'
         : 'bg-secondary text-secondary-foreground'
   return (
@@ -107,10 +119,9 @@ export function ProjectMembersTable({
     .map((r) => ({ id: r.id, name: r.name, rank: (r as unknown as { rank: number }).rank }))
     .sort((a, b) => a.rank - b.rank)
 
-  // Derive if the current user is a Manager from their own member row
-  const currentUserMember = members.find((m) => m.userId === currentUserId)
-  const isCurrentUserManager =
-    currentUserMember?.role === 'MANAGER' || currentUserMember?.role === 'Manager'
+  // Can the current user update member roles? Derived from auth context permission.
+  // Replaces the former hardcoded `role === 'MANAGER'` string check.
+  const canUpdateMemberRoles = usePermission('project:member:role-update')
 
   return (
     <div className="space-y-4">
@@ -188,7 +199,7 @@ export function ProjectMembersTable({
                       <Avatar className="h-8 w-8 shrink-0">
                         <AvatarImage src={member.user.avatarUrl ?? undefined} />
                         <AvatarFallback className="text-xs">
-                          {getInitials(member.user.fullName)}
+                          {getInitials(member.user.fullName ?? '')}
                         </AvatarFallback>
                       </Avatar>
                       <div className="min-w-0">
@@ -209,20 +220,31 @@ export function ProjectMembersTable({
 
                   {/* Role */}
                   <TableCell>
-                    {isCurrentUserManager &&
-                    !isCurrentUser &&
-                    member.role !== 'MANAGER' &&
-                    member.role !== 'Manager' ? (
-                      <RoleSelectorCell
-                        userId={member.userId}
-                        projectId={projectId}
-                        workspaceId={workspaceId}
-                        currentRoleName={member.role ?? null}
-                        roles={assignableRoles}
-                      />
-                    ) : (
-                      <RoleBadge role={member.role ?? 'VIEWER'} />
-                    )}
+                    {(() => {
+                      // Look up member's role in assignableRoles (non-system only).
+                      // System roles (MANAGER) are excluded from assignableRoles by isSystem filter,
+                      // so `memberRole` is undefined for MANAGERs — no string comparison needed.
+                      const memberRole = assignableRoles.find(
+                        (r) =>
+                          r.name.toLowerCase() === (member.role ?? '').toLowerCase(),
+                      )
+                      const canEditThisRow =
+                        canUpdateMemberRoles && !isCurrentUser && !!memberRole
+
+                      return canEditThisRow ? (
+                        <RoleSelectorCell
+                          userId={member.userId}
+                          projectId={projectId}
+                          workspaceId={workspaceId}
+                          currentRoleName={member.role ?? null}
+                          roles={assignableRoles}
+                        />
+                      ) : member.role ? (
+                        <RoleBadge role={member.role} rank={memberRole?.rank} />
+                      ) : (
+                        <span className="text-xs text-muted-foreground">No role</span>
+                      )
+                    })()}
                   </TableCell>
 
                   {/* Joined */}

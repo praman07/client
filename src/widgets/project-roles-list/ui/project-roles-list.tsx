@@ -24,6 +24,7 @@ import {
   Skeleton,
 } from '@/shared/ui'
 import { useAppDispatch } from '@/shared/hooks'
+import { Guard } from '@/shared/lib/auth'
 import {
   PROJECT_ROLE_FIELDS,
   ROLE_PERMISSION_FIELDS,
@@ -188,10 +189,12 @@ export function ProjectRolesList({
             </p>
           )}
         </div>
-        <Button size="sm" onClick={() => dispatch(openCreateRoleDialog())}>
-          <UserPlus className="mr-1.5 h-4 w-4" />
-          Create Role
-        </Button>
+        <Guard permission="project:role:create">
+          <Button size="sm" onClick={() => dispatch(openCreateRoleDialog())}>
+            <UserPlus className="mr-1.5 h-4 w-4" />
+            Create Role
+          </Button>
+        </Guard>
       </div>
 
       {/* List */}
@@ -269,20 +272,22 @@ export function ProjectRolesList({
 
                   {/* Edit (non-system only) */}
                   {!role.isSystem && (
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="h-7 w-7"
-                      onClick={() => dispatch(openUpdateRoleDialog(role.id))}
-                      title="Edit role"
-                    >
-                      <Pencil className="h-4 w-4" />
-                    </Button>
+                    <Guard permission="project:role:update">
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-7 w-7"
+                        onClick={() => dispatch(openUpdateRoleDialog(role.id))}
+                        title="Edit role"
+                      >
+                        <Pencil className="h-4 w-4" />
+                      </Button>
+                    </Guard>
                   )}
 
                   {/* Delete (non-system only) */}
                   {!role.isSystem && (
-                    <>
+                    <Guard permission="project:role:delete">
                       <Button
                         variant="ghost"
                         size="icon"
@@ -330,7 +335,7 @@ export function ProjectRolesList({
                           </AlertDialogFooter>
                         </AlertDialogContent>
                       </AlertDialog>
-                    </>
+                    </Guard>
                   )}
                 </div>
               </div>

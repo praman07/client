@@ -24,7 +24,7 @@ import {
   extractActiveFileIds,
   migrateDocumentUrls,
 } from '@/shared/lib/blocknote'
-import { markFilesUnreferenced, VaultFileSource } from '@/shared/api/vault'
+import { VaultFileSource, markFilesUnreferenced } from '@/shared/api/vault'
 
 const log = createLogger('pages:page-editor')
 

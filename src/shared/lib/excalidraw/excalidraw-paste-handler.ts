@@ -13,17 +13,17 @@
  * @layer Shared
  */
 
-import * as Y from 'yjs'
 import { toast } from 'sonner'
+import type * as Y from 'yjs'
+import type { ExcalidrawImperativeAPI } from '@excalidraw/excalidraw/types'
 import {
-  registerExternalFile,
   confirmVaultUpload,
   getVaultFileUrl,
+  registerExternalFile,
 } from '@/shared/api/vault'
 import { uploadToS3 } from '@/features/vault/upload-file'
 import { VaultFileSource } from '@/gql/graphql'
 import { createLogger } from '@/shared/lib/logger'
-import type { ExcalidrawImperativeAPI } from '@excalidraw/excalidraw/types'
 
 const log = createLogger('whiteboard:media:vault-upload')
 
@@ -210,7 +210,7 @@ export function createVaultGenerateIdForFile(ctx: GenerateIdContext) {
  */
 export function recoverStaleUploads(vaultMeta: Y.Map<any>, ydoc: Y.Doc): void {
   const now = Date.now()
-  const staleKeys: string[] = []
+  const staleKeys: Array<string> = []
 
   for (const [key, value] of vaultMeta.entries()) {
     if (

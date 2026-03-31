@@ -11,9 +11,9 @@
  */
 
 import { useEffect, useRef } from 'react'
-import * as Y from 'yjs'
+import type * as Y from 'yjs'
 import { useAuth } from '@/shared/hooks'
-import { markFilesUnreferenced, VaultFileSource } from '@/shared/api/vault'
+import { VaultFileSource, markFilesUnreferenced } from '@/shared/api/vault'
 import {
   recoverStaleUploads,
   sanitizeLegacyAssets,
@@ -164,7 +164,7 @@ function getActiveImageFileIds(yElements: Y.Array<Y.Map<any>>): Set<string> {
     const el = wrapper.get('el') as Record<string, unknown> | undefined
     if (!el) continue
     if (el['type'] === 'image' && !el['isDeleted'] && typeof el['fileId'] === 'string') {
-      ids.add(el['fileId'] as string)
+      ids.add(el['fileId'])
     }
   }
   return ids

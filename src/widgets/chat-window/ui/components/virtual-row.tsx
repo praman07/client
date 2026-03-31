@@ -12,10 +12,10 @@
  */
 
 import React from 'react'
-import type { VirtualItem as TanstackVirtualItem } from '@tanstack/react-virtual'
 import { AdditionalMessage } from './additional-message'
 import { DateSeparator } from './date-separator'
 import { PrimaryMessage } from './primary-message'
+import type { VirtualItem as TanstackVirtualItem } from '@tanstack/react-virtual'
 import type { VirtualItem } from '../../lib/transform-messages'
 
 interface VirtualRowProps {

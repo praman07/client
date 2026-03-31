@@ -24,7 +24,7 @@ import {
   extractActiveFileIds,
   migrateDocumentUrls,
 } from '@/shared/lib/blocknote'
-import { markFilesUnreferenced, VaultFileSource } from '@/shared/api/vault'
+import { VaultFileSource, markFilesUnreferenced } from '@/shared/api/vault'
 import { createLogger } from '@/shared/lib/logger'
 
 interface EditIssueDescriptionEditorProps {
@@ -106,7 +106,7 @@ export function EditIssueDescriptionEditor({
   useEffect(() => {
     if (!loadedBlocks || hasSeeded.current) return
     hasSeeded.current = true
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-argument
+     
     editor.replaceBlocks(editor.document as any, loadedBlocks)
     onDescriptionLoaded(loadedBlocks)
     // Migrate legacy URL formats and seed deletion tracker

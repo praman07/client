@@ -4,6 +4,7 @@ import { RouteError } from '@/shared/ui'
 import { useSyncCurrentUser } from '@/entities/user'
 import { useAuthSync } from '@/entities/session'
 import { ReduxProvider } from '@/app/providers/redux/provider'
+import { AuthorizationProvider } from '@/shared/lib/auth'
 
 export const Route = createFileRoute('/_app')({
   component: AppLayoutWrapper,
@@ -25,7 +26,9 @@ function AppLayout() {
   return (
     <>
       <SignedIn>
-        <Outlet />
+        <AuthorizationProvider>
+          <Outlet />
+        </AuthorizationProvider>
       </SignedIn>
       <SignedOut>
         <RedirectToSignIn />

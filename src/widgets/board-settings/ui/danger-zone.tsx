@@ -3,6 +3,7 @@ import { AlertTriangle, Archive, Trash2 } from 'lucide-react'
 import { useArchiveBoard } from '@/features/whiteboard/archive-board'
 import { useDeleteBoard } from '@/features/whiteboard/delete-board'
 import { Button } from '@/shared/ui/primitives/button'
+import { Guard } from '@/shared/lib/auth'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -65,13 +66,15 @@ export function DangerZone({ boardId, onDeleted }: DangerZoneProps) {
             </p>
           </div>
 
-          <Button
-            variant="outline"
-            onClick={handleArchive}
-            disabled={archiveBoard.isPending}
-          >
-            {archiveBoard.isPending ? 'Archiving...' : 'Archive'}
-          </Button>
+          <Guard permission="whiteboard:delete">
+            <Button
+              variant="outline"
+              onClick={handleArchive}
+              disabled={archiveBoard.isPending}
+            >
+              {archiveBoard.isPending ? 'Archiving...' : 'Archive'}
+            </Button>
+          </Guard>
         </div>
       </div>
 
@@ -88,12 +91,14 @@ export function DangerZone({ boardId, onDeleted }: DangerZoneProps) {
             </p>
           </div>
 
-          <Button
-            variant="destructive"
-            onClick={() => setShowDeleteDialog(true)}
-          >
-            Delete
-          </Button>
+          <Guard permission="whiteboard:delete">
+            <Button
+              variant="destructive"
+              onClick={() => setShowDeleteDialog(true)}
+            >
+              Delete
+            </Button>
+          </Guard>
         </div>
       </div>
 

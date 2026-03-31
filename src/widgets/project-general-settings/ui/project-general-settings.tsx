@@ -1,5 +1,6 @@
 import { Badge, Button, Separator } from '@/shared/ui'
 import { useAppDispatch, useAppSelector } from '@/shared/hooks'
+import { Guard } from '@/shared/lib/auth'
 import { UpdateProjectForm } from '@/features/project/update-project'
 import { DeleteProjectDialog, openDeleteProjectDialog } from '@/features/project/delete-project'
 import {
@@ -45,14 +46,16 @@ export function ProjectGeneralSettings({
             </Badge>
           )}
         </div>
-        <UpdateProjectForm
-          projectId={project.id}
-          workspaceId={workspaceId}
-          defaultValues={{
-            name: project.name,
-            description: project.description ?? '',
-          }}
-        />
+        <Guard permission="project:update">
+          <UpdateProjectForm
+            projectId={project.id}
+            workspaceId={workspaceId}
+            defaultValues={{
+              name: project.name,
+              description: project.description ?? '',
+            }}
+          />
+        </Guard>
       </section>
 
       <Separator />
@@ -79,17 +82,19 @@ export function ProjectGeneralSettings({
                   : 'Make this project read-only and hide it from active views.'}
               </p>
             </div>
-            <Button
-              variant="outline"
-              size="sm"
-              className="shrink-0"
-              disabled={archiving || unarchiving}
-              onClick={() =>
-                isArchived ? unarchive(project.id) : archive(project.id)
-              }
-            >
-              {isArchived ? 'Unarchive' : 'Archive'}
-            </Button>
+            <Guard permission="project:archive">
+              <Button
+                variant="outline"
+                size="sm"
+                className="shrink-0"
+                disabled={archiving || unarchiving}
+                onClick={() =>
+                  isArchived ? unarchive(project.id) : archive(project.id)
+                }
+              >
+                {isArchived ? 'Unarchive' : 'Archive'}
+              </Button>
+            </Guard>
           </div>
 
           {/* Delete */}
@@ -101,14 +106,16 @@ export function ProjectGeneralSettings({
                 undone.
               </p>
             </div>
-            <Button
-              variant="outline"
-              size="sm"
-              className="shrink-0 text-destructive border-destructive/40 hover:bg-destructive/10 hover:text-destructive"
-              onClick={() => dispatch(openDeleteProjectDialog())}
-            >
-              Delete Project
-            </Button>
+            <Guard permission="project:delete">
+              <Button
+                variant="outline"
+                size="sm"
+                className="shrink-0 text-destructive border-destructive/40 hover:bg-destructive/10 hover:text-destructive"
+                onClick={() => dispatch(openDeleteProjectDialog())}
+              >
+                Delete Project
+              </Button>
+            </Guard>
           </div>
         </div>
       </section>
