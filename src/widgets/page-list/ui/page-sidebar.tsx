@@ -8,7 +8,6 @@ import { useProjectPages } from '@/features/pages/fetch-project-pages'
 import { CreatePageModal } from '@/features/pages/create-page'
 
 interface PageSidebarProps {
-  workspaceId: string
   projectId: string
 }
 

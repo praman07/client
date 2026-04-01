@@ -12,6 +12,8 @@ import * as Y from 'yjs'
 import type { PageUpdateBroadcastPayload } from '@/shared/contracts/pages'
 import type { PageEventHandlerContext } from '../../model'
 import { base64ToUint8Array } from '@/entities/page-session'
+import { registerHandler } from '@/shared/ws/event-bus'
+import { PageDownstreamEvent } from '@/shared/contracts/pages'
 import { createLogger } from '@/shared/lib/logger'
 
 const log = createLogger('pages:page-update')
@@ -83,4 +85,11 @@ export function handlePageUpdate(
     // CRDT errors are non-fatal — Tiptap convergence is self-healing
     log.error('Failed to apply remote update', { pageId, streamId, err })
   }
+}
+
+/** Registration wrapper — called by registerPageHandlers. */
+export function registerPageUpdateHandler(context: PageEventHandlerContext) {
+  return registerHandler(PageDownstreamEvent.PageUpdate, (event) => {
+    handlePageUpdate(event.payload as PageUpdateBroadcastPayload, context)
+  })
 }

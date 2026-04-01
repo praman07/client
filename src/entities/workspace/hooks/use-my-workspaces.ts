@@ -28,5 +28,6 @@ export function useMyWorkspaces() {
       dispatch(setMyWorkspaces(data.myWorkspaces as any))
       return data
     },
+    staleTime: 5 * 60 * 1000,
   })
 }

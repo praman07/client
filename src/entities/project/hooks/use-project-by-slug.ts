@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { GET_PROJECT_BY_SLUG } from '../api'
+import { GET_PROJECT_BY_SLUG, projectKeys } from '../api'
 import { useAuth } from '@/shared/hooks'
 import { GqlClient } from '@/shared/api'
 
@@ -7,7 +7,7 @@ export function useProjectBySlug(workspaceId: string, slug: string) {
   const { getToken, isSignedIn } = useAuth()
 
   return useQuery({
-    queryKey: ['project', workspaceId, slug],
+    queryKey: projectKeys.bySlug(workspaceId, slug),
     queryFn: async () => {
       const token = await getToken()
       return GqlClient(token).request(GET_PROJECT_BY_SLUG, {
@@ -16,5 +16,6 @@ export function useProjectBySlug(workspaceId: string, slug: string) {
       })
     },
     enabled: !!workspaceId && !!slug && !!isSignedIn,
+    staleTime: 2 * 60 * 1000,
   })
 }

@@ -20,7 +20,7 @@
 // ═══════════════════════════════════════════════════════════════
 // MASTER SWITCH
 // ═══════════════════════════════════════════════════════════════
-export const ALL = false
+export const ALL = true
 
 // ═══════════════════════════════════════════════════════════════
 // GROUP FLAGS (enable entire feature/module)
@@ -37,7 +37,8 @@ export const GROUPS = {
   issues: false,        // all issues feature logs
 
   // ─── Module groups ────────────────────────────────────────────
-  websocket: false,     // all ws:* logs
+  ws: false,            // all ws:* logs (alias: websocket below)
+  websocket: false,     // legacy alias — use 'ws' group flag instead
   resequencer: false,   // all reseq:* logs
   shared: false,        // all shared:* utility logs
   yjs: false,           // all yjs:* logs
@@ -64,8 +65,8 @@ export const FILES: Record<string, boolean | undefined> = {
   'ws:connection': false,
   'ws:conn-mgr': false,
   'ws:registry': false,
-  'ws:plugin': false,
-  'ws:plugin-registry': false,
+  'ws:plugin': true,           // ✅ chat/whiteboard/pages plugin lifecycle (createDomainPlugin)
+  'ws:plugin-registry': true,  // ✅ registerPlugin / unregisterPlugin calls
   'ws:domain-registry': false,
   'ws:orchestrator': false,
   'ws:manager': false,
@@ -76,8 +77,8 @@ export const FILES: Record<string, boolean | undefined> = {
   'ws:leader': false,
   'ws:sub-mgr': false,
   'ws:sub-rec': false,
-  'ws:pages-plugin': false,
-  'ws:whiteboard-plugin': false,
+  'ws:pages-plugin': true,       // ✅ pages-plugin.ts lifecycle
+  'ws:whiteboard-plugin': true,  // ✅ whiteboard-plugin.ts lifecycle
 
   // ─────────────────────────────────────────────────────────────
   // Resequencer Module
@@ -119,11 +120,11 @@ export const FILES: Record<string, boolean | undefined> = {
   'chat:outbox': false,
   'chat:ack': false,
   // WS event handlers
-  'chat:handler': false,                 // send-message handler
-  'chat:edit-handler': false,            // edit-message handler
-  'chat:delete-handler': false,          // delete-message handler
-  'chat:reaction-handler': false,        // reaction handler
-  'chat:sync-required-handler': false,
+  'chat:handler': true,                  // ✅ send-message handler
+  'chat:edit-handler': true,             // ✅ edit-message handler
+  'chat:delete-handler': true,           // ✅ delete-message handler
+  'chat:reaction-handler': true,         // ✅ reaction handler
+  'chat:sync-required-handler': true,    // ✅ sync-required handler
   // Recovery / sync
   'chat:recovery': false,
   'chat:sync': false,
@@ -144,14 +145,14 @@ export const FILES: Record<string, boolean | undefined> = {
   'whiteboard:validation': false,
   'whiteboard:ydoc-registry': false,
   // WS events
-  'whiteboard:subscribe': false,
-  'whiteboard:unsubscribe': false,
-  'whiteboard:board-update': false,
+  'whiteboard:subscribe': true,          // ✅
+  'whiteboard:unsubscribe': true,        // ✅
+  'whiteboard:board-update': true,       // ✅
   'whiteboard:send-update': false,
-  'whiteboard:update-ack': false,
+  'whiteboard:update-ack': true,         // ✅
   'whiteboard:use-send-update': false,
-  'whiteboard:user-joined': false,
-  'whiteboard:user-left': false,
+  'whiteboard:user-joined': true,        // ✅
+  'whiteboard:user-left': true,          // ✅
   // Board lifecycle
   'whiteboard:board-locked': false,
   'whiteboard:board-unlocked': false,

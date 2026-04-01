@@ -1,4 +1,4 @@
-import { ChevronsUpDown, Layers, Plus } from 'lucide-react'
+import { ChevronsUpDown, Layers } from 'lucide-react'
 import { Link, useParams } from '@tanstack/react-router'
 import {
   DropdownMenu,
@@ -13,30 +13,29 @@ import {
 } from '@/shared/ui'
 import { cn } from '@/shared/lib/utils'
 import { useAppSelector } from '@/shared/hooks'
+import { selectCurrentProject } from '@/entities/project'
+import { PROJECT_FRAGMENT, useMyProjects } from '@/entities/project'
 import { selectWorkspaceBySlug } from '@/entities/workspace'
-import { PROJECT_FRAGMENT, useMyProjects, useProjectBySlug  } from '@/entities/project'
 import { useFragment } from '@/gql'
 
+/**
+ * ProjectSwitcher
+ *
+ * Displays the active project name (from Redux — instant, no loading state)
+ * and opens a dropdown listing all projects in the current workspace.
+ *
+ * Does NOT re-fetch the current project — it reads from Redux which is
+ * hydrated by the parent project route via useProjectSync.
+ * Only the project list (useMyProjects) is fetched here for the dropdown.
+ *
+ * @layer Widgets/Navigation
+ */
 export function ProjectSwitcher() {
-  const { workspaceSlug, projectSlug } = useParams({ strict: false })
+  const { workspaceSlug } = useParams({ strict: false })
 
-  const workspace = useAppSelector((state) =>
-    selectWorkspaceBySlug(state, workspaceSlug),
-  )
-
-  // 1. Fetch Current Project
-  const { data: currentProjectData, isLoading: isProjectLoading } =
-    useProjectBySlug(workspace?.id || '', projectSlug || '')
-  const currentProject = useFragment(
-    PROJECT_FRAGMENT,
-    currentProjectData?.projectBySlug,
-  )
-
-  // 2. Fetch All Projects (for list)
-  const { data: allProjectsData } = useMyProjects(workspace?.id || '')
-  const allProjects = useFragment(PROJECT_FRAGMENT, allProjectsData?.myProjects)
-
-  if (!workspace || isProjectLoading) return <Skeleton className="h-8 w-32" />
+  // Current project — read from Redux (set by useProjectSync in the project route)
+  // This is instant — no fetch, no skeleton on the trigger.
+  const currentProject = useAppSelector(selectCurrentProject)
 
   return (
     <DropdownMenu>
@@ -54,39 +53,57 @@ export function ProjectSwitcher() {
         </span>
         <ChevronsUpDown className="h-4 w-4 opacity-50" />
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="start" className="w-56">
-        <DropdownMenuGroup>
-          <DropdownMenuLabel>Projects</DropdownMenuLabel>
-          {allProjects?.map((project) => (
-            <DropdownMenuItem key={project.id} className="p-0">
-              <Link
-                to="/workspace/$workspaceSlug/project/$projectSlug"
-                params={{
-                  workspaceSlug: workspaceSlug!,
-                  projectSlug: project.key,
-                }}
-                className="w-full cursor-pointer flex items-center px-2 py-1.5"
-              >
-                <Layers className="mr-2 h-4 w-4" />
-                {project.name}
-              </Link>
-            </DropdownMenuItem>
-          ))}
-        </DropdownMenuGroup>
-        <DropdownMenuSeparator />
-        <DropdownMenuGroup>
-          <DropdownMenuItem className="p-0">
+      <ProjectDropdownContent workspaceSlug={workspaceSlug} />
+    </DropdownMenu>
+  )
+}
+
+/**
+ * The dropdown content — split so the project list fetch only triggers
+ * when the dropdown is opened (DropdownMenuContent mounts on open).
+ */
+function ProjectDropdownContent({ workspaceSlug }: { workspaceSlug?: string }) {
+  // Read workspaceId from Redux — workspace is always synced before the project route renders
+  const workspace = useAppSelector((state) =>
+    selectWorkspaceBySlug(state, workspaceSlug),
+  )
+  const { data } = useMyProjects(workspace?.id ?? '')
+  const allProjects = useFragment(PROJECT_FRAGMENT, data?.myProjects)
+
+  if (!workspaceSlug) return <Skeleton className="h-8 w-32" />
+
+  return (
+    <DropdownMenuContent align="start" className="w-56">
+      <DropdownMenuGroup>
+        <DropdownMenuLabel>Projects</DropdownMenuLabel>
+        {allProjects?.map((project) => (
+          <DropdownMenuItem key={project.id} className="p-0">
             <Link
-              to="/workspace/$workspaceSlug/projects"
-              params={{ workspaceSlug: workspaceSlug! }}
+              to="/workspace/$workspaceSlug/project/$projectSlug"
+              params={{
+                workspaceSlug,
+                projectSlug: project.key,
+              }}
               className="w-full cursor-pointer flex items-center px-2 py-1.5"
             >
-              <Plus className="mr-2 h-4 w-4" />
-              View All Projects
+              <Layers className="mr-2 h-4 w-4" />
+              {project.name}
             </Link>
           </DropdownMenuItem>
-        </DropdownMenuGroup>
-      </DropdownMenuContent>
-    </DropdownMenu>
+        ))}
+      </DropdownMenuGroup>
+      <DropdownMenuSeparator />
+      <DropdownMenuGroup>
+        <DropdownMenuItem className="p-0">
+          <Link
+            to="/workspace/$workspaceSlug/projects"
+            params={{ workspaceSlug }}
+            className="w-full cursor-pointer flex items-center px-2 py-1.5"
+          >
+            View All Projects
+          </Link>
+        </DropdownMenuItem>
+      </DropdownMenuGroup>
+    </DropdownMenuContent>
   )
 }

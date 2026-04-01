@@ -1,11 +1,7 @@
-import { Spinner } from '@/shared/ui'
+import { WorkspaceLayoutSkeleton } from '@/shared/ui'
 
 export function WorkspaceLoadingState() {
-  return (
-    <div className="flex bg-background h-screen w-full items-center justify-center">
-      <Spinner className="size-6 text-muted-foreground" />
-    </div>
-  )
+  return <WorkspaceLayoutSkeleton />
 }
 
 export function WorkspaceErrorState() {

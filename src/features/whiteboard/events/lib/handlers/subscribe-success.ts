@@ -12,6 +12,8 @@ import {
   offlineQueue,
   setConnectionStatus,
 } from '@/entities/whiteboard-session'
+import { registerHandler } from '@/shared/ws/event-bus'
+import { WhiteboardDownstreamEvent } from '@/shared/contracts/whiteboard/events'
 import { createLogger } from '@/shared/lib/logger'
 
 const log = createLogger('whiteboard:subscribe')
@@ -71,4 +73,11 @@ export async function handleSubscribeSuccess(
   } catch (error) {
     log.error('Failed to flush offline queue:', error)
   }
+}
+
+/** Registration wrapper — called by registerWhiteboardHandlers. */
+export function registerBoardInitHandler(context: WhiteboardEventHandlerContext) {
+  return registerHandler(WhiteboardDownstreamEvent.BoardInit, (event) => {
+    handleSubscribeSuccess(event.payload as BoardInitPayload, context)
+  })
 }

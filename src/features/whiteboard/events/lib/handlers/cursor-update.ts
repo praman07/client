@@ -1,13 +1,8 @@
-/**
- * Whiteboard Event Handler: Cursor Update
- *
- * Role: Handle remote cursor position updates
- * Responsibility: Update cursor position in presence state
- */
-
 import type { CursorUpdatePayload } from '@/shared/contracts/whiteboard/downstream'
 import type { WhiteboardEventHandlerContext } from '../../model'
 import { updateCursorPosition } from '@/entities/whiteboard-presence'
+import { registerHandler } from '@/shared/ws/event-bus'
+import { WhiteboardDownstreamEvent } from '@/shared/contracts/whiteboard/events'
 
 export function handleCursorUpdate(
   payload: CursorUpdatePayload,
@@ -25,4 +20,11 @@ export function handleCursorUpdate(
       cursor: { x, y },
     }),
   )
+}
+
+/** Registration wrapper — called by registerWhiteboardHandlers. */
+export function registerCursorUpdateHandler(context: WhiteboardEventHandlerContext) {
+  return registerHandler(WhiteboardDownstreamEvent.CursorUpdate, (event) => {
+    handleCursorUpdate(event.payload as CursorUpdatePayload, context)
+  })
 }

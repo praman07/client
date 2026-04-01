@@ -11,6 +11,8 @@
 import type { UpdateAckPayload } from '@/shared/contracts/whiteboard/downstream'
 import type { WhiteboardEventHandlerContext } from '../../model'
 import type { PendingUpdatesTracker } from '@/shared/lib/yjs'
+import { registerHandler } from '@/shared/ws/event-bus'
+import { WhiteboardDownstreamEvent } from '@/shared/contracts/whiteboard/events'
 import { createLogger } from '@/shared/lib/logger'
 
 const log = createLogger('whiteboard:update-ack')
@@ -81,4 +83,11 @@ export function handleUpdateAck(
   if (status === 'duplicate') {
     log.debug('Update was duplicate (server already had it)', { dedupeId })
   }
+}
+
+/** Registration wrapper — called by registerWhiteboardHandlers. */
+export function registerUpdateAckHandler(context: WhiteboardEventHandlerContext) {
+  return registerHandler(WhiteboardDownstreamEvent.UpdateAck, (event) => {
+    handleUpdateAck(event.payload as UpdateAckPayload, context)
+  })
 }

@@ -1,6 +1,6 @@
 import { Outlet } from '@tanstack/react-router'
 import { WorkspaceErrorState, WorkspaceLoadingState } from './layout-states'
-import { useSyncWorkspaceContext } from '@/entities/workspace/hooks'
+import { useSyncWorkspaceContext, useWorkspaceContextSwitch } from '@/entities/workspace/hooks'
 import { DashboardHeader } from '@/widgets/navigation'
 
 interface WorkspaceLayoutProps {
@@ -8,6 +8,10 @@ interface WorkspaceLayoutProps {
 }
 
 export function WorkspaceLayout({ workspaceSlug }: WorkspaceLayoutProps) {
+  // Fire synchronously before child routes render.
+  // If the slug changed, purges stale workspace-scoped cache immediately.
+  useWorkspaceContextSwitch(workspaceSlug)
+
   const { data, isLoading, error } = useSyncWorkspaceContext(workspaceSlug)
 
   if (isLoading) {

@@ -8,6 +8,7 @@ export const PROJECT_FRAGMENT = gql(`
     description
     workspaceId
     isArchived
+    activePlugins
     createdAt
     updatedAt
     members {
@@ -121,5 +122,11 @@ export const UNARCHIVE_PROJECT = gql(`
 export const DELETE_PROJECT = gql(`
   mutation DeleteProject($projectId: ID!) {
     deleteProject(projectId: $projectId)
+  }
+`)
+
+export const TOGGLE_PROJECT_PLUGIN = gql(`
+  mutation ToggleProjectPlugin($projectId: ID!, $workspaceId: ID!, $type: String!, $enable: Boolean!) {
+    toggleProjectPlugin(projectId: $projectId, workspaceId: $workspaceId, type: $type, enable: $enable)
   }
 `)

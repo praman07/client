@@ -1,15 +1,14 @@
 import { Link } from '@tanstack/react-router'
-import type { LinkProps } from '@tanstack/react-router'
 
 interface NavItem {
   label: string
-  href: LinkProps['to']
+  href: string
   activeOptions?: { exact?: boolean }
 }
 
 interface NavTabsProps {
   items: Array<NavItem>
-  from?: LinkProps['from']
+  from?: string
 }
 
 export function NavTabs({ items, from }: NavTabsProps) {
@@ -18,9 +17,8 @@ export function NavTabs({ items, from }: NavTabsProps) {
       {items.map((item) => (
         <Link
           key={item.href}
-           
           to={item.href as any}
-          from={from}
+          from={from as any}
           activeOptions={item.activeOptions}
           className="group relative flex h-12 items-center text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
           activeProps={{

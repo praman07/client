@@ -32,8 +32,6 @@ const PRIORITY_RULES = [
     type === PageUpstreamEvent.AwarenessUpdate,
 ]
 
-let cleanupHandlers: (() => void) | null = null
-
 /**
  * Creates the pages WS domain plugin.
  * Called once at app startup alongside createWhiteboardPlugin.
@@ -41,6 +39,9 @@ let cleanupHandlers: (() => void) | null = null
  * @param context - Page event handler dependencies (dispatch, queryClient, userId)
  */
 export function createPagesPlugin(context: PageEventHandlerContext) {
+  // Scoped to this factory instance — safe for per-route lifecycle management.
+  let cleanupHandlers: (() => void) | null = null
+
   return createDomainPlugin({
     domain: 'pages',
     upstreamEvents: UPSTREAM_EVENTS,

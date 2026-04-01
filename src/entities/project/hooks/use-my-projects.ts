@@ -13,5 +13,6 @@ export function useMyProjects(workspaceId: string) {
       return GqlClient(token).request(LIST_PROJECTS_BY_USER, { workspaceId })
     },
     enabled: !!workspaceId && !!isSignedIn,
+    staleTime: 2 * 60 * 1000,
   })
 }

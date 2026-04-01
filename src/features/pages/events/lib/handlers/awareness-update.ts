@@ -14,6 +14,8 @@
 import type { AwarenessUpdateBroadcastPayload } from '@/shared/contracts/pages'
 import type { PageEventHandlerContext } from '../../model'
 import type { PageAwarenessProvider } from '@/entities/page-session'
+import { registerHandler } from '@/shared/ws/event-bus'
+import { PageDownstreamEvent } from '@/shared/contracts/pages'
 import { createLogger } from '@/shared/lib/logger'
 
 const log = createLogger('pages:awareness-update')
@@ -63,4 +65,16 @@ export function handleAwarenessUpdate(
       err,
     })
   }
+}
+
+/**
+ * Registration wrapper — called by registerPageHandlers.
+ * Extracts pageId from the event envelope and passes it to handleAwarenessUpdate.
+ */
+export function registerPageAwarenessUpdateHandler(context: PageEventHandlerContext) {
+  return registerHandler(PageDownstreamEvent.AwarenessUpdate, (event) => {
+    const payload = event.payload as AwarenessUpdateBroadcastPayload & { pageId?: string }
+    // pageId is available in the event envelope — pass through
+    handleAwarenessUpdate(payload, context, payload.pageId ?? '')
+  })
 }

@@ -1,13 +1,13 @@
 /**
  * app-permission.ts — Client-side AppPermission union type.
  *
- * ⚠️  GENERATED FILE — DO NOT EDIT MANUALLY.
+ * GENERATED FILE — DO NOT EDIT MANUALLY.
  * Run: cd server && bun run scripts/sync-permissions.ts
  *
- * This is an exact mirror of server/src/modules/authorization/types/app-permissions.ts.
- * Used by <Guard permission="..."> and usePermission("...") for compile-time safety.
+ * Mirror of: server/src/modules/authorization/types/app-permissions.ts
+ * Used by Guard and usePermission for compile-time safety.
  *
- * Last generated: 2026-03-31
+ * Last generated: 2026-04-01
  */
 
 // Workspace
@@ -120,7 +120,7 @@ type VaultPermission =
 
 /**
  * AppPermission — complete union of all granular permissions.
- * Use this type with <Guard permission="..."> and usePermission("...").
+ * Use this type with Guard and usePermission.
  */
 export type AppPermission =
   | WorkspacePermission

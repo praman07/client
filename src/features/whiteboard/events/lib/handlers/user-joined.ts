@@ -8,6 +8,8 @@
 import type { UserJoinedPayload } from '@/shared/contracts/whiteboard/downstream'
 import type { WhiteboardEventHandlerContext } from '../../model'
 import { addCollaborator } from '@/entities/whiteboard-presence'
+import { registerHandler } from '@/shared/ws/event-bus'
+import { WhiteboardDownstreamEvent } from '@/shared/contracts/whiteboard/events'
 import { createLogger } from '@/shared/lib/logger'
 
 const log = createLogger('whiteboard:user-joined')
@@ -58,3 +60,11 @@ export function handleUserJoined(
 
   log.debug('✅ addCollaborator dispatched successfully')
 }
+
+/** Registration wrapper — called by registerWhiteboardHandlers. */
+export function registerUserJoinedHandler(context: WhiteboardEventHandlerContext) {
+  return registerHandler(WhiteboardDownstreamEvent.UserJoined, (event) => {
+    handleUserJoined(event.payload as UserJoinedPayload, context)
+  })
+}
+

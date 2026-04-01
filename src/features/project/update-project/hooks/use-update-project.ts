@@ -18,7 +18,7 @@ export function useUpdateProject(projectId: string, workspaceId: string) {
       })
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: projectKeys.detail(projectId) })
+      queryClient.invalidateQueries({ queryKey: projectKeys.detail(workspaceId, projectId) })
       queryClient.invalidateQueries({ queryKey: projectKeys.list(workspaceId) })
     },
     onError: handleUpdateProjectError,

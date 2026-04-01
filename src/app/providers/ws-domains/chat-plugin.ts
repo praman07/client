@@ -41,14 +41,15 @@ const PRIORITY_RULES = [
     type === ChatUpstreamEvent.DeleteMessage,
 ]
 
-let cleanupHandlers: (() => void) | null = null
-
 /**
  * Creates chat plugin with handler context.
  *
  * @param context - Chat event handler dependencies
  */
 export function createChatPlugin(context: ChatEventHandlerContext) {
+  // Scoped to this factory instance — safe for per-route lifecycle management.
+  let cleanupHandlers: (() => void) | null = null
+
   return createDomainPlugin({
     domain: 'chat',
     upstreamEvents: UPSTREAM_EVENTS,

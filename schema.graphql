@@ -215,6 +215,7 @@ type Mutation {
   createProjectRole(projectId: ID!, workspaceId: ID!, input: CreateProjectRoleInput!): ProjectRole!
   updateProjectRole(roleId: ID!, projectId: ID!, workspaceId: ID!, input: UpdateProjectRoleInput!): ProjectRole!
   deleteProjectRole(roleId: ID!, projectId: ID!, workspaceId: ID!): Boolean!
+  toggleProjectPlugin(projectId: ID!, workspaceId: ID!, type: String!, enable: Boolean!): Boolean!
   createChannel(input: CreateChannelInput!): Conversation!
   archiveChannel(input: ArchiveChannelInput!): Conversation!
   renameChannel(input: RenameChannelInput!): Conversation!
@@ -642,6 +643,7 @@ type Project {
   createdAt: String!
   updatedAt: String!
   members: [ProjectMember!]!
+  activePlugins: [String!]!
 }
 
 type ProjectRole {

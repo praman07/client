@@ -45,7 +45,7 @@ type Documents = {
     "\n  mutation DeleteProjectRole($roleId: ID!, $projectId: ID!, $workspaceId: ID!) {\n    deleteProjectRole(roleId: $roleId, projectId: $projectId, workspaceId: $workspaceId)\n  }\n": typeof types.DeleteProjectRoleDocument,
     "\n  mutation AssignRolePermission(\n    $roleId: ID!\n    $workspaceId: ID!\n    $permissionId: ID!\n    $effect: String!\n    $conditions: String\n  ) {\n    assignRolePermission(\n      roleId: $roleId\n      workspaceId: $workspaceId\n      permissionId: $permissionId\n      effect: $effect\n      conditions: $conditions\n    ) {\n      ...RolePermissionFields\n    }\n  }\n": typeof types.AssignRolePermissionDocument,
     "\n  mutation RemoveRolePermission($roleId: ID!, $workspaceId: ID!, $permissionId: ID!) {\n    removeRolePermission(roleId: $roleId, workspaceId: $workspaceId, permissionId: $permissionId)\n  }\n": typeof types.RemoveRolePermissionDocument,
-    "\n  fragment ProjectFields on Project {\n    id\n    key\n    name\n    description\n    workspaceId\n    isArchived\n    createdAt\n    updatedAt\n    members {\n      userId\n      role\n      joinedAt\n      user {\n        id\n        fullName\n        avatarUrl\n      }\n    }\n  }\n": typeof types.ProjectFieldsFragmentDoc,
+    "\n  fragment ProjectFields on Project {\n    id\n    key\n    name\n    description\n    workspaceId\n    isArchived\n    activePlugins\n    createdAt\n    updatedAt\n    members {\n      userId\n      role\n      joinedAt\n      user {\n        id\n        fullName\n        avatarUrl\n      }\n    }\n  }\n": typeof types.ProjectFieldsFragmentDoc,
     "\n  query GetProject($id: ID!) {\n    project(id: $id) {\n      ...ProjectFields\n    }\n  }\n": typeof types.GetProjectDocument,
     "\n  query MyProjects($workspaceId: ID!) {\n    myProjects(workspaceId: $workspaceId) {\n      ...ProjectFields\n    }\n  }\n": typeof types.MyProjectsDocument,
     "\n  query GetProjectBySlug($workspaceId: ID!, $slug: String!) {\n    projectBySlug(workspaceId: $workspaceId, slug: $slug) {\n      ...ProjectFields\n    }\n  }\n": typeof types.GetProjectBySlugDocument,
@@ -54,6 +54,7 @@ type Documents = {
     "\n  mutation ArchiveProject($projectId: ID!) {\n    archiveProject(projectId: $projectId) {\n      id\n      isArchived\n    }\n  }\n": typeof types.ArchiveProjectDocument,
     "\n  mutation UnarchiveProject($projectId: ID!) {\n    unarchiveProject(projectId: $projectId) {\n      id\n      isArchived\n    }\n  }\n": typeof types.UnarchiveProjectDocument,
     "\n  mutation DeleteProject($projectId: ID!) {\n    deleteProject(projectId: $projectId)\n  }\n": typeof types.DeleteProjectDocument,
+    "\n  mutation ToggleProjectPlugin($projectId: ID!, $workspaceId: ID!, $type: String!, $enable: Boolean!) {\n    toggleProjectPlugin(projectId: $projectId, workspaceId: $workspaceId, type: $type, enable: $enable)\n  }\n": typeof types.ToggleProjectPluginDocument,
     "\n  mutation SessionSyncUser(\n    $clerkId: String!\n    $email: String!\n    $fullName: String\n    $avatarUrl: String\n  ) {\n    syncUser(\n      clerkId: $clerkId\n      email: $email\n      fullName: $fullName\n      avatarUrl: $avatarUrl\n    ) {\n      id\n      email\n      fullName\n      avatarUrl\n    }\n  }": typeof types.SessionSyncUserDocument,
     "\n  query GetMe {\n    me {\n      ...User\n    }\n  }\n": typeof types.GetMeDocument,
     "\n  fragment User on User {\n    id\n    email\n    fullName\n    avatarUrl\n  }\n": typeof types.UserFragmentDoc,
@@ -190,7 +191,7 @@ const documents: Documents = {
     "\n  mutation DeleteProjectRole($roleId: ID!, $projectId: ID!, $workspaceId: ID!) {\n    deleteProjectRole(roleId: $roleId, projectId: $projectId, workspaceId: $workspaceId)\n  }\n": types.DeleteProjectRoleDocument,
     "\n  mutation AssignRolePermission(\n    $roleId: ID!\n    $workspaceId: ID!\n    $permissionId: ID!\n    $effect: String!\n    $conditions: String\n  ) {\n    assignRolePermission(\n      roleId: $roleId\n      workspaceId: $workspaceId\n      permissionId: $permissionId\n      effect: $effect\n      conditions: $conditions\n    ) {\n      ...RolePermissionFields\n    }\n  }\n": types.AssignRolePermissionDocument,
     "\n  mutation RemoveRolePermission($roleId: ID!, $workspaceId: ID!, $permissionId: ID!) {\n    removeRolePermission(roleId: $roleId, workspaceId: $workspaceId, permissionId: $permissionId)\n  }\n": types.RemoveRolePermissionDocument,
-    "\n  fragment ProjectFields on Project {\n    id\n    key\n    name\n    description\n    workspaceId\n    isArchived\n    createdAt\n    updatedAt\n    members {\n      userId\n      role\n      joinedAt\n      user {\n        id\n        fullName\n        avatarUrl\n      }\n    }\n  }\n": types.ProjectFieldsFragmentDoc,
+    "\n  fragment ProjectFields on Project {\n    id\n    key\n    name\n    description\n    workspaceId\n    isArchived\n    activePlugins\n    createdAt\n    updatedAt\n    members {\n      userId\n      role\n      joinedAt\n      user {\n        id\n        fullName\n        avatarUrl\n      }\n    }\n  }\n": types.ProjectFieldsFragmentDoc,
     "\n  query GetProject($id: ID!) {\n    project(id: $id) {\n      ...ProjectFields\n    }\n  }\n": types.GetProjectDocument,
     "\n  query MyProjects($workspaceId: ID!) {\n    myProjects(workspaceId: $workspaceId) {\n      ...ProjectFields\n    }\n  }\n": types.MyProjectsDocument,
     "\n  query GetProjectBySlug($workspaceId: ID!, $slug: String!) {\n    projectBySlug(workspaceId: $workspaceId, slug: $slug) {\n      ...ProjectFields\n    }\n  }\n": types.GetProjectBySlugDocument,
@@ -199,6 +200,7 @@ const documents: Documents = {
     "\n  mutation ArchiveProject($projectId: ID!) {\n    archiveProject(projectId: $projectId) {\n      id\n      isArchived\n    }\n  }\n": types.ArchiveProjectDocument,
     "\n  mutation UnarchiveProject($projectId: ID!) {\n    unarchiveProject(projectId: $projectId) {\n      id\n      isArchived\n    }\n  }\n": types.UnarchiveProjectDocument,
     "\n  mutation DeleteProject($projectId: ID!) {\n    deleteProject(projectId: $projectId)\n  }\n": types.DeleteProjectDocument,
+    "\n  mutation ToggleProjectPlugin($projectId: ID!, $workspaceId: ID!, $type: String!, $enable: Boolean!) {\n    toggleProjectPlugin(projectId: $projectId, workspaceId: $workspaceId, type: $type, enable: $enable)\n  }\n": types.ToggleProjectPluginDocument,
     "\n  mutation SessionSyncUser(\n    $clerkId: String!\n    $email: String!\n    $fullName: String\n    $avatarUrl: String\n  ) {\n    syncUser(\n      clerkId: $clerkId\n      email: $email\n      fullName: $fullName\n      avatarUrl: $avatarUrl\n    ) {\n      id\n      email\n      fullName\n      avatarUrl\n    }\n  }": types.SessionSyncUserDocument,
     "\n  query GetMe {\n    me {\n      ...User\n    }\n  }\n": types.GetMeDocument,
     "\n  fragment User on User {\n    id\n    email\n    fullName\n    avatarUrl\n  }\n": types.UserFragmentDoc,
@@ -445,7 +447,7 @@ export function gql(source: "\n  mutation RemoveRolePermission($roleId: ID!, $wo
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "\n  fragment ProjectFields on Project {\n    id\n    key\n    name\n    description\n    workspaceId\n    isArchived\n    createdAt\n    updatedAt\n    members {\n      userId\n      role\n      joinedAt\n      user {\n        id\n        fullName\n        avatarUrl\n      }\n    }\n  }\n"): (typeof documents)["\n  fragment ProjectFields on Project {\n    id\n    key\n    name\n    description\n    workspaceId\n    isArchived\n    createdAt\n    updatedAt\n    members {\n      userId\n      role\n      joinedAt\n      user {\n        id\n        fullName\n        avatarUrl\n      }\n    }\n  }\n"];
+export function gql(source: "\n  fragment ProjectFields on Project {\n    id\n    key\n    name\n    description\n    workspaceId\n    isArchived\n    activePlugins\n    createdAt\n    updatedAt\n    members {\n      userId\n      role\n      joinedAt\n      user {\n        id\n        fullName\n        avatarUrl\n      }\n    }\n  }\n"): (typeof documents)["\n  fragment ProjectFields on Project {\n    id\n    key\n    name\n    description\n    workspaceId\n    isArchived\n    activePlugins\n    createdAt\n    updatedAt\n    members {\n      userId\n      role\n      joinedAt\n      user {\n        id\n        fullName\n        avatarUrl\n      }\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -478,6 +480,10 @@ export function gql(source: "\n  mutation UnarchiveProject($projectId: ID!) {\n 
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "\n  mutation DeleteProject($projectId: ID!) {\n    deleteProject(projectId: $projectId)\n  }\n"): (typeof documents)["\n  mutation DeleteProject($projectId: ID!) {\n    deleteProject(projectId: $projectId)\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation ToggleProjectPlugin($projectId: ID!, $workspaceId: ID!, $type: String!, $enable: Boolean!) {\n    toggleProjectPlugin(projectId: $projectId, workspaceId: $workspaceId, type: $type, enable: $enable)\n  }\n"): (typeof documents)["\n  mutation ToggleProjectPlugin($projectId: ID!, $workspaceId: ID!, $type: String!, $enable: Boolean!) {\n    toggleProjectPlugin(projectId: $projectId, workspaceId: $workspaceId, type: $type, enable: $enable)\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

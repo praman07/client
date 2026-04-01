@@ -1,18 +1,26 @@
-import { Outlet, createFileRoute } from '@tanstack/react-router'
-import { Suspense } from 'react'
+import { Outlet, createFileRoute, redirect } from '@tanstack/react-router'
+import { Suspense, useEffect, useRef } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
 import { SidebarInset, SidebarProvider } from '@/shared/ui/primitives/sidebar'
 import { PageSidebar } from '@/widgets/page-list'
-import { useAppSelector } from '@/shared/hooks'
-import { selectWorkspaceBySlug } from '@/entities/workspace'
+import { useAppDispatch, useAppSelector, useUser } from '@/shared/hooks'
+import { useQueryClient } from '@tanstack/react-query'
 import { selectCurrentProject } from '@/entities/project'
-import { PageSpinner, PagesSkeleton, RouteError, WidgetError  } from '@/shared/ui'
+import { PageSpinner, PagesSkeleton, RouteError, WidgetError } from '@/shared/ui'
+import { createPagesPlugin } from '@/app/providers/ws-domains/pages-plugin'
+import { registerPlugin, unregisterPlugin } from '@/shared/ws/domains'
 
 export const Route = createFileRoute(
   '/_app/workspace/$workspaceSlug/project/$projectSlug/pages',
 )({
   component: PagesLayout,
   pendingComponent: PagesSkeleton,
+  beforeLoad: ({ context }) => {
+    const activePlugins: string[] = (context as any)?.project?.activePlugins ?? []
+    if (activePlugins.length > 0 && !activePlugins.includes('PAGES')) {
+      throw redirect({ to: '/' as any, search: { pluginDisabled: 'PAGES' } as any })
+    }
+  },
   errorComponent: ({ error, reset }) => (
     <RouteError error={error} reset={reset} />
   ),
@@ -20,18 +28,42 @@ export const Route = createFileRoute(
 
 /**
  * Pages layout — SidebarProvider + PageSidebar + SidebarInset + Outlet.
- * IDs resolved from Redux (same pattern as whiteboard/index.tsx).
+ *
+ * Owns the pages WS domain plugin lifecycle — the plugin is registered only
+ * while the user is inside the /pages route subtree (YJS awareness, editor sync).
  */
 function PagesLayout() {
-  const { workspaceSlug } = Route.useParams()
+  const dispatch = useAppDispatch()
+  const queryClient = useQueryClient()
+  const { user } = useUser()
 
-  const workspace = useAppSelector((state) =>
-    selectWorkspaceBySlug(state, workspaceSlug),
-  )
+  // Read workspace and project from Redux — both set by parent ProjectBaseLayout
+  // before this component mounts, so they are available on first render.
+  // V16 fix: removed workspaceSlug re-lookup via Route.useParams() + selector chain;
+  // workspace.id is sourced from selectCurrentProject which already carries it.
   const project = useAppSelector(selectCurrentProject)
 
-  if (!workspace?.id || !project?.id) {
-    return <PageSpinner label="Loading workspace…" />
+  // Stable ref — holds latest userId without triggering plugin re-registration
+  const userIdRef = useRef(user?.id ?? null)
+  userIdRef.current = user?.id ?? null
+
+  // V14 fix: guard plugin registration — only register when project context is ready.
+  // dispatch and queryClient are stable refs; plugin lifecycle tied to route lifetime.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    if (!project?.id) return
+
+    const plugin = createPagesPlugin({
+      dispatch,
+      queryClient,
+      userId: userIdRef.current,
+    })
+    registerPlugin(plugin)
+    return () => unregisterPlugin('pages')
+  }, [project?.id])
+
+  if (!project?.id) {
+    return <PageSpinner label="Loading Pages…" />
   }
 
   return (
@@ -41,7 +73,7 @@ function PagesLayout() {
     >
       {/* Sidebar gets its own ErrorBoundary so a sidebar failure doesn't kill the editor */}
       <ErrorBoundary FallbackComponent={WidgetError}>
-        <PageSidebar workspaceId={workspace.id} projectId={project.id} />
+        <PageSidebar projectId={project.id} />
       </ErrorBoundary>
 
       <SidebarInset className="flex h-full flex-col overflow-hidden">

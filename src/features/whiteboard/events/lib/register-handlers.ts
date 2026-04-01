@@ -1,38 +1,26 @@
 /**
  * Whiteboard Event Handler Registration
  *
- * Architecture: Register all whiteboard event handlers with EventBus
- * Pattern: Matches chat domain registration pattern
+ * Architecture: Register all whiteboard event handlers with EventBus.
+ * Each event uses a named registerXHandler() from its handler file,
+ * matching the chat domain registration pattern for testability.
  */
 
 import {
-  handleBoardDeleted,
-  handleBoardLocked,
-  handleBoardUnlocked,
-  handleBoardUpdate,
-  handleCursorUpdate,
-  handleSubscribeSuccess,
-  handleUpdateAck,
-  handleUserJoined,
-  handleUserLeft,
+  registerBoardInitHandler,
+  registerBoardUpdateHandler,
+  registerUpdateAckHandler,
+  registerUserJoinedHandler,
+  registerUserLeftHandler,
+  registerCursorUpdateHandler,
+  registerBoardLockedHandler,
+  registerBoardUnlockedHandler,
+  registerBoardDeletedHandler,
 } from './handlers'
-import type {
-  BoardDeletedPayload,
-  BoardInitPayload,
-  BoardLockedPayload,
-  BoardUnlockedPayload,
-  BoardUpdatePayload,
-  CursorUpdatePayload,
-  UpdateAckPayload,
-  UserJoinedPayload,
-  UserLeftPayload,
-} from '@/shared/contracts/whiteboard/downstream'
 import type { WhiteboardEventHandlerContext } from '../model'
-import { registerHandler } from '@/shared/ws/event-bus'
-import { WhiteboardDownstreamEvent } from '@/shared/contracts/whiteboard/events'
 
 /**
- * Register all whiteboard event handlers
+ * Register all whiteboard event handlers.
  *
  * @param context - Handler context with dispatch, queryClient, userId
  * @returns Cleanup function to unregister all handlers
@@ -40,76 +28,17 @@ import { WhiteboardDownstreamEvent } from '@/shared/contracts/whiteboard/events'
 export function registerWhiteboardHandlers(
   context: WhiteboardEventHandlerContext,
 ) {
-  const unregisterFns: Array<() => void> = []
+  const cleanups = [
+    registerBoardInitHandler(context),    // whiteboard:board-init
+    registerBoardUpdateHandler(context),  // whiteboard:board-update (CRDT)
+    registerUpdateAckHandler(context),    // whiteboard:update-ack (echo prevention)
+    registerUserJoinedHandler(context),   // whiteboard:user-joined (presence)
+    registerUserLeftHandler(context),     // whiteboard:user-left (presence)
+    registerCursorUpdateHandler(context), // whiteboard:cursor-update (real-time cursors)
+    registerBoardLockedHandler(context),  // whiteboard:board-locked
+    registerBoardUnlockedHandler(context),// whiteboard:board-unlocked
+    registerBoardDeletedHandler(context), // whiteboard:board-deleted
+  ]
 
-  // Board Init (subscribe success)
-  unregisterFns.push(
-    registerHandler(WhiteboardDownstreamEvent.BoardInit, (event) => {
-      handleSubscribeSuccess(event.payload as BoardInitPayload, context)
-    }),
-  )
-
-  // Board Update (remote CRDT updates + replay gap)
-  unregisterFns.push(
-    registerHandler(WhiteboardDownstreamEvent.BoardUpdate, (event) => {
-      // ✅ FIX: Backend sends { type, data: { boardId, update, ... } }
-      // Extract the nested data object
-      const payload = (event.payload as any).data || event.payload
-      handleBoardUpdate(payload as BoardUpdatePayload, context)
-    }),
-  )
-
-  // Update ACK (server confirmation)
-  unregisterFns.push(
-    registerHandler(WhiteboardDownstreamEvent.UpdateAck, (event) => {
-      handleUpdateAck(event.payload as UpdateAckPayload, context)
-    }),
-  )
-
-  // User Joined (new collaborator)
-  unregisterFns.push(
-    registerHandler(WhiteboardDownstreamEvent.UserJoined, (event) => {
-      handleUserJoined(event.payload as UserJoinedPayload, context)
-    }),
-  )
-
-  // User Left (collaborator disconnected)
-  unregisterFns.push(
-    registerHandler(WhiteboardDownstreamEvent.UserLeft, (event) => {
-      handleUserLeft(event.payload as UserLeftPayload, context)
-    }),
-  )
-
-  // Cursor Update (remote cursor position)
-  unregisterFns.push(
-    registerHandler(WhiteboardDownstreamEvent.CursorUpdate, (event) => {
-      handleCursorUpdate(event.payload as CursorUpdatePayload, context)
-    }),
-  )
-
-  // Board Locked (admin action)
-  unregisterFns.push(
-    registerHandler(WhiteboardDownstreamEvent.BoardLocked, (event) => {
-      handleBoardLocked(event.payload as BoardLockedPayload, context)
-    }),
-  )
-
-  // Board Unlocked (admin action)
-  unregisterFns.push(
-    registerHandler(WhiteboardDownstreamEvent.BoardUnlocked, (event) => {
-      handleBoardUnlocked(event.payload as BoardUnlockedPayload, context)
-    }),
-  )
-
-  // Board Deleted (creator action)
-  unregisterFns.push(
-    registerHandler(WhiteboardDownstreamEvent.BoardDeleted, (event) => {
-      handleBoardDeleted(event.payload as BoardDeletedPayload, context)
-    }),
-  )
-
-  // Return cleanup function
-  return () => {
-    unregisterFns.forEach((unregister) => unregister())
-  }
+  return () => cleanups.forEach((fn) => fn())
 }
