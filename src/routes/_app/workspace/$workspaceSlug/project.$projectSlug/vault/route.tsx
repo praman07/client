@@ -5,7 +5,7 @@ export const Route = createFileRoute(
 )({
   component: VaultLayout,
   beforeLoad: ({ context }) => {
-    const activePlugins: string[] = (context as any)?.project?.activePlugins ?? []
+    const activePlugins: Array<string> = (context as any)?.project?.activePlugins ?? []
     if (activePlugins.length > 0 && !activePlugins.includes('VAULT')) {
       throw redirect({ to: '/' as any, search: { pluginDisabled: 'VAULT' } as any })
     }

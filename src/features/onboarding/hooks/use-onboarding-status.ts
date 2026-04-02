@@ -1,7 +1,8 @@
 import { useQuery } from '@tanstack/react-query'
 import { ONBOARDING_STATUS_QUERY, onboardingKeys } from '../api'
 import { GqlClient } from '@/shared/api'
-import { useAuth, useUser } from '@/shared/hooks'
+import { useAuth } from '@/shared/hooks'
+import { useUser } from '@/entities/user'
 
 export function useOnboardingStatus() {
   const { user } = useUser()
@@ -15,11 +16,6 @@ export function useOnboardingStatus() {
       return client.request(ONBOARDING_STATUS_QUERY)
     },
     enabled: !!user,
-    refetchInterval: (query) => {
-      const data = query.state.data
-      if (data && !data.onboardingStatus.hasUser) return 1000
-      return false
-    },
     retry: true,
   })
 }

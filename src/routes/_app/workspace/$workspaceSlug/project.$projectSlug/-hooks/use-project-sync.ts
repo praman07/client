@@ -11,9 +11,9 @@
  */
 
 import { useEffect } from 'react'
-import { useAppDispatch } from '@/shared/hooks'
-import { setCurrentProject, clearCurrentProject } from '@/entities/project'
 import type { Project } from '@/entities/project'
+import { useAppDispatch } from '@/shared/hooks'
+import { clearCurrentProject, setCurrentProject } from '@/entities/project'
 
 export function useProjectSync(project: Project | null) {
   const dispatch = useAppDispatch()

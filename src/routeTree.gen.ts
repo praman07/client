@@ -19,14 +19,20 @@ import { Route as MarketingPricingRouteImport } from './routes/_marketing/pricin
 import { Route as MarketingContactRouteImport } from './routes/_marketing/contact'
 import { Route as MarketingChangelogRouteImport } from './routes/_marketing/changelog'
 import { Route as MarketingAboutRouteImport } from './routes/_marketing/about'
+import { Route as AuthSsoCallbackRouteImport } from './routes/_auth/sso-callback'
 import { Route as AuthSignUpRouteImport } from './routes/_auth/sign-up'
 import { Route as AuthSignInRouteImport } from './routes/_auth/sign-in'
 import { Route as AppOnboardingRouteImport } from './routes/_app/onboarding'
+import { Route as AppHomeRouteImport } from './routes/_app/home'
+import { Route as AppUserRouteRouteImport } from './routes/_app/user/route'
 import { Route as MarketingFeaturesChatRouteImport } from './routes/_marketing/features/chat'
 import { Route as MarketingCompareSlackRouteImport } from './routes/_marketing/compare/slack'
 import { Route as AppWorkspaceNewRouteImport } from './routes/_app/workspace/new'
 import { Route as AppWorkspaceJoinRouteImport } from './routes/_app/workspace/join'
-import { Route as AppUserSettingsSplatRouteImport } from './routes/_app/user-settings.$'
+import { Route as AppUserWorkspacesRouteImport } from './routes/_app/user/workspaces'
+import { Route as AppUserProfileRouteImport } from './routes/_app/user/profile'
+import { Route as AppUserBillingRouteImport } from './routes/_app/user/billing'
+import { Route as AppUserAccountRouteImport } from './routes/_app/user/account'
 import { Route as AppWorkspaceWorkspaceSlugRouteRouteImport } from './routes/_app/workspace/$workspaceSlug/route'
 import { Route as AppWorkspaceWorkspaceSlugMainRouteRouteImport } from './routes/_app/workspace/$workspaceSlug/_main/route'
 import { Route as AppWorkspaceWorkspaceSlugMainIndexRouteImport } from './routes/_app/workspace/$workspaceSlug/_main/index'
@@ -105,6 +111,11 @@ const MarketingAboutRoute = MarketingAboutRouteImport.update({
   path: '/about',
   getParentRoute: () => MarketingRouteRoute,
 } as any)
+const AuthSsoCallbackRoute = AuthSsoCallbackRouteImport.update({
+  id: '/sso-callback',
+  path: '/sso-callback',
+  getParentRoute: () => AuthRouteRoute,
+} as any)
 const AuthSignUpRoute = AuthSignUpRouteImport.update({
   id: '/sign-up',
   path: '/sign-up',
@@ -118,6 +129,16 @@ const AuthSignInRoute = AuthSignInRouteImport.update({
 const AppOnboardingRoute = AppOnboardingRouteImport.update({
   id: '/onboarding',
   path: '/onboarding',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+const AppHomeRoute = AppHomeRouteImport.update({
+  id: '/home',
+  path: '/home',
+  getParentRoute: () => AppRouteRoute,
+} as any)
+const AppUserRouteRoute = AppUserRouteRouteImport.update({
+  id: '/user',
+  path: '/user',
   getParentRoute: () => AppRouteRoute,
 } as any)
 const MarketingFeaturesChatRoute = MarketingFeaturesChatRouteImport.update({
@@ -140,10 +161,25 @@ const AppWorkspaceJoinRoute = AppWorkspaceJoinRouteImport.update({
   path: '/workspace/join',
   getParentRoute: () => AppRouteRoute,
 } as any)
-const AppUserSettingsSplatRoute = AppUserSettingsSplatRouteImport.update({
-  id: '/user-settings/$',
-  path: '/user-settings/$',
-  getParentRoute: () => AppRouteRoute,
+const AppUserWorkspacesRoute = AppUserWorkspacesRouteImport.update({
+  id: '/workspaces',
+  path: '/workspaces',
+  getParentRoute: () => AppUserRouteRoute,
+} as any)
+const AppUserProfileRoute = AppUserProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => AppUserRouteRoute,
+} as any)
+const AppUserBillingRoute = AppUserBillingRouteImport.update({
+  id: '/billing',
+  path: '/billing',
+  getParentRoute: () => AppUserRouteRoute,
+} as any)
+const AppUserAccountRoute = AppUserAccountRouteImport.update({
+  id: '/account',
+  path: '/account',
+  getParentRoute: () => AppUserRouteRoute,
 } as any)
 const AppWorkspaceWorkspaceSlugRouteRoute =
   AppWorkspaceWorkspaceSlugRouteRouteImport.update({
@@ -346,15 +382,21 @@ export interface FileRoutesByFullPath {
   '/': typeof MarketingIndexRoute
   '/unauthorized': typeof UnauthorizedRouteRoute
   '/$': typeof SplatRoute
+  '/user': typeof AppUserRouteRouteWithChildren
+  '/home': typeof AppHomeRoute
   '/onboarding': typeof AppOnboardingRoute
   '/sign-in': typeof AuthSignInRoute
   '/sign-up': typeof AuthSignUpRoute
+  '/sso-callback': typeof AuthSsoCallbackRoute
   '/about': typeof MarketingAboutRoute
   '/changelog': typeof MarketingChangelogRoute
   '/contact': typeof MarketingContactRoute
   '/pricing': typeof MarketingPricingRoute
   '/workspace/$workspaceSlug': typeof AppWorkspaceWorkspaceSlugMainRouteRouteWithChildren
-  '/user-settings/$': typeof AppUserSettingsSplatRoute
+  '/user/account': typeof AppUserAccountRoute
+  '/user/billing': typeof AppUserBillingRoute
+  '/user/profile': typeof AppUserProfileRoute
+  '/user/workspaces': typeof AppUserWorkspacesRoute
   '/workspace/join': typeof AppWorkspaceJoinRoute
   '/workspace/new': typeof AppWorkspaceNewRoute
   '/compare/slack': typeof MarketingCompareSlackRoute
@@ -392,15 +434,21 @@ export interface FileRoutesByTo {
   '/': typeof MarketingIndexRoute
   '/unauthorized': typeof UnauthorizedRouteRoute
   '/$': typeof SplatRoute
+  '/user': typeof AppUserRouteRouteWithChildren
+  '/home': typeof AppHomeRoute
   '/onboarding': typeof AppOnboardingRoute
   '/sign-in': typeof AuthSignInRoute
   '/sign-up': typeof AuthSignUpRoute
+  '/sso-callback': typeof AuthSsoCallbackRoute
   '/about': typeof MarketingAboutRoute
   '/changelog': typeof MarketingChangelogRoute
   '/contact': typeof MarketingContactRoute
   '/pricing': typeof MarketingPricingRoute
   '/workspace/$workspaceSlug': typeof AppWorkspaceWorkspaceSlugMainIndexRoute
-  '/user-settings/$': typeof AppUserSettingsSplatRoute
+  '/user/account': typeof AppUserAccountRoute
+  '/user/billing': typeof AppUserBillingRoute
+  '/user/profile': typeof AppUserProfileRoute
+  '/user/workspaces': typeof AppUserWorkspacesRoute
   '/workspace/join': typeof AppWorkspaceJoinRoute
   '/workspace/new': typeof AppWorkspaceNewRoute
   '/compare/slack': typeof MarketingCompareSlackRoute
@@ -432,16 +480,22 @@ export interface FileRoutesById {
   '/_marketing': typeof MarketingRouteRouteWithChildren
   '/unauthorized': typeof UnauthorizedRouteRoute
   '/$': typeof SplatRoute
+  '/_app/user': typeof AppUserRouteRouteWithChildren
+  '/_app/home': typeof AppHomeRoute
   '/_app/onboarding': typeof AppOnboardingRoute
   '/_auth/sign-in': typeof AuthSignInRoute
   '/_auth/sign-up': typeof AuthSignUpRoute
+  '/_auth/sso-callback': typeof AuthSsoCallbackRoute
   '/_marketing/about': typeof MarketingAboutRoute
   '/_marketing/changelog': typeof MarketingChangelogRoute
   '/_marketing/contact': typeof MarketingContactRoute
   '/_marketing/pricing': typeof MarketingPricingRoute
   '/_marketing/': typeof MarketingIndexRoute
   '/_app/workspace/$workspaceSlug': typeof AppWorkspaceWorkspaceSlugRouteRouteWithChildren
-  '/_app/user-settings/$': typeof AppUserSettingsSplatRoute
+  '/_app/user/account': typeof AppUserAccountRoute
+  '/_app/user/billing': typeof AppUserBillingRoute
+  '/_app/user/profile': typeof AppUserProfileRoute
+  '/_app/user/workspaces': typeof AppUserWorkspacesRoute
   '/_app/workspace/join': typeof AppWorkspaceJoinRoute
   '/_app/workspace/new': typeof AppWorkspaceNewRoute
   '/_marketing/compare/slack': typeof MarketingCompareSlackRoute
@@ -482,15 +536,21 @@ export interface FileRouteTypes {
     | '/'
     | '/unauthorized'
     | '/$'
+    | '/user'
+    | '/home'
     | '/onboarding'
     | '/sign-in'
     | '/sign-up'
+    | '/sso-callback'
     | '/about'
     | '/changelog'
     | '/contact'
     | '/pricing'
     | '/workspace/$workspaceSlug'
-    | '/user-settings/$'
+    | '/user/account'
+    | '/user/billing'
+    | '/user/profile'
+    | '/user/workspaces'
     | '/workspace/join'
     | '/workspace/new'
     | '/compare/slack'
@@ -528,15 +588,21 @@ export interface FileRouteTypes {
     | '/'
     | '/unauthorized'
     | '/$'
+    | '/user'
+    | '/home'
     | '/onboarding'
     | '/sign-in'
     | '/sign-up'
+    | '/sso-callback'
     | '/about'
     | '/changelog'
     | '/contact'
     | '/pricing'
     | '/workspace/$workspaceSlug'
-    | '/user-settings/$'
+    | '/user/account'
+    | '/user/billing'
+    | '/user/profile'
+    | '/user/workspaces'
     | '/workspace/join'
     | '/workspace/new'
     | '/compare/slack'
@@ -567,16 +633,22 @@ export interface FileRouteTypes {
     | '/_marketing'
     | '/unauthorized'
     | '/$'
+    | '/_app/user'
+    | '/_app/home'
     | '/_app/onboarding'
     | '/_auth/sign-in'
     | '/_auth/sign-up'
+    | '/_auth/sso-callback'
     | '/_marketing/about'
     | '/_marketing/changelog'
     | '/_marketing/contact'
     | '/_marketing/pricing'
     | '/_marketing/'
     | '/_app/workspace/$workspaceSlug'
-    | '/_app/user-settings/$'
+    | '/_app/user/account'
+    | '/_app/user/billing'
+    | '/_app/user/profile'
+    | '/_app/user/workspaces'
     | '/_app/workspace/join'
     | '/_app/workspace/new'
     | '/_marketing/compare/slack'
@@ -692,6 +764,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MarketingAboutRouteImport
       parentRoute: typeof MarketingRouteRoute
     }
+    '/_auth/sso-callback': {
+      id: '/_auth/sso-callback'
+      path: '/sso-callback'
+      fullPath: '/sso-callback'
+      preLoaderRoute: typeof AuthSsoCallbackRouteImport
+      parentRoute: typeof AuthRouteRoute
+    }
     '/_auth/sign-up': {
       id: '/_auth/sign-up'
       path: '/sign-up'
@@ -711,6 +790,20 @@ declare module '@tanstack/react-router' {
       path: '/onboarding'
       fullPath: '/onboarding'
       preLoaderRoute: typeof AppOnboardingRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/_app/home': {
+      id: '/_app/home'
+      path: '/home'
+      fullPath: '/home'
+      preLoaderRoute: typeof AppHomeRouteImport
+      parentRoute: typeof AppRouteRoute
+    }
+    '/_app/user': {
+      id: '/_app/user'
+      path: '/user'
+      fullPath: '/user'
+      preLoaderRoute: typeof AppUserRouteRouteImport
       parentRoute: typeof AppRouteRoute
     }
     '/_marketing/features/chat': {
@@ -741,12 +834,33 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppWorkspaceJoinRouteImport
       parentRoute: typeof AppRouteRoute
     }
-    '/_app/user-settings/$': {
-      id: '/_app/user-settings/$'
-      path: '/user-settings/$'
-      fullPath: '/user-settings/$'
-      preLoaderRoute: typeof AppUserSettingsSplatRouteImport
-      parentRoute: typeof AppRouteRoute
+    '/_app/user/workspaces': {
+      id: '/_app/user/workspaces'
+      path: '/workspaces'
+      fullPath: '/user/workspaces'
+      preLoaderRoute: typeof AppUserWorkspacesRouteImport
+      parentRoute: typeof AppUserRouteRoute
+    }
+    '/_app/user/profile': {
+      id: '/_app/user/profile'
+      path: '/profile'
+      fullPath: '/user/profile'
+      preLoaderRoute: typeof AppUserProfileRouteImport
+      parentRoute: typeof AppUserRouteRoute
+    }
+    '/_app/user/billing': {
+      id: '/_app/user/billing'
+      path: '/billing'
+      fullPath: '/user/billing'
+      preLoaderRoute: typeof AppUserBillingRouteImport
+      parentRoute: typeof AppUserRouteRoute
+    }
+    '/_app/user/account': {
+      id: '/_app/user/account'
+      path: '/account'
+      fullPath: '/user/account'
+      preLoaderRoute: typeof AppUserAccountRouteImport
+      parentRoute: typeof AppUserRouteRoute
     }
     '/_app/workspace/$workspaceSlug': {
       id: '/_app/workspace/$workspaceSlug'
@@ -960,6 +1074,24 @@ declare module '@tanstack/react-router' {
     }
   }
 }
+
+interface AppUserRouteRouteChildren {
+  AppUserAccountRoute: typeof AppUserAccountRoute
+  AppUserBillingRoute: typeof AppUserBillingRoute
+  AppUserProfileRoute: typeof AppUserProfileRoute
+  AppUserWorkspacesRoute: typeof AppUserWorkspacesRoute
+}
+
+const AppUserRouteRouteChildren: AppUserRouteRouteChildren = {
+  AppUserAccountRoute: AppUserAccountRoute,
+  AppUserBillingRoute: AppUserBillingRoute,
+  AppUserProfileRoute: AppUserProfileRoute,
+  AppUserWorkspacesRoute: AppUserWorkspacesRoute,
+}
+
+const AppUserRouteRouteWithChildren = AppUserRouteRoute._addFileChildren(
+  AppUserRouteRouteChildren,
+)
 
 interface AppWorkspaceWorkspaceSlugMainRouteRouteChildren {
   AppWorkspaceWorkspaceSlugMainMembersRoute: typeof AppWorkspaceWorkspaceSlugMainMembersRoute
@@ -1181,18 +1313,20 @@ const AppWorkspaceWorkspaceSlugRouteRouteWithChildren =
   )
 
 interface AppRouteRouteChildren {
+  AppUserRouteRoute: typeof AppUserRouteRouteWithChildren
+  AppHomeRoute: typeof AppHomeRoute
   AppOnboardingRoute: typeof AppOnboardingRoute
   AppWorkspaceWorkspaceSlugRouteRoute: typeof AppWorkspaceWorkspaceSlugRouteRouteWithChildren
-  AppUserSettingsSplatRoute: typeof AppUserSettingsSplatRoute
   AppWorkspaceJoinRoute: typeof AppWorkspaceJoinRoute
   AppWorkspaceNewRoute: typeof AppWorkspaceNewRoute
 }
 
 const AppRouteRouteChildren: AppRouteRouteChildren = {
+  AppUserRouteRoute: AppUserRouteRouteWithChildren,
+  AppHomeRoute: AppHomeRoute,
   AppOnboardingRoute: AppOnboardingRoute,
   AppWorkspaceWorkspaceSlugRouteRoute:
     AppWorkspaceWorkspaceSlugRouteRouteWithChildren,
-  AppUserSettingsSplatRoute: AppUserSettingsSplatRoute,
   AppWorkspaceJoinRoute: AppWorkspaceJoinRoute,
   AppWorkspaceNewRoute: AppWorkspaceNewRoute,
 }
@@ -1204,11 +1338,13 @@ const AppRouteRouteWithChildren = AppRouteRoute._addFileChildren(
 interface AuthRouteRouteChildren {
   AuthSignInRoute: typeof AuthSignInRoute
   AuthSignUpRoute: typeof AuthSignUpRoute
+  AuthSsoCallbackRoute: typeof AuthSsoCallbackRoute
 }
 
 const AuthRouteRouteChildren: AuthRouteRouteChildren = {
   AuthSignInRoute: AuthSignInRoute,
   AuthSignUpRoute: AuthSignUpRoute,
+  AuthSsoCallbackRoute: AuthSsoCallbackRoute,
 }
 
 const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(

@@ -1,5 +1,5 @@
-import { Skeleton } from '@/shared/ui/primitives/skeleton'
 import { ChatSkeleton } from './chat-skeleton'
+import { Skeleton } from '@/shared/ui/primitives/skeleton'
 
 /**
  * ChatPluginSkeleton

@@ -1,10 +1,10 @@
 import { Outlet, createFileRoute, redirect } from '@tanstack/react-router'
 import { Suspense, useEffect, useRef } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
+import { useQueryClient } from '@tanstack/react-query'
 import { SidebarInset, SidebarProvider } from '@/shared/ui/primitives/sidebar'
 import { PageSidebar } from '@/widgets/page-list'
 import { useAppDispatch, useAppSelector, useUser } from '@/shared/hooks'
-import { useQueryClient } from '@tanstack/react-query'
 import { selectCurrentProject } from '@/entities/project'
 import { PageSpinner, PagesSkeleton, RouteError, WidgetError } from '@/shared/ui'
 import { createPagesPlugin } from '@/app/providers/ws-domains/pages-plugin'
@@ -16,7 +16,7 @@ export const Route = createFileRoute(
   component: PagesLayout,
   pendingComponent: PagesSkeleton,
   beforeLoad: ({ context }) => {
-    const activePlugins: string[] = (context as any)?.project?.activePlugins ?? []
+    const activePlugins: Array<string> = (context as any)?.project?.activePlugins ?? []
     if (activePlugins.length > 0 && !activePlugins.includes('PAGES')) {
       throw redirect({ to: '/' as any, search: { pluginDisabled: 'PAGES' } as any })
     }
@@ -45,11 +45,13 @@ function PagesLayout() {
 
   // Stable ref — holds latest userId without triggering plugin re-registration
   const userIdRef = useRef(user?.id ?? null)
-  userIdRef.current = user?.id ?? null
+  useEffect(() => {
+    userIdRef.current = user?.id ?? null
+  }, [user?.id])
 
   // V14 fix: guard plugin registration — only register when project context is ready.
   // dispatch and queryClient are stable refs; plugin lifecycle tied to route lifetime.
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+   
   useEffect(() => {
     if (!project?.id) return
 
@@ -60,7 +62,7 @@ function PagesLayout() {
     })
     registerPlugin(plugin)
     return () => unregisterPlugin('pages')
-  }, [project?.id])
+  }, [project?.id, dispatch, queryClient])
 
   if (!project?.id) {
     return <PageSpinner label="Loading Pages…" />

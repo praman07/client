@@ -79,7 +79,7 @@ export function AuthorizationProvider({
     return Object.fromEntries(
       data.featureFlags.map((f: { key: string; enabled: boolean }) => [f.key, f.enabled]),
     )
-  }, [data?.featureFlags])
+  }, [data])
 
 
   const value = useMemo<AuthScopeContext>(

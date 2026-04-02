@@ -16,7 +16,7 @@ export interface NavItem {
   activeOptions?: { exact?: boolean }
 }
 
-export const WORKSPACE_TABS: NavItem[] = [
+export const WORKSPACE_TABS: Array<NavItem> = [
   { label: 'Overview', href: '.', activeOptions: { exact: true } },
   { label: 'Projects', href: './projects' },
   { label: 'Members', href: './members' },
@@ -39,11 +39,11 @@ export const PLUGIN_TAB_REGISTRY: Record<string, NavItem> = {
  * Core tabs always shown regardless of active plugins.
  * Home is pinned first; Settings is pinned last.
  */
-export const CORE_PROJECT_TABS: NavItem[] = [
+export const CORE_PROJECT_TABS: Array<NavItem> = [
   { label: 'Home', href: '.', activeOptions: { exact: true } },
 ]
 
-export const CORE_PROJECT_TAIL_TABS: NavItem[] = [
+export const CORE_PROJECT_TAIL_TABS: Array<NavItem> = [
   { label: 'Settings', href: './settings' },
 ]
 
@@ -57,7 +57,7 @@ export const CORE_PROJECT_TAIL_TABS: NavItem[] = [
  *
  * @param activePlugins - PluginType string[] from the project fragment
  */
-export function buildProjectNav(activePlugins: string[]): NavItem[] {
+export function buildProjectNav(activePlugins: Array<string>): Array<NavItem> {
   const pluginTabs = Object.entries(PLUGIN_TAB_REGISTRY)
     .filter(([key]) => activePlugins.includes(key))
     .map(([, tab]) => tab)

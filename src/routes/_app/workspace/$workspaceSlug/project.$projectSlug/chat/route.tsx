@@ -4,7 +4,7 @@ import { ErrorBoundary } from 'react-error-boundary'
 import { SidebarInset } from '@/shared/ui/primitives/sidebar'
 import { ChatSidebar, SidebarProvider } from '@/widgets/chat-sidebar'
 import { ChatPluginSkeleton, PageSpinner, RouteError, WidgetError } from '@/shared/ui'
-import { useUser, useAppSelector } from '@/shared/hooks'
+import { useAppSelector, useUser } from '@/shared/hooks'
 import { selectCurrentProject } from '@/entities/project'
 import { createChatPlugin } from '@/app/providers/ws-domains/chat-plugin'
 import { registerPlugin, unregisterPlugin } from '@/shared/ws/domains'
@@ -18,7 +18,7 @@ export const Route = createFileRoute(
     // Guard: CHAT plugin must be active. activePlugins is populated
     // after setCurrentProject() runs in the parent ProjectBaseLayout.
     // On first load the parent runs first, so this is reliable.
-    const activePlugins: string[] = (context as any)?.project?.activePlugins ?? []
+    const activePlugins: Array<string> = (context as any)?.project?.activePlugins ?? []
     if (activePlugins.length > 0 && !activePlugins.includes('CHAT')) {
       throw redirect({ to: '/' as any, search: { pluginDisabled: 'CHAT' } as any })
     }
@@ -35,12 +35,14 @@ function ChatLayout() {
   // Stable refs — always hold the latest value without triggering re-registration
   const projectRef = useRef(project)
   const userRef = useRef(user)
-  projectRef.current = project
-  userRef.current = user
+  useEffect(() => {
+    projectRef.current = project
+    userRef.current = user
+  }, [project, user])
 
   // Plugin lifecycle is tied to route mount/unmount, not data identity.
   // Closures read from refs so they always see the latest value.
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+   
   useEffect(() => {
     const plugin = createChatPlugin({
       getProjectId: () => projectRef.current?.id,

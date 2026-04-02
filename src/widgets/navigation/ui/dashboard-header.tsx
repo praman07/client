@@ -1,7 +1,7 @@
 import { useRouterState } from '@tanstack/react-router'
-import { UserButton } from '@clerk/clerk-react'
 import { Bell } from 'lucide-react'
 import { Fragment } from 'react/jsx-runtime'
+import { UserDropdown } from './user-dropdown'
 import type { RouteStaticData } from '../model'
 import { Avatar, AvatarFallback, AvatarImage, Button } from '@/shared/ui'
 
@@ -53,13 +53,7 @@ export function DashboardHeader({ children }: { children?: React.ReactNode }) {
           <Button variant="ghost" size="icon" className="text-muted-foreground">
             <Bell className="h-5 w-5" />
           </Button>
-          <div className="h-8 w-8 rounded-full bg-muted overflow-hidden">
-            <UserButton
-              afterSignOutUrl="/sign-in"
-              userProfileUrl="/user-settings"
-              userProfileMode="navigation"
-            />
-          </div>
+          <UserDropdown />
         </div>
       </div>
       {children}

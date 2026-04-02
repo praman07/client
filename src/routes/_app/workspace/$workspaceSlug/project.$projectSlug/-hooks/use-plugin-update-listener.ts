@@ -27,7 +27,7 @@ export function usePluginUpdateListener(
 
     const handler = (event: Event) => {
       const detail = (event as CustomEvent<{ projectId: string }>).detail
-      if (detail?.projectId === projectId) {
+      if (detail.projectId === projectId) {
         queryClient.invalidateQueries({
           queryKey: projectKeys.bySlug(workspaceId ?? '', projectSlug),
         })

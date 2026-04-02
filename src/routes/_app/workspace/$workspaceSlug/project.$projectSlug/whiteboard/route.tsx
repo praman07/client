@@ -2,7 +2,7 @@ import { Outlet, createFileRoute, redirect } from '@tanstack/react-router'
 import { useEffect, useRef } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
 import { useAppDispatch, useUser } from '@/shared/hooks'
-import { WhiteboardLayoutSkeleton, RouteError } from '@/shared/ui'
+import { RouteError, WhiteboardLayoutSkeleton } from '@/shared/ui'
 import { createWhiteboardPlugin } from '@/app/providers/ws-domains/whiteboard-plugin'
 import { registerPlugin, unregisterPlugin } from '@/shared/ws/domains'
 
@@ -12,7 +12,7 @@ export const Route = createFileRoute(
   component: WhiteboardLayout,
   pendingComponent: WhiteboardLayoutSkeleton,
   beforeLoad: ({ context }) => {
-    const activePlugins: string[] = (context as any)?.project?.activePlugins ?? []
+    const activePlugins: Array<string> = (context as any)?.project?.activePlugins ?? []
     if (activePlugins.length > 0 && !activePlugins.includes('WHITEBOARD')) {
       throw redirect({ to: '/' as any, search: { pluginDisabled: 'WHITEBOARD' } as any })
     }
@@ -35,12 +35,14 @@ function WhiteboardLayout() {
 
   // Stable ref — holds latest userId without triggering re-registration
   const userIdRef = useRef(user?.id ?? null)
-  userIdRef.current = user?.id ?? null
+  useEffect(() => {
+    userIdRef.current = user?.id ?? null
+  }, [user?.id])
 
   // Plugin lifecycle is tied to route mount/unmount.
   // dispatch and queryClient are stable React references — excluded from deps intentionally.
   // userId is read through a ref so the plugin always sees the current value.
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+   
   useEffect(() => {
     const plugin = createWhiteboardPlugin({
       dispatch,
@@ -49,7 +51,7 @@ function WhiteboardLayout() {
     })
     registerPlugin(plugin)
     return () => unregisterPlugin('whiteboard')
-  }, [])
+  }, [dispatch, queryClient])
 
   return <Outlet />
 }

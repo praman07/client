@@ -7,15 +7,15 @@
  */
 
 import {
+  registerBoardDeletedHandler,
   registerBoardInitHandler,
+  registerBoardLockedHandler,
+  registerBoardUnlockedHandler,
   registerBoardUpdateHandler,
+  registerCursorUpdateHandler,
   registerUpdateAckHandler,
   registerUserJoinedHandler,
   registerUserLeftHandler,
-  registerCursorUpdateHandler,
-  registerBoardLockedHandler,
-  registerBoardUnlockedHandler,
-  registerBoardDeletedHandler,
 } from './handlers'
 import type { WhiteboardEventHandlerContext } from '../model'
 

@@ -1,11 +1,13 @@
 import { Outlet, createFileRoute } from '@tanstack/react-router'
 import { Suspense } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
+import { useProjectSync } from './-hooks/use-project-sync'
+import { usePluginUpdateListener } from './-hooks/use-plugin-update-listener'
+import type { WorkspacePartial } from '@/entities/workspace'
 import { NavTabs, ProjectSwitcher } from '@/widgets/navigation'
 import { buildProjectNav } from '@/shared/config/navigation'
 import { useAppSelector } from '@/shared/hooks'
 import { selectWorkspaceBySlug } from '@/entities/workspace'
-import type { WorkspacePartial } from '@/entities/workspace'
 import {
   PROJECT_FRAGMENT,
   ProjectErrorState,
@@ -16,8 +18,6 @@ import {
 import { useFragment } from '@/gql'
 import { DomainRegistry } from '@/app/providers/ws-domains'
 import { PageSpinner, RouteError } from '@/shared/ui'
-import { useProjectSync } from './-hooks/use-project-sync'
-import { usePluginUpdateListener } from './-hooks/use-plugin-update-listener'
 
 export const Route = createFileRoute(
   '/_app/workspace/$workspaceSlug/project/$projectSlug',

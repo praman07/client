@@ -1,103 +1,67 @@
 import { useNavigate } from '@tanstack/react-router'
 import { useEffect, useState } from 'react'
 import { deriveOnboardingStep, mapOnboardingError } from '../lib'
-import {
-  useCreateOnboardingWorkspace,
-  useOnboardingStatus,
-  useSyncUser,
-} from './index'
-import { generateIdempotencyKey } from '@/shared/lib/idempotency'
-import { useUser } from '@/shared/hooks'
+import { useOnboardingStatus } from './index'
 import { createLogger } from '@/shared/lib/logger'
 
 const log = createLogger('app:onboarding')
 
+/**
+ * useOnboardingOrchestrator — simplified orchestrator.
+ *
+ * After the useSafeUser DB guard, the only states are:
+ *   - loading       : waiting for onboardingStatus query
+ *   - needs_workspace: user has no workspace → UI prompts workspace creation
+ *   - redirecting   : workspace exists → navigate to /workspace/:slug (or /home)
+ *   - error         : query or redirect failure
+ */
 export function useOnboardingOrchestrator() {
-  const { user } = useUser()
   const navigate = useNavigate()
-
-  // Stable Idempotency Key
-  const [creationKey] = useState(() => generateIdempotencyKey())
   const [internalError, setInternalError] = useState<unknown>(null)
 
-  // 1. Data Layer
   const { data, isLoading, error: queryError } = useOnboardingStatus()
-  const { mutateAsync: syncUser } = useSyncUser()
-  const { mutateAsync: createWorkspace } = useCreateOnboardingWorkspace()
 
-  // 2. Logic Layer (Derived State)
   const status = data?.onboardingStatus
   const calculatedStep = deriveOnboardingStep(isLoading, queryError, status)
-
-  // Override: If we caught a mutation error, force error state
   const step = internalError ? 'error' : calculatedStep
   const finalError = internalError || queryError
 
   const reset = () => {
     setInternalError(null)
-    window.location.reload() // Or we could just invalidate queries, but for "Death Screen" reload is safer
+    window.location.reload()
   }
 
-  // 3. Side Effects Layer (The Orchestrator)
   useEffect(() => {
-    // If not ready or error, do nothing
-    if (!user || !status) return
+    if (step !== 'redirecting' || !status) return
 
     const orchestrate = async () => {
-      switch (step) {
-        case 'loading':
-        case 'error':
-          // Do nothing
-          break
-
-        case 'syncing': {
-          const email = user.primaryEmailAddress?.emailAddress
-          if (!email) return
-          try {
-            await syncUser({
-              clerkId: user.id,
-              email: email,
-              fullName: user.fullName || '',
-              avatarUrl: user.imageUrl,
-            })
-          } catch (e) {
-            log.error('Sync failed', e)
-            setInternalError(mapOnboardingError(e))
-          }
-          break
+      try {
+        const slug = status.workspaceSlug
+        if (!slug) {
+          // Workspace record exists but slug missing — fall back to /home
+          await navigate({ to: '/home' as never })
+          return
         }
-
-        case 'creating_workspace': {
-          try {
-            await createWorkspace({ idempotencyKey: creationKey })
-          } catch (e) {
-            log.error('Workspace creation failed', e)
-            setInternalError(mapOnboardingError(e))
-          }
-          break
+        if (!status.hasProject) {
+          await navigate({
+            to: '/workspace/$workspaceSlug',
+            params: { workspaceSlug: slug },
+            search: { action: 'create-project' },
+          })
+        } else {
+          await navigate({
+            to: '/workspace/$workspaceSlug',
+            params: { workspaceSlug: slug },
+          })
         }
-
-        case 'redirecting': {
-          const slug = status.workspaceSlug
-          if (!status.hasProject) {
-            navigate({
-              to: '/workspace/$workspaceSlug',
-              params: { workspaceSlug: slug || '' },
-              search: { action: 'create-project' },
-            })
-          } else {
-            navigate({
-              to: '/workspace/$workspaceSlug',
-              params: { workspaceSlug: slug || '' },
-            })
-          }
-          break
-        }
+      } catch (e) {
+        log.error('Redirect failed', e)
+        setInternalError(mapOnboardingError(e))
       }
     }
 
-    orchestrate()
-  }, [step, user, status, syncUser, createWorkspace, navigate, creationKey])
+    void orchestrate()
+  }, [step, status, navigate])
 
   return { step, error: finalError, reset }
 }

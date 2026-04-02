@@ -18,6 +18,7 @@ type Query {
   me: User
   user(userId: ID!): PublicUser
   workspaceUser(workspaceId: ID!, userId: ID!): WorkspaceMember
+  userHome: UserHomeData
   getWorkspaceInviteInfo(token: String!): WorkspaceInviteInfo!
   myWorkspaces: [Workspace!]!
   onboardingStatus: OnboardingStatus!
@@ -374,6 +375,9 @@ type Mutation {
 input UpdateProfileInput {
   fullName: String
   avatarUrl: String
+  bio: String
+  timezone: String
+  language: String
 }
 
 type User {
@@ -381,6 +385,9 @@ type User {
   email: String!
   fullName: String
   avatarUrl: String
+  bio: String
+  timezone: String
+  language: String
   status: String!
   createdAt: String!
   updatedAt: String!
@@ -391,6 +398,34 @@ type PublicUser {
   fullName: String
   avatarUrl: String
   email: String!
+}
+
+type WorkspaceHomeEntry {
+  id: ID!
+  slug: String!
+  name: String!
+  logoUrl: String
+  memberRole: String!
+}
+
+type PendingInviteEntry {
+  id: ID!
+  token: String!
+  workspaceName: String!
+  role: String!
+}
+
+type UserHomeProfile {
+  id: ID!
+  fullName: String
+  avatarUrl: String
+  email: String!
+}
+
+type UserHomeData {
+  user: UserHomeProfile!
+  workspaces: [WorkspaceHomeEntry!]!
+  pendingInvites: [PendingInviteEntry!]!
 }
 
 type Workspace {

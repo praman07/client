@@ -82,7 +82,7 @@ export function HeroSection() {
               <LiquidMetalButton
                 label={isSignedIn ? 'Go to Dashboard' : 'Start Building Free'}
                 onClick={() =>
-                  void navigate({ to: isSignedIn ? '/onboarding' : '/sign-up' })
+                  void navigate({ to: isSignedIn ? '/home' : '/sign-up' })
                 }
               />
             )}

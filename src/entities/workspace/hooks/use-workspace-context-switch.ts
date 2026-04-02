@@ -1,8 +1,8 @@
 import { useLayoutEffect, useRef } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
+import { selectCurrentWorkspaceId } from '../model'
 import { useAppSelector } from '@/shared/hooks'
 import { removeWorkspaceScopedCache } from '@/shared/lib/cache'
-import { selectCurrentWorkspaceId } from '../model'
 
 /**
  * useWorkspaceContextSwitch

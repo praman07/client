@@ -57,7 +57,8 @@ type Documents = {
     "\n  mutation ToggleProjectPlugin($projectId: ID!, $workspaceId: ID!, $type: String!, $enable: Boolean!) {\n    toggleProjectPlugin(projectId: $projectId, workspaceId: $workspaceId, type: $type, enable: $enable)\n  }\n": typeof types.ToggleProjectPluginDocument,
     "\n  mutation SessionSyncUser(\n    $clerkId: String!\n    $email: String!\n    $fullName: String\n    $avatarUrl: String\n  ) {\n    syncUser(\n      clerkId: $clerkId\n      email: $email\n      fullName: $fullName\n      avatarUrl: $avatarUrl\n    ) {\n      id\n      email\n      fullName\n      avatarUrl\n    }\n  }": typeof types.SessionSyncUserDocument,
     "\n  query GetMe {\n    me {\n      ...User\n    }\n  }\n": typeof types.GetMeDocument,
-    "\n  fragment User on User {\n    id\n    email\n    fullName\n    avatarUrl\n  }\n": typeof types.UserFragmentDoc,
+    "\n  fragment User on User {\n    id\n    email\n    fullName\n    avatarUrl\n    bio\n    timezone\n    language\n  }\n": typeof types.UserFragmentDoc,
+    "\n  mutation UpdateProfileMutation($input: UpdateProfileInput!) {\n    updateProfile(input: $input) {\n      ...User\n    }\n  }\n": typeof types.UpdateProfileMutationDocument,
     "\n  fragment VaultFileFields on VaultFile {\n    id\n    projectId\n    workspaceId\n    folderId\n    uploaderUserId\n    name\n    mimeType\n    sizeBytes\n    s3Key\n    source\n    sourceId\n    status\n    uploader {\n      id\n      fullName\n      avatarUrl\n    }\n    confirmedAt\n    createdAt\n    updatedAt\n  }\n": typeof types.VaultFileFieldsFragmentDoc,
     "\n  fragment VaultFolderFields on VaultFolder {\n    id\n    projectId\n    parentFolderId\n    name\n    isSystem\n    createdAt\n    updatedAt\n  }\n": typeof types.VaultFolderFieldsFragmentDoc,
     "\n  fragment BoardFields on Whiteboard {\n    id\n    workspaceId\n    projectId\n    title\n    description\n    elementCount\n    fileSizeBytes\n    isArchived\n    isLocked\n    createdBy\n    createdAt\n    updatedAt\n  }\n": typeof types.BoardFieldsFragmentDoc,
@@ -149,6 +150,7 @@ type Documents = {
     "\n  mutation UnarchiveBoard($boardId: ID!) {\n    unarchiveBoard(boardId: $boardId) {\n      id\n      isArchived\n      updatedAt\n    }\n  }\n": typeof types.UnarchiveBoardDocument,
     "\n  mutation UnlockBoard($boardId: ID!) {\n    unlockBoard(boardId: $boardId) {\n      id\n      isLocked\n      updatedAt\n    }\n  }\n": typeof types.UnlockBoardDocument,
     "\n  mutation UpdateBoardDescription($boardId: ID!, $description: String) {\n    updateBoardDescription(boardId: $boardId, description: $description) {\n      id\n      description\n      updatedAt\n    }\n  }\n": typeof types.UpdateBoardDescriptionDocument,
+    "\n  query GetUserHome {\n    userHome {\n      user {\n        id\n        fullName\n        avatarUrl\n        email\n      }\n      workspaces {\n        id\n        slug\n        name\n        logoUrl\n        memberRole\n      }\n      pendingInvites {\n        id\n        token\n        workspaceName\n        role\n      }\n    }\n  }\n": typeof types.GetUserHomeDocument,
     "\n  mutation RegisterExternalFile($input: RegisterExternalFileInput!) {\n    registerExternalFile(input: $input) {\n      fileId\n      presignedUrl\n      expiresAt\n    }\n  }\n": typeof types.RegisterExternalFileDocument,
     "\n  mutation ConfirmVaultUploadExternal($input: ConfirmVaultUploadInput!) {\n    confirmVaultUpload(input: $input) {\n      file {\n        id\n        name\n        mimeType\n        sizeBytes\n        status\n      }\n    }\n  }\n": typeof types.ConfirmVaultUploadExternalDocument,
     "\n  query GetBatchDownloadUrls($fileIds: [ID!]!) {\n    getBatchDownloadUrls(fileIds: $fileIds) {\n      fileId\n      url\n      status\n      name\n      mimeType\n      sizeBytes\n    }\n  }\n": typeof types.GetBatchDownloadUrlsDocument,
@@ -203,7 +205,8 @@ const documents: Documents = {
     "\n  mutation ToggleProjectPlugin($projectId: ID!, $workspaceId: ID!, $type: String!, $enable: Boolean!) {\n    toggleProjectPlugin(projectId: $projectId, workspaceId: $workspaceId, type: $type, enable: $enable)\n  }\n": types.ToggleProjectPluginDocument,
     "\n  mutation SessionSyncUser(\n    $clerkId: String!\n    $email: String!\n    $fullName: String\n    $avatarUrl: String\n  ) {\n    syncUser(\n      clerkId: $clerkId\n      email: $email\n      fullName: $fullName\n      avatarUrl: $avatarUrl\n    ) {\n      id\n      email\n      fullName\n      avatarUrl\n    }\n  }": types.SessionSyncUserDocument,
     "\n  query GetMe {\n    me {\n      ...User\n    }\n  }\n": types.GetMeDocument,
-    "\n  fragment User on User {\n    id\n    email\n    fullName\n    avatarUrl\n  }\n": types.UserFragmentDoc,
+    "\n  fragment User on User {\n    id\n    email\n    fullName\n    avatarUrl\n    bio\n    timezone\n    language\n  }\n": types.UserFragmentDoc,
+    "\n  mutation UpdateProfileMutation($input: UpdateProfileInput!) {\n    updateProfile(input: $input) {\n      ...User\n    }\n  }\n": types.UpdateProfileMutationDocument,
     "\n  fragment VaultFileFields on VaultFile {\n    id\n    projectId\n    workspaceId\n    folderId\n    uploaderUserId\n    name\n    mimeType\n    sizeBytes\n    s3Key\n    source\n    sourceId\n    status\n    uploader {\n      id\n      fullName\n      avatarUrl\n    }\n    confirmedAt\n    createdAt\n    updatedAt\n  }\n": types.VaultFileFieldsFragmentDoc,
     "\n  fragment VaultFolderFields on VaultFolder {\n    id\n    projectId\n    parentFolderId\n    name\n    isSystem\n    createdAt\n    updatedAt\n  }\n": types.VaultFolderFieldsFragmentDoc,
     "\n  fragment BoardFields on Whiteboard {\n    id\n    workspaceId\n    projectId\n    title\n    description\n    elementCount\n    fileSizeBytes\n    isArchived\n    isLocked\n    createdBy\n    createdAt\n    updatedAt\n  }\n": types.BoardFieldsFragmentDoc,
@@ -295,6 +298,7 @@ const documents: Documents = {
     "\n  mutation UnarchiveBoard($boardId: ID!) {\n    unarchiveBoard(boardId: $boardId) {\n      id\n      isArchived\n      updatedAt\n    }\n  }\n": types.UnarchiveBoardDocument,
     "\n  mutation UnlockBoard($boardId: ID!) {\n    unlockBoard(boardId: $boardId) {\n      id\n      isLocked\n      updatedAt\n    }\n  }\n": types.UnlockBoardDocument,
     "\n  mutation UpdateBoardDescription($boardId: ID!, $description: String) {\n    updateBoardDescription(boardId: $boardId, description: $description) {\n      id\n      description\n      updatedAt\n    }\n  }\n": types.UpdateBoardDescriptionDocument,
+    "\n  query GetUserHome {\n    userHome {\n      user {\n        id\n        fullName\n        avatarUrl\n        email\n      }\n      workspaces {\n        id\n        slug\n        name\n        logoUrl\n        memberRole\n      }\n      pendingInvites {\n        id\n        token\n        workspaceName\n        role\n      }\n    }\n  }\n": types.GetUserHomeDocument,
     "\n  mutation RegisterExternalFile($input: RegisterExternalFileInput!) {\n    registerExternalFile(input: $input) {\n      fileId\n      presignedUrl\n      expiresAt\n    }\n  }\n": types.RegisterExternalFileDocument,
     "\n  mutation ConfirmVaultUploadExternal($input: ConfirmVaultUploadInput!) {\n    confirmVaultUpload(input: $input) {\n      file {\n        id\n        name\n        mimeType\n        sizeBytes\n        status\n      }\n    }\n  }\n": types.ConfirmVaultUploadExternalDocument,
     "\n  query GetBatchDownloadUrls($fileIds: [ID!]!) {\n    getBatchDownloadUrls(fileIds: $fileIds) {\n      fileId\n      url\n      status\n      name\n      mimeType\n      sizeBytes\n    }\n  }\n": types.GetBatchDownloadUrlsDocument,
@@ -495,7 +499,11 @@ export function gql(source: "\n  query GetMe {\n    me {\n      ...User\n    }\n
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "\n  fragment User on User {\n    id\n    email\n    fullName\n    avatarUrl\n  }\n"): (typeof documents)["\n  fragment User on User {\n    id\n    email\n    fullName\n    avatarUrl\n  }\n"];
+export function gql(source: "\n  fragment User on User {\n    id\n    email\n    fullName\n    avatarUrl\n    bio\n    timezone\n    language\n  }\n"): (typeof documents)["\n  fragment User on User {\n    id\n    email\n    fullName\n    avatarUrl\n    bio\n    timezone\n    language\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation UpdateProfileMutation($input: UpdateProfileInput!) {\n    updateProfile(input: $input) {\n      ...User\n    }\n  }\n"): (typeof documents)["\n  mutation UpdateProfileMutation($input: UpdateProfileInput!) {\n    updateProfile(input: $input) {\n      ...User\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -860,6 +868,10 @@ export function gql(source: "\n  mutation UnlockBoard($boardId: ID!) {\n    unlo
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "\n  mutation UpdateBoardDescription($boardId: ID!, $description: String) {\n    updateBoardDescription(boardId: $boardId, description: $description) {\n      id\n      description\n      updatedAt\n    }\n  }\n"): (typeof documents)["\n  mutation UpdateBoardDescription($boardId: ID!, $description: String) {\n    updateBoardDescription(boardId: $boardId, description: $description) {\n      id\n      description\n      updatedAt\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  query GetUserHome {\n    userHome {\n      user {\n        id\n        fullName\n        avatarUrl\n        email\n      }\n      workspaces {\n        id\n        slug\n        name\n        logoUrl\n        memberRole\n      }\n      pendingInvites {\n        id\n        token\n        workspaceName\n        role\n      }\n    }\n  }\n"): (typeof documents)["\n  query GetUserHome {\n    userHome {\n      user {\n        id\n        fullName\n        avatarUrl\n        email\n      }\n      workspaces {\n        id\n        slug\n        name\n        logoUrl\n        memberRole\n      }\n      pendingInvites {\n        id\n        token\n        workspaceName\n        role\n      }\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

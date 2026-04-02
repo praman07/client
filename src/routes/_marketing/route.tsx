@@ -51,7 +51,7 @@ function MarketingNavbar() {
           {!isLoaded ? (
             <div className="w-24 h-9 bg-white/10 animate-pulse rounded-full" />
           ) : isSignedIn ? (
-            <Link to="/onboarding" className={btnPrimary}>
+            <Link to="/home" className={btnPrimary}>
               Go to Dashboard
             </Link>
           ) : (
@@ -101,7 +101,7 @@ function MarketingNavbar() {
           <div className="flex w-full flex-col gap-3 pt-2 border-t border-border/20">
             {isSignedIn ? (
               <Link
-                to="/onboarding"
+                to="/home"
                 className={`${btnPrimary} w-full text-center`}
                 onClick={() => setIsMobileMenuOpen(false)}
               >

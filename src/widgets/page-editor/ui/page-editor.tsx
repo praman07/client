@@ -11,8 +11,7 @@ import { CollaboratorBar } from './collaborator-bar'
 import type * as Y from 'yjs'
 import type { PageAwarenessProvider } from '@/entities/page-session'
 import { assignColor } from '@/entities/page-presence'
-import { useAppSelector, useAuth } from '@/shared/hooks'
-import { selectCurrentUser } from '@/entities/user'
+import { useAppSelector, useAuth, useUser } from '@/shared/hooks'
 import { selectCurrentProject } from '@/entities/project'
 import { createLogger } from '@/shared/lib/logger'
 import {
@@ -93,7 +92,7 @@ function PageEditorBody({
     resetLinkify()
   })
 
-  const currentUser = useAppSelector(selectCurrentUser)
+  const { user: currentUser } = useUser()
   const { getToken } = useAuth()
 
   // System Design Decision: Decoupled Awareness Registration

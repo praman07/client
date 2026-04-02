@@ -6,8 +6,7 @@ import { useClientDiff } from './sync-phases/use-client-diff'
 import { useNetworkSync } from './sync-phases/use-network-sync'
 import { PageAwarenessProvider, createPageDoc, selectIsPageLocked  } from '@/entities/page-session'
 import { assignColor } from '@/entities/page-presence'
-import { useAppSelector } from '@/shared/hooks'
-import { selectCurrentUser } from '@/entities/user'
+import { useAppSelector, useUser } from '@/shared/hooks'
 import { createLogger } from '@/shared/lib/logger'
 
 const log = createLogger('pages:use-page-sync')
@@ -30,7 +29,7 @@ export interface PageSyncResult {
  * @layer Widgets
  */
 export function usePageSync(pageId: string): PageSyncResult {
-  const currentUser = useAppSelector(selectCurrentUser)
+  const { user: currentUser } = useUser()
   const isLocked = useAppSelector(selectIsPageLocked)
 
   const ydoc = useMemo(() => {

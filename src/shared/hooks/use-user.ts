@@ -1,5 +1,3 @@
-import { useUser as useClerkUser } from '@clerk/clerk-react'
-
-export const useUser = () => {
-  return useClerkUser()
-}
+// Re-exports the DB-backed useUser from @/entities/user.
+// All callsites importing from '@/shared/hooks' continue to work unchanged.
+export { useUser } from '@/entities/user'

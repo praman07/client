@@ -13,8 +13,7 @@ import {
 } from '@/shared/ui'
 import { cn } from '@/shared/lib/utils'
 import { useAppSelector } from '@/shared/hooks'
-import { selectCurrentProject } from '@/entities/project'
-import { PROJECT_FRAGMENT, useMyProjects } from '@/entities/project'
+import { PROJECT_FRAGMENT, selectCurrentProject, useMyProjects  } from '@/entities/project'
 import { selectWorkspaceBySlug } from '@/entities/workspace'
 import { useFragment } from '@/gql'
 

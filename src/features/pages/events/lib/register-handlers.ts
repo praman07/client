@@ -9,12 +9,12 @@
  */
 
 import {
+  registerPageAwarenessUpdateHandler,
   registerPageSubscribeSuccessHandler,
-  registerPageUpdateHandler,
   registerPageUpdateAckHandler,
+  registerPageUpdateHandler,
   registerPageUserJoinedHandler,
   registerPageUserLeftHandler,
-  registerPageAwarenessUpdateHandler,
 } from './handlers'
 import type { PageEventHandlerContext } from '../model'
 

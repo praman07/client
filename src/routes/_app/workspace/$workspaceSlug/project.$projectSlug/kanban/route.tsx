@@ -5,7 +5,7 @@ export const Route = createFileRoute(
 )({
   component: BoardLayout,
   beforeLoad: ({ context }) => {
-    const activePlugins: string[] = (context as any)?.project?.activePlugins ?? []
+    const activePlugins: Array<string> = (context as any)?.project?.activePlugins ?? []
     if (activePlugins.length > 0 && !activePlugins.includes('ISSUES')) {
       throw redirect({ to: '/' as any, search: { pluginDisabled: 'ISSUES' } as any })
     }
