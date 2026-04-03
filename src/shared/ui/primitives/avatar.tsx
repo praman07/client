@@ -17,7 +17,7 @@ function Avatar({
       data-slot="avatar"
       data-size={size}
       className={cn(
-        'size-8 rounded-full after:rounded-full data-[size=lg]:size-10 data-[size=sm]:size-6 after:border-border group/avatar relative flex shrink-0 select-none after:absolute after:inset-0 after:border after:mix-blend-darken dark:after:mix-blend-lighten',
+        'size-8 rounded-full after:rounded-full data-[size=lg]:size-10 data-[size=sm]:size-6 after:border-border group/avatar relative grid shrink-0 place-items-center select-none after:absolute after:inset-0 after:border after:mix-blend-darken dark:after:mix-blend-lighten',
         className,
       )}
       {...props}
@@ -26,11 +26,14 @@ function Avatar({
 }
 
 function AvatarImage({ className, ...props }: AvatarPrimitive.Image.Props) {
+  // Prevent browser layout jank from rendering an <img> tag with an empty src and painting its alt text
+  if (!props.src) return null
+
   return (
     <AvatarPrimitive.Image
       data-slot="avatar-image"
       className={cn(
-        'rounded-full aspect-square size-full object-cover',
+        'rounded-full aspect-square size-full object-cover col-start-1 row-start-1',
         className,
       )}
       {...props}
@@ -46,7 +49,7 @@ function AvatarFallback({
     <AvatarPrimitive.Fallback
       data-slot="avatar-fallback"
       className={cn(
-        'bg-muted text-muted-foreground rounded-full flex size-full items-center justify-center text-sm group-data-[size=sm]/avatar:text-xs',
+        'bg-muted text-muted-foreground rounded-full flex size-full items-center justify-center text-sm group-data-[size=sm]/avatar:text-xs col-start-1 row-start-1',
         className,
       )}
       {...props}

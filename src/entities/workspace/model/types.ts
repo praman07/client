@@ -3,4 +3,5 @@ export interface WorkspacePartial {
   slug: string
   name: string
   logoUrl?: string | null
+  memberRole?: string | null
 }

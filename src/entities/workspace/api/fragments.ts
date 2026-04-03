@@ -6,5 +6,6 @@ export const WORKSPACE_FRAGMENT = gql(`
     name
     slug
     logoUrl
+    memberRole
   }
 `)

@@ -26,10 +26,10 @@ const PRO_FEATURES = [
  */
 export function UserBillingPage() {
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 max-w-2xl">
       <div>
-        <h2 className="text-lg font-semibold">Billing</h2>
-        <p className="text-sm text-muted-foreground mt-0.5">Manage your subscription and payment method.</p>
+        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">Billing</h1>
+        <p className="text-sm sm:text-base text-muted-foreground mt-1">Manage your subscription and payment method.</p>
       </div>
 
       {/* Current plan */}
@@ -42,7 +42,7 @@ export function UserBillingPage() {
           <Badge variant="secondary">Free</Badge>
         </div>
 
-        <div className="grid grid-cols-2 gap-2">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4">
           {FREE_FEATURES.map((f) => (
             <div key={f} className="flex items-center gap-1.5 text-sm text-muted-foreground">
               <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500 shrink-0" />
@@ -66,7 +66,7 @@ export function UserBillingPage() {
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-2">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4">
           {PRO_FEATURES.map((f) => (
             <div key={f} className="flex items-center gap-1.5 text-sm">
               <CheckCircle2 className="h-3.5 w-3.5 text-primary shrink-0" />

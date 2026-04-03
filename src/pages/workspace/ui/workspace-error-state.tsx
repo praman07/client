@@ -1,8 +1,3 @@
-import { WorkspaceLayoutSkeleton } from '@/shared/ui'
-
-export function WorkspaceLoadingState() {
-  return <WorkspaceLayoutSkeleton />
-}
 
 export function WorkspaceErrorState() {
   return (
