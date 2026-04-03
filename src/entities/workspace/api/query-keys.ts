@@ -4,4 +4,6 @@ export const workspaceKeys = {
   detail: (slug: string) => [...workspaceKeys.all, 'detail', slug] as const,
   checkSlug: (slug: string) =>
     [...workspaceKeys.all, 'check-slug', slug] as const,
+  overview: (workspaceId: string) =>
+    [...workspaceKeys.all, 'overview', workspaceId] as const,
 }

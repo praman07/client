@@ -64,6 +64,7 @@ type Documents = {
     "\n  fragment BoardFields on Whiteboard {\n    id\n    workspaceId\n    projectId\n    title\n    description\n    elementCount\n    fileSizeBytes\n    isArchived\n    isLocked\n    createdBy\n    createdAt\n    updatedAt\n  }\n": typeof types.BoardFieldsFragmentDoc,
     "\n  fragment BoardWithCollaborators on Whiteboard {\n    ...BoardFields\n    collaborators {\n      userId\n      joinedAt\n      user {\n        id\n        fullName\n        email\n        avatarUrl\n      }\n    }\n  }\n": typeof types.BoardWithCollaboratorsFragmentDoc,
     "\n  fragment WorkspaceFragment on Workspace {\n    id\n    name\n    slug\n    logoUrl\n    memberRole\n  }\n": typeof types.WorkspaceFragmentFragmentDoc,
+    "\n  query GetWorkspaceOverview($workspaceId: ID!) {\n    workspaceOverview(workspaceId: $workspaceId) {\n      totalProjects\n      totalMembers\n      totalIssues\n      totalPages\n      totalChannels\n      activeProjects {\n        id\n        name\n        key\n        description\n        memberCount\n        openIssues\n        updatedAt\n      }\n      recentMembers {\n        userId\n        fullName\n        email\n        avatarUrl\n        roleName\n        joinedAt\n      }\n    }\n  }\n": typeof types.GetWorkspaceOverviewDocument,
     "\n  query GetMyWorkspaces {\n    myWorkspaces {\n      ...WorkspaceFragment\n    }\n  }\n": typeof types.GetMyWorkspacesDocument,
     "\n  query GetWorkspaceBySlug($slug: String!) {\n    workspaceBySlug(slug: $slug) {\n      id\n      name\n      slug\n      logoUrl\n    }\n  }\n": typeof types.GetWorkspaceBySlugDocument,
     "\n  mutation ArchiveChannel($input: ArchiveChannelInput!) {\n    archiveChannel(input: $input) {\n      id\n      name\n      type\n      isArchived\n      deletedAt\n      workspaceId\n      projectId\n      updatedAt\n    }\n  }\n": typeof types.ArchiveChannelDocument,
@@ -76,6 +77,7 @@ type Documents = {
     "\n  mutation UnarchiveChannel($workspaceId: ID!, $channelId: ID!) {\n    unarchiveChannel(workspaceId: $workspaceId, channelId: $channelId) {\n      success\n      channelId\n      name\n    }\n  }\n": typeof types.UnarchiveChannelDocument,
     "\n  mutation CreateWorkspace($slug: String!, $name: String!) {\n    createWorkspace(slug: $slug, name: $name) {\n      id\n      slug\n      name\n    }\n  }\n": typeof types.CreateWorkspaceDocument,
     "\n  mutation CheckSlugAvailability($slug: String!) {\n    checkSlugAvailability(slug: $slug) {\n      available\n      message\n    }\n  }\n": typeof types.CheckSlugAvailabilityDocument,
+    "\n  query GetWorkspaceRoles($workspaceId: ID!) {\n    workspaceRoles(workspaceId: $workspaceId) {\n      id\n      name\n      rank\n    }\n  }\n": typeof types.GetWorkspaceRolesDocument,
     "\n  mutation InviteToWorkspace($input: InviteToWorkspaceInput!) {\n    inviteToWorkspace(input: $input) {\n      success\n      message\n      invitedCount\n    }\n  }\n": typeof types.InviteToWorkspaceDocument,
     "\n  mutation CreateIssue($input: CreateIssueInput!) {\n    createIssue(input: $input) {\n      issue {\n        id\n        ...IssueCardFields\n      }\n    }\n  }\n": typeof types.CreateIssueDocument,
     "\n  mutation MoveIssueStatus($input: MoveIssueStatusInput!) {\n    moveIssueStatus(input: $input) {\n      issue {\n        ...IssueCardFields\n      }\n    }\n  }\n": typeof types.MoveIssueStatusDocument,
@@ -211,6 +213,7 @@ const documents: Documents = {
     "\n  fragment BoardFields on Whiteboard {\n    id\n    workspaceId\n    projectId\n    title\n    description\n    elementCount\n    fileSizeBytes\n    isArchived\n    isLocked\n    createdBy\n    createdAt\n    updatedAt\n  }\n": types.BoardFieldsFragmentDoc,
     "\n  fragment BoardWithCollaborators on Whiteboard {\n    ...BoardFields\n    collaborators {\n      userId\n      joinedAt\n      user {\n        id\n        fullName\n        email\n        avatarUrl\n      }\n    }\n  }\n": types.BoardWithCollaboratorsFragmentDoc,
     "\n  fragment WorkspaceFragment on Workspace {\n    id\n    name\n    slug\n    logoUrl\n    memberRole\n  }\n": types.WorkspaceFragmentFragmentDoc,
+    "\n  query GetWorkspaceOverview($workspaceId: ID!) {\n    workspaceOverview(workspaceId: $workspaceId) {\n      totalProjects\n      totalMembers\n      totalIssues\n      totalPages\n      totalChannels\n      activeProjects {\n        id\n        name\n        key\n        description\n        memberCount\n        openIssues\n        updatedAt\n      }\n      recentMembers {\n        userId\n        fullName\n        email\n        avatarUrl\n        roleName\n        joinedAt\n      }\n    }\n  }\n": types.GetWorkspaceOverviewDocument,
     "\n  query GetMyWorkspaces {\n    myWorkspaces {\n      ...WorkspaceFragment\n    }\n  }\n": types.GetMyWorkspacesDocument,
     "\n  query GetWorkspaceBySlug($slug: String!) {\n    workspaceBySlug(slug: $slug) {\n      id\n      name\n      slug\n      logoUrl\n    }\n  }\n": types.GetWorkspaceBySlugDocument,
     "\n  mutation ArchiveChannel($input: ArchiveChannelInput!) {\n    archiveChannel(input: $input) {\n      id\n      name\n      type\n      isArchived\n      deletedAt\n      workspaceId\n      projectId\n      updatedAt\n    }\n  }\n": types.ArchiveChannelDocument,
@@ -223,6 +226,7 @@ const documents: Documents = {
     "\n  mutation UnarchiveChannel($workspaceId: ID!, $channelId: ID!) {\n    unarchiveChannel(workspaceId: $workspaceId, channelId: $channelId) {\n      success\n      channelId\n      name\n    }\n  }\n": types.UnarchiveChannelDocument,
     "\n  mutation CreateWorkspace($slug: String!, $name: String!) {\n    createWorkspace(slug: $slug, name: $name) {\n      id\n      slug\n      name\n    }\n  }\n": types.CreateWorkspaceDocument,
     "\n  mutation CheckSlugAvailability($slug: String!) {\n    checkSlugAvailability(slug: $slug) {\n      available\n      message\n    }\n  }\n": types.CheckSlugAvailabilityDocument,
+    "\n  query GetWorkspaceRoles($workspaceId: ID!) {\n    workspaceRoles(workspaceId: $workspaceId) {\n      id\n      name\n      rank\n    }\n  }\n": types.GetWorkspaceRolesDocument,
     "\n  mutation InviteToWorkspace($input: InviteToWorkspaceInput!) {\n    inviteToWorkspace(input: $input) {\n      success\n      message\n      invitedCount\n    }\n  }\n": types.InviteToWorkspaceDocument,
     "\n  mutation CreateIssue($input: CreateIssueInput!) {\n    createIssue(input: $input) {\n      issue {\n        id\n        ...IssueCardFields\n      }\n    }\n  }\n": types.CreateIssueDocument,
     "\n  mutation MoveIssueStatus($input: MoveIssueStatusInput!) {\n    moveIssueStatus(input: $input) {\n      issue {\n        ...IssueCardFields\n      }\n    }\n  }\n": types.MoveIssueStatusDocument,
@@ -525,6 +529,10 @@ export function gql(source: "\n  fragment WorkspaceFragment on Workspace {\n    
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
+export function gql(source: "\n  query GetWorkspaceOverview($workspaceId: ID!) {\n    workspaceOverview(workspaceId: $workspaceId) {\n      totalProjects\n      totalMembers\n      totalIssues\n      totalPages\n      totalChannels\n      activeProjects {\n        id\n        name\n        key\n        description\n        memberCount\n        openIssues\n        updatedAt\n      }\n      recentMembers {\n        userId\n        fullName\n        email\n        avatarUrl\n        roleName\n        joinedAt\n      }\n    }\n  }\n"): (typeof documents)["\n  query GetWorkspaceOverview($workspaceId: ID!) {\n    workspaceOverview(workspaceId: $workspaceId) {\n      totalProjects\n      totalMembers\n      totalIssues\n      totalPages\n      totalChannels\n      activeProjects {\n        id\n        name\n        key\n        description\n        memberCount\n        openIssues\n        updatedAt\n      }\n      recentMembers {\n        userId\n        fullName\n        email\n        avatarUrl\n        roleName\n        joinedAt\n      }\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
 export function gql(source: "\n  query GetMyWorkspaces {\n    myWorkspaces {\n      ...WorkspaceFragment\n    }\n  }\n"): (typeof documents)["\n  query GetMyWorkspaces {\n    myWorkspaces {\n      ...WorkspaceFragment\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
@@ -570,6 +578,10 @@ export function gql(source: "\n  mutation CreateWorkspace($slug: String!, $name:
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "\n  mutation CheckSlugAvailability($slug: String!) {\n    checkSlugAvailability(slug: $slug) {\n      available\n      message\n    }\n  }\n"): (typeof documents)["\n  mutation CheckSlugAvailability($slug: String!) {\n    checkSlugAvailability(slug: $slug) {\n      available\n      message\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  query GetWorkspaceRoles($workspaceId: ID!) {\n    workspaceRoles(workspaceId: $workspaceId) {\n      id\n      name\n      rank\n    }\n  }\n"): (typeof documents)["\n  query GetWorkspaceRoles($workspaceId: ID!) {\n    workspaceRoles(workspaceId: $workspaceId) {\n      id\n      name\n      rank\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

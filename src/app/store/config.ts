@@ -22,6 +22,7 @@ import { deleteProjectReducer } from '@/features/project/delete-project/model/sl
 import { leaveProjectReducer } from '@/features/project/leave-project/model/slice'
 import { createProjectRoleReducer } from '@/features/project/create-project-role/model/slice'
 import { updateProjectRoleReducer } from '@/features/project/update-project-role/model/slice'
+import inviteMemberReducer from '@/features/invite-member/model/slice'
 
 export const store = configureStore({
   reducer: {
@@ -48,6 +49,7 @@ export const store = configureStore({
     leaveProject: leaveProjectReducer, // ✅ Leave project dialog state
     createProjectRole: createProjectRoleReducer, // ✅ Create role dialog state
     updateProjectRole: updateProjectRoleReducer, // ✅ Update role dialog state
+    inviteMember: inviteMemberReducer, // ✅ Invite member dialog state
   },
 })
 

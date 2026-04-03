@@ -2,7 +2,7 @@ import { Outlet } from '@tanstack/react-router'
 import { WorkspaceErrorState } from './workspace-error-state'
 import { useSyncWorkspaceContext, useWorkspaceContextSwitch } from '@/entities/workspace/hooks'
 import { DashboardHeader } from '@/widgets/navigation'
-import { WorkspaceLayoutSkeleton } from '@/shared/ui'
+import { Spinner } from '@/shared/ui/primitives/spinner'
 
 interface WorkspaceLayoutProps {
   workspaceSlug: string
@@ -25,7 +25,9 @@ export function WorkspaceLayout({ workspaceSlug }: WorkspaceLayoutProps) {
       {/* CONTENT AREA */}
       <main className="flex-1 flex flex-col overflow-hidden">
         {isLoading ? (
-          <WorkspaceLayoutSkeleton />
+          <div className="flex-1 flex flex-col items-center justify-center min-h-[50vh]">
+            <Spinner className="size-8 text-muted-foreground/50" />
+          </div>
         ) : error || !data?.workspaceBySlug ? (
           <WorkspaceErrorState />
         ) : (

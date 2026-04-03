@@ -4,7 +4,7 @@ import { Plus } from 'lucide-react'
 import { useAppSelector } from '@/shared/hooks'
 import { selectWorkspaceBySlug } from '@/entities/workspace'
 import { PROJECT_FRAGMENT, ProjectCard , useMyProjects  } from '@/entities/project'
-import { CreateProjectModal, useCreateProjectModal } from '@/features/project/create-project'
+import { useCreateProjectModal } from '@/features/project/create-project'
 import { Button, Skeleton } from '@/shared/ui'
 import { useFragment } from '@/gql'
 
@@ -68,7 +68,6 @@ export function ProjectsPage({ workspaceSlug }: ProjectsPageProps) {
         )}
       </div>
 
-      <CreateProjectModal />
     </div>
   )
 }

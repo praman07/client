@@ -32,7 +32,14 @@ function DialogOverlay({
     <DialogPrimitive.Backdrop
       data-slot="dialog-overlay"
       className={cn(
-        'data-open:animate-in data-closed:animate-out data-closed:fade-out-0 data-open:fade-in-0 bg-background/80 duration-(--transition-spring) supports-backdrop-filter:backdrop-blur-xs fixed inset-0 isolate z-50',
+        // Layout
+        'fixed inset-0 isolate z-50 bg-black/60 supports-backdrop-filter:backdrop-blur-sm',
+        // Transition on GPU-composited property only
+        'transition-opacity duration-200 ease-out',
+        // Starting state (entering) — Base UI sets this on first-frame
+        'data-starting-style:opacity-0',
+        // Ending state (leaving) — Base UI sets this just before unmount
+        'data-ending-style:opacity-0 data-ending-style:duration-150 data-ending-style:ease-in',
         className,
       )}
       {...props}
@@ -54,7 +61,21 @@ function DialogContent({
       <DialogPrimitive.Popup
         data-slot="dialog-content"
         className={cn(
-          'bg-background data-open:animate-in data-closed:animate-out data-closed:fade-out-0 data-open:fade-in-0 data-closed:zoom-out-95 data-open:zoom-in-95 border border-border grid max-w-[calc(100%-2rem)] gap-6 rounded-xl p-6 text-sm shadow-lg duration-(--transition-spring) sm:max-w-md lg:max-w-xl fixed top-1/2 left-1/2 z-50 w-full -translate-x-1/2 -translate-y-1/2 outline-none',
+          // Positioning — translate-x stays -50%, translate-y animated below
+          'fixed top-1/2 left-1/2 z-50 w-full -translate-x-1/2 outline-none',
+          // Container
+          'grid max-w-[calc(100%-2rem)] gap-6 rounded-xl border border-border bg-background p-6 text-sm shadow-xl sm:max-w-md lg:max-w-xl',
+          // GPU-accelerated transition on composited props only
+          '[transition:transform_220ms_cubic-bezier(0.16,1,0.3,1),opacity_200ms_ease]',
+          '[will-change:transform,opacity]',
+          // Resting / open state
+          '-translate-y-1/2 opacity-100 scale-100',
+          // Enter from: nudged 16px down, scaled 96%, invisible
+          'data-starting-style:-translate-y-[calc(50%-16px)] data-starting-style:opacity-0 data-starting-style:scale-[0.96]',
+          // Exit to: nudged 8px down, scaled 97%, invisible
+          'data-ending-style:-translate-y-[calc(50%-8px)] data-ending-style:opacity-0 data-ending-style:scale-[0.97]',
+          // Faster exit
+          '[&[data-ending-style]]:[transition-duration:150ms]',
           className,
         )}
         {...props}

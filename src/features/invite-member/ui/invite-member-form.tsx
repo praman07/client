@@ -7,10 +7,18 @@ import { CheckCircle2, Loader2 } from 'lucide-react'
 import { mapInviteMemberError } from '../lib'
 import { inviteMemberSchema } from '../model'
 import { useInviteMember } from '../hooks'
+import { useWorkspaceRoles } from '../hooks/use-workspace-roles'
 import { EmailListField } from './email-list-field'
 import type { InviteMemberFormValues } from '../model'
 import { useAppSelector } from '@/shared/hooks'
 import { Button } from '@/shared/ui'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/shared/ui'
 import { selectCurrentWorkspace } from '@/entities/workspace'
 
 interface Props {
@@ -22,17 +30,24 @@ export function InviteMemberForm({ onClose }: Props) {
   const currentWorkspace = useAppSelector(selectCurrentWorkspace)
 
   const { mutate, isPending } = useInviteMember()
+  const { data: roles, isLoading: rolesLoading } = useWorkspaceRoles()
+
+  // Default to the lowest-ranked role (most restrictive default)
+  const defaultRoleId = roles
+    ? [...roles].sort((a, b) => b.rank - a.rank)[0]?.id ?? ''
+    : ''
 
   const form = useForm({
     defaultValues: {
       emails: [{ email: '' }],
+      roleId: defaultRoleId,
     } as InviteMemberFormValues,
     validators: {
       onChange: inviteMemberSchema,
     },
     onSubmit: ({ value }) => {
       mutate(
-        { emails: value.emails },
+        { emails: value.emails, roleId: value.roleId },
         {
           onSuccess: (data) => {
             if (data.inviteToWorkspace.success) {
@@ -71,18 +86,43 @@ export function InviteMemberForm({ onClose }: Props) {
         e.stopPropagation()
         form.handleSubmit()
       }}
-      className="space-y-6 pt-2"
+      className="space-y-5 pt-2"
     >
       <EmailListField form={form} />
 
-      <div className="flex justify-end gap-2 pt-2">
+      {/* Role selector */}
+      <div className="space-y-1.5">
+        <label className="text-sm font-medium text-foreground">Invite as</label>
+        <form.Field name="roleId">
+          {(field) => (
+            <Select
+              value={field.state.value}
+              onValueChange={(val) => val && field.handleChange(val)}
+              disabled={rolesLoading || !roles?.length}
+            >
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder={rolesLoading ? 'Loading roles…' : 'Select a role'} />
+              </SelectTrigger>
+              <SelectContent>
+                {roles?.map((role) => (
+                  <SelectItem key={role.id} value={role.id}>
+                    {role.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          )}
+        </form.Field>
+      </div>
+
+      <div className="flex justify-end gap-2 pt-1">
         <Button type="button" variant="outline" onClick={onClose}>
           Cancel
         </Button>
         <form.Subscribe
           selector={(state) => [state.canSubmit]}
           children={([canSubmit]) => (
-            <Button type="submit" disabled={!canSubmit || isPending}>
+            <Button type="submit" disabled={!canSubmit || isPending || rolesLoading}>
               {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               Send Invites
             </Button>

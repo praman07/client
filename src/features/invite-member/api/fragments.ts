@@ -9,3 +9,13 @@ export const INVITE_TO_WORKSPACE = gql(`
     }
   }
 `)
+
+export const GET_WORKSPACE_ROLES = gql(`
+  query GetWorkspaceRoles($workspaceId: ID!) {
+    workspaceRoles(workspaceId: $workspaceId) {
+      id
+      name
+      rank
+    }
+  }
+`)

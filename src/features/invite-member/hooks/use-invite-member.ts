@@ -6,6 +6,7 @@ import { selectCurrentWorkspace } from '@/entities/workspace'
 
 interface InviteMemberInput {
   emails: Array<{ email: string }>
+  roleId: string
 }
 
 export function useInviteMember() {
@@ -24,6 +25,7 @@ export function useInviteMember() {
         input: {
           workspaceId: currentWorkspace.id,
           emails: emailList,
+          roleId: values.roleId,
         },
       })
     },
