@@ -190,7 +190,7 @@ type Mutation {
   deleteWorkspace(workspaceId: ID!): Boolean!
   transferWorkspaceOwnership(workspaceId: ID!, newOwnerId: ID!): WorkspaceMember!
   removeWorkspaceMember(workspaceId: ID!, memberId: ID!): InviteResponse!
-  updateWorkspaceMemberRole(workspaceId: ID!, memberId: ID!, role: String!): WorkspaceMember!
+  updateWorkspaceMemberRole(workspaceId: ID!, memberId: ID!, roleId: ID!): WorkspaceMember!
   updateWorkspace(workspaceId: ID!, input: UpdateWorkspaceInput!): Workspace!
   createWorkspaceRole(workspaceId: ID!, input: CreateWorkspaceRoleInput!): WorkspaceRole!
   updateWorkspaceRole(roleId: ID!, workspaceId: ID!, input: UpdateWorkspaceRoleInput!): WorkspaceRole!
@@ -532,6 +532,8 @@ type OnboardingStatus {
 type WorkspaceMember {
   id: ID!
   role: String!
+  roleId: ID!
+  roleRank: Int!
   joinedAt: String!
   user: User!
 }
@@ -540,6 +542,7 @@ type WorkspaceInvite {
   id: ID!
   email: String!
   role: String!
+  roleId: ID!
   expiresAt: String!
   createdAt: String!
 }

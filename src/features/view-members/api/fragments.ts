@@ -5,6 +5,8 @@ export const GET_WORKSPACE_MEMBERS = gql(`
     workspaceMembers(workspaceId: $workspaceId) {
       id
       role
+      roleId
+      roleRank
       joinedAt
       user {
         id
@@ -17,10 +19,12 @@ export const GET_WORKSPACE_MEMBERS = gql(`
 `)
 
 export const UPDATE_MEMBER_ROLE = gql(`
-  mutation UpdateWorkspaceMemberRole($workspaceId: ID!, $memberId: ID!, $role: String!) {
-    updateWorkspaceMemberRole(workspaceId: $workspaceId, memberId: $memberId, role: $role) {
+  mutation UpdateWorkspaceMemberRole($workspaceId: ID!, $memberId: ID!, $roleId: ID!) {
+    updateWorkspaceMemberRole(workspaceId: $workspaceId, memberId: $memberId, roleId: $roleId) {
       id
       role
+      roleId
+      roleRank
     }
   }
 `)
@@ -33,3 +37,4 @@ export const REMOVE_MEMBER = gql(`
     }
   }
 `)
+
