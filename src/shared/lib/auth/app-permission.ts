@@ -11,8 +11,9 @@
  */
 
 // Workspace
+// NOTE: "workspace:create" intentionally absent — platform-level action, not RBAC.
+// See server/src/modules/workspace/permissions.ts for rationale.
 type WorkspacePermission =
-  | "workspace:create"
   | "workspace:read"
   | "workspace:update"
   | "workspace:delete"

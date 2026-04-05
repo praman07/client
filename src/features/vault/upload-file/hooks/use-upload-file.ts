@@ -1,6 +1,6 @@
 import { useQueryClient } from '@tanstack/react-query'
 import { validateFile } from '../lib/validate-file'
-import { uploadToS3 } from '../lib/upload-to-s3'
+import { uploadToS3 } from '@/shared/lib/s3'
 import { CONFIRM_VAULT_UPLOAD, REQUEST_VAULT_UPLOAD } from '../api/fragments'
 import { GqlClient } from '@/shared/api/graphql-client'
 import { useAuth } from '@/shared/hooks'
@@ -141,3 +141,4 @@ export function useUploadFile() {
     }
   }
 }
+  

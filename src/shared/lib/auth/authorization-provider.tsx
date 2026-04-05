@@ -9,14 +9,17 @@
  *  - Disabled when workspaceId is null (home, onboarding routes)
  *  - staleTime matches server Redis TTL (5 min) to avoid redundant refetches
  *  - WS push invalidation via registerHandler for near-instant propagation
+ *    When the server emits `auth.invalidated` the query cache is immediately
+ *    invalidated, triggering a background refetch without any loading flash.
  */
 import React, {
   createContext,
   useContext,
+  useEffect,
   useMemo,
 } from 'react'
 
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useAuth } from '@clerk/clerk-react'
 import { ACTIVE_CONTEXT_QUERY } from './active-context.query'
 import { authContextKeys } from './query-keys'
@@ -29,6 +32,7 @@ import { GqlClient } from '@/shared/api'
 import { useAppSelector } from '@/shared/hooks'
 import { selectCurrentWorkspace } from '@/entities/workspace'
 import { selectCurrentProject } from '@/entities/project'
+import { registerHandler } from '@/shared/ws/event-bus'
 
 export const AuthorizationContext = createContext<AuthScopeContext>(
   AUTH_SCOPE_CONTEXT_DEFAULT,
@@ -41,7 +45,8 @@ export function AuthorizationProvider({
 }: {
   children: React.ReactNode
 }) {
-  const { getToken, isSignedIn } = useAuth()
+  const { getToken, isSignedIn, userId } = useAuth()
+  const queryClient = useQueryClient()
 
   // Resolve scope from Redux — already synced by workspace/project route hierarchy
   const workspace = useAppSelector(selectCurrentWorkspace)
@@ -71,6 +76,28 @@ export function AuthorizationProvider({
     staleTime: FIVE_MINUTES,
     retry: false,
   })
+
+  /**
+   * WS push invalidation — subscribe to auth.invalidated events.
+   *
+   * Server emits this event after every role/permission change, immediately
+   * after Redis cache invalidation. We invalidate the React Query cache so
+   * the next render triggers a background refetch from the server.
+   *
+   * Security: we check that the event targets the current user (userId match)
+   * before invalidating — avoids unnecessary refetches from other users' events.
+   */
+  useEffect(() => {
+    const unsubscribe = registerHandler<{ type: 'auth.invalidated'; payload: { userId: string } }>(
+      'auth.invalidated',
+      (event) => {
+        // Only invalidate if the event targets the current user
+        if (event.payload?.userId && event.payload.userId !== userId) return
+        queryClient.invalidateQueries({ queryKey })
+      },
+    )
+    return unsubscribe
+  }, [queryClient, queryKey, userId])
 
 
   // Map featureFlags array → Record<string, boolean> for O(1) lookups in hooks

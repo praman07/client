@@ -64,10 +64,16 @@ type Documents = {
     "\n  fragment BoardFields on Whiteboard {\n    id\n    workspaceId\n    projectId\n    title\n    description\n    elementCount\n    fileSizeBytes\n    isArchived\n    isLocked\n    createdBy\n    createdAt\n    updatedAt\n  }\n": typeof types.BoardFieldsFragmentDoc,
     "\n  fragment BoardWithCollaborators on Whiteboard {\n    ...BoardFields\n    collaborators {\n      userId\n      joinedAt\n      user {\n        id\n        fullName\n        email\n        avatarUrl\n      }\n    }\n  }\n": typeof types.BoardWithCollaboratorsFragmentDoc,
     "\n  fragment WorkspaceFragment on Workspace {\n    id\n    name\n    slug\n    logoUrl\n    memberRole\n  }\n": typeof types.WorkspaceFragmentFragmentDoc,
-    "\n  query GetWorkspaceOverview($workspaceId: ID!) {\n    workspaceOverview(workspaceId: $workspaceId) {\n      totalProjects\n      totalMembers\n      totalIssues\n      totalPages\n      totalChannels\n      activeProjects {\n        id\n        name\n        key\n        description\n        memberCount\n        openIssues\n        updatedAt\n      }\n      recentMembers {\n        userId\n        fullName\n        email\n        avatarUrl\n        roleName\n        joinedAt\n      }\n    }\n  }\n": typeof types.GetWorkspaceOverviewDocument,
+    "\n  fragment WorkspaceLightFragment on Workspace {\n    id\n    name\n    slug\n    logoUrl\n  }\n": typeof types.WorkspaceLightFragmentFragmentDoc,
+    "\n  fragment WorkspaceSettingsFragment on Workspace {\n    id\n    name\n    slug\n    logoUrl\n    domainWhitelist\n    memberRole\n    createdAt\n    updatedAt\n  }\n": typeof types.WorkspaceSettingsFragmentFragmentDoc,
     "\n  query GetMyWorkspaces {\n    myWorkspaces {\n      ...WorkspaceFragment\n    }\n  }\n": typeof types.GetMyWorkspacesDocument,
-    "\n  query GetWorkspaceBySlug($slug: String!) {\n    workspaceBySlug(slug: $slug) {\n      id\n      name\n      slug\n      logoUrl\n    }\n  }\n": typeof types.GetWorkspaceBySlugDocument,
-    "\n  query GetWorkspaceRoles($workspaceId: ID!) {\n    workspaceRoles(workspaceId: $workspaceId) {\n      id\n      name\n      rank\n    }\n  }\n": typeof types.GetWorkspaceRolesDocument,
+    "\n  query GetWorkspaceBySlug($slug: String!) {\n    workspaceBySlug(slug: $slug) {\n      ...WorkspaceLightFragment\n    }\n  }\n": typeof types.GetWorkspaceBySlugDocument,
+    "\n  query GetWorkspaceOverview($workspaceId: ID!) {\n    workspaceOverview(workspaceId: $workspaceId) {\n      totalProjects\n      totalMembers\n      totalIssues\n      totalPages\n      totalChannels\n      activeProjects {\n        id\n        name\n        key\n        description\n        memberCount\n        openIssues\n        updatedAt\n      }\n      recentMembers {\n        userId\n        fullName\n        email\n        avatarUrl\n        roleName\n        joinedAt\n      }\n    }\n  }\n": typeof types.GetWorkspaceOverviewDocument,
+    "\n  query GetWorkspaceRoles($workspaceId: ID!) {\n    workspaceRoles(workspaceId: $workspaceId) {\n      id\n      name\n      description\n      isSystem\n      rank\n    }\n  }\n": typeof types.GetWorkspaceRolesDocument,
+    "\n  mutation UpdateWorkspace($workspaceId: ID!, $input: UpdateWorkspaceInput!) {\n    updateWorkspace(workspaceId: $workspaceId, input: $input) {\n      ...WorkspaceSettingsFragment\n    }\n  }\n": typeof types.UpdateWorkspaceDocument,
+    "\n  mutation RenameWorkspaceSlug($workspaceId: ID!, $slug: String!) {\n    renameWorkspaceSlug(workspaceId: $workspaceId, slug: $slug) {\n      ...WorkspaceSettingsFragment\n    }\n  }\n": typeof types.RenameWorkspaceSlugDocument,
+    "\n  mutation RequestWorkspaceLogoUpload($workspaceId: ID!, $mimeType: String!, $sizeBytes: Int!) {\n    requestWorkspaceLogoUpload(workspaceId: $workspaceId, mimeType: $mimeType, sizeBytes: $sizeBytes) {\n      presignedUrl\n      logoUrl\n      expiresAt\n    }\n  }\n": typeof types.RequestWorkspaceLogoUploadDocument,
+    "\n  mutation CheckSlugAvailability($slug: String!) {\n    checkSlugAvailability(slug: $slug) {\n      available\n      message\n      reservationId\n    }\n  }\n": typeof types.CheckSlugAvailabilityDocument,
     "\n  mutation ArchiveChannel($input: ArchiveChannelInput!) {\n    archiveChannel(input: $input) {\n      id\n      name\n      type\n      isArchived\n      deletedAt\n      workspaceId\n      projectId\n      updatedAt\n    }\n  }\n": typeof types.ArchiveChannelDocument,
     "\n  mutation CheckChannelAvailability($input: CheckChannelAvailabilityInput!) {\n    checkChannelAvailability(input: $input) {\n      available\n      message\n      reason\n      reservationId\n    }\n  }\n": typeof types.CheckChannelAvailabilityDocument,
     "\n  mutation CreateChannel($input: CreateChannelInput!) {\n    createChannel(input: $input) {\n      id\n      name\n      type\n      workspaceId\n      projectId\n    }\n  }\n": typeof types.CreateChannelDocument,
@@ -77,8 +83,8 @@ type Documents = {
     "\n  mutation RenameChannel($input: RenameChannelInput!) {\n    renameChannel(input: $input) {\n      id\n      name\n      type\n      workspaceId\n      projectId\n      updatedAt\n    }\n  }\n": typeof types.RenameChannelDocument,
     "\n  mutation UnarchiveChannel($workspaceId: ID!, $channelId: ID!) {\n    unarchiveChannel(workspaceId: $workspaceId, channelId: $channelId) {\n      success\n      channelId\n      name\n    }\n  }\n": typeof types.UnarchiveChannelDocument,
     "\n  mutation CreateWorkspace($slug: String!, $name: String!) {\n    createWorkspace(slug: $slug, name: $name) {\n      id\n      slug\n      name\n    }\n  }\n": typeof types.CreateWorkspaceDocument,
-    "\n  mutation CheckSlugAvailability($slug: String!) {\n    checkSlugAvailability(slug: $slug) {\n      available\n      message\n    }\n  }\n": typeof types.CheckSlugAvailabilityDocument,
     "\n  mutation InviteToWorkspace($input: InviteToWorkspaceInput!) {\n    inviteToWorkspace(input: $input) {\n      success\n      message\n      invitedCount\n    }\n  }\n": typeof types.InviteToWorkspaceDocument,
+    "\n  query InviteMemberGetWorkspaceRoles($workspaceId: ID!) {\n    workspaceRoles(workspaceId: $workspaceId) {\n      id\n      name\n      rank\n    }\n  }\n": typeof types.InviteMemberGetWorkspaceRolesDocument,
     "\n  mutation CreateIssue($input: CreateIssueInput!) {\n    createIssue(input: $input) {\n      issue {\n        id\n        ...IssueCardFields\n      }\n    }\n  }\n": typeof types.CreateIssueDocument,
     "\n  mutation MoveIssueStatus($input: MoveIssueStatusInput!) {\n    moveIssueStatus(input: $input) {\n      issue {\n        ...IssueCardFields\n      }\n    }\n  }\n": typeof types.MoveIssueStatusDocument,
     "\n  mutation ReorderIssue($input: ReorderIssueInput!) {\n    reorderIssue(input: $input) {\n      issue {\n        ...IssueCardFields\n      }\n    }\n  }\n": typeof types.ReorderIssueDocument,
@@ -155,6 +161,15 @@ type Documents = {
     "\n  mutation UnarchiveBoard($boardId: ID!) {\n    unarchiveBoard(boardId: $boardId) {\n      id\n      isArchived\n      updatedAt\n    }\n  }\n": typeof types.UnarchiveBoardDocument,
     "\n  mutation UnlockBoard($boardId: ID!) {\n    unlockBoard(boardId: $boardId) {\n      id\n      isLocked\n      updatedAt\n    }\n  }\n": typeof types.UnlockBoardDocument,
     "\n  mutation UpdateBoardDescription($boardId: ID!, $description: String) {\n    updateBoardDescription(boardId: $boardId, description: $description) {\n      id\n      description\n      updatedAt\n    }\n  }\n": typeof types.UpdateBoardDescriptionDocument,
+    "\n  query GetWorkspaceSettings($workspaceId: ID!) {\n    workspaceById(workspaceId: $workspaceId) {\n      ...WorkspaceSettingsFragment\n    }\n  }\n": typeof types.GetWorkspaceSettingsDocument,
+    "\n  query GetWorkspaceRolePermissions($roleId: ID!, $workspaceId: ID!) {\n    rolePermissions(roleId: $roleId, workspaceId: $workspaceId) {\n      roleId\n      permissionId\n      effect\n      conditions\n      permission { id resource action description module }\n    }\n  }\n": typeof types.GetWorkspaceRolePermissionsDocument,
+    "\n  query GetAllWorkspacePermissions($workspaceId: ID!) {\n    allPermissions(workspaceId: $workspaceId) {\n      id\n      resource\n      action\n      description\n      module\n    }\n  }\n": typeof types.GetAllWorkspacePermissionsDocument,
+    "\n  query GetWorkspacePermissions($workspaceId: ID!) {\n    workspacePermissions(workspaceId: $workspaceId) {\n      id\n      resource\n      action\n      description\n      module\n    }\n  }\n": typeof types.GetWorkspacePermissionsDocument,
+    "\n  mutation AssignWorkspaceRolePermission(\n    $roleId: ID!, $workspaceId: ID!, $permissionId: ID!, $effect: String, $conditions: String\n  ) {\n    assignRolePermission(\n      roleId: $roleId, workspaceId: $workspaceId, permissionId: $permissionId,\n      effect: $effect, conditions: $conditions\n    ) {\n      roleId\n      permissionId\n      effect\n    }\n  }\n": typeof types.AssignWorkspaceRolePermissionDocument,
+    "\n  mutation RemoveWorkspaceRolePermission($roleId: ID!, $workspaceId: ID!, $permissionId: ID!) {\n    removeRolePermission(roleId: $roleId, workspaceId: $workspaceId, permissionId: $permissionId)\n  }\n": typeof types.RemoveWorkspaceRolePermissionDocument,
+    "\n  mutation CreateWorkspaceRole($workspaceId: ID!, $input: CreateWorkspaceRoleInput!) {\n    createWorkspaceRole(workspaceId: $workspaceId, input: $input) {\n      id\n      name\n      rank\n      description\n      isSystem\n      scopeType\n    }\n  }\n": typeof types.CreateWorkspaceRoleDocument,
+    "\n  mutation UpdateWorkspaceRole($roleId: ID!, $workspaceId: ID!, $input: UpdateWorkspaceRoleInput!) {\n    updateWorkspaceRole(roleId: $roleId, workspaceId: $workspaceId, input: $input) {\n      id\n      name\n      rank\n      description\n      isSystem\n      scopeType\n    }\n  }\n": typeof types.UpdateWorkspaceRoleDocument,
+    "\n  mutation DeleteWorkspaceRole($roleId: ID!, $workspaceId: ID!) {\n    deleteWorkspaceRole(roleId: $roleId, workspaceId: $workspaceId)\n  }\n": typeof types.DeleteWorkspaceRoleDocument,
     "\n  mutation RegisterExternalFile($input: RegisterExternalFileInput!) {\n    registerExternalFile(input: $input) {\n      fileId\n      presignedUrl\n      expiresAt\n    }\n  }\n": typeof types.RegisterExternalFileDocument,
     "\n  mutation ConfirmVaultUploadExternal($input: ConfirmVaultUploadInput!) {\n    confirmVaultUpload(input: $input) {\n      file {\n        id\n        name\n        mimeType\n        sizeBytes\n        status\n      }\n    }\n  }\n": typeof types.ConfirmVaultUploadExternalDocument,
     "\n  query GetBatchDownloadUrls($fileIds: [ID!]!) {\n    getBatchDownloadUrls(fileIds: $fileIds) {\n      fileId\n      url\n      status\n      name\n      mimeType\n      sizeBytes\n    }\n  }\n": typeof types.GetBatchDownloadUrlsDocument,
@@ -216,10 +231,16 @@ const documents: Documents = {
     "\n  fragment BoardFields on Whiteboard {\n    id\n    workspaceId\n    projectId\n    title\n    description\n    elementCount\n    fileSizeBytes\n    isArchived\n    isLocked\n    createdBy\n    createdAt\n    updatedAt\n  }\n": types.BoardFieldsFragmentDoc,
     "\n  fragment BoardWithCollaborators on Whiteboard {\n    ...BoardFields\n    collaborators {\n      userId\n      joinedAt\n      user {\n        id\n        fullName\n        email\n        avatarUrl\n      }\n    }\n  }\n": types.BoardWithCollaboratorsFragmentDoc,
     "\n  fragment WorkspaceFragment on Workspace {\n    id\n    name\n    slug\n    logoUrl\n    memberRole\n  }\n": types.WorkspaceFragmentFragmentDoc,
-    "\n  query GetWorkspaceOverview($workspaceId: ID!) {\n    workspaceOverview(workspaceId: $workspaceId) {\n      totalProjects\n      totalMembers\n      totalIssues\n      totalPages\n      totalChannels\n      activeProjects {\n        id\n        name\n        key\n        description\n        memberCount\n        openIssues\n        updatedAt\n      }\n      recentMembers {\n        userId\n        fullName\n        email\n        avatarUrl\n        roleName\n        joinedAt\n      }\n    }\n  }\n": types.GetWorkspaceOverviewDocument,
+    "\n  fragment WorkspaceLightFragment on Workspace {\n    id\n    name\n    slug\n    logoUrl\n  }\n": types.WorkspaceLightFragmentFragmentDoc,
+    "\n  fragment WorkspaceSettingsFragment on Workspace {\n    id\n    name\n    slug\n    logoUrl\n    domainWhitelist\n    memberRole\n    createdAt\n    updatedAt\n  }\n": types.WorkspaceSettingsFragmentFragmentDoc,
     "\n  query GetMyWorkspaces {\n    myWorkspaces {\n      ...WorkspaceFragment\n    }\n  }\n": types.GetMyWorkspacesDocument,
-    "\n  query GetWorkspaceBySlug($slug: String!) {\n    workspaceBySlug(slug: $slug) {\n      id\n      name\n      slug\n      logoUrl\n    }\n  }\n": types.GetWorkspaceBySlugDocument,
-    "\n  query GetWorkspaceRoles($workspaceId: ID!) {\n    workspaceRoles(workspaceId: $workspaceId) {\n      id\n      name\n      rank\n    }\n  }\n": types.GetWorkspaceRolesDocument,
+    "\n  query GetWorkspaceBySlug($slug: String!) {\n    workspaceBySlug(slug: $slug) {\n      ...WorkspaceLightFragment\n    }\n  }\n": types.GetWorkspaceBySlugDocument,
+    "\n  query GetWorkspaceOverview($workspaceId: ID!) {\n    workspaceOverview(workspaceId: $workspaceId) {\n      totalProjects\n      totalMembers\n      totalIssues\n      totalPages\n      totalChannels\n      activeProjects {\n        id\n        name\n        key\n        description\n        memberCount\n        openIssues\n        updatedAt\n      }\n      recentMembers {\n        userId\n        fullName\n        email\n        avatarUrl\n        roleName\n        joinedAt\n      }\n    }\n  }\n": types.GetWorkspaceOverviewDocument,
+    "\n  query GetWorkspaceRoles($workspaceId: ID!) {\n    workspaceRoles(workspaceId: $workspaceId) {\n      id\n      name\n      description\n      isSystem\n      rank\n    }\n  }\n": types.GetWorkspaceRolesDocument,
+    "\n  mutation UpdateWorkspace($workspaceId: ID!, $input: UpdateWorkspaceInput!) {\n    updateWorkspace(workspaceId: $workspaceId, input: $input) {\n      ...WorkspaceSettingsFragment\n    }\n  }\n": types.UpdateWorkspaceDocument,
+    "\n  mutation RenameWorkspaceSlug($workspaceId: ID!, $slug: String!) {\n    renameWorkspaceSlug(workspaceId: $workspaceId, slug: $slug) {\n      ...WorkspaceSettingsFragment\n    }\n  }\n": types.RenameWorkspaceSlugDocument,
+    "\n  mutation RequestWorkspaceLogoUpload($workspaceId: ID!, $mimeType: String!, $sizeBytes: Int!) {\n    requestWorkspaceLogoUpload(workspaceId: $workspaceId, mimeType: $mimeType, sizeBytes: $sizeBytes) {\n      presignedUrl\n      logoUrl\n      expiresAt\n    }\n  }\n": types.RequestWorkspaceLogoUploadDocument,
+    "\n  mutation CheckSlugAvailability($slug: String!) {\n    checkSlugAvailability(slug: $slug) {\n      available\n      message\n      reservationId\n    }\n  }\n": types.CheckSlugAvailabilityDocument,
     "\n  mutation ArchiveChannel($input: ArchiveChannelInput!) {\n    archiveChannel(input: $input) {\n      id\n      name\n      type\n      isArchived\n      deletedAt\n      workspaceId\n      projectId\n      updatedAt\n    }\n  }\n": types.ArchiveChannelDocument,
     "\n  mutation CheckChannelAvailability($input: CheckChannelAvailabilityInput!) {\n    checkChannelAvailability(input: $input) {\n      available\n      message\n      reason\n      reservationId\n    }\n  }\n": types.CheckChannelAvailabilityDocument,
     "\n  mutation CreateChannel($input: CreateChannelInput!) {\n    createChannel(input: $input) {\n      id\n      name\n      type\n      workspaceId\n      projectId\n    }\n  }\n": types.CreateChannelDocument,
@@ -229,8 +250,8 @@ const documents: Documents = {
     "\n  mutation RenameChannel($input: RenameChannelInput!) {\n    renameChannel(input: $input) {\n      id\n      name\n      type\n      workspaceId\n      projectId\n      updatedAt\n    }\n  }\n": types.RenameChannelDocument,
     "\n  mutation UnarchiveChannel($workspaceId: ID!, $channelId: ID!) {\n    unarchiveChannel(workspaceId: $workspaceId, channelId: $channelId) {\n      success\n      channelId\n      name\n    }\n  }\n": types.UnarchiveChannelDocument,
     "\n  mutation CreateWorkspace($slug: String!, $name: String!) {\n    createWorkspace(slug: $slug, name: $name) {\n      id\n      slug\n      name\n    }\n  }\n": types.CreateWorkspaceDocument,
-    "\n  mutation CheckSlugAvailability($slug: String!) {\n    checkSlugAvailability(slug: $slug) {\n      available\n      message\n    }\n  }\n": types.CheckSlugAvailabilityDocument,
     "\n  mutation InviteToWorkspace($input: InviteToWorkspaceInput!) {\n    inviteToWorkspace(input: $input) {\n      success\n      message\n      invitedCount\n    }\n  }\n": types.InviteToWorkspaceDocument,
+    "\n  query InviteMemberGetWorkspaceRoles($workspaceId: ID!) {\n    workspaceRoles(workspaceId: $workspaceId) {\n      id\n      name\n      rank\n    }\n  }\n": types.InviteMemberGetWorkspaceRolesDocument,
     "\n  mutation CreateIssue($input: CreateIssueInput!) {\n    createIssue(input: $input) {\n      issue {\n        id\n        ...IssueCardFields\n      }\n    }\n  }\n": types.CreateIssueDocument,
     "\n  mutation MoveIssueStatus($input: MoveIssueStatusInput!) {\n    moveIssueStatus(input: $input) {\n      issue {\n        ...IssueCardFields\n      }\n    }\n  }\n": types.MoveIssueStatusDocument,
     "\n  mutation ReorderIssue($input: ReorderIssueInput!) {\n    reorderIssue(input: $input) {\n      issue {\n        ...IssueCardFields\n      }\n    }\n  }\n": types.ReorderIssueDocument,
@@ -307,6 +328,15 @@ const documents: Documents = {
     "\n  mutation UnarchiveBoard($boardId: ID!) {\n    unarchiveBoard(boardId: $boardId) {\n      id\n      isArchived\n      updatedAt\n    }\n  }\n": types.UnarchiveBoardDocument,
     "\n  mutation UnlockBoard($boardId: ID!) {\n    unlockBoard(boardId: $boardId) {\n      id\n      isLocked\n      updatedAt\n    }\n  }\n": types.UnlockBoardDocument,
     "\n  mutation UpdateBoardDescription($boardId: ID!, $description: String) {\n    updateBoardDescription(boardId: $boardId, description: $description) {\n      id\n      description\n      updatedAt\n    }\n  }\n": types.UpdateBoardDescriptionDocument,
+    "\n  query GetWorkspaceSettings($workspaceId: ID!) {\n    workspaceById(workspaceId: $workspaceId) {\n      ...WorkspaceSettingsFragment\n    }\n  }\n": types.GetWorkspaceSettingsDocument,
+    "\n  query GetWorkspaceRolePermissions($roleId: ID!, $workspaceId: ID!) {\n    rolePermissions(roleId: $roleId, workspaceId: $workspaceId) {\n      roleId\n      permissionId\n      effect\n      conditions\n      permission { id resource action description module }\n    }\n  }\n": types.GetWorkspaceRolePermissionsDocument,
+    "\n  query GetAllWorkspacePermissions($workspaceId: ID!) {\n    allPermissions(workspaceId: $workspaceId) {\n      id\n      resource\n      action\n      description\n      module\n    }\n  }\n": types.GetAllWorkspacePermissionsDocument,
+    "\n  query GetWorkspacePermissions($workspaceId: ID!) {\n    workspacePermissions(workspaceId: $workspaceId) {\n      id\n      resource\n      action\n      description\n      module\n    }\n  }\n": types.GetWorkspacePermissionsDocument,
+    "\n  mutation AssignWorkspaceRolePermission(\n    $roleId: ID!, $workspaceId: ID!, $permissionId: ID!, $effect: String, $conditions: String\n  ) {\n    assignRolePermission(\n      roleId: $roleId, workspaceId: $workspaceId, permissionId: $permissionId,\n      effect: $effect, conditions: $conditions\n    ) {\n      roleId\n      permissionId\n      effect\n    }\n  }\n": types.AssignWorkspaceRolePermissionDocument,
+    "\n  mutation RemoveWorkspaceRolePermission($roleId: ID!, $workspaceId: ID!, $permissionId: ID!) {\n    removeRolePermission(roleId: $roleId, workspaceId: $workspaceId, permissionId: $permissionId)\n  }\n": types.RemoveWorkspaceRolePermissionDocument,
+    "\n  mutation CreateWorkspaceRole($workspaceId: ID!, $input: CreateWorkspaceRoleInput!) {\n    createWorkspaceRole(workspaceId: $workspaceId, input: $input) {\n      id\n      name\n      rank\n      description\n      isSystem\n      scopeType\n    }\n  }\n": types.CreateWorkspaceRoleDocument,
+    "\n  mutation UpdateWorkspaceRole($roleId: ID!, $workspaceId: ID!, $input: UpdateWorkspaceRoleInput!) {\n    updateWorkspaceRole(roleId: $roleId, workspaceId: $workspaceId, input: $input) {\n      id\n      name\n      rank\n      description\n      isSystem\n      scopeType\n    }\n  }\n": types.UpdateWorkspaceRoleDocument,
+    "\n  mutation DeleteWorkspaceRole($roleId: ID!, $workspaceId: ID!) {\n    deleteWorkspaceRole(roleId: $roleId, workspaceId: $workspaceId)\n  }\n": types.DeleteWorkspaceRoleDocument,
     "\n  mutation RegisterExternalFile($input: RegisterExternalFileInput!) {\n    registerExternalFile(input: $input) {\n      fileId\n      presignedUrl\n      expiresAt\n    }\n  }\n": types.RegisterExternalFileDocument,
     "\n  mutation ConfirmVaultUploadExternal($input: ConfirmVaultUploadInput!) {\n    confirmVaultUpload(input: $input) {\n      file {\n        id\n        name\n        mimeType\n        sizeBytes\n        status\n      }\n    }\n  }\n": types.ConfirmVaultUploadExternalDocument,
     "\n  query GetBatchDownloadUrls($fileIds: [ID!]!) {\n    getBatchDownloadUrls(fileIds: $fileIds) {\n      fileId\n      url\n      status\n      name\n      mimeType\n      sizeBytes\n    }\n  }\n": types.GetBatchDownloadUrlsDocument,
@@ -535,7 +565,11 @@ export function gql(source: "\n  fragment WorkspaceFragment on Workspace {\n    
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "\n  query GetWorkspaceOverview($workspaceId: ID!) {\n    workspaceOverview(workspaceId: $workspaceId) {\n      totalProjects\n      totalMembers\n      totalIssues\n      totalPages\n      totalChannels\n      activeProjects {\n        id\n        name\n        key\n        description\n        memberCount\n        openIssues\n        updatedAt\n      }\n      recentMembers {\n        userId\n        fullName\n        email\n        avatarUrl\n        roleName\n        joinedAt\n      }\n    }\n  }\n"): (typeof documents)["\n  query GetWorkspaceOverview($workspaceId: ID!) {\n    workspaceOverview(workspaceId: $workspaceId) {\n      totalProjects\n      totalMembers\n      totalIssues\n      totalPages\n      totalChannels\n      activeProjects {\n        id\n        name\n        key\n        description\n        memberCount\n        openIssues\n        updatedAt\n      }\n      recentMembers {\n        userId\n        fullName\n        email\n        avatarUrl\n        roleName\n        joinedAt\n      }\n    }\n  }\n"];
+export function gql(source: "\n  fragment WorkspaceLightFragment on Workspace {\n    id\n    name\n    slug\n    logoUrl\n  }\n"): (typeof documents)["\n  fragment WorkspaceLightFragment on Workspace {\n    id\n    name\n    slug\n    logoUrl\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  fragment WorkspaceSettingsFragment on Workspace {\n    id\n    name\n    slug\n    logoUrl\n    domainWhitelist\n    memberRole\n    createdAt\n    updatedAt\n  }\n"): (typeof documents)["\n  fragment WorkspaceSettingsFragment on Workspace {\n    id\n    name\n    slug\n    logoUrl\n    domainWhitelist\n    memberRole\n    createdAt\n    updatedAt\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -543,11 +577,31 @@ export function gql(source: "\n  query GetMyWorkspaces {\n    myWorkspaces {\n  
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "\n  query GetWorkspaceBySlug($slug: String!) {\n    workspaceBySlug(slug: $slug) {\n      id\n      name\n      slug\n      logoUrl\n    }\n  }\n"): (typeof documents)["\n  query GetWorkspaceBySlug($slug: String!) {\n    workspaceBySlug(slug: $slug) {\n      id\n      name\n      slug\n      logoUrl\n    }\n  }\n"];
+export function gql(source: "\n  query GetWorkspaceBySlug($slug: String!) {\n    workspaceBySlug(slug: $slug) {\n      ...WorkspaceLightFragment\n    }\n  }\n"): (typeof documents)["\n  query GetWorkspaceBySlug($slug: String!) {\n    workspaceBySlug(slug: $slug) {\n      ...WorkspaceLightFragment\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "\n  query GetWorkspaceRoles($workspaceId: ID!) {\n    workspaceRoles(workspaceId: $workspaceId) {\n      id\n      name\n      rank\n    }\n  }\n"): (typeof documents)["\n  query GetWorkspaceRoles($workspaceId: ID!) {\n    workspaceRoles(workspaceId: $workspaceId) {\n      id\n      name\n      rank\n    }\n  }\n"];
+export function gql(source: "\n  query GetWorkspaceOverview($workspaceId: ID!) {\n    workspaceOverview(workspaceId: $workspaceId) {\n      totalProjects\n      totalMembers\n      totalIssues\n      totalPages\n      totalChannels\n      activeProjects {\n        id\n        name\n        key\n        description\n        memberCount\n        openIssues\n        updatedAt\n      }\n      recentMembers {\n        userId\n        fullName\n        email\n        avatarUrl\n        roleName\n        joinedAt\n      }\n    }\n  }\n"): (typeof documents)["\n  query GetWorkspaceOverview($workspaceId: ID!) {\n    workspaceOverview(workspaceId: $workspaceId) {\n      totalProjects\n      totalMembers\n      totalIssues\n      totalPages\n      totalChannels\n      activeProjects {\n        id\n        name\n        key\n        description\n        memberCount\n        openIssues\n        updatedAt\n      }\n      recentMembers {\n        userId\n        fullName\n        email\n        avatarUrl\n        roleName\n        joinedAt\n      }\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  query GetWorkspaceRoles($workspaceId: ID!) {\n    workspaceRoles(workspaceId: $workspaceId) {\n      id\n      name\n      description\n      isSystem\n      rank\n    }\n  }\n"): (typeof documents)["\n  query GetWorkspaceRoles($workspaceId: ID!) {\n    workspaceRoles(workspaceId: $workspaceId) {\n      id\n      name\n      description\n      isSystem\n      rank\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation UpdateWorkspace($workspaceId: ID!, $input: UpdateWorkspaceInput!) {\n    updateWorkspace(workspaceId: $workspaceId, input: $input) {\n      ...WorkspaceSettingsFragment\n    }\n  }\n"): (typeof documents)["\n  mutation UpdateWorkspace($workspaceId: ID!, $input: UpdateWorkspaceInput!) {\n    updateWorkspace(workspaceId: $workspaceId, input: $input) {\n      ...WorkspaceSettingsFragment\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation RenameWorkspaceSlug($workspaceId: ID!, $slug: String!) {\n    renameWorkspaceSlug(workspaceId: $workspaceId, slug: $slug) {\n      ...WorkspaceSettingsFragment\n    }\n  }\n"): (typeof documents)["\n  mutation RenameWorkspaceSlug($workspaceId: ID!, $slug: String!) {\n    renameWorkspaceSlug(workspaceId: $workspaceId, slug: $slug) {\n      ...WorkspaceSettingsFragment\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation RequestWorkspaceLogoUpload($workspaceId: ID!, $mimeType: String!, $sizeBytes: Int!) {\n    requestWorkspaceLogoUpload(workspaceId: $workspaceId, mimeType: $mimeType, sizeBytes: $sizeBytes) {\n      presignedUrl\n      logoUrl\n      expiresAt\n    }\n  }\n"): (typeof documents)["\n  mutation RequestWorkspaceLogoUpload($workspaceId: ID!, $mimeType: String!, $sizeBytes: Int!) {\n    requestWorkspaceLogoUpload(workspaceId: $workspaceId, mimeType: $mimeType, sizeBytes: $sizeBytes) {\n      presignedUrl\n      logoUrl\n      expiresAt\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation CheckSlugAvailability($slug: String!) {\n    checkSlugAvailability(slug: $slug) {\n      available\n      message\n      reservationId\n    }\n  }\n"): (typeof documents)["\n  mutation CheckSlugAvailability($slug: String!) {\n    checkSlugAvailability(slug: $slug) {\n      available\n      message\n      reservationId\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -587,11 +641,11 @@ export function gql(source: "\n  mutation CreateWorkspace($slug: String!, $name:
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "\n  mutation CheckSlugAvailability($slug: String!) {\n    checkSlugAvailability(slug: $slug) {\n      available\n      message\n    }\n  }\n"): (typeof documents)["\n  mutation CheckSlugAvailability($slug: String!) {\n    checkSlugAvailability(slug: $slug) {\n      available\n      message\n    }\n  }\n"];
+export function gql(source: "\n  mutation InviteToWorkspace($input: InviteToWorkspaceInput!) {\n    inviteToWorkspace(input: $input) {\n      success\n      message\n      invitedCount\n    }\n  }\n"): (typeof documents)["\n  mutation InviteToWorkspace($input: InviteToWorkspaceInput!) {\n    inviteToWorkspace(input: $input) {\n      success\n      message\n      invitedCount\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "\n  mutation InviteToWorkspace($input: InviteToWorkspaceInput!) {\n    inviteToWorkspace(input: $input) {\n      success\n      message\n      invitedCount\n    }\n  }\n"): (typeof documents)["\n  mutation InviteToWorkspace($input: InviteToWorkspaceInput!) {\n    inviteToWorkspace(input: $input) {\n      success\n      message\n      invitedCount\n    }\n  }\n"];
+export function gql(source: "\n  query InviteMemberGetWorkspaceRoles($workspaceId: ID!) {\n    workspaceRoles(workspaceId: $workspaceId) {\n      id\n      name\n      rank\n    }\n  }\n"): (typeof documents)["\n  query InviteMemberGetWorkspaceRoles($workspaceId: ID!) {\n    workspaceRoles(workspaceId: $workspaceId) {\n      id\n      name\n      rank\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -896,6 +950,42 @@ export function gql(source: "\n  mutation UnlockBoard($boardId: ID!) {\n    unlo
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "\n  mutation UpdateBoardDescription($boardId: ID!, $description: String) {\n    updateBoardDescription(boardId: $boardId, description: $description) {\n      id\n      description\n      updatedAt\n    }\n  }\n"): (typeof documents)["\n  mutation UpdateBoardDescription($boardId: ID!, $description: String) {\n    updateBoardDescription(boardId: $boardId, description: $description) {\n      id\n      description\n      updatedAt\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  query GetWorkspaceSettings($workspaceId: ID!) {\n    workspaceById(workspaceId: $workspaceId) {\n      ...WorkspaceSettingsFragment\n    }\n  }\n"): (typeof documents)["\n  query GetWorkspaceSettings($workspaceId: ID!) {\n    workspaceById(workspaceId: $workspaceId) {\n      ...WorkspaceSettingsFragment\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  query GetWorkspaceRolePermissions($roleId: ID!, $workspaceId: ID!) {\n    rolePermissions(roleId: $roleId, workspaceId: $workspaceId) {\n      roleId\n      permissionId\n      effect\n      conditions\n      permission { id resource action description module }\n    }\n  }\n"): (typeof documents)["\n  query GetWorkspaceRolePermissions($roleId: ID!, $workspaceId: ID!) {\n    rolePermissions(roleId: $roleId, workspaceId: $workspaceId) {\n      roleId\n      permissionId\n      effect\n      conditions\n      permission { id resource action description module }\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  query GetAllWorkspacePermissions($workspaceId: ID!) {\n    allPermissions(workspaceId: $workspaceId) {\n      id\n      resource\n      action\n      description\n      module\n    }\n  }\n"): (typeof documents)["\n  query GetAllWorkspacePermissions($workspaceId: ID!) {\n    allPermissions(workspaceId: $workspaceId) {\n      id\n      resource\n      action\n      description\n      module\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  query GetWorkspacePermissions($workspaceId: ID!) {\n    workspacePermissions(workspaceId: $workspaceId) {\n      id\n      resource\n      action\n      description\n      module\n    }\n  }\n"): (typeof documents)["\n  query GetWorkspacePermissions($workspaceId: ID!) {\n    workspacePermissions(workspaceId: $workspaceId) {\n      id\n      resource\n      action\n      description\n      module\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation AssignWorkspaceRolePermission(\n    $roleId: ID!, $workspaceId: ID!, $permissionId: ID!, $effect: String, $conditions: String\n  ) {\n    assignRolePermission(\n      roleId: $roleId, workspaceId: $workspaceId, permissionId: $permissionId,\n      effect: $effect, conditions: $conditions\n    ) {\n      roleId\n      permissionId\n      effect\n    }\n  }\n"): (typeof documents)["\n  mutation AssignWorkspaceRolePermission(\n    $roleId: ID!, $workspaceId: ID!, $permissionId: ID!, $effect: String, $conditions: String\n  ) {\n    assignRolePermission(\n      roleId: $roleId, workspaceId: $workspaceId, permissionId: $permissionId,\n      effect: $effect, conditions: $conditions\n    ) {\n      roleId\n      permissionId\n      effect\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation RemoveWorkspaceRolePermission($roleId: ID!, $workspaceId: ID!, $permissionId: ID!) {\n    removeRolePermission(roleId: $roleId, workspaceId: $workspaceId, permissionId: $permissionId)\n  }\n"): (typeof documents)["\n  mutation RemoveWorkspaceRolePermission($roleId: ID!, $workspaceId: ID!, $permissionId: ID!) {\n    removeRolePermission(roleId: $roleId, workspaceId: $workspaceId, permissionId: $permissionId)\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation CreateWorkspaceRole($workspaceId: ID!, $input: CreateWorkspaceRoleInput!) {\n    createWorkspaceRole(workspaceId: $workspaceId, input: $input) {\n      id\n      name\n      rank\n      description\n      isSystem\n      scopeType\n    }\n  }\n"): (typeof documents)["\n  mutation CreateWorkspaceRole($workspaceId: ID!, $input: CreateWorkspaceRoleInput!) {\n    createWorkspaceRole(workspaceId: $workspaceId, input: $input) {\n      id\n      name\n      rank\n      description\n      isSystem\n      scopeType\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation UpdateWorkspaceRole($roleId: ID!, $workspaceId: ID!, $input: UpdateWorkspaceRoleInput!) {\n    updateWorkspaceRole(roleId: $roleId, workspaceId: $workspaceId, input: $input) {\n      id\n      name\n      rank\n      description\n      isSystem\n      scopeType\n    }\n  }\n"): (typeof documents)["\n  mutation UpdateWorkspaceRole($roleId: ID!, $workspaceId: ID!, $input: UpdateWorkspaceRoleInput!) {\n    updateWorkspaceRole(roleId: $roleId, workspaceId: $workspaceId, input: $input) {\n      id\n      name\n      rank\n      description\n      isSystem\n      scopeType\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation DeleteWorkspaceRole($roleId: ID!, $workspaceId: ID!) {\n    deleteWorkspaceRole(roleId: $roleId, workspaceId: $workspaceId)\n  }\n"): (typeof documents)["\n  mutation DeleteWorkspaceRole($roleId: ID!, $workspaceId: ID!) {\n    deleteWorkspaceRole(roleId: $roleId, workspaceId: $workspaceId)\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

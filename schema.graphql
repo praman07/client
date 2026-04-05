@@ -29,6 +29,7 @@ type Query {
   workspaceRoles(workspaceId: ID!): [WorkspaceRole!]!
   rolePermissions(roleId: ID!, workspaceId: ID!): [RolePermission!]!
   workspaceOverview(workspaceId: ID!): WorkspaceOverview!
+  workspacePermissions(workspaceId: ID!): [Permission!]!
 
   """Get paginated notifications for the current user."""
   notifications(limit: Int, cursor: String, isRead: Boolean): NotificationConnection!
@@ -197,6 +198,8 @@ type Mutation {
   deleteWorkspaceRole(roleId: ID!, workspaceId: ID!): Boolean!
   assignRolePermission(roleId: ID!, workspaceId: ID!, permissionId: ID!, effect: String, conditions: String): RolePermission!
   removeRolePermission(roleId: ID!, workspaceId: ID!, permissionId: ID!): Boolean!
+  renameWorkspaceSlug(workspaceId: ID!, slug: String!): Workspace!
+  requestWorkspaceLogoUpload(workspaceId: ID!, mimeType: String!, sizeBytes: Int!): WorkspaceLogoUploadPayload!
 
   """Mark specific notifications as read."""
   markNotificationRead(ids: [ID!]!): Boolean!
@@ -514,6 +517,14 @@ input UpdateWorkspaceRoleInput {
   name: String
   description: String
   rank: Int
+}
+
+type WorkspaceLogoUploadPayload {
+  presignedUrl: String!
+
+  """The final S3 URL to store in Workspace.logoUrl after PUT succeeds."""
+  logoUrl: String!
+  expiresAt: String!
 }
 
 type WorkspaceInviteInfo {
