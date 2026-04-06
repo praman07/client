@@ -45,6 +45,7 @@ type ProjectPermission =
   | "project:role:create"
   | "project:role:update"
   | "project:role:delete"
+  | "project:role:assign-permission"
   | "project:settings:view"
 
 // Issues

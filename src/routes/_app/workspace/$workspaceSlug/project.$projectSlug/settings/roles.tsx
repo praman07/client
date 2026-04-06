@@ -3,8 +3,8 @@ import { ErrorBoundary } from 'react-error-boundary'
 import { useAppSelector } from '@/shared/hooks'
 import { selectCurrentProject } from '@/entities/project'
 import { selectCurrentWorkspace } from '@/entities/workspace'
-import { ProjectRolesList } from '@/widgets/project-roles-list'
-import { PageSpinner, RouteError, WidgetError  } from '@/shared/ui'
+import { PageSpinner, RouteError, ScrollArea, WidgetError } from '@/shared/ui'
+import { ProjectRolesPanel } from '@/widgets/project-roles-panel'
 
 export const Route = createFileRoute(
   '/_app/workspace/$workspaceSlug/project/$projectSlug/settings/roles',
@@ -20,12 +20,13 @@ function RolesSettingsPage() {
   const project = useAppSelector(selectCurrentProject)
   const workspace = useAppSelector(selectCurrentWorkspace)
 
-  // PageSpinner handles Redux sync wait — never returns silently null
   if (!project || !workspace) return <PageSpinner label="Loading project…" />
 
   return (
     <ErrorBoundary FallbackComponent={WidgetError}>
-      <ProjectRolesList projectId={project.id} workspaceId={workspace.id} />
+      <ScrollArea className="h-[calc(100vh-320px)]">
+        <ProjectRolesPanel projectId={project.id} workspaceId={workspace.id} />
+      </ScrollArea>
     </ErrorBoundary>
   )
 }

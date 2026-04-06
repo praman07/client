@@ -18,6 +18,7 @@ import {
 import { useFragment } from '@/gql'
 import { DomainRegistry } from '@/app/providers/ws-domains'
 import { PageSpinner, RouteError } from '@/shared/ui'
+import { CreateProjectRoleDialog } from '@/features/project/create-project-role'
 
 export const Route = createFileRoute(
   '/_app/workspace/$workspaceSlug/project/$projectSlug',
@@ -99,6 +100,9 @@ function ProjectLayout({
           </Suspense>
         </ErrorBoundary>
       </div>
+
+      {/* Project-scoped modal registry — portaled to <body>, zero visual impact */}
+      <CreateProjectRoleDialog projectId={project.id} workspaceId={workspace.id} />
     </div>
   )
 }

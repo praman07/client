@@ -228,6 +228,7 @@ export function CreateProjectRoleDialog({
           {step === 1 && (
             <StepPermissions
               workspaceId={workspaceId}
+              projectId={projectId}
               selectedIds={selectedPermissionIds}
               onToggle={handlePermToggle}
               onToggleResource={handlePermToggleResource}

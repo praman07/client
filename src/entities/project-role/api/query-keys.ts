@@ -25,4 +25,10 @@ export const rolePermissionKeys = {
    */
   list: (roleId: string) =>
     [...rolePermissionKeys.all(roleId), 'list'] as const,
+  /**
+   * Project-scoped permissions catalog (module='project'). Used by the roles settings page.
+   * Invalidated on schema migrations only — staleTime set long (10 min).
+   */
+  projectCatalog: (workspaceId: string, projectId: string) =>
+    ['project-role-permissions', 'project-catalog', workspaceId, projectId] as const,
 }

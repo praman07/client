@@ -1,5 +1,6 @@
 import { WorkspaceRolesPanel } from "@/widgets/workspace-roles-panel";
+import { ScrollArea } from "@/shared/ui";
 
 export function RolesSettingsPage() {
-  return <WorkspaceRolesPanel />
+  return <ScrollArea className="h-[calc(100vh-220px)]"><WorkspaceRolesPanel /></ScrollArea>
 }

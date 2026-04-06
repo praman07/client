@@ -43,6 +43,7 @@ type Query {
   projectRoles(projectId: ID!, workspaceId: ID!): [ProjectRole!]!
   projectOverview(projectId: ID!): ProjectOverview!
   allPermissions(workspaceId: ID!): [Permission!]!
+  projectPermissions(workspaceId: ID!, projectId: ID!): [Permission!]!
   getThreadMessages(parentMessageId: ID!, limit: Int, beforeCursor: ID): [ChatMessage!]!
   getMessageById(messageId: ID!): ChatMessage
   getMessagesAfterCursor(channelId: ID!, afterCursor: ID!, limit: Int): [ChatMessage!]!

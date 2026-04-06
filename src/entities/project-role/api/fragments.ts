@@ -65,6 +65,22 @@ export const GET_ALL_PERMISSIONS = gql(`
   }
 `)
 
+/**
+ * Fetches project-scoped permissions (module = "project") for the roles & permissions matrix.
+ * Used by useProjectPermissionsCatalog on the project settings Roles tab.
+ */
+export const GET_PROJECT_PERMISSIONS = gql(`
+  query GetProjectPermissions($workspaceId: ID!, $projectId: ID!) {
+    projectPermissions(workspaceId: $workspaceId, projectId: $projectId) {
+      id
+      resource
+      action
+      description
+      module
+    }
+  }
+`)
+
 // ── Mutations (imported by features/manage-project-roles) ─────────────────────
 
 export const CREATE_PROJECT_ROLE = gql(`

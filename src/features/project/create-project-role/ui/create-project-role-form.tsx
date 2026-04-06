@@ -14,7 +14,7 @@ import {
   Textarea,
 } from '@/shared/ui'
 import { cn } from '@/shared/lib/utils'
-import { useAllPermissions } from '@/entities/project-role'
+import { useProjectPermissionsCatalog } from '@/features/project/manage-role-permissions'
 import { useProjectMembers } from '@/entities/project-member'
 
 // ─── Step 1: Role Details ────────────────────────────────────────────────────
@@ -94,6 +94,7 @@ export function StepRoleDetails({
 
 interface StepPermissionsProps {
   workspaceId: string
+  projectId: string
   selectedIds: Set<string>
   onToggle: (id: string) => void
   onToggleResource: (ids: Array<string>) => void
@@ -102,16 +103,17 @@ interface StepPermissionsProps {
 
 export function StepPermissions({
   workspaceId,
+  projectId,
   selectedIds,
   onToggle,
   onToggleResource,
   onToggleAll,
 }: StepPermissionsProps) {
   const [search, setSearch] = useState('')
-  const { data, isLoading } = useAllPermissions(workspaceId)
+  const { data, isLoading } = useProjectPermissionsCatalog(workspaceId, projectId)
   const allPermissions = useMemo(
-    () => data?.allPermissions ?? [],
-    [data?.allPermissions],
+    () => data ?? [],
+    [data],
   )
 
   const byResource = useMemo(() => {

@@ -35,7 +35,7 @@ export function WorkspaceRoleList({
   })
 
   return (
-    <div className="flex flex-col h-full border rounded-lg bg-card overflow-hidden">
+    <div className="flex flex-col border rounded-lg bg-card overflow-hidden">
       {/* Header */}
       <div className="px-4 py-3 border-b bg-muted/30 flex items-center gap-2">
         <Shield className="h-4 w-4 text-primary shrink-0" />
@@ -58,7 +58,7 @@ export function WorkspaceRoleList({
       </Guard>
 
       {/* Role Items */}
-      <div className="flex-1 overflow-y-auto px-3 py-2 space-y-1">
+      <div className="overflow-auto px-3 py-2 space-y-1">
         {sortedRoles.map((role) => (
           <button
             key={role.id}

@@ -40,6 +40,7 @@ type Documents = {
     "\n  query GetProjectRoles($projectId: ID!, $workspaceId: ID!) {\n    projectRoles(projectId: $projectId, workspaceId: $workspaceId) {\n      ...ProjectRoleFields\n    }\n  }\n": typeof types.GetProjectRolesDocument,
     "\n  query GetRolePermissions($roleId: ID!, $workspaceId: ID!) {\n    rolePermissions(roleId: $roleId, workspaceId: $workspaceId) {\n      ...RolePermissionFields\n    }\n  }\n": typeof types.GetRolePermissionsDocument,
     "\n  query GetAllPermissions($workspaceId: ID!) {\n    allPermissions(workspaceId: $workspaceId) {\n      id\n      resource\n      action\n      description\n      module\n    }\n  }\n": typeof types.GetAllPermissionsDocument,
+    "\n  query GetProjectPermissions($workspaceId: ID!, $projectId: ID!) {\n    projectPermissions(workspaceId: $workspaceId, projectId: $projectId) {\n      id\n      resource\n      action\n      description\n      module\n    }\n  }\n": typeof types.GetProjectPermissionsDocument,
     "\n  mutation CreateProjectRole(\n    $projectId: ID!\n    $workspaceId: ID!\n    $input: CreateProjectRoleInput!\n  ) {\n    createProjectRole(\n      projectId: $projectId\n      workspaceId: $workspaceId\n      input: $input\n    ) {\n      ...ProjectRoleFields\n    }\n  }\n": typeof types.CreateProjectRoleDocument,
     "\n  mutation UpdateProjectRole(\n    $roleId: ID!\n    $projectId: ID!\n    $workspaceId: ID!\n    $input: UpdateProjectRoleInput!\n  ) {\n    updateProjectRole(\n      roleId: $roleId\n      projectId: $projectId\n      workspaceId: $workspaceId\n      input: $input\n    ) {\n      ...ProjectRoleFields\n    }\n  }\n": typeof types.UpdateProjectRoleDocument,
     "\n  mutation DeleteProjectRole($roleId: ID!, $projectId: ID!, $workspaceId: ID!) {\n    deleteProjectRole(roleId: $roleId, projectId: $projectId, workspaceId: $workspaceId)\n  }\n": typeof types.DeleteProjectRoleDocument,
@@ -207,6 +208,7 @@ const documents: Documents = {
     "\n  query GetProjectRoles($projectId: ID!, $workspaceId: ID!) {\n    projectRoles(projectId: $projectId, workspaceId: $workspaceId) {\n      ...ProjectRoleFields\n    }\n  }\n": types.GetProjectRolesDocument,
     "\n  query GetRolePermissions($roleId: ID!, $workspaceId: ID!) {\n    rolePermissions(roleId: $roleId, workspaceId: $workspaceId) {\n      ...RolePermissionFields\n    }\n  }\n": types.GetRolePermissionsDocument,
     "\n  query GetAllPermissions($workspaceId: ID!) {\n    allPermissions(workspaceId: $workspaceId) {\n      id\n      resource\n      action\n      description\n      module\n    }\n  }\n": types.GetAllPermissionsDocument,
+    "\n  query GetProjectPermissions($workspaceId: ID!, $projectId: ID!) {\n    projectPermissions(workspaceId: $workspaceId, projectId: $projectId) {\n      id\n      resource\n      action\n      description\n      module\n    }\n  }\n": types.GetProjectPermissionsDocument,
     "\n  mutation CreateProjectRole(\n    $projectId: ID!\n    $workspaceId: ID!\n    $input: CreateProjectRoleInput!\n  ) {\n    createProjectRole(\n      projectId: $projectId\n      workspaceId: $workspaceId\n      input: $input\n    ) {\n      ...ProjectRoleFields\n    }\n  }\n": types.CreateProjectRoleDocument,
     "\n  mutation UpdateProjectRole(\n    $roleId: ID!\n    $projectId: ID!\n    $workspaceId: ID!\n    $input: UpdateProjectRoleInput!\n  ) {\n    updateProjectRole(\n      roleId: $roleId\n      projectId: $projectId\n      workspaceId: $workspaceId\n      input: $input\n    ) {\n      ...ProjectRoleFields\n    }\n  }\n": types.UpdateProjectRoleDocument,
     "\n  mutation DeleteProjectRole($roleId: ID!, $projectId: ID!, $workspaceId: ID!) {\n    deleteProjectRole(roleId: $roleId, projectId: $projectId, workspaceId: $workspaceId)\n  }\n": types.DeleteProjectRoleDocument,
@@ -466,6 +468,10 @@ export function gql(source: "\n  query GetRolePermissions($roleId: ID!, $workspa
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "\n  query GetAllPermissions($workspaceId: ID!) {\n    allPermissions(workspaceId: $workspaceId) {\n      id\n      resource\n      action\n      description\n      module\n    }\n  }\n"): (typeof documents)["\n  query GetAllPermissions($workspaceId: ID!) {\n    allPermissions(workspaceId: $workspaceId) {\n      id\n      resource\n      action\n      description\n      module\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  query GetProjectPermissions($workspaceId: ID!, $projectId: ID!) {\n    projectPermissions(workspaceId: $workspaceId, projectId: $projectId) {\n      id\n      resource\n      action\n      description\n      module\n    }\n  }\n"): (typeof documents)["\n  query GetProjectPermissions($workspaceId: ID!, $projectId: ID!) {\n    projectPermissions(workspaceId: $workspaceId, projectId: $projectId) {\n      id\n      resource\n      action\n      description\n      module\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
