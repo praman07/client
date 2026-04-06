@@ -109,7 +109,7 @@ export function ProjectRolesPanel({ workspaceId, projectId }: ProjectRolesPanelP
   const roleToConfirmDelete = roles.find((r: any) => r.id === roleToDelete)
 
   return (
-    <div className="flex flex-col lg:flex-row gap-6 items-start">
+    <div className="flex flex-col lg:flex-row gap-6 h-full min-h-0 lg:min-h-[600px]">
       {/* List Sidebar */}
       <div className="w-full lg:w-60 shrink-0">
         <ProjectRoleList
