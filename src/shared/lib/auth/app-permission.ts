@@ -7,12 +7,10 @@
  * Mirror of: server/src/modules/authorization/types/app-permissions.ts
  * Used by Guard and usePermission for compile-time safety.
  *
- * Last generated: 2026-04-01
+ * Last generated: 2026-04-06
  */
 
 // Workspace
-// NOTE: "workspace:create" intentionally absent — platform-level action, not RBAC.
-// See server/src/modules/workspace/permissions.ts for rationale.
 type WorkspacePermission =
   | "workspace:read"
   | "workspace:update"

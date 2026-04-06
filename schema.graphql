@@ -221,6 +221,7 @@ type Mutation {
   updateProjectRole(roleId: ID!, projectId: ID!, workspaceId: ID!, input: UpdateProjectRoleInput!): ProjectRole!
   deleteProjectRole(roleId: ID!, projectId: ID!, workspaceId: ID!): Boolean!
   toggleProjectPlugin(projectId: ID!, workspaceId: ID!, type: String!, enable: Boolean!): Boolean!
+  requestProjectLogoUpload(projectId: ID!, mimeType: String!, sizeBytes: Int!): ProjectLogoUploadPayload!
   createChannel(input: CreateChannelInput!): Conversation!
   archiveChannel(input: ArchiveChannelInput!): Conversation!
   renameChannel(input: RenameChannelInput!): Conversation!
@@ -691,6 +692,7 @@ type Project {
   description: String
   isPrivate: Boolean
   isArchived: Boolean
+  logoUrl: String
   createdAt: String!
   updatedAt: String!
   members: [ProjectMember!]!
@@ -720,6 +722,8 @@ input UpdateProjectInput {
   name: String
   description: String
   isPrivate: Boolean
+  logoUrl: String
+  key: String
 }
 
 input CreateProjectRoleInput {
@@ -732,6 +736,17 @@ input UpdateProjectRoleInput {
   name: String
   description: String
   rank: Int
+}
+
+type ProjectLogoUploadPayload {
+  """The presigned S3 PUT URL the client uses to upload directly."""
+  presignedUrl: String!
+
+  """The final S3 URL to store in Project.logoUrl after PUT succeeds."""
+  logoUrl: String!
+
+  """ISO timestamp after which the presigned PUT URL expires."""
+  expiresAt: String!
 }
 
 type ProjectOverview {

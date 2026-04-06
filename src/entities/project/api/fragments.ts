@@ -8,6 +8,7 @@ export const PROJECT_FRAGMENT = gql(`
     description
     workspaceId
     isArchived
+    logoUrl
     activePlugins
     createdAt
     updatedAt
@@ -128,5 +129,15 @@ export const DELETE_PROJECT = gql(`
 export const TOGGLE_PROJECT_PLUGIN = gql(`
   mutation ToggleProjectPlugin($projectId: ID!, $workspaceId: ID!, $type: String!, $enable: Boolean!) {
     toggleProjectPlugin(projectId: $projectId, workspaceId: $workspaceId, type: $type, enable: $enable)
+  }
+`)
+
+export const REQUEST_PROJECT_LOGO_UPLOAD_MUTATION = gql(`
+  mutation RequestProjectLogoUpload($projectId: ID!, $mimeType: String!, $sizeBytes: Int!) {
+    requestProjectLogoUpload(projectId: $projectId, mimeType: $mimeType, sizeBytes: $sizeBytes) {
+      presignedUrl
+      logoUrl
+      expiresAt
+    }
   }
 `)

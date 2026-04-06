@@ -1,7 +1,7 @@
+import { useQueryClient } from '@tanstack/react-query'
 import { Badge, Button, Separator } from '@/shared/ui'
 import { useAppDispatch, useAppSelector } from '@/shared/hooks'
 import { Guard } from '@/shared/lib/auth'
-import { UpdateProjectForm } from '@/features/project/update-project'
 import { DeleteProjectDialog, openDeleteProjectDialog } from '@/features/project/delete-project'
 import {
   useArchiveProject,
@@ -10,11 +10,14 @@ import {
 import {
   selectCurrentProject,
   selectCurrentProjectIsArchived,
+  projectKeys,
 } from '@/entities/project'
+import { ProjectGeneralForm } from './project-general-form'
 
 interface ProjectGeneralSettingsProps {
   workspaceId: string
   workspaceSlug: string
+  projectSlug: string
 }
 
 export function ProjectGeneralSettings({
@@ -22,22 +25,42 @@ export function ProjectGeneralSettings({
   workspaceSlug,
 }: ProjectGeneralSettingsProps) {
   const dispatch = useAppDispatch()
+  const queryClient = useQueryClient()
   const project = useAppSelector(selectCurrentProject)
   const isArchived = useAppSelector(selectCurrentProjectIsArchived)
+
   const { mutate: archive, isPending: archiving } = useArchiveProject()
   const { mutate: unarchive, isPending: unarchiving } = useUnarchiveProject()
 
   if (!project) return null
 
+  const handleArchive = () => {
+    archive(project.id, {
+      onSuccess: () => {
+        // Fix existing bug: archive didn't invalidate list cache
+        queryClient.invalidateQueries({ queryKey: projectKeys.list(workspaceId) })
+      },
+    })
+  }
+
+  const handleUnarchive = () => {
+    unarchive(project.id, {
+      onSuccess: () => {
+        queryClient.invalidateQueries({ queryKey: projectKeys.list(workspaceId) })
+      },
+    })
+  }
+
   return (
-    <div className="space-y-8 max-w-2xl">
-      {/* Project Info */}
-      <section className="space-y-4">
-        <div className="flex items-center gap-2">
+    <div className="space-y-8 max-w-4xl">
+
+      {/* ── General Settings ──────────────────────────────────────────── */}
+      <section className="space-y-6">
+        <div className="flex items-center gap-3">
           <div>
-            <h3 className="text-sm font-semibold">Project Info</h3>
+            <h3 className="text-sm font-semibold">General Settings</h3>
             <p className="text-sm text-muted-foreground">
-              Update your project's name and description.
+              Update your project's name, key, description and icon.
             </p>
           </div>
           {isArchived && (
@@ -46,21 +69,19 @@ export function ProjectGeneralSettings({
             </Badge>
           )}
         </div>
+
         <Guard permission="project:update">
-          <UpdateProjectForm
-            projectId={project.id}
+          <ProjectGeneralForm
+            project={project}
             workspaceId={workspaceId}
-            defaultValues={{
-              name: project.name,
-              description: project.description ?? '',
-            }}
+            workspaceSlug={workspaceSlug}
           />
         </Guard>
       </section>
 
       <Separator />
 
-      {/* Danger Zone */}
+      {/* ── Danger Zone ───────────────────────────────────────────────── */}
       <section className="space-y-3">
         <div>
           <h3 className="text-sm font-semibold">Danger Zone</h3>
@@ -70,6 +91,7 @@ export function ProjectGeneralSettings({
         </div>
 
         <div className="rounded-lg border border-destructive/30 divide-y divide-destructive/20">
+
           {/* Archive / Unarchive */}
           <div className="flex items-center justify-between px-4 py-3 gap-4">
             <div className="min-w-0">
@@ -88,9 +110,7 @@ export function ProjectGeneralSettings({
                 size="sm"
                 className="shrink-0"
                 disabled={archiving || unarchiving}
-                onClick={() =>
-                  isArchived ? unarchive(project.id) : archive(project.id)
-                }
+                onClick={isArchived ? handleUnarchive : handleArchive}
               >
                 {isArchived ? 'Unarchive' : 'Archive'}
               </Button>
@@ -102,8 +122,7 @@ export function ProjectGeneralSettings({
             <div className="min-w-0">
               <p className="text-sm font-medium">Delete project</p>
               <p className="text-xs text-muted-foreground">
-                Permanently delete this project and all its data. This cannot be
-                undone.
+                Permanently delete this project and all its data. This cannot be undone.
               </p>
             </div>
             <Guard permission="project:delete">
