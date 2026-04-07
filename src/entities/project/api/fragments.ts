@@ -8,6 +8,7 @@ export const PROJECT_FRAGMENT = gql(`
     description
     workspaceId
     isArchived
+    isPrivate
     logoUrl
     activePlugins
     createdAt
@@ -59,6 +60,7 @@ export const GET_PROJECT_OVERVIEW = gql(`
       completedIssues
       overdueIssues
       pageCount
+      memberCount
       issuesByStatus {
         statusId
         name
@@ -88,6 +90,65 @@ export const GET_PROJECT_OVERVIEW = gql(`
         roleRank
         joinedAt
       }
+      
+      issuesByPriority {
+        priority
+        count
+      }
+      upcomingIssues {
+        id
+        number
+        title
+        dueDate
+        assigneeName
+        assigneeAvatar
+        statusName
+        statusColor
+      }
+      recentPages {
+        id
+        title
+        emojiIcon
+        updatedAt
+        createdByName
+      }
+      recentVaultFiles {
+        id
+        name
+        mimeType
+        sizeBytes
+        createdByName
+        createdAt
+      }
+      recentWhiteboards {
+        id
+        title
+        elementCount
+        updatedAt
+        isLocked
+      }
+      vaultUsage {
+        usedBytes
+        fileCount
+      }
+      projectChannels {
+        id
+        name
+        topic
+        updatedAt
+      }
+    }
+  }
+`)
+
+export const GET_PROJECT_CONTRIBUTOR_STATS = gql(`
+  query GetProjectContributorStats($projectId: ID!) {
+    projectContributorStats(projectId: $projectId) {
+      userId
+      name
+      avatarUrl
+      assigned
+      completed
     }
   }
 `)

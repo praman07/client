@@ -92,7 +92,14 @@ export function MoreMenu({ dueDate, onDueDateChange }: MoreMenuProps) {
               mode="single"
               selected={selectedDate}
               onSelect={(date) => {
-                onDueDateChange(date ? date.toISOString().split('T')[0] : null)
+                if (date) {
+                  const year = date.getFullYear()
+                  const month = String(date.getMonth() + 1).padStart(2, '0')
+                  const day = String(date.getDate()).padStart(2, '0')
+                  onDueDateChange(`${year}-${month}-${day}`)
+                } else {
+                  onDueDateChange(null)
+                }
                 setOpen(false)
               }}
               initialFocus

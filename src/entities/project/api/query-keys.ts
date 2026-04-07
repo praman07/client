@@ -14,4 +14,6 @@ export const projectKeys = {
    */
   overview: (projectId: string) =>
     [...projectKeys.all, 'overview', projectId] as const,
+  contributorStats: (projectId: string) =>
+    [...projectKeys.all, 'contributor-stats', projectId] as const,
 }

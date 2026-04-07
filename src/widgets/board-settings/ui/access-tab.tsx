@@ -15,7 +15,8 @@ interface AccessTabProps {
  * Lock/unlock board (read-only mode)
  */
 export function AccessTab({ boardId }: AccessTabProps) {
-  const { data: board } = useBoard(boardId)
+  const { data } = useBoard(boardId)
+  const board = data?.getBoard
   const lockBoard = useLockBoard()
   const unlockBoard = useUnlockBoard()
 

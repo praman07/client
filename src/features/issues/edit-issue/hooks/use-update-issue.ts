@@ -20,6 +20,7 @@ import type { Issue } from '@/entities/issue'
 import { useAuth } from '@/shared/hooks'
 import { GqlClient } from '@/shared/api/graphql-client'
 import { issueKeys, updateIssue } from '@/entities/issue'
+import { projectKeys } from '@/entities/project/api/query-keys'
 
 /**
  * Converts a date-only string ("YYYY-MM-DD") to a full ISO datetime string
@@ -59,12 +60,18 @@ export function useUpdateIssue(projectId: string) {
         } as UpdateIssueInput,
       })
     },
-    onMutate: ({ issueId, ...patch }) => {
-      dispatch(updateIssue({ id: issueId, patch: patch as Partial<Issue> }))
+    onMutate: ({ issueId, statusId: _statusId, ...patch }) => {
+      // Strip undefined values to avoid overwriting valid Redux state with undefined.
+      // statusId is excluded: the Issue entity uses `status` (object), not `statusId`.
+      const cleanPatch = Object.fromEntries(
+        Object.entries(patch).filter(([, v]) => v !== undefined),
+      ) as Partial<Issue>
+      dispatch(updateIssue({ id: issueId, patch: cleanPatch }))
     },
     onSuccess: (_, { issueId }) => {
       queryClient.invalidateQueries({ queryKey: issueKeys.list(projectId) })
       queryClient.invalidateQueries({ queryKey: issueKeys.detail(issueId) })
+      queryClient.invalidateQueries({ queryKey: projectKeys.overview(projectId) })
     },
     onError: (error, { issueId }) => {
       queryClient.invalidateQueries({ queryKey: issueKeys.list(projectId) })
