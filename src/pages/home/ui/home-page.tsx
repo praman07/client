@@ -1,17 +1,17 @@
-import { useUser } from '@/entities/user'
-import { useMyWorkspaces } from '@/entities/workspace/hooks/use-my-workspaces'
 import { extractFirstName } from '../lib/utils'
 
 import { HomeHeader } from './home-header'
 import { RecentWorkspaces } from './recent-workspaces'
 import { ActivityFeedStubs } from './activity-feed-stubs'
+import { useMyWorkspaces } from '@/entities/workspace/hooks/use-my-workspaces'
+import { useUser } from '@/entities/user'
 
 export function HomePage() {
   const { user, isLoaded: isUserLoading } = useUser()
   const { data: workspacesData, isLoading: isWorkspacesLoading } = useMyWorkspaces()
 
   const firstName = extractFirstName(user?.fullName)
-  const workspaces = (workspacesData?.myWorkspaces ?? []) as unknown as any[]
+  const workspaces = (workspacesData?.myWorkspaces ?? []) as unknown as Array<any>
 
   return (
     <>

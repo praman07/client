@@ -1,5 +1,5 @@
-import { cn } from '@/shared/lib/utils'
 import { DataTableEmpty } from './data-table-empty'
+import { cn } from '@/shared/lib/utils'
 
 export interface ColumnDef<TRow> {
   key: string
@@ -10,8 +10,8 @@ export interface ColumnDef<TRow> {
 }
 
 interface DataTableProps<TRow> {
-  columns: ColumnDef<TRow>[]
-  rows: TRow[]
+  columns: Array<ColumnDef<TRow>>
+  rows: Array<TRow>
   rowKey: (row: TRow) => string
   search?: string
   emptyMessage?: string

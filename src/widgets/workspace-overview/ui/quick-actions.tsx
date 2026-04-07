@@ -1,6 +1,6 @@
-import { Card } from '@/shared/ui'
-import { PlusCircle, UserPlus, UploadCloud, ChevronRight } from 'lucide-react'
+import { ChevronRight, PlusCircle, UploadCloud, UserPlus } from 'lucide-react'
 import { useNavigate, useParams } from '@tanstack/react-router'
+import { Card } from '@/shared/ui'
 import { Guard } from '@/shared/lib/auth/guard'
 import { useCreateProjectModal } from '@/features/project/create-project'
 import { useInviteMemberModal } from '@/features/invite-member'
@@ -19,7 +19,7 @@ export function QuickActions() {
   const { open: openCreateProject } = useCreateProjectModal()
   const { open: openInvite } = useInviteMemberModal()
 
-  const actions: Action[] = [
+  const actions: Array<Action> = [
     {
       id: 'create-project',
       label: 'Create Project',

@@ -1,14 +1,14 @@
-import { useState, useMemo } from 'react'
-import { useCurrentWorkspace, useWorkspaceRoles } from '@/entities/workspace/hooks'
-import { useDeleteWorkspaceRole } from '@/features/workspace/manage-workspace-role'
-import {
-  useWorkspacePermissionsCatalog,
-  useRolePermissions,
-} from '@/features/workspace/manage-role-permissions'
+import { useMemo, useState } from 'react'
 import { Loader2, ShieldOff } from 'lucide-react'
 import { WorkspaceRoleList } from './workspace-role-list'
 import { WorkspaceRolePermissionsPanel } from './workspace-role-permissions-panel'
 import { RoleDeleteConfirm } from './role-delete-confirm'
+import {
+  useRolePermissions,
+  useWorkspacePermissionsCatalog,
+} from '@/features/workspace/manage-role-permissions'
+import { useDeleteWorkspaceRole } from '@/features/workspace/manage-workspace-role'
+import { useCurrentWorkspace, useWorkspaceRoles } from '@/entities/workspace/hooks'
 
 /** Shape expected by the permissions panel */
 type RoleForPanel = {
@@ -17,7 +17,7 @@ type RoleForPanel = {
   description: string | null
   isSystem: boolean
   rank: number
-  permissions: { id: string; name: string }[]
+  permissions: Array<{ id: string; name: string }>
 }
 
 export function WorkspaceRolesPanel() {

@@ -2,6 +2,10 @@ import { useEffect, useState } from 'react'
 import { useForm } from '@tanstack/react-form'
 import { CheckCircle2, Loader2 } from 'lucide-react'
 import { toast } from 'sonner'
+import { useUpdateProfile } from '../hooks/use-update-profile'
+import { useClerkProfile } from '../hooks/use-clerk-profile'
+import { mapUpdateProfileError } from '../lib/error-mapping'
+import { updateProfileSchema } from '../model/schema'
 import { useUser } from '@/entities/user'
 import { Button } from '@/shared/ui/primitives/button'
 import { Input } from '@/shared/ui/primitives/input'
@@ -14,10 +18,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/shared/ui/primitives/select'
-import { useUpdateProfile } from '../hooks/use-update-profile'
-import { useClerkProfile } from '../hooks/use-clerk-profile'
-import { mapUpdateProfileError } from '../lib/error-mapping'
-import { updateProfileSchema } from '../model/schema'
 
 const TIMEZONES = [
   'UTC', 'America/New_York', 'America/Chicago', 'America/Denver',

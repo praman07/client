@@ -1,6 +1,6 @@
 import { Outlet, createFileRoute } from '@tanstack/react-router'
 import { UserSidebar } from '@/widgets/user-sidebar'
-import { SidebarProvider, SidebarInset } from '@/shared/ui/primitives/sidebar'
+import { SidebarInset, SidebarProvider } from '@/shared/ui/primitives/sidebar'
 
 export const Route = createFileRoute('/_app/_user-layer')({
   component: UserLayerLayout,

@@ -1,4 +1,5 @@
 import { useQueryClient } from '@tanstack/react-query'
+import { ProjectGeneralForm } from './project-general-form'
 import { Badge, Button, Separator } from '@/shared/ui'
 import { useAppDispatch, useAppSelector } from '@/shared/hooks'
 import { Guard } from '@/shared/lib/auth'
@@ -8,11 +9,10 @@ import {
   useUnarchiveProject,
 } from '@/features/project/archive-project'
 import {
+  projectKeys,
   selectCurrentProject,
   selectCurrentProjectIsArchived,
-  projectKeys,
 } from '@/entities/project'
-import { ProjectGeneralForm } from './project-general-form'
 
 interface ProjectGeneralSettingsProps {
   workspaceId: string

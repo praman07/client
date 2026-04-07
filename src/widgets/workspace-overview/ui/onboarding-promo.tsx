@@ -1,5 +1,5 @@
-import { Card, Button } from '@/shared/ui'
 import { Sparkles } from 'lucide-react'
+import { Button, Card } from '@/shared/ui'
 
 export function OnboardingPromo() {
   return (

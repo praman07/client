@@ -1,10 +1,10 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { workspaceKeys } from '@/entities/workspace'
+import { toast } from 'sonner'
 import { CREATE_WORKSPACE_ROLE_MUTATION } from '../api/fragments'
+import type { CreateWorkspaceRoleInput } from '../model/schema'
+import { workspaceKeys } from '@/entities/workspace'
 import { GqlClient } from '@/shared/api'
 import { useAuth } from '@/shared/hooks'
-import { toast } from 'sonner'
-import { CreateWorkspaceRoleInput } from '../model/schema'
 
 export function useCreateWorkspaceRole(workspaceId: string) {
   const { getToken } = useAuth()

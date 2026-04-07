@@ -1,8 +1,8 @@
 import { Link } from '@tanstack/react-router'
+import type { WorkspaceFragmentFragment } from '@/gql/graphql'
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/primitives/avatar'
 import { Badge } from '@/shared/ui/primitives/badge'
 import { Card, CardContent } from '@/shared/ui/primitives/card'
-import type { WorkspaceFragmentFragment } from '@/gql/graphql'
 
 export interface WorkspaceCardProps {
   workspace: WorkspaceFragmentFragment

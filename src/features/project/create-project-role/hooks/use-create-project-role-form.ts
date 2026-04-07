@@ -7,8 +7,9 @@ import { useCreateProjectRole } from './use-create-project-role'
 import type { CreateProjectRoleFormValues } from '../model/schema'
 import { useAppDispatch } from '@/shared/hooks'
 import { useAssignRolePermission } from '@/features/project/manage-role-permissions'
-import { projectMemberKeys, useUpdateProjectMemberRole  } from '@/entities/project-member'
+import { projectMemberKeys } from '@/entities/project-member'
 import { rolePermissionKeys } from '@/entities/project-role'
+import { useUpdateProjectMemberRole } from '@/features/project/update-project-member-role'
 
 interface UseCreateProjectRoleFormProps {
   projectId: string

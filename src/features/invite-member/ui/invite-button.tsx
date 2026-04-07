@@ -1,7 +1,7 @@
 import { UserPlus } from 'lucide-react'
-import { Button } from '@/shared/ui'
 import { useInviteMemberModal } from '../hooks/use-invite-member-modal'
 import type React from 'react'
+import { Button } from '@/shared/ui'
 
 type InviteButtonProps = React.ComponentProps<typeof Button>
 

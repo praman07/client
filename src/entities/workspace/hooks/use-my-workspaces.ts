@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { useAuth } from '@clerk/clerk-react'
 import { setMyWorkspaces } from '../model/slice'
-import { workspaceKeys, GET_MY_WORKSPACES_QUERY } from '../api'
+import { GET_MY_WORKSPACES_QUERY, workspaceKeys } from '../api'
 import { GqlClient } from '@/shared/api/graphql-client'
 import { useAppDispatch } from '@/shared/hooks'
 

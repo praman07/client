@@ -1,9 +1,9 @@
-import { Card } from '@/shared/ui'
-import { Skeleton } from '@/shared/ui/primitives/skeleton'
-import { ChevronRight, Layers, FolderGit2, FolderArchive, Folder } from 'lucide-react'
-import { useWorkspaceOverview } from '@/entities/workspace/hooks'
+import { ChevronRight, Folder, FolderArchive, FolderGit2, Layers } from 'lucide-react'
 import { formatDistanceToNow } from 'date-fns'
 import { Link, useParams } from '@tanstack/react-router'
+import { Card } from '@/shared/ui'
+import { Skeleton } from '@/shared/ui/primitives/skeleton'
+import { useWorkspaceOverview } from '@/entities/workspace/hooks'
 
 // Cycle through a set of distinct project icon styles
 const PROJECT_ICON_STYLES = [
@@ -79,7 +79,7 @@ export function RecentProjects() {
       ) : (
         <div className="flex flex-col space-y-2.5">
           {projects.map((project, index) => {
-            const style = PROJECT_ICON_STYLES[index % PROJECT_ICON_STYLES.length]!
+            const style = PROJECT_ICON_STYLES[index % PROJECT_ICON_STYLES.length]
             const IconComponent = style.icon
             const updatedAt = formatDistanceToNow(new Date(project.updatedAt), { addSuffix: true })
 

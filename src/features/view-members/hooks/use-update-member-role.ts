@@ -1,9 +1,9 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { toast } from 'sonner'
 import { UPDATE_MEMBER_ROLE, workspaceMemberKeys } from '../api'
 import { useAuth } from '@/shared/hooks'
 import { GqlClient } from '@/shared/api'
 import { authContextKeys } from '@/shared/lib/auth/query-keys'
-import { toast } from 'sonner'
 
 export function useUpdateMemberRole(workspaceId: string) {
   const queryClient = useQueryClient()

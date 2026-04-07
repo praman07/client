@@ -1,10 +1,10 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { toast } from 'sonner'
 import { ASSIGN_ROLE_PERMISSION_MUTATION } from '../api/fragments'
 import { rolePermissionKeys } from '../api/query-keys'
 import { authContextKeys } from '@/shared/lib/auth/query-keys'
 import { GqlClient } from '@/shared/api'
 import { useAuth } from '@/shared/hooks'
-import { toast } from 'sonner'
 
 export function useAssignRolePermission(workspaceId: string, roleId: string) {
   const { getToken } = useAuth()

@@ -1,15 +1,15 @@
 import { Link, useLocation } from '@tanstack/react-router'
 import {
+  ChevronsUpDown,
+  CreditCard,
   Grid2X2,
   Home,
   Layers,
-  PlusCircle,
-  User as UserIcon,
-  Settings,
-  CreditCard,
-  ChevronsUpDown,
   LogOut,
+  PlusCircle,
+  Settings,
   Sparkles,
+  User as UserIcon,
 } from 'lucide-react'
 import {
   Avatar,

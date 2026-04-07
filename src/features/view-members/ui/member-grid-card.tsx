@@ -1,9 +1,9 @@
-import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui'
 import { MemberRoleCell } from './member-role-cell'
 import { MemberActionsMenu } from './member-actions-menu'
+import type { WorkspaceMember } from '../model/types'
+import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui'
 import { formatDate } from '@/shared/lib/date'
 import { cn } from '@/shared/lib/utils'
-import type { WorkspaceMember } from '../model/types'
 
 interface MemberGridCardProps {
   member: WorkspaceMember

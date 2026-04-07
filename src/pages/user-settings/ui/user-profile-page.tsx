@@ -1,5 +1,5 @@
 import { Separator } from '@/shared/ui/primitives/separator'
-import { UpdateProfileForm, AvatarUploadField } from '@/features/user/update-profile'
+import { AvatarUploadField, UpdateProfileForm } from '@/features/user/update-profile'
 
 /**
  * UserProfilePage — pure composition root.

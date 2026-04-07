@@ -11,7 +11,7 @@ export function UserWorkspacesPage() {
   const navigate = useNavigate()
   const { data, isLoading } = useMyWorkspaces()
 
-  const workspaces = (data?.myWorkspaces ?? []) as any[]
+  const workspaces = (data?.myWorkspaces ?? []) as Array<any>
 
   return (
     <div className="space-y-6">

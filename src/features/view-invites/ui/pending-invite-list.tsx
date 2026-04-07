@@ -1,11 +1,12 @@
-import { DataTable, DataTableSkeleton, type ColumnDef } from '@/shared/ui'
 import { useWorkspaceInvites } from '../hooks'
-import { usePermission } from '@/shared/lib/auth'
 import { mapInvitesError } from '../lib'
 import { InviteRoleBadge } from './invite-role-badge'
 import { InviteActionsCell } from './invite-actions-cell'
-import { formatDateRelative } from '@/shared/lib/date'
 import type { WorkspaceInvite } from '../model/types'
+import type {ColumnDef} from '@/shared/ui';
+import { formatDateRelative } from '@/shared/lib/date'
+import { usePermission } from '@/shared/lib/auth'
+import {  DataTable, DataTableSkeleton } from '@/shared/ui'
 
 interface PendingInviteListProps {
   workspaceId: string
@@ -18,7 +19,7 @@ export function PendingInviteList({ workspaceId }: PendingInviteListProps) {
 
   const invites = data?.workspaceInvites ?? []
 
-  const columns: ColumnDef<WorkspaceInvite>[] = [
+  const columns: Array<ColumnDef<WorkspaceInvite>> = [
     {
       key: 'email',
       header: 'Email',

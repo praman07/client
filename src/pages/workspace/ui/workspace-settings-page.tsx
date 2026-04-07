@@ -1,7 +1,7 @@
-import { Outlet, Link, useParams, useLocation } from '@tanstack/react-router'
+import { Link, Outlet, useLocation, useParams } from '@tanstack/react-router'
 import { Settings, ShieldCheck, ShieldOff } from 'lucide-react'
 import { cn } from '@/shared/lib/utils'
-import { usePermission, useAuthorizationContext } from '@/shared/lib/auth'
+import { useAuthorizationContext, usePermission } from '@/shared/lib/auth'
 
 export function WorkspaceSettingsPage() {
   const { workspaceSlug } = useParams({ strict: false })

@@ -1,3 +1,5 @@
+import { useCreateWorkspaceRoleModal } from '../hooks/use-create-workspace-role-modal'
+import { CreateWorkspaceRoleForm } from './create-workspace-role-form'
 import {
   Dialog,
   DialogContent,
@@ -5,12 +7,10 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/shared/ui/primitives/dialog'
-import { useCreateWorkspaceRoleModal } from '../hooks/use-create-workspace-role-modal'
-import { CreateWorkspaceRoleForm } from './create-workspace-role-form'
 
 interface CreateWorkspaceRoleDialogProps {
   workspaceId: string
-  existingRoleNames: string[]
+  existingRoleNames: Array<string>
 }
 
 export function CreateWorkspaceRoleDialog({

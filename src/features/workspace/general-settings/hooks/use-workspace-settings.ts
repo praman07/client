@@ -1,10 +1,9 @@
 import { useQuery } from '@tanstack/react-query'
-import { workspaceKeys } from '@/entities/workspace'
 import { GET_WORKSPACE_SETTINGS_QUERY } from '../api/fragments'
+import { WORKSPACE_SETTINGS_FRAGMENT, workspaceKeys  } from '@/entities/workspace'
 import { GqlClient } from '@/shared/api'
 import { useAuth } from '@/shared/hooks'
 import { useFragment } from '@/gql'
-import { WORKSPACE_SETTINGS_FRAGMENT } from '@/entities/workspace'
 
 export function useWorkspaceSettings(workspaceId: string) {
   const { getToken } = useAuth()

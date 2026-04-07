@@ -1,12 +1,12 @@
-import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui'
-import { DataTable, type ColumnDef } from '@/shared/ui'
 import { MemberRoleCell } from './member-role-cell'
 import { MemberActionsMenu } from './member-actions-menu'
-import { formatDate } from '@/shared/lib/date'
 import type { WorkspaceMember } from '../model/types'
+import type {ColumnDef} from '@/shared/ui';
+import { Avatar, AvatarFallback, AvatarImage,  DataTable  } from '@/shared/ui'
+import { formatDate } from '@/shared/lib/date'
 
 interface MemberTableViewProps {
-  members: WorkspaceMember[]
+  members: Array<WorkspaceMember>
   workspaceId: string
   actorRank: number
   actorUserId: string
@@ -20,7 +20,7 @@ export function MemberTableView({
   actorUserId,
   search,
 }: MemberTableViewProps) {
-  const columns: ColumnDef<WorkspaceMember>[] = [
+  const columns: Array<ColumnDef<WorkspaceMember>> = [
     {
       key: 'user',
       header: 'User',

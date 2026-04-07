@@ -681,6 +681,7 @@ type ProjectMember {
   user: User!
   userId: ID!
   role: String
+  roleId: ID
   joinedAt: String!
 }
 

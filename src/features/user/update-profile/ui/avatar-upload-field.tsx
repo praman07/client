@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState } from 'react'
 import { Loader2 } from 'lucide-react'
 import { toast } from 'sonner'
-import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/primitives/avatar'
-import { useUser } from '@/entities/user'
 import { useClerkProfile } from '../hooks/use-clerk-profile'
 import { useUpdateProfile } from '../hooks/use-update-profile'
 import { mapUpdateProfileError } from '../lib/error-mapping'
+import { useUser } from '@/entities/user'
+import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/primitives/avatar'
 
 /**
  * AvatarUploadField — self-contained avatar upload control.

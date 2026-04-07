@@ -19,3 +19,20 @@ export const workspaceKeys = {
   overview: (workspaceId: string) =>
     [...workspaceKeys.all, 'overview', workspaceId] as const,
 }
+
+/**
+ * Query key factory for workspace members.
+ *
+ * Lives in the Entity layer so any feature can invalidate or read
+ * the workspace members cache without importing from features/view-members.
+ *
+ * Invalidated by: addProjectMember (indirectly — workspace membership unchanged),
+ *   removeWorkspaceMember, updateWorkspaceMemberRole.
+ *
+ * @layer Entity — workspace
+ */
+export const workspaceMemberKeys = {
+  all: ['workspace-members'] as const,
+  list: (workspaceId: string) =>
+    [...workspaceMemberKeys.all, 'list', workspaceId] as const,
+}

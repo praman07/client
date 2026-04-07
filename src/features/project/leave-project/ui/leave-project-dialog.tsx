@@ -18,17 +18,20 @@ import { useAppDispatch, useAppSelector } from '@/shared/hooks'
 interface LeaveProjectDialogProps {
   projectId: string
   workspaceSlug: string
+  workspaceId: string
 }
 
 export function LeaveProjectDialog({
   projectId,
   workspaceSlug,
+  workspaceId,
 }: LeaveProjectDialogProps) {
   const isOpen = useAppSelector(selectIsLeaveProjectDialogOpen)
   const dispatch = useAppDispatch()
   const { mutate: leaveProject, isPending } = useLeaveProject(
     projectId,
     workspaceSlug,
+    workspaceId,
   )
 
   return (

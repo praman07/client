@@ -1,13 +1,12 @@
 import { useQueryClient } from '@tanstack/react-query'
-import { workspaceKeys, REQUEST_WORKSPACE_LOGO_UPLOAD_MUTATION, UPDATE_WORKSPACE_MUTATION } from '@/entities/workspace'
+import { toast } from 'sonner'
+import { validateLogo } from '../lib/validate-logo'
+import { REQUEST_WORKSPACE_LOGO_UPLOAD_MUTATION, UPDATE_WORKSPACE_MUTATION, workspaceKeys } from '@/entities/workspace'
 import { updateWorkspace } from '@/entities/workspace/model/slice'
 import { selectCurrentWorkspace } from '@/entities/workspace/model/selectors'
 import { GqlClient } from '@/shared/api'
-import { useAuth } from '@/shared/hooks'
-import { useAppDispatch, useAppSelector } from '@/shared/hooks'
+import { useAppDispatch, useAppSelector, useAuth  } from '@/shared/hooks'
 import { uploadToS3 } from '@/shared/lib/s3'
-import { toast } from 'sonner'
-import { validateLogo } from '../lib/validate-logo'
 
 export function useUploadWorkspaceLogo(workspaceId: string) {
   const { getToken } = useAuth()

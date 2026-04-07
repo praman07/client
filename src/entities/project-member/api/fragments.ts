@@ -13,6 +13,7 @@ export const PROJECT_MEMBER_FIELDS = gql(`
     id
     userId
     role
+    roleId
     joinedAt
     user {
       id

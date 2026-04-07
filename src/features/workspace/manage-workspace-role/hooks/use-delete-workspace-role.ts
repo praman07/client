@@ -1,10 +1,10 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { toast } from 'sonner'
+import { DELETE_WORKSPACE_ROLE_MUTATION } from '../api/fragments'
 import { workspaceKeys } from '@/entities/workspace'
 import { authContextKeys } from '@/shared/lib/auth/query-keys'
-import { DELETE_WORKSPACE_ROLE_MUTATION } from '../api/fragments'
 import { GqlClient } from '@/shared/api'
 import { useAuth } from '@/shared/hooks'
-import { toast } from 'sonner'
 
 export function useDeleteWorkspaceRole(workspaceId: string) {
   const { getToken } = useAuth()

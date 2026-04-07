@@ -1,6 +1,8 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { toast } from 'sonner'
 import { handleUpdateProjectMemberRoleError } from '../lib/error-mapping'
-import { UPDATE_PROJECT_MEMBER_ROLE, projectMemberKeys  } from '@/entities/project-member'
+import { UPDATE_PROJECT_MEMBER_ROLE, projectMemberKeys } from '@/entities/project-member'
+import { authContextKeys } from '@/shared/lib/auth/query-keys'
 import { GqlClient } from '@/shared/api'
 import { useAuth } from '@/shared/hooks'
 
@@ -30,11 +32,16 @@ export function useUpdateProjectMemberRole() {
         roleId,
       })
     },
-    onSuccess: (_, { projectId }) => {
+    onSuccess: (_, { projectId, workspaceId }) => {
       queryClient.invalidateQueries({
         queryKey: projectMemberKeys.list(projectId),
       })
+      queryClient.invalidateQueries({
+        queryKey: authContextKeys.scope(workspaceId, projectId),
+      })
+      toast.success('Role updated')
     },
     onError: handleUpdateProjectMemberRoleError,
   })
 }
+

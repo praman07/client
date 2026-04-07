@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { ErrorBoundary } from 'react-error-boundary'
-import { useAppSelector, useAuth } from '@/shared/hooks'
+import { useAppSelector } from '@/shared/hooks'
 import { selectCurrentProject } from '@/entities/project'
 import { selectCurrentWorkspace } from '@/entities/workspace'
 import { ProjectMembersTable } from '@/widgets/project-members-table'
@@ -16,7 +16,6 @@ function MembersSettingsPage() {
   const { workspaceSlug } = Route.useParams()
   const project = useAppSelector(selectCurrentProject)
   const workspace = useAppSelector(selectCurrentWorkspace)
-  const { userId: currentUserId } = useAuth()
 
   if (!project || !workspace) {
     return <MembersPageSkeleton />
@@ -28,7 +27,6 @@ function MembersSettingsPage() {
         projectId={project.id}
         workspaceId={workspace.id}
         workspaceSlug={workspaceSlug}
-        currentUserId={currentUserId ?? undefined}
       />
     </ErrorBoundary>
   )

@@ -11,11 +11,11 @@ export type ProjectRole = {
   description?: string | null
   isSystem: boolean
   rank: number
-  permissions: { id: string; name: string }[]
+  permissions: Array<{ id: string; name: string }>
 }
 
 interface ProjectRoleListProps {
-  roles: ProjectRole[]
+  roles: Array<ProjectRole>
   selectedRoleId?: string
   onSelect: (roleId: string) => void
 }

@@ -2,6 +2,9 @@ import { useForm } from '@tanstack/react-form'
 import { z } from 'zod'
 import { toast } from 'sonner'
 import { TriangleAlert } from 'lucide-react'
+import { mapRenameSlugError, mapUpdateWorkspaceError } from '../lib/error-mapping'
+import { WorkspaceLogoUploader } from './workspace-logo-uploader'
+import { EditableField } from './editable-field'
 import { usePermission } from '@/shared/lib/auth'
 import { Label } from '@/shared/ui/primitives/label'
 import { Button } from '@/shared/ui/primitives/button'
@@ -13,10 +16,7 @@ import {
   SelectValue,
 } from '@/shared/ui/primitives/select'
 import { Spinner } from '@/shared/ui'
-import { WorkspaceLogoUploader } from './workspace-logo-uploader'
-import { mapUpdateWorkspaceError, mapRenameSlugError } from '../lib/error-mapping'
 import { useCheckSlugAvailability } from '@/features/create-workspace/hooks'
-import { EditableField } from './editable-field'
 
 const COMPANY_SIZES = [
   '1-10 Employees',
@@ -86,7 +86,7 @@ export function WorkspaceGeneralForm({
       slug: initialSlug,
     },
     onSubmit: async ({ value }) => {
-      const promises: Promise<void>[] = []
+      const promises: Array<Promise<void>> = []
 
       if (value.name !== initialName) {
         promises.push(

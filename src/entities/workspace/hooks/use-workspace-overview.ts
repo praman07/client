@@ -1,9 +1,9 @@
 import { useQuery } from '@tanstack/react-query'
 import { useAuth } from '@clerk/clerk-react'
-import { GqlClient } from '@/shared/api'
-import { useAppSelector } from '@/shared/hooks'
 import { selectCurrentWorkspaceId } from '../model/selectors'
 import { GET_WORKSPACE_OVERVIEW_QUERY, workspaceKeys } from '../api'
+import { GqlClient } from '@/shared/api'
+import { useAppSelector } from '@/shared/hooks'
 
 /**
  * useWorkspaceOverview — fetches the full workspace snapshot in one round-trip.

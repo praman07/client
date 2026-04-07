@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { useAuth } from '@clerk/clerk-react'
 import { setCurrentWorkspaceId } from '../model/slice'
-import { workspaceKeys, GET_WORKSPACE_BY_SLUG_QUERY, WORKSPACE_LIGHT_FRAGMENT } from '../api'
+import { GET_WORKSPACE_BY_SLUG_QUERY, WORKSPACE_LIGHT_FRAGMENT, workspaceKeys } from '../api'
 import { GqlClient } from '@/shared/api'
 import { useAppDispatch } from '@/shared/hooks'
 import { useFragment } from '@/gql'

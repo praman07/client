@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { Search, SlidersHorizontal, LayoutList, LayoutGrid } from 'lucide-react'
-import { useWorkspaceMembers, usePaginatedMembers } from '../hooks'
+import { LayoutGrid, LayoutList, Search, SlidersHorizontal } from 'lucide-react'
+import { usePaginatedMembers, useWorkspaceMembers } from '../hooks'
 import { mapMembersError } from '../lib'
 import { MemberTableView } from './member-table-view'
 import { MemberGridView } from './member-grid-view'

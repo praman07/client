@@ -1,11 +1,11 @@
 import { ComingSoonWrapper } from '@/shared/ui/primitives/coming-soon-wrapper'
 import {
-  OverviewHeader,
-  WorkspaceSummary,
-  RecentProjects,
   ActivityFeed,
+  OverviewHeader,
   QuickActions,
+  RecentProjects,
   WorkspaceMembersWidget,
+  WorkspaceSummary,
   // StorageUsage,
   // OnboardingPromo,
 } from '@/widgets/workspace-overview'

@@ -3,15 +3,16 @@ import { z } from 'zod'
 import { toast } from 'sonner'
 import { TriangleAlert } from 'lucide-react'
 import { useQueryClient } from '@tanstack/react-query'
+import { useNavigate } from '@tanstack/react-router'
+import { ProjectLogoUploader } from './project-logo-uploader'
+import type { ProjectFieldsFragment } from '@/gql/graphql'
 import { usePermission } from '@/shared/lib/auth'
 import { Label } from '@/shared/ui/primitives/label'
 import { Button } from '@/shared/ui/primitives/button'
 import { Textarea } from '@/shared/ui/primitives/textarea'
 import { Spinner } from '@/shared/ui'
 import { GqlClient } from '@/shared/api'
-import { useAuth } from '@/shared/hooks'
-import { useAppDispatch } from '@/shared/hooks'
-import { useNavigate } from '@tanstack/react-router'
+import { useAppDispatch, useAuth  } from '@/shared/hooks'
 import {
   UPDATE_PROJECT,
   projectKeys,
@@ -19,8 +20,6 @@ import {
 import { setCurrentProject } from '@/entities/project/model/slice'
 import { CHECK_SLUG } from '@/features/project/create-project/api/fragments'
 import { EditableField } from '@/widgets/workspace-general-settings-panel/ui/editable-field'
-import { ProjectLogoUploader } from './project-logo-uploader'
-import type { ProjectFieldsFragment } from '@/gql/graphql'
 
 const nameSchema = z
   .string()

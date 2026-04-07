@@ -1,7 +1,7 @@
-import { Card, Avatar, AvatarFallback, AvatarImage, Button } from '@/shared/ui'
+import { Link, useParams } from '@tanstack/react-router'
+import { Avatar, AvatarFallback, AvatarImage, Button, Card } from '@/shared/ui'
 import { Skeleton } from '@/shared/ui/primitives/skeleton'
 import { useWorkspaceOverview } from '@/entities/workspace/hooks'
-import { Link, useParams } from '@tanstack/react-router'
 
 function WorkspaceMembersSkeleton() {
   return (

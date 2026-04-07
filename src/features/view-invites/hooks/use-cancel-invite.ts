@@ -1,8 +1,8 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { toast } from 'sonner'
 import { CANCEL_WORKSPACE_INVITE, workspaceInviteKeys } from '../api'
 import { useAuth } from '@/shared/hooks'
 import { GqlClient } from '@/shared/api'
-import { toast } from 'sonner'
 
 /**
  * Revokes (hard-deletes) a workspace invite.

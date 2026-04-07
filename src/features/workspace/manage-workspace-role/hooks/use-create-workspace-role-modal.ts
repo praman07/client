@@ -1,9 +1,9 @@
-import { useAppDispatch, useAppSelector } from '@/shared/hooks'
 import {
-  openCreateWorkspaceRoleDialog,
   closeCreateWorkspaceRoleDialog,
+  openCreateWorkspaceRoleDialog,
   selectIsCreateWorkspaceRoleDialogOpen,
 } from '../model/create-role-slice'
+import { useAppDispatch, useAppSelector } from '@/shared/hooks'
 
 export function useCreateWorkspaceRoleModal() {
   const dispatch = useAppDispatch()

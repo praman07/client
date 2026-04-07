@@ -1,5 +1,5 @@
-import { Card, Avatar, AvatarFallback, AvatarImage, Badge } from '@/shared/ui'
-import { Image, FileText } from 'lucide-react'
+import { FileText, Image } from 'lucide-react'
+import { Avatar, AvatarFallback, AvatarImage, Badge, Card } from '@/shared/ui'
 
 const ACTIVITIES = [
   {

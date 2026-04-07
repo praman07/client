@@ -1,8 +1,8 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { workspaceKeys, RENAME_WORKSPACE_SLUG_MUTATION } from '@/entities/workspace'
+import { toast } from 'sonner'
+import { RENAME_WORKSPACE_SLUG_MUTATION, workspaceKeys } from '@/entities/workspace'
 import { GqlClient } from '@/shared/api'
 import { useAuth } from '@/shared/hooks'
-import { toast } from 'sonner'
 
 export function useRenameWorkspaceSlug(workspaceId: string) {
   const { getToken } = useAuth()

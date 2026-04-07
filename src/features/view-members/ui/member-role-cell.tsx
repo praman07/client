@@ -1,16 +1,16 @@
-import { Loader2, ChevronDown, CheckIcon } from 'lucide-react'
+import { CheckIcon, ChevronDown, Loader2 } from 'lucide-react'
+import { useUpdateMemberRole } from '../hooks'
+import type { WorkspaceMember } from '../model/types'
 import { cn } from '@/shared/lib/utils'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuTrigger,
   DropdownMenuSeparator,
+  DropdownMenuTrigger,
 } from '@/shared/ui'
 import { usePermission } from '@/shared/lib/auth'
 import { useWorkspaceRoles } from '@/entities/workspace/hooks'
-import { useUpdateMemberRole } from '../hooks'
-import type { WorkspaceMember } from '../model/types'
 
 interface MemberRoleCellProps {
   member: WorkspaceMember

@@ -1,8 +1,8 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { toast } from 'sonner'
 import { RESEND_WORKSPACE_INVITE, workspaceInviteKeys } from '../api'
 import { useAuth } from '@/shared/hooks'
 import { GqlClient } from '@/shared/api'
-import { toast } from 'sonner'
 
 /**
  * Resends a workspace invite, extending its expiry by +7 days.

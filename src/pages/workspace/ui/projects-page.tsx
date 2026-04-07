@@ -1,5 +1,5 @@
 import { Link } from '@tanstack/react-router'
-import { Plus, FolderGit2 } from 'lucide-react'
+import { FolderGit2, Plus } from 'lucide-react'
 
 import { useAppSelector } from '@/shared/hooks'
 import { selectWorkspaceBySlug } from '@/entities/workspace'
@@ -7,16 +7,16 @@ import { PROJECT_FRAGMENT, ProjectCard, useMyProjects } from '@/entities/project
 import { useCreateProjectModal } from '@/features/project/create-project'
 import {
   Button,
-  Skeleton,
+  Card,
+  CardFooter,
+  CardHeader,
   Empty,
   EmptyContent,
   EmptyDescription,
   EmptyHeader,
   EmptyMedia,
   EmptyTitle,
-  Card,
-  CardHeader,
-  CardFooter,
+  Skeleton,
 } from '@/shared/ui'
 import { useFragment } from '@/gql'
 import { Guard } from '@/shared/lib/auth/guard'

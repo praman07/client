@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import type { UpdateProfileInput } from '@/gql/graphql'
 import { UPDATE_PROFILE_MUTATION } from '@/entities/user/api/mutations'
 import { userKeys } from '@/entities/user/model/use-user'
-import type { UpdateProfileInput } from '@/gql/graphql'
 import { GqlClient } from '@/shared/api/graphql-client'
 import { useAuth } from '@/shared/hooks'
 

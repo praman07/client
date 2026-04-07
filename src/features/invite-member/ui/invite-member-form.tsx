@@ -11,14 +11,12 @@ import { useWorkspaceRoles } from '../hooks/use-workspace-roles'
 import { EmailListField } from './email-list-field'
 import type { InviteMemberFormValues } from '../model'
 import { useAppSelector } from '@/shared/hooks'
-import { Button } from '@/shared/ui'
-import {
+import { Button,
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue,
-} from '@/shared/ui'
+  SelectValue } from '@/shared/ui'
 import { selectCurrentWorkspace } from '@/entities/workspace'
 
 interface Props {

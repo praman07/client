@@ -1,9 +1,9 @@
-import { useAppDispatch, useAppSelector } from '@/shared/hooks'
 import {
-  openInviteMemberModal,
   closeInviteMemberModal,
+  openInviteMemberModal,
   selectIsInviteMemberModalOpen,
 } from '../model/slice'
+import { useAppDispatch, useAppSelector } from '@/shared/hooks'
 
 export function useInviteMemberModal() {
   const dispatch = useAppDispatch()

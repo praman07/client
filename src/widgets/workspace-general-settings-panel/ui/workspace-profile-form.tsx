@@ -1,6 +1,7 @@
 import { useForm } from '@tanstack/react-form'
 import { toast } from 'sonner'
 import { z } from 'zod'
+import { mapUpdateWorkspaceError } from '../lib/error-mapping'
 import { Button } from '@/shared/ui/primitives/button'
 import { Input } from '@/shared/ui/primitives/input'
 import { Label } from '@/shared/ui/primitives/label'
@@ -12,7 +13,6 @@ import {
   CardHeader, 
   CardTitle 
 } from '@/shared/ui/primitives/card'
-import { mapUpdateWorkspaceError } from '../lib/error-mapping'
 
 const profileSchema = z.object({
   name: z.string().min(1, 'Workspace name is required').max(100),

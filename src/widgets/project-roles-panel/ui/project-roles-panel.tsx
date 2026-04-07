@@ -1,11 +1,11 @@
-import { useState, useMemo } from 'react'
-import { useProjectRoles, useRolePermissions } from '@/entities/project-role/hooks'
-import { useDeleteProjectRole } from '@/features/project/delete-project-role'
-import { useProjectPermissionsCatalog } from '@/features/project/manage-role-permissions'
+import { useMemo, useState } from 'react'
 import { Loader2, ShieldOff } from 'lucide-react'
 import { ProjectRoleList } from './project-role-list'
 import { ProjectRolePermissionsPanel } from './project-role-permissions-panel'
 import { ProjectRoleDeleteConfirm } from '.'
+import { useProjectPermissionsCatalog } from '@/features/project/manage-role-permissions'
+import { useDeleteProjectRole } from '@/features/project/delete-project-role'
+import { useProjectRoles, useRolePermissions } from '@/entities/project-role/hooks'
 
 interface ProjectRolesPanelProps {
   workspaceId: string
@@ -18,12 +18,12 @@ type RoleForPanel = {
   description: string | null
   isSystem: boolean
   rank: number
-  permissions: { id: string; name: string }[]
+  permissions: Array<{ id: string; name: string }>
 }
 
 export function ProjectRolesPanel({ workspaceId, projectId }: ProjectRolesPanelProps) {
   const { data: rolesData, isLoading: rolesLoading } = useProjectRoles(projectId, workspaceId)
-  const roles: any[] = (rolesData?.projectRoles ?? []) as any[]
+  const roles: Array<any> = (rolesData?.projectRoles ?? []) as Array<any>
 
   const [selectedRoleId, setSelectedRoleId] = useState<string | null>(null)
   const [roleToDelete, setRoleToDelete] = useState<string | null>(null)

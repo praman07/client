@@ -1,12 +1,12 @@
+import { useQueryClient } from '@tanstack/react-query'
+import { Loader2 } from 'lucide-react'
+import { WorkspaceGeneralForm } from './workspace-general-form'
 import { useCurrentWorkspace } from '@/entities/workspace/hooks'
 import { useAuth } from '@/shared/hooks'
 import { GqlClient } from '@/shared/api'
-import { UPDATE_WORKSPACE_MUTATION, RENAME_WORKSPACE_SLUG_MUTATION } from '@/entities/workspace/api/fragments'
-import { useQueryClient } from '@tanstack/react-query'
+import { RENAME_WORKSPACE_SLUG_MUTATION, UPDATE_WORKSPACE_MUTATION } from '@/entities/workspace/api/fragments'
 import { workspaceKeys } from '@/entities/workspace'
-import { Loader2 } from 'lucide-react'
 import { Separator } from '@/shared/ui/primitives/separator'
-import { WorkspaceGeneralForm } from './workspace-general-form'
 
 export function WorkspaceGeneralSettingsPanel() {
   const currentWorkspace = useCurrentWorkspace()

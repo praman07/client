@@ -2,6 +2,7 @@ import { useForm } from '@tanstack/react-form'
 import { toast } from 'sonner'
 import { z } from 'zod'
 import { Info } from 'lucide-react'
+import { mapRenameSlugError } from '../lib/error-mapping'
 import { Button } from '@/shared/ui/primitives/button'
 
 import { Label } from '@/shared/ui/primitives/label'
@@ -18,7 +19,6 @@ import {
   AlertDescription, 
   AlertTitle 
 } from '@/shared/ui/primitives/alert'
-import { mapRenameSlugError } from '../lib/error-mapping'
 
 const slugSchema = z.object({
   slug: z.string()

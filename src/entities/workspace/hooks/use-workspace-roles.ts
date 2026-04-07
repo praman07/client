@@ -1,9 +1,8 @@
 import { useQuery } from '@tanstack/react-query'
+import { GET_WORKSPACE_ROLES_QUERY, workspaceKeys } from '../api'
 import { GqlClient } from '@/shared/api/graphql-client'
-import { useAppSelector } from '@/shared/hooks'
-import { useAuth } from '@/shared/hooks'
+import { useAppSelector, useAuth  } from '@/shared/hooks'
 import { selectCurrentWorkspace } from '@/entities/workspace'
-import { workspaceKeys, GET_WORKSPACE_ROLES_QUERY } from '../api'
 
 export function useWorkspaceRoles() {
   const { getToken } = useAuth()

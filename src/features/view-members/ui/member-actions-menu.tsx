@@ -1,12 +1,9 @@
 import { Fragment, useState } from 'react'
-import { MoreHorizontal, Loader2 } from 'lucide-react'
+import { Loader2, MoreHorizontal } from 'lucide-react'
+import { MEMBER_ACTIONS } from '../lib/member-actions'
+import { useRemoveMember } from '../hooks'
+import type { WorkspaceMember } from '../model/types'
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-  Button,
   AlertDialog,
   AlertDialogAction,
   AlertDialogCancel,
@@ -15,12 +12,15 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
+  Button,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
 } from '@/shared/ui'
 import { usePermission } from '@/shared/lib/auth'
 import { cn } from '@/shared/lib/utils'
-import { MEMBER_ACTIONS } from '../lib/member-actions'
-import { useRemoveMember } from '../hooks'
-import type { WorkspaceMember } from '../model/types'
 
 interface MemberActionsMenuProps {
   member: WorkspaceMember

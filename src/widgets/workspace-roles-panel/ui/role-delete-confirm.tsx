@@ -1,3 +1,4 @@
+import { Loader2 } from 'lucide-react'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -8,7 +9,6 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/shared/ui/primitives/alert-dialog'
-import { Loader2 } from 'lucide-react'
 
 interface RoleDeleteConfirmProps {
   roleName: string

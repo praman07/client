@@ -1,17 +1,16 @@
 import { useQueryClient } from '@tanstack/react-query'
+import { toast } from 'sonner'
+import { validateLogo } from '../lib/validate-logo'
 import {
-  projectKeys,
   REQUEST_PROJECT_LOGO_UPLOAD_MUTATION,
   UPDATE_PROJECT,
+  projectKeys,
 } from '@/entities/project'
 import { setCurrentProject } from '@/entities/project/model/slice'
 import { selectCurrentProject } from '@/entities/project/model/selectors'
 import { GqlClient } from '@/shared/api'
-import { useAuth } from '@/shared/hooks'
-import { useAppDispatch, useAppSelector } from '@/shared/hooks'
+import { useAppDispatch, useAppSelector, useAuth  } from '@/shared/hooks'
 import { uploadToS3 } from '@/shared/lib/s3'
-import { toast } from 'sonner'
-import { validateLogo } from '../lib/validate-logo'
 
 export function useUploadProjectLogo(projectId: string, workspaceId: string) {
   const { getToken } = useAuth()

@@ -1,7 +1,7 @@
 import { Link, useLocation } from '@tanstack/react-router'
-import { Settings2, Shield, Users, ShieldOff } from 'lucide-react'
+import { Settings2, Shield, ShieldOff, Users } from 'lucide-react'
 import { cn } from '@/shared/lib/utils'
-import { usePermission, useAuthorizationContext } from '@/shared/lib/auth'
+import { useAuthorizationContext, usePermission } from '@/shared/lib/auth'
 
 const SETTINGS_TABS = [
   { label: 'General', path: 'general', icon: Settings2 },

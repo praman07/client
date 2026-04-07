@@ -1,5 +1,5 @@
+import { Eye, UserMinus } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
-import { UserMinus, Eye } from 'lucide-react'
 import type { AppPermission } from '@/shared/lib/auth'
 
 export interface MemberAction {
@@ -17,7 +17,7 @@ export interface MemberAction {
  * Guards are evaluated at render time — permission check + rank check.
  * Add new actions here; UI components read from this registry dynamically.
  */
-export const MEMBER_ACTIONS: MemberAction[] = [
+export const MEMBER_ACTIONS: Array<MemberAction> = [
   {
     key: 'view-profile',
     label: 'View Profile',

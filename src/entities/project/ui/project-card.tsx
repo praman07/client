@@ -1,27 +1,27 @@
 import * as React from 'react'
 import {
-  Users,
   Clock,
-  Terminal,
-  Sparkles,
   Database,
   Megaphone,
-  Shield,
   Rocket,
+  Shield,
+  Sparkles,
+  Terminal,
+  Users,
 } from 'lucide-react'
 import type { Project } from '../model/types'
 import { formatDateRelative } from '@/shared/lib'
 import {
+  Avatar,
+  AvatarFallback,
+  AvatarGroup,
+  AvatarGroupCount,
+  AvatarImage,
   Card,
   CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
-  Avatar,
-  AvatarImage,
-  AvatarFallback,
-  AvatarGroup,
-  AvatarGroupCount,
 } from '@/shared/ui'
 
 // Custom Logo generation based on project ID

@@ -2,8 +2,8 @@ import { useMemo } from 'react'
 import type { WorkspaceMember } from '../model/types'
 
 interface PaginatedMembersResult {
-  filtered: WorkspaceMember[]
-  paginated: WorkspaceMember[]
+  filtered: Array<WorkspaceMember>
+  paginated: Array<WorkspaceMember>
   totalPages: number
   totalCount: number
   safePage: number
@@ -16,7 +16,7 @@ interface PaginatedMembersResult {
  * Clamps the page to within valid bounds if the filtered set changes.
  */
 export function usePaginatedMembers(
-  allMembers: WorkspaceMember[],
+  allMembers: Array<WorkspaceMember>,
   search: string,
   page: number,
   pageSize: number,

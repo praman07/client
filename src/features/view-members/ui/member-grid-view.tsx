@@ -3,7 +3,7 @@ import { MemberGridCard } from './member-grid-card'
 import type { WorkspaceMember } from '../model/types'
 
 interface MemberGridViewProps {
-  members: WorkspaceMember[]
+  members: Array<WorkspaceMember>
   workspaceId: string
   actorRank: number
   actorUserId: string

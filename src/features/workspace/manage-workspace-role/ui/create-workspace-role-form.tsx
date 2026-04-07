@@ -1,17 +1,17 @@
 import { useForm } from '@tanstack/react-form'
 import { toast } from 'sonner'
 import { useState } from 'react'
+import { useCreateWorkspaceRole } from '../hooks/use-create-workspace-role'
+import { createWorkspaceRoleSchema } from '../model/schema'
 import { Button } from '@/shared/ui/primitives/button'
 import { Input } from '@/shared/ui/primitives/input'
 import { Label } from '@/shared/ui/primitives/label'
 import { Textarea } from '@/shared/ui/primitives/textarea'
-import { useCreateWorkspaceRole } from '../hooks/use-create-workspace-role'
-import { createWorkspaceRoleSchema } from '../model/schema'
 import { mapCreateRoleError } from '@/widgets/workspace-roles-panel/lib/error-mapping'
 
 interface CreateWorkspaceRoleFormProps {
   workspaceId: string
-  existingRoleNames: string[]
+  existingRoleNames: Array<string>
   onSuccess?: () => void
   onClose?: () => void
 }

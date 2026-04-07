@@ -1,6 +1,6 @@
 import React from 'react'
-import { cn } from '@/shared/lib/utils'
 import { Lock } from 'lucide-react'
+import { cn } from '@/shared/lib/utils'
 
 export interface ComingSoonWrapperProps extends React.HTMLAttributes<HTMLDivElement> {
   children: React.ReactNode

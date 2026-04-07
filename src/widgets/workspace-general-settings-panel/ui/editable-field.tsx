@@ -1,5 +1,5 @@
-import { useState, useRef, useEffect } from 'react'
-import { Pencil, Check, X } from 'lucide-react'
+import { useEffect, useRef, useState } from 'react'
+import { Check, Pencil, X } from 'lucide-react'
 import { Input } from '@/shared/ui/primitives/input'
 import { cn } from '@/shared/lib/utils'
 

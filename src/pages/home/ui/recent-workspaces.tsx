@@ -1,13 +1,13 @@
 import { Link, useNavigate } from '@tanstack/react-router'
 import { Add01Icon, Folder01Icon } from '@hugeicons/core-free-icons'
 import { HugeiconsIcon } from '@hugeicons/react'
+import type { WorkspaceFragmentFragment } from '@/gql/graphql'
 import { Button } from '@/shared/ui/primitives/button'
 import { Skeleton } from '@/shared/ui/primitives/skeleton'
 import { WorkspaceCard } from '@/entities/workspace'
-import type { WorkspaceFragmentFragment } from '@/gql/graphql'
 
 export interface RecentWorkspacesProps {
-  workspaces: WorkspaceFragmentFragment[]
+  workspaces: Array<WorkspaceFragmentFragment>
   isLoading: boolean
 }
 

@@ -163,3 +163,30 @@ export const CHECK_SLUG_AVAILABILITY_MUTATION = gql(`
     }
   }
 `)
+
+// ── Workspace Members ─────────────────────────────────────────────────────────
+
+/**
+ * Query to fetch all members of a workspace with their role information.
+ * Lives in the Entity layer so any feature can consume it without
+ * coupling to features/view-members.
+ *
+ * @layer Entity — workspace
+ */
+export const GET_WORKSPACE_MEMBERS = gql(`
+  query GetWorkspaceMembers($workspaceId: ID!) {
+    workspaceMembers(workspaceId: $workspaceId) {
+      id
+      role
+      roleId
+      roleRank
+      joinedAt
+      user {
+        id
+        fullName
+        email
+        avatarUrl
+      }
+    }
+  }
+`)

@@ -1,5 +1,5 @@
 import { HugeiconsIcon } from '@hugeicons/react'
-import { Folder01Icon, Chat01Icon, Note01Icon, UserAdd01Icon } from '@hugeicons/core-free-icons'
+import { Chat01Icon, Folder01Icon, Note01Icon, UserAdd01Icon } from '@hugeicons/core-free-icons'
 
 export function QuickActions() {
   return (

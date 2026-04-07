@@ -1,8 +1,8 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { workspaceKeys, UPDATE_WORKSPACE_MUTATION } from '@/entities/workspace'
+import { toast } from 'sonner'
+import { UPDATE_WORKSPACE_MUTATION, workspaceKeys } from '@/entities/workspace'
 import { GqlClient } from '@/shared/api'
 import { useAuth } from '@/shared/hooks'
-import { toast } from 'sonner'
 
 export function useUpdateWorkspaceProfile(workspaceId: string) {
   const { getToken } = useAuth()

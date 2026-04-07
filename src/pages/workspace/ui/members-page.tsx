@@ -1,9 +1,9 @@
+import { ShieldOff } from 'lucide-react'
 import { InviteButton } from '@/features/invite-member'
 import { MemberList } from '@/features/view-members'
 import { PendingInviteList } from '@/features/view-invites'
 import { useCurrentWorkspace } from '@/entities/workspace/hooks'
-import { usePermission, useAuthorizationContext } from '@/shared/lib/auth'
-import { ShieldOff } from 'lucide-react'
+import { useAuthorizationContext, usePermission } from '@/shared/lib/auth'
 
 export function MembersPage() {
   const currentWorkspace = useCurrentWorkspace()

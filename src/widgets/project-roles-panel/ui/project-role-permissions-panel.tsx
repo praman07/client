@@ -1,14 +1,15 @@
-import { useState, useMemo, useEffect, useCallback } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { toast } from 'sonner'
 import {
-  Shield,
-  Trash2,
-  Pencil,
   Check,
-  X,
   ChevronDown,
   ChevronUp,
+  Pencil,
+  Shield,
+  Trash2,
+  X,
 } from 'lucide-react'
+import type { ProjectRole } from './project-role-list'
 import { cn } from '@/shared/lib/utils'
 import { Button } from '@/shared/ui/primitives/button'
 import { Input } from '@/shared/ui/primitives/input'
@@ -16,13 +17,12 @@ import { Textarea } from '@/shared/ui/primitives/textarea'
 import { Switch } from '@/shared/ui/primitives/switch'
 import { Badge } from '@/shared/ui/primitives/badge'
 import { Card, CardContent, CardHeader } from '@/shared/ui/primitives/card'
-import type { ProjectRole } from './project-role-list'
 import { useUpdateProjectRole } from '@/features/project/update-project-role'
 import {
   useAssignRolePermission,
   useRemoveRolePermission,
 } from '@/features/project/manage-role-permissions'
-import { usePermission, Guard } from '@/shared/lib/auth'
+import { Guard, usePermission } from '@/shared/lib/auth'
 
 interface AvailablePermission {
   id: string
@@ -36,7 +36,7 @@ interface ProjectRolePermissionsPanelProps {
   workspaceId: string
   projectId: string
   role: ProjectRole
-  availablePermissions: AvailablePermission[]
+  availablePermissions: Array<AvailablePermission>
   onDelete?: (roleId: string) => void
 }
 
@@ -52,8 +52,8 @@ function getGroupLabel(resource: string): string {
   return key.charAt(0).toUpperCase() + key.slice(1).replace(/-/g, ' ')
 }
 
-function groupPermissions(permissions: AvailablePermission[]) {
-  const groups = new Map<string, AvailablePermission[]>()
+function groupPermissions(permissions: Array<AvailablePermission>) {
+  const groups = new Map<string, Array<AvailablePermission>>()
   for (const perm of permissions) {
     const group = getGroupLabel(perm.resource)
     if (!groups.has(group)) groups.set(group, [])
@@ -143,7 +143,7 @@ function PermissionGroup({
   isSaving,
 }: {
   groupName: string
-  permissions: AvailablePermission[]
+  permissions: Array<AvailablePermission>
   pendingPermIds: Set<string>
   onToggle: (id: string) => void
   disabled: boolean
@@ -267,7 +267,7 @@ export function ProjectRolePermissionsPanel({
   const handleSave = async () => {
     try {
       setIsSaving(true)
-      const promises: Promise<any>[] = []
+      const promises: Array<Promise<any>> = []
 
       const identityChanged =
         canEditIdentity &&
