@@ -75,9 +75,9 @@ export function ChatAttachmentPicker({
       />
       <Button
         variant="ghost"
-        size="sm"
+        size="icon"
         className={cn(
-          'h-6 px-1.5 text-muted-foreground hover:text-foreground',
+          'size-7 text-muted-foreground hover:text-foreground',
           isDisabled && 'opacity-50 cursor-not-allowed',
           className,
         )}
@@ -86,8 +86,7 @@ export function ChatAttachmentPicker({
         title={tooltipText}
         aria-label="Attach file"
       >
-        <HugeiconsIcon icon={Attachment01Icon} className="size-3.5 mr-1" />
-        <span className="text-[10px] font-medium">Attach</span>
+        <HugeiconsIcon icon={Attachment01Icon} className="size-4" />
       </Button>
     </>
   )

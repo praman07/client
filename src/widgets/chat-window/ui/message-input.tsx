@@ -1,22 +1,24 @@
 import { HugeiconsIcon } from '@hugeicons/react'
 import {
-  Calendar01Icon,
-  GiftIcon,
-  PlusSignIcon as PlusIcon,
-  SentIcon,
   SmileIcon,
 } from '@hugeicons/core-free-icons'
+import { Bold, Link2, AtSign } from 'lucide-react'
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
+import { cn } from '@/shared/lib/utils'
 import { useEditRequest } from '../lib/edit-request-context'
 import { useReplyRequest } from '../lib/reply-request-context'
 import {
   ChatToolbar,
-  ChatToolbarAddonEnd,
-  ChatToolbarAddonStart,
   ChatToolbarTextarea,
 } from './components/chat-layout'
+import { Separator } from '@/shared/ui/primitives/separator'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/shared/ui/primitives/tooltip'
 import type { StagedAttachment } from '@/features/chat/media'
 import { useAuth } from '@/shared/hooks'
 import { Button } from '@/shared/ui/primitives/button'
@@ -36,9 +38,10 @@ interface MessageInputProps {
   channelId: string
   projectId: string
   workspaceId: string
+  channelName?: string
 }
 
-export function MessageInput({ channelId, projectId, workspaceId }: MessageInputProps) {
+export function MessageInput({ channelId, projectId, workspaceId, channelName }: MessageInputProps) {
   const { userId, getToken } = useAuth()
   const queryClient = useQueryClient()
   const [content, setContent] = useState('')
@@ -261,9 +264,10 @@ export function MessageInput({ channelId, projectId, workspaceId }: MessageInput
 
   return (
     <div className="flex flex-col w-full shrink-0 z-20">
-      {/* ── Replying-To Banner ─────────────────────────────────── */}
+
+      {/* ── Replying-To Banner ──────────────────────────────────── */}
       {replyingTo && (
-        <div className="flex items-center justify-between px-3 py-1.5 bg-muted/60 border-b text-xs">
+        <div className="flex items-center justify-between px-4 py-2 bg-muted/60 rounded-t-xl border border-border/50 border-b-0 text-xs">
           <div className="flex items-center gap-1.5 min-w-0">
             <span className="text-muted-foreground shrink-0">Replying to</span>
             <strong className="text-foreground shrink-0">{replyingTo.displayName}</strong>
@@ -271,7 +275,7 @@ export function MessageInput({ channelId, projectId, workspaceId }: MessageInput
           </div>
           <button
             onClick={clearReply}
-            className="ml-2 shrink-0 text-muted-foreground hover:text-destructive transition-colors"
+            className="ml-2 shrink-0 text-muted-foreground hover:text-destructive transition-colors text-sm leading-none"
             aria-label="Cancel reply"
           >
             ✕
@@ -279,76 +283,105 @@ export function MessageInput({ channelId, projectId, workspaceId }: MessageInput
         </div>
       )}
 
-      <ChatToolbar className="border-t pb-safe overflow-visible">
-        <div className="flex flex-col w-full bg-background border rounded-2xl shadow-sm focus-within:ring-1 ring-ring transition-all">
+      <ChatToolbar className="pb-safe overflow-visible">
+        <div
+          className={cn(
+            'flex flex-col w-full rounded-xl ring-1 ring-border/50 bg-card',
+            // 'focus-within:ring-primary/30 transition-all duration-150',
+            replyingTo && 'rounded-tl-none rounded-tr-none',
+          )}
+        >
 
-          {/* ── Pending Attachments Strip ─────────────────────── */}
+          {/* ── Attachment Preview Strip ─────────────────────── */}
           <ChatAttachmentPreview
             attachments={pendingAttachments}
             onRemove={handleRemoveAttachment}
             onRetry={handleRetry}
           />
 
-          <div className="flex items-end gap-2 p-2">
-            <ChatToolbarAddonStart className="pb-1">
-              <Button variant="ghost" size="icon" className="size-8 @md/chat:size-9 shrink-0">
-                <HugeiconsIcon icon={PlusIcon} className="size-5" />
-              </Button>
-            </ChatToolbarAddonStart>
-
+          {/* ── Zone 1: Textarea ─────────────────────────────── */}
+          <div className="px-4 pt-3 pb-2">
             <ChatToolbarTextarea
               ref={textareaRef}
-              placeholder="Type your message…"
+              placeholder={`Message #${channelName ?? channelId}…`}
               value={content}
               onChange={(e) => setContent(e.target.value)}
               onKeyDown={handleKeyDown}
               onPaste={handlePaste}
-              className="max-h-[200px] py-2.5"
+              className="max-h-[180px] text-sm leading-relaxed"
             />
-
-            <ChatToolbarAddonEnd className="pb-1">
-              {!canSend ? (
-                <div className="flex items-center gap-1">
-                  <Button variant="ghost" size="icon" className="size-8 @md/chat:size-9 hidden @md/chat:inline-flex">
-                    <HugeiconsIcon icon={GiftIcon} className="size-4" />
-                  </Button>
-                  <Button variant="ghost" size="icon" className="size-8 @md/chat:size-9 hidden @md/chat:inline-flex">
-                    <HugeiconsIcon icon={Calendar01Icon} className="size-4" />
-                  </Button>
-                  <Button variant="ghost" size="icon" className="size-8 @md/chat:size-9">
-                    <HugeiconsIcon icon={SmileIcon} className="size-5" />
-                  </Button>
-                </div>
-              ) : (
-                <Button
-                  size="icon"
-                  className="size-8 @md/chat:size-9 rounded-full shrink-0"
-                  onClick={handleSend}
-                  disabled={isUploading}
-                  aria-label="Send message"
-                >
-                  <HugeiconsIcon icon={SentIcon} className="size-4" />
-                </Button>
-              )}
-            </ChatToolbarAddonEnd>
           </div>
 
-          {/* ── Bottom toolbar: Attach + hints ───────────────── */}
-          <div className="flex items-center justify-between px-3 py-1 border-t bg-muted/30 rounded-b-2xl">
-            <div className="flex items-center gap-3">
+          {/* ── Separator ────────────────────────────────────── */}
+          <Separator />
+
+          {/* ── Zone 2: Action Bar ───────────────────────────── */}
+          <div className="flex items-center justify-between px-3 h-11">
+
+            {/* Left: Attachment picker + pipe + disabled formatting buttons */}
+            <div className="flex items-center gap-0.5">
               <ChatAttachmentPicker
                 currentAttachmentCount={pendingAttachments.length}
                 onFileSelected={startUpload}
                 uploading={isUploading}
                 disabled={quota.isFull}
               />
+              <Separator orientation="vertical" className="h-4 mx-1.5" />
+              <Tooltip>
+                <TooltipTrigger
+                  className="size-7 inline-flex items-center justify-center rounded-md text-muted-foreground opacity-50 cursor-not-allowed"
+                  disabled
+                  aria-label="Bold (coming soon)"
+                >
+                  <Bold className="size-3.5" />
+                </TooltipTrigger>
+                <TooltipContent side="top">Bold (coming soon)</TooltipContent>
+              </Tooltip>
+              <Tooltip>
+                <TooltipTrigger
+                  className="size-7 inline-flex items-center justify-center rounded-md text-muted-foreground opacity-50 cursor-not-allowed"
+                  disabled
+                  aria-label="Link (coming soon)"
+                >
+                  <Link2 className="size-3.5" />
+                </TooltipTrigger>
+                <TooltipContent side="top">Link (coming soon)</TooltipContent>
+              </Tooltip>
+              <Tooltip>
+                <TooltipTrigger
+                  className="size-7 inline-flex items-center justify-center rounded-md text-muted-foreground opacity-50 cursor-not-allowed"
+                  disabled
+                  aria-label="Mention (coming soon)"
+                >
+                  <AtSign className="size-3.5" />
+                </TooltipTrigger>
+                <TooltipContent side="top">Mention (coming soon)</TooltipContent>
+              </Tooltip>
             </div>
+
+            {/* Right: Emoji + SEND pill */}
             <div className="flex items-center gap-2">
-              <span className="text-[10px] text-muted-foreground font-medium">
-                <strong>Return</strong> to send
-              </span>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="size-7 text-muted-foreground hover:text-foreground"
+                aria-label="Add emoji (coming soon)"
+                disabled
+              >
+                <HugeiconsIcon icon={SmileIcon} className="size-4" />
+              </Button>
+              <Button
+                size="sm"
+                className="h-7 px-3.5 rounded-full text-xs font-semibold uppercase tracking-wide"
+                onClick={handleSend}
+                disabled={!canSend || isUploading}
+                aria-label="Send message"
+              >
+                Send
+              </Button>
             </div>
           </div>
+
         </div>
       </ChatToolbar>
     </div>

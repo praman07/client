@@ -41,14 +41,14 @@ export const VirtualRow = React.memo(
         }}
         className={
           item.type === 'MESSAGE' && item.message?.id === highlightedMessageId
-            ? 'bg-amber-500/10 border-l-2 border-amber-400/70 rounded-r transition-colors duration-1000'
-            : 'transition-colors duration-1000'
+            ? 'bg-amber-500/10 border-l-2 border-amber-400/70 rounded-r transition-colors duration-700'
+            : 'border-l-2 border-transparent transition-colors duration-700'
         }
       >
         {item.type === 'DATE' && item.timestamp !== undefined ? (
           <DateSeparator timestamp={item.timestamp} />
         ) : item.isPrimary && item.message ? (
-          <PrimaryMessage message={item.message} className="mt-4" />
+          <PrimaryMessage message={item.message} />
         ) : item.message ? (
           <AdditionalMessage message={item.message} />
         ) : null}

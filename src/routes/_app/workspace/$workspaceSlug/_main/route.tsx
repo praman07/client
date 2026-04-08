@@ -21,9 +21,7 @@ function WorkspaceMainLayout() {
 
   return (
     <>
-      <div className="border-b bg-background px-6">
-        <NavTabs items={WORKSPACE_TABS as any} from={Route.fullPath} />
-      </div>
+      <NavTabs items={WORKSPACE_TABS as any} from={Route.fullPath} />
       <main className="flex-1 overflow-auto bg-background">
         <div className="mx-auto max-w-7xl w-full p-6 lg:p-8">
           <ErrorBoundary FallbackComponent={({ error, resetErrorBoundary }) => (

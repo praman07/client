@@ -94,7 +94,7 @@ function AttachmentCard({
       {/* Card body */}
       <div
         className={cn(
-          'relative flex items-center overflow-hidden rounded-lg border bg-muted/40',
+          'relative flex items-center overflow-hidden rounded-lg border border-border/60 bg-card',
           isImage ? 'w-16 h-16' : 'h-12 max-w-[140px] px-2 gap-2',
         )}
         title={`${attachment.name} (${formatBytes(attachment.sizeBytes)})`}
@@ -109,7 +109,7 @@ function AttachmentCard({
           />
         ) : isImage ? (
           // Image but no local preview yet
-          <div className="w-full h-full flex items-center justify-center bg-muted">
+          <div className="w-full h-full flex items-center justify-center bg-card">
             <Film className="size-5 text-muted-foreground" />
           </div>
         ) : (
@@ -117,10 +117,10 @@ function AttachmentCard({
           <>
             <FileTypeIcon mimeType={attachment.mimeType} className="size-4 shrink-0" />
             <div className="flex flex-col min-w-0">
-              <span className="text-[10px] font-medium text-foreground truncate leading-tight">
+              <span className="text-xs font-medium text-foreground truncate leading-tight">
                 {attachment.name}
               </span>
-              <span className="text-[9px] text-muted-foreground leading-tight">
+              <span className="text-xs text-muted-foreground leading-tight">
                 {formatBytes(attachment.sizeBytes)}
               </span>
             </div>
@@ -134,7 +134,7 @@ function AttachmentCard({
             aria-label={`Uploading ${attachment.uploadProgress}%`}
           >
             <div
-              className="h-1 bg-primary transition-all duration-150 rounded-b-lg"
+              className="h-1.5 bg-primary transition-all duration-150 rounded-b-lg"
               style={{ width: `${attachment.uploadProgress}%` }}
             />
           </div>
@@ -190,14 +190,18 @@ export function ChatAttachmentPreview({
   return (
     <div
       className={cn(
-        'flex items-center gap-2 px-3 py-2 border-b overflow-x-auto scrollbar-none',
+        'flex items-center gap-2 px-4 py-3 border-border/50 overflow-x-auto scrollbar-none',
         className,
       )}
       role="list"
       aria-label={`${attachments.length} pending attachment${attachments.length === 1 ? '' : 's'}`}
     >
       {attachments.map((attachment) => (
-        <div key={attachment.fileId} role="listitem">
+        <div
+          key={attachment.fileId}
+          role="listitem"
+          className="animate-in fade-in-0 slide-in-from-bottom-1 duration-150"
+        >
           <AttachmentCard
             attachment={attachment}
             onRemove={() => onRemove(attachment.fileId)}

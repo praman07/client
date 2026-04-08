@@ -7,6 +7,7 @@ import { useMessageEdit } from '../../lib/use-message-edit'
 import { useEditRequest } from '../../lib/edit-request-context'
 import { useReplyRequest } from '../../lib/reply-request-context'
 import { useScrollToMessage } from '../../lib/scroll-to-message-context'
+import { useUserProfilePanel } from '@/features/chat/user-profile-panel'
 import {
   MessageEvent,
   MessageEventAddon,
@@ -67,6 +68,7 @@ interface PrimaryMessageProps {
 export function PrimaryMessage({ message, className }: PrimaryMessageProps) {
   const { getMemberInfo } = useMemberCache()
   const memberInfo = getMemberInfo(message.authorId)
+  const { open: openUserProfile } = useUserProfilePanel()
   const { user } = useUser()
   const { requestReply } = useReplyRequest()
   const { scrollToMessage } = useScrollToMessage()
@@ -176,9 +178,12 @@ export function PrimaryMessage({ message, className }: PrimaryMessageProps) {
 
   return (
     <>
-      <MessageEvent className={cn('hover:bg-accent/50 group/msg', className)}>
+      <MessageEvent className={cn('hover:bg-accent/50 group/msg mt-3', className)}>
         <MessageEventAddon>
-          <Avatar className="rounded-full size-8 @md/chat:size-10 mx-auto border shadow-sm">
+          <Avatar
+            className="rounded-full size-9 shrink-0 cursor-pointer hover:opacity-80 transition-opacity"
+            onClick={() => openUserProfile(message.authorId)}
+          >
             {memberInfo?.avatarUrl && (
               <AvatarImage src={memberInfo.avatarUrl} alt={displayName} />
             )}
@@ -188,8 +193,11 @@ export function PrimaryMessage({ message, className }: PrimaryMessageProps) {
           </Avatar>
         </MessageEventAddon>
         <MessageEventBody>
-          <div className="flex items-baseline gap-2">
-            <MessageEventTitle className="hover:underline cursor-pointer">
+          <div className="flex items-center gap-2">
+            <MessageEventTitle
+              className="hover:underline cursor-pointer"
+              onClick={() => openUserProfile(message.authorId)}
+            >
               {displayName}
             </MessageEventTitle>
             <MessageEventDescription>
@@ -201,16 +209,16 @@ export function PrimaryMessage({ message, className }: PrimaryMessageProps) {
 
           {/* ── Tombstone ────────────────────────────────────── */}
           {message.deletedAt ? (
-            <div className="flex items-center gap-1.5 text-muted-foreground/70 italic text-sm py-0.5 select-none">
+            <div className="flex items-center gap-2 text-muted-foreground/70 italic text-sm py-0.5 select-none">
               <Trash2 className="h-3 w-3 shrink-0" />
               <span>This message was deleted.</span>
             </div>
           ) : isEditing ? (
             /* ── Edit mode ─────────────────────────────────────── */
-            <div className="flex flex-col gap-1 mt-1">
+            <div className="flex flex-col gap-1.5 mt-1.5">
               <textarea
                 autoFocus
-                className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm resize-none focus:outline-none focus:ring-1 focus:ring-ring"
+                className="w-full rounded-md border border-input bg-muted/20 px-3 py-2 text-sm resize-none focus:outline-none focus:ring-1 focus:ring-ring min-h-[60px]"
                 value={editValue}
                 rows={Math.max(2, editValue.split('\n').length)}
                 onChange={(e) => setEditValue(e.target.value)}
@@ -225,7 +233,7 @@ export function PrimaryMessage({ message, className }: PrimaryMessageProps) {
                   }
                 }}
               />
-              <p className="text-[10px] text-muted-foreground">
+              <p className="text-xs text-muted-foreground">
                 <span className="font-medium">escape</span> to cancel •{' '}
                 <span className="font-medium">enter</span> to save
               </p>
@@ -237,7 +245,7 @@ export function PrimaryMessage({ message, className }: PrimaryMessageProps) {
               {message.parentMessageId && (
                 <button
                   onClick={() => scrollToMessage(message.parentMessageId!)}
-                  className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground mb-0.5 border-l-2 border-muted hover:border-primary/60 pl-2 py-0.5 w-full text-left transition-colors"
+                  className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground mb-1 border-l-2 border-muted-foreground/25 hover:border-primary/50 pl-2.5 py-0.5 max-h-10 overflow-hidden w-full text-left transition-colors rounded-sm"
                 >
                   <Reply className="h-3 w-3 shrink-0" />
                   {parentMessage ? (
@@ -290,14 +298,18 @@ export function PrimaryMessage({ message, className }: PrimaryMessageProps) {
 
               {/* Hover action bar — visible to everyone on non-deleted messages */}
               {!message.deletedAt && (
-                <div className={`absolute -top-2 right-0 items-center gap-0.5 bg-background border rounded-md shadow-sm px-1 py-0.5 ${isPickerOpen ? 'flex' : 'hidden group-hover/msg:flex'}`}>
+                <div className={cn(
+                  'absolute -top-3 right-2 z-10 items-center gap-0.5',
+                  'bg-background border border-border/60 rounded-lg shadow-md px-1 py-0.5',
+                  isPickerOpen ? 'flex' : 'hidden group-hover/msg:flex'
+                )}>
                   {/* Emoji picker — lazy loaded, no bundle impact until opened */}
                   <Popover open={isPickerOpen} onOpenChange={setIsPickerOpen}>
                     <PopoverTrigger
                       className="p-1 rounded hover:bg-accent text-muted-foreground hover:text-foreground transition-colors"
                       aria-label="Add reaction"
                     >
-                      <SmilePlus className="h-3.5 w-3.5" />
+                      <SmilePlus className="size-4" />
                     </PopoverTrigger>
                     <PopoverContent
                       side="top"
@@ -335,7 +347,7 @@ export function PrimaryMessage({ message, className }: PrimaryMessageProps) {
                     title="Reply"
                     aria-label="Reply to message"
                   >
-                    <Reply className="h-3.5 w-3.5" />
+                    <Reply className="size-4" />
                   </button>
                   {canEdit && (
                     <button
@@ -344,7 +356,7 @@ export function PrimaryMessage({ message, className }: PrimaryMessageProps) {
                       title="Edit message"
                       aria-label="Edit message"
                     >
-                      <Pencil className="h-3.5 w-3.5" />
+                      <Pencil className="size-4" />
                     </button>
                   )}
                   {canDelete && (
@@ -354,7 +366,7 @@ export function PrimaryMessage({ message, className }: PrimaryMessageProps) {
                       title="Delete message"
                       aria-label="Delete message"
                     >
-                      <Trash2 className="h-3.5 w-3.5" />
+                      <Trash2 className="size-4" />
                     </button>
                   )}
                 </div>
@@ -362,7 +374,7 @@ export function PrimaryMessage({ message, className }: PrimaryMessageProps) {
 
               {/* ── Reaction Badges ───────────────────────────────── */}
               {!message.deletedAt && (message.reactions ?? []).length > 0 && (
-                <div className="flex flex-wrap gap-1 mt-1.5">
+                <div className="flex flex-wrap gap-1 mt-2">
                   {message.reactions!.map((reaction) => (
                     <ReactionBadge
                       key={reaction.emoji}
@@ -375,7 +387,7 @@ export function PrimaryMessage({ message, className }: PrimaryMessageProps) {
 
               {/* ── Reply Count Badge (P6.1) ─────────────────────── */}
               {(message.replyCount ?? 0) > 0 && (
-                <button className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground mt-0.5 transition-colors">
+                <button className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground mt-1.5 transition-colors">
                   <MessageSquare className="h-3 w-3" />
                   <span>
                     {message.replyCount} {message.replyCount === 1 ? 'reply' : 'replies'}

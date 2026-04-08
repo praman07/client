@@ -44,7 +44,6 @@ type Query {
   projectOverview(projectId: ID!): ProjectOverview!
   allPermissions(workspaceId: ID!): [Permission!]!
   projectPermissions(workspaceId: ID!, projectId: ID!): [Permission!]!
-  projectVelocity(projectId: ID!, days: Int): [VelocityData!]!
   projectContributorStats(projectId: ID!): [ContributorStats!]!
   getThreadMessages(parentMessageId: ID!, limit: Int, beforeCursor: ID): [ChatMessage!]!
   getMessageById(messageId: ID!): ChatMessage
@@ -854,12 +853,6 @@ type OverviewMember {
   roleName: String
   roleRank: Int
   joinedAt: String!
-}
-
-type VelocityData {
-  date: String!
-  completed: Int!
-  created: Int!
 }
 
 type ContributorStats {
@@ -1796,6 +1789,7 @@ type CreateIssueResult {
 input UpdateIssueInput {
   issueId: ID!
   title: String
+  statusId: ID
   priority: IssuePriority
   assigneeId: ID
   labelIds: [ID!]

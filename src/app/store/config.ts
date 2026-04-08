@@ -24,6 +24,7 @@ import { createProjectRoleReducer } from '@/features/project/create-project-role
 import { updateProjectRoleReducer } from '@/features/project/update-project-role/model/slice'
 import inviteMemberReducer from '@/features/invite-member/model/slice'
 import { createWorkspaceRoleReducer } from '@/features/workspace/manage-workspace-role/model/create-role-slice'
+import { userProfilePanelReducer } from '@/features/chat/user-profile-panel'
 
 export const store = configureStore({
   reducer: {
@@ -52,6 +53,7 @@ export const store = configureStore({
     updateProjectRole: updateProjectRoleReducer, // ✅ Update role dialog state
     inviteMember: inviteMemberReducer, // ✅ Invite member dialog state
     createWorkspaceRole: createWorkspaceRoleReducer, // ✅ Create workspace role dialog
+    userProfilePanel: userProfilePanelReducer, // ✅ user-profile-panel reducer
   },
 })
 

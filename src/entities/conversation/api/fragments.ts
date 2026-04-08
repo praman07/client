@@ -29,6 +29,9 @@ export const CONVERSATION_FIELDS_FRAGMENT = gql(`
     createdAt
     updatedAt
     deletedAt
+    members {
+      ...ConversationMemberFields
+    }
   }
 `)
 

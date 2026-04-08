@@ -1,4 +1,5 @@
 import { MemberCacheProvider } from '../lib/member-cache-context'
+import { UserProfilePanel } from '@/widgets/user-profile-panel'
 import { EditRequestProvider } from '../lib/edit-request-context'
 import { ReplyRequestProvider } from '../lib/reply-request-context'
 import { ScrollToMessageProvider } from '../lib/scroll-to-message-context'
@@ -21,7 +22,12 @@ interface ChatWindowProps {
   workspaceId: string
   channelName: string
   isPrivate: boolean
-  description?: string
+  topic?: string
+  isDm?: boolean
+  otherUser?: {
+    fullName?: string | null
+    avatarUrl?: string | null
+  }
 }
 
 export function ChatWindow({
@@ -30,7 +36,9 @@ export function ChatWindow({
   workspaceId,
   channelName,
   isPrivate,
-  description,
+  topic,
+  isDm,
+  otherUser,
 }: ChatWindowProps) {
   // 0. Fetch conversation with members for cache
   const { data: conversationData } = useConversation(channelId, {
@@ -74,18 +82,19 @@ export function ChatWindow({
                 channelId={channelId}
                 channelName={channelName}
                 isPrivate={isPrivate}
-                description={
-                  description || 'Topic: General discussion about the project'
-                }
+                topic={topic}
+                isDm={isDm}
+                otherUser={otherUser}
               >
                 <SyncStatusIndicator status={status} />
               </ChatHeader>
               <MessageList channelId={channelId} projectId={projectId} />
-              <MessageInput channelId={channelId} projectId={projectId} workspaceId={workspaceId} />
+              <MessageInput channelId={channelId} projectId={projectId} workspaceId={workspaceId} channelName={channelName} />
             </ChatContainer>
           </ScrollToMessageProvider>
         </ReplyRequestProvider>
       </EditRequestProvider>
+      <UserProfilePanel />
     </MemberCacheProvider>
   )
 }

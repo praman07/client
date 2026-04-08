@@ -18,7 +18,7 @@ export function ScrollToBottomButton({
       <Button
         size="sm"
         variant="secondary"
-        className="rounded-full shadow-lg pointer-events-auto h-8 px-3 gap-1.5 opacity-90 hover:opacity-100 transition-opacity"
+        className="rounded-full shadow-lg pointer-events-auto h-8 px-3 gap-1.5 opacity-90 hover:opacity-100 transition-all animate-in slide-in-from-bottom-2 duration-200"
         onClick={onClick}
       >
         <HugeiconsIcon icon={ArrowDownIcon} className="size-3.5" />

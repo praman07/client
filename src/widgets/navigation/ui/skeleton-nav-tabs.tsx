@@ -13,15 +13,17 @@ interface SkeletonNavTabsProps {
  */
 export function SkeletonNavTabs({ count = 4 }: SkeletonNavTabsProps) {
   return (
-    <nav className="flex items-center gap-6 overflow-x-auto overflow-y-hidden">
-      {Array.from({ length: count }).map((_, i) => (
-        <div
-          key={i}
-          className="relative flex h-12 items-center"
-        >
-          <Skeleton className="h-4 w-16 rounded" />
-        </div>
-      ))}
-    </nav>
+    <div className="w-full shrink-0 border-b bg-card px-6">
+      <nav className="flex items-center gap-6 overflow-x-auto overflow-y-hidden">
+        {Array.from({ length: count }).map((_, i) => (
+          <div
+            key={i}
+            className="relative flex h-12 items-center"
+          >
+            <Skeleton className="h-4 w-16 rounded" />
+          </div>
+        ))}
+      </nav>
+    </div>
   )
 }

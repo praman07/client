@@ -87,9 +87,7 @@ function ProjectLayout({
   return (
     <div className="flex h-full flex-col">
       <DomainRegistry />
-      <div className="shrink-0 border-b bg-background px-6">
-        <NavTabs items={navItems} from={Route.fullPath} />
-      </div>
+      <NavTabs items={navItems} from={Route.fullPath} />
       <div className="flex-1 overflow-hidden relative">
         <ErrorBoundary
           FallbackComponent={({ error: err, resetErrorBoundary }) => (

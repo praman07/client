@@ -1,6 +1,7 @@
 import { useLiveQuery } from 'dexie-react-hooks'
 import { MessageSquare, Pencil, Reply, SmilePlus, Trash2 } from 'lucide-react'
 import { Suspense, lazy, useCallback, useEffect, useRef, useState } from 'react'
+import { cn } from '@/shared/lib/utils'
 import { useMessageEdit } from '../../lib/use-message-edit'
 import { useEditRequest } from '../../lib/edit-request-context'
 import { useReplyRequest } from '../../lib/reply-request-context'
@@ -148,9 +149,9 @@ export function AdditionalMessage({ message }: AdditionalMessageProps) {
 
   return (
     <>
-      <MessageEvent className="hover:bg-accent/50 group/msg h-auto py-0.5">
+      <MessageEvent className="hover:bg-accent/50 group/msg">
         <MessageEventAddon>
-          <MessageEventDescription className="text-right text-[8px] @md/chat:text-[10px] group-hover:visible invisible select-none">
+          <MessageEventDescription className="text-right text-xs group-hover/msg:opacity-100 opacity-0 select-none transition-opacity duration-150">
             {new Intl.DateTimeFormat('en-US', {
               timeStyle: 'short',
             }).format(new Date(message.createdAt))}
@@ -159,16 +160,16 @@ export function AdditionalMessage({ message }: AdditionalMessageProps) {
         <MessageEventBody>
           {/* ── Tombstone ────────────────────────────────────── */}
           {message.deletedAt ? (
-            <div className="flex items-center gap-1.5 text-muted-foreground/70 italic text-sm py-0.5 select-none">
+            <div className="flex items-center gap-2 text-muted-foreground/70 italic text-sm py-0.5 select-none">
               <Trash2 className="h-3 w-3 shrink-0" />
               <span>This message was deleted.</span>
             </div>
           ) : isEditing ? (
             /* ── Edit mode ─────────────────────────────────────── */
-            <div className="flex flex-col gap-1">
+            <div className="flex flex-col gap-1.5 mt-1.5">
               <textarea
                 autoFocus
-                className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm resize-none focus:outline-none focus:ring-1 focus:ring-ring"
+                className="w-full rounded-md border border-input bg-muted/20 px-3 py-2 text-sm resize-none focus:outline-none focus:ring-1 focus:ring-ring min-h-[60px]"
                 value={editValue}
                 rows={Math.max(2, editValue.split('\n').length)}
                 onChange={(e) => setEditValue(e.target.value)}
@@ -183,7 +184,7 @@ export function AdditionalMessage({ message }: AdditionalMessageProps) {
                   }
                 }}
               />
-              <p className="text-[10px] text-muted-foreground">
+              <p className="text-xs text-muted-foreground">
                 <span className="font-medium">escape</span> to cancel •{' '}
                 <span className="font-medium">enter</span> to save
               </p>
@@ -195,7 +196,7 @@ export function AdditionalMessage({ message }: AdditionalMessageProps) {
               {message.parentMessageId && (
                 <button
                   onClick={() => scrollToMessage(message.parentMessageId!)}
-                  className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground mb-0.5 border-l-2 border-muted hover:border-primary/60 pl-2 py-0.5 w-full text-left transition-colors"
+                  className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground mb-1 border-l-2 border-muted-foreground/25 hover:border-primary/50 pl-2.5 py-0.5 max-h-10 overflow-hidden w-full text-left transition-colors rounded-sm"
                 >
                   <Reply className="h-3 w-3 shrink-0" />
                   {parentMessage ? (
@@ -248,14 +249,18 @@ export function AdditionalMessage({ message }: AdditionalMessageProps) {
 
               {/* Hover action bar — visible to everyone on non-deleted messages */}
               {!message.deletedAt && (
-                <div className={`absolute -top-2 right-0 items-center gap-0.5 bg-background border rounded-md shadow-sm px-1 py-0.5 ${isPickerOpen ? 'flex' : 'hidden group-hover/msg:flex'}`}>
+                <div className={cn(
+                  'absolute -top-3 right-2 z-10 items-center gap-0.5',
+                  'bg-background border border-border/60 rounded-lg shadow-md px-1 py-0.5',
+                  isPickerOpen ? 'flex' : 'hidden group-hover/msg:flex'
+                )}>
                   {/* Emoji picker — lazy loaded */}
                   <Popover open={isPickerOpen} onOpenChange={setIsPickerOpen}>
                     <PopoverTrigger
                       className="p-1 rounded hover:bg-accent text-muted-foreground hover:text-foreground transition-colors"
                       aria-label="Add reaction"
                     >
-                      <SmilePlus className="h-3.5 w-3.5" />
+                      <SmilePlus className="size-4" />
                     </PopoverTrigger>
                     <PopoverContent
                       side="top"
@@ -293,7 +298,7 @@ export function AdditionalMessage({ message }: AdditionalMessageProps) {
                     title="Reply"
                     aria-label="Reply to message"
                   >
-                    <Reply className="h-3.5 w-3.5" />
+                    <Reply className="size-4" />
                   </button>
                   {canEdit && (
                     <button
@@ -302,7 +307,7 @@ export function AdditionalMessage({ message }: AdditionalMessageProps) {
                       title="Edit message"
                       aria-label="Edit message"
                     >
-                      <Pencil className="h-3.5 w-3.5" />
+                      <Pencil className="size-4" />
                     </button>
                   )}
                   {canDelete && (
@@ -312,7 +317,7 @@ export function AdditionalMessage({ message }: AdditionalMessageProps) {
                       title="Delete message"
                       aria-label="Delete message"
                     >
-                      <Trash2 className="h-3.5 w-3.5" />
+                      <Trash2 className="size-4" />
                     </button>
                   )}
                 </div>
@@ -320,7 +325,7 @@ export function AdditionalMessage({ message }: AdditionalMessageProps) {
 
               {/* ── Reaction Badges ───────────────────────────────── */}
               {!message.deletedAt && (message.reactions ?? []).length > 0 && (
-                <div className="flex flex-wrap gap-1 mt-1.5">
+                <div className="flex flex-wrap gap-1 mt-2">
                   {message.reactions!.map((reaction) => (
                     <ReactionBadge
                       key={reaction.emoji}
@@ -333,7 +338,7 @@ export function AdditionalMessage({ message }: AdditionalMessageProps) {
 
               {/* ── Reply Count Badge ─────────────────────────────── */}
               {(message.replyCount ?? 0) > 0 && (
-                <button className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground mt-0.5 transition-colors">
+                <button className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground mt-1.5 transition-colors">
                   <MessageSquare className="h-3 w-3" />
                   <span>
                     {message.replyCount} {message.replyCount === 1 ? 'reply' : 'replies'}

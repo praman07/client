@@ -133,7 +133,7 @@ function ImageAttachment({
     return (
       <div
         className={cn(
-          'flex items-center gap-2 p-3 rounded-lg border bg-muted/30',
+          'flex items-center gap-2 p-3 rounded-lg border border-border/60 bg-card',
           'max-w-[320px] min-h-[56px]',
           className,
         )}
@@ -141,7 +141,7 @@ function ImageAttachment({
         <AlertCircle className="size-4 shrink-0 text-muted-foreground/60" />
         <div className="flex flex-col min-w-0">
           <span className="text-xs font-medium text-foreground truncate">{name}</span>
-          <span className="text-[10px] text-muted-foreground">
+          <span className="text-xs text-muted-foreground">
             Image failed to load · {formatBytes(sizeBytes)}
           </span>
         </div>
@@ -159,7 +159,7 @@ function ImageAttachment({
       */}
       <div
         className={cn(
-          'relative max-w-[320px] rounded-lg border bg-muted/40 overflow-hidden cursor-zoom-in',
+          'relative max-w-[320px] rounded-lg border border-border/60 bg-card overflow-hidden cursor-zoom-in shadow-sm hover:brightness-95 transition-all duration-150',
           className,
         )}
         style={{ aspectRatio: '4 / 3' }}
@@ -188,7 +188,7 @@ function ImageAttachment({
       </div>
       {expanded && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4"
           onClick={() => setExpanded(false)}
           role="dialog"
           aria-label={`Full size: ${name}`}
@@ -319,7 +319,7 @@ function VideoAttachment({
             preload="none"
             title={name}
           />
-          <p className="text-[10px] text-muted-foreground mt-0.5 px-1 truncate">
+          <p className="text-xs text-muted-foreground mt-0.5 px-1 truncate">
             {name} · {formatBytes(sizeBytes)}
           </p>
         </>
@@ -339,7 +339,7 @@ function VideoAttachment({
                 style={{ width: `${downloadProgress}%` }}
               />
             </div>
-            <span className="text-[10px] text-muted-foreground">{downloadProgress}%</span>
+            <span className="text-xs text-muted-foreground">{downloadProgress}%</span>
           </div>
         </div>
       )
@@ -352,7 +352,7 @@ function VideoAttachment({
           <AlertCircle className="size-5 shrink-0 text-destructive/70" />
           <div className="flex flex-col min-w-0 flex-1">
             <span className="text-sm font-medium text-foreground truncate">{name}</span>
-            <span className="text-[10px] text-muted-foreground">{formatBytes(sizeBytes)}</span>
+            <span className="text-xs text-muted-foreground">{formatBytes(sizeBytes)}</span>
           </div>
           <button
             onClick={handleDownload}
@@ -372,7 +372,7 @@ function VideoAttachment({
         <Film className="size-5 shrink-0 text-blue-400" />
         <div className="flex flex-col min-w-0 flex-1">
           <span className="text-sm font-medium text-foreground truncate">{name}</span>
-          <span className="text-[10px] text-muted-foreground">{formatBytes(sizeBytes)} · Video</span>
+          <span className="text-xs text-muted-foreground">{formatBytes(sizeBytes)} · Video</span>
         </div>
         <button
           onClick={handleDownload}
@@ -393,7 +393,7 @@ function VideoAttachment({
         // Stable container: all states render inside this same box.
         // min-h-[56px] ensures the virtualizer always measures at least this height.
         // max-w-[320px] matches file card width; cached state expands to max-w-[480px] via child.
-        'rounded-lg border bg-muted/30 overflow-hidden',
+        'rounded-lg border border-border/60 bg-card overflow-hidden',
         state === 'cached' ? 'max-w-[480px]' : 'max-w-[320px] min-h-[56px]',
         className,
       )}
@@ -416,7 +416,7 @@ function FileCard({
   sizeBytes: number
 }) {
   return (
-    <div className="flex items-center gap-3 p-3 rounded-lg border bg-muted/30 max-w-[320px] group/fc">
+    <div className="flex items-center gap-3 p-3 rounded-lg border border-border/60 bg-card max-w-[320px] group/fc hover:bg-accent/20 transition-colors">
       <FileTypeIcon mimeType={mimeType} className="size-5 shrink-0" />
       <div className="flex flex-col min-w-0 flex-1">
         <span className="text-sm font-medium text-foreground truncate">{name}</span>
@@ -447,7 +447,7 @@ function AttachmentTombstone({ reason }: { reason: 'deleted' | 'forbidden' | 'er
     error: 'Could not load attachment.',
   }
   return (
-    <div className="flex items-center gap-2 text-xs text-muted-foreground italic py-1">
+    <div className="flex items-center gap-2 text-xs text-muted-foreground italic py-1 border-l-2 border-muted-foreground/20 pl-2">
       <AlertCircle className="size-3.5 shrink-0 text-muted-foreground/60" />
       <span>{messages[reason]}</span>
     </div>
@@ -460,9 +460,9 @@ function AudioAttachment({ url, name, sizeBytes, className }: {
   url: string; name: string; sizeBytes: number; className?: string
 }) {
   return (
-    <div className={cn('max-w-[320px]', className)}>
-      <audio src={url} controls className="w-full h-10" preload="metadata" />
-      <p className="text-[10px] text-muted-foreground mt-0.5 truncate">
+    <div className={cn('max-w-[320px] rounded-lg border border-border/60 bg-card px-3 pt-2 pb-1.5', className)}>
+      <audio src={url} controls className="w-full h-9" preload="metadata" />
+      <p className="text-xs text-muted-foreground mt-1 truncate">
         {name} · {formatBytes(sizeBytes)}
       </p>
     </div>

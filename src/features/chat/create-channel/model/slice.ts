@@ -19,6 +19,9 @@ export const createChannelSlice = createSlice({
       state.isOpen = false
     },
   },
+  selectors: {
+    selectIsCreateChannelModalOpen: (state) => state.isOpen,
+  },
 })
 
 export const { openCreateChannelModal, closeCreateChannelModal } =
@@ -26,6 +29,5 @@ export const { openCreateChannelModal, closeCreateChannelModal } =
 
 export const createChannelReducer = createChannelSlice.reducer
 
-export const selectIsCreateChannelModalOpen = (state: {
-  createChannel: CreateChannelState
-}) => state.createChannel.isOpen
+// RTK .selectors (canonical)
+export const { selectIsCreateChannelModalOpen } = createChannelSlice.selectors

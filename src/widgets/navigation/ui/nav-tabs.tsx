@@ -13,7 +13,8 @@ interface NavTabsProps {
 
 export function NavTabs({ items, from }: NavTabsProps) {
   return (
-    <nav className="flex items-center gap-6 overflow-x-auto overflow-y-hidden">
+    <div className="w-full shrink-0 border-b bg-card px-6">
+      <nav className="flex items-center gap-6 overflow-x-auto overflow-y-hidden">
       {items.map((item) => (
         <Link
           key={item.href}
@@ -35,6 +36,7 @@ export function NavTabs({ items, from }: NavTabsProps) {
           )}
         </Link>
       ))}
-    </nav>
+      </nav>
+    </div>
   )
 }
