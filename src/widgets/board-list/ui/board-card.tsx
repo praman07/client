@@ -8,8 +8,7 @@ import type { Board } from '@/entities/whiteboard-board'
 import { RenameBoardDialog } from '@/features/whiteboard/rename-board'
 import { DeleteBoardDialog } from '@/features/whiteboard/delete-board'
 import { ArchiveBoardDialog } from '@/features/whiteboard/archive-board'
-import { AddCollaboratorsDialog, useBoardCollaborators  } from '@/features/whiteboard/add-collaborators'
-import { useWorkspaceMembers } from '@/features/view-members/hooks'
+import { WhiteboardSettingsModal } from '@/widgets/whiteboard-settings-modal'
 
 interface BoardCardProps {
   board: Board
@@ -18,23 +17,14 @@ interface BoardCardProps {
 }
 
 /**
- * Individual board card with context menu
+ * Individual board card with context menu.
  *
  * Features:
  * - Right-click context menu with all board actions
- * - Keyboard shortcuts
- * - Rename, copy link, duplicate, lock/unlock, settings, archive, delete
+ * - Rename, copy link, duplicate, lock/unlock, archive, delete
+ * - Settings modal (3-tab: General / Members / Settings)
  */
 export function BoardCard({ board, viewMode, isCreator }: BoardCardProps) {
-  // Data fetching for collaborators
-  const { data: workspaceMembersData } = useWorkspaceMembers(board.workspaceId)
-  const { data: collaboratorsData } = useBoardCollaborators(board.id)
-
-   
-  const workspaceMembers = (workspaceMembersData?.workspaceMembers || []) as any
-  const currentCollaboratorIds =
-    collaboratorsData?.boardCollaborators.map((c: any) => c.userId) ?? []
-
   // Get route params from router state matches
   const routerState = useRouterState()
   const currentMatch = routerState.matches.find(
@@ -68,6 +58,11 @@ export function BoardCard({ board, viewMode, isCreator }: BoardCardProps) {
           board={board}
           workspaceSlug={workspaceSlug}
           projectSlug={projectSlug}
+          onOpenMenu={(e) => {
+            e.preventDefault()
+            e.stopPropagation()
+            handlers.handleSettings(e)
+          }}
         />
       </BoardCardContextMenu>
 
@@ -107,13 +102,13 @@ export function BoardCard({ board, viewMode, isCreator }: BoardCardProps) {
         isPending={mutations.unarchiveBoard.isPending}
       />
 
-      {/* Add Collaborators Dialog */}
-      <AddCollaboratorsDialog
-        boardId={board.id}
-        workspaceMembers={workspaceMembers}
-        currentCollaboratorIds={currentCollaboratorIds}
-        open={state.showAddCollaboratorsDialog}
-        onOpenChange={state.setShowAddCollaboratorsDialog}
+      {/* Centralised Settings Modal (General / Members / Settings tabs) */}
+      <WhiteboardSettingsModal
+        board={board}
+        isCreator={isCreator}
+        open={state.showSettingsModal}
+        onOpenChange={state.setShowSettingsModal}
+        defaultTab={state.settingsDefaultTab}
       />
     </>
   )

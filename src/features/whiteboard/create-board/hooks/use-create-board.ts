@@ -25,10 +25,11 @@ export function useCreateBoard() {
       return client.request(CREATE_BOARD, { input })
     },
     onSuccess: (_data, variables) => {
-      // Invalidate board list for workspace
+      // Invalidate specific workspace list + broad list key for infinite queries
       queryClient.invalidateQueries({
         queryKey: boardKeys.list(variables.workspaceId),
       })
+      queryClient.invalidateQueries({ queryKey: boardKeys.lists() })
     },
   })
 }

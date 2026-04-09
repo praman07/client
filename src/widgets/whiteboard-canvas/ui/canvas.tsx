@@ -5,15 +5,18 @@ import { useWhiteboardSync } from '../hooks/use-whiteboard-sync'
 import { useWhiteboardMediaLifecycle } from '../hooks/use-whiteboard-media-lifecycle'
 import type { ExcalidrawImperativeAPI } from '@excalidraw/excalidraw/types'
 import { createVaultGenerateIdForFile } from '@/shared/lib/excalidraw'
-import { useAppSelector, useAuth  } from '@/shared/hooks'
+import { useAppSelector, useAuth } from '@/shared/hooks'
 import { selectCurrentProject } from '@/entities/project'
 import { selectCurrentWorkspace } from '@/entities/workspace'
 import { createLogger } from '@/shared/lib/logger'
+import { CanvasCollaborators } from './canvas-collaborators'
 
 const log = createLogger('whiteboard:canvas')
 
 interface WhiteboardCanvasProps {
   boardId: string
+  /** When true, the canvas is read-only (board is locked). Default: false. */
+  isReadOnly?: boolean
 }
 
 /**
@@ -23,11 +26,20 @@ interface WhiteboardCanvasProps {
  *   This singular orchestrator handles Y.Doc Initialization → IDB Persistence → Client Diff → WebSocket Sync → Excalidraw Binding.
  *
  * System Design Decision: Universal Image Interception
- *   Leverages `generateIdForFile` instead of DOM `onPaste` events to guarantee 100% intercept-coverage 
+ *   Leverages `generateIdForFile` instead of DOM `onPaste` events to guarantee 100% intercept-coverage
  *   across all entry points (toolbar, drop zones, clipboard). Images are natively piped directly into the
  *   Vault proxy schema before touching the canvas.
+ *
+ * Design decisions:
+ * - Dark theme is applied to match the Obsidian Architect design system.
+ * - Collaboration UI (top-right avatar strip) replaces the legacy sidebar.
+ * - `viewModeEnabled` respects the `isReadOnly` prop (locked boards).
+ * - UIOptions hides the GitHub link clutter.
  */
-export function WhiteboardCanvas({ boardId }: WhiteboardCanvasProps) {
+export function WhiteboardCanvas({
+  boardId,
+  isReadOnly = false,
+}: WhiteboardCanvasProps) {
   const excalidrawRef = useRef<HTMLDivElement>(null!)
   const [api, setApi] = useState<ExcalidrawImperativeAPI | null>(null)
 
@@ -35,11 +47,13 @@ export function WhiteboardCanvas({ boardId }: WhiteboardCanvasProps) {
   const project = useAppSelector(selectCurrentProject)
   const workspace = useAppSelector(selectCurrentWorkspace)
 
-  // Single hook orchestrates entire sync lifecycle
+  // Single hook orchestrates entire sync lifecycle.
+  // isReadOnly prevents ExcalidrawBinding from being created in view mode.
   const { ydoc, binding, serverSynced, indexeddbSynced } = useWhiteboardSync(
     boardId,
     api,
     excalidrawRef,
+    isReadOnly,
   )
 
   // Track image element removals → notify server to start cleanup timer
@@ -83,10 +97,17 @@ export function WhiteboardCanvas({ boardId }: WhiteboardCanvasProps) {
     <div ref={excalidrawRef} className="relative h-full w-full">
       <Excalidraw
         excalidrawAPI={setApi}
-        theme="light"
+        theme="dark"
         name="Collabify Whiteboard"
         isCollaborating={!!binding}
-        generateIdForFile={handleGenerateIdForFile}
+        viewModeEnabled={isReadOnly}
+        generateIdForFile={isReadOnly ? undefined : handleGenerateIdForFile}
+        UIOptions={{
+          canvasActions: {
+            toggleTheme: false,
+          },
+        }}
+        renderTopRightUI={() => <CanvasCollaborators />}
       />
     </div>
   )

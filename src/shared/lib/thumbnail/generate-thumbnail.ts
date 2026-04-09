@@ -24,7 +24,7 @@ export async function generateBoardThumbnail(
     elements: elements as any,
     appState: {
       exportBackground: true,
-      exportWithDarkMode: false,
+      exportWithDarkMode: true,
     },
     files: null,
     mimeType: 'image/webp',
@@ -33,6 +33,7 @@ export async function generateBoardThumbnail(
     // The tight bounding box is computed internally — we never crop.
     maxWidthOrHeight: MAX_SIDE,
     exportPadding: EXPORT_PADDING,
+    theme: 'dark',
   })
   return new Uint8Array(await blob.arrayBuffer())
 }

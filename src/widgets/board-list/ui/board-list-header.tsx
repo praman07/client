@@ -1,4 +1,4 @@
-import { Grid, List, Search, SlidersHorizontal } from 'lucide-react'
+import { Grid, List, Search, SlidersHorizontal, SquarePen } from 'lucide-react'
 import type { SortOption, ViewMode } from '../hooks'
 import { Input } from '@/shared/ui/primitives/input'
 import { Button } from '@/shared/ui/primitives/button'
@@ -9,6 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/shared/ui/primitives/select'
+import { Guard } from '@/shared/lib/auth/guard'
 
 interface BoardListHeaderProps {
   searchQuery: string
@@ -19,6 +20,7 @@ interface BoardListHeaderProps {
   onViewModeToggle: () => void
   showArchived: boolean
   onShowArchivedChange: (show: boolean) => void
+  onCreateBoard: () => void
 }
 
 /**
@@ -33,6 +35,7 @@ export function BoardListHeader({
   onViewModeToggle,
   showArchived,
   onShowArchivedChange,
+  onCreateBoard,
 }: BoardListHeaderProps) {
   return (
     <div className="flex items-center gap-4 mb-6">
@@ -80,6 +83,14 @@ export function BoardListHeader({
           <Grid className="h-4 w-4" />
         )}
       </Button>
+
+      {/* Create Board — Guard-gated */}
+      <Guard permission="whiteboard:create">
+        <Button size="sm" onClick={onCreateBoard} className="gap-1.5 shrink-0">
+          <SquarePen className="h-4 w-4" />
+          New Board
+        </Button>
+      </Guard>
     </div>
   )
 }
