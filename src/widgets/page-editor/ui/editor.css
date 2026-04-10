@@ -1,0 +1,320 @@
+/* ═══════════════════════════════════════════════════════════════
+   BlockNote Editor Overrides — Obsidian Architect design system
+   Scope: .bn-shadcn only — zero global side-effects
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── Editor surface + background match ─────────────────────────── */
+/* The outer BlockNote wrapper needs a transparent bg so the page
+   background (#0B0D10 via --pal-base) shows through */
+.bn-shadcn,
+.bn-shadcn .bn-editor {
+  background: transparent;
+}
+
+/* Scoped to the BlockNote root — sets the writable content area bg */
+.bn-shadcn .bn-editor * {
+  caret-color: var(--pal-foreground, #E6EAF0);
+}
+
+.bn-shadcn .bn-editor {
+  font-family: "Geist", ui-sans-serif, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--pal-foreground, #E6EAF0);
+}
+
+/* ── Block container spacing ────────────────────────────────────── */
+.bn-shadcn [data-node-type="blockContainer"] {
+  margin-top: 1px;
+  margin-bottom: 1px;
+  padding-top: 1px;
+  padding-bottom: 1px;
+}
+
+/* ── Paragraph min-height ───────────────────────────────────────── */
+.bn-shadcn .bn-editor .bn-inline-content {
+  min-height: 1.5em;
+}
+
+/* ── Headings — only color + weight, preserve BlockNote's native sizes ── */
+/* BlockNote renders h1/h2/h3 natively — we only harmonize color/weight.
+   Do NOT override font-size or margins here to avoid making text too large. */
+.bn-shadcn .bn-editor h1 {
+  color: var(--pal-foreground, #E6EAF0);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.bn-shadcn .bn-editor h2 {
+  color: var(--pal-foreground, #E6EAF0);
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
+
+.bn-shadcn .bn-editor h3 {
+  color: var(--pal-foreground, #E6EAF0);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+/* ── Lists ──────────────────────────────────────────────────────── */
+.bn-shadcn .bn-editor ul,
+.bn-shadcn .bn-editor ol {
+  padding-left: 1.6em;
+}
+
+.bn-shadcn .bn-editor ul li,
+.bn-shadcn .bn-editor ol li {
+  margin-top: 2px;
+  margin-bottom: 2px;
+  line-height: 1.6;
+}
+
+/* ── Checklist ──────────────────────────────────────────────────── */
+.bn-shadcn .bn-editor .bn-block-content[data-content-type="checkListItem"] {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.bn-shadcn
+  .bn-editor
+  .bn-block-content[data-content-type="checkListItem"][data-checked="true"]
+  .bn-inline-content {
+  text-decoration: line-through;
+  color: var(--muted-foreground);
+}
+
+/* ── Quote / Callout placeholder-like styling ───────────────────── */
+.bn-shadcn .bn-editor [data-content-type="bulletListItem"]::marker,
+.bn-shadcn .bn-editor [data-content-type="numberedListItem"]::marker {
+  color: var(--muted-foreground);
+}
+
+/* ── Placeholder text ───────────────────────────────────────────── */
+.bn-shadcn .bn-editor .is-empty::before,
+.bn-shadcn .bn-editor .is-editor-empty::before,
+.bn-shadcn .bn-editor [data-placeholder]::before {
+  color: var(--muted-foreground);
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+/* ── Code block ─────────────────────────────────────────────────── */
+.bn-shadcn .bn-editor pre,
+.bn-shadcn .bn-editor code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    "Liberation Mono", "Courier New", monospace;
+  font-size: 0.875em;
+  border-radius: 4px;
+}
+
+.bn-shadcn .bn-editor pre {
+  background: var(--muted);
+  padding: 14px 16px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  overflow-x: auto;
+  line-height: 1.5;
+}
+
+.bn-shadcn .bn-editor :not(pre) > code {
+  background: var(--muted);
+  padding: 2px 5px;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+}
+
+/* ── Block focus / selected highlight ───────────────────────────── */
+.bn-shadcn .bn-editor [data-node-type="blockContainer"].bn-focused {
+  border-radius: 4px;
+}
+
+/* ── Side menu drag handle ──────────────────────────────────────── */
+.bn-shadcn .bn-side-menu .bn-drag-handle {
+  color: var(--muted-foreground);
+  transition: color 150ms ease;
+}
+
+.bn-shadcn .bn-side-menu .bn-drag-handle:hover {
+  color: var(--foreground);
+}
+
+/* ══════════════════════════════════════════════════════════════════
+   Collabify Slash Menu — "Obsidian Architect" design system
+   Tokens: --pal-surface-1 (#111418), --pal-surface-2 (#161A20),
+           --pal-border (#232A32), --pal-foreground (#E6EAF0),
+           --pal-muted (#8A94A6)
+   ══════════════════════════════════════════════════════════════════ */
+
+/* Override BlockNote's suggestion menu container positioning */
+.bn-shadcn .bn-suggestion-menu {
+  all: unset; /* strip any BlockNote default */
+  display: block;
+}
+
+/* ── Root panel ─────────────────────────────────────────────────── */
+.csm-root {
+  width: 296px;
+  max-height: 400px;
+  display: flex;
+  flex-direction: column;
+  background: var(--pal-surface-1, #111418);
+  border: 1px solid var(--pal-border, #232A32);
+  border-radius: 8px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.35);
+  overflow: hidden;
+  font-family: "Geist", ui-sans-serif, system-ui, sans-serif;
+}
+
+/* ── Scrollable list area ───────────────────────────────────────── */
+.csm-list {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 6px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--pal-surface-2, #161A20) transparent;
+}
+
+.csm-list::-webkit-scrollbar {
+  width: 4px;
+}
+.csm-list::-webkit-scrollbar-thumb {
+  background: var(--pal-border, #232A32);
+  border-radius: 4px;
+}
+
+/* ── Group section label ────────────────────────────────────────── */
+.csm-group-label {
+  padding: 10px 8px 4px;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--pal-muted, #8A94A6);
+  line-height: 1;
+  user-select: none;
+}
+
+.csm-group-label:first-child {
+  padding-top: 4px;
+}
+
+/* ── Item row ───────────────────────────────────────────────────── */
+.csm-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 5px 6px;
+  border-radius: 5px;
+  cursor: pointer;
+  user-select: none;
+  min-height: 36px;
+  transition: background 80ms ease;
+}
+
+.csm-item:hover {
+  background: var(--pal-surface-2, #161A20);
+}
+
+.csm-item[data-selected] {
+  background: var(--pal-surface-2, #161A20);
+}
+
+/* ── Icon box (28 × 28, Surface-2 fill, border) ─────────────────── */
+.csm-item__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: 5px;
+  border: 1px solid var(--pal-border, #232A32);
+  background: var(--pal-surface-2, #161A20);
+  color: var(--pal-foreground, #E6EAF0);
+  /* icon SVGs from BlockNote are ~18px — let them inherit */
+}
+
+.csm-item__icon svg {
+  width: 16px;
+  height: 16px;
+  color: var(--pal-foreground, #E6EAF0);
+}
+
+/* ── Body: title + optional inline subtext ──────────────────────── */
+.csm-item__body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: baseline;
+  gap: 0;
+  overflow: hidden;
+}
+
+.csm-item__title {
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--pal-foreground, #E6EAF0);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.4;
+}
+
+.csm-item__dot {
+  font-size: 13px;
+  color: var(--pal-muted, #8A94A6);
+  flex-shrink: 0;
+  padding: 0 1px;
+}
+
+.csm-item__subtext {
+  font-size: 13px;
+  color: var(--pal-muted, #8A94A6);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex-shrink: 1;
+}
+
+/* ── Right badge (keyboard shortcut: #, ##, ###) ────────────────── */
+.csm-item__badge {
+  flex-shrink: 0;
+  font-size: 12px;
+  font-family: "Geist Mono", ui-monospace, Menlo, monospace;
+  color: var(--pal-muted, #8A94A6);
+  letter-spacing: 0.02em;
+  margin-left: 6px;
+}
+
+/* ── Footer (Close menu · esc) ──────────────────────────────────── */
+.csm-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 7px 12px;
+  border-top: 1px solid var(--pal-border, #232A32);
+  flex-shrink: 0;
+}
+
+.csm-footer__label {
+  font-size: 13px;
+  color: var(--pal-muted, #8A94A6);
+  font-weight: 400;
+}
+
+.csm-footer__badge {
+  font-size: 11px;
+  font-family: "Geist Mono", ui-monospace, Menlo, monospace;
+  color: var(--pal-muted, #8A94A6);
+}
+
+/* ── Empty state ────────────────────────────────────────────────── */
+.csm-empty {
+  padding: 20px 12px;
+  font-size: 13px;
+  color: var(--pal-muted, #8A94A6);
+  text-align: center;
+}

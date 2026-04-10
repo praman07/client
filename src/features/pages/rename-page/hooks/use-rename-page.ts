@@ -51,10 +51,15 @@ export function useRenamePage() {
         pageKeys.projectPages(projectId),
       )
 
-      // Optimistically update title in the nested page tree
+      // Optimistically update title in the nested page tree.
+      // Guard: getQueryData returns the raw GQL shape { getProjectPages: Page[] }
+      // on initial fetch and Page[] after a prior setQueryData. Both must be handled.
       queryClient.setQueryData<Array<Page>>(
         pageKeys.projectPages(projectId),
-        (old) => (old ? updatePageTitle(old, pageId, title) : old),
+        (old) => {
+          if (!old || !Array.isArray(old)) return old
+          return updatePageTitle(old, pageId, title)
+        },
       )
 
       log.debug('Optimistic update applied', { pageId, title })

@@ -129,6 +129,7 @@ type Documents = {
     "\n  mutation UnarchivePage($input: UnarchivePageInput!) {\n    unarchivePage(input: $input) {\n      page {\n        id\n        isArchived\n        updatedAt\n      }\n    }\n  }\n": typeof types.UnarchivePageDocument,
     "\n  mutation LockPage($input: LockPageInput!) {\n    lockPage(input: $input) {\n      page {\n        id\n        isLocked\n        updatedAt\n      }\n    }\n  }\n": typeof types.LockPageDocument,
     "\n  mutation UnlockPage($input: UnlockPageInput!) {\n    unlockPage(input: $input) {\n      page {\n        id\n        isLocked\n        updatedAt\n      }\n    }\n  }\n": typeof types.UnlockPageDocument,
+    "\n  mutation UpdatePageDetails($input: UpdatePageDetailsInput!) {\n    updatePageDetails(input: $input) {\n      page {\n        id\n        icon\n        coverUrl\n        projectId\n        parentId\n        title\n        position\n        isArchived\n        isLocked\n        updatedAt\n      }\n    }\n  }\n": typeof types.UpdatePageDetailsDocument,
     "\n  mutation CreateProject($workspaceId: ID!, $input: CreateProjectInput!) {\n    createProject(workspaceId: $workspaceId, input: $input) {\n      ...ProjectFields\n    }\n  }\n": typeof types.CreateProjectDocument,
     "\n  mutation CheckSlug($workspaceId: ID!, $slug: String!) {\n    checkProjectSlugAvailability(workspaceId: $workspaceId, slug: $slug) {\n      available\n      message\n      reason\n      reservationId\n    }\n  }\n": typeof types.CheckSlugDocument,
     "\n  mutation CreateVaultFolder($input: CreateVaultFolderInput!) {\n    createVaultFolder(input: $input) {\n      folder {\n        ...VaultFolderFields\n      }\n    }\n  }\n": typeof types.CreateVaultFolderDocument,
@@ -303,6 +304,7 @@ const documents: Documents = {
     "\n  mutation UnarchivePage($input: UnarchivePageInput!) {\n    unarchivePage(input: $input) {\n      page {\n        id\n        isArchived\n        updatedAt\n      }\n    }\n  }\n": types.UnarchivePageDocument,
     "\n  mutation LockPage($input: LockPageInput!) {\n    lockPage(input: $input) {\n      page {\n        id\n        isLocked\n        updatedAt\n      }\n    }\n  }\n": types.LockPageDocument,
     "\n  mutation UnlockPage($input: UnlockPageInput!) {\n    unlockPage(input: $input) {\n      page {\n        id\n        isLocked\n        updatedAt\n      }\n    }\n  }\n": types.UnlockPageDocument,
+    "\n  mutation UpdatePageDetails($input: UpdatePageDetailsInput!) {\n    updatePageDetails(input: $input) {\n      page {\n        id\n        icon\n        coverUrl\n        projectId\n        parentId\n        title\n        position\n        isArchived\n        isLocked\n        updatedAt\n      }\n    }\n  }\n": types.UpdatePageDetailsDocument,
     "\n  mutation CreateProject($workspaceId: ID!, $input: CreateProjectInput!) {\n    createProject(workspaceId: $workspaceId, input: $input) {\n      ...ProjectFields\n    }\n  }\n": types.CreateProjectDocument,
     "\n  mutation CheckSlug($workspaceId: ID!, $slug: String!) {\n    checkProjectSlugAvailability(workspaceId: $workspaceId, slug: $slug) {\n      available\n      message\n      reason\n      reservationId\n    }\n  }\n": types.CheckSlugDocument,
     "\n  mutation CreateVaultFolder($input: CreateVaultFolderInput!) {\n    createVaultFolder(input: $input) {\n      folder {\n        ...VaultFolderFields\n      }\n    }\n  }\n": types.CreateVaultFolderDocument,
@@ -836,6 +838,10 @@ export function gql(source: "\n  mutation LockPage($input: LockPageInput!) {\n  
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "\n  mutation UnlockPage($input: UnlockPageInput!) {\n    unlockPage(input: $input) {\n      page {\n        id\n        isLocked\n        updatedAt\n      }\n    }\n  }\n"): (typeof documents)["\n  mutation UnlockPage($input: UnlockPageInput!) {\n    unlockPage(input: $input) {\n      page {\n        id\n        isLocked\n        updatedAt\n      }\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation UpdatePageDetails($input: UpdatePageDetailsInput!) {\n    updatePageDetails(input: $input) {\n      page {\n        id\n        icon\n        coverUrl\n        projectId\n        parentId\n        title\n        position\n        isArchived\n        isLocked\n        updatedAt\n      }\n    }\n  }\n"): (typeof documents)["\n  mutation UpdatePageDetails($input: UpdatePageDetailsInput!) {\n    updatePageDetails(input: $input) {\n      page {\n        id\n        icon\n        coverUrl\n        projectId\n        parentId\n        title\n        position\n        isArchived\n        isLocked\n        updatedAt\n      }\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

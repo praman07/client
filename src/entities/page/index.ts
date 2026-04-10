@@ -14,3 +14,6 @@ export {
   PAGE_WITH_COLLABORATORS,
   PAGE_WITH_CHILDREN,
 } from './api/fragments'
+
+// Hooks
+export { usePageById } from './hooks/use-page-by-id'

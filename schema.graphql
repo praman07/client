@@ -302,6 +302,7 @@ type Mutation {
 
   """Cannot remove the page creator."""
   removePageCollaborator(input: RemovePageCollaboratorInput!): RemovePageCollaboratorResult!
+  updatePageDetails(input: UpdatePageDetailsInput!): UpdatePageDetailsResult!
 
   """
   Step 1 of 2 for uploading a file to Vault.
@@ -1420,6 +1421,20 @@ input RemovePageCollaboratorInput {
 
 type RemovePageCollaboratorResult {
   success: Boolean!
+}
+
+input UpdatePageDetailsInput {
+  pageId: ID!
+
+  """Emoji character to set as the page icon. Pass null to remove."""
+  emoji: String
+
+  """Permanent vault proxy URL for the cover image. Pass null to remove."""
+  coverImageUrl: String
+}
+
+type UpdatePageDetailsResult {
+  page: Page!
 }
 
 """

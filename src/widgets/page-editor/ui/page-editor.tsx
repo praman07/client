@@ -1,7 +1,9 @@
 import '@blocknote/shadcn/style.css'
+import './editor.css'
 import { reset as resetLinkify } from 'linkifyjs'
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { useCreateBlockNote } from '@blocknote/react'
+import { useCreateBlockNote, SuggestionMenuController } from '@blocknote/react'
+import { NotionSlashMenu } from './notion-slash-menu'
 import { BlockNoteView } from '@blocknote/shadcn'
 import { usePageSync } from '../hooks/use-page-sync'
 import { PageEditorSkeleton } from './page-editor-skeleton'
@@ -24,6 +26,9 @@ import {
   migrateDocumentUrls,
 } from '@/shared/lib/blocknote'
 import { VaultFileSource, markFilesUnreferenced } from '@/shared/api/vault'
+import { PageCoverBanner } from './page-cover'
+import { PageEmojiPicker } from './page-emoji'
+import { usePageById } from '@/entities/page'
 
 const log = createLogger('pages:page-editor')
 
@@ -104,6 +109,11 @@ function PageEditorBody({
       unregisterPageAwarenessProvider(pageId)
     }
   }, [pageId, awarenessProvider])
+
+  const currentPage = usePageById(pageId, project.id)
+  const coverUrl = currentPage?.coverUrl ?? null
+  const icon = currentPage?.icon ?? null
+  const dbTitle = currentPage?.title ?? ''
 
   const currentUserId = currentUser?.id ?? null
   const userColor = useMemo(
@@ -221,17 +231,26 @@ function PageEditorBody({
 
   return (
     <div className="flex flex-col h-full overflow-auto">
-      <div className="mx-auto w-full max-w-3xl px-2 py-12">
+      {/* Full-width cover banner — outside max-w-3xl */}
+      <PageCoverBanner coverUrl={coverUrl} />
+
+      <div className="mx-auto w-full max-w-3xl px-16 pt-6 pb-12">
+        {/* Emoji — overlaps cover bottom edge if cover exists */}
+        <PageEmojiPicker icon={icon} hasCover={!!coverUrl} isLocked={isLocked} />
+
         <CollaboratorBar />
 
-        {/* <PageCover ydoc={ydoc} /> */}
-
-        <PageTitle ydoc={ydoc} isLocked={isLocked} />
+        <PageTitle ydoc={ydoc} isLocked={isLocked} dbTitle={dbTitle} />
 
         {isLocked && <LockedBanner />}
 
         {/* System Design Decision: uploadFile injects directly into the editor instance constructor, not the UI view component. */}
-        <BlockNoteView editor={editor} theme="light" editable={!isLocked} />
+        <BlockNoteView editor={editor} editable={!isLocked} slashMenu={false}>
+          <SuggestionMenuController
+            triggerCharacter="/"
+            suggestionMenuComponent={NotionSlashMenu}
+          />
+        </BlockNoteView>
       </div>
     </div>
   )
