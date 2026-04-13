@@ -1,5 +1,5 @@
 import React from 'react'
-import { Plus, FileText, Layout, HardDrive } from 'lucide-react'
+import { FileText, HardDrive, Layout, Plus } from 'lucide-react'
 import { Link, useParams } from '@tanstack/react-router'
 
 const ACTIONS = [

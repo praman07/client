@@ -1,8 +1,8 @@
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { GET_NOTIFICATIONS, notificationKeys } from '../api';
+import type { GetNotificationsQuery } from '@/gql/graphql';
 import { useAuth } from '@/shared/hooks';
 import { GqlClient } from '@/shared/api';
-import type { GetNotificationsQuery } from '@/gql/graphql';
 
 interface UseNotificationsOptions {
   limit?: number;
@@ -21,7 +21,7 @@ export function useNotifications({ limit = 20, isRead }: UseNotificationsOptions
         limit,
         cursor: pageParam,
         isRead: isRead ?? undefined,
-      }) as Promise<GetNotificationsQuery>;
+      });
     },
     initialPageParam: undefined as string | undefined,
     getNextPageParam: (lastPage) => {

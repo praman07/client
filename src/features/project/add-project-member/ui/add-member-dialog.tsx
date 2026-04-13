@@ -17,16 +17,16 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  ScrollArea,
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
   Empty,
   EmptyContent,
   EmptyDescription,
   EmptyMedia,
   EmptyTitle,
+  ScrollArea,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
 } from '@/shared/ui'
 import { useAppDispatch, useAppSelector } from '@/shared/hooks'
 import { useWorkspaceMembers } from '@/entities/workspace'

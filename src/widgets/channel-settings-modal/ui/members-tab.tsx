@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Search, UserPlus, X } from 'lucide-react'
+import { AddMembersDialog } from './add-members-dialog'
 import type { ConversationFieldsFragment, ConversationMember } from '@/gql/graphql'
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/primitives/avatar'
 import { Button } from '@/shared/ui/primitives/button'
@@ -18,7 +19,6 @@ import { useAuthorizationContext, usePermission } from '@/shared/lib/auth'
 import { useAuth } from '@/shared/hooks'
 import { useRemoveChannelMember } from '@/features/chat/channel-members'
 import { useUserProfilePanel } from '@/features/chat/user-profile-panel'
-import { AddMembersDialog } from './add-members-dialog'
 
 interface MembersTabProps {
   conversation: ConversationFieldsFragment
@@ -123,7 +123,7 @@ export function MembersTab({ conversation }: MembersTabProps) {
 
   const { mutate: removeMember, isPending: removing } = useRemoveChannelMember(conversation.id)
 
-  const members = (conversation.members ?? []) as ConversationMember[]
+  const members = (conversation.members ?? []) as Array<ConversationMember>
 
   const filtered = members.filter((m) => {
     if (!search) return true

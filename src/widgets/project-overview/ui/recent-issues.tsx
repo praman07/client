@@ -1,8 +1,8 @@
 import React from 'react'
-import { History, User, ChevronRight } from 'lucide-react'
-import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/primitives/avatar'
+import { ChevronRight, History, User } from 'lucide-react'
 import { formatDistanceToNow } from 'date-fns'
 import { Link, useParams } from '@tanstack/react-router'
+import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/primitives/avatar'
 
 interface Issue {
   id: string
@@ -17,7 +17,7 @@ interface Issue {
 }
 
 interface RecentIssuesProps {
-  issues: Issue[]
+  issues: Array<Issue>
 }
 
 export const RecentIssues: React.FC<RecentIssuesProps> = ({ issues }) => {

@@ -1,9 +1,9 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { SET_GLOBAL_NOTIF_MODE, notificationKeys } from '../api';
+import type { GlobalNotifMode } from '@/gql/graphql';
 import { useAppDispatch, useAuth } from '@/shared/hooks';
 import { GqlClient } from '@/shared/api';
-import { setGlobalModeOptimistic, clearPendingMode, setError } from '@/entities/notification';
-import type { GlobalNotifMode } from '@/gql/graphql';
+import { clearPendingMode, setError, setGlobalModeOptimistic } from '@/entities/notification';
 
 export function useSetGlobalMode() {
   const { getToken } = useAuth();

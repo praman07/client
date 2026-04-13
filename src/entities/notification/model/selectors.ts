@@ -1,6 +1,6 @@
 import { createSelector } from '@reduxjs/toolkit';
-import { GlobalNotifMode } from '@/gql/graphql';
 import type { RootState } from '@/app/store';
+import { GlobalNotifMode } from '@/gql/graphql';
 
 const selectNotificationDomain = (state: RootState) => state.notification;
 

@@ -7,7 +7,6 @@ import { useMessageEdit } from '../../lib/use-message-edit'
 import { useEditRequest } from '../../lib/edit-request-context'
 import { useReplyRequest } from '../../lib/reply-request-context'
 import { useScrollToMessage } from '../../lib/scroll-to-message-context'
-import { useUserProfilePanel } from '@/features/chat/user-profile-panel'
 import {
   MessageEvent,
   MessageEventAddon,
@@ -19,6 +18,7 @@ import {
 import type { MessageRowData } from '../../model/message-list.types'
 import type { DBMessage } from '@/shared/lib/db/schema'
 import type { ReactionGroup } from '@/entities/reaction'
+import { useUserProfilePanel } from '@/features/chat/user-profile-panel'
 import {
   Avatar,
   AvatarFallback,

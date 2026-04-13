@@ -12,7 +12,7 @@ interface Whiteboard {
 }
 
 interface WhiteboardPreviewProps {
-  whiteboards: Whiteboard[]
+  whiteboards: Array<Whiteboard>
 }
 
 export const WhiteboardPreview: React.FC<WhiteboardPreviewProps> = ({ whiteboards }) => {

@@ -1,8 +1,8 @@
 import React from 'react'
 import { Progress as ProgressRoot } from '@base-ui/react/progress'
 import {
-  ProgressTrack,
   ProgressIndicator,
+  ProgressTrack,
 } from '@/shared/ui/primitives/progress'
 
 interface StatusCount {
@@ -14,7 +14,7 @@ interface StatusCount {
 }
 
 interface IssueStatusBreakdownProps {
-  statuses: StatusCount[]
+  statuses: Array<StatusCount>
   totalIssues: number
 }
 

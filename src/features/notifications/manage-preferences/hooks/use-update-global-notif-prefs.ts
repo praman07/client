@@ -1,8 +1,8 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { UPDATE_GLOBAL_NOTIF_PREFS, notificationKeys } from '../api';
+import type { UpdateGlobalNotifPrefsInput } from '@/gql/graphql';
 import { useAuth } from '@/shared/hooks';
 import { GqlClient } from '@/shared/api';
-import type { UpdateGlobalNotifPrefsInput } from '@/gql/graphql';
 
 /**
  * Unified hook for updating global notification preferences.

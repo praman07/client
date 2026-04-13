@@ -10,7 +10,7 @@ export function useAddChannelMembers(channelId: string) {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: async (vars: { workspaceId: string; userIds: string[] }) => {
+    mutationFn: async (vars: { workspaceId: string; userIds: Array<string> }) => {
       const token = await getToken()
       return GqlClient(token).request(ADD_CHANNEL_MEMBERS_MUTATION as any, {
         workspaceId: vars.workspaceId,

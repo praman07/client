@@ -1,5 +1,5 @@
-import { Button } from '@/shared/ui/primitives/button';
 import { usePauseNotifications, useResumeNotifications } from '../hooks';
+import { Button } from '@/shared/ui/primitives/button';
 
 interface DndControlsProps {
   isDndActive: boolean;

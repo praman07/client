@@ -1,10 +1,10 @@
-import { useAppDispatch, useAppSelector } from '@/shared/hooks'
 import {
-  openUserProfilePanel,
   closeUserProfilePanel,
+  openUserProfilePanel,
   selectIsUserProfilePanelOpen,
   selectUserProfilePanelUserId,
 } from '../model'
+import { useAppDispatch, useAppSelector } from '@/shared/hooks'
 
 export function useUserProfilePanel() {
   const dispatch = useAppDispatch()

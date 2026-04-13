@@ -1,6 +1,6 @@
 import {
-  useActiveCollaborators,
   CollaboratorAvatar,
+  useActiveCollaborators,
 } from '@/entities/whiteboard-presence'
 
 /**

@@ -1,13 +1,13 @@
-import { useRef, useState, useEffect } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useParams } from '@tanstack/react-router'
 import { HugeiconsIcon } from '@hugeicons/react'
-import { Image01Icon, Delete01Icon } from '@hugeicons/core-free-icons'
+import { Delete01Icon, Image01Icon } from '@hugeicons/core-free-icons'
+import { toast } from 'sonner'
 import { useUpdatePageDetails } from '@/features/pages/update-page-details'
-import { uploadToVault, markFilesUnreferenced, VaultFileSource } from '@/shared/api/vault'
+import { VaultFileSource, markFilesUnreferenced, uploadToVault } from '@/shared/api/vault'
 import { useAppSelector, useAuth } from '@/shared/hooks'
 import { selectCurrentProject } from '@/entities/project'
 import { createLogger } from '@/shared/lib/logger'
-import { toast } from 'sonner'
 
 const log = createLogger('pages:page-cover')
 
@@ -132,7 +132,7 @@ export function PageCoverBanner({ coverUrl }: PageCoverProps) {
           workspaceId: project.workspaceId,
           projectId: project.id,
           source: VaultFileSource.Page,
-          sourceId: pageId as string,
+          sourceId: pageId,
           name: file.name,
           mimeType: file.type,
           sizeBytes: file.size,
@@ -142,7 +142,7 @@ export function PageCoverBanner({ coverUrl }: PageCoverProps) {
       )
 
       updatePageDetails(
-        { pageId: pageId as string, projectId: project.id, coverImageUrl: result.url },
+        { pageId: pageId, projectId: project.id, coverImageUrl: result.url },
         {
           onSuccess: async () => {
             toast.success('Cover updated', { id: toastId })
@@ -152,7 +152,7 @@ export function PageCoverBanner({ coverUrl }: PageCoverProps) {
               if (freshToken) {
                 markFilesUnreferenced(
                   [oldFileId],
-                  pageId as string,
+                  pageId,
                   VaultFileSource.Page,
                   freshToken,
                 ).catch((err) => log.warn('Failed to mark old cover as unreferenced', { err }))
@@ -178,7 +178,7 @@ export function PageCoverBanner({ coverUrl }: PageCoverProps) {
     toast.loading('Removing cover…', { id: toastId })
 
     updatePageDetails(
-      { pageId: pageId as string, projectId: project.id, coverImageUrl: null },
+      { pageId: pageId, projectId: project.id, coverImageUrl: null },
       {
         onSuccess: async () => {
           toast.success('Cover removed', { id: toastId })
@@ -187,7 +187,7 @@ export function PageCoverBanner({ coverUrl }: PageCoverProps) {
             if (token) {
               markFilesUnreferenced(
                 [oldFileId],
-                pageId as string,
+                pageId,
                 VaultFileSource.Page,
                 token,
               ).catch((err) => log.warn('Failed to mark old cover as unreferenced', { err }))

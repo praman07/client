@@ -2,24 +2,24 @@ import { HugeiconsIcon } from '@hugeicons/react'
 import {
   SmileIcon,
 } from '@hugeicons/core-free-icons'
-import { Bold, Link2, AtSign } from 'lucide-react'
+import { AtSign, Bold, Link2 } from 'lucide-react'
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
 import { toast } from 'sonner'
-import { cn } from '@/shared/lib/utils'
 import { useEditRequest } from '../lib/edit-request-context'
 import { useReplyRequest } from '../lib/reply-request-context'
 import {
   ChatToolbar,
   ChatToolbarTextarea,
 } from './components/chat-layout'
+import type { StagedAttachment } from '@/features/chat/media'
 import { Separator } from '@/shared/ui/primitives/separator'
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
 } from '@/shared/ui/primitives/tooltip'
-import type { StagedAttachment } from '@/features/chat/media'
+import { cn } from '@/shared/lib/utils'
 import { useAuth } from '@/shared/hooks'
 import { Button } from '@/shared/ui/primitives/button'
 import { db } from '@/shared/lib/db'

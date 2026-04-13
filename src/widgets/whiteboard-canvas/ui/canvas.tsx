@@ -3,13 +3,13 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { Excalidraw } from '@excalidraw/excalidraw'
 import { useWhiteboardSync } from '../hooks/use-whiteboard-sync'
 import { useWhiteboardMediaLifecycle } from '../hooks/use-whiteboard-media-lifecycle'
+import { CanvasCollaborators } from './canvas-collaborators'
 import type { ExcalidrawImperativeAPI } from '@excalidraw/excalidraw/types'
 import { createVaultGenerateIdForFile } from '@/shared/lib/excalidraw'
 import { useAppSelector, useAuth } from '@/shared/hooks'
 import { selectCurrentProject } from '@/entities/project'
 import { selectCurrentWorkspace } from '@/entities/workspace'
 import { createLogger } from '@/shared/lib/logger'
-import { CanvasCollaborators } from './canvas-collaborators'
 
 const log = createLogger('whiteboard:canvas')
 

@@ -1,10 +1,11 @@
 import React from 'react'
 import { Bar, BarChart, Cell, XAxis, YAxis } from 'recharts'
+import type {ChartConfig} from '@/shared/ui/primitives/chart';
 import {
+  
   ChartContainer,
   ChartTooltip,
-  ChartTooltipContent,
-  type ChartConfig,
+  ChartTooltipContent
 } from '@/shared/ui/primitives/chart'
 
 interface PriorityCount {
@@ -13,7 +14,7 @@ interface PriorityCount {
 }
 
 interface PriorityDistributionProps {
-  distribution: PriorityCount[]
+  distribution: Array<PriorityCount>
 }
 
 const PRIORITY_CONFIG: Record<

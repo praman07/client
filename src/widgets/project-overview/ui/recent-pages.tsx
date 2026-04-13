@@ -1,5 +1,5 @@
 import React from 'react'
-import { FileText, ChevronRight } from 'lucide-react'
+import { ChevronRight, FileText } from 'lucide-react'
 import { Link, useParams } from '@tanstack/react-router'
 import { formatDistanceToNow } from 'date-fns'
 
@@ -12,7 +12,7 @@ interface PagePreview {
 }
 
 interface RecentPagesProps {
-  pages: PagePreview[]
+  pages: Array<PagePreview>
 }
 
 const PageIcon: React.FC<{ emoji?: string | null }> = ({ emoji }) => {

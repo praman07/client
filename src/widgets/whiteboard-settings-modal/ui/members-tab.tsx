@@ -1,15 +1,16 @@
 import { useState } from 'react'
-import { UserPlus, X, Lock } from 'lucide-react'
+import { Lock, UserPlus, X } from 'lucide-react'
+import { toast } from 'sonner'
+import type { Board } from '@/entities/whiteboard-board'
 import {
-  useBoardCollaborators,
   useAddCollaborators,
+  useBoardCollaborators,
 } from '@/features/whiteboard/add-collaborators'
 import {
   RemoveCollaboratorDialog,
   useRemoveCollaborator,
 } from '@/features/whiteboard/remove-collaborator'
 import { useWorkspaceMembers } from '@/features/view-members/hooks'
-import type { Board } from '@/entities/whiteboard-board'
 import { Button } from '@/shared/ui/primitives/button'
 import {
   Avatar,
@@ -30,7 +31,6 @@ import {
   PopoverTrigger,
 } from '@/shared/ui/primitives/popover'
 import { usePermission } from '@/shared/lib/auth/use-permission'
-import { toast } from 'sonner'
 
 interface Collaborator {
   userId: string
@@ -78,9 +78,9 @@ export function MembersTab({ board }: MembersTabProps) {
     useState<Collaborator | null>(null)
   const [confirmRemoveOpen, setConfirmRemoveOpen] = useState(false)
 
-  const collaborators: Collaborator[] =
+  const collaborators: Array<Collaborator> =
     (collaboratorsData as any)?.boardCollaborators ?? []
-  const workspaceMembers: any[] =
+  const workspaceMembers: Array<any> =
     (workspaceMembersData as any)?.workspaceMembers ?? []
 
   const collaboratorIds = new Set(collaborators.map((c) => c.userId))

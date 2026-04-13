@@ -1,5 +1,5 @@
 import React from 'react'
-import { ChevronRight, File, FileImage, FileText, FileCode, Archive, FolderOpen, HardDrive } from 'lucide-react'
+import { Archive, ChevronRight, File, FileCode, FileImage, FileText, FolderOpen, HardDrive } from 'lucide-react'
 import { Link, useParams } from '@tanstack/react-router'
 
 interface VaultFile {
@@ -17,7 +17,7 @@ interface VaultUsage {
 }
 
 interface VaultActivityProps {
-  files: VaultFile[]
+  files: Array<VaultFile>
   usage: VaultUsage
 }
 

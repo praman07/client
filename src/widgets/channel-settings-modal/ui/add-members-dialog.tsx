@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Check, Users, Search, X } from 'lucide-react'
+import { Check, Search, Users, X } from 'lucide-react'
 import { cn } from '@/shared/lib/utils'
 import {
   Avatar,
@@ -12,8 +12,8 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  ScrollArea,
   Input,
+  ScrollArea,
 } from '@/shared/ui'
 import { useWorkspaceMembers } from '@/entities/workspace'
 import { useAddChannelMembers } from '@/features/chat/channel-members'
@@ -23,7 +23,7 @@ interface AddMembersDialogProps {
   onOpenChange: (open: boolean) => void
   channelId: string
   workspaceId: string
-  existingMemberIds: string[]
+  existingMemberIds: Array<string>
 }
 
 function getInitials(name: string) {
@@ -37,7 +37,7 @@ export function AddMembersDialog({
   workspaceId,
   existingMemberIds,
 }: AddMembersDialogProps) {
-  const [selectedUserIds, setSelectedUserIds] = useState<string[]>([])
+  const [selectedUserIds, setSelectedUserIds] = useState<Array<string>>([])
   const [search, setSearch] = useState('')
   const { mutate: addMembers, isPending } = useAddChannelMembers(channelId)
 

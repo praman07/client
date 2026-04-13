@@ -1,7 +1,7 @@
 import React from 'react'
 import { UserPlus } from 'lucide-react'
-import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/primitives/avatar'
 import { Link, useParams } from '@tanstack/react-router'
+import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/primitives/avatar'
 
 interface Member {
   userId: string
@@ -18,9 +18,9 @@ interface Channel {
 }
 
 interface ActiveMembersProps {
-  members: Member[]
+  members: Array<Member>
   totalCount: number
-  channels?: Channel[]
+  channels?: Array<Channel>
 }
 
 export const ActiveMembers: React.FC<ActiveMembersProps> = ({

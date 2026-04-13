@@ -36,13 +36,13 @@ export function PageEmojiPicker({ icon, hasCover, isLocked }: PageEmojiProps) {
   const handleSelect = (emoji: { native: string }) => {
     if (!pageId || !project?.id || isLocked) return
     setOpen(false)
-    updatePageDetails({ pageId: pageId as string, projectId: project.id, emoji: emoji.native })
+    updatePageDetails({ pageId: pageId, projectId: project.id, emoji: emoji.native })
   }
 
   const handleRemove = (e: React.MouseEvent) => {
     e.stopPropagation()
     if (!pageId || !project?.id || isLocked) return
-    updatePageDetails({ pageId: pageId as string, projectId: project.id, emoji: null })
+    updatePageDetails({ pageId: pageId, projectId: project.id, emoji: null })
   }
 
   return (

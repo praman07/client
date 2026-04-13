@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { MARK_NOTIFICATION_READ, MARK_ALL_NOTIFICATIONS_READ, notificationKeys } from '../api';
+import { MARK_ALL_NOTIFICATIONS_READ, MARK_NOTIFICATION_READ, notificationKeys } from '../api';
 import { useAuth } from '@/shared/hooks';
 import { GqlClient } from '@/shared/api';
 
@@ -8,7 +8,7 @@ export function useMarkNotificationRead() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (ids: string[]) => {
+    mutationFn: async (ids: Array<string>) => {
       const token = await getToken();
       const client = GqlClient(token);
       return client.request(MARK_NOTIFICATION_READ, { ids });

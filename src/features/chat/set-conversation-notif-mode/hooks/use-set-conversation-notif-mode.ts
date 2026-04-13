@@ -1,8 +1,8 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { SET_CONVERSATION_NOTIF_MODE, conversationKeys } from '../api';
+import type { ConversationNotifMode } from '@/gql/graphql';
 import { useAuth } from '@/shared/hooks';
 import { GqlClient } from '@/shared/api';
-import type { ConversationNotifMode } from '@/gql/graphql';
 
 export function useSetConversationNotifMode() {
   const { getToken } = useAuth();

@@ -5,6 +5,7 @@
 export { DomainRegistry } from './registry'
 export { createChatPlugin } from './chat-plugin'
 export { createWhiteboardPlugin } from './whiteboard-plugin'
+export { createNotificationPlugin } from './notification-plugin'
 
 // Re-export from shared for convenience
 export type { DomainPlugin } from '@/shared/ws/domains'

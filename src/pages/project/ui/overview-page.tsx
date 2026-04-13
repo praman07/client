@@ -4,16 +4,16 @@ import {
   useProjectOverview,
 } from '@/entities/project'
 import {
-  ProjectOverviewHeader,
-  ProjectHealth,
+  ActiveMembers,
   IssueStatusBreakdown,
   PriorityDistribution,
-  UpcomingDeadlines,
-  RecentPages,
-  VaultActivity,
-  ActiveMembers,
   ProjectChannels,
+  ProjectHealth,
+  ProjectOverviewHeader,
   RecentIssues,
+  RecentPages,
+  UpcomingDeadlines,
+  VaultActivity,
 } from '@/widgets/project-overview'
 import { PageSpinner, RouteError, WidgetError } from '@/shared/ui'
 
@@ -26,7 +26,7 @@ interface OverviewPageProps {
   description?: string | null
   isPrivate?: boolean | null
   isArchived?: boolean | null
-  activePlugins: string[]
+  activePlugins: Array<string>
   workspaceSlug: string
 }
 

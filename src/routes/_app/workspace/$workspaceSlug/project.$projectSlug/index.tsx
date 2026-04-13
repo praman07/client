@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { OverviewPage } from '@/pages/project'
-import { useProjectBySlug, PROJECT_FRAGMENT } from '@/entities/project'
+import { PROJECT_FRAGMENT, useProjectBySlug } from '@/entities/project'
 import { useAppSelector } from '@/shared/hooks'
 import { selectWorkspaceBySlug } from '@/entities/workspace'
 import { useFragment } from '@/gql'

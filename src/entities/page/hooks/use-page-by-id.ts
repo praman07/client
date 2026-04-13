@@ -20,7 +20,7 @@ import { useMemo, useSyncExternalStore } from 'react'
 import { pageKeys } from '../api/query-keys'
 import type { Page } from '../model/types'
 
-function findPageInTree(nodes: Page[], pageId: string): Page | null {
+function findPageInTree(nodes: Array<Page>, pageId: string): Page | null {
   for (const node of nodes) {
     if (node.id === pageId) return node
     if (Array.isArray(node.children) && node.children.length > 0) {
@@ -51,15 +51,15 @@ export function usePageById(pageId: string, projectId: string): Page | null {
     // So we must handle BOTH shapes:
     //   1. { getProjectPages: Page[] } — raw GQL response (initial fetch)
     //   2. Page[]                      — after setQueryData() from mutation hooks
-    let pages: Page[] | undefined
+    let pages: Array<Page> | undefined
     if (Array.isArray(rawData)) {
-      pages = rawData as Page[]
+      pages = rawData as Array<Page>
     } else if (
       typeof rawData === 'object' &&
-      'getProjectPages' in (rawData as object) &&
+      'getProjectPages' in (rawData) &&
       Array.isArray((rawData as { getProjectPages: unknown }).getProjectPages)
     ) {
-      pages = (rawData as { getProjectPages: Page[] }).getProjectPages
+      pages = (rawData as { getProjectPages: Array<Page> }).getProjectPages
     }
 
     if (!pages) return null

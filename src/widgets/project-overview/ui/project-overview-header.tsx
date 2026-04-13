@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from '@tanstack/react-router'
-import { Settings, Lock, CheckCircle2, Archive, UserPlus } from 'lucide-react'
+import { Archive, CheckCircle2, Lock, Settings, UserPlus } from 'lucide-react'
 import { Button } from '@/shared/ui/primitives/button'
 import { Guard } from '@/shared/lib/auth/guard'
 import { PLUGIN_TAB_REGISTRY } from '@/shared/config/navigation'
@@ -13,7 +13,7 @@ interface ProjectOverviewHeaderProps {
   description?: string | null
   isPrivate?: boolean | null
   isArchived?: boolean | null
-  activePlugins: string[]
+  activePlugins: Array<string>
   /** Absolute base path for this project, e.g. "/workspace/my-ws/project/my-proj" */
   projectBasePath: string
 }

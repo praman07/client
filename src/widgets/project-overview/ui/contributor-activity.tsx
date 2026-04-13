@@ -11,7 +11,7 @@ interface ContributorStats {
 }
 
 interface ContributorActivityProps {
-  stats: ContributorStats[]
+  stats: Array<ContributorStats>
   loading?: boolean
 }
 

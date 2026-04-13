@@ -11,7 +11,7 @@ interface Channel {
 }
 
 interface ProjectChannelsProps {
-  channels: Channel[]
+  channels: Array<Channel>
 }
 
 export const ProjectChannels: React.FC<ProjectChannelsProps> = ({ channels }) => {

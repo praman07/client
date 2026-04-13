@@ -1,8 +1,5 @@
-import {
-  type DefaultReactSuggestionItem,
-  type SuggestionMenuProps,
-} from '@blocknote/react'
 import { useEffect, useRef } from 'react'
+import type {DefaultReactSuggestionItem, SuggestionMenuProps} from '@blocknote/react';
 
 /**
  * CollabifySlashMenu — custom slash menu matching the "Obsidian Architect" design system.

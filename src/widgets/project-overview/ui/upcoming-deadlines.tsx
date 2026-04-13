@@ -1,6 +1,6 @@
 import React from 'react'
 import { Calendar } from 'lucide-react'
-import { differenceInCalendarDays, isPast, isToday, parseISO, isValid } from 'date-fns'
+import { differenceInCalendarDays, isPast, isToday, isValid, parseISO } from 'date-fns'
 import { cn } from '@/shared/lib/utils'
 
 interface UpcomingIssue {
@@ -15,7 +15,7 @@ interface UpcomingIssue {
 }
 
 interface UpcomingDeadlinesProps {
-  issues: UpcomingIssue[]
+  issues: Array<UpcomingIssue>
 }
 
 interface DueDateDisplay {
