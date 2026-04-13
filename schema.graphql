@@ -19,6 +19,7 @@ type Query {
   user(userId: ID!): PublicUser
   workspaceUser(workspaceId: ID!, userId: ID!): WorkspaceMember
   userHome: UserHomeData
+  myNotificationSummary: NotificationSummary!
   getWorkspaceInviteInfo(token: String!): WorkspaceInviteInfo!
   myWorkspaces: [Workspace!]!
   onboardingStatus: OnboardingStatus!
@@ -30,11 +31,7 @@ type Query {
   rolePermissions(roleId: ID!, workspaceId: ID!): [RolePermission!]!
   workspaceOverview(workspaceId: ID!): WorkspaceOverview!
   workspacePermissions(workspaceId: ID!): [Permission!]!
-
-  """Get paginated notifications for the current user."""
   notifications(limit: Int, cursor: String, isRead: Boolean): NotificationConnection!
-
-  """Get count of unread notifications."""
   unreadNotificationCount: Int!
   myProjects(workspaceId: ID!): [Project!]!
   projectBySlug(workspaceId: ID!, slug: String!): Project
@@ -182,6 +179,10 @@ type Mutation {
   syncUser(clerkId: String!, email: String!, fullName: String, avatarUrl: String, emailVerified: Boolean): User!
   updateProfile(input: UpdateProfileInput!): User!
   deleteAccount: Boolean!
+  updateGlobalNotifPrefs(input: UpdateGlobalNotifPrefsInput!): GlobalNotificationPreference!
+  setGlobalNotifMode(mode: GlobalNotifMode!): Boolean!
+  pauseNotifications(until: String!): Boolean!
+  resumeNotifications: Boolean!
   acceptWorkspaceInvite(input: AcceptInviteInput!): JoinResponse!
   checkSlugAvailability(slug: String!): AvailabilityResponse!
   createOnboardingWorkspace: Workspace!
@@ -202,11 +203,10 @@ type Mutation {
   removeRolePermission(roleId: ID!, workspaceId: ID!, permissionId: ID!): Boolean!
   renameWorkspaceSlug(workspaceId: ID!, slug: String!): Workspace!
   requestWorkspaceLogoUpload(workspaceId: ID!, mimeType: String!, sizeBytes: Int!): WorkspaceLogoUploadPayload!
-
-  """Mark specific notifications as read."""
+  updateWorkspaceNotifPrefs(workspaceId: String!, input: UpdateScopedPreferencesInput!): ScopedNotificationPreference!
+  muteWorkspace(workspaceId: String!, until: String): Boolean!
+  unmuteWorkspace(workspaceId: String!): Boolean!
   markNotificationRead(ids: [ID!]!): Boolean!
-
-  """Mark all notifications as read."""
   markAllNotificationsRead: Boolean!
   createProject(workspaceId: ID!, input: CreateProjectInput!): Project!
   checkProjectSlugAvailability(workspaceId: ID!, slug: String!): AvailabilityResponse!
@@ -223,6 +223,9 @@ type Mutation {
   deleteProjectRole(roleId: ID!, projectId: ID!, workspaceId: ID!): Boolean!
   toggleProjectPlugin(projectId: ID!, workspaceId: ID!, type: String!, enable: Boolean!): Boolean!
   requestProjectLogoUpload(projectId: ID!, mimeType: String!, sizeBytes: Int!): ProjectLogoUploadPayload!
+  updateProjectNotifPrefs(projectId: String!, input: UpdateScopedPreferencesInput!): ScopedNotificationPreference!
+  muteProject(projectId: String!, until: String): Boolean!
+  unmuteProject(projectId: String!): Boolean!
   createChannel(input: CreateChannelInput!): Conversation!
   archiveChannel(input: ArchiveChannelInput!): Conversation!
   renameChannel(input: RenameChannelInput!): Conversation!
@@ -243,6 +246,7 @@ type Mutation {
   addGroupMembers(workspaceId: ID!, groupId: ID!, userIds: [ID!]!): AddGroupMembersResult!
   removeGroupMember(workspaceId: ID!, groupId: ID!, userId: ID!): RemoveGroupMemberResult!
   leaveGroup(workspaceId: ID!, groupId: ID!): LeaveGroupResult!
+  setConversationNotifMode(conversationId: String!, mode: ConversationNotifMode!, muteUntil: String): ConversationNotificationPreference!
   closeThread(workspaceId: ID!, threadId: ID!): CloseThreadResult!
   reopenThread(workspaceId: ID!, threadId: ID!): ReopenThreadResult!
   deleteThread(workspaceId: ID!, threadId: ID!): DeleteThreadResult!
@@ -387,6 +391,14 @@ input UpdateProfileInput {
   language: String
 }
 
+input UpdateGlobalNotifPrefsInput {
+  emailEnabled: Boolean
+  pushEnabled: Boolean
+  globalMode: GlobalNotifMode
+  muteUntil: String
+  categories: [CategoryPreferenceInput!]
+}
+
 type User {
   id: ID!
   email: String!
@@ -433,6 +445,15 @@ type UserHomeData {
   user: UserHomeProfile!
   workspaces: [WorkspaceHomeEntry!]!
   pendingInvites: [PendingInviteEntry!]!
+}
+
+type NotificationSummary {
+  globalMode: GlobalNotifMode!
+  emailEnabled: Boolean!
+  pushEnabled: Boolean!
+  isDndActive: Boolean!
+  dndUntil: DateTime
+  categories: [CategoryPreferenceSetting!]!
 }
 
 type Workspace {
@@ -605,14 +626,27 @@ type WorkspaceOverviewIssue {
   dueDate: String
 }
 
-type NotificationConnection {
-  edges: [NotificationEdge!]!
-  pageInfo: PageInfo!
+enum NotificationCategory {
+  chat_messages
+  mentions
+  reactions
+  assignments
+  deadlines
+  access_changes
+  collaboration
+  system_admin
 }
 
-type NotificationEdge {
-  node: Notification!
-  cursor: String!
+enum ConversationNotifMode {
+  ALL_MESSAGES
+  MENTIONS_ONLY
+  NOTHING
+}
+
+enum GlobalNotifMode {
+  ALL
+  MENTIONS_ONLY
+  NOTHING
 }
 
 type Notification {
@@ -622,60 +656,67 @@ type Notification {
   entityType: String!
   entityId: String!
   category: String!
-  data: JSON
+  data: JSON!
   isRead: Boolean!
   isArchived: Boolean!
   createdAt: DateTime!
+  workspaceId: String
+  projectId: String
   actor: User
-  chatMessage: ChatMessage
   workspace: Workspace
   project: Project
-  task: Task
-  page: Page
 }
 
-type Task {
-  id: ID!
-  title: String!
-  statusName: String!
+type NotificationEdge {
+  cursor: String!
+  node: Notification!
 }
 
-"""
-A collaborative document page within a project.
-The Y.Doc content is synced via WebSocket and accessed via getPageSnapshot.
-"""
-type Page {
-  id: ID!
-  title: String!
-  workspaceId: ID!
-  projectId: ID!
+type NotificationConnection {
+  edges: [NotificationEdge!]!
+  pageInfo: PageInfo!
+}
 
-  """null = root-level page (no parent)"""
-  parentId: ID
+type CategoryPreferenceSetting {
+  category: NotificationCategory!
+  email: Boolean!
+  push: Boolean!
+  inApp: Boolean!
+}
 
-  """Emoji or absolute URL for the page icon"""
-  icon: String
-  coverUrl: String
+type GlobalNotificationPreference {
+  emailEnabled: Boolean!
+  pushEnabled: Boolean!
+  inAppEnabled: Boolean!
+  globalMode: GlobalNotifMode!
+  categories: [CategoryPreferenceSetting!]!
+}
 
-  """
-  Fractional index position for ordering within parent (e.g., 1.5 between 1.0 and 2.0)
-  """
-  position: Float!
-  isArchived: Boolean!
-  isLocked: Boolean!
+type ScopedNotificationPreference {
+  emailEnabled: Boolean
+  pushEnabled: Boolean
+  categories: [CategoryPreferenceSetting!]!
+}
 
-  """
-  S3 key for the latest compiled Yjs snapshot (disaster recovery reference)
-  """
-  s3Key: String
-  createdBy: ID!
-  createdAt: DateTime!
-  updatedAt: DateTime!
-  collaborators: [PageCollaborator!]!
-  creator: UserBasic!
+type ConversationNotificationPreference {
+  conversationId: String!
+  mode: ConversationNotifMode!
+  muteUntil: DateTime
+  pushEnabled: Boolean
+  emailEnabled: Boolean
+}
 
-  """Populated only by getProjectPages — empty in all other contexts"""
-  children: [Page!]!
+input CategoryPreferenceInput {
+  category: NotificationCategory!
+  email: Boolean!
+  push: Boolean!
+  inApp: Boolean!
+}
+
+input UpdateScopedPreferencesInput {
+  emailEnabled: Boolean
+  pushEnabled: Boolean
+  categories: [CategoryPreferenceInput!]
 }
 
 type ProjectMember {
@@ -882,6 +923,8 @@ type Conversation {
   deletedAt: DateTime
   members: [ConversationMember!]
   lastMessage: LastMessagePreview
+  myNotifMode: ConversationNotifMode
+  isMuted: Boolean!
 }
 
 enum ConversationType {
@@ -1283,6 +1326,44 @@ type ActiveCollaborator {
   joinedAt: DateTime!
   lastSeenAt: DateTime!
   cursorPosition: CursorPosition
+}
+
+"""
+A collaborative document page within a project.
+The Y.Doc content is synced via WebSocket and accessed via getPageSnapshot.
+"""
+type Page {
+  id: ID!
+  workspaceId: ID!
+  projectId: ID!
+
+  """null = root-level page (no parent)"""
+  parentId: ID
+  title: String!
+
+  """Emoji or absolute URL for the page icon"""
+  icon: String
+  coverUrl: String
+
+  """
+  Fractional index position for ordering within parent (e.g., 1.5 between 1.0 and 2.0)
+  """
+  position: Float!
+  isArchived: Boolean!
+  isLocked: Boolean!
+
+  """
+  S3 key for the latest compiled Yjs snapshot (disaster recovery reference)
+  """
+  s3Key: String
+  createdBy: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  collaborators: [PageCollaborator!]!
+  creator: UserBasic!
+
+  """Populated only by getProjectPages — empty in all other contexts"""
+  children: [Page!]!
 }
 
 type PageCollaborator {

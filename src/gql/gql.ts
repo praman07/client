@@ -26,6 +26,13 @@ type Documents = {
     "\n  fragment IssueStatusFields on IssueStatus {\n    id\n    projectId\n    name\n    color\n    icon\n    position\n    isSystem\n    issueCount\n  }\n": typeof types.IssueStatusFieldsFragmentDoc,
     "\n  fragment IssueCardFields on Issue {\n    id\n    number\n    title\n    priority\n    position\n    dueDate\n    updatedAt\n    status {\n      id\n      name\n      color\n      icon\n    }\n    assignee {\n      id\n      fullName\n      avatarUrl\n    }\n    labels {\n      id\n      name\n      color\n    }\n  }\n": typeof types.IssueCardFieldsFragmentDoc,
     "\n  fragment IssueDetailFields on Issue {\n    ...IssueCardFields\n    descriptionS3Key\n    createdBy {\n      id\n      fullName\n      avatarUrl\n    }\n    createdAt\n  }\n": typeof types.IssueDetailFieldsFragmentDoc,
+    "\n  fragment NotificationSummaryFields on NotificationSummary {\n    globalMode\n    emailEnabled\n    pushEnabled\n    isDndActive\n    dndUntil\n    categories {\n      category\n      email\n      push\n      inApp\n    }\n  }\n": typeof types.NotificationSummaryFieldsFragmentDoc,
+    "\n  fragment CategoryPreferenceFields on CategoryPreferenceSetting {\n    category\n    email\n    push\n    inApp\n  }\n": typeof types.CategoryPreferenceFieldsFragmentDoc,
+    "\n  mutation SetGlobalNotifMode($mode: GlobalNotifMode!) {\n    setGlobalNotifMode(mode: $mode)\n  }\n": typeof types.SetGlobalNotifModeDocument,
+    "\n  mutation PauseNotifications($until: String!) {\n    pauseNotifications(until: $until)\n  }\n": typeof types.PauseNotificationsDocument,
+    "\n  mutation ResumeNotifications {\n    resumeNotifications\n  }\n": typeof types.ResumeNotificationsDocument,
+    "\n  mutation UpdateGlobalNotifPrefs($input: UpdateGlobalNotifPrefsInput!) {\n    updateGlobalNotifPrefs(input: $input) {\n      emailEnabled\n      pushEnabled\n      globalMode\n    }\n  }\n": typeof types.UpdateGlobalNotifPrefsDocument,
+    "\n  query GetNotificationSummary {\n    myNotificationSummary {\n      ...NotificationSummaryFields\n    }\n  }\n": typeof types.GetNotificationSummaryDocument,
     "\n  fragment PageFields on Page {\n    id\n    title\n    workspaceId\n    projectId\n    parentId\n    icon\n    coverUrl\n    position\n    isArchived\n    isLocked\n    s3Key\n    createdBy\n    createdAt\n    updatedAt\n  }\n": typeof types.PageFieldsFragmentDoc,
     "\n  fragment PageWithCollaborators on Page {\n    ...PageFields\n    collaborators {\n      userId\n      role\n      joinedAt\n      user {\n        id\n        fullName\n        email\n        avatarUrl\n      }\n    }\n  }\n": typeof types.PageWithCollaboratorsFragmentDoc,
     "\n  fragment PageWithChildren on Page {\n    ...PageFields\n    children {\n      ...PageFields\n      children {\n        ...PageFields\n        children {\n          ...PageFields\n        }\n      }\n    }\n  }\n": typeof types.PageWithChildrenFragmentDoc,
@@ -87,6 +94,7 @@ type Documents = {
     "\n  mutation DeleteChannel($workspaceId: ID!, $channelId: ID!) {\n    deleteChannel(workspaceId: $workspaceId, channelId: $channelId) {\n      success\n      channelId\n    }\n  }\n": typeof types.DeleteChannelDocument,
     "\n  query GetProjectDms($projectId: ID!, $workspaceId: ID!) {\n    getProjectDms(projectId: $projectId, workspaceId: $workspaceId) {\n      id\n      otherUser {\n        id\n        fullName\n        avatarUrl\n      }\n      unreadCount\n      updatedAt\n    }\n  }\n": typeof types.GetProjectDmsDocument,
     "\n  mutation RenameChannel($input: RenameChannelInput!) {\n    renameChannel(input: $input) {\n      id\n      name\n      type\n      workspaceId\n      projectId\n      updatedAt\n    }\n  }\n": typeof types.RenameChannelDocument,
+    "\n  mutation SetConversationNotifMode($conversationId: String!, $mode: ConversationNotifMode!, $muteUntil: String) {\n    setConversationNotifMode(conversationId: $conversationId, mode: $mode, muteUntil: $muteUntil) {\n      conversationId\n      mode\n      muteUntil\n      pushEnabled\n      emailEnabled\n    }\n  }\n": typeof types.SetConversationNotifModeDocument,
     "\n  mutation UnarchiveChannel($workspaceId: ID!, $channelId: ID!) {\n    unarchiveChannel(workspaceId: $workspaceId, channelId: $channelId) {\n      success\n      channelId\n      name\n    }\n  }\n": typeof types.UnarchiveChannelDocument,
     "\n  mutation UpdateChannelDescription($workspaceId: ID!, $channelId: ID!, $description: String) {\n    updateChannelDescription(workspaceId: $workspaceId, channelId: $channelId, description: $description) {\n      success\n      channelId\n      description\n    }\n  }\n": typeof types.UpdateChannelDescriptionDocument,
     "\n  mutation UpdateChannelVisibility($workspaceId: ID!, $channelId: ID!, $isPublic: Boolean!) {\n    updateChannelVisibility(workspaceId: $workspaceId, channelId: $channelId, isPublic: $isPublic) {\n      success\n      channelId\n      isPublic\n    }\n  }\n": typeof types.UpdateChannelVisibilityDocument,
@@ -111,6 +119,9 @@ type Documents = {
     "\n  mutation DeleteIssueStatus($input: DeleteIssueStatusInput!) {\n    deleteIssueStatus(input: $input) {\n      success\n    }\n  }\n": typeof types.DeleteIssueStatusDocument,
     "\n  mutation AcceptWorkspaceInvite($input: AcceptInviteInput!) {\n    acceptWorkspaceInvite(input: $input) {\n      success\n      message\n      workspaceSlug\n    }\n  }\n": typeof types.AcceptWorkspaceInviteDocument,
     "\n  query GetWorkspaceInviteInfo($token: String!) {\n    getWorkspaceInviteInfo(token: $token) {\n      workspaceName\n      workspaceLogoUrl\n      inviterName\n    }\n  }\n": typeof types.GetWorkspaceInviteInfoDocument,
+    "\n  mutation MarkNotificationRead($ids: [ID!]!) {\n    markNotificationRead(ids: $ids)\n  }\n": typeof types.MarkNotificationReadDocument,
+    "\n  mutation MarkAllNotificationsRead {\n    markAllNotificationsRead\n  }\n": typeof types.MarkAllNotificationsReadDocument,
+    "\n  query GetNotifications($limit: Int, $cursor: String, $isRead: Boolean) {\n    notifications(limit: $limit, cursor: $cursor, isRead: $isRead) {\n      edges {\n        cursor\n        node {\n          id\n          entityType\n          category\n          isRead\n          createdAt\n          data\n        }\n      }\n      pageInfo {\n        hasNextPage\n        endCursor\n      }\n    }\n  }\n": typeof types.GetNotificationsDocument,
     "\n  mutation SyncUser(\n    $clerkId: String!\n    $email: String!\n    $fullName: String\n    $avatarUrl: String\n  ) {\n    syncUser(\n      clerkId: $clerkId\n      email: $email\n      fullName: $fullName\n      avatarUrl: $avatarUrl\n    ) {\n      id\n    }\n  }\n": typeof types.SyncUserDocument,
     "\n  mutation CreateOnboardingWorkspace {\n    createOnboardingWorkspace {\n      id\n      slug\n    }\n  }\n": typeof types.CreateOnboardingWorkspaceDocument,
     "\n  query OnboardingStatus {\n    onboardingStatus {\n      hasUser\n      hasWorkspace\n      hasProject\n      workspaceSlug\n    }\n  }\n": typeof types.OnboardingStatusDocument,
@@ -201,6 +212,13 @@ const documents: Documents = {
     "\n  fragment IssueStatusFields on IssueStatus {\n    id\n    projectId\n    name\n    color\n    icon\n    position\n    isSystem\n    issueCount\n  }\n": types.IssueStatusFieldsFragmentDoc,
     "\n  fragment IssueCardFields on Issue {\n    id\n    number\n    title\n    priority\n    position\n    dueDate\n    updatedAt\n    status {\n      id\n      name\n      color\n      icon\n    }\n    assignee {\n      id\n      fullName\n      avatarUrl\n    }\n    labels {\n      id\n      name\n      color\n    }\n  }\n": types.IssueCardFieldsFragmentDoc,
     "\n  fragment IssueDetailFields on Issue {\n    ...IssueCardFields\n    descriptionS3Key\n    createdBy {\n      id\n      fullName\n      avatarUrl\n    }\n    createdAt\n  }\n": types.IssueDetailFieldsFragmentDoc,
+    "\n  fragment NotificationSummaryFields on NotificationSummary {\n    globalMode\n    emailEnabled\n    pushEnabled\n    isDndActive\n    dndUntil\n    categories {\n      category\n      email\n      push\n      inApp\n    }\n  }\n": types.NotificationSummaryFieldsFragmentDoc,
+    "\n  fragment CategoryPreferenceFields on CategoryPreferenceSetting {\n    category\n    email\n    push\n    inApp\n  }\n": types.CategoryPreferenceFieldsFragmentDoc,
+    "\n  mutation SetGlobalNotifMode($mode: GlobalNotifMode!) {\n    setGlobalNotifMode(mode: $mode)\n  }\n": types.SetGlobalNotifModeDocument,
+    "\n  mutation PauseNotifications($until: String!) {\n    pauseNotifications(until: $until)\n  }\n": types.PauseNotificationsDocument,
+    "\n  mutation ResumeNotifications {\n    resumeNotifications\n  }\n": types.ResumeNotificationsDocument,
+    "\n  mutation UpdateGlobalNotifPrefs($input: UpdateGlobalNotifPrefsInput!) {\n    updateGlobalNotifPrefs(input: $input) {\n      emailEnabled\n      pushEnabled\n      globalMode\n    }\n  }\n": types.UpdateGlobalNotifPrefsDocument,
+    "\n  query GetNotificationSummary {\n    myNotificationSummary {\n      ...NotificationSummaryFields\n    }\n  }\n": types.GetNotificationSummaryDocument,
     "\n  fragment PageFields on Page {\n    id\n    title\n    workspaceId\n    projectId\n    parentId\n    icon\n    coverUrl\n    position\n    isArchived\n    isLocked\n    s3Key\n    createdBy\n    createdAt\n    updatedAt\n  }\n": types.PageFieldsFragmentDoc,
     "\n  fragment PageWithCollaborators on Page {\n    ...PageFields\n    collaborators {\n      userId\n      role\n      joinedAt\n      user {\n        id\n        fullName\n        email\n        avatarUrl\n      }\n    }\n  }\n": types.PageWithCollaboratorsFragmentDoc,
     "\n  fragment PageWithChildren on Page {\n    ...PageFields\n    children {\n      ...PageFields\n      children {\n        ...PageFields\n        children {\n          ...PageFields\n        }\n      }\n    }\n  }\n": types.PageWithChildrenFragmentDoc,
@@ -262,6 +280,7 @@ const documents: Documents = {
     "\n  mutation DeleteChannel($workspaceId: ID!, $channelId: ID!) {\n    deleteChannel(workspaceId: $workspaceId, channelId: $channelId) {\n      success\n      channelId\n    }\n  }\n": types.DeleteChannelDocument,
     "\n  query GetProjectDms($projectId: ID!, $workspaceId: ID!) {\n    getProjectDms(projectId: $projectId, workspaceId: $workspaceId) {\n      id\n      otherUser {\n        id\n        fullName\n        avatarUrl\n      }\n      unreadCount\n      updatedAt\n    }\n  }\n": types.GetProjectDmsDocument,
     "\n  mutation RenameChannel($input: RenameChannelInput!) {\n    renameChannel(input: $input) {\n      id\n      name\n      type\n      workspaceId\n      projectId\n      updatedAt\n    }\n  }\n": types.RenameChannelDocument,
+    "\n  mutation SetConversationNotifMode($conversationId: String!, $mode: ConversationNotifMode!, $muteUntil: String) {\n    setConversationNotifMode(conversationId: $conversationId, mode: $mode, muteUntil: $muteUntil) {\n      conversationId\n      mode\n      muteUntil\n      pushEnabled\n      emailEnabled\n    }\n  }\n": types.SetConversationNotifModeDocument,
     "\n  mutation UnarchiveChannel($workspaceId: ID!, $channelId: ID!) {\n    unarchiveChannel(workspaceId: $workspaceId, channelId: $channelId) {\n      success\n      channelId\n      name\n    }\n  }\n": types.UnarchiveChannelDocument,
     "\n  mutation UpdateChannelDescription($workspaceId: ID!, $channelId: ID!, $description: String) {\n    updateChannelDescription(workspaceId: $workspaceId, channelId: $channelId, description: $description) {\n      success\n      channelId\n      description\n    }\n  }\n": types.UpdateChannelDescriptionDocument,
     "\n  mutation UpdateChannelVisibility($workspaceId: ID!, $channelId: ID!, $isPublic: Boolean!) {\n    updateChannelVisibility(workspaceId: $workspaceId, channelId: $channelId, isPublic: $isPublic) {\n      success\n      channelId\n      isPublic\n    }\n  }\n": types.UpdateChannelVisibilityDocument,
@@ -286,6 +305,9 @@ const documents: Documents = {
     "\n  mutation DeleteIssueStatus($input: DeleteIssueStatusInput!) {\n    deleteIssueStatus(input: $input) {\n      success\n    }\n  }\n": types.DeleteIssueStatusDocument,
     "\n  mutation AcceptWorkspaceInvite($input: AcceptInviteInput!) {\n    acceptWorkspaceInvite(input: $input) {\n      success\n      message\n      workspaceSlug\n    }\n  }\n": types.AcceptWorkspaceInviteDocument,
     "\n  query GetWorkspaceInviteInfo($token: String!) {\n    getWorkspaceInviteInfo(token: $token) {\n      workspaceName\n      workspaceLogoUrl\n      inviterName\n    }\n  }\n": types.GetWorkspaceInviteInfoDocument,
+    "\n  mutation MarkNotificationRead($ids: [ID!]!) {\n    markNotificationRead(ids: $ids)\n  }\n": types.MarkNotificationReadDocument,
+    "\n  mutation MarkAllNotificationsRead {\n    markAllNotificationsRead\n  }\n": types.MarkAllNotificationsReadDocument,
+    "\n  query GetNotifications($limit: Int, $cursor: String, $isRead: Boolean) {\n    notifications(limit: $limit, cursor: $cursor, isRead: $isRead) {\n      edges {\n        cursor\n        node {\n          id\n          entityType\n          category\n          isRead\n          createdAt\n          data\n        }\n      }\n      pageInfo {\n        hasNextPage\n        endCursor\n      }\n    }\n  }\n": types.GetNotificationsDocument,
     "\n  mutation SyncUser(\n    $clerkId: String!\n    $email: String!\n    $fullName: String\n    $avatarUrl: String\n  ) {\n    syncUser(\n      clerkId: $clerkId\n      email: $email\n      fullName: $fullName\n      avatarUrl: $avatarUrl\n    ) {\n      id\n    }\n  }\n": types.SyncUserDocument,
     "\n  mutation CreateOnboardingWorkspace {\n    createOnboardingWorkspace {\n      id\n      slug\n    }\n  }\n": types.CreateOnboardingWorkspaceDocument,
     "\n  query OnboardingStatus {\n    onboardingStatus {\n      hasUser\n      hasWorkspace\n      hasProject\n      workspaceSlug\n    }\n  }\n": types.OnboardingStatusDocument,
@@ -426,6 +448,34 @@ export function gql(source: "\n  fragment IssueCardFields on Issue {\n    id\n  
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "\n  fragment IssueDetailFields on Issue {\n    ...IssueCardFields\n    descriptionS3Key\n    createdBy {\n      id\n      fullName\n      avatarUrl\n    }\n    createdAt\n  }\n"): (typeof documents)["\n  fragment IssueDetailFields on Issue {\n    ...IssueCardFields\n    descriptionS3Key\n    createdBy {\n      id\n      fullName\n      avatarUrl\n    }\n    createdAt\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  fragment NotificationSummaryFields on NotificationSummary {\n    globalMode\n    emailEnabled\n    pushEnabled\n    isDndActive\n    dndUntil\n    categories {\n      category\n      email\n      push\n      inApp\n    }\n  }\n"): (typeof documents)["\n  fragment NotificationSummaryFields on NotificationSummary {\n    globalMode\n    emailEnabled\n    pushEnabled\n    isDndActive\n    dndUntil\n    categories {\n      category\n      email\n      push\n      inApp\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  fragment CategoryPreferenceFields on CategoryPreferenceSetting {\n    category\n    email\n    push\n    inApp\n  }\n"): (typeof documents)["\n  fragment CategoryPreferenceFields on CategoryPreferenceSetting {\n    category\n    email\n    push\n    inApp\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation SetGlobalNotifMode($mode: GlobalNotifMode!) {\n    setGlobalNotifMode(mode: $mode)\n  }\n"): (typeof documents)["\n  mutation SetGlobalNotifMode($mode: GlobalNotifMode!) {\n    setGlobalNotifMode(mode: $mode)\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation PauseNotifications($until: String!) {\n    pauseNotifications(until: $until)\n  }\n"): (typeof documents)["\n  mutation PauseNotifications($until: String!) {\n    pauseNotifications(until: $until)\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation ResumeNotifications {\n    resumeNotifications\n  }\n"): (typeof documents)["\n  mutation ResumeNotifications {\n    resumeNotifications\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation UpdateGlobalNotifPrefs($input: UpdateGlobalNotifPrefsInput!) {\n    updateGlobalNotifPrefs(input: $input) {\n      emailEnabled\n      pushEnabled\n      globalMode\n    }\n  }\n"): (typeof documents)["\n  mutation UpdateGlobalNotifPrefs($input: UpdateGlobalNotifPrefsInput!) {\n    updateGlobalNotifPrefs(input: $input) {\n      emailEnabled\n      pushEnabled\n      globalMode\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  query GetNotificationSummary {\n    myNotificationSummary {\n      ...NotificationSummaryFields\n    }\n  }\n"): (typeof documents)["\n  query GetNotificationSummary {\n    myNotificationSummary {\n      ...NotificationSummaryFields\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -673,6 +723,10 @@ export function gql(source: "\n  mutation RenameChannel($input: RenameChannelInp
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
+export function gql(source: "\n  mutation SetConversationNotifMode($conversationId: String!, $mode: ConversationNotifMode!, $muteUntil: String) {\n    setConversationNotifMode(conversationId: $conversationId, mode: $mode, muteUntil: $muteUntil) {\n      conversationId\n      mode\n      muteUntil\n      pushEnabled\n      emailEnabled\n    }\n  }\n"): (typeof documents)["\n  mutation SetConversationNotifMode($conversationId: String!, $mode: ConversationNotifMode!, $muteUntil: String) {\n    setConversationNotifMode(conversationId: $conversationId, mode: $mode, muteUntil: $muteUntil) {\n      conversationId\n      mode\n      muteUntil\n      pushEnabled\n      emailEnabled\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
 export function gql(source: "\n  mutation UnarchiveChannel($workspaceId: ID!, $channelId: ID!) {\n    unarchiveChannel(workspaceId: $workspaceId, channelId: $channelId) {\n      success\n      channelId\n      name\n    }\n  }\n"): (typeof documents)["\n  mutation UnarchiveChannel($workspaceId: ID!, $channelId: ID!) {\n    unarchiveChannel(workspaceId: $workspaceId, channelId: $channelId) {\n      success\n      channelId\n      name\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
@@ -766,6 +820,18 @@ export function gql(source: "\n  mutation AcceptWorkspaceInvite($input: AcceptIn
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "\n  query GetWorkspaceInviteInfo($token: String!) {\n    getWorkspaceInviteInfo(token: $token) {\n      workspaceName\n      workspaceLogoUrl\n      inviterName\n    }\n  }\n"): (typeof documents)["\n  query GetWorkspaceInviteInfo($token: String!) {\n    getWorkspaceInviteInfo(token: $token) {\n      workspaceName\n      workspaceLogoUrl\n      inviterName\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation MarkNotificationRead($ids: [ID!]!) {\n    markNotificationRead(ids: $ids)\n  }\n"): (typeof documents)["\n  mutation MarkNotificationRead($ids: [ID!]!) {\n    markNotificationRead(ids: $ids)\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation MarkAllNotificationsRead {\n    markAllNotificationsRead\n  }\n"): (typeof documents)["\n  mutation MarkAllNotificationsRead {\n    markAllNotificationsRead\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  query GetNotifications($limit: Int, $cursor: String, $isRead: Boolean) {\n    notifications(limit: $limit, cursor: $cursor, isRead: $isRead) {\n      edges {\n        cursor\n        node {\n          id\n          entityType\n          category\n          isRead\n          createdAt\n          data\n        }\n      }\n      pageInfo {\n        hasNextPage\n        endCursor\n      }\n    }\n  }\n"): (typeof documents)["\n  query GetNotifications($limit: Int, $cursor: String, $isRead: Boolean) {\n    notifications(limit: $limit, cursor: $cursor, isRead: $isRead) {\n      edges {\n        cursor\n        node {\n          id\n          entityType\n          category\n          isRead\n          createdAt\n          data\n        }\n      }\n      pageInfo {\n        hasNextPage\n        endCursor\n      }\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
