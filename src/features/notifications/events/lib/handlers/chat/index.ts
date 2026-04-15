@@ -2,6 +2,7 @@
  * Chat Notification Handlers Index
  */
 
+export { registerChatMessageNewHandler } from './chat-message-new-handler'
 export { registerChatMessageMentionHandler } from './chat-message-mention-handler'
 export { registerChatDmCreatedHandler } from './chat-dm-created-handler'
 export { registerChatGroupMemberAddedHandler } from './chat-group-member-added-handler'

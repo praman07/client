@@ -22,6 +22,9 @@ export function useSetConversationNotifMode() {
       queryClient.invalidateQueries({
         queryKey: conversationKeys.notifPreference(variables.conversationId),
       });
+      queryClient.invalidateQueries({
+        queryKey: conversationKeys.detail(variables.conversationId),
+      });
     },
   });
 }

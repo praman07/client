@@ -29,11 +29,14 @@ export const CONVERSATION_FIELDS_FRAGMENT = gql(`
     createdAt
     updatedAt
     deletedAt
-    members {
+        members {
       ...ConversationMemberFields
     }
+    myNotifMode
+    isMuted
   }
-`)
+`
+)
 
 export const CONVERSATION_MEMBER_FIELDS_FRAGMENT = gql(`
   fragment ConversationMemberFields on ConversationMember {

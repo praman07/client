@@ -11,16 +11,19 @@ import type { DownstreamContract } from '../types'
 // PAYLOADS — Derived from backend Zod schemas
 // ═══════════════════════════════════════════════════════════════
 
+export interface ChatMessageNewPayload {
+  messageId: string
+  conversationId: string
+  conversationType: "CHANNEL" | "GROUP" | "DIRECT"
+  actorId: string
+  preview: string
+}
+
 export interface ChatMessageMentionPayload {
   messageId: string
   conversationId: string
-  conversationName: string | null
-  workspaceId: string
-  workspaceSlug: string
   mentionedUserId: string
   actorId: string
-  actorName: string
-  contentPreview: string
 }
 
 export interface ChatDmCreatedPayload {
@@ -62,9 +65,8 @@ export interface ChatMessageReplyPayload {
   messageId: string
   parentMessageId: string
   conversationId: string
-  workspaceId: string
   actorId: string
-  actorName: string
+  preview: string
 }
 
 export interface ChatReactionAddedPayload {
@@ -214,7 +216,7 @@ export interface PageMentionPayload {
   mentionedUserId: string
   actorId: string
   actorName: string
-  contentPreview: string
+  preview: string
 }
 
 export interface ProjectArchivedPayload {
@@ -421,6 +423,7 @@ export interface VaultStorageLimitPayload {
 // CONTRACT TYPES — Discriminated unions for type-safe handling
 // ═══════════════════════════════════════════════════════════════
 
+export type ChatMessageNewContract = DownstreamContract<NotificationDownstreamEvent.ChatMessageNew, ChatMessageNewPayload>
 export type ChatMessageMentionContract = DownstreamContract<NotificationDownstreamEvent.ChatMessageMention, ChatMessageMentionPayload>
 export type ChatDmCreatedContract = DownstreamContract<NotificationDownstreamEvent.ChatDmCreated, ChatDmCreatedPayload>
 export type ChatGroupMemberAddedContract = DownstreamContract<NotificationDownstreamEvent.ChatGroupMemberAdded, ChatGroupMemberAddedPayload>
@@ -473,6 +476,7 @@ export type VaultStorageLimitContract = DownstreamContract<NotificationDownstrea
 // ═══════════════════════════════════════════════════════════════
 
 export type NotificationDownstreamContract =
+  | ChatMessageNewContract
   | ChatMessageMentionContract
   | ChatDmCreatedContract
   | ChatGroupMemberAddedContract

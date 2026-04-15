@@ -16,6 +16,7 @@ import { createDomainPlugin } from '@/shared/ws/domains'
 import { registerNotificationHandlers } from '@/features/notifications/events'
 import { NotificationDownstreamEvent } from '@/shared/contracts/notification/events'
 import { createLogger } from '@/shared/lib/logger'
+import '@/shared/ui/toast/config'
 
 const log = createLogger('ws:notification-plugin')
 

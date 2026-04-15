@@ -8,6 +8,7 @@ import { Guard } from '@/shared/lib/auth'
 import { ArchiveChannelDialog } from '@/features/chat/archive-channel'
 import { UnarchiveChannelDialog } from '@/features/chat/unarchive-channel'
 import { DeleteChannelDialog } from '@/features/chat/delete-channel'
+import { ChannelNotificationSettings } from '@/features/chat/set-conversation-notif-mode'
 
 interface SettingsTabProps {
   conversation: ConversationFieldsFragment
@@ -157,6 +158,15 @@ export function SettingsTab({ conversation }: SettingsTabProps) {
             to control access via roles.
           </p>
         </div>
+      </section>
+
+      {/* ── Notification settings ── */}
+      <section className="space-y-2.5">
+        <ChannelNotificationSettings
+          conversationId={conversation.id}
+          initialMode={conversation.myNotifMode ?? undefined}
+          initialMuteUntil={undefined}
+        />
       </section>
 
       {/* ── Dialogs ── */}

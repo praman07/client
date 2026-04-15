@@ -11,6 +11,7 @@ import {
   registerChatDmCreatedHandler,
   registerChatGroupMemberAddedHandler,
   registerChatMessageMentionHandler,
+  registerChatMessageNewHandler,
   registerChatMessageReplyHandler,
   registerChatReactionAddedHandler,
   registerChatThreadCreatedHandler,
@@ -62,6 +63,7 @@ import type { NotificationEventHandlerContext } from '../model/types'
 
 export function registerNotificationHandlers(context: NotificationEventHandlerContext) {
   const cleanups = [
+    registerChatMessageNewHandler(context),
     registerChatMessageMentionHandler(context),
     registerChatDmCreatedHandler(context),
     registerChatGroupMemberAddedHandler(context),

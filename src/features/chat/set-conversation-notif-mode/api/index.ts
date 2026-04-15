@@ -1,5 +1,5 @@
 import { gql } from '@/gql';
-import { conversationKeys } from '@/entities/conversation/api/query-keys';
+import { conversationKeys } from '@/entities/conversation';
 
 export { conversationKeys };
 

@@ -27,7 +27,7 @@ export const ALL = true
 // ═══════════════════════════════════════════════════════════════
 export const GROUPS = {
   // ─── Feature groups ──────────────────────────────────────────
-  chat: false,
+  chat: true,
   auth: false,
   whiteboard: false,
   'whiteboard-sync': false,
@@ -37,8 +37,8 @@ export const GROUPS = {
   issues: false,        // all issues feature logs
 
   // ─── Module groups ────────────────────────────────────────────
-  ws: false,            // all ws:* logs (alias: websocket below)
-  websocket: false,     // legacy alias — use 'ws' group flag instead
+  ws: true,            // all ws:* logs (alias: websocket below)
+  websocket: true,     // legacy alias — use 'ws' group flag instead
   resequencer: false,   // all reseq:* logs
   shared: false,        // all shared:* utility logs
   yjs: false,           // all yjs:* logs
@@ -58,6 +58,8 @@ export const FILES: Record<string, boolean | undefined> = {
   'app:events': false,
   'app:onboarding': false,
   'app:workspace': false,
+  'ws:notification-plugin': false,
+  'ws:auth-plugin': false,
 
   // ─────────────────────────────────────────────────────────────
   // WebSocket Module
@@ -115,7 +117,6 @@ export const FILES: Record<string, boolean | undefined> = {
   'chat:messageList': false,
   'chat:memberCache': false,
   'chat:message': false,
-  'chat:authors': false,
   'chat:sidebar': false,
   'chat:outbox': false,
   'chat:ack': false,
@@ -141,6 +142,8 @@ export const FILES: Record<string, boolean | undefined> = {
   // Core
   'whiteboard:canvas': false,
   'whiteboard:presence': false,
+  'ws:whiteboard-plugin': true,
+  'ws:pages-plugin': true,
   'whiteboard:sidebar': false,
   'whiteboard:validation': false,
   'whiteboard:ydoc-registry': false,
@@ -183,6 +186,8 @@ export const FILES: Record<string, boolean | undefined> = {
   // Sync orchestrator
   'pages:use-page-sync': true,
   'pages:page-editor': true,
+  'pages:page-cover': true,
+  'pages:page-title': true,
   // Sync phases
   'pages:phase1:server-sync': true,
   'pages:phase2:indexeddb-sync': true,
@@ -219,6 +224,8 @@ export const FILES: Record<string, boolean | undefined> = {
   'pages:reorder-page-hook': false,
   'pages:unarchive-page-hook': false,
   'pages:unlock-page-hook': false,
+  'pages:update-page-details-hook': false,
+  'pages:send-page-update': true,
 
   // ─────────────────────────────────────────────────────────────
   // Issues Feature
@@ -239,6 +246,7 @@ export const FILES: Record<string, boolean | undefined> = {
   // BlockNote integration
   'shared:blocknote:upload-adapter': false,  // blocknote-upload-adapter.ts
   'shared:blocknote:url-refresher': false,   // blocknote-url-refresher.ts
+  'shared:blocknote:file-utils': false,      // blocknote-file-utils.ts
 }
 
 export type GroupFlag = keyof typeof GROUPS
