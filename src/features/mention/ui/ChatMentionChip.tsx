@@ -7,8 +7,7 @@
  * @layer Features → mention/ui
  */
 import { SearchEntityType } from '@/gql/graphql'
-import { buildEntityRoute } from '@/features/mention/lib/navigate-to-entity'
-import { useNavigate } from '@tanstack/react-router'
+import { useNavigateToEntity } from '@/features/mention/lib/navigate-to-entity'
 
 // ── Props ─────────────────────────────────────────────────────────────────────
 
@@ -34,7 +33,7 @@ const DEFAULT_COLOR = 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-
 // ── Component ─────────────────────────────────────────────────────────────────
 
 export function ChatMentionChip({ entityId, entityType, displayText }: ChatMentionChipProps) {
-  const navigate = useNavigate()
+  const navigateToEntity = useNavigateToEntity()
 
   const isOrphaned = !entityId
   const colorClass = isOrphaned
@@ -45,8 +44,7 @@ export function ChatMentionChip({ entityId, entityType, displayText }: ChatMenti
     e.preventDefault()
     e.stopPropagation()
     if (isOrphaned) return
-    const route = buildEntityRoute(entityId, entityType)
-    if (route) void navigate({ to: route })
+    navigateToEntity(entityId, entityType)
   }
 
   return (

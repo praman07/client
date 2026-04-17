@@ -1,49 +1,88 @@
 /**
- * navigate-to-entity — derives a TanStack Router route from an entityId.
+ * useNavigateToEntity — type-safe mention chip navigation hook.
  *
- * EntityId prefix convention (FR-013):
- *   PAGE        ids contain no prefix — routed by type field
- *   ISSUE       ids contain no prefix — routed by type field
- *   VAULT_FILE  ids contain no prefix — routed by type field
- *   WHITEBOARD  ids contain no prefix — routed by type field
- *   USER        profile pages — routed by type field
+ * Uses TanStack Router's fully-typed `navigate()` with literal `to` values
+ * from the generated `FileRoutesByTo` union so broken routes are compile errors.
  *
- * Returns null if the entityType is unrecognised or if entityId is empty.
- * MentionChip callers should guard against null before navigating.
+ * `to` values come from `FileRoutesByTo` (NOT `fullPaths`) — index routes are
+ * addressed WITHOUT a trailing slash in the `to` union:
+ *   kanban/index.tsx → to: '/workspace/$workspaceSlug/project/$projectSlug/kanban'
+ *   vault/index.tsx  → to: '/workspace/$workspaceSlug/project/$projectSlug/vault'
+ *
+ * Route mapping:
+ *   PAGE         → .../pages/$pageId
+ *   ISSUE        → .../kanban  ?issueId=
+ *   VAULT_FILE   → .../vault
+ *   VAULT_FOLDER → .../vault   ?folderId=
+ *   WHITEBOARD   → .../whiteboard/$boardId
+ *   USER         → no-op (global profile not yet built)
  *
  * @layer Features → mention/lib
  */
+import { useNavigate, useParams } from '@tanstack/react-router'
 import { SearchEntityType } from '@/gql/graphql'
 
-// Route segments per entity type
-const TYPE_SEGMENT: Partial<Record<string, string>> = {
-  [SearchEntityType.Page]:        'pages',
-  [SearchEntityType.Issue]:       'issues',
-  [SearchEntityType.VaultFile]:   'vault',
-  [SearchEntityType.VaultFolder]: 'vault',
-  [SearchEntityType.Whiteboard]:  'whiteboards',
-  [SearchEntityType.User]:        'members',
-}
-
 /**
- * Build a relative route path for the given entity.
- *
- * Pattern: /<segment>/<entityId>
- *
- * The project/workspace prefix is intentionally omitted because navigation
- * happens inside an already-scoped project context. TanStack Router's
- * `useNavigate` will resolve this relative to the current route tree.
- *
- * Returns null for unknown entity types or empty entityIds.
+ * Returns a stable `navigateToEntity(entityId, entityType)` callback.
+ * Must be rendered inside the project route tree so `workspaceSlug`
+ * and `projectSlug` params are available.
  */
-export function buildEntityRoute(
-  entityId: string,
-  entityType: string,
-): string | null {
-  if (!entityId || !entityType) return null
+export function useNavigateToEntity() {
+  const navigate = useNavigate()
+  // Anchored to the project layout — both params are always present here
+  const { workspaceSlug, projectSlug } = useParams({
+    from: '/_app/workspace/$workspaceSlug/project/$projectSlug',
+  })
 
-  const segment = TYPE_SEGMENT[entityType]
-  if (!segment) return null
+  return function navigateToEntity(entityId: string, entityType: string): void {
+    if (!entityId || !entityType) return
 
-  return `${segment}/${entityId}`
+    switch (entityType) {
+      case SearchEntityType.Page:
+        void navigate({
+          to: '/workspace/$workspaceSlug/project/$projectSlug/pages/$pageId',
+          params: { workspaceSlug, projectSlug, pageId: entityId },
+        })
+        break
+
+      case SearchEntityType.Issue:
+        // No dedicated /issues/:id route — navigate to kanban with ?issueId=
+        void navigate({
+          to: '/workspace/$workspaceSlug/project/$projectSlug/kanban',
+          params: { workspaceSlug, projectSlug },
+          search: (prev) => ({ ...prev, issueId: entityId }),
+        })
+        break
+
+      case SearchEntityType.VaultFile:
+        void navigate({
+          to: '/workspace/$workspaceSlug/project/$projectSlug/vault',
+          params: { workspaceSlug, projectSlug },
+          search: { folderId: undefined },
+        })
+        break
+
+      case SearchEntityType.VaultFolder:
+        void navigate({
+          to: '/workspace/$workspaceSlug/project/$projectSlug/vault',
+          params: { workspaceSlug, projectSlug },
+          search: (prev) => ({ ...prev, folderId: entityId }),
+        })
+        break
+
+      case SearchEntityType.Whiteboard:
+        void navigate({
+          to: '/workspace/$workspaceSlug/project/$projectSlug/whiteboard/$boardId',
+          params: { workspaceSlug, projectSlug, boardId: entityId },
+        })
+        break
+
+      case SearchEntityType.User:
+        // Global user profile not yet built — no navigation
+        break
+
+      default:
+        break
+    }
+  }
 }

@@ -10,6 +10,9 @@ export const Route = createFileRoute(
   '/_app/workspace/$workspaceSlug/project/$projectSlug/kanban/',
 )({
   component: RouteComponent,
+  validateSearch: (search: Record<string, unknown>) => ({
+    issueId: typeof search.issueId === 'string' ? search.issueId : undefined,
+  }),
   pendingComponent: IssuesBoardSkeleton,
   errorComponent: ({ error, reset }) => (
     <RouteError error={error} reset={reset} />
