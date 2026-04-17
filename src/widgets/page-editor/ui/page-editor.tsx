@@ -29,6 +29,7 @@ import {
 } from '@/shared/lib/blocknote'
 import { VaultFileSource, markFilesUnreferenced } from '@/shared/api/vault'
 import { usePageById } from '@/entities/page'
+import { mentionSchema, MentionMenuController, useSyncMentions } from '@/features/mention'
 
 const log = createLogger('pages:page-editor')
 
@@ -142,6 +143,7 @@ function PageEditorBody({
   )
 
   const editor = useCreateBlockNote({
+    schema: mentionSchema,
     collaboration: {
       // System Design Decision: We strictly map to the "blocknote" XmlFragment. Using other identifiers (e.g. "default") prevents proper BlockNote hydration.
       fragment: ydoc.getXmlFragment('blocknote'),
@@ -183,12 +185,21 @@ function PageEditorBody({
   // the server S3 cleanup job to confidently mark assets for deletion.
   const savedFileIdsRef = useRef<Set<string>>(new Set())
 
+  // ── Mention sync ─────────────────────────────────────────────────────────
+  // Debounced onChange → extract chips → createMentions / deleteMentionsBySource
+  const syncMentions = useSyncMentions({
+    sourceEntityId:   pageId,
+    sourceEntityType: 'PAGE',
+    editor,
+  })
+
   useEffect(() => {
     let debounceTimer: ReturnType<typeof setTimeout> | null = null
 
     const unsubscribe = editor.onChange(() => {
       if (debounceTimer) clearTimeout(debounceTimer)
 
+      // File unreferenced tracking (5s debounce)
       debounceTimer = setTimeout(async () => {
         const currentIds = extractActiveFileIds(editor.document)
         const removed = [...savedFileIdsRef.current].filter(
@@ -220,6 +231,9 @@ function PageEditorBody({
           log.warn('[UNREF_MARK_FAILED]', { err, removedIds: removed, pageId })
         }
       }, 5_000)
+
+      // Mention sync (1.5s debounce — handled internally by useSyncMentions)
+      syncMentions()
     })
 
     return () => {
@@ -227,7 +241,7 @@ function PageEditorBody({
       unsubscribe()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [editor, pageId])
+  }, [editor, pageId, syncMentions])
 
   return (
     <div className="flex flex-col h-full overflow-auto">
@@ -250,6 +264,8 @@ function PageEditorBody({
             triggerCharacter="/"
             suggestionMenuComponent={NotionSlashMenu}
           />
+          {/* @-mention suggestion menu — backed by TanStack entity cache */}
+          <MentionMenuController projectId={project.id} />
         </BlockNoteView>
       </div>
     </div>

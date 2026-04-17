@@ -7,7 +7,7 @@
 
 import { toast as sonnerToast } from 'sonner'
 import type { ToastData, ToastVariant } from './types'
-import { Avatar, AvatarImage, AvatarFallback } from '@/shared/ui/primitives/avatar'
+import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/primitives/avatar'
 import { cn } from '@/shared/lib/utils'
 
 /**

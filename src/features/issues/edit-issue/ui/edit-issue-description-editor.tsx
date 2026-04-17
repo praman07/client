@@ -26,6 +26,7 @@ import {
 } from '@/shared/lib/blocknote'
 import { VaultFileSource, markFilesUnreferenced } from '@/shared/api/vault'
 import { createLogger } from '@/shared/lib/logger'
+import { mentionSchema, MentionMenuController, useSyncMentions } from '@/features/mention'
 
 interface EditIssueDescriptionEditorProps {
   issueId: string
@@ -74,6 +75,7 @@ export function EditIssueDescriptionEditor({
     : undefined
 
   const editor = useCreateBlockNote({
+    schema: mentionSchema,
     dictionary: {
       ...en,
       placeholders: {
@@ -93,7 +95,11 @@ export function EditIssueDescriptionEditor({
 
   // Expose editor instance to parent for synchronous reads on save
   useEffect(() => {
-    if (editorRef) editorRef.current = editor
+    if (editorRef) {
+      // Cast to `any` — parent only calls .document; safe regardless of schema generics
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      editorRef.current = editor as any
+    }
   }, [editor, editorRef])
 
   // Vault unreferenced tracking: seed savedFileIdsRef when S3 content loads.
@@ -172,6 +178,18 @@ export function EditIssueDescriptionEditor({
     })
   }, [editor, onChange, getToken, issueId])
 
+  // ── Mention sync ─────────────────────────────────────────────────────────
+  const syncMentions = useSyncMentions({
+    sourceEntityId:   issueId,
+    sourceEntityType: 'ISSUE',
+    editor,
+  })
+  useEffect(() => {
+    return editor.onChange(() => {
+      syncMentions()
+    })
+  }, [editor, syncMentions])
+
   if (isLoading) {
     return (
       <div className="py-2 text-sm text-muted-foreground animate-pulse">
@@ -186,6 +204,9 @@ export function EditIssueDescriptionEditor({
       editable={editable}
       theme="light"
       sideMenu={false}
-    />
+    >
+      {/* @-mention suggestion menu — backed by TanStack entity cache */}
+      {project?.id && <MentionMenuController projectId={project.id} />}
+    </BlockNoteView>
   )
 }

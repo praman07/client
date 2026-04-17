@@ -31,7 +31,7 @@ function findUserInDetailCache(
   actorId: string
 ): ResolvedUser | null {
   const key = conversationKeys.detail(conversationId)
-  const data = queryClient.getQueryData(key) as any
+  const data = queryClient.getQueryData(key)
   
   if (!data?.getConversation?.members) return null
   
@@ -71,7 +71,7 @@ function findUserInListCache(
   ]
 
   for (const key of listKeys) {
-    const data = queryClient.getQueryData(key) as any
+    const data = queryClient.getQueryData(key)
     if (!data?.getUserConversations?.edges) continue
     
     const edge = data.getUserConversations.edges.find(
@@ -148,7 +148,7 @@ function findConversationInDetailCache(
   conversationId: string
 ): ResolvedConversation | null {
   const key = conversationKeys.detail(conversationId)
-  const data = queryClient.getQueryData(key) as any
+  const data = queryClient.getQueryData(key)
   
   if (data?.getConversation) {
     return {
@@ -181,7 +181,7 @@ function findConversationInListCache(
   ]
 
   for (const key of listKeys) {
-    const data = queryClient.getQueryData(key) as any
+    const data = queryClient.getQueryData(key)
     if (!data?.getUserConversations?.edges) continue
     
     const edge = data.getUserConversations.edges.find(

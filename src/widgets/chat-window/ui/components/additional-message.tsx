@@ -29,15 +29,23 @@ import {
   AlertDialogTitle,
 } from '@/shared/ui/primitives/alert-dialog'
 import { db } from '@/shared/lib/db'
-import { addReaction, deleteMessage, removeReaction } from '@/features/chat/events/api'
-import { ReactionBadge, mergeReactionAdd, mergeReactionRemove } from '@/entities/reaction'
+import {
+  addReaction,
+  deleteMessage,
+  removeReaction,
+} from '@/features/chat/events/api'
+import {
+  ReactionBadge,
+  mergeReactionAdd,
+  mergeReactionRemove,
+} from '@/entities/reaction'
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from '@/shared/ui/primitives/popover'
 import { ChatAttachmentRenderer } from '@/features/chat/media'
-
+import { RichChatContent } from './RichChatContent'
 
 // Lazy-load the heavy emoji picker only when opened
 const EmojiPicker = lazy(() => import('@emoji-mart/react'))
@@ -61,8 +69,14 @@ export function AdditionalMessage({ message }: AdditionalMessageProps) {
   const { scrollToMessage } = useScrollToMessage()
 
   const currentContent = getSafeContent(message.content)
-  const { isEditing, editValue, setEditValue, startEdit, cancelEdit, submitEdit } =
-    useMessageEdit(message.id, currentContent)
+  const {
+    isEditing,
+    editValue,
+    setEditValue,
+    startEdit,
+    cancelEdit,
+    submitEdit,
+  } = useMessageEdit(message.id, currentContent)
 
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
   const [isPickerOpen, setIsPickerOpen] = useState(false)
@@ -95,14 +109,15 @@ export function AdditionalMessage({ message }: AdditionalMessageProps) {
 
       try {
         await db.transaction('rw', db.messages, async () => {
-          const current = await db.messages.where('id').equals(message.id).first()
+          const current = await db.messages
+            .where('id')
+            .equals(message.id)
+            .first()
           let reactions = (current?.reactions ?? []) as Array<ReactionGroup>
 
           // Find any emoji this user has already reacted with
           const userPrevReaction = reactions.find((r) =>
-            r.authorIds != null
-              ? r.authorIds.includes(user.id)
-              : r.hasReacted,
+            r.authorIds != null ? r.authorIds.includes(user.id) : r.hasReacted,
           )
 
           const isSameEmoji = userPrevReaction?.emoji === emoji
@@ -112,8 +127,15 @@ export function AdditionalMessage({ message }: AdditionalMessageProps) {
             emitOps.push(() => removeReaction(message.id, emoji))
           } else {
             if (userPrevReaction) {
-              reactions = mergeReactionRemove(reactions, userPrevReaction.emoji, user.id, user.id)
-              emitOps.push(() => removeReaction(message.id, userPrevReaction.emoji))
+              reactions = mergeReactionRemove(
+                reactions,
+                userPrevReaction.emoji,
+                user.id,
+                user.id,
+              )
+              emitOps.push(() =>
+                removeReaction(message.id, userPrevReaction.emoji),
+              )
             }
             reactions = mergeReactionAdd(reactions, emoji, user.id, user.id)
             emitOps.push(() => addReaction(message.id, emoji))
@@ -122,7 +144,9 @@ export function AdditionalMessage({ message }: AdditionalMessageProps) {
           await db.messages
             .where('id')
             .equals(message.id)
-            .modify((msg) => { msg.reactions = reactions })
+            .modify((msg) => {
+              msg.reactions = reactions
+            })
         })
 
         emitOps.forEach((fn) => fn())
@@ -203,11 +227,15 @@ export function AdditionalMessage({ message }: AdditionalMessageProps) {
                     <span>
                       Replying to{' '}
                       <strong className="text-foreground/70">
-                        @{getMemberInfo(parentMessage.authorId)?.fullName ?? parentMessage.authorId}
-                      </strong>
-                      {' '}
-                      <span className="text-muted-foreground/60 truncate">
-                        {getSafeContent(parentMessage.content).slice(0, 60)}
+                        @
+                        {getMemberInfo(parentMessage.authorId)?.fullName ??
+                          parentMessage.authorId}
+                      </strong>{' '}
+                      <span className="text-muted-foreground/60 truncate inline-flex items-center gap-0.5 flex-wrap">
+                        <RichChatContent
+                          content={parentMessage.content}
+                          maxChars={60}
+                        />
                       </span>
                     </span>
                   ) : (
@@ -217,7 +245,7 @@ export function AdditionalMessage({ message }: AdditionalMessageProps) {
               )}
 
               <MessageEventContent>
-                {currentContent}
+                <RichChatContent content={message.content} />
                 {message.isEdited && (
                   <span
                     className="ml-1 text-[10px] text-muted-foreground/60 italic select-none"
@@ -236,24 +264,27 @@ export function AdditionalMessage({ message }: AdditionalMessageProps) {
               </MessageEventContent>
 
               {/* ── Attachments ─────────────────────────────────────── */}
-              {!message.deletedAt && (message.metadata?.attachments ?? []).length > 0 && (
-                <div className="flex flex-col gap-1.5 mt-1.5">
-                  {message.metadata!.attachments!.map((attachment) => (
-                    <ChatAttachmentRenderer
-                      key={attachment.fileId}
-                      attachment={attachment}
-                    />
-                  ))}
-                </div>
-              )}
+              {!message.deletedAt &&
+                (message.metadata?.attachments ?? []).length > 0 && (
+                  <div className="flex flex-col gap-1.5 mt-1.5">
+                    {message.metadata!.attachments!.map((attachment) => (
+                      <ChatAttachmentRenderer
+                        key={attachment.fileId}
+                        attachment={attachment}
+                      />
+                    ))}
+                  </div>
+                )}
 
               {/* Hover action bar — visible to everyone on non-deleted messages */}
               {!message.deletedAt && (
-                <div className={cn(
-                  'absolute -top-3 right-2 z-10 items-center gap-0.5',
-                  'bg-background border border-border/60 rounded-lg shadow-md px-1 py-0.5',
-                  isPickerOpen ? 'flex' : 'hidden group-hover/msg:flex'
-                )}>
+                <div
+                  className={cn(
+                    'absolute -top-3 right-2 z-10 items-center gap-0.5',
+                    'bg-background border border-border/60 rounded-lg shadow-md px-1 py-0.5',
+                    isPickerOpen ? 'flex' : 'hidden group-hover/msg:flex',
+                  )}
+                >
                   {/* Emoji picker — lazy loaded */}
                   <Popover open={isPickerOpen} onOpenChange={setIsPickerOpen}>
                     <PopoverTrigger
@@ -267,7 +298,13 @@ export function AdditionalMessage({ message }: AdditionalMessageProps) {
                       align="end"
                       className="p-0 w-auto border-0 shadow-none bg-transparent ring-0"
                     >
-                      <Suspense fallback={<div className="p-4 text-xs text-muted-foreground">Loading…</div>}>
+                      <Suspense
+                        fallback={
+                          <div className="p-4 text-xs text-muted-foreground">
+                            Loading…
+                          </div>
+                        }
+                      >
                         <EmojiPicker
                           data={async () => {
                             const response = await import('@emoji-mart/data')
@@ -290,7 +327,9 @@ export function AdditionalMessage({ message }: AdditionalMessageProps) {
                         id: message.id,
                         authorId: message.authorId,
                         content: currentContent,
-                        displayName: getMemberInfo(message.authorId)?.fullName ?? message.authorId,
+                        displayName:
+                          getMemberInfo(message.authorId)?.fullName ??
+                          message.authorId,
                         contentSnippet: currentContent.slice(0, 80),
                       })
                     }
@@ -341,7 +380,8 @@ export function AdditionalMessage({ message }: AdditionalMessageProps) {
                 <button className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground mt-1.5 transition-colors">
                   <MessageSquare className="h-3 w-3" />
                   <span>
-                    {message.replyCount} {message.replyCount === 1 ? 'reply' : 'replies'}
+                    {message.replyCount}{' '}
+                    {message.replyCount === 1 ? 'reply' : 'replies'}
                   </span>
                 </button>
               )}

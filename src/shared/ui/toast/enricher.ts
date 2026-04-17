@@ -5,9 +5,9 @@
  * No API calls - uses existing cached state only.
  */
 
+import { resolveConversationFromCache, resolveUserFromCache } from './resolver'
 import type { ToastData, ToastUser } from './types'
-import type { ChatMessageNewPayload, ChatMessageMentionPayload, ChatMessageReplyPayload } from '@/shared/contracts/notification/downstream'
-import { resolveUserFromCache, resolveConversationFromCache } from './resolver'
+import type { ChatMessageMentionPayload, ChatMessageNewPayload, ChatMessageReplyPayload } from '@/shared/contracts/notification/downstream'
 
 /**
  * Get actor info from cache (TanStack Query → Redux → fallback)

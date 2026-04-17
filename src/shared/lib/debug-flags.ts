@@ -142,8 +142,6 @@ export const FILES: Record<string, boolean | undefined> = {
   // Core
   'whiteboard:canvas': false,
   'whiteboard:presence': false,
-  'ws:whiteboard-plugin': true,
-  'ws:pages-plugin': true,
   'whiteboard:sidebar': false,
   'whiteboard:validation': false,
   'whiteboard:ydoc-registry': false,
@@ -210,8 +208,6 @@ export const FILES: Record<string, boolean | undefined> = {
   'pages:indexeddb-cleanup': true,
   // Send
   'pages:send-page-update': true,
-  // UI
-  'pages:page-title': true,
   // Presence
   'pages:presence': true,
   // Mutation hooks (enable individually as needed)
@@ -225,7 +221,6 @@ export const FILES: Record<string, boolean | undefined> = {
   'pages:unarchive-page-hook': false,
   'pages:unlock-page-hook': false,
   'pages:update-page-details-hook': false,
-  'pages:send-page-update': true,
 
   // ─────────────────────────────────────────────────────────────
   // Issues Feature

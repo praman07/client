@@ -33,6 +33,8 @@ import {
   uploadChatMedia,
   useVaultQuota,
 } from '@/features/chat/media'
+import { ChatMentionTrigger } from '@/features/mention'
+import type { MentionRef } from '@/widgets/chat-window/ui/components/RichChatContent'
 
 interface MessageInputProps {
   channelId: string
@@ -45,6 +47,8 @@ export function MessageInput({ channelId, projectId, workspaceId, channelName }:
   const { userId, getToken } = useAuth()
   const queryClient = useQueryClient()
   const [content, setContent] = useState('')
+  const [mentions, setMentions] = useState<MentionRef[]>([])
+  const [isMentionMenuOpen, setIsMentionMenuOpen] = useState(false)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
   const { requestEdit } = useEditRequest()
   const { replyingTo, clearReply } = useReplyRequest()
@@ -61,8 +65,6 @@ export function MessageInput({ channelId, projectId, workspaceId, channelName }:
   // Keep refs so startUpload/picker callbacks always read fresh values
   // without needing to be in useCallback deps (which would recreate them on
   // every quota or attachment-count change).
-  // useLayoutEffect (no deps) runs synchronously after every render —
-  // same guarantee as bare assignment, but satisfies react-hooks/refs.
   const quotaRef = useRef(quota)
   const attachmentCountRef = useRef(pendingAttachments.length)
   useLayoutEffect(() => {
@@ -83,7 +85,6 @@ export function MessageInput({ channelId, projectId, workspaceId, channelName }:
         ? URL.createObjectURL(file)
         : undefined
 
-      // Stage immediately so preview appears at once
       const staged: StagedAttachment = {
         fileId: tempId,
         name: file.name,
@@ -91,12 +92,11 @@ export function MessageInput({ channelId, projectId, workspaceId, channelName }:
         sizeBytes: file.size,
         localPreviewUrl,
         uploadProgress: 0,
-        file,          // kept for retry on failure
+        file,
         failed: false,
       }
       setPendingAttachments((prev) => [...prev, staged])
 
-      // Per-file upload toast (bottom-left, Vault-style)
       const uploadToastId = toast.loading(`Uploading ${file.name}…`)
 
       try {
@@ -115,25 +115,17 @@ export function MessageInput({ channelId, projectId, workspaceId, channelName }:
           },
         })
 
-        // Replace temp entry with confirmed attachment (uploadProgress = undefined = done)
         setPendingAttachments((prev) =>
           prev.map((a) =>
             a.fileId === tempId
-              ? {
-                  ...result,
-                  localPreviewUrl,
-                  uploadProgress: undefined,  // undefined = fully confirmed, no spinner
-                }
+              ? { ...result, localPreviewUrl, uploadProgress: undefined }
               : a,
           ),
         )
 
         toast.success(`${file.name} ready`, { id: uploadToastId })
-
-        // Invalidate quota — file is now ACTIVE and counted
         invalidateVaultQuota(queryClient, projectId)
       } catch (err) {
-        // Mark as failed — keep the card visible with a retry button
         setPendingAttachments((prev) =>
           prev.map((a) =>
             a.fileId === tempId
@@ -149,7 +141,6 @@ export function MessageInput({ channelId, projectId, workspaceId, channelName }:
         }
       }
     },
-    // Only stable references in deps — quota and count come from refs above.
     [getToken, projectId, workspaceId, channelId, queryClient],
   )
 
@@ -157,7 +148,6 @@ export function MessageInput({ channelId, projectId, workspaceId, channelName }:
     (fileId: string) => {
       const attachment = pendingAttachments.find((a) => a.fileId === fileId)
       if (!attachment?.file) return
-      // Remove the failed entry (startUpload will re-stage it with a new tempId)
       setPendingAttachments((prev) => {
         const a = prev.find((x) => x.fileId === fileId)
         if (a?.localPreviewUrl?.startsWith('blob:')) URL.revokeObjectURL(a.localPreviewUrl)
@@ -195,20 +185,25 @@ export function MessageInput({ channelId, projectId, workspaceId, channelName }:
   const handleSend = async () => {
     const hasContent = content.trim().length > 0
     const confirmedAttachments = pendingAttachments
-      .filter((a) => a.uploadProgress === undefined)
+      .filter((a) => a.uploadProgress === undefined && !a.failed)
       .map(({ fileId, name, mimeType, sizeBytes, url }) => ({
         fileId, name, mimeType, sizeBytes, url,
       }))
     const hasAttachments = confirmedAttachments.length > 0
 
     if (!hasContent && !hasAttachments) return
-    if (isUploading) return  // block send while any upload is in progress
+    if (isUploading) return
 
-    const msg = content
+    // Serialize: plain string when no mentions, structured JSON when mentions present
+    const richContent = mentions.length > 0
+      ? JSON.stringify({ text: content, mentions })
+      : content
+
     const parentMessageId = replyingTo?.id
     const metadata = hasAttachments ? { attachments: confirmedAttachments } : undefined
 
     setContent('')
+    setMentions([])
     setPendingAttachments([])
     clearReply()
 
@@ -216,11 +211,20 @@ export function MessageInput({ channelId, projectId, workspaceId, channelName }:
       textareaRef.current.style.height = 'auto'
     }
 
-    await sendMessage(msg, channelId, projectId, userId || 'ANONYMOUS', parentMessageId, metadata)
+    await sendMessage(richContent, channelId, projectId, userId || 'ANONYMOUS', parentMessageId, metadata)
+
+    // TODO: createMentions for chat requires the server-assigned message CUID.
+    // sendMessage is WS fire-and-forget (returns void) — no ID is available here.
+    // Hook into new-message-handler.ts ACK path to create backlink records.
   }
 
-  const handleKeyDown = async (e: React.KeyboardEvent) => {
-    // ↑ shortcut: edit last own message when input is empty
+  // ── Keyboard handler ────────────────────────────────────────────────────────
+
+  const handleKeyDown = async (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    // 1. Let the mention menu consume the event first
+    if (ChatMentionTrigger._keyHandler?.(e)) return
+
+    // 2. ↑ shortcut: edit last own message when input is empty
     if (e.key === 'ArrowUp' && !content.trim()) {
       e.preventDefault()
       if (!userId) return
@@ -235,7 +239,8 @@ export function MessageInput({ channelId, projectId, workspaceId, channelName }:
       return
     }
 
-    if (e.key === 'Enter' && !e.shiftKey) {
+    // 3. Enter sends — but NOT while the mention menu is open
+    if (e.key === 'Enter' && !e.shiftKey && !isMentionMenuOpen) {
       e.preventDefault()
       void handleSend()
     }
@@ -255,7 +260,6 @@ export function MessageInput({ channelId, projectId, workspaceId, channelName }:
   }, [replyingTo])
 
   // Send button active state
-  // A 'failed' attachment is not uploading — it's broken. User must retry or remove it.
   const hasFailed = pendingAttachments.some((a) => a.failed === true)
   const canSend =
     (content.trim().length > 0 || pendingAttachments.some((a) => a.uploadProgress === undefined && !a.failed)) &&
@@ -263,7 +267,7 @@ export function MessageInput({ channelId, projectId, workspaceId, channelName }:
     !hasFailed
 
   return (
-    <div className="flex flex-col w-full shrink-0 z-20">
+    <div className="flex flex-col w-full shrink-0 z-20 relative">
 
       {/* ── Replying-To Banner ──────────────────────────────────── */}
       {replyingTo && (
@@ -283,11 +287,21 @@ export function MessageInput({ channelId, projectId, workspaceId, channelName }:
         </div>
       )}
 
+      {/* ── Mention Trigger ──────────────────────────────────────── */}
+      <ChatMentionTrigger
+        projectId={projectId}
+        content={content}
+        onContentChange={setContent}
+        mentions={mentions}
+        onMentionsChange={setMentions}
+        inputRef={textareaRef}
+        onMenuOpen={setIsMentionMenuOpen}
+      />
+
       <ChatToolbar className="pb-safe overflow-visible">
         <div
           className={cn(
             'flex flex-col w-full rounded-xl ring-1 ring-border/50 bg-card',
-            // 'focus-within:ring-primary/30 transition-all duration-150',
             replyingTo && 'rounded-tl-none rounded-tr-none',
           )}
         >
@@ -305,7 +319,11 @@ export function MessageInput({ channelId, projectId, workspaceId, channelName }:
               ref={textareaRef}
               placeholder={`Message #${channelName ?? channelId}…`}
               value={content}
-              onChange={(e) => setContent(e.target.value)}
+              onChange={(e) => {
+                setContent(e.target.value)
+                // Notify trigger after React flushes — selectionStart is accurate
+                requestAnimationFrame(() => ChatMentionTrigger._checkTrigger?.())
+              }}
               onKeyDown={handleKeyDown}
               onPaste={handlePaste}
               className="max-h-[180px] text-sm leading-relaxed"
@@ -318,7 +336,7 @@ export function MessageInput({ channelId, projectId, workspaceId, channelName }:
           {/* ── Zone 2: Action Bar ───────────────────────────── */}
           <div className="flex items-center justify-between px-3 h-11">
 
-            {/* Left: Attachment picker + pipe + disabled formatting buttons */}
+            {/* Left: Attachment picker + formatting buttons */}
             <div className="flex items-center gap-0.5">
               <ChatAttachmentPicker
                 currentAttachmentCount={pendingAttachments.length}
@@ -349,13 +367,28 @@ export function MessageInput({ channelId, projectId, workspaceId, channelName }:
               </Tooltip>
               <Tooltip>
                 <TooltipTrigger
-                  className="size-7 inline-flex items-center justify-center rounded-md text-muted-foreground opacity-50 cursor-not-allowed"
-                  disabled
-                  aria-label="Mention (coming soon)"
+                  className="size-7 inline-flex items-center justify-center rounded-md text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
+                  aria-label="Mention"
+                  onClick={() => {
+                    const textarea = textareaRef.current
+                    if (!textarea) return
+                    const pos = textarea.selectionStart ?? textarea.value.length
+                    const before = content.slice(0, pos)
+                    const after  = content.slice(pos)
+                    const needsSpace = before.length > 0 && !/\s$/.test(before)
+                    const insertion = needsSpace ? ' @' : '@'
+                    setContent(before + insertion + after)
+                    setTimeout(() => {
+                      textarea.focus()
+                      const nextPos = pos + insertion.length
+                      textarea.setSelectionRange(nextPos, nextPos)
+                      requestAnimationFrame(() => ChatMentionTrigger._checkTrigger?.())
+                    }, 0)
+                  }}
                 >
                   <AtSign className="size-3.5" />
                 </TooltipTrigger>
-                <TooltipContent side="top">Mention (coming soon)</TooltipContent>
+                <TooltipContent side="top">Mention</TooltipContent>
               </Tooltip>
             </div>
 

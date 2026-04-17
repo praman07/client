@@ -6,8 +6,8 @@
  */
 
 import { registerToastConfig } from './types'
-import type { ChatMessageNewPayload, ChatMessageMentionPayload, ChatMessageReplyPayload } from '@/shared/contracts/notification/downstream'
-import { enrichChatMessageNew, enrichChatMention, enrichChatReply } from './enricher'
+import { enrichChatMention, enrichChatMessageNew, enrichChatReply } from './enricher'
+import type { ChatMessageMentionPayload, ChatMessageNewPayload, ChatMessageReplyPayload } from '@/shared/contracts/notification/downstream'
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Chat Notifications

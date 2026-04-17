@@ -42,6 +42,7 @@ type Query {
   allPermissions(workspaceId: ID!): [Permission!]!
   projectPermissions(workspaceId: ID!, projectId: ID!): [Permission!]!
   projectContributorStats(projectId: ID!): [ContributorStats!]!
+  getProjectEntities(projectId: ID!): [SearchEntity!]!
   getThreadMessages(parentMessageId: ID!, limit: Int, beforeCursor: ID): [ChatMessage!]!
   getMessageById(messageId: ID!): ChatMessage
   getMessagesAfterCursor(channelId: ID!, afterCursor: ID!, limit: Int): [ChatMessage!]!
@@ -172,6 +173,9 @@ type Query {
   getIssueDescriptionUrl(issueId: ID!): IssueDescriptionUrl!
   activeContext(workspaceId: ID!, projectId: ID): ActiveUserContext!
   featureFlags: [FeatureFlagRecord!]!
+  getBacklinks(targetEntityId: ID!, limit: Int, cursor: ID, filters: BacklinkFilters): BacklinkResult!
+  getMentions(sourceEntityId: ID!): [Mention!]!
+  getMentionEvents(mentionId: ID!): [MentionEvent!]!
 }
 
 type Mutation {
@@ -381,6 +385,11 @@ type Mutation {
   """Step 2 of 2: verifies S3 upload and activates the description."""
   confirmIssueDescriptionUpload(input: ConfirmIssueDescriptionUploadInput!): ConfirmIssueDescriptionUploadResult!
   toggleFeatureFlag(input: ToggleFeatureFlagInput!): ToggleFlagResult!
+  createMentions(mentions: [CreateMentionInput!]!): [Mention!]!
+  updateMention(input: UpdateMentionInput!): Mention!
+  deleteMentions(mentionIds: [ID!]!): Boolean!
+  deleteMentionsBySource(sourceEntityId: ID!): Int!
+  orphanMentions(targetEntityId: ID!): Int!
 }
 
 input UpdateProfileInput {
@@ -903,6 +912,21 @@ type ContributorStats {
   avatarUrl: String
   assigned: Int!
   completed: Int!
+}
+
+enum SearchEntityType {
+  PAGE
+  ISSUE
+  VAULT_FILE
+  VAULT_FOLDER
+  WHITEBOARD
+  USER
+}
+
+type SearchEntity {
+  id: ID!
+  type: SearchEntityType!
+  name: String!
 }
 
 type Conversation {
@@ -2045,4 +2069,78 @@ type ToggleFlagResult {
   success: Boolean!
   flagKey: String!
   enabled: Boolean!
+}
+
+input BacklinkFilters {
+  sourceType: String
+  actorId: String
+  dateFrom: DateTime
+  dateTo: DateTime
+}
+
+type Backlink {
+  id: ID!
+  sourceEntityId: String!
+  sourceEntityType: String!
+  targetEntityId: String!
+  targetEntityType: String!
+  context: String
+  createdAt: DateTime!
+  sourceMention: Mention!
+}
+
+type BacklinkResult {
+  backlinks: [Backlink!]!
+  total: Int!
+  hasMore: Boolean!
+}
+
+type Mention {
+  id: ID!
+  sourceEntityId: String!
+  sourceEntityType: String!
+  targetEntityId: String!
+  targetEntityType: String!
+  displayText: String!
+  sourceLocation: JSON
+  tier: MentionTier!
+  status: MentionStatus!
+  createdAt: DateTime!
+  createdById: String!
+}
+
+enum MentionTier {
+  TIER_1
+  TIER_2
+  TIER_3
+}
+
+enum MentionStatus {
+  ACTIVE
+  ORPHANED
+  REMOVED
+}
+
+type MentionEvent {
+  id: ID!
+  mentionId: String!
+  eventType: String!
+  payload: JSON!
+  actorId: String
+  createdAt: DateTime!
+}
+
+input CreateMentionInput {
+  sourceEntityId: ID!
+  sourceEntityType: String!
+  targetEntityId: ID!
+  targetEntityType: String!
+  displayText: String!
+  sourceLocation: JSON
+}
+
+input UpdateMentionInput {
+  mentionId: ID!
+  displayText: String
+  sourceLocation: JSON
 }

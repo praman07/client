@@ -26,6 +26,8 @@ import { BlockNoteView } from '@blocknote/shadcn'
 
 import { en } from '@blocknote/core/locales'
 import type { BlockNoteEditor } from '@blocknote/core'
+import { mentionSchema } from '@/features/mention'
+import { MentionMenuController } from '@/features/mention'
 
 interface IssueDescriptionEditorProps {
    
@@ -33,14 +35,18 @@ interface IssueDescriptionEditorProps {
    
   editorRef: React.MutableRefObject<BlockNoteEditor<any> | null>
   editable?: boolean
+  /** Project ID — used to load entity cache for @-mention suggestions */
+  projectId: string
 }
 
 export function IssueDescriptionEditor({
   onChange,
   editorRef,
   editable = true,
+  projectId,
 }: IssueDescriptionEditorProps) {
   const editor = useCreateBlockNote({
+    schema: mentionSchema,
     // ── Placeholder ────────────────────────────────────────────────────────────
     // Spread the default `en` dictionary then override only the one string.
     // A bare partial cast (`as any`) replaces the entire dictionary object,
@@ -67,7 +73,10 @@ export function IssueDescriptionEditor({
   // Expose the editor instance up to the parent form so it can read
   // editor.document synchronously on submit without going through state.
   useEffect(() => {
-    editorRef.current = editor
+    // Cast to `any` — the parent only calls .document on this ref, which is
+    // available regardless of the schema generic parameters.
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    editorRef.current = editor as any
   }, [editor, editorRef])
 
   // Propagate content changes up so the parent can track whether
@@ -94,6 +103,9 @@ export function IssueDescriptionEditor({
       // Remove the floating formatting toolbar — issue descriptions are
       // simple; full toolbar is available in the edit modal.
       formattingToolbar={false}
-    />
+    >
+      {/* @-mention suggestion menu — backed by TanStack entity cache */}
+      <MentionMenuController projectId={projectId} />
+    </BlockNoteView>
   )
 }

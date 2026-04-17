@@ -46,6 +46,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/shared/ui/primitives/popover'
+import { RichChatContent } from './RichChatContent'
 
 // Lazy-load the heavy emoji picker only when opened
 const EmojiPicker = lazy(() => import('@emoji-mart/react'))
@@ -266,7 +267,7 @@ export function PrimaryMessage({ message, className }: PrimaryMessageProps) {
               )}
 
               <MessageEventContent>
-                {currentContent}
+                <RichChatContent content={message.content} />
                 {message.isEdited && (
                   <span
                     className="ml-1 text-[10px] text-muted-foreground/60 italic select-none"

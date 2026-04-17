@@ -26,6 +26,10 @@ type Documents = {
     "\n  fragment IssueStatusFields on IssueStatus {\n    id\n    projectId\n    name\n    color\n    icon\n    position\n    isSystem\n    issueCount\n  }\n": typeof types.IssueStatusFieldsFragmentDoc,
     "\n  fragment IssueCardFields on Issue {\n    id\n    number\n    title\n    priority\n    position\n    dueDate\n    updatedAt\n    status {\n      id\n      name\n      color\n      icon\n    }\n    assignee {\n      id\n      fullName\n      avatarUrl\n    }\n    labels {\n      id\n      name\n      color\n    }\n  }\n": typeof types.IssueCardFieldsFragmentDoc,
     "\n  fragment IssueDetailFields on Issue {\n    ...IssueCardFields\n    descriptionS3Key\n    createdBy {\n      id\n      fullName\n      avatarUrl\n    }\n    createdAt\n  }\n": typeof types.IssueDetailFieldsFragmentDoc,
+    "\n  fragment MentionFields on Mention {\n    id\n    sourceEntityId\n    sourceEntityType\n    targetEntityId\n    targetEntityType\n    displayText\n    sourceLocation\n    tier\n    status\n    createdAt\n    createdById\n  }\n": typeof types.MentionFieldsFragmentDoc,
+    "\n  fragment BacklinkFields on Backlink {\n    id\n    sourceEntityId\n    sourceEntityType\n    targetEntityId\n    targetEntityType\n    context\n    createdAt\n    sourceMention {\n      ...MentionFields\n    }\n  }\n": typeof types.BacklinkFieldsFragmentDoc,
+    "\n  fragment BacklinkResultFields on BacklinkResult {\n    backlinks {\n      ...BacklinkFields\n    }\n    total\n    hasMore\n  }\n": typeof types.BacklinkResultFieldsFragmentDoc,
+    "\n  fragment MentionEventFields on MentionEvent {\n    id\n    mentionId\n    eventType\n    payload\n    actorId\n    createdAt\n  }\n": typeof types.MentionEventFieldsFragmentDoc,
     "\n  fragment NotificationSummaryFields on NotificationSummary {\n    globalMode\n    emailEnabled\n    pushEnabled\n    isDndActive\n    dndUntil\n    categories {\n      category\n      email\n      push\n      inApp\n    }\n  }\n": typeof types.NotificationSummaryFieldsFragmentDoc,
     "\n  fragment CategoryPreferenceFields on CategoryPreferenceSetting {\n    category\n    email\n    push\n    inApp\n  }\n": typeof types.CategoryPreferenceFieldsFragmentDoc,
     "\n  mutation SetGlobalNotifMode($mode: GlobalNotifMode!) {\n    setGlobalNotifMode(mode: $mode)\n  }\n": typeof types.SetGlobalNotifModeDocument,
@@ -119,6 +123,15 @@ type Documents = {
     "\n  mutation DeleteIssueStatus($input: DeleteIssueStatusInput!) {\n    deleteIssueStatus(input: $input) {\n      success\n    }\n  }\n": typeof types.DeleteIssueStatusDocument,
     "\n  mutation AcceptWorkspaceInvite($input: AcceptInviteInput!) {\n    acceptWorkspaceInvite(input: $input) {\n      success\n      message\n      workspaceSlug\n    }\n  }\n": typeof types.AcceptWorkspaceInviteDocument,
     "\n  query GetWorkspaceInviteInfo($token: String!) {\n    getWorkspaceInviteInfo(token: $token) {\n      workspaceName\n      workspaceLogoUrl\n      inviterName\n    }\n  }\n": typeof types.GetWorkspaceInviteInfoDocument,
+    "\n  mutation CreateMentions($mentions: [CreateMentionInput!]!) {\n    createMentions(mentions: $mentions) {\n      id\n      sourceEntityId\n      sourceEntityType\n      targetEntityId\n      targetEntityType\n      displayText\n      sourceLocation\n      tier\n      status\n      createdAt\n      createdById\n    }\n  }\n": typeof types.CreateMentionsDocument,
+    "\n  mutation DeleteMentionsBySource($sourceEntityId: ID!) {\n    deleteMentionsBySource(sourceEntityId: $sourceEntityId)\n  }\n": typeof types.DeleteMentionsBySourceDocument,
+    "\n  mutation DeleteMentions($mentionIds: [ID!]!) {\n    deleteMentions(mentionIds: $mentionIds)\n  }\n": typeof types.DeleteMentionsDocument,
+    "\n  query GetProjectEntities($projectId: ID!) {\n    getProjectEntities(projectId: $projectId) {\n      id\n      type\n      name\n    }\n  }\n": typeof types.GetProjectEntitiesDocument,
+    "\n  mutation OrphanMentions($targetEntityId: ID!) {\n    orphanMentions(targetEntityId: $targetEntityId)\n  }\n": typeof types.OrphanMentionsDocument,
+    "\n  mutation UpdateMention($input: UpdateMentionInput!) {\n    updateMention(input: $input) {\n      id\n      sourceEntityId\n      sourceEntityType\n      targetEntityId\n      targetEntityType\n      displayText\n      sourceLocation\n      tier\n      status\n      createdAt\n      createdById\n    }\n  }\n": typeof types.UpdateMentionDocument,
+    "\n  query GetBacklinks($targetEntityId: ID!, $limit: Int, $cursor: ID, $filters: BacklinkFilters) {\n    getBacklinks(targetEntityId: $targetEntityId, limit: $limit, cursor: $cursor, filters: $filters) {\n      backlinks {\n        id\n        sourceEntityId\n        sourceEntityType\n        targetEntityId\n        targetEntityType\n        context\n        createdAt\n        sourceMention {\n          id\n          displayText\n          sourceLocation\n          createdAt\n        }\n      }\n      total\n      hasMore\n    }\n  }\n": typeof types.GetBacklinksDocument,
+    "\n  query GetMentionEvents($mentionId: ID!) {\n    getMentionEvents(mentionId: $mentionId) {\n      id\n      mentionId\n      eventType\n      payload\n      actorId\n      createdAt\n    }\n  }\n": typeof types.GetMentionEventsDocument,
+    "\n  query GetMentions($sourceEntityId: ID!) {\n    getMentions(sourceEntityId: $sourceEntityId) {\n      id\n      sourceEntityId\n      sourceEntityType\n      targetEntityId\n      targetEntityType\n      displayText\n      sourceLocation\n      tier\n      status\n      createdAt\n      createdById\n    }\n  }\n": typeof types.GetMentionsDocument,
     "\n  mutation MarkNotificationRead($ids: [ID!]!) {\n    markNotificationRead(ids: $ids)\n  }\n": typeof types.MarkNotificationReadDocument,
     "\n  mutation MarkAllNotificationsRead {\n    markAllNotificationsRead\n  }\n": typeof types.MarkAllNotificationsReadDocument,
     "\n  query GetNotifications($limit: Int, $cursor: String, $isRead: Boolean) {\n    notifications(limit: $limit, cursor: $cursor, isRead: $isRead) {\n      edges {\n        cursor\n        node {\n          id\n          entityType\n          category\n          isRead\n          createdAt\n          data\n        }\n      }\n      pageInfo {\n        hasNextPage\n        endCursor\n      }\n    }\n  }\n": typeof types.GetNotificationsDocument,
@@ -212,6 +225,10 @@ const documents: Documents = {
     "\n  fragment IssueStatusFields on IssueStatus {\n    id\n    projectId\n    name\n    color\n    icon\n    position\n    isSystem\n    issueCount\n  }\n": types.IssueStatusFieldsFragmentDoc,
     "\n  fragment IssueCardFields on Issue {\n    id\n    number\n    title\n    priority\n    position\n    dueDate\n    updatedAt\n    status {\n      id\n      name\n      color\n      icon\n    }\n    assignee {\n      id\n      fullName\n      avatarUrl\n    }\n    labels {\n      id\n      name\n      color\n    }\n  }\n": types.IssueCardFieldsFragmentDoc,
     "\n  fragment IssueDetailFields on Issue {\n    ...IssueCardFields\n    descriptionS3Key\n    createdBy {\n      id\n      fullName\n      avatarUrl\n    }\n    createdAt\n  }\n": types.IssueDetailFieldsFragmentDoc,
+    "\n  fragment MentionFields on Mention {\n    id\n    sourceEntityId\n    sourceEntityType\n    targetEntityId\n    targetEntityType\n    displayText\n    sourceLocation\n    tier\n    status\n    createdAt\n    createdById\n  }\n": types.MentionFieldsFragmentDoc,
+    "\n  fragment BacklinkFields on Backlink {\n    id\n    sourceEntityId\n    sourceEntityType\n    targetEntityId\n    targetEntityType\n    context\n    createdAt\n    sourceMention {\n      ...MentionFields\n    }\n  }\n": types.BacklinkFieldsFragmentDoc,
+    "\n  fragment BacklinkResultFields on BacklinkResult {\n    backlinks {\n      ...BacklinkFields\n    }\n    total\n    hasMore\n  }\n": types.BacklinkResultFieldsFragmentDoc,
+    "\n  fragment MentionEventFields on MentionEvent {\n    id\n    mentionId\n    eventType\n    payload\n    actorId\n    createdAt\n  }\n": types.MentionEventFieldsFragmentDoc,
     "\n  fragment NotificationSummaryFields on NotificationSummary {\n    globalMode\n    emailEnabled\n    pushEnabled\n    isDndActive\n    dndUntil\n    categories {\n      category\n      email\n      push\n      inApp\n    }\n  }\n": types.NotificationSummaryFieldsFragmentDoc,
     "\n  fragment CategoryPreferenceFields on CategoryPreferenceSetting {\n    category\n    email\n    push\n    inApp\n  }\n": types.CategoryPreferenceFieldsFragmentDoc,
     "\n  mutation SetGlobalNotifMode($mode: GlobalNotifMode!) {\n    setGlobalNotifMode(mode: $mode)\n  }\n": types.SetGlobalNotifModeDocument,
@@ -305,6 +322,15 @@ const documents: Documents = {
     "\n  mutation DeleteIssueStatus($input: DeleteIssueStatusInput!) {\n    deleteIssueStatus(input: $input) {\n      success\n    }\n  }\n": types.DeleteIssueStatusDocument,
     "\n  mutation AcceptWorkspaceInvite($input: AcceptInviteInput!) {\n    acceptWorkspaceInvite(input: $input) {\n      success\n      message\n      workspaceSlug\n    }\n  }\n": types.AcceptWorkspaceInviteDocument,
     "\n  query GetWorkspaceInviteInfo($token: String!) {\n    getWorkspaceInviteInfo(token: $token) {\n      workspaceName\n      workspaceLogoUrl\n      inviterName\n    }\n  }\n": types.GetWorkspaceInviteInfoDocument,
+    "\n  mutation CreateMentions($mentions: [CreateMentionInput!]!) {\n    createMentions(mentions: $mentions) {\n      id\n      sourceEntityId\n      sourceEntityType\n      targetEntityId\n      targetEntityType\n      displayText\n      sourceLocation\n      tier\n      status\n      createdAt\n      createdById\n    }\n  }\n": types.CreateMentionsDocument,
+    "\n  mutation DeleteMentionsBySource($sourceEntityId: ID!) {\n    deleteMentionsBySource(sourceEntityId: $sourceEntityId)\n  }\n": types.DeleteMentionsBySourceDocument,
+    "\n  mutation DeleteMentions($mentionIds: [ID!]!) {\n    deleteMentions(mentionIds: $mentionIds)\n  }\n": types.DeleteMentionsDocument,
+    "\n  query GetProjectEntities($projectId: ID!) {\n    getProjectEntities(projectId: $projectId) {\n      id\n      type\n      name\n    }\n  }\n": types.GetProjectEntitiesDocument,
+    "\n  mutation OrphanMentions($targetEntityId: ID!) {\n    orphanMentions(targetEntityId: $targetEntityId)\n  }\n": types.OrphanMentionsDocument,
+    "\n  mutation UpdateMention($input: UpdateMentionInput!) {\n    updateMention(input: $input) {\n      id\n      sourceEntityId\n      sourceEntityType\n      targetEntityId\n      targetEntityType\n      displayText\n      sourceLocation\n      tier\n      status\n      createdAt\n      createdById\n    }\n  }\n": types.UpdateMentionDocument,
+    "\n  query GetBacklinks($targetEntityId: ID!, $limit: Int, $cursor: ID, $filters: BacklinkFilters) {\n    getBacklinks(targetEntityId: $targetEntityId, limit: $limit, cursor: $cursor, filters: $filters) {\n      backlinks {\n        id\n        sourceEntityId\n        sourceEntityType\n        targetEntityId\n        targetEntityType\n        context\n        createdAt\n        sourceMention {\n          id\n          displayText\n          sourceLocation\n          createdAt\n        }\n      }\n      total\n      hasMore\n    }\n  }\n": types.GetBacklinksDocument,
+    "\n  query GetMentionEvents($mentionId: ID!) {\n    getMentionEvents(mentionId: $mentionId) {\n      id\n      mentionId\n      eventType\n      payload\n      actorId\n      createdAt\n    }\n  }\n": types.GetMentionEventsDocument,
+    "\n  query GetMentions($sourceEntityId: ID!) {\n    getMentions(sourceEntityId: $sourceEntityId) {\n      id\n      sourceEntityId\n      sourceEntityType\n      targetEntityId\n      targetEntityType\n      displayText\n      sourceLocation\n      tier\n      status\n      createdAt\n      createdById\n    }\n  }\n": types.GetMentionsDocument,
     "\n  mutation MarkNotificationRead($ids: [ID!]!) {\n    markNotificationRead(ids: $ids)\n  }\n": types.MarkNotificationReadDocument,
     "\n  mutation MarkAllNotificationsRead {\n    markAllNotificationsRead\n  }\n": types.MarkAllNotificationsReadDocument,
     "\n  query GetNotifications($limit: Int, $cursor: String, $isRead: Boolean) {\n    notifications(limit: $limit, cursor: $cursor, isRead: $isRead) {\n      edges {\n        cursor\n        node {\n          id\n          entityType\n          category\n          isRead\n          createdAt\n          data\n        }\n      }\n      pageInfo {\n        hasNextPage\n        endCursor\n      }\n    }\n  }\n": types.GetNotificationsDocument,
@@ -448,6 +474,22 @@ export function gql(source: "\n  fragment IssueCardFields on Issue {\n    id\n  
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "\n  fragment IssueDetailFields on Issue {\n    ...IssueCardFields\n    descriptionS3Key\n    createdBy {\n      id\n      fullName\n      avatarUrl\n    }\n    createdAt\n  }\n"): (typeof documents)["\n  fragment IssueDetailFields on Issue {\n    ...IssueCardFields\n    descriptionS3Key\n    createdBy {\n      id\n      fullName\n      avatarUrl\n    }\n    createdAt\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  fragment MentionFields on Mention {\n    id\n    sourceEntityId\n    sourceEntityType\n    targetEntityId\n    targetEntityType\n    displayText\n    sourceLocation\n    tier\n    status\n    createdAt\n    createdById\n  }\n"): (typeof documents)["\n  fragment MentionFields on Mention {\n    id\n    sourceEntityId\n    sourceEntityType\n    targetEntityId\n    targetEntityType\n    displayText\n    sourceLocation\n    tier\n    status\n    createdAt\n    createdById\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  fragment BacklinkFields on Backlink {\n    id\n    sourceEntityId\n    sourceEntityType\n    targetEntityId\n    targetEntityType\n    context\n    createdAt\n    sourceMention {\n      ...MentionFields\n    }\n  }\n"): (typeof documents)["\n  fragment BacklinkFields on Backlink {\n    id\n    sourceEntityId\n    sourceEntityType\n    targetEntityId\n    targetEntityType\n    context\n    createdAt\n    sourceMention {\n      ...MentionFields\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  fragment BacklinkResultFields on BacklinkResult {\n    backlinks {\n      ...BacklinkFields\n    }\n    total\n    hasMore\n  }\n"): (typeof documents)["\n  fragment BacklinkResultFields on BacklinkResult {\n    backlinks {\n      ...BacklinkFields\n    }\n    total\n    hasMore\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  fragment MentionEventFields on MentionEvent {\n    id\n    mentionId\n    eventType\n    payload\n    actorId\n    createdAt\n  }\n"): (typeof documents)["\n  fragment MentionEventFields on MentionEvent {\n    id\n    mentionId\n    eventType\n    payload\n    actorId\n    createdAt\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -820,6 +862,42 @@ export function gql(source: "\n  mutation AcceptWorkspaceInvite($input: AcceptIn
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "\n  query GetWorkspaceInviteInfo($token: String!) {\n    getWorkspaceInviteInfo(token: $token) {\n      workspaceName\n      workspaceLogoUrl\n      inviterName\n    }\n  }\n"): (typeof documents)["\n  query GetWorkspaceInviteInfo($token: String!) {\n    getWorkspaceInviteInfo(token: $token) {\n      workspaceName\n      workspaceLogoUrl\n      inviterName\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation CreateMentions($mentions: [CreateMentionInput!]!) {\n    createMentions(mentions: $mentions) {\n      id\n      sourceEntityId\n      sourceEntityType\n      targetEntityId\n      targetEntityType\n      displayText\n      sourceLocation\n      tier\n      status\n      createdAt\n      createdById\n    }\n  }\n"): (typeof documents)["\n  mutation CreateMentions($mentions: [CreateMentionInput!]!) {\n    createMentions(mentions: $mentions) {\n      id\n      sourceEntityId\n      sourceEntityType\n      targetEntityId\n      targetEntityType\n      displayText\n      sourceLocation\n      tier\n      status\n      createdAt\n      createdById\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation DeleteMentionsBySource($sourceEntityId: ID!) {\n    deleteMentionsBySource(sourceEntityId: $sourceEntityId)\n  }\n"): (typeof documents)["\n  mutation DeleteMentionsBySource($sourceEntityId: ID!) {\n    deleteMentionsBySource(sourceEntityId: $sourceEntityId)\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation DeleteMentions($mentionIds: [ID!]!) {\n    deleteMentions(mentionIds: $mentionIds)\n  }\n"): (typeof documents)["\n  mutation DeleteMentions($mentionIds: [ID!]!) {\n    deleteMentions(mentionIds: $mentionIds)\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  query GetProjectEntities($projectId: ID!) {\n    getProjectEntities(projectId: $projectId) {\n      id\n      type\n      name\n    }\n  }\n"): (typeof documents)["\n  query GetProjectEntities($projectId: ID!) {\n    getProjectEntities(projectId: $projectId) {\n      id\n      type\n      name\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation OrphanMentions($targetEntityId: ID!) {\n    orphanMentions(targetEntityId: $targetEntityId)\n  }\n"): (typeof documents)["\n  mutation OrphanMentions($targetEntityId: ID!) {\n    orphanMentions(targetEntityId: $targetEntityId)\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  mutation UpdateMention($input: UpdateMentionInput!) {\n    updateMention(input: $input) {\n      id\n      sourceEntityId\n      sourceEntityType\n      targetEntityId\n      targetEntityType\n      displayText\n      sourceLocation\n      tier\n      status\n      createdAt\n      createdById\n    }\n  }\n"): (typeof documents)["\n  mutation UpdateMention($input: UpdateMentionInput!) {\n    updateMention(input: $input) {\n      id\n      sourceEntityId\n      sourceEntityType\n      targetEntityId\n      targetEntityType\n      displayText\n      sourceLocation\n      tier\n      status\n      createdAt\n      createdById\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  query GetBacklinks($targetEntityId: ID!, $limit: Int, $cursor: ID, $filters: BacklinkFilters) {\n    getBacklinks(targetEntityId: $targetEntityId, limit: $limit, cursor: $cursor, filters: $filters) {\n      backlinks {\n        id\n        sourceEntityId\n        sourceEntityType\n        targetEntityId\n        targetEntityType\n        context\n        createdAt\n        sourceMention {\n          id\n          displayText\n          sourceLocation\n          createdAt\n        }\n      }\n      total\n      hasMore\n    }\n  }\n"): (typeof documents)["\n  query GetBacklinks($targetEntityId: ID!, $limit: Int, $cursor: ID, $filters: BacklinkFilters) {\n    getBacklinks(targetEntityId: $targetEntityId, limit: $limit, cursor: $cursor, filters: $filters) {\n      backlinks {\n        id\n        sourceEntityId\n        sourceEntityType\n        targetEntityId\n        targetEntityType\n        context\n        createdAt\n        sourceMention {\n          id\n          displayText\n          sourceLocation\n          createdAt\n        }\n      }\n      total\n      hasMore\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  query GetMentionEvents($mentionId: ID!) {\n    getMentionEvents(mentionId: $mentionId) {\n      id\n      mentionId\n      eventType\n      payload\n      actorId\n      createdAt\n    }\n  }\n"): (typeof documents)["\n  query GetMentionEvents($mentionId: ID!) {\n    getMentionEvents(mentionId: $mentionId) {\n      id\n      mentionId\n      eventType\n      payload\n      actorId\n      createdAt\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  query GetMentions($sourceEntityId: ID!) {\n    getMentions(sourceEntityId: $sourceEntityId) {\n      id\n      sourceEntityId\n      sourceEntityType\n      targetEntityId\n      targetEntityType\n      displayText\n      sourceLocation\n      tier\n      status\n      createdAt\n      createdById\n    }\n  }\n"): (typeof documents)["\n  query GetMentions($sourceEntityId: ID!) {\n    getMentions(sourceEntityId: $sourceEntityId) {\n      id\n      sourceEntityId\n      sourceEntityType\n      targetEntityId\n      targetEntityType\n      displayText\n      sourceLocation\n      tier\n      status\n      createdAt\n      createdById\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
