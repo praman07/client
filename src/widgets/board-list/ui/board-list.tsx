@@ -103,7 +103,7 @@ export function BoardList({ workspaceId, projectId }: BoardListProps) {
       />
 
       {sortedBoards.length === 0 ? (
-        <div className="text-center py-16 text-muted-foreground">
+        <div className="text-center py-16 text-tertiary">
           <p>No boards found matching your filters</p>
         </div>
       ) : (

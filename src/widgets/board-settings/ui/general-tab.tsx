@@ -74,7 +74,7 @@ export function GeneralTab({ boardId }: GeneralTabProps) {
           placeholder="Enter board name..."
           disabled={isPending}
         />
-        <p className="text-xs text-muted-foreground">
+        <p className="text-12 text-secondary">
           The name will be visible to all collaborators
         </p>
       </div>
@@ -88,7 +88,7 @@ export function GeneralTab({ boardId }: GeneralTabProps) {
           rows={4}
           disabled={isPending}
         />
-        <p className="text-xs text-muted-foreground">
+        <p className="text-12 text-secondary">
           Optional description to help others understand the board's purpose
         </p>
       </div>

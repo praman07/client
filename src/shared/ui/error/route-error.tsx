@@ -27,21 +27,21 @@ export function RouteError({ error, reset }: RouteErrorProps) {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-[50vh] p-4 animate-in fade-in zoom-in-95 duration-300">
-      <Card className="w-full max-w-md shadow-lg border-destructive/20">
+      <Card className="w-full max-w-md shadow-raised-100 border-danger-strong/20">
         <CardHeader className="text-center pb-2">
           <div className="flex justify-center mb-4">
-            <div className="p-3 bg-destructive/10 rounded-full ring-8 ring-destructive/5">
-              <AlertTriangleIcon className="w-8 h-8 text-destructive" />
+            <div className="p-3 bg-danger-subtle rounded-full ring-8 ring-danger-subtle/5">
+              <AlertTriangleIcon className="w-8 h-8 text-danger-primary" />
             </div>
           </div>
-          <CardTitle className="text-xl">Something went wrong</CardTitle>
+          <CardTitle className="text-18">Something went wrong</CardTitle>
           <CardDescription>
             We encountered an unexpected error while loading this page.
           </CardDescription>
         </CardHeader>
 
         <CardContent className="space-y-4">
-          <div className="p-3 text-sm font-mono text-destructive bg-destructive/5 rounded-md border border-destructive/10 overflow-auto max-h-32">
+          <div className="p-3 text-13 font-mono text-danger-primary bg-danger-subtle rounded-md border border-danger-strong/10 overflow-auto max-h-32">
             {error instanceof Error ? error.message : 'Unknown error occurred'}
           </div>
         </CardContent>

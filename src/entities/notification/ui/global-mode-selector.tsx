@@ -36,10 +36,10 @@ export function GlobalModeSelector({
         <label
           key={mode.value}
           className={cn(
-            'flex items-start gap-3 p-3 rounded-lg border cursor-pointer transition-colors',
-            'hover:bg-muted/50',
-            value === mode.value && 'border-primary bg-primary/5',
-            disabled && 'opacity-50 cursor-not-allowed'
+            'flex items-start gap-3 p-3 rounded-lg border border-subtle cursor-pointer transition-colors',
+            'hover:bg-layer-1-hover',
+            value === mode.value && 'border-accent-strong bg-accent-subtle',
+            disabled && 'text-disabled pointer-events-none'
           )}
         >
           <input
@@ -52,8 +52,8 @@ export function GlobalModeSelector({
             className="mt-1"
           />
           <div>
-            <div className="font-medium">{mode.label}</div>
-            <div className="text-sm text-muted-foreground">
+            <div className="text-14 font-medium text-primary">{mode.label}</div>
+            <div className="text-13 text-secondary">
               {mode.description}
             </div>
           </div>

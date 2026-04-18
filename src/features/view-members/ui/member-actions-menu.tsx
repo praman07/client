@@ -73,7 +73,7 @@ export function MemberActionsMenu({
     <>
       <DropdownMenu>
         <DropdownMenuTrigger
-          className="inline-flex h-7 w-7 items-center justify-center rounded-md text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors outline-none focus-visible:ring-1 focus-visible:ring-ring/50"
+          className="inline-flex h-7 w-7 items-center justify-center rounded-md text-tertiary hover:text-primary hover:bg-layer-transparent-hover transition-colors outline-none"
         >
           <MoreHorizontal className="h-4 w-4" />
         </DropdownMenuTrigger>
@@ -111,7 +111,7 @@ export function MemberActionsMenu({
             <AlertDialogTitle>Remove Member</AlertDialogTitle>
             <AlertDialogDescription>
               Are you sure you want to remove{' '}
-              <span className="font-semibold text-foreground">
+              <span className="font-semibold text-primary">
                 {member.user.fullName || member.user.email}
               </span>{' '}
               from this workspace? This action cannot be undone.
@@ -120,7 +120,7 @@ export function MemberActionsMenu({
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
             <AlertDialogAction
-              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              className="bg-danger-primary text-on-color hover:bg-danger-primary/90"
               onClick={() => {
                 removeMember({ memberId: member.id })
                 setConfirmRemove(false)

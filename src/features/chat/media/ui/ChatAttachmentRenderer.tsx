@@ -43,14 +43,14 @@ interface ChatAttachmentRendererProps {
 // ── File type icon helper ─────────────────────────────────────────────────────
 
 function FileTypeIcon({ mimeType, className }: { mimeType: string; className?: string }) {
-  if (mimeType.startsWith('video/')) return <Film className={cn('text-blue-400', className)} />
-  if (mimeType.startsWith('audio/')) return <Music className={cn('text-purple-400', className)} />
-  if (mimeType === 'application/pdf') return <FileText className={cn('text-red-400', className)} />
+  if (mimeType.startsWith('video/')) return <Film className={cn('text-accent-primary', className)} />
+  if (mimeType.startsWith('audio/')) return <Music className={cn('text-accent-secondary', className)} />
+  if (mimeType === 'application/pdf') return <FileText className={cn('text-danger-primary', className)} />
   if (mimeType.startsWith('text/') || mimeType === 'application/json')
-    return <FileCode className={cn('text-green-400', className)} />
+    return <FileCode className={cn('text-success-primary', className)} />
   if (mimeType.includes('zip') || mimeType.includes('tar') || mimeType.includes('gzip'))
-    return <Archive className={cn('text-yellow-500', className)} />
-  return <FileText className={cn('text-muted-foreground', className)} />
+    return <Archive className={cn('text-warning-primary', className)} />
+  return <FileText className={cn('text-secondary', className)} />
 }
 
 // ── Image renderer — cache-first, dimension-locked to prevent layout shift ─────
@@ -133,15 +133,15 @@ function ImageAttachment({
     return (
       <div
         className={cn(
-          'flex items-center gap-2 p-3 rounded-lg border border-border/60 bg-card',
+          'flex items-center gap-2 p-3 rounded-lg border border-subtle bg-layer-1',
           'max-w-[320px] min-h-[56px]',
           className,
         )}
       >
-        <AlertCircle className="size-4 shrink-0 text-muted-foreground/60" />
+        <AlertCircle className="size-4 shrink-0 text-secondary" />
         <div className="flex flex-col min-w-0">
-          <span className="text-xs font-medium text-foreground truncate">{name}</span>
-          <span className="text-xs text-muted-foreground">
+          <span className="text-11 font-medium text-primary truncate">{name}</span>
+          <span className="text-11 text-secondary">
             Image failed to load · {formatBytes(sizeBytes)}
           </span>
         </div>
@@ -159,7 +159,7 @@ function ImageAttachment({
       */}
       <div
         className={cn(
-          'relative max-w-[320px] rounded-lg border border-border/60 bg-card overflow-hidden cursor-zoom-in shadow-sm hover:brightness-95 transition-all duration-150',
+          'relative max-w-[320px] rounded-lg border border-subtle bg-layer-1 overflow-hidden cursor-zoom-in shadow-sm hover:brightness-95 transition-all duration-150',
           className,
         )}
         style={{ aspectRatio: '4 / 3' }}
@@ -172,7 +172,7 @@ function ImageAttachment({
         {/* Skeleton placeholder — visible until image is decoded */}
         {!loaded && (
           <div className="absolute inset-0 flex items-center justify-center">
-            <ImageIcon className="size-8 text-muted-foreground/20" />
+            <ImageIcon className="size-8 text-tertiary" />
           </div>
         )}
         <img
@@ -188,7 +188,7 @@ function ImageAttachment({
       </div>
       {expanded && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-backdrop backdrop-blur-sm p-4"
           onClick={() => setExpanded(false)}
           role="dialog"
           aria-label={`Full size: ${name}`}
@@ -200,7 +200,7 @@ function ImageAttachment({
             className="max-w-full max-h-full object-contain rounded-lg select-none"
           />
           <button
-            className="absolute top-4 right-4 text-white/70 hover:text-white transition-colors"
+            className="absolute top-4 right-4 text-on-color/70 hover:text-on-color transition-colors"
             onClick={(e) => { e.stopPropagation(); setExpanded(false) }}
             aria-label="Close image"
           >
@@ -301,7 +301,7 @@ function VideoAttachment({
     // Checking IndexDB
     if (state === 'checking') {
       return (
-        <div className="flex items-center gap-2 text-muted-foreground text-xs p-3">
+        <div className="flex items-center gap-2 text-secondary text-11 p-3">
           <Loader2 className="size-3.5 animate-spin shrink-0" />
           <span>Loading video…</span>
         </div>
@@ -319,7 +319,7 @@ function VideoAttachment({
             preload="none"
             title={name}
           />
-          <p className="text-xs text-muted-foreground mt-0.5 px-1 truncate">
+          <p className="text-11 text-secondary mt-0.5 px-1 truncate">
             {name} · {formatBytes(sizeBytes)}
           </p>
         </>
@@ -330,16 +330,16 @@ function VideoAttachment({
     if (state === 'downloading') {
       return (
         <div className="flex items-center gap-3 p-3">
-          <Film className="size-5 shrink-0 text-blue-400" />
+          <Film className="size-5 shrink-0 text-accent-primary" />
           <div className="flex flex-col min-w-0 flex-1 gap-1">
-            <span className="text-sm font-medium text-foreground truncate">{name}</span>
-            <div className="w-full bg-muted rounded-full h-1">
+            <span className="text-13 font-medium text-primary truncate">{name}</span>
+            <div className="w-full bg-layer-2 rounded-full h-1">
               <div
-                className="bg-primary h-1 rounded-full transition-all"
+                className="bg-accent-primary h-1 rounded-full transition-all"
                 style={{ width: `${downloadProgress}%` }}
               />
             </div>
-            <span className="text-xs text-muted-foreground">{downloadProgress}%</span>
+            <span className="text-11 text-secondary">{downloadProgress}%</span>
           </div>
         </div>
       )
@@ -349,14 +349,14 @@ function VideoAttachment({
     if (state === 'error') {
       return (
         <div className="flex items-center gap-3 p-3">
-          <AlertCircle className="size-5 shrink-0 text-destructive/70" />
+          <AlertCircle className="size-5 shrink-0 text-danger-primary" />
           <div className="flex flex-col min-w-0 flex-1">
-            <span className="text-sm font-medium text-foreground truncate">{name}</span>
-            <span className="text-xs text-muted-foreground">{formatBytes(sizeBytes)}</span>
+            <span className="text-13 font-medium text-primary truncate">{name}</span>
+            <span className="text-11 text-secondary">{formatBytes(sizeBytes)}</span>
           </div>
           <button
             onClick={handleDownload}
-            className="shrink-0 p-1.5 rounded hover:bg-accent text-muted-foreground hover:text-foreground transition-colors"
+            className="shrink-0 p-1.5 rounded hover:bg-layer-2 text-secondary hover:text-primary transition-colors"
             title="Retry download"
             aria-label="Retry download"
           >
@@ -369,14 +369,14 @@ function VideoAttachment({
     // Default: uncached — show "Download to view" card
     return (
       <div className="flex items-center gap-3 p-3">
-        <Film className="size-5 shrink-0 text-blue-400" />
+        <Film className="size-5 shrink-0 text-accent-primary" />
         <div className="flex flex-col min-w-0 flex-1">
-          <span className="text-sm font-medium text-foreground truncate">{name}</span>
-          <span className="text-xs text-muted-foreground">{formatBytes(sizeBytes)} · Video</span>
+          <span className="text-13 font-medium text-primary truncate">{name}</span>
+          <span className="text-11 text-secondary">{formatBytes(sizeBytes)} · Video</span>
         </div>
         <button
           onClick={handleDownload}
-          className="shrink-0 flex items-center gap-1.5 px-2 py-1 rounded text-xs font-medium bg-primary/10 hover:bg-primary/20 text-primary transition-colors"
+          className="shrink-0 flex items-center gap-1.5 px-2 py-1 rounded text-11 font-medium bg-accent-subtle hover:bg-accent-subtle-hover text-primary transition-colors"
           title="Download to view"
           aria-label="Download video to play"
         >
@@ -393,7 +393,7 @@ function VideoAttachment({
         // Stable container: all states render inside this same box.
         // min-h-[56px] ensures the virtualizer always measures at least this height.
         // max-w-[320px] matches file card width; cached state expands to max-w-[480px] via child.
-        'rounded-lg border border-border/60 bg-card overflow-hidden',
+        'rounded-lg border border-subtle bg-layer-1 overflow-hidden',
         state === 'cached' ? 'max-w-[480px]' : 'max-w-[320px] min-h-[56px]',
         className,
       )}
@@ -416,17 +416,17 @@ function FileCard({
   sizeBytes: number
 }) {
   return (
-    <div className="flex items-center gap-3 p-3 rounded-lg border border-border/60 bg-card max-w-[320px] group/fc hover:bg-accent/20 transition-colors">
+    <div className="flex items-center gap-3 p-3 rounded-lg border border-subtle bg-layer-1 max-w-[320px] group/fc hover:bg-layer-2 transition-colors">
       <FileTypeIcon mimeType={mimeType} className="size-5 shrink-0" />
       <div className="flex flex-col min-w-0 flex-1">
-        <span className="text-sm font-medium text-foreground truncate">{name}</span>
-        <span className="text-xs text-muted-foreground">{formatBytes(sizeBytes)}</span>
+        <span className="text-13 font-medium text-primary truncate">{name}</span>
+        <span className="text-11 text-secondary">{formatBytes(sizeBytes)}</span>
       </div>
       {url && (
         <a
           href={url}
           download={name}
-          className="shrink-0 p-1.5 rounded hover:bg-accent text-muted-foreground hover:text-foreground transition-colors"
+          className="shrink-0 p-1.5 rounded hover:bg-layer-2 text-secondary hover:text-primary transition-colors"
           title={`Download ${name}`}
           aria-label={`Download ${name}`}
           onClick={(e) => e.stopPropagation()}
@@ -447,8 +447,8 @@ function AttachmentTombstone({ reason }: { reason: 'deleted' | 'forbidden' | 'er
     error: 'Could not load attachment.',
   }
   return (
-    <div className="flex items-center gap-2 text-xs text-muted-foreground italic py-1 border-l-2 border-muted-foreground/20 pl-2">
-      <AlertCircle className="size-3.5 shrink-0 text-muted-foreground/60" />
+    <div className="flex items-center gap-2 text-11 text-secondary italic py-1 border-l-2 border-subtle pl-2">
+      <AlertCircle className="size-3.5 shrink-0 text-tertiary" />
       <span>{messages[reason]}</span>
     </div>
   )
@@ -460,9 +460,9 @@ function AudioAttachment({ url, name, sizeBytes, className }: {
   url: string; name: string; sizeBytes: number; className?: string
 }) {
   return (
-    <div className={cn('max-w-[320px] rounded-lg border border-border/60 bg-card px-3 pt-2 pb-1.5', className)}>
+    <div className={cn('max-w-[320px] rounded-lg border border-subtle bg-layer-1 px-3 pt-2 pb-1.5', className)}>
       <audio src={url} controls className="w-full h-9" preload="metadata" />
-      <p className="text-xs text-muted-foreground mt-1 truncate">
+      <p className="text-11 text-secondary mt-1 truncate">
         {name} · {formatBytes(sizeBytes)}
       </p>
     </div>
@@ -482,7 +482,7 @@ export function ChatAttachmentRenderer({
   // Loading — show a minimal spinner only if no initial URL available
   if (status === 'loading') {
     return (
-      <div className={cn('flex items-center gap-2 text-muted-foreground text-xs py-1', className)}>
+      <div className={cn('flex items-center gap-2 text-secondary text-11 py-1', className)}>
         <Loader2 className="size-3.5 animate-spin" />
         <span>Loading attachment…</span>
       </div>

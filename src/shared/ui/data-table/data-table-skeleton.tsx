@@ -10,9 +10,9 @@ export function DataTableSkeleton({
   rowCount = 5,
 }: DataTableSkeletonProps) {
   return (
-    <div className="rounded-xl border border-border/40 overflow-hidden bg-card/20">
+    <div className="rounded-xl border border-subtle/40 overflow-hidden bg-layer-1/20">
       {/* Header skeleton */}
-      <div className="flex items-center gap-8 px-4 py-3 border-b border-border/40 bg-muted/30">
+      <div className="flex items-center gap-8 px-4 py-3 border-b border-subtle/40 bg-layer-1/30">
         {Array.from({ length: columnCount }).map((_, i) => (
           <Skeleton key={i} className="h-3 w-20" />
         ))}
@@ -21,7 +21,7 @@ export function DataTableSkeleton({
       {Array.from({ length: rowCount }).map((_, i) => (
         <div
           key={i}
-          className="flex items-center gap-8 px-4 py-3.5 border-b border-border/20 last:border-0"
+          className="flex items-center gap-8 px-4 py-3.5 border-b border-subtle/20 last:border-0"
         >
           {Array.from({ length: columnCount }).map((_, j) => (
             <Skeleton key={j} className="h-3.5 w-32" />

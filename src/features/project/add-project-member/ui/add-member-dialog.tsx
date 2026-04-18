@@ -101,9 +101,9 @@ export function AddMemberDialog({
           {/* Role selector */}
           {assignableRoles.length > 0 && (
             <div className="space-y-1.5 flex flex-col">
-              <label 
-                htmlFor="project-role" 
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+              <label
+                htmlFor="project-role"
+                className="text-13 font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
               >
                 Role
               </label>
@@ -112,7 +112,7 @@ export function AddMemberDialog({
                 onValueChange={(val) => val && setSelectedRoleId(val)}
               >
                 <SelectTrigger id="project-role" className="w-full">
-                  <span className="flex-1 text-left text-sm truncate">
+                  <span className="flex-1 text-left text-13 truncate">
                     {assignableRoles.find((r) => r.id === selectedRoleId)?.name ?? 'Select a role'}
                   </span>
                 </SelectTrigger>
@@ -129,11 +129,11 @@ export function AddMemberDialog({
 
           {/* Member list */}
           <div className="space-y-1.5 flex flex-col">
-            <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+            <label className="text-13 font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
               Member
             </label>
             {isLoading ? (
-              <div className="py-8 text-center text-sm text-muted-foreground border rounded-md">
+              <div className="py-8 text-center text-13 text-secondary border border-subtle rounded-md">
                 Loading members...
               </div>
             ) : availableMembers.length === 0 ? (
@@ -161,21 +161,21 @@ export function AddMemberDialog({
                           setSelectedUserId(isSelected ? null : member.user.id)
                         }
                         className={cn(
-                          'flex w-full items-center gap-3 rounded-sm px-3 py-2 text-left transition-colors hover:bg-muted/50 hover:text-foreground',
-                          isSelected && 'bg-muted/50',
+                          'flex w-full items-center gap-3 rounded-xs px-3 py-2 text-left transition-colors hover:bg-layer-1-hover hover:text-primary',
+                          isSelected && 'bg-layer-1',
                         )}
                       >
                         <Avatar className="h-8 w-8 shrink-0">
                           <AvatarImage src={member.user.avatarUrl ?? ''} />
-                          <AvatarFallback className="text-xs bg-muted text-muted-foreground border">
+                          <AvatarFallback className="text-11 bg-layer-1 text-secondary border border-subtle">
                             {getInitials(member.user.fullName ?? member.user.email)}
                           </AvatarFallback>
                         </Avatar>
                         <div className="min-w-0 flex-1">
-                          <p className="text-sm font-medium truncate tracking-tight text-foreground">
+                          <p className="text-13 font-medium truncate tracking-tight text-primary">
                             {member.user.fullName ?? 'Unknown'}
                           </p>
-                          <p className="text-xs text-muted-foreground truncate">
+                          <p className="text-11 text-secondary truncate">
                             {member.user.email}
                           </p>
                         </div>

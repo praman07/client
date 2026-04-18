@@ -19,39 +19,39 @@ const variantStyles: Record<ToastVariant, {
   indicatorText: string
 }> = {
   default: {
-    border: 'border-l-4 border-l-blue-500',
-    indicatorBg: 'bg-blue-500/10',
-    indicatorText: 'text-blue-600 dark:text-blue-400',
+    border: 'border-l-4 border-l-accent-primary',
+    indicatorBg: 'bg-accent-primary/10',
+    indicatorText: 'text-accent-primary',
   },
   mention: {
-    border: 'border-l-4 border-l-orange-500',
-    indicatorBg: 'bg-orange-500/10',
-    indicatorText: 'text-orange-600 dark:text-orange-400',
+    border: 'border-l-4 border-l-warning-primary',
+    indicatorBg: 'bg-warning-subtle',
+    indicatorText: 'text-warning-primary',
   },
   reply: {
-    border: 'border-l-4 border-l-green-500',
-    indicatorBg: 'bg-green-500/10',
-    indicatorText: 'text-green-600 dark:text-green-400',
+    border: 'border-l-4 border-l-success-primary',
+    indicatorBg: 'bg-success-subtle',
+    indicatorText: 'text-success-primary',
   },
   success: {
-    border: 'border-l-4 border-l-emerald-500',
-    indicatorBg: 'bg-emerald-500/10',
-    indicatorText: 'text-emerald-600 dark:text-emerald-400',
+    border: 'border-l-4 border-l-success-primary',
+    indicatorBg: 'bg-success-subtle',
+    indicatorText: 'text-success-primary',
   },
   error: {
-    border: 'border-l-4 border-l-red-500',
-    indicatorBg: 'bg-red-500/10',
-    indicatorText: 'text-red-600 dark:text-red-400',
+    border: 'border-l-4 border-l-danger-primary',
+    indicatorBg: 'bg-danger-subtle',
+    indicatorText: 'text-danger-primary',
   },
   warning: {
-    border: 'border-l-4 border-l-amber-500',
-    indicatorBg: 'bg-amber-500/10',
-    indicatorText: 'text-amber-600 dark:text-amber-400',
+    border: 'border-l-4 border-l-warning-primary',
+    indicatorBg: 'bg-warning-subtle',
+    indicatorText: 'text-warning-primary',
   },
   system: {
-    border: 'border-l-4 border-l-purple-500',
-    indicatorBg: 'bg-purple-500/10',
-    indicatorText: 'text-purple-600 dark:text-purple-400',
+    border: 'border-l-4 border-l-accent-primary',
+    indicatorBg: 'bg-accent-subtle',
+    indicatorText: 'text-accent-primary',
   },
 }
 
@@ -86,31 +86,31 @@ function getVariantIndicator(variant: ToastVariant): React.ReactNode {
   switch (variant) {
     case 'mention':
       return (
-        <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-orange-500/10 text-orange-600 dark:text-orange-400">
+        <span className="text-11 font-medium px-2 py-0.5 rounded-full bg-warning-subtle text-warning-primary">
           @mentioned you
         </span>
       )
     case 'reply':
       return (
-        <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-green-500/10 text-green-600 dark:text-green-400">
+        <span className="text-11 font-medium px-2 py-0.5 rounded-full bg-success-subtle text-success-primary">
           replied to your message
         </span>
       )
     case 'success':
       return (
-        <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
+        <span className="text-11 font-medium px-2 py-0.5 rounded-full bg-success-subtle text-success-primary">
           Success
         </span>
       )
     case 'error':
       return (
-        <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-red-500/10 text-red-600 dark:text-red-400">
+        <span className="text-11 font-medium px-2 py-0.5 rounded-full bg-danger-subtle text-danger-primary">
           Error
         </span>
       )
     case 'warning':
       return (
-        <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-600 dark:text-amber-400">
+        <span className="text-11 font-medium px-2 py-0.5 rounded-full bg-warning-subtle text-warning-primary">
           Warning
         </span>
       )
@@ -153,7 +153,7 @@ function renderToast(data: ToastData) {
   return (
     <div
       className={cn(
-        'flex items-start gap-3 p-3 bg-popover border rounded-lg shadow-lg cursor-pointer hover:bg-accent/50 transition-colors w-96',
+        'flex items-start gap-3 p-3 bg-surface-2 border border-subtle rounded-lg shadow-overlay-100 cursor-pointer hover:bg-layer-1-hover transition-colors w-96',
         styles.border
       )}
     >
@@ -164,26 +164,26 @@ function renderToast(data: ToastData) {
           avatarUrl={data.user.avatarUrl}
         />
       ) : (
-        <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center">
-          <span className="text-xs font-medium text-muted-foreground">?</span>
+        <div className="w-8 h-8 rounded-full bg-layer-2 flex items-center justify-center">
+          <span className="text-11 font-medium text-tertiary">?</span>
         </div>
       )}
       
       {/* Content */}
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2 flex-wrap">
-          <span className="font-semibold text-sm truncate">{data.title}</span>
+          <span className="font-semibold text-13 truncate">{data.title}</span>
           {indicator}
         </div>
         
         {data.subtitle && (
-          <div className="text-xs text-muted-foreground truncate mt-0.5">
+          <div className="text-12 text-tertiary truncate mt-0.5">
             {data.subtitle}
           </div>
         )}
         
         {data.body && (
-          <p className="text-sm mt-1 truncate text-foreground/80">
+          <p className="text-13 mt-1 truncate text-primary/80">
             {data.body}
           </p>
         )}

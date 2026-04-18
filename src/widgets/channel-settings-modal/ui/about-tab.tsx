@@ -43,12 +43,12 @@ function InlineTextArea({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className="resize-none text-sm min-h-[72px] bg-muted/20 border-border/50 w-full"
+        className="resize-none text-14 min-h-[72px] bg-layer-2 border-subtle-1 w-full"
         maxLength={maxLength}
         autoFocus
       />
       <div className="flex items-center justify-between">
-        <span className="text-xs text-muted-foreground">
+        <span className="text-11 text-secondary">
           {value.length}/{maxLength}
         </span>
         <div className="flex items-center gap-2">
@@ -79,7 +79,7 @@ function CopyButton({ value }: { value: string }) {
       title={copied ? 'Copied!' : 'Copy channel ID'}
       className={cn(
         'inline-flex items-center transition-colors',
-        copied ? 'text-primary' : 'text-muted-foreground hover:text-foreground',
+        copied ? 'text-accent-primary' : 'text-secondary hover:text-primary',
       )}
     >
       <HugeiconsIcon icon={Copy01Icon} className="size-3.5" />
@@ -99,7 +99,7 @@ function SectionRow({ title, editPermission, onEdit, children }: SectionRowProps
   return (
     <div className="flex items-start justify-between gap-4 px-4 py-3.5">
       <div className="min-w-0 flex-1">
-        <p className="text-sm font-semibold text-foreground">{title}</p>
+        <p className="text-14 font-semibold text-primary">{title}</p>
         <div className="mt-0.5">{children}</div>
       </div>
       {editPermission && onEdit && (
@@ -108,7 +108,7 @@ function SectionRow({ title, editPermission, onEdit, children }: SectionRowProps
             variant="ghost"
             size="sm"
             onClick={onEdit}
-            className="shrink-0 h-7 text-xs text-primary hover:text-primary/80 hover:bg-primary/5 font-medium px-2"
+            className="shrink-0 h-7 text-11 text-primary hover:bg-layer-transparent-hover font-medium px-2"
           >
             <HugeiconsIcon icon={Edit02Icon} className="size-3 mr-1" />
             Edit
@@ -175,7 +175,7 @@ export function AboutTab({ conversation }: AboutTabProps) {
     <div className="space-y-4">
 
       {/* ── Card group: Name + Description ── */}
-      <div className="rounded-lg border border-border/50 divide-y divide-border/40 bg-card/30 overflow-hidden">
+      <div className="rounded-lg border-subtle divide-y divide-subtle-1 bg-layer-1 overflow-hidden">
 
         {/* Channel name row */}
         <SectionRow
@@ -194,7 +194,7 @@ export function AboutTab({ conversation }: AboutTabProps) {
               />
             </div>
           ) : (
-            <p className="text-sm text-muted-foreground">
+            <p className="text-14 text-secondary">
               # {conversation.name}
             </p>
           )}
@@ -217,7 +217,7 @@ export function AboutTab({ conversation }: AboutTabProps) {
               maxLength={280}
             />
           ) : (
-            <p className="text-sm text-muted-foreground leading-relaxed break-words">
+            <p className="text-14 text-secondary leading-relaxed break-words">
               {conversation.topic || (
                 <span className="italic">Add a topic</span>
               )}
@@ -227,8 +227,8 @@ export function AboutTab({ conversation }: AboutTabProps) {
 
         {/* Created by row */}
         <div className="px-4 py-3.5">
-          <p className="text-sm font-semibold text-foreground">Created</p>
-          <p className="text-sm text-muted-foreground mt-0.5">
+          <p className="text-14 font-semibold text-primary">Created</p>
+          <p className="text-14 text-secondary mt-0.5">
             {new Date(conversation.createdAt).toLocaleDateString('en-US', {
               month: 'long',
               day: 'numeric',
@@ -240,19 +240,19 @@ export function AboutTab({ conversation }: AboutTabProps) {
       </div>
 
       {/* ── Visibility card ── */}
-      <div className="flex items-start justify-between gap-4 px-4 py-3.5 rounded-lg border border-border/50 bg-card/30">
+      <div className="flex items-start justify-between gap-4 px-4 py-3.5 rounded-lg border-subtle bg-layer-1">
         <div className="flex items-start gap-3 min-w-0">
-          <div className="mt-0.5 shrink-0 p-1.5 rounded-md bg-muted/30">
+          <div className="mt-0.5 shrink-0 p-1.5 rounded-md bg-layer-1-hover">
             <HugeiconsIcon
               icon={conversation.isPublic ? Globe02Icon : LockIcon}
-              className="size-4 text-muted-foreground"
+              className="size-4 text-secondary"
             />
           </div>
           <div className="min-w-0">
-            <p className="text-sm font-semibold text-foreground">
+            <p className="text-14 font-semibold text-primary">
               {conversation.isPublic ? 'Public channel' : 'Private channel'}
             </p>
-            <p className="text-xs text-muted-foreground mt-0.5 leading-relaxed">
+            <p className="text-11 text-secondary mt-0.5 leading-relaxed">
               {conversation.isPublic
                 ? 'Anyone in the workspace can join and view messages.'
                 : 'Only invited members can view this channel.'}
@@ -263,7 +263,7 @@ export function AboutTab({ conversation }: AboutTabProps) {
           <Button
             variant="outline"
             size="sm"
-            className="shrink-0 h-7 text-xs border-border/50"
+            className="shrink-0 h-7 text-11 border-subtle-1"
             onClick={handleToggleVisibility}
             disabled={togglingVisibility}
           >
@@ -279,14 +279,14 @@ export function AboutTab({ conversation }: AboutTabProps) {
       {/* ── Footer meta ── */}
       <div className="space-y-1.5 px-1">
         <div className="flex items-center gap-1.5">
-          <p className="text-xs text-muted-foreground">
+          <p className="text-11 text-secondary">
             Channel ID:{' '}
             <span className="font-mono">{conversation.id}</span>
           </p>
           <CopyButton value={conversation.id} />
         </div>
         {conversation.memberCount != null && (
-          <p className="text-xs text-muted-foreground">
+          <p className="text-11 text-secondary">
             {conversation.memberCount} member{conversation.memberCount !== 1 ? 's' : ''}
           </p>
         )}

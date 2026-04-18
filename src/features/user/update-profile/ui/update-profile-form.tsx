@@ -120,7 +120,7 @@ export function UpdateProfileForm() {
     >
       {/* Root error banner */}
       {rootError && (
-        <div className="rounded-lg border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive">
+        <div className="rounded-lg border border-danger-strong bg-danger-subtle px-3 py-2 text-13 text-danger-primary">
           {rootError}
         </div>
       )}
@@ -150,7 +150,7 @@ export function UpdateProfileForm() {
               disabled={isPending}
             />
             {field.state.meta.errors.length > 0 && (
-              <p className="text-sm text-destructive">
+              <p className="text-13 text-danger-primary">
                 {field.state.meta.errors.join(', ')}
               </p>
             )}
@@ -183,11 +183,11 @@ export function UpdateProfileForm() {
               maxLength={300}
               disabled={isPending}
             />
-            <p className="text-xs text-muted-foreground text-right">
+            <p className="text-11 text-secondary text-right">
               {(field.state.value ?? '').length}/300
             </p>
             {field.state.meta.errors.length > 0 && (
-              <p className="text-sm text-destructive">
+              <p className="text-13 text-danger-primary">
                 {field.state.meta.errors.join(', ')}
               </p>
             )}
@@ -264,7 +264,7 @@ export function UpdateProfileForm() {
           )}
         />
         {saved && (
-          <span className="flex items-center gap-1 text-sm text-emerald-600">
+          <span className="flex items-center gap-1 text-13 text-success-primary">
             <CheckCircle2 className="h-4 w-4" />
             Saved
           </span>

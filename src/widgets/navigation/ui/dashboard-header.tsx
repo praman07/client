@@ -20,7 +20,7 @@ export function DashboardHeader({ children }: { children?: React.ReactNode }) {
     }))
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background">
+    <header className="sticky top-0 z-[var(--z-sticky)] w-full border-b border-subtle bg-surface-1">
       <div className="flex h-14 items-center gap-4 px-6">
         {/* Left: Logo & Context */}
         <div className="flex items-center gap-4 mr-auto">
@@ -39,7 +39,7 @@ export function DashboardHeader({ children }: { children?: React.ReactNode }) {
               return (
                 <Fragment key={crumb.id}>
                   {index > 0 && (
-                    <span className="text-muted-foreground/40">/</span>
+                    <span className="text-tertiary">/</span>
                   )}
                   <Component />
                 </Fragment>
@@ -50,7 +50,7 @@ export function DashboardHeader({ children }: { children?: React.ReactNode }) {
 
         {/* Right: Actions & User */}
         <div className="flex items-center gap-4">
-          <Button variant="ghost" size="icon" className="text-muted-foreground">
+          <Button variant="ghost" size="icon" className="text-secondary">
             <Bell className="h-5 w-5" />
           </Button>
           <UserDropdown />

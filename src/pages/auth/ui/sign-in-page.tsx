@@ -43,13 +43,13 @@ export function SignInPage() {
   }
 
   return (
-    <div className="flex min-h-svh flex-col items-center justify-center bg-background p-6">
+    <div className="flex min-h-svh flex-col items-center justify-center bg-canvas p-6">
       <div className="w-full max-w-sm space-y-6">
         {/* Logo */}
         <div className="flex flex-col items-center gap-2 text-center">
           <img src="/logo2.png" alt="Collabify" className="h-10 w-10 rounded-xl object-contain" />
-          <h1 className="text-2xl font-semibold tracking-tight">Welcome back</h1>
-          <p className="text-sm text-muted-foreground">Sign in to your Collabify account</p>
+          <h1 className="text-20 font-semibold tracking-tight text-primary">Welcome back</h1>
+          <p className="text-13 text-secondary">Sign in to your Collabify account</p>
         </div>
 
         {/* SSO Buttons */}
@@ -83,7 +83,7 @@ export function SignInPage() {
 
         <div className="relative">
           <Separator />
-          <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-background px-2 text-xs text-muted-foreground">
+          <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-canvas px-2 text-11 text-secondary">
             or continue with email
           </span>
         </div>
@@ -91,7 +91,7 @@ export function SignInPage() {
         {/* Email/Password Form */}
         <form onSubmit={handleEmailSignIn} className="space-y-4">
           {error && (
-            <p className="rounded-lg border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive">
+            <p className="rounded-lg border border-danger-strong bg-danger-subtle px-3 py-2 text-13 text-danger-primary">
               {error}
             </p>
           )}
@@ -124,9 +124,9 @@ export function SignInPage() {
           </Button>
         </form>
 
-        <p className="text-center text-sm text-muted-foreground">
+        <p className="text-center text-13 text-secondary">
           Don't have an account?{' '}
-          <a href="/sign-up" className="font-medium text-foreground underline underline-offset-4 hover:text-primary">
+          <a href="/sign-up" className="font-medium text-primary underline underline-offset-4 hover:text-accent-primary">
             Sign up
           </a>
         </p>

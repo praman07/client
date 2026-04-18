@@ -33,7 +33,7 @@ export function RemoteCursor({
         />
       </svg>
       <div
-        className="mt-1 whitespace-nowrap rounded px-2 py-1 text-xs text-white"
+        className="mt-1 whitespace-nowrap rounded px-2 py-1 text-11 text-on-color"
         style={{ backgroundColor: color }}
       >
         {userName}

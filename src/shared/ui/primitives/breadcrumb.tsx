@@ -25,7 +25,9 @@ function BreadcrumbList({ className, ...props }: React.ComponentProps<'ol'>) {
     <ol
       data-slot="breadcrumb-list"
       className={cn(
-        'text-muted-foreground gap-1.5 text-sm sm:gap-2.5 flex flex-wrap items-center wrap-break-word',
+        'flex flex-wrap items-center gap-1.5 sm:gap-2',
+        'text-12 text-tertiary',
+        'wrap-break-word',
         className,
       )}
       {...props}
@@ -37,7 +39,7 @@ function BreadcrumbItem({ className, ...props }: React.ComponentProps<'li'>) {
   return (
     <li
       data-slot="breadcrumb-item"
-      className={cn('gap-1.5 inline-flex items-center', className)}
+      className={cn('inline-flex items-center gap-1.5', className)}
       {...props}
     />
   )
@@ -52,7 +54,11 @@ function BreadcrumbLink({
     defaultTagName: 'a',
     props: mergeProps<'a'>(
       {
-        className: cn('hover:text-foreground hardware-accelerated active:scale-[0.95] transition-all duration-(--transition-expressive)', className),
+        className: cn(
+          'text-tertiary hover:text-primary transition-colors duration-100',
+          'hardware-accelerated active:scale-[0.98]',
+          className,
+        ),
       },
       props,
     ),
@@ -70,7 +76,7 @@ function BreadcrumbPage({ className, ...props }: React.ComponentProps<'span'>) {
       role="link"
       aria-disabled="true"
       aria-current="page"
-      className={cn('text-foreground font-normal', className)}
+      className={cn('text-primary font-medium', className)}
       {...props}
     />
   )
@@ -86,7 +92,7 @@ function BreadcrumbSeparator({
       data-slot="breadcrumb-separator"
       role="presentation"
       aria-hidden="true"
-      className={cn('[&>svg]:size-3.5', className)}
+      className={cn('text-tertiary [&>svg]:size-3', className)}
       {...props}
     >
       {children ?? <HugeiconsIcon icon={ArrowRight01Icon} strokeWidth={2} />}
@@ -104,7 +110,8 @@ function BreadcrumbEllipsis({
       role="presentation"
       aria-hidden="true"
       className={cn(
-        'size-5 [&>svg]:size-4 flex items-center justify-center',
+        'size-5 flex items-center justify-center text-tertiary',
+        '[&>svg]:size-3.5',
         className,
       )}
       {...props}

@@ -76,7 +76,7 @@ export function ChatHeader({
       <ChatHeaderStart>
         <HugeiconsIcon
           icon={isPrivate ? LockKeyIcon : HashtagIcon}
-          className="text-muted-foreground size-5"
+          className="text-secondary size-5"
         />
       </ChatHeaderStart>
 
@@ -88,12 +88,12 @@ export function ChatHeader({
           >
             {channelName}
           </h2>
-          <span className="text-xs bg-accent px-1.5 py-0.5 rounded text-muted-foreground font-medium uppercase tracking-wider">
+          <span className="text-11 bg-accent-subtle px-1.5 py-0.5 rounded-md text-secondary font-medium uppercase tracking-wider">
             {isPrivate ? 'Private' : 'Public'}
           </span>
         </div>
         {topic && (
-          <span className="text-xs text-muted-foreground truncate max-w-[300px]">
+          <span className="text-11 text-secondary truncate max-w-[300px]">
             {topic}
           </span>
         )}

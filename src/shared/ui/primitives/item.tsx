@@ -36,13 +36,13 @@ function ItemSeparator({
 }
 
 const itemVariants = cva(
-  '[a]:hover:bg-muted rounded-md border text-sm w-full group/item focus-visible:border-ring focus-visible:ring-ring/50 flex items-center flex-wrap outline-none transition-colors hardware-accelerated active:scale-[0.98] duration-(--transition-expressive) focus-visible:ring-[3px] [a]:transition-colors',
+  'hover:bg-layer-transparent-hover rounded-md border text-13 w-full group/item flex items-center flex-wrap outline-none transition-colors duration-100 hardware-accelerated active:scale-[0.98] [a]:transition-colors',
   {
     variants: {
       variant: {
         default: 'border-transparent',
-        outline: 'border-border',
-        muted: 'bg-muted/50 border-transparent',
+        outline: 'border-subtle',
+        muted: 'bg-layer-1 border-transparent',
       },
       size: {
         default: 'gap-3.5 px-4 py-3.5',
@@ -144,7 +144,7 @@ function ItemDescription({ className, ...props }: React.ComponentProps<'p'>) {
     <p
       data-slot="item-description"
       className={cn(
-        'text-muted-foreground text-left text-sm leading-normal group-data-[size=xs]/item:text-xs [&>a:hover]:text-primary line-clamp-2 font-normal [&>a]:underline [&>a]:underline-offset-4',
+        'text-secondary text-left text-13 leading-normal group-data-[size=xs]/item:text-12 [&>a:hover]:text-primary line-clamp-2 font-normal [&>a]:underline [&>a]:underline-offset-4',
         className,
       )}
       {...props}

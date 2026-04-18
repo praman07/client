@@ -87,17 +87,17 @@ export function AddMembersDialog({
 
         <div className="px-6 pb-4 space-y-4">
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground pointer-events-none" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-secondary pointer-events-none" />
             <Input
               placeholder="Search people..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="pl-9 h-9 text-sm bg-muted/20 border-border/50"
+              className="pl-9 h-9 text-14 bg-layer-2 border-subtle-1"
             />
             {search && (
               <button 
                 onClick={() => setSearch('')} 
-                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-secondary hover:text-primary"
               >
                 <X className="size-4" />
               </button>
@@ -105,21 +105,21 @@ export function AddMembersDialog({
           </div>
 
           <div className="space-y-1.5">
-            <label className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+            <label className="text-11 font-semibold uppercase tracking-widest text-tertiary">
               Select members ({selectedUserIds.length} selected)
             </label>
             
-            <ScrollArea className="h-[300px] rounded-md border border-border/50">
+            <ScrollArea className="h-[300px] rounded-md border-subtle-1">
               {isLoading ? (
-                <div className="p-8 text-center text-sm text-muted-foreground">
+                <div className="p-8 text-center text-14 text-secondary">
                   Loading workspace members...
                 </div>
               ) : availableMembers.length === 0 ? (
                 <div className="p-8 text-center space-y-2">
                    <div className="flex justify-center">
-                     <Users className="size-8 text-muted-foreground/40" />
+                     <Users className="size-8 text-tertiary" />
                    </div>
-                   <p className="text-sm text-balance text-muted-foreground">
+                   <p className="text-14 text-balance text-secondary">
                      {search ? `No members match "${search}"` : 'All workspace members are already joined.'}
                    </p>
                 </div>
@@ -133,29 +133,29 @@ export function AddMembersDialog({
                         type="button"
                         onClick={() => toggleUser(member.user.id)}
                         className={cn(
-                          'flex w-full items-center gap-3 rounded-sm px-3 py-2 text-left transition-colors hover:bg-muted/50 hover:text-foreground',
-                          isSelected && 'bg-muted/30',
+                          'flex w-full items-center gap-3 rounded-sm px-3 py-2 text-left transition-colors hover:bg-layer-1-hover hover:text-primary',
+                          isSelected && 'bg-layer-1',
                         )}
                       >
-                        <Avatar className="h-8 w-8 shrink-0 border border-border/40">
+                        <Avatar className="h-8 w-8 shrink-0 border-subtle-1">
                           <AvatarImage src={member.user.avatarUrl ?? ''} />
-                          <AvatarFallback className="text-[10px] font-bold bg-muted text-muted-foreground">
+                          <AvatarFallback className="text-10 font-bold bg-layer-1 text-secondary">
                             {getInitials(member.user.fullName ?? member.user.email)}
                           </AvatarFallback>
                         </Avatar>
                         <div className="min-w-0 flex-1">
-                          <p className="text-sm font-medium truncate text-foreground leading-none mb-1">
+                          <p className="text-14 font-medium truncate text-primary leading-none mb-1">
                             {member.user.fullName ?? 'Unknown'}
                           </p>
-                          <p className="text-xs text-muted-foreground truncate leading-none">
+                          <p className="text-11 text-secondary truncate leading-none">
                             {member.user.email}
                           </p>
                         </div>
                         <div className={cn(
                           "size-4 rounded border flex items-center justify-center transition-colors",
-                          isSelected ? "bg-primary border-primary" : "border-border/60"
+                          isSelected ? "bg-accent-primary border-accent-strong" : "border-subtle-1"
                         )}>
-                          {isSelected && <Check className="size-3 text-primary-foreground stroke-[3px]" />}
+                          {isSelected && <Check className="size-3 text-on-color stroke-[3px]" />}
                         </div>
                       </button>
                     )
@@ -166,7 +166,7 @@ export function AddMembersDialog({
           </div>
         </div>
 
-        <DialogFooter className="p-6 pt-2 bg-muted/10 border-t border-border/50">
+        <DialogFooter className="p-6 pt-2 bg-layer-1 border-t border-subtle-1">
           <Button variant="ghost" onClick={handleClose} disabled={isPending} className="h-8 text-xs">
             Cancel
           </Button>

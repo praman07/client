@@ -16,12 +16,12 @@ export function SyncStatusIndicator({
   return (
     <div
       className={cn(
-        'flex items-center gap-2 text-xs font-medium px-3 py-1.5 rounded-full',
+        'flex items-center gap-2 text-11 font-medium px-3 py-1.5 rounded-full transition-colors duration-150',
         className,
         {
-          'bg-blue-500/10 text-blue-500': status === 'FETCHING',
-          'bg-yellow-500/10 text-yellow-500': status === 'RECOVERING',
-          'bg-red-500/10 text-red-500': status === 'DESYNCED',
+          'bg-accent-subtle text-accent-primary': status === 'FETCHING',
+          'bg-warning-subtle text-warning-primary': status === 'RECOVERING',
+          'bg-danger-subtle text-danger-primary': status === 'DESYNCED',
         },
       )}
     >

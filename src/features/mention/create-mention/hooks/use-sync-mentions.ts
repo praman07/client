@@ -28,11 +28,12 @@
  * @layer Features → mention/create-mention/hooks
  */
 import { useCallback, useEffect, useRef } from 'react'
+import {  extractMentionChips } from '../../lib/extract-mention-chips'
+import { useDeleteMentionsBySource } from '../../delete-mention-by-source'
+import { useCreateMentions } from './use-create-mention'
+import type {MentionChipData} from '../../lib/extract-mention-chips';
 import type { MentionEditor } from '../../lib/mention-schema'
 import type { CreateMentionInput } from '@/gql/graphql'
-import { extractMentionChips, type MentionChipData } from '../../lib/extract-mention-chips'
-import { useCreateMentions } from './use-create-mention'
-import { useDeleteMentionsBySource } from '../../delete-mention-by-source'
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -59,7 +60,7 @@ export function useSyncMentions({
   const createMentions        = useCreateMentions()
   const deleteMentionsBySource = useDeleteMentionsBySource()
 
-  const prevChipsRef = useRef<MentionChipData[]>([])
+  const prevChipsRef = useRef<Array<MentionChipData>>([])
   const timerRef     = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   // Clean up timer on unmount

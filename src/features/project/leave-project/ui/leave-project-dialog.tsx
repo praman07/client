@@ -56,7 +56,7 @@ export function LeaveProjectDialog({
               })
             }
             disabled={isPending}
-            className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            className="bg-danger-primary hover:bg-danger-primary-hover text-on-color"
           >
             {isPending ? 'Leaving...' : 'Leave Project'}
           </AlertDialogAction>

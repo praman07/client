@@ -48,13 +48,13 @@ export function ProjectLogoUploader({
     <div className="flex items-center gap-4">
       {/* Square rounded avatar — matches workspace logo uploader style */}
       <div className="relative shrink-0">
-        <Avatar className="h-[72px] w-[72px] rounded-xl border border-border">
+        <Avatar className="h-[72px] w-[72px] rounded-xl border border-subtle">
           <AvatarImage
             src={displayUrl ?? undefined}
             alt={name}
             className="object-cover rounded-xl"
           />
-          <AvatarFallback className="rounded-xl text-lg font-bold bg-primary/15 text-primary">
+          <AvatarFallback className="rounded-xl text-lg font-bold bg-accent-subtle text-accent-primary">
             {initials}
           </AvatarFallback>
         </Avatar>
@@ -75,7 +75,7 @@ export function ProjectLogoUploader({
           >
             {isUploading ? 'Uploading...' : 'Upload new Icon'}
           </label>
-          <p className="text-xs text-muted-foreground">Recommended 512×512px. PNG or JPG.</p>
+          <p className="text-xs text-secondary">Recommended 512×512px. PNG or JPG.</p>
           <input
             id="project-logo-upload"
             type="file"

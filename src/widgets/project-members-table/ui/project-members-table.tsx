@@ -76,10 +76,10 @@ function RoleBadge({ role, rank }: RoleBadgeProps) {
   const label = role.charAt(0).toUpperCase() + role.slice(1).toLowerCase()
   const colorClass =
     rank === undefined
-      ? 'bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-300'
+      ? 'bg-accent-subtle text-accent-primary'
       : rank <= 1
-        ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300'
-        : 'bg-secondary text-secondary-foreground'
+        ? 'bg-success-subtle text-success-primary'
+        : 'bg-layer-1 text-primary'
   return (
     <span
       className={cn(
@@ -186,22 +186,22 @@ export function ProjectMembersTable({
         const isCurrentUser = member.userId === currentUserId
         return (
           <div className="flex items-center gap-3">
-            <Avatar className="h-8 w-8 shrink-0 border border-border/40">
+            <Avatar className="h-8 w-8 shrink-0 border border-subtle-1">
               <AvatarImage src={member.user.avatarUrl ?? undefined} />
-              <AvatarFallback className="text-[11px] font-bold bg-muted text-muted-foreground">
+              <AvatarFallback className="text-[11px] font-bold bg-layer-2 text-secondary">
                 {getInitials(member.user.fullName ?? member.user.email)}
               </AvatarFallback>
             </Avatar>
             <div className="min-w-0">
-              <p className="truncate text-sm font-semibold text-foreground tracking-tight">
+              <p className="truncate text-sm font-semibold text-primary tracking-tight">
                 {member.user.fullName ?? 'Unknown User'}
                 {isCurrentUser && (
-                  <span className="ml-1.5 text-xs text-muted-foreground font-normal">
+                  <span className="ml-1.5 text-xs text-secondary font-normal">
                     (you)
                   </span>
                 )}
               </p>
-              <p className="text-xs text-muted-foreground truncate">
+              <p className="text-xs text-secondary truncate">
                 {member.user.email}
               </p>
             </div>
@@ -232,14 +232,14 @@ export function ProjectMembersTable({
         ) : member.role ? (
           <RoleBadge role={member.role} rank={memberRoleInfo?.rank} />
         ) : (
-          <span className="text-xs text-muted-foreground">No role</span>
+          <span className="text-xs text-secondary">No role</span>
         )
       },
     },
     {
       key: 'joinedAt',
       header: 'Joined',
-      cellClassName: 'text-muted-foreground text-xs',
+      cellClassName: 'text-secondary text-xs',
       render: (member) => formatDate(member.joinedAt),
     },
     {
@@ -254,7 +254,7 @@ export function ProjectMembersTable({
             <Button
               variant="ghost"
               size="sm"
-              className="text-destructive hover:text-destructive hover:bg-destructive/10"
+              className="text-danger-primary hover:text-danger-primary hover:bg-danger-subtle"
               onClick={() => dispatch(openLeaveProjectDialog())}
             >
               Leave
@@ -269,7 +269,7 @@ export function ProjectMembersTable({
             <Button
               variant="ghost"
               size="sm"
-              className="text-destructive hover:text-destructive hover:bg-destructive/10"
+              className="text-danger-primary hover:text-danger-primary hover:bg-danger-subtle"
               onClick={() => setRemovingUserId(member.userId)}
               disabled={removing}
             >
@@ -293,7 +293,7 @@ export function ProjectMembersTable({
                     Cancel
                   </AlertDialogCancel>
                   <AlertDialogAction
-                    className="bg-destructive text-white hover:bg-destructive/90"
+                    className="bg-danger-primary text-on-color hover:bg-danger-primary/90"
                     onClick={() => {
                       removeMember({ projectId, workspaceId, userId: member.userId })
                       setRemovingUserId(null)
@@ -317,7 +317,7 @@ export function ProjectMembersTable({
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h2 className="text-2xl font-bold tracking-tight">Project Members</h2>
-          <p className="text-sm text-muted-foreground mt-0.5">
+          <p className="text-sm text-secondary mt-0.5">
             Manage who has access to this project.
           </p>
         </div>
@@ -334,12 +334,12 @@ export function ProjectMembersTable({
       {/* Toolbar */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center px-1">
         <div className="relative flex-1 max-w-sm group">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground group-focus-within:text-foreground transition-colors pointer-events-none" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-secondary group-focus-within:text-primary transition-colors pointer-events-none" />
           <Input
             placeholder="Filter by name or email..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="pl-9 h-9 text-sm bg-muted/20 border-border/40 focus-visible:ring-primary/20 hover:bg-muted/30 transition-all rounded-lg"
+            className="pl-9 h-9 text-sm bg-layer-2 border-subtle-1 hover:bg-layer-1 transition-all rounded-lg"
           />
         </div>
       </div>
@@ -362,8 +362,8 @@ export function ProjectMembersTable({
 
       {/* Footer count */}
       {!isLoading && members.length > 0 && (
-        <p className="text-[11px] text-muted-foreground/60 uppercase tracking-widest font-semibold flex items-center gap-2 px-1">
-          <span className="h-1 w-1 rounded-full bg-muted-foreground/40" />
+        <p className="text-[11px] text-secondary/60 uppercase tracking-widest font-semibold flex items-center gap-2 px-1">
+          <span className="h-1 w-1 rounded-full bg-secondary/40" />
           {members.length} {members.length === 1 ? 'member' : 'members'}
           {search && (
             <>
@@ -376,12 +376,12 @@ export function ProjectMembersTable({
       {/* Permission denial — no read access */}
       {!canAddMember && !canRemoveMember && !canUpdateRole && members.length === 0 && !isLoading && (
         <div className="flex flex-col items-center justify-center gap-4 py-20 text-center">
-          <div className="p-3 rounded-full bg-destructive/10">
-            <ShieldOff className="h-7 w-7 text-destructive" />
+          <div className="p-3 rounded-full bg-danger-subtle">
+            <ShieldOff className="h-7 w-7 text-danger-primary" />
           </div>
           <div className="space-y-1">
             <h2 className="text-lg font-semibold">Access Restricted</h2>
-            <p className="text-sm text-muted-foreground max-w-sm">
+            <p className="text-sm text-secondary max-w-sm">
               You don't have permission to manage project members.
             </p>
           </div>

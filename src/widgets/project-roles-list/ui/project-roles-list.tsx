@@ -229,7 +229,7 @@ export function ProjectRolesList({
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-2 flex-wrap">
                     <span className="text-sm font-medium">{role.name}</span>
-                    <Badge variant="secondary" className="text-xs">
+                    <Badge variant="default" className="text-xs">
                       Rank {role.rank}
                     </Badge>
                     {role.isSystem && (

@@ -110,25 +110,25 @@ export function AvatarUploadField() {
         type="button"
         onClick={() => !isUploading && inputRef.current?.click()}
         disabled={isUploading}
-        className="relative group rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+        className="relative group rounded-full focus-visible:outline-none"
         aria-label="Change profile photo"
       >
-        <Avatar className="h-16 w-16 ring-2 ring-border transition-opacity group-hover:opacity-80">
+        <Avatar className="h-16 w-16 border-2 border-subtle transition-opacity group-hover:opacity-80">
           <AvatarImage src={avatarSrc} alt={user?.fullName ?? 'User'} />
           <AvatarFallback className="text-xl font-semibold">{initials}</AvatarFallback>
         </Avatar>
 
         {/* Upload spinner overlay */}
         {isUploading && (
-          <div className="absolute inset-0 flex items-center justify-center rounded-full bg-background/70">
+          <div className="absolute inset-0 flex items-center justify-center rounded-full bg-surface-1/70">
             <Loader2 className="h-5 w-5 animate-spin text-primary" />
           </div>
         )}
 
         {/* Hover hint overlay */}
         {!isUploading && (
-          <div className="absolute inset-0 flex items-center justify-center rounded-full bg-background/0 group-hover:bg-background/50 transition-colors">
-            <span className="text-[10px] font-bold text-transparent group-hover:text-foreground transition-colors tracking-tight">
+          <div className="absolute inset-0 flex items-center justify-center rounded-full bg-layer-transparent group-hover:bg-layer-transparent-hover transition-colors">
+            <span className="text-10 font-bold text-transparent group-hover:text-primary transition-colors tracking-tight">
               CHANGE
             </span>
           </div>
@@ -136,9 +136,9 @@ export function AvatarUploadField() {
       </button>
 
       <div>
-        <p className="text-sm font-medium">{user?.fullName ?? '—'}</p>
-        <p className="text-xs text-muted-foreground mt-0.5">{user?.email}</p>
-        <p className="text-xs text-muted-foreground/60 mt-1">
+        <p className="text-13 font-medium">{user?.fullName ?? '—'}</p>
+        <p className="text-11 text-secondary mt-0.5">{user?.email}</p>
+        <p className="text-11 text-disabled mt-1">
           Click to upload · JPEG, PNG, GIF, WebP · Max 10MB
         </p>
       </div>

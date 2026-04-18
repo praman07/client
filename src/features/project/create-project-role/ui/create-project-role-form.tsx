@@ -36,7 +36,7 @@ export function StepRoleDetails({
         {/* Name */}
         <div className="space-y-1.5">
           <Label>
-            Role Name <span className="text-destructive">*</span>
+            Role Name <span className="text-danger-primary">*</span>
           </Label>
           <Input
             value={values.name}
@@ -44,7 +44,7 @@ export function StepRoleDetails({
             placeholder="e.g. Tech Lead, QA Engineer"
           />
           {errors.name && (
-            <p className="text-sm text-destructive">{errors.name}</p>
+            <p className="text-13 text-danger-primary">{errors.name}</p>
           )}
         </div>
 
@@ -58,13 +58,13 @@ export function StepRoleDetails({
             value={values.rank}
             onChange={(e) => onChange('rank', Number(e.target.value))}
           />
-          <p className="text-[11px] text-muted-foreground leading-tight">
+          <p className="text-11 text-secondary leading-tight">
             Lower = higher authority.
             <br />
             MANAGER is rank 1.
           </p>
           {errors.rank && (
-            <p className="text-sm text-destructive">{errors.rank}</p>
+            <p className="text-13 text-danger-primary">{errors.rank}</p>
           )}
         </div>
       </div>
@@ -73,7 +73,7 @@ export function StepRoleDetails({
       <div className="space-y-1.5">
         <Label>
           Description{' '}
-          <span className="text-muted-foreground text-xs">(optional)</span>
+          <span className="text-secondary text-11">(optional)</span>
         </Label>
         <Textarea
           value={values.description ?? ''}
@@ -83,7 +83,7 @@ export function StepRoleDetails({
           className="resize-none"
         />
         {errors.description && (
-          <p className="text-sm text-destructive">{errors.description}</p>
+          <p className="text-13 text-danger-primary">{errors.description}</p>
         )}
       </div>
     </div>
@@ -141,7 +141,7 @@ export function StepPermissions({
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-full text-sm text-muted-foreground animate-pulse py-10">
+      <div className="flex items-center justify-center h-full text-13 text-secondary animate-pulse py-10">
         Loading permissions...
       </div>
     )
@@ -152,7 +152,7 @@ export function StepPermissions({
       {/* Toolbar */}
       <div className="flex items-center gap-3">
         <div className="relative flex-1">
-          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-secondary" />
           <Input
             className="pl-8 h-9"
             placeholder="Search permissions or resources..."
@@ -168,7 +168,7 @@ export function StepPermissions({
         >
           {allSelected ? 'Deselect all' : 'Select all'}
         </Button>
-        <span className="text-xs text-muted-foreground shrink-0 tabular-nums">
+        <span className="text-11 text-secondary shrink-0 tabular-nums">
           {selectedIds.size} selected
         </span>
       </div>
@@ -176,7 +176,7 @@ export function StepPermissions({
       {/* Resource grid */}
       <ScrollArea className="h-[380px] -mx-1 px-1">
         {Object.keys(byResource).length === 0 ? (
-          <p className="text-sm text-muted-foreground text-center py-10">
+          <p className="text-13 text-secondary text-center py-10">
             No permissions match.
           </p>
         ) : (
@@ -190,22 +190,22 @@ export function StepPermissions({
                 <div
                   key={resource}
                   className={cn(
-                    'rounded-lg border p-3 space-y-2.5 transition-colors',
+'rounded-lg border border-subtle p-3 space-y-2.5 transition-colors',
                     allGroupSelected
-                      ? 'border-primary/40 bg-primary/5'
+                      ? 'border-accent-subtle bg-accent-subtle'
                       : someGroupSelected
-                        ? 'border-primary/20 bg-primary/2'
-                        : 'bg-muted/20',
+                        ? 'border-accent-subtle bg-accent-subtle'
+                        : 'bg-layer-2',
                   )}
                 >
                   <div className="flex items-center justify-between gap-2">
-                    <p className="text-xs font-semibold uppercase tracking-wider text-foreground truncate">
+                    <p className="text-11 font-semibold uppercase tracking-wider text-primary truncate">
                       {resource.replace('.', ' › ')}
                     </p>
                     <button
                       type="button"
                       onClick={() => onToggleResource(ids)}
-                      className="text-[10px] text-muted-foreground hover:text-primary shrink-0 transition-colors"
+                      className="text-10 text-secondary hover:text-primary shrink-0 transition-colors"
                     >
                       {allGroupSelected ? 'None' : 'All'}
                     </button>
@@ -214,14 +214,14 @@ export function StepPermissions({
                     {perms.map((p) => (
                       <label
                         key={p.id}
-                        className="flex items-center gap-2 text-sm cursor-pointer select-none group"
+                        className="flex items-center gap-2 text-13 cursor-pointer select-none group"
                       >
                         <Checkbox
                           checked={selectedIds.has(p.id)}
                           onCheckedChange={() => onToggle(p.id)}
                           className="shrink-0"
                         />
-                        <span className="capitalize group-hover:text-foreground transition-colors text-muted-foreground [&:has(~input:checked)]:text-foreground">
+                        <span className="capitalize group-hover:text-primary transition-colors text-secondary [&:has(~input:checked)]:text-primary">
                           {p.action}
                         </span>
                       </label>
@@ -286,7 +286,7 @@ export function StepMembers({
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center text-sm text-muted-foreground animate-pulse py-10">
+      <div className="flex items-center justify-center text-13 text-secondary animate-pulse py-10">
         Loading members...
       </div>
     )
@@ -296,7 +296,7 @@ export function StepMembers({
     <div className="flex flex-col gap-3 h-full">
       <div className="flex items-center gap-3">
         <div className="relative flex-1">
-          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-secondary" />
           <Input
             className="pl-8 h-9"
             placeholder="Search by name or email..."
@@ -304,14 +304,14 @@ export function StepMembers({
             onChange={(e) => setSearch(e.target.value)}
           />
         </div>
-        <span className="text-xs text-muted-foreground shrink-0">
+        <span className="text-11 text-secondary shrink-0">
           {selectedIds.size} selected
         </span>
       </div>
 
       <ScrollArea className="h-[390px] rounded-md border">
         {assignable.length === 0 ? (
-          <p className="text-sm text-muted-foreground text-center py-10">
+          <p className="text-13 text-secondary text-center py-10">
             {search
               ? 'No members match.'
               : 'No assignable members (Managers are excluded).'}
@@ -330,8 +330,8 @@ export function StepMembers({
                 <label
                   key={m.userId}
                   className={cn(
-                    'flex items-center gap-3 px-4 py-3 cursor-pointer select-none transition-colors hover:bg-muted/40',
-                    isSelected && 'bg-muted/20',
+                    'flex items-center gap-3 px-4 py-3 cursor-pointer select-none transition-colors hover:bg-layer-2',
+                    isSelected && 'bg-layer-2',
                   )}
                 >
                   <Checkbox
@@ -341,28 +341,28 @@ export function StepMembers({
                   />
                   <Avatar className="h-8 w-8 shrink-0">
                     <AvatarImage src={m.user.avatarUrl ?? undefined} />
-                    <AvatarFallback className="text-xs">
+                    <AvatarFallback className="text-11">
                       {initials}
                     </AvatarFallback>
                   </Avatar>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium truncate">
+                    <p className="text-13 font-medium truncate">
                       {m.user.fullName ?? m.user.email}
                     </p>
                     {m.user.fullName && (
-                      <p className="text-xs text-muted-foreground truncate">
+                      <p className="text-11 text-secondary truncate">
                         {m.user.email}
                       </p>
                     )}
                   </div>
                   {m.role ? (
-                    <Badge variant="secondary" className="text-xs shrink-0">
+                    <Badge variant="outline" className="text-11 shrink-0">
                       {m.role}
                     </Badge>
                   ) : (
                     <Badge
                       variant="outline"
-                      className="text-xs shrink-0 text-muted-foreground"
+                      className="text-11 shrink-0 text-secondary"
                     >
                       No role
                     </Badge>
@@ -375,7 +375,7 @@ export function StepMembers({
       </ScrollArea>
 
       {selectedIds.size > 0 && (
-        <p className="text-xs text-muted-foreground">
+        <p className="text-11 text-secondary">
           <span className="font-medium">Note:</span> Members with an existing
           role will have it replaced by the new role.
         </p>

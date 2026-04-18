@@ -112,7 +112,7 @@ export function ChannelNotificationSettings({
 
   return (
     <div className="space-y-4">
-      <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground px-1">
+      <p className="text-11 font-semibold uppercase tracking-widest text-secondary px-1">
         Notifications
       </p>
 
@@ -127,19 +127,19 @@ export function ChannelNotificationSettings({
               key={opt.value}
               className={cn(
                 'flex items-start gap-3 px-4 py-3 rounded-lg border cursor-pointer transition-colors',
-                'hover:bg-muted/50',
+                'hover:bg-layer-1-hover',
                 selectedMode === opt.value
-                  ? 'border-foreground/30 bg-muted/20'
-                  : 'border-border/30',
+                  ? 'border-subtle-1 bg-layer-1'
+                  : 'border-subtle',
               )}
             >
               <RadioGroupItem value={opt.value} className="mt-0.5 shrink-0" />
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2">
-                  <HugeiconsIcon icon={opt.icon} className="size-4 text-muted-foreground shrink-0" />
-                  <span className="text-sm font-medium text-foreground">{opt.label}</span>
+                  <HugeiconsIcon icon={opt.icon} className="size-4 text-secondary shrink-0" />
+                  <span className="text-sm font-medium text-primary">{opt.label}</span>
                 </div>
-                <p className="text-xs text-muted-foreground mt-0.5">{opt.description}</p>
+                <p className="text-xs text-secondary mt-0.5">{opt.description}</p>
               </div>
             </label>
           ))}
@@ -147,7 +147,7 @@ export function ChannelNotificationSettings({
 
         {showMuteOptions && (
           <div className="mt-2 pl-1">
-            <p className="py-2 text-xs text-muted-foreground">Mute for...</p>
+            <p className="py-2 text-xs text-secondary">Mute for...</p>
             <div className="flex flex-wrap gap-2">
               {MUTE_DURATIONS.map((d) => (
                 <Button
@@ -162,7 +162,7 @@ export function ChannelNotificationSettings({
                 </Button>
               ))}
             </div>
-            <p className="text-xs text-muted-foreground mt-2">
+            <p className="text-xs text-secondary mt-2">
               You will still be notified for direct @mentions.
             </p>
           </div>

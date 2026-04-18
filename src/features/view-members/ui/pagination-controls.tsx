@@ -63,17 +63,17 @@ export function PaginationControls({
   return (
     <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between py-2 px-1">
       {/* Left: count info */}
-      <p className="text-xs text-muted-foreground font-medium">
-        Showing <span className="text-foreground">{startItem}</span> to{' '}
-        <span className="text-foreground">{endItem}</span> of{' '}
-        <span className="text-foreground">{totalCount}</span> members
+      <p className="text-12 text-secondary font-medium">
+        Showing <span className="text-primary">{startItem}</span> to{' '}
+        <span className="text-primary">{endItem}</span> of{' '}
+        <span className="text-primary">{totalCount}</span> members
       </p>
 
       {/* Right: controls */}
       <div className="flex items-center gap-3">
         {/* Page size selector */}
         <DropdownMenu>
-          <DropdownMenuTrigger className="inline-flex h-8 items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground border border-border/40 rounded-md px-2.5 py-1 transition-all outline-none focus-visible:ring-1 focus-visible:ring-primary/30">
+          <DropdownMenuTrigger className="inline-flex h-8 items-center gap-1.5 text-12 text-secondary hover:text-primary border border-subtle rounded-md px-2.5 py-1 transition-all outline-none">
             {pageSize} / page <ChevronDown className="h-3 w-3 opacity-60" />
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-32 p-1">
@@ -82,8 +82,8 @@ export function PaginationControls({
                 key={size}
                 onClick={() => onPageSizeChange(size)}
                 className={cn(
-                  'text-xs flex items-center justify-between',
-                  size === pageSize && 'bg-muted text-foreground font-semibold',
+                  'text-12 flex items-center justify-between',
+                  size === pageSize && 'bg-layer-1 text-primary font-semibold',
                 )}
               >
                 {size} per page
@@ -98,7 +98,7 @@ export function PaginationControls({
           <Button
             variant="outline"
             size="icon"
-            className="h-8 w-8 border-border/40"
+            className="h-8 w-8 border-subtle"
             onClick={() => onPageChange(1)}
             disabled={page === 1}
           >
@@ -109,7 +109,7 @@ export function PaginationControls({
           <Button
             variant="outline"
             size="icon"
-            className="h-8 w-8 border-border/40"
+            className="h-8 w-8 border-subtle"
             onClick={() => onPageChange(page - 1)}
             disabled={page === 1}
           >
@@ -121,9 +121,9 @@ export function PaginationControls({
             {pageNumbers.map((p) => (
               <Button
                 key={p}
-                variant={p === page ? 'secondary' : 'ghost'}
+                variant={p === page ? 'default' : 'ghost'}
                 size="icon"
-                className={cn('h-8 w-8 text-xs font-medium', p === page && 'border border-border/60')}
+                className={cn('h-8 w-8 text-12 font-medium', p === page && 'border border-subtle')}
                 onClick={() => onPageChange(p)}
               >
                 {p}
@@ -135,7 +135,7 @@ export function PaginationControls({
           <Button
             variant="outline"
             size="icon"
-            className="h-8 w-8 border-border/40"
+            className="h-8 w-8 border-subtle"
             onClick={() => onPageChange(page + 1)}
             disabled={page === totalPages}
           >
@@ -146,7 +146,7 @@ export function PaginationControls({
           <Button
             variant="outline"
             size="icon"
-            className="h-8 w-8 border-border/40"
+            className="h-8 w-8 border-subtle"
             onClick={() => onPageChange(totalPages)}
             disabled={page === totalPages}
           >

@@ -42,7 +42,7 @@ export function PageTreeSection({ pages }: PageTreeSectionProps) {
             <PageTreeItem key={node.page.id} node={node} />
           ))}
           {pages.length === 0 && (
-            <p className="px-2 py-4 text-xs text-muted-foreground text-center">
+            <p className="px-2 py-4 text-xs text-secondary text-center">
               No pages yet.{' '}
               <button
                 className="underline underline-offset-2"

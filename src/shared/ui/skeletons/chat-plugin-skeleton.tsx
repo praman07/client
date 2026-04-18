@@ -16,7 +16,7 @@ export function ChatPluginSkeleton() {
   return (
     <div className="h-full flex w-full overflow-hidden">
       {/* Sidebar strip — matches --sidebar-width: 240px */}
-      <div className="w-[240px] border-r shrink-0 flex flex-col gap-2 p-3 bg-background">
+      <div className="w-[240px] border-r shrink-0 flex flex-col gap-2 p-3 bg-surface-1">
         {/* Search / new chat button */}
         <Skeleton className="h-8 w-full rounded-md" />
         {/* Conversation list items */}

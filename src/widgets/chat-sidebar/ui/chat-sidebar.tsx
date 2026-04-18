@@ -126,7 +126,7 @@ export function ChatSidebar() {
       collapsible="icon"
       className="border-r inset-y-0 z-0 relative h-full"
     >
-      <SidebarContent className="overflow-hidden bg-card">
+      <SidebarContent className="overflow-hidden bg-layer-1">
         <ScrollArea className="h-full w-full">
           <div className="flex flex-col gap-2 p-2">
             {isLoading ? (

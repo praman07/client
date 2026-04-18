@@ -27,13 +27,13 @@ export function MemberTableView({
       headerClassName: 'w-[260px]',
       render: (member) => (
         <div className="flex items-center gap-3">
-          <Avatar className="h-8 w-8 shrink-0 border border-border/40">
+          <Avatar className="h-8 w-8 shrink-0 border border-subtle">
             <AvatarImage src={member.user.avatarUrl ?? undefined} />
-            <AvatarFallback className="text-[11px] font-bold bg-muted text-muted-foreground">
+            <AvatarFallback className="text-11 font-bold bg-layer-2 text-secondary">
               {(member.user.fullName ?? member.user.email)[0]?.toUpperCase()}
             </AvatarFallback>
           </Avatar>
-          <p className="truncate text-sm font-semibold text-foreground tracking-tight">
+          <p className="truncate text-14 font-semibold text-primary tracking-tight">
             {member.user.fullName ?? 'Unknown User'}
           </p>
         </div>
@@ -42,7 +42,7 @@ export function MemberTableView({
     {
       key: 'email',
       header: 'Email',
-      cellClassName: 'text-muted-foreground',
+      cellClassName: 'text-secondary',
       render: (member) => (
         <span className="line-clamp-1">{member.user.email}</span>
       ),
@@ -62,7 +62,7 @@ export function MemberTableView({
     {
       key: 'joinedAt',
       header: 'Joined At',
-      cellClassName: 'text-muted-foreground text-xs',
+      cellClassName: 'text-secondary text-11',
       render: (member) => formatDate(member.joinedAt),
     },
     {

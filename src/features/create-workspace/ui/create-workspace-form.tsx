@@ -47,10 +47,10 @@ export function CreateWorkspaceForm() {
   return (
     <div className="w-full max-w-[600px] mx-auto space-y-8">
       <div className="space-y-2 text-center">
-        <h1 className="text-3xl font-semibold tracking-tight text-foreground">
+        <h1 className="text-32 font-semibold tracking-tight text-primary">
           Create your workspace
         </h1>
-        <p className="text-muted-foreground text-lg">
+        <p className="text-secondary text-16">
           Set up your team's collaborative environment
         </p>
       </div>
@@ -80,7 +80,7 @@ export function CreateWorkspaceForm() {
             <Button
               type="button"
               variant="link"
-              className="px-0 text-muted-foreground hover:text-foreground"
+              className="px-0 text-secondary hover:text-primary"
             >
               Join existing workspace instead
             </Button>

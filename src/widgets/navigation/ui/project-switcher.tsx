@@ -41,16 +41,16 @@ export function ProjectSwitcher() {
       <DropdownMenuTrigger
         className={cn(
           buttonVariants({ variant: 'ghost' }),
-          'h-8 gap-2 px-2 text-muted-foreground hover:text-foreground',
+          'h-8 gap-2 px-2 text-secondary hover:text-primary',
         )}
       >
-        <div className="flex h-5 w-5 items-center justify-center rounded-md bg-indigo-500/10 text-indigo-500">
+        <div className="flex h-5 w-5 items-center justify-center rounded-md bg-accent-subtle text-accent-primary">
           <Layers className="h-3 w-3" />
         </div>
-        <span className="font-medium text-foreground">
+        <span className="font-medium text-primary">
           {currentProject?.name || 'Select Project'}
         </span>
-        <ChevronsUpDown className="h-4 w-4 opacity-50" />
+        <ChevronsUpDown className="h-4 w-4 text-disabled" />
       </DropdownMenuTrigger>
       <ProjectDropdownContent workspaceSlug={workspaceSlug} />
     </DropdownMenu>

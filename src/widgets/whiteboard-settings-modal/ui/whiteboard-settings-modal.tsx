@@ -71,11 +71,11 @@ export function WhiteboardSettingsModal({
        * overflow-hidden clips ScrollArea correctly.
        * gap-0 + p-0 let us control all internal spacing manually.
        */}
-      <DialogContent className="sm:max-w-lg flex flex-col gap-0 p-0 h-[min(580px,90svh)] overflow-hidden">
-        {/* ── Header ─────────────────────────── shrink-0 */}
-        <DialogHeader className="shrink-0 px-6 pt-6 pb-0">
-          <DialogTitle className="truncate">{board.title}</DialogTitle>
-        </DialogHeader>
+<DialogContent className="sm:max-w-lg flex flex-col gap-0 p-0 h-[min(580px,90svh)] overflow-hidden bg-surface-2 border border-subtle rounded-xl shadow-dialog">
+      {/* ── Header ─────────────────────────── shrink-0 */}
+      <DialogHeader className="shrink-0 px-6 pt-6 pb-0 border-b border-subtle">
+        <DialogTitle className="text-18 font-semibold text-primary tracking-tight truncate">{board.title}</DialogTitle>
+      </DialogHeader>
 
         {/* ── Tabs ───────────────────────────────────── */}
         <Tabs
@@ -83,15 +83,15 @@ export function WhiteboardSettingsModal({
           className="flex flex-col flex-1 min-h-0 mt-4"
         >
           {/* Tab strip — always visible, never scrolls */}
-          <TabsList className="shrink-0 mx-6 grid grid-cols-3">
-            <TabsTrigger value="general">General</TabsTrigger>
-            <TabsTrigger value="members" disabled={!showMembersTab}>
-              Members
-            </TabsTrigger>
-            <TabsTrigger value="settings" disabled={!showSettingsTab}>
-              Settings
-            </TabsTrigger>
-          </TabsList>
+<TabsList className="shrink-0 mx-6 grid grid-cols-3 border-b border-subtle">
+        <TabsTrigger value="general" className="px-3 py-2 text-13 font-medium text-secondary data-[state=active]:text-primary data-[state=active]:border-b-2 data-[state=active]:border-accent-strong">General</TabsTrigger>
+        <TabsTrigger value="members" disabled={!showMembersTab} className="px-3 py-2 text-13 font-medium text-secondary data-[state=active]:text-primary data-[state=active]:border-b-2 data-[state=active]:border-accent-strong">
+          Members
+        </TabsTrigger>
+        <TabsTrigger value="settings" disabled={!showSettingsTab} className="px-3 py-2 text-13 font-medium text-secondary data-[state=active]:text-primary data-[state=active]:border-b-2 data-[state=active]:border-accent-strong">
+          Settings
+        </TabsTrigger>
+      </TabsList>
 
           {/*
            * Each TabsContent fills remaining height. ScrollArea handles

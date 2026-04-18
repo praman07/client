@@ -11,7 +11,7 @@ export function useDeleteMentions() {
       const token = await getToken()
       const client = GqlClient(token)
       const data = await client.request(DELETE_MENTIONS, { mentionIds })
-      return data.deleteMentions as boolean
+      return data.deleteMentions
     },
   })
 }

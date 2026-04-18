@@ -15,7 +15,7 @@ interface BoardListPageProps {
  */
 export function BoardListPage({ workspaceId, projectId }: BoardListPageProps) {
   return (
-    <div className="h-screen w-full flex flex-col overflow-hidden bg-background">
+    <div className="h-screen w-full flex flex-col overflow-hidden bg-surface-1">
       {/* Main Content - Scrollable */}
       <div className="flex-1 overflow-auto">
         <ErrorBoundary FallbackComponent={WidgetError}>

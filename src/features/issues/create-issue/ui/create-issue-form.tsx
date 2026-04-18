@@ -155,17 +155,17 @@ export function CreateIssueForm({
   return (
     <form onSubmit={handleSubmit} className="flex flex-col h-full">
       {/* ── Header breadcrumb ─────────────────────────────────────────────────── */}
-      <div className="flex items-center gap-2 px-4 py-3 border-b border-border">
+      <div className="flex items-center gap-2 px-4 py-3 border-b border-subtle">
         <HugeiconsIcon
           icon={NoteIcon}
           strokeWidth={2}
-          className="size-4 text-muted-foreground shrink-0"
+          className="size-4 text-secondary shrink-0"
         />
-        <span className="text-xs text-muted-foreground font-medium">
+        <span className="text-11 text-secondary font-medium">
           {projectKey}
         </span>
-        <span className="text-xs text-muted-foreground">›</span>
-        <span className="text-xs text-foreground font-medium">New issue</span>
+        <span className="text-11 text-secondary">›</span>
+        <span className="text-11 text-primary font-medium">New issue</span>
 
         {/* Spacer */}
         <div className="ml-auto flex items-center gap-1">
@@ -210,7 +210,7 @@ export function CreateIssueForm({
           placeholder="Issue title"
           disabled={isPending}
           autoFocus
-          className="border-none bg-transparent px-0 h-auto py-0 text-4xl md:text-2xl font-medium shadow-none focus-visible:ring-0 leading-snug placeholder:text-muted-foreground/50"
+          className="border-none bg-transparent px-0 h-auto py-0 text-40 md:text-24 font-medium shadow-none focus-visible:ring-0 leading-snug placeholder:text-placeholder"
         />
 
         {/* Description — BlockNote editor */}
@@ -273,7 +273,7 @@ export function CreateIssueForm({
             />
             <label
               htmlFor="create-more"
-              className="text-xs text-muted-foreground select-none cursor-pointer"
+              className="text-11 text-secondary select-none cursor-pointer"
             >
               Create more
             </label>

@@ -102,11 +102,11 @@ function EditableText({
   }
 
   if (disabled) {
-    return (
-      <span className={cn('text-sm text-muted-foreground', className)}>
-        {value || <span className="italic opacity-50">{placeholder}</span>}
-      </span>
-    )
+return (
+    <span className={cn('text-14 text-secondary', className)}>
+      {value || <span className="italic opacity-50">{placeholder}</span>}
+    </span>
+  )
   }
 
   if (editing) {
@@ -115,7 +115,7 @@ function EditableText({
       onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
         setDraft(e.target.value),
       autoFocus: true,
-      className: 'text-sm',
+      className: 'text-14',
       placeholder,
     }
     return (
@@ -137,34 +137,34 @@ function EditableText({
             }}
           />
         )}
-        <button
+<button
           onClick={commit}
-          className="mt-1 p-1 rounded text-primary hover:bg-primary/10 shrink-0"
+          className="mt-1 p-1 rounded text-accent-primary hover:bg-accent-subtle shrink-0"
           type="button"
           title="Save"
         >
           <Check className="h-3.5 w-3.5" />
         </button>
-        <button
-          onClick={cancel}
-          className="mt-1 p-1 rounded text-muted-foreground hover:bg-muted shrink-0"
-          type="button"
-          title="Cancel"
-        >
-          <X className="h-3.5 w-3.5" />
-        </button>
-      </div>
+<button
+      onClick={cancel}
+      className="mt-1 p-1 rounded text-secondary hover:bg-layer-1 shrink-0"
+      type="button"
+      title="Cancel"
+    >
+      <X className="h-3.5 w-3.5" />
+    </button>
+  </div>
     )
   }
 
   return (
     <div className={cn('flex items-center gap-1.5 group/edit flex-1 min-w-0', className)}>
-      <span className="text-sm truncate">
-        {value || <span className="italic text-muted-foreground opacity-60">{placeholder}</span>}
+      <span className="text-14 truncate">
+        {value || <span className="italic text-secondary opacity-60">{placeholder}</span>}
       </span>
       <button
         onClick={() => setEditing(true)}
-        className="shrink-0 opacity-0 group-hover/edit:opacity-60 hover:opacity-100! transition-opacity p-0.5 rounded hover:bg-muted"
+        className="shrink-0 opacity-0 group-hover/edit:opacity-60 hover:opacity-100! transition-opacity p-0.5 rounded hover:bg-layer-1"
         type="button"
         title="Edit"
       >
@@ -195,45 +195,45 @@ function PermissionGroup({
   const grantedCount = permissions.filter((p) => pendingPermIds.has(p.id)).length
 
   return (
-    <div className="rounded-lg border bg-muted/5 overflow-hidden">
-      <button
-        type="button"
-        onClick={() => setOpen((o) => !o)}
-        className="w-full flex items-center justify-between px-4 py-2.5 bg-muted/30 hover:bg-muted/50 transition-colors"
-      >
-        <div className="flex items-center gap-2">
-          <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-            {groupName}
-          </span>
-          <Badge variant="secondary" className="text-[9px] h-4 px-1.5">
+<div className="rounded-lg border border-subtle bg-layer-1 overflow-hidden">
+    <button
+      type="button"
+      onClick={() => setOpen((o) => !o)}
+      className="w-full flex items-center justify-between px-4 py-2.5 bg-layer-2 hover:bg-layer-2-hover transition-colors"
+    >
+      <div className="flex items-center gap-2">
+        <span className="text-12 font-semibold uppercase tracking-wider text-secondary">
+          {groupName}
+        </span>
+          <Badge variant="secondary" className="text-10 h-4 px-1.5">
             {grantedCount}/{permissions.length}
           </Badge>
         </div>
-        {open ? (
-          <ChevronUp className="h-3.5 w-3.5 text-muted-foreground" />
-        ) : (
-          <ChevronDown className="h-3.5 w-3.5 text-muted-foreground" />
-        )}
+{open ? (
+        <ChevronUp className="h-3.5 w-3.5 text-secondary" />
+      ) : (
+        <ChevronDown className="h-3.5 w-3.5 text-secondary" />
+      )}
       </button>
 
       {open && (
         <div className="divide-y">
           {permissions.map((perm) => (
-            <div
-              key={perm.id}
-              className={cn(
-                'flex items-center justify-between px-4 py-3 transition-colors',
-                !disabled && 'hover:bg-muted/20'
-              )}
-            >
-              <div className="space-y-0.5 flex-1 min-w-0 pr-4">
-                <span className="text-sm font-medium">
-                  {perm.name || `${perm.resource}:${perm.action}`}
-                </span>
-                <p className="text-[11px] text-muted-foreground font-mono">
-                  {perm.resource}:{perm.action}
-                </p>
-              </div>
+<div
+          key={perm.id}
+          className={cn(
+            'flex items-center justify-between px-4 py-3 transition-colors',
+            !disabled && 'hover:bg-layer-1-hover'
+          )}
+        >
+          <div className="space-y-0.5 flex-1 min-w-0 pr-4">
+            <span className="text-14 font-medium">
+              {perm.name || `${perm.resource}:${perm.action}`}
+            </span>
+            <p className="text-11 text-secondary font-mono">
+              {perm.resource}:{perm.action}
+            </p>
+          </div>
               <Switch
                 checked={pendingPermIds.has(perm.id)}
                 onCheckedChange={() => onToggle(perm.id)}
@@ -354,26 +354,26 @@ export function WorkspaceRolePermissionsPanel({
   )
 
   return (
-    <Card className="flex flex-col h-full shadow-sm border-muted/60">
-      {/* ── Header ── */}
-      <CardHeader className="pb-3 border-b space-y-0">
-        <div className="flex flex-col sm:flex-row sm:items-center gap-4 min-w-0">
-          <div className="flex items-center gap-3 min-w-0 w-full sm:w-auto">
-            <div className="p-1.5 rounded-lg bg-primary/10 shrink-0">
-              <Shield className="h-4 w-4 text-primary" />
-            </div>
+<Card className="flex flex-col h-full shadow-raised-100 border border-subtle">
+        {/* ── Header ── */}
+        <CardHeader className="pb-3 border-b border-subtle space-y-0">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-4 min-w-0">
+            <div className="flex items-center gap-3 min-w-0 w-full sm:w-auto">
+              <div className="p-1.5 rounded-lg bg-accent-subtle shrink-0">
+                <Shield className="h-4 w-4 text-accent-primary" />
+              </div>
 
-            {/* Role name — inline edit */}
-            <div className="flex-1 min-w-0 flex items-center gap-3">
-              <EditableText
-                value={name}
-                onCommit={setName}
-                disabled={!canEditIdentity}
-                placeholder="Role name"
-                className="font-semibold text-base"
-              />
+              {/* Role name — inline edit */}
+              <div className="flex-1 min-w-0 flex items-center gap-3">
+                <EditableText
+                  value={name}
+                  onCommit={setName}
+                  disabled={!canEditIdentity}
+                  placeholder="Role name"
+                  className="font-semibold text-16"
+                />
               {role.isSystem && (
-                <Badge variant="secondary" className="text-[9px] h-4 px-1.5 uppercase tracking-wide shrink-0">
+                <Badge variant="secondary" className="text-10 h-4 px-1.5 uppercase tracking-wide shrink-0">
                   System
                 </Badge>
               )}
@@ -389,7 +389,7 @@ export function WorkspaceRolePermissionsPanel({
                   size="sm"
                   onClick={handleCancel}
                   disabled={isSaving}
-                  className="h-8 text-xs flex-1 sm:flex-none"
+                  className="h-8 text-12 flex-1 sm:flex-none"
                 >
                   <X className="h-3.5 w-3.5 mr-1" />
                   Cancel
@@ -398,7 +398,7 @@ export function WorkspaceRolePermissionsPanel({
                   size="sm"
                   onClick={handleSave}
                   disabled={isSaving}
-                  className="h-8 text-xs px-4 flex-1 sm:flex-none"
+                  className="h-8 text-12 px-4 flex-1 sm:flex-none"
                 >
                   {isSaving ? 'Saving…' : 'Save'}
                 </Button>
@@ -406,15 +406,15 @@ export function WorkspaceRolePermissionsPanel({
             )}
             {!role.isSystem && (
               <Guard permission="workspace:role:delete">
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="h-8 w-8 text-destructive hover:bg-destructive/10 shrink-0"
-                  onClick={() => onDelete?.(role.id)}
-                  disabled={isSaving}
-                  title="Delete role"
-                >
-                  <Trash2 className="h-3.5 w-3.5" />
+<Button
+            variant="ghost"
+            size="icon"
+            className="h-8 w-8 text-danger-primary hover:bg-danger-subtle shrink-0"
+            onClick={() => onDelete?.(role.id)}
+            disabled={isSaving}
+            title="Delete role"
+          >
+            <Trash2 className="h-3.5 w-3.5" />
                 </Button>
               </Guard>
             )}
@@ -424,7 +424,7 @@ export function WorkspaceRolePermissionsPanel({
         {/* Description + Rank row — inline edit */}
         <div className="flex flex-col sm:flex-row items-start gap-4 sm:gap-6 pt-4 sm:pt-3 pl-0 sm:pl-10">
           <div className="flex-1 min-w-0 w-full">
-            <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground mb-1">Description</p>
+            <p className="text-10 font-semibold uppercase tracking-wider text-secondary mb-1">Description</p>
             <EditableText
               value={description}
               onCommit={setDescription}
@@ -434,9 +434,9 @@ export function WorkspaceRolePermissionsPanel({
             />
           </div>
           <div className="shrink-0 w-full sm:w-24">
-            <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground mb-1">Rank</p>
+            <p className="text-10 font-semibold uppercase tracking-wider text-secondary mb-1">Rank</p>
             {!canEditIdentity ? (
-              <span className="text-sm text-muted-foreground">{rank}</span>
+              <span className="text-14 text-secondary">{rank}</span>
             ) : (
               <Input
                 type="number"
@@ -452,27 +452,27 @@ export function WorkspaceRolePermissionsPanel({
                 disabled={isSaving}
                 min={0}
                 max={99}
-                className="h-9 text-sm w-full [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                className="h-9 text-14 w-full [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
               />
             )}
           </div>
         </div>
 
-        {role.isSystem && (
-          <p className="pl-0 sm:pl-10 mt-3 sm:mt-2 text-xs text-muted-foreground italic">
-            System roles are managed by Collabify and cannot be modified.
-          </p>
-        )}
-      </CardHeader>
+{role.isSystem && (
+            <p className="pl-0 sm:pl-10 mt-3 sm:mt-2 text-12 text-secondary italic">
+              System roles are managed by Collabify and cannot be modified.
+            </p>
+          )}
+        </CardHeader>
 
-      {/* ── Permissions Matrix ── */}
-      <CardContent className="flex-1 overflow-y-auto py-5 space-y-3">
-        <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-4">
-          Permissions
-        </p>
+        {/* ── Permissions Matrix ── */}
+        <CardContent className="flex-1 overflow-y-auto py-5 space-y-3">
+          <p className="text-11 font-semibold uppercase tracking-wider text-secondary mb-4">
+            Permissions
+          </p>
 
         {availablePermissions.length === 0 ? (
-          <div className="flex items-center justify-center h-32 text-sm text-muted-foreground border-2 border-dashed rounded-lg">
+          <div className="flex items-center justify-center h-32 text-14 text-secondary border-2 border-dashed border-subtle rounded-lg">
             No workspace permissions available
           </div>
         ) : (

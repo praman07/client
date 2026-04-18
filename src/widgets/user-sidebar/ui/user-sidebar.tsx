@@ -60,14 +60,14 @@ export function UserSidebar() {
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" render={<Link to="/home" />}>
               <div className="flex items-center gap-2">
-                <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+                <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-accent-primary text-on-color">
                   <Grid2X2 className="size-4" />
                 </div>
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-semibold tracking-tight">
                     Collabify
                   </span>
-                  <span className="truncate text-[10px] text-muted-foreground uppercase font-bold tracking-widest">
+                  <span className="truncate text-[10px] text-secondary uppercase font-bold tracking-widest">
                     Workspace Layer
                   </span>
                 </div>
@@ -152,7 +152,7 @@ export function UserSidebar() {
         </SidebarGroup>
       </SidebarContent>
 
-      <SidebarFooter className="border-t border-border/50 p-2">
+      <SidebarFooter className="border-t border-subtle p-2">
         <SidebarMenu>
           <SidebarMenuItem>
             <DropdownMenu>
@@ -164,7 +164,7 @@ export function UserSidebar() {
                   />
                 }
               >
-                <Avatar className="h-8 w-8 rounded-lg bg-muted">
+                <Avatar className="h-8 w-8 rounded-lg bg-layer-2">
                   <AvatarImage
                     src={user?.avatarUrl ?? undefined}
                     alt={user?.fullName ?? ''}
@@ -177,7 +177,7 @@ export function UserSidebar() {
                   <span className="truncate font-semibold">
                     {user?.fullName}
                   </span>
-                  <span className="truncate text-xs text-muted-foreground">
+                  <span className="truncate text-xs text-secondary">
                     {user?.email}
                   </span>
                 </div>
@@ -192,7 +192,7 @@ export function UserSidebar() {
                 <DropdownMenuGroup>
                   <DropdownMenuLabel className="p-0 font-normal">
                     <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
-                      <Avatar className="h-8 w-8 rounded-lg bg-muted">
+                      <Avatar className="h-8 w-8 rounded-lg bg-layer-2">
                         <AvatarImage
                           src={user?.avatarUrl ?? undefined}
                           alt={user?.fullName ?? ''}
@@ -205,7 +205,7 @@ export function UserSidebar() {
                         <span className="truncate font-semibold">
                           {user?.fullName}
                         </span>
-                        <span className="truncate text-xs text-muted-foreground">
+                        <span className="truncate text-xs text-secondary">
                           {user?.email}
                         </span>
                       </div>
@@ -224,8 +224,10 @@ export function UserSidebar() {
                   className="gap-2 p-2"
                   onClick={() => void signOut()}
                 >
-                  <LogOut className="size-4 text-destructive" />
-                  <span className="text-destructive font-medium">Log out</span>
+                  <LogOut className="size-4 text-danger-primary" />
+                  <span className="text-danger-primary font-medium">
+                    Log out
+                  </span>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>

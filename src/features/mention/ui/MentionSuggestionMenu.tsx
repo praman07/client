@@ -22,7 +22,7 @@ interface TabConfig {
   label: string
 }
 
-const TABS: TabConfig[] = [
+const TABS: Array<TabConfig> = [
   { key: 'ALL',                       label: 'All'         },
   { key: SearchEntityType.User,       label: 'People'      },
   { key: SearchEntityType.Page,       label: 'Pages'       },
@@ -38,7 +38,7 @@ const TABS: TabConfig[] = [
 // the menu is used outside a BlockNote editor (e.g. ChatMentionTrigger).
 // MentionMenuController passes a compatible superset via spread {...props}.
 interface MentionSuggestionMenuProps {
-  items: DefaultReactSuggestionItem[]
+  items: Array<DefaultReactSuggestionItem>
   selectedIndex: number | null | undefined
   onItemClick?: (item: DefaultReactSuggestionItem) => void
   activeTab: TabFilter

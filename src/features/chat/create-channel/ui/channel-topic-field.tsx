@@ -100,7 +100,7 @@ export function ChannelTopicField({ form }: Props) {
               className="max-h-[120px] resize-none overflow-hidden"
             />
             {field.state.meta.errors.length > 0 && (
-              <p className="text-sm text-destructive font-medium">
+              <p className="text-sm text-danger-primary font-medium">
                 {field.state.meta.errors.join(', ')}
               </p>
             )}

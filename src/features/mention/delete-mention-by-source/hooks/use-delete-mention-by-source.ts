@@ -11,7 +11,7 @@ export function useDeleteMentionsBySource() {
       const token = await getToken()
       const client = GqlClient(token)
       const data = await client.request(DELETE_MENTIONS_BY_SOURCE, { sourceEntityId })
-      return data.deleteMentionsBySource as number
+      return data.deleteMentionsBySource
     },
   })
 }

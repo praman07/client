@@ -152,7 +152,7 @@ export function VaultExplorer({
             {/* Folders section */}
             {(folders).length > 0 && (
               <section>
-                <h2 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-3">
+                <h2 className="text-xs font-semibold uppercase tracking-wider text-secondary mb-3">
                   Folders
                 </h2>
                 <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-3">
@@ -184,7 +184,7 @@ export function VaultExplorer({
             {/* Files section */}
             {(files).length > 0 && (
               <section>
-                <h2 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-3">
+                <h2 className="text-xs font-semibold uppercase tracking-wider text-secondary mb-3">
                   Files
                 </h2>
                 <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-3">

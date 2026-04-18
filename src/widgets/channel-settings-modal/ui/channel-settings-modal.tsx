@@ -32,16 +32,16 @@ export function ChannelSettingsModal() {
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && close()}>
-      <DialogContent className="max-w-2xl w-[calc(100vw-2rem)] h-[min(640px,90dvh)] flex flex-col p-0 gap-0 overflow-hidden bg-background border-border">
+      <DialogContent className="max-w-2xl w-[calc(100vw-2rem)] h-[min(640px,90dvh)] flex flex-col p-0 gap-0 overflow-hidden bg-surface-2 border-subtle">
 
         {/* ── Header: title + tab bar ── */}
         <DialogHeader className="px-6 pt-5 pb-0 shrink-0 space-y-0">
-          <DialogTitle className="text-base font-semibold text-foreground flex items-center gap-1.5 pb-3">
+          <DialogTitle className="text-16 font-semibold text-primary flex items-center gap-1.5 pb-3">
             {isLoading ? (
               <Skeleton className="h-5 w-40" />
             ) : (
               <>
-                <span className="text-muted-foreground font-normal">#</span>
+                <span className="text-secondary font-normal">#</span>
                 <span>{conversation?.name ?? 'Channel Settings'}</span>
               </>
             )}
@@ -51,7 +51,7 @@ export function ChannelSettingsModal() {
           <nav
             role="tablist"
             aria-label="Channel settings tabs"
-            className="flex items-end -mx-6 px-6 overflow-x-auto overflow-y-hidden scrollbar-none border-b border-border"
+            className="flex items-end -mx-6 px-6 overflow-x-auto overflow-y-hidden scrollbar-none border-b border-subtle"
           >
             {isLoading ? (
               <div className="flex gap-6 pb-2.5">
@@ -67,15 +67,15 @@ export function ChannelSettingsModal() {
                   aria-selected={activeTab === tab.value}
                   onClick={() => setTab(tab.value)}
                   className={cn(
-                    'shrink-0 pb-2.5 pt-1 mr-5 text-sm font-medium border-b-2 transition-colors whitespace-nowrap focus-visible:outline-none',
+                    'shrink-0 pb-2.5 pt-1 mr-5 text-14 font-medium border-b-2 transition-colors whitespace-nowrap focus-visible:outline-none',
                     activeTab === tab.value
-                      ? 'border-foreground text-foreground'
-                      : 'border-transparent text-muted-foreground hover:text-foreground hover:border-border/60',
+                      ? 'border-accent-strong text-primary'
+                      : 'border-transparent text-secondary hover:text-primary hover:border-subtle-1',
                   )}
                 >
                   {tab.label}
                   {tab.badge != null && (
-                    <span className="ml-1.5 text-xs font-normal text-muted-foreground">
+                    <span className="ml-1.5 text-11 font-normal text-secondary">
                       {tab.badge}
                     </span>
                   )}

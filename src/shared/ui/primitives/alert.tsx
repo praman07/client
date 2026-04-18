@@ -5,13 +5,35 @@ import type { VariantProps } from 'class-variance-authority'
 import { cn } from '@/shared/lib/utils'
 
 const alertVariants = cva(
-  "grid gap-0.5 rounded-lg border px-4 py-3 text-left text-sm has-data-[slot=alert-action]:relative has-data-[slot=alert-action]:pr-18 has-[>svg]:grid-cols-[auto_1fr] has-[>svg]:gap-x-2.5 *:[svg]:row-span-2 *:[svg]:translate-y-0.5 *:[svg]:text-current *:[svg:not([class*='size-'])]:size-4 w-full relative group/alert",
+  [
+    // Layout
+    'grid gap-0.5 rounded-lg border px-4 py-3 text-left text-13',
+    // Action support
+    'has-data-[slot=alert-action]:relative has-data-[slot=alert-action]:pr-18',
+    // Icon layout
+    "has-[>svg]:grid-cols-[auto_1fr] has-[>svg]:gap-x-2.5",
+    "*:[svg]:row-span-2 *:[svg]:translate-y-0.5 *:[svg]:text-current",
+    "*:[svg:not([class*='size-'])]:size-4",
+    'w-full relative group/alert',
+  ],
   {
     variants: {
       variant: {
-        default: 'bg-card text-card-foreground border-border',
+        // Neutral / informational
+        default:
+          'bg-layer-1 text-primary border-subtle',
+        // Accent / info
+        info:
+          'bg-accent-subtle text-accent-primary border-accent-subtle *:[svg]:text-accent-primary',
+        // Success
+        success:
+          'bg-success-subtle text-success-primary border-success-subtle *:[svg]:text-success-primary',
+        // Warning
+        warning:
+          'bg-warning-subtle text-warning-primary border-warning-subtle *:[svg]:text-warning-primary',
+        // Danger / destructive
         destructive:
-          'text-destructive bg-card border-destructive/20 *:data-[slot=alert-description]:text-destructive/90 *:[svg]:text-current',
+          'bg-danger-subtle text-danger-primary border-danger-subtle *:[svg]:text-danger-primary',
       },
     },
     defaultVariants: {
@@ -40,7 +62,9 @@ function AlertTitle({ className, ...props }: React.ComponentProps<'div'>) {
     <div
       data-slot="alert-title"
       className={cn(
-        'font-medium group-has-[>svg]/alert:col-start-2 [&_a]:hover:text-foreground [&_a]:underline [&_a]:underline-offset-3',
+        'text-13 font-semibold leading-snug',
+        'group-has-[>svg]/alert:col-start-2',
+        '[&_a]:hover:underline [&_a]:underline-offset-3',
         className,
       )}
       {...props}
@@ -56,7 +80,10 @@ function AlertDescription({
     <div
       data-slot="alert-description"
       className={cn(
-        'text-muted-foreground text-sm text-balance md:text-pretty [&_p:not(:last-child)]:mb-4 [&_a]:hover:text-foreground [&_a]:underline [&_a]:underline-offset-3',
+        'text-12 opacity-90 text-balance md:text-pretty leading-relaxed',
+        'group-has-[>svg]/alert:col-start-2',
+        '[&_p:not(:last-child)]:mb-3',
+        '[&_a]:underline [&_a]:underline-offset-3',
         className,
       )}
       {...props}

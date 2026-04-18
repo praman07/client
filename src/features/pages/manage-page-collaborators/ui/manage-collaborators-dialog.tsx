@@ -77,13 +77,13 @@ export function ManageCollaboratorsDialog({
             </DialogDescription>
           </DialogHeader>
 
-          <ScrollArea className="max-h-[400px] rounded-md border p-2">
+          <ScrollArea className="max-h-[400px] rounded-lg border border-subtle p-2">
             {isLoading ? (
-              <div className="text-sm text-muted-foreground py-6 text-center">
+              <div className="text-13 text-secondary py-6 text-center">
                 Loading...
               </div>
             ) : !collaborators || collaborators.length === 0 ? (
-              <div className="text-sm text-muted-foreground py-6 text-center">
+              <div className="text-13 text-secondary py-6 text-center">
                 No collaborators yet.
               </div>
             ) : (
@@ -96,24 +96,24 @@ export function ManageCollaboratorsDialog({
                   return (
                     <div
                       key={collab.userId}
-                      className="flex items-center gap-3 rounded-lg p-3"
+                      className="flex items-center gap-3 rounded-lg p-3 hover:bg-layer-1-hover transition-colors duration-100"
                     >
                       <Avatar className="h-9 w-9 shrink-0">
                         <AvatarImage src={avatar} />
-                        <AvatarFallback className="text-xs">
+                        <AvatarFallback className="text-11">
                           {getInitials(name)}
                         </AvatarFallback>
                       </Avatar>
                       <div className="flex flex-1 flex-col min-w-0">
-                        <span className="text-sm font-medium truncate">
+                        <span className="text-13 font-medium truncate">
                           {name}
                           {isCreator && (
-                            <span className="ml-2 text-xs text-muted-foreground">
+                            <span className="ml-2 text-11 text-secondary">
                               (Creator)
                             </span>
                           )}
                         </span>
-                        <span className="text-xs text-muted-foreground truncate">
+                        <span className="text-11 text-secondary truncate">
                           {email}
                         </span>
                       </div>
@@ -121,7 +121,7 @@ export function ManageCollaboratorsDialog({
                         <Button
                           variant="ghost"
                           size="icon"
-                          className="h-8 w-8 text-muted-foreground hover:text-destructive"
+                          className="h-8 w-8 text-secondary hover:text-danger-primary"
                           disabled={isRemoving}
                           onClick={() => handleRemove(collab.userId, name)}
                         >

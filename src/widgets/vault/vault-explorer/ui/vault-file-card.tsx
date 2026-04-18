@@ -48,15 +48,15 @@ export function VaultFileCard({
         className={cn(
           'group flex flex-col rounded-xl cursor-pointer select-none transition-all duration-150 overflow-hidden border',
           isSelected
-            ? 'border-primary/40 ring-2 ring-primary/30 bg-primary/5'
-            : 'border-border/50 hover:border-border hover:shadow-md bg-card',
+            ? 'border-accent-subtle ring-2 ring-accent-subtle bg-accent-subtle'
+            : 'border-subtle/50 hover:border-subtle hover:shadow-md bg-layer-1',
         )}
       >
         {/* ── Preview area ──────────────────────────────── */}
         <div
           className={cn(
             'relative flex h-32 w-full items-center justify-center overflow-hidden transition-colors duration-150',
-            showThumb ? 'bg-muted/40' : bgColor,
+            showThumb ? 'bg-layer-2/40' : bgColor,
             !isSelected && !showThumb && 'group-hover:brightness-95',
           )}
         >
@@ -87,14 +87,14 @@ export function VaultFileCard({
           </span>
           <button
             onClick={(e) => e.stopPropagation()}
-            className="shrink-0 rounded-md p-1 opacity-0 group-hover:opacity-100 hover:bg-muted transition-opacity duration-100"
+            className="shrink-0 rounded-md p-1 opacity-0 group-hover:opacity-100 hover:bg-layer-1 transition-opacity duration-100"
           >
-            <MoreHorizontal className="h-3.5 w-3.5 text-muted-foreground" />
+            <MoreHorizontal className="h-3.5 w-3.5 text-secondary" />
           </button>
         </div>
 
         {/* ── Metadata row ──────────────────────────────── */}
-        <div className="flex items-center gap-1 px-3 pb-2.5 text-[10px] text-muted-foreground truncate">
+        <div className="flex items-center gap-1 px-3 pb-2.5 text-xs text-secondary truncate">
           {file.uploader && (
             <>
               <span className="truncate max-w-20">

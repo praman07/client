@@ -13,6 +13,7 @@ import {
   ChatToolbarTextarea,
 } from './components/chat-layout'
 import type { StagedAttachment } from '@/features/chat/media'
+import type { MentionRef } from '@/widgets/chat-window/ui/components/RichChatContent'
 import { Separator } from '@/shared/ui/primitives/separator'
 import {
   Tooltip,
@@ -34,7 +35,6 @@ import {
   useVaultQuota,
 } from '@/features/chat/media'
 import { ChatMentionTrigger } from '@/features/mention'
-import type { MentionRef } from '@/widgets/chat-window/ui/components/RichChatContent'
 
 interface MessageInputProps {
   channelId: string
@@ -47,7 +47,7 @@ export function MessageInput({ channelId, projectId, workspaceId, channelName }:
   const { userId, getToken } = useAuth()
   const queryClient = useQueryClient()
   const [content, setContent] = useState('')
-  const [mentions, setMentions] = useState<MentionRef[]>([])
+  const [mentions, setMentions] = useState<Array<MentionRef>>([])
   const [isMentionMenuOpen, setIsMentionMenuOpen] = useState(false)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
   const { requestEdit } = useEditRequest()
@@ -271,15 +271,15 @@ export function MessageInput({ channelId, projectId, workspaceId, channelName }:
 
       {/* ── Replying-To Banner ──────────────────────────────────── */}
       {replyingTo && (
-        <div className="flex items-center justify-between px-4 py-2 bg-muted/60 rounded-t-xl border border-border/50 border-b-0 text-xs">
+        <div className="flex items-center justify-between px-4 py-2 bg-layer-2 rounded-t-xl border-subtle-1 border-b-0 text-11">
           <div className="flex items-center gap-1.5 min-w-0">
-            <span className="text-muted-foreground shrink-0">Replying to</span>
-            <strong className="text-foreground shrink-0">{replyingTo.displayName}</strong>
-            <span className="text-muted-foreground/60 truncate">{replyingTo.contentSnippet}</span>
+            <span className="text-secondary shrink-0">Replying to</span>
+            <strong className="text-primary shrink-0">{replyingTo.displayName}</strong>
+            <span className="text-tertiary truncate">{replyingTo.contentSnippet}</span>
           </div>
           <button
             onClick={clearReply}
-            className="ml-2 shrink-0 text-muted-foreground hover:text-destructive transition-colors text-sm leading-none"
+            className="ml-2 shrink-0 text-secondary hover:text-danger-primary transition-colors text-14 leading-none"
             aria-label="Cancel reply"
           >
             ✕
@@ -301,7 +301,7 @@ export function MessageInput({ channelId, projectId, workspaceId, channelName }:
       <ChatToolbar className="pb-safe overflow-visible">
         <div
           className={cn(
-            'flex flex-col w-full rounded-xl ring-1 ring-border/50 bg-card',
+            'flex flex-col w-full rounded-xl border-subtle-1 bg-layer-1',
             replyingTo && 'rounded-tl-none rounded-tr-none',
           )}
         >
@@ -347,7 +347,7 @@ export function MessageInput({ channelId, projectId, workspaceId, channelName }:
               <Separator orientation="vertical" className="h-4 mx-1.5" />
               <Tooltip>
                 <TooltipTrigger
-                  className="size-7 inline-flex items-center justify-center rounded-md text-muted-foreground opacity-50 cursor-not-allowed"
+                  className="size-7 inline-flex items-center justify-center rounded-md text-disabled cursor-not-allowed"
                   disabled
                   aria-label="Bold (coming soon)"
                 >
@@ -357,7 +357,7 @@ export function MessageInput({ channelId, projectId, workspaceId, channelName }:
               </Tooltip>
               <Tooltip>
                 <TooltipTrigger
-                  className="size-7 inline-flex items-center justify-center rounded-md text-muted-foreground opacity-50 cursor-not-allowed"
+                  className="size-7 inline-flex items-center justify-center rounded-md text-disabled cursor-not-allowed"
                   disabled
                   aria-label="Link (coming soon)"
                 >
@@ -367,7 +367,7 @@ export function MessageInput({ channelId, projectId, workspaceId, channelName }:
               </Tooltip>
               <Tooltip>
                 <TooltipTrigger
-                  className="size-7 inline-flex items-center justify-center rounded-md text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
+                  className="size-7 inline-flex items-center justify-center rounded-md text-secondary hover:text-primary hover:bg-accent-subtle transition-colors"
                   aria-label="Mention"
                   onClick={() => {
                     const textarea = textareaRef.current
@@ -397,7 +397,7 @@ export function MessageInput({ channelId, projectId, workspaceId, channelName }:
               <Button
                 variant="ghost"
                 size="icon"
-                className="size-7 text-muted-foreground hover:text-foreground"
+                className="size-7 text-secondary hover:text-primary"
                 aria-label="Add emoji (coming soon)"
                 disabled
               >

@@ -66,7 +66,7 @@ export function RenameBoardInput({
   if (!isEditing) {
     return (
       <h1
-        className="cursor-pointer text-2xl font-bold hover:text-primary"
+        className="cursor-pointer text-20 font-bold hover:text-primary"
         onClick={() => setIsEditing(true)}
         title="Click to rename"
       >
@@ -119,11 +119,11 @@ export function RenameBoardInput({
                 }
               }}
               disabled={isPending}
-              className="text-2xl font-bold"
+              className="text-20 font-bold"
               aria-label="Board title"
             />
             {field.state.meta.errors.length > 0 && (
-              <p className="mt-1 text-sm text-destructive">
+              <p className="mt-1 text-sm text-danger-primary">
                 {field.state.meta.errors.join(', ')}
               </p>
             )}
@@ -135,10 +135,10 @@ export function RenameBoardInput({
         <button
           type="submit"
           disabled={isPending || form.state.errors.length > 0}
-          className="rounded-md p-1 hover:bg-accent disabled:opacity-50"
+          className="rounded-md p-1 hover:bg-layer-2 disabled:text-disabled"
           title="Save (Enter)"
         >
-          <Check className="h-5 w-5 text-green-600" />
+          <Check className="h-5 w-5 text-success-primary" />
         </button>
         <button
           type="button"
@@ -148,10 +148,10 @@ export function RenameBoardInput({
             onCancel?.()
           }}
           disabled={isPending}
-          className="rounded-md p-1 hover:bg-accent disabled:opacity-50"
+          className="rounded-md p-1 hover:bg-layer-2 disabled:text-disabled"
           title="Cancel (Esc)"
         >
-          <X className="h-5 w-5 text-destructive" />
+          <X className="h-5 w-5 text-danger-primary" />
         </button>
       </div>
     </form>

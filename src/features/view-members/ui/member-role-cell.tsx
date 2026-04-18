@@ -23,20 +23,20 @@ interface MemberRoleCellProps {
 function getRoleBadgeClass(roleName: string): string {
   const name = roleName.toUpperCase()
   if (name === 'OWNER')
-    return 'bg-amber-500/15 text-amber-400 border-amber-500/30 hover:bg-amber-500/25'
+    return 'bg-warning-subtle text-warning-primary border-warning-subtle hover:bg-warning-subtle'
   if (name === 'ADMIN')
-    return 'bg-blue-500/15 text-blue-400 border-blue-500/30 hover:bg-blue-500/25'
+    return 'bg-accent-subtle text-accent-primary border-accent-subtle hover:bg-accent-subtle'
   if (name === 'GUEST')
-    return 'bg-muted/50 text-muted-foreground/70 border-border/50 hover:bg-muted'
-  return 'bg-muted/80 text-muted-foreground border-border hover:bg-muted'
+    return 'bg-layer-2 text-tertiary border-subtle hover:bg-layer-2-hover'
+  return 'bg-layer-2 text-secondary border-subtle hover:bg-layer-2-hover'
 }
 
 function getRoleItemBadgeClass(roleName: string): string {
   const name = roleName.toUpperCase()
-  if (name === 'OWNER') return 'bg-amber-500/15 text-amber-400'
-  if (name === 'ADMIN') return 'bg-blue-500/15 text-blue-400'
-  if (name === 'GUEST') return 'bg-muted/50 text-muted-foreground/70'
-  return 'bg-muted text-muted-foreground'
+  if (name === 'OWNER') return 'bg-warning-subtle text-warning-primary'
+  if (name === 'ADMIN') return 'bg-accent-subtle text-accent-primary'
+  if (name === 'GUEST') return 'bg-layer-2 text-tertiary'
+  return 'bg-layer-2 text-secondary'
 }
 
 export function MemberRoleCell({
@@ -79,11 +79,11 @@ export function MemberRoleCell({
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className="rounded-md outline-none focus-visible:ring-1 focus-visible:ring-ring/50">
+      <DropdownMenuTrigger className="rounded-md outline-none">
         {badge}
       </DropdownMenuTrigger>
       <DropdownMenuContent align="start" className="w-44 p-1">
-        <p className="px-2 py-1 text-[10px] uppercase tracking-widest text-muted-foreground font-medium">
+        <p className="px-2 py-1 text-10 uppercase tracking-widest text-tertiary font-medium">
           Assign role
         </p>
         <DropdownMenuSeparator />
@@ -109,7 +109,7 @@ export function MemberRoleCell({
                 </span>
               </span>
               {isSelected && (
-                <CheckIcon className="h-3.5 w-3.5 text-muted-foreground" />
+                <CheckIcon className="h-3.5 w-3.5 text-tertiary" />
               )}
             </DropdownMenuItem>
           )

@@ -77,7 +77,7 @@ export function ChatAttachmentPicker({
         variant="ghost"
         size="icon"
         className={cn(
-          'size-7 text-muted-foreground hover:text-foreground',
+          'size-7 text-secondary hover:text-primary',
           isDisabled && 'opacity-50 cursor-not-allowed',
           className,
         )}

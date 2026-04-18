@@ -26,7 +26,7 @@ import {
 } from '@/shared/lib/blocknote'
 import { VaultFileSource, markFilesUnreferenced } from '@/shared/api/vault'
 import { createLogger } from '@/shared/lib/logger'
-import { mentionSchema, MentionMenuController, useSyncMentions } from '@/features/mention'
+import { MentionMenuController, mentionSchema, useSyncMentions } from '@/features/mention'
 
 interface EditIssueDescriptionEditorProps {
   issueId: string
@@ -97,7 +97,7 @@ export function EditIssueDescriptionEditor({
   useEffect(() => {
     if (editorRef) {
       // Cast to `any` — parent only calls .document; safe regardless of schema generics
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+       
       editorRef.current = editor as any
     }
   }, [editor, editorRef])
@@ -192,7 +192,7 @@ export function EditIssueDescriptionEditor({
 
   if (isLoading) {
     return (
-      <div className="py-2 text-sm text-muted-foreground animate-pulse">
+      <div className="py-2 text-sm text-secondary animate-pulse">
         Loading description…
       </div>
     )

@@ -80,7 +80,7 @@ export function PageTreeItem({ node, depth = 0 }: PageTreeItemProps) {
               <span className="truncate">{node.page.title || 'Untitled'}</span>
             </SidebarMenuButton>
             <CollapsibleTrigger
-              className="absolute right-6 flex h-4 w-4 items-center justify-center text-muted-foreground hover:text-foreground"
+              className="absolute right-6 flex h-4 w-4 items-center justify-center text-secondary hover:text-primary"
               onClick={(e) => {
                 e.preventDefault()
                 e.stopPropagation()

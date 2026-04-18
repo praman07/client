@@ -26,7 +26,7 @@ export function FilterChip({ chip, onRemove }: FilterChipProps) {
       <Button
         variant="ghost"
         size="icon"
-        className="ml-0.5 h-4 w-4 rounded-sm p-0 text-muted-foreground hover:text-foreground hover:bg-transparent"
+        className="ml-0.5 h-4 w-4 rounded-sm p-0 text-secondary hover:text-primary hover:bg-transparent"
         onClick={() => onRemove(chip.category)}
         aria-label={`Remove ${chip.label} filter`}
       >

@@ -63,7 +63,7 @@ function MessageEventDescription({
   return (
     <span
       data-slot="chat-event-description"
-      className={cn('text-xs text-muted-foreground leading-tight', className)}
+      className={cn('text-11 text-secondary leading-tight', className)}
       {...props}
     />
   )

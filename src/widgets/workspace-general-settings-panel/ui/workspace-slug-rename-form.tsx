@@ -56,9 +56,9 @@ export function WorkspaceSlugRenameForm({
   })
 
   return (
-    <Card className="border-destructive/20 shadow-sm">
-      <CardHeader>
-        <CardTitle className="text-destructive">Danger Zone: Workspace URL</CardTitle>
+<Card className="border border-danger-strong shadow-sm">
+        <CardHeader>
+          <CardTitle className="text-danger-primary">Danger Zone: Workspace URL</CardTitle>
         <CardDescription>
           Changing your workspace URL will break all existing links to files and projects.
         </CardDescription>
@@ -71,7 +71,7 @@ export function WorkspaceSlugRenameForm({
         }}
       >
         <CardContent className="space-y-4">
-          <Alert variant="destructive" className="bg-destructive/5 border-destructive/10">
+          <Alert variant="destructive" className="bg-danger-subtle border border-danger-subtle">
             <Info className="h-4 w-4" />
             <AlertTitle>Heads up!</AlertTitle>
             <AlertDescription className="text-xs">
@@ -92,8 +92,8 @@ export function WorkspaceSlugRenameForm({
             {(field) => (
               <div className="space-y-2">
                 <Label htmlFor={field.name}>Workspace URL</Label>
-                <div className="flex items-center gap-0 h-10 w-full rounded-md border border-input bg-transparent px-0 ring-offset-background focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2">
-                  <span className="shrink-0 flex items-center h-full px-3 text-sm text-muted-foreground bg-muted/50 border-r rounded-l-md font-medium select-none">
+<div className="flex items-center gap-0 h-10 w-full rounded-md border border-subtle-1 bg-transparent px-0">
+          <span className="shrink-0 flex items-center h-full px-3 text-14 text-secondary bg-layer-1 border-r border-subtle rounded-l-md font-medium select-none">
                     {currentUrl.replace(initialSlug, '')}
                   </span>
                   <input
@@ -102,19 +102,19 @@ export function WorkspaceSlugRenameForm({
                     value={field.state.value}
                     onBlur={field.handleBlur}
                     onChange={(e) => field.handleChange(e.target.value.toLowerCase())}
-                    className="flex-1 bg-transparent px-3 py-2 text-sm outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50"
+                    className="flex-1 bg-transparent px-3 py-2 text-14 outline-none placeholder:text-placeholder disabled:cursor-not-allowed disabled:opacity-50"
                   />
                 </div>
-                {field.state.meta.errors.length > 0 && (
-                  <p className="text-sm text-destructive font-medium">
-                    {field.state.meta.errors.join(', ')}
-                  </p>
-                )}
+{field.state.meta.errors.length > 0 && (
+            <p className="text-14 text-danger-primary font-medium">
+              {field.state.meta.errors.join(', ')}
+            </p>
+          )}
               </div>
             )}
           </form.Field>
         </CardContent>
-        <CardFooter className="border-t bg-destructive/3 flex items-center justify-end py-4">
+        <CardFooter className="border-t border-subtle bg-danger-subtle flex items-center justify-end py-4">
           <form.Subscribe
             selector={(state) => [state.canSubmit, state.isSubmitting, state.isDirty]}
             children={([canSubmit, isSubmitting, isDirty]) => (

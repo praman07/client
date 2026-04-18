@@ -16,7 +16,7 @@ export function WorkspaceGeneralSettingsPanel() {
   if (!currentWorkspace) {
     return (
       <div className="flex items-center justify-center h-64">
-        <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+        <Loader2 className="h-8 w-8 animate-spin text-secondary" />
       </div>
     )
   }
@@ -46,7 +46,7 @@ export function WorkspaceGeneralSettingsPanel() {
     <div className="max-w-4xl">
       {/* Header — Save Changes button is inside the form, shown only when dirty */}
       <div className="mb-4">
-        <h2 className="text-xl font-bold tracking-tight">General Settings</h2>
+        <h2 className="text-20 font-semibold tracking-tight">General Settings</h2>
       </div>
 
       <Separator className="mb-8" />

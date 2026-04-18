@@ -30,12 +30,12 @@ export function ProjectSettingsTabs({
   if (!canViewSettings) {
     return (
       <div className="flex flex-col items-center justify-center gap-4 py-20 text-center">
-        <div className="p-3 rounded-full bg-destructive/10">
-          <ShieldOff className="h-7 w-7 text-destructive" />
+        <div className="p-3 rounded-full bg-danger-subtle">
+          <ShieldOff className="h-7 w-7 text-danger-primary" />
         </div>
         <div className="space-y-1">
           <h2 className="text-lg font-semibold">Access Restricted</h2>
-          <p className="text-sm text-muted-foreground max-w-sm">
+          <p className="text-sm text-secondary max-w-sm">
             You don't have permission to view project settings. Contact a project Manager
             to request access.
           </p>
@@ -49,7 +49,7 @@ export function ProjectSettingsTabs({
       {/* Page header */}
       <div>
         <h1 className="text-3xl font-bold tracking-tight">Project Settings</h1>
-        <p className="text-muted-foreground mt-1">
+        <p className="text-secondary mt-1">
           Manage this project's configuration, members, and access roles.
         </p>
       </div>
@@ -72,7 +72,7 @@ export function ProjectSettingsTabs({
                     'flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-lg transition-colors',
                     isActive
                       ? 'bg-primary/10 text-primary'
-                      : 'text-muted-foreground hover:bg-muted hover:text-foreground'
+                      : 'text-secondary hover:bg-layer-2 hover:text-primary'
                   )}
                 >
                   <Icon className="h-4 w-4" />

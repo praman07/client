@@ -60,7 +60,7 @@ export function PageTreeItemActions({
         <DropdownMenuTrigger
           render={
             <button
-              className="text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground absolute top-1.5 right-1 aspect-square w-5 rounded-md p-0 flex items-center justify-center opacity-0 group-hover/menu-item:opacity-100 transition-opacity focus:opacity-100"
+              className="text-secondary hover:text-primary hover:bg-layer-transparent-hover absolute top-1.5 right-1 aspect-square w-5 rounded-md p-0 flex items-center justify-center opacity-0 group-hover/menu-item:opacity-100 transition-opacity focus:opacity-100"
               aria-label={`More actions for ${pageTitle}`}
             >
               <HugeiconsIcon icon={MoreVerticalIcon} className="h-4 w-4" />
@@ -96,7 +96,7 @@ export function PageTreeItemActions({
               Archive
             </DropdownMenuItem>
             <DropdownMenuItem
-              className="text-destructive focus:text-destructive"
+              className="text-danger-primary focus:text-danger-primary"
               onClick={() => {
                 if (workspace?.id && project?.id)
                   deletePage({

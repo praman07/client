@@ -24,14 +24,13 @@ import {
   CardTitle,
 } from '@/shared/ui'
 
-// Custom Logo generation based on project ID
 const DEMO_LOGOS = [
-  { icon: Terminal, color: 'bg-blue-500/10 text-blue-500' },
-  { icon: Sparkles, color: 'bg-purple-500/10 text-purple-500' },
-  { icon: Database, color: 'bg-emerald-500/10 text-emerald-500' },
-  { icon: Megaphone, color: 'bg-orange-500/10 text-orange-500' },
-  { icon: Shield, color: 'bg-red-500/10 text-red-500' },
-  { icon: Rocket, color: 'bg-pink-500/10 text-pink-500' },
+  { icon: Terminal, color: 'bg-accent-subtle text-accent-primary' },
+  { icon: Sparkles, color: 'bg-layer-2 text-accent-primary' },
+  { icon: Database, color: 'bg-success-subtle text-success-primary' },
+  { icon: Megaphone, color: 'bg-warning-subtle text-warning-primary' },
+  { icon: Shield, color: 'bg-danger-subtle text-danger-primary' },
+  { icon: Rocket, color: 'bg-layer-2 text-accent-primary' },
 ]
 
 function getDemoLogo(projectId: string) {
@@ -52,13 +51,12 @@ export function ProjectCard({ project, onClick }: ProjectCardProps) {
   const LogoConfig = React.useMemo(() => getDemoLogo(project.id), [project.id])
   const LogoIcon = LogoConfig.icon
 
-  // Only take first 2 members for avatar stack
   const visibleMembers = project.members.slice(0, 2)
   const excessMembersCount = project.members.length - 2
 
   return (
     <Card
-      className="hover:bg-muted/50 cursor-pointer transition-colors group/project-card h-full"
+      className="hover:bg-layer-1-hover cursor-pointer transition-colors group/project-card h-full border border-subtle"
       onClick={onClick}
     >
       <div className="flex justify-between items-start px-6">
@@ -86,13 +84,13 @@ export function ProjectCard({ project, onClick }: ProjectCardProps) {
       </div>
 
       <CardHeader>
-        <CardTitle className="text-lg line-clamp-1">{project.name}</CardTitle>
-        <CardDescription className="line-clamp-2">
+        <CardTitle className="text-18 line-clamp-1 text-primary">{project.name}</CardTitle>
+        <CardDescription className="text-13 line-clamp-2 text-secondary">
           {project.description || 'No description provided'}
         </CardDescription>
       </CardHeader>
 
-      <CardFooter className="border-t border-border/10 justify-between text-xs text-muted-foreground w-full mt-auto">
+      <CardFooter className="border-t border-subtle justify-between text-11 text-tertiary w-full mt-auto">
         <div className="flex items-center gap-1.5">
           <Users className="w-4 h-4" />
           <span>{project.members.length} member{project.members.length === 1 ? '' : 's'}</span>

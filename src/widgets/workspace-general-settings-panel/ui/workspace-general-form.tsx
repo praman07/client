@@ -143,9 +143,9 @@ export function WorkspaceGeneralForm({
           >
             {(field) => (
               <div className="space-y-2">
-                <Label className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
-                  Workspace Name
-                </Label>
+<Label className="text-11 font-semibold uppercase tracking-widest text-secondary">
+          Workspace Name
+        </Label>
                 <EditableField
                   id="field-name"
                   value={field.state.value}
@@ -191,14 +191,14 @@ export function WorkspaceGeneralForm({
           >
             {(field) => (
               <div className="space-y-2">
-                <Label className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
-                  Workspace Slug
-                </Label>
+<Label className="text-11 font-semibold uppercase tracking-widest text-secondary">
+          Workspace Slug
+        </Label>
                 {/* Split slug input: prefix + editable part */}
-                <div className="flex h-10 rounded-md border border-input bg-transparent ring-offset-background focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 overflow-hidden">
-                  <span className="flex items-center shrink-0 px-2 sm:px-3 text-xs sm:text-sm text-muted-foreground bg-muted/40 border-r select-none">
-                    {urlPrefix}
-                  </span>
+<div className="flex h-10 rounded-md border border-subtle-1 bg-transparent overflow-hidden">
+        <span className="flex items-center shrink-0 px-2 sm:px-3 text-12 sm:text-13 text-secondary bg-layer-1 border-r border-subtle select-none">
+          {urlPrefix}
+        </span>
                   <div className="relative flex-1 min-w-0">
                     <input
                       id="field-slug"
@@ -206,23 +206,23 @@ export function WorkspaceGeneralForm({
                       onBlur={field.handleBlur}
                       onChange={(e) => canUpdate && field.handleChange(toSlug(e.target.value))}
                       readOnly={!canUpdate}
-                      className="w-full h-full bg-transparent px-2 sm:px-3 text-sm outline-none placeholder:text-muted-foreground read-only:cursor-default read-only:opacity-70 truncate"
+                      className="w-full h-full bg-transparent px-2 sm:px-3 text-14 outline-none placeholder:text-placeholder read-only:cursor-default read-only:opacity-70 truncate"
                       placeholder="my-workspace"
                     />
                     {field.state.meta.isValidating && (
-                      <div className="absolute right-3 top-1/2 -translate-y-1/2 bg-background/80 pl-1">
-                        <Spinner className="h-3.5 w-3.5 text-muted-foreground" />
-                      </div>
+<div className="absolute right-3 top-1/2 -translate-y-1/2 bg-layer-1/80 pl-1">
+            <Spinner className="h-3.5 w-3.5 text-secondary" />
+          </div>
                     )}
                   </div>
                 </div>
-                {field.state.meta.errors.length > 0 ? (
-                  <p className="text-sm text-destructive">{field.state.meta.errors[0]}</p>
-                ) : field.state.value !== initialSlug ? (
-                  <p className="flex items-center gap-1.5 text-xs text-amber-500">
-                    <TriangleAlert className="h-3 w-3 shrink-0" />
-                    Changing slug will update all workspace URLs
-                  </p>
+{field.state.meta.errors.length > 0 ? (
+            <p className="text-14 text-danger-primary">{field.state.meta.errors[0]}</p>
+          ) : field.state.value !== initialSlug ? (
+            <p className="flex items-center gap-1.5 text-12 text-warning-primary">
+              <TriangleAlert className="h-3 w-3 shrink-0" />
+              Changing slug will update all workspace URLs
+            </p>
                 ) : null}
               </div>
             )}
@@ -231,9 +231,9 @@ export function WorkspaceGeneralForm({
 
         {/* RIGHT COLUMN: Logo uploader (ordered first on mobile) */}
         <div className="space-y-2 lg:pt-6 order-first lg:order-0 mb-4 lg:mb-0">
-          <Label className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
-            Workspace Icon
-          </Label>
+<Label className="text-11 font-semibold uppercase tracking-widest text-secondary">
+          Workspace Icon
+        </Label>
           <WorkspaceLogoUploader
             name={initialName}
             logoUrl={logoUrl}
@@ -246,9 +246,9 @@ export function WorkspaceGeneralForm({
       {/* Second row: Company Size + Timezone stubs */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-12 gap-y-7 pt-7">
         <div className="space-y-2">
-          <Label className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
-            Company Size
-          </Label>
+<Label className="text-11 font-semibold uppercase tracking-widest text-secondary">
+          Company Size
+        </Label>
           <Select defaultValue="11-50 Employees" disabled={!canUpdate}>
             <SelectTrigger className="h-10">
               <SelectValue placeholder="Select company size" />
@@ -261,9 +261,9 @@ export function WorkspaceGeneralForm({
           </Select>
         </div>
         <div className="space-y-2">
-          <Label className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
-            Timezone
-          </Label>
+<Label className="text-11 font-semibold uppercase tracking-widest text-secondary">
+          Timezone
+        </Label>
           <Select defaultValue="(GMT-08:00) Pacific Time (US & Canada)" disabled={!canUpdate}>
             <SelectTrigger className="h-10">
               <SelectValue placeholder="Select timezone" />
@@ -282,8 +282,8 @@ export function WorkspaceGeneralForm({
         <form.Subscribe
           selector={(state) => [state.isDirty, state.canSubmit, state.isSubmitting]}
           children={([isDirty, canSubmit, isSubmitting]) =>
-            isDirty ? (
-              <div className="flex justify-end pt-8 border-t mt-8">
+isDirty ? (
+            <div className="flex justify-end pt-8 border-t border-subtle mt-8">
                 <Button
                   type="submit"
                   disabled={!canSubmit || isSubmitting}

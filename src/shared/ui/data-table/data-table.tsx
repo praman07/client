@@ -34,15 +34,15 @@ export function DataTable<TRow>({
       : emptyMessage
 
   return (
-    <div className={cn('rounded-xl border border-border/40 overflow-hidden bg-card/20 shadow-sm', className)}>
-      <table className="w-full text-sm">
+    <div className={cn('rounded-xl border border-subtle/40 overflow-hidden bg-layer-1/20 shadow-raised-100', className)}>
+      <table className="w-full text-13">
         <thead>
-          <tr className="bg-muted/30 border-b border-border/40">
+          <tr className="bg-layer-1/30 border-b border-subtle/40">
             {columns.map((col) => (
               <th
                 key={col.key}
                 className={cn(
-                  'px-4 py-3 text-left text-[11px] font-semibold uppercase tracking-wider text-muted-foreground/80',
+                  'px-4 py-3 text-left text-11 font-semibold uppercase tracking-wide text-tertiary',
                   col.headerClassName,
                 )}
               >
@@ -61,7 +61,7 @@ export function DataTable<TRow>({
             rows.map((row, index) => (
               <tr
                 key={rowKey(row)}
-                className="group border-b border-border/20 transition-colors hover:bg-muted/10 last:border-0"
+                className="group border-b border-subtle/20 transition-colors hover:bg-layer-transparent-hover last:border-0"
                 style={{
                   animationDelay: `${index * 30}ms`,
                 }}
@@ -70,7 +70,7 @@ export function DataTable<TRow>({
                   <td
                     key={col.key}
                     className={cn(
-                      'px-4 py-3 text-sm text-foreground/90',
+                      'px-4 py-3 text-13 text-primary/90',
                       col.cellClassName,
                     )}
                   >

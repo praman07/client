@@ -110,7 +110,7 @@ export const NavItems = ({ items, className, onItemClick }: NavItemsProps) => {
           to={item.link}
           onMouseEnter={() => setHovered(idx)}
           onClick={onItemClick}
-          className="relative px-4 py-2 text-foreground/70 hover:text-foreground transition-colors duration-200"
+          className="relative px-4 py-2 text-secondary hover:text-primary transition-colors duration-200"
         >
           {hovered === idx && (
             <motion.div
@@ -142,7 +142,7 @@ export const MobileNav = ({ children, className, visible }: MobileNavProps) => {
       transition={{ type: 'spring', stiffness: 200, damping: 50 }}
       className={cn(
         'relative z-50 mx-auto flex w-full max-w-[calc(100vw-2rem)] flex-col items-center justify-between px-0 py-2 lg:hidden',
-        visible && 'bg-background/80 border border-border/20',
+        visible && 'bg-layer-2/80 border border-subtle/20',
         className,
       )}
     >
@@ -169,7 +169,7 @@ export const MobileNavMenu = ({
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: -8 }}
         className={cn(
-          'absolute inset-x-0 top-16 z-50 flex w-full flex-col items-start gap-4 rounded-xl border border-border/20 bg-background/95 backdrop-blur-xl px-4 py-6 shadow-2xl',
+          'absolute inset-x-0 top-16 z-50 flex w-full flex-col items-start gap-4 rounded-xl border border-subtle/20 bg-surface-2/95 backdrop-blur-xl px-4 py-6 shadow-2xl',
           className,
         )}
       >
@@ -187,9 +187,9 @@ export const MobileNavToggle = ({
   onClick: () => void
 }) =>
   isOpen ? (
-    <X className="size-5 text-foreground cursor-pointer" onClick={onClick} />
+    <X className="size-5 text-primary cursor-pointer" onClick={onClick} />
   ) : (
-    <Menu className="size-5 text-foreground cursor-pointer" onClick={onClick} />
+    <Menu className="size-5 text-primary cursor-pointer" onClick={onClick} />
   )
 
 export const NavbarButton = ({
@@ -214,12 +214,12 @@ export const NavbarButton = ({
 
   const variants = {
     primary:
-      'bg-foreground text-background shadow-sm hover:bg-foreground/90',
+      'bg-accent-primary text-on-color shadow-raised-100 hover:bg-accent-primary-hover',
     secondary:
-      'bg-transparent text-foreground hover:bg-white/8',
-    dark: 'bg-foreground text-background',
+      'bg-transparent text-primary hover:bg-white/8',
+    dark: 'bg-primary text-on-color',
     gradient:
-      'bg-linear-to-b from-foreground/90 to-foreground text-background',
+      'bg-linear-to-b from-accent-primary/90 to-accent-primary text-on-color',
   }
 
   return (

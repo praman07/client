@@ -109,20 +109,20 @@ export function MembersTab({ board }: MembersTabProps) {
   // ── If user can't read collaborators at all ──────────
   if (!canRead) {
     return (
-      <div className="flex flex-col items-center justify-center py-10 gap-3 text-center">
-        <Lock className="h-8 w-8 text-muted-foreground/40" />
-        <p className="text-sm text-muted-foreground">
-          You don't have permission to view collaborators.
-        </p>
-      </div>
+<div className="flex flex-col items-center justify-center py-10 gap-3 text-center">
+      <Lock className="h-8 w-8 text-tertiary/40" />
+      <p className="text-14 text-secondary">
+        You don't have permission to view collaborators.
+      </p>
+    </div>
     )
   }
 
   return (
     <div className="space-y-4">
       {/* ── Header ────────────────────────────────────── */}
-      <div className="flex items-center justify-between">
-        <p className="text-sm text-muted-foreground">
+<div className="flex items-center justify-between">
+      <p className="text-14 text-secondary">
           {collaborators.length === 0
             ? 'No collaborators yet'
             : `${collaborators.length} collaborator${collaborators.length !== 1 ? 's' : ''}`}
@@ -158,12 +158,12 @@ export function MembersTab({ board }: MembersTabProps) {
                               {getInitials(user.fullName)}
                             </AvatarFallback>
                           </Avatar>
-                          <div className="flex flex-col">
-                            <span className="text-sm">{user.fullName}</span>
-                            <span className="text-xs text-muted-foreground">
-                              {user.email}
-                            </span>
-                          </div>
+<div className="flex flex-col">
+                  <span className="text-14">{user.fullName}</span>
+                  <span className="text-12 text-secondary">
+                    {user.email}
+                  </span>
+                </div>
                         </CommandItem>
                       )
                     })}
@@ -181,7 +181,7 @@ export function MembersTab({ board }: MembersTabProps) {
           {collaborators.map((c) => (
             <li
               key={c.userId}
-              className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-muted/40 transition-colors group"
+              className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-layer-1-hover transition-colors group"
             >
               <Avatar className="h-8 w-8 shrink-0">
                 <AvatarImage src={c.user.avatarUrl ?? ''} />
@@ -191,10 +191,10 @@ export function MembersTab({ board }: MembersTabProps) {
               </Avatar>
 
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium truncate">{c.user.fullName}</p>
-                <p className="text-xs text-muted-foreground truncate">
-                  {c.user.email}
-                </p>
+<p className="text-14 font-medium truncate">{c.user.fullName}</p>
+              <p className="text-12 text-secondary truncate">
+                {c.user.email}
+              </p>
               </div>
 
               {/* Remove — only for users with whiteboard:collaborator:remove */}
@@ -202,7 +202,7 @@ export function MembersTab({ board }: MembersTabProps) {
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="h-7 w-7 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity text-muted-foreground hover:text-destructive hover:bg-destructive/10"
+                  className="h-7 w-7 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity text-secondary hover:text-danger-primary hover:bg-danger-subtle"
                   onClick={() => handleRemoveClick(c)}
                   disabled={removeCollaborator.isPending}
                   aria-label={`Remove ${c.user.fullName}`}
@@ -214,13 +214,13 @@ export function MembersTab({ board }: MembersTabProps) {
           ))}
         </ul>
       ) : (
-        <div className="text-center py-8">
-          <p className="text-sm text-muted-foreground">
-            {canAdd
-              ? 'No collaborators yet. Add someone to get started.'
-              : 'No collaborators yet.'}
-          </p>
-        </div>
+<div className="text-center py-8">
+      <p className="text-14 text-secondary">
+        {canAdd
+          ? 'No collaborators yet. Add someone to get started.'
+          : 'No collaborators yet.'}
+      </p>
+    </div>
       )}
 
       {/* Remove confirmation dialog */}

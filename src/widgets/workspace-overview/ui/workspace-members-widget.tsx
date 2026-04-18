@@ -32,38 +32,38 @@ export function WorkspaceMembersWidget() {
   const overflowCount = Math.max(0, totalMembers - members.length)
 
   return (
-    <Card className="flex flex-col p-6 shadow-sm">
-      <div className="flex items-center justify-between mb-5">
-        <h3 className="text-sm font-bold text-foreground tracking-tight">Workspace Members</h3>
-        <span className="text-[11px] font-semibold text-muted-foreground uppercase tracking-widest">
-          {totalMembers} Total
-        </span>
-      </div>
+<Card className="flex flex-col p-6 shadow-raised-100 border border-subtle bg-layer-1">
+    <div className="flex items-center justify-between mb-5">
+      <h3 className="text-14 font-semibold text-primary tracking-tight">Workspace Members</h3>
+      <span className="text-11 font-semibold text-secondary uppercase tracking-widest">
+        {totalMembers} Total
+      </span>
+    </div>
 
-      <div className="flex items-center -space-x-3 py-1 mb-6 px-1">
-        {members.map((member) => (
-          <Avatar
-            key={member.userId}
-            className="w-10 h-10 border-2 border-background hover:-translate-y-1 hover:z-10 transition-all cursor-pointer shadow-sm relative"
-          >
+    <div className="flex items-center -space-x-3 py-1 mb-6 px-1">
+      {members.map((member) => (
+        <Avatar
+          key={member.userId}
+          className="w-10 h-10 border-2 border-subtle hover:-translate-y-1 hover:z-10 transition-all cursor-pointer shadow-sm relative"
+        >
             {member.avatarUrl && <AvatarImage src={member.avatarUrl} alt={member.fullName ?? member.email} />}
             <AvatarFallback>
               {(member.fullName ?? member.email).charAt(0).toUpperCase()}
             </AvatarFallback>
           </Avatar>
         ))}
-        {overflowCount > 0 && (
-          <div className="relative z-0 flex items-center justify-center w-10 h-10 rounded-full border-2 border-background bg-surface-2 shadow-sm text-[11px] text-foreground font-mono font-medium hover:-translate-y-1 hover:z-10 transition-all cursor-pointer">
-            +{overflowCount}
-          </div>
-        )}
-      </div>
+{overflowCount > 0 && (
+        <div className="relative z-0 flex items-center justify-center w-10 h-10 rounded-full border-2 border-subtle bg-layer-2 shadow-sm text-11 text-primary font-mono font-medium hover:-translate-y-1 hover:z-10 transition-all cursor-pointer">
+          +{overflowCount}
+        </div>
+      )}
+    </div>
 
-      <Button
-        variant="outline"
-        className="w-full h-9 font-medium shadow-none bg-surface-2 border-border/40 hover:bg-surface-2/80 hover:text-foreground text-muted-foreground transition-colors"
-        asChild
-      >
+    <Button
+      variant="outline"
+      className="w-full h-9 font-medium shadow-none bg-layer-2 border border-subtle hover:bg-layer-2-hover hover:text-primary text-secondary transition-colors"
+      asChild
+    >
         <Link
           to="/workspace/$workspaceSlug/members"
           params={{ workspaceSlug: workspaceSlug! }}

@@ -90,7 +90,7 @@ export function InviteMemberForm({ onClose }: Props) {
 
       {/* Role selector */}
       <div className="space-y-1.5">
-        <label className="text-sm font-medium text-foreground">Invite as</label>
+        <label className="text-13 font-medium text-primary">Invite as</label>
         <form.Field name="roleId">
           {(field) => (
             <Select
@@ -142,12 +142,12 @@ function InviteSuccess({
 }) {
   return (
     <div className="flex flex-col items-center justify-center space-y-4 py-6 text-center animate-in fade-in-50">
-      <div className="rounded-full bg-green-100 p-3 text-green-600 dark:bg-green-900/30">
+      <div className="rounded-full bg-success-subtle p-3 text-success-primary">
         <CheckCircle2 className="h-8 w-8" />
       </div>
       <div className="space-y-1">
-        <h3 className="text-lg font-medium">Invites Sent!</h3>
-        <p className="text-sm text-muted-foreground">
+        <h3 className="text-16 font-medium text-primary">Invites Sent!</h3>
+        <p className="text-13 text-secondary">
           Your teammates have been invited to join <b>{workspaceName}</b>.
         </p>
       </div>

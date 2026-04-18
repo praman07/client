@@ -9,8 +9,8 @@ export function UserProfilePage() {
   return (
     <div className="space-y-8 max-w-2xl">
       <div>
-        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">Profile</h1>
-        <p className="text-sm sm:text-base text-muted-foreground mt-1">
+        <h1 className="text-20 sm:text-24 font-bold tracking-tight">Profile</h1>
+        <p className="text-13 sm:text-14 text-secondary mt-1">
           This information is visible to your teammates across all workspaces.
         </p>
       </div>

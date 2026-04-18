@@ -35,9 +35,9 @@ export function ProjectRoleList({
   })
 
   return (
-    <div className="flex flex-col border rounded-lg bg-card overflow-hidden">
+    <div className="flex flex-col border border-subtle rounded-lg bg-layer-1 overflow-hidden">
       {/* Header */}
-      <div className="px-4 py-3 border-b bg-muted/30 flex items-center gap-2">
+      <div className="px-4 py-3 border-b border-subtle bg-layer-2 flex items-center gap-2">
         <Shield className="h-4 w-4 text-primary shrink-0" />
         <h3 className="text-sm font-semibold flex-1">Project Roles</h3>
       </div>
@@ -67,7 +67,7 @@ export function ProjectRoleList({
               'w-full flex flex-col items-start gap-0.5 px-3 py-2.5 rounded-md text-left transition-all group',
               selectedRoleId === role.id
                 ? 'bg-primary/10 text-primary ring-1 ring-primary/20'
-                : 'hover:bg-muted text-muted-foreground hover:text-foreground'
+                : 'hover:bg-layer-2 text-secondary hover:text-primary'
             )}
           >
             <div className="flex items-center justify-between w-full gap-2">

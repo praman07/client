@@ -24,10 +24,10 @@ export function HomeHeader({ firstName, isLoading }: HomeHeaderProps) {
       <div className="flex items-start gap-3">
         <SidebarTrigger className="-ml-3 mt-1 hidden md:flex" />
         <div className="flex flex-col">
-          <h1 className="text-3xl font-bold tracking-tight text-foreground">
+          <h1 className="text-24 font-bold tracking-tight text-primary">
             {isLoading ? <Skeleton className="h-9 w-48 inline-block" /> : `${greeting}, ${firstName}`}
           </h1>
-          <p className="text-muted-foreground mt-1.5 text-sm sm:text-base max-w-lg">
+          <p className="text-secondary mt-1.5 text-13 sm:text-14 max-w-lg">
             Here's what's happening across your workspaces today.
           </p>
         </div>

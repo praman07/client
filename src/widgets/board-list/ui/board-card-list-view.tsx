@@ -34,24 +34,24 @@ export function BoardCardListView({
       <Link
         to="/workspace/$workspaceSlug/project/$projectSlug/whiteboard/$boardId"
         params={{ workspaceSlug, projectSlug, boardId: board.id }}
-        className="flex items-center gap-3 sm:gap-4 px-3 sm:px-4 py-3 rounded-xl border border-border/50 bg-card hover:bg-muted/20 hover:border-primary/30 hover:shadow-sm transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60"
+        className="flex items-center gap-3 sm:gap-4 px-3 sm:px-4 py-3 rounded-xl border border-subtle/50 bg-layer-1 hover:bg-layer-transparent-hover hover:border-accent-primary/30 hover:shadow-raised-100 transition-all duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary/60"
       >
         {/* Thumbnail — fixed width, responsive size */}
-        <div className="w-16 sm:w-20 shrink-0 rounded-lg overflow-hidden border border-border/40 bg-muted/30 aspect-video">
+        <div className="w-16 sm:w-20 shrink-0 rounded-lg overflow-hidden border border-subtle/40 bg-layer-2/30 aspect-video">
           <BoardThumbnail boardId={board.id} />
         </div>
 
         {/* Main content */}
         <div className="flex-1 min-w-0">
-          <h3 className="font-semibold text-sm leading-snug truncate text-foreground group-hover:text-primary transition-colors duration-150">
+          <h3 className="font-semibold text-14 leading-snug truncate text-primary group-hover:text-primary transition-colors duration-150">
             {board.title}
           </h3>
           {board.description ? (
-            <p className="text-xs text-muted-foreground truncate mt-0.5">
+            <p className="text-12 text-tertiary truncate mt-0.5">
               {board.description}
             </p>
           ) : (
-            <p className="text-[11px] text-muted-foreground mt-0.5">
+            <p className="text-11 text-tertiary mt-0.5">
               Edited {formatDistanceToNow(new Date(board.updatedAt), { addSuffix: false })} ago
             </p>
           )}
@@ -61,13 +61,13 @@ export function BoardCardListView({
         {(board.isArchived || board.isLocked) && (
           <div className="hidden sm:flex items-center gap-1 shrink-0">
             {board.isArchived && (
-              <Badge variant="secondary" className="gap-1 text-[10px] h-5 px-1.5">
+              <Badge variant="secondary" className="gap-1 text-10 h-5 px-1.5">
                 <Archive className="h-2.5 w-2.5" />
                 <span className="hidden md:inline">Archived</span>
               </Badge>
             )}
             {board.isLocked && (
-              <Badge variant="secondary" className="gap-1 text-[10px] h-5 px-1.5">
+              <Badge variant="secondary" className="gap-1 text-10 h-5 px-1.5">
                 <Lock className="h-2.5 w-2.5" />
                 <span className="hidden md:inline">Locked</span>
               </Badge>
@@ -77,7 +77,7 @@ export function BoardCardListView({
 
         {/* Last edited — hidden when description shown (shown in its place) */}
         {board.description && (
-          <p className="hidden sm:block text-[11px] text-muted-foreground shrink-0 tabular-nums">
+          <p className="hidden sm:block text-11 text-tertiary shrink-0 tabular-nums">
             {formatDistanceToNow(new Date(board.updatedAt), { addSuffix: false })} ago
           </p>
         )}
@@ -89,7 +89,7 @@ export function BoardCardListView({
           type="button"
           onClick={onOpenMenu}
           aria-label="Board options"
-          className="absolute right-3 top-1/2 -translate-y-1/2 h-7 w-7 flex items-center justify-center rounded-md text-muted-foreground hover:text-foreground hover:bg-muted transition-colors opacity-0 group-hover:opacity-100 focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/60"
+          className="absolute right-3 top-1/2 -translate-y-1/2 h-7 w-7 flex items-center justify-center rounded-md text-tertiary hover:text-primary hover:bg-layer-1 transition-colors opacity-0 group-hover:opacity-100 focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary/60"
         >
           <MoreHorizontal className="h-4 w-4" />
         </button>

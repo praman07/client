@@ -53,7 +53,7 @@ export function PageEmojiPicker({ icon, hasCover, isLocked }: PageEmojiProps) {
             disabled={isLocked}
             className={`
               text-5xl leading-none select-none rounded-lg p-1 transition-colors
-              ${icon ? 'hover:bg-accent' : 'text-muted-foreground/40 hover:text-muted-foreground hover:bg-accent text-2xl'}
+              ${icon ? 'hover:bg-layer-2-hover' : 'text-tertiary/40 hover:text-secondary hover:bg-layer-2-hover text-2xl'}
               disabled:cursor-default disabled:hover:bg-transparent
             `}
             title={icon ? 'Change emoji' : 'Add emoji'}
@@ -62,7 +62,7 @@ export function PageEmojiPicker({ icon, hasCover, isLocked }: PageEmojiProps) {
           </button>
         </PopoverTrigger>
         <PopoverContent
-          className="w-auto p-0 border-none shadow-lg z-[100]"
+          className="w-auto p-0 border-none shadow-overlay-100 z-[var(--z-dropdown)]"
           sideOffset={4}
           align="start"
         >
@@ -79,7 +79,7 @@ export function PageEmojiPicker({ icon, hasCover, isLocked }: PageEmojiProps) {
       {icon && !isLocked && (
         <button
           onClick={handleRemove}
-          className="text-xs text-muted-foreground hover:text-foreground transition-colors px-2 py-1 rounded hover:bg-accent"
+          className="text-11 text-secondary hover:text-primary transition-colors px-2 py-1 rounded-md hover:bg-layer-2-hover"
         >
           Remove emoji
         </button>

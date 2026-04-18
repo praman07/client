@@ -19,7 +19,7 @@ export function VaultExplorerToolbar({
   onUpload,
 }: VaultExplorerToolbarProps) {
   return (
-    <div className="flex items-center gap-2 px-6 py-3 border-b bg-background/80 backdrop-blur-sm">
+    <div className="flex items-center gap-2 px-6 py-3 border-b border-subtle bg-surface-1/80 backdrop-blur-sm">
       <Guard permission="vault:folder:create">
         <Button variant="outline" size="sm" onClick={onCreateFolder}>
           <FolderPlus className="h-4 w-4 mr-1.5" />
@@ -34,7 +34,7 @@ export function VaultExplorerToolbar({
         </Button>
       </Guard>
 
-      <div className="ml-auto flex items-center gap-1.5 text-xs text-muted-foreground">
+      <div className="ml-auto flex items-center gap-1.5 text-xs text-secondary">
         <ArrowUpDown className="h-3.5 w-3.5" />
         {sort.sortBy} · {sort.sortDir}
       </div>

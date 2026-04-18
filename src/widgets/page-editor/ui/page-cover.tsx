@@ -204,7 +204,7 @@ export function PageCoverBanner({ coverUrl }: PageCoverProps) {
       <div className="mx-auto w-full max-w-3xl px-16 pt-16 pb-0 flex gap-2 opacity-0 hover:opacity-100 transition-opacity">
         <button
           onClick={() => fileInputRef.current?.click()}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs text-muted-foreground hover:bg-accent transition-colors"
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-11 text-secondary hover:bg-layer-2-hover transition-colors"
         >
           <HugeiconsIcon icon={Image01Icon} className="h-4 w-4" />
           Add cover
@@ -233,22 +233,20 @@ export function PageCoverBanner({ coverUrl }: PageCoverProps) {
           className="w-full h-full object-cover"
         />
       ) : (
-        // Loading skeleton while blob URL is being fetched
-        <div className="w-full h-full bg-muted animate-pulse" />
+        <div className="w-full h-full bg-layer-1 animate-pulse" />
       )}
-      {/* Dark overlay — appears on hover to make controls readable */}
       <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity" />
       <div className="absolute bottom-3 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
         <button
           onClick={() => fileInputRef.current?.click()}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs bg-background/80 backdrop-blur-sm text-foreground hover:bg-background transition-colors"
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-11 bg-surface-1/80 backdrop-blur-sm text-primary hover:bg-surface-1 transition-colors"
         >
           <HugeiconsIcon icon={Image01Icon} className="h-3.5 w-3.5" />
           Change cover
         </button>
         <button
           onClick={handleRemove}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs bg-background/80 backdrop-blur-sm text-foreground hover:bg-background transition-colors"
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-11 bg-surface-1/80 backdrop-blur-sm text-primary hover:bg-surface-1 transition-colors"
         >
           <HugeiconsIcon icon={Delete01Icon} className="h-3.5 w-3.5" />
           Remove

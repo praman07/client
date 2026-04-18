@@ -24,7 +24,7 @@ export function PendingInviteList({ workspaceId }: PendingInviteListProps) {
       key: 'email',
       header: 'Email',
       render: (invite) => (
-        <span className="text-sm text-foreground font-medium">{invite.email}</span>
+        <span className="text-14 text-primary font-medium">{invite.email}</span>
       ),
     },
     {
@@ -35,7 +35,7 @@ export function PendingInviteList({ workspaceId }: PendingInviteListProps) {
     {
       key: 'invitedAt',
       header: 'Invited At',
-      cellClassName: 'text-muted-foreground text-xs',
+      cellClassName: 'text-tertiary text-11',
       render: (invite) => formatDateRelative(invite.createdAt),
     },
     {
@@ -60,9 +60,9 @@ export function PendingInviteList({ workspaceId }: PendingInviteListProps) {
 
   if (error) {
     return (
-      <div className="rounded-xl border border-destructive/20 bg-destructive/5 p-5">
-        <p className="text-sm font-bold text-destructive">Failed to load invitations</p>
-        <p className="text-sm text-destructive/80 mt-1">{mapInvitesError(error)}</p>
+      <div className="rounded-xl border border-danger-subtle bg-danger-subtle p-5">
+        <p className="text-14 font-bold text-danger-primary">Failed to load invitations</p>
+        <p className="text-14 text-danger-secondary mt-1">{mapInvitesError(error)}</p>
       </div>
     )
   }

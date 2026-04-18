@@ -55,7 +55,7 @@ function NavigationMenuItem({
 }
 
 const navigationMenuTriggerStyle = cva(
-  'bg-background hover:bg-muted focus:bg-muted data-open:hover:bg-muted data-open:focus:bg-muted data-open:bg-muted/50 focus-visible:ring-ring/50 data-popup-open:bg-muted/50 data-popup-open:hover:bg-muted rounded-md px-4 py-2 text-sm font-medium transition-all duration-(--transition-expressive) focus-visible:ring-[3px] focus-visible:outline-1 disabled:opacity-50 group/navigation-menu-trigger inline-flex h-9 w-max items-center justify-center disabled:pointer-events-none outline-none hardware-accelerated active:scale-[0.98]',
+  'bg-transparent hover:bg-layer-1-hover focus:bg-layer-1-hover data-open:hover:bg-layer-1-hover data-open:focus:bg-layer-1-hover data-open:bg-layer-2 data-popup-open:bg-layer-2 data-popup-open:hover:bg-layer-1-hover text-secondary hover:text-primary focus:text-primary data-open:text-primary rounded-md px-3 py-1.5 text-13 font-medium transition-colors duration-100 disabled:opacity-40 group/navigation-menu-trigger inline-flex h-8 w-max items-center justify-center disabled:pointer-events-none outline-none hardware-accelerated active:scale-[0.98]',
 )
 
 function NavigationMenuTrigger({
@@ -88,7 +88,7 @@ function NavigationMenuContent({
     <NavigationMenuPrimitive.Content
       data-slot="navigation-menu-content"
       className={cn(
-        'data-[motion^=from-]:animate-in data-[motion^=to-]:animate-out data-[motion^=from-]:fade-in data-[motion^=to-]:fade-out data-[motion=from-end]:slide-in-from-right-52 data-[motion=from-start]:slide-in-from-left-52 data-[motion=to-end]:slide-out-to-right-52 data-[motion=to-start]:slide-out-to-left-52 group-data-[viewport=false]/navigation-menu:bg-popover group-data-[viewport=false]/navigation-menu:text-popover-foreground group-data-[viewport=false]/navigation-menu:data-open:animate-in group-data-[viewport=false]/navigation-menu:data-closed:animate-out group-data-[viewport=false]/navigation-menu:data-closed:zoom-out-95 group-data-[viewport=false]/navigation-menu:data-open:zoom-in-95 group-data-[viewport=false]/navigation-menu:data-open:fade-in-0 group-data-[viewport=false]/navigation-menu:data-closed:fade-out-0 group-data-[viewport=false]/navigation-menu:border group-data-[viewport=false]/navigation-menu:border-border p-2 pr-2.5 group-data-[viewport=false]/navigation-menu:rounded-md group-data-[viewport=false]/navigation-menu:shadow-md group-data-[viewport=false]/navigation-menu:duration-(--transition-spring) h-full w-auto **:data-[slot=navigation-menu-link]:focus:ring-0 **:data-[slot=navigation-menu-link]:focus:outline-none',
+        'data-[motion^=from-]:animate-in data-[motion^=to-]:animate-out data-[motion^=from-]:fade-in data-[motion^=to-]:fade-out data-[motion=from-end]:slide-in-from-right-52 data-[motion=from-start]:slide-in-from-left-52 data-[motion=to-end]:slide-out-to-right-52 data-[motion=to-start]:slide-out-to-left-52 group-data-[viewport=false]/navigation-menu:bg-surface-2 group-data-[viewport=false]/navigation-menu:text-primary group-data-[viewport=false]/navigation-menu:data-open:animate-in group-data-[viewport=false]/navigation-menu:data-closed:animate-out group-data-[viewport=false]/navigation-menu:data-closed:zoom-out-95 group-data-[viewport=false]/navigation-menu:data-open:zoom-in-95 group-data-[viewport=false]/navigation-menu:data-open:fade-in-0 group-data-[viewport=false]/navigation-menu:data-closed:fade-out-0 group-data-[viewport=false]/navigation-menu:border group-data-[viewport=false]/navigation-menu:border-subtle p-2 pr-2.5 group-data-[viewport=false]/navigation-menu:rounded-md group-data-[viewport=false]/navigation-menu:shadow-overlay-100 group-data-[viewport=false]/navigation-menu:duration-100 h-full w-auto **:data-[slot=navigation-menu-link]:focus:ring-0 **:data-[slot=navigation-menu-link]:focus:outline-none',
         className,
       )}
       {...props}
@@ -112,12 +112,12 @@ function NavigationMenuPositioner({
         align={align}
         alignOffset={alignOffset}
         className={cn(
-          'transition-[top,left,right,bottom] duration-(--transition-spring) data-[side=bottom]:before:top-[-10px] data-[side=bottom]:before:right-0 data-[side=bottom]:before:left-0 isolate z-50 h-(--positioner-height) w-(--positioner-width) max-w-(--available-width) data-instant:transition-none',
+          'transition-[top,left,right,bottom] duration-100 data-[side=bottom]:before:top-[-10px] data-[side=bottom]:before:right-0 data-[side=bottom]:before:left-0 isolate z-[var(--z-dropdown)] h-(--positioner-height) w-(--positioner-width) max-w-(--available-width) data-instant:transition-none',
           className,
         )}
         {...props}
       >
-        <NavigationMenuPrimitive.Popup className="bg-popover text-popover-foreground border-border border rounded-lg shadow-md transition-all duration-(--transition-spring) outline-none data-ending-style:scale-90 data-ending-style:opacity-0 data-ending-style:duration-150 data-starting-style:scale-90 data-starting-style:opacity-0 xs:w-(--popup-width) relative h-(--popup-height) w-(--popup-width) origin-(--transform-origin)">
+        <NavigationMenuPrimitive.Popup className="bg-surface-2 text-primary border-subtle border rounded-lg shadow-overlay-100 transition-all duration-100 outline-none data-ending-style:scale-90 data-ending-style:opacity-0 data-ending-style:duration-150 data-starting-style:scale-90 data-starting-style:opacity-0 xs:w-(--popup-width) relative h-(--popup-height) w-(--popup-width) origin-(--transform-origin)">
           <NavigationMenuPrimitive.Viewport className="relative size-full overflow-hidden" />
         </NavigationMenuPrimitive.Popup>
       </NavigationMenuPrimitive.Positioner>
@@ -133,7 +133,7 @@ function NavigationMenuLink({
     <NavigationMenuPrimitive.Link
       data-slot="navigation-menu-link"
       className={cn(
-        "data-[active=true]:focus:bg-muted data-[active=true]:hover:bg-muted data-[active=true]:bg-muted/50 focus-visible:ring-ring/50 hover:bg-muted focus:bg-muted flex items-center gap-1.5 rounded-sm p-2 text-sm transition-all outline-none focus-visible:ring-[3px] focus-visible:outline-1 hardware-accelerated active:scale-[0.98] duration-(--transition-expressive) [&_svg:not([class*='size-'])]:size-4",
+        "data-[active=true]:focus:bg-layer-1-hover data-[active=true]:hover:bg-layer-1-hover data-[active=true]:bg-layer-2 hover:bg-layer-1-hover focus:bg-layer-1-hover text-secondary hover:text-primary focus:text-primary data-[active=true]:text-primary flex items-center gap-1.5 rounded-xs p-2 text-13 transition-colors duration-100 outline-none hardware-accelerated active:scale-[0.98] [&_svg:not([class*='size-'])]:size-4",
         className,
       )}
       {...props}
@@ -154,7 +154,7 @@ function NavigationMenuIndicator({
       )}
       {...props}
     >
-      <div className="bg-border rounded-tl-sm shadow-md relative top-[60%] h-2 w-2 rotate-45" />
+      <div className="bg-subtle rounded-tl-sm shadow-md relative top-[60%] h-2 w-2 rotate-45" />
     </NavigationMenuPrimitive.Icon>
   )
 }

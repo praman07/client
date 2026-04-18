@@ -28,7 +28,7 @@ export function IssuesBoardSkeleton() {
             {/* Cards */}
             <div className="flex flex-col gap-2">
               {Array.from({ length: col === 0 ? 4 : col === 1 ? 3 : 2 }).map((_fill, card) => (
-                <div key={card} className="rounded-lg border bg-card p-3 flex flex-col gap-2">
+                <div key={card} className="rounded-lg border border-subtle bg-layer-1 p-3 flex flex-col gap-2">
                   <Skeleton className="h-4 w-full" />
                   <Skeleton className="h-3 w-3/4" />
                   <div className="flex items-center gap-2 mt-1">

@@ -20,7 +20,7 @@ export function WorkspaceNameField({ form }: Props) {
     >
       {(field) => (
         <div className="space-y-3">
-          <Label htmlFor={field.name} className="text-base font-medium">
+          <Label htmlFor={field.name} className="text-14 font-medium">
             Workspace Name
           </Label>
           <Input
@@ -30,10 +30,10 @@ export function WorkspaceNameField({ form }: Props) {
             onBlur={field.handleBlur}
             onChange={(e) => field.handleChange(e.target.value)}
             placeholder="e.g., Acme Corporation"
-            className="h-12 text-base px-4"
+            className="h-12 text-14 px-4"
           />
           {field.state.meta.errors.length > 0 && (
-            <p className="text-sm text-destructive font-medium">
+            <p className="text-sm text-danger-primary font-medium">
               {field.state.meta.errors.join(', ')}
             </p>
           )}

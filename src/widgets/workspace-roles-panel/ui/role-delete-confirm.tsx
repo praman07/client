@@ -31,21 +31,21 @@ export function RoleDeleteConfirm({
         <AlertDialogHeader>
           <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
           <AlertDialogDescription>
-            This will permanently delete the <span className="font-semibold text-foreground">"{roleName}"</span> role. 
+            This will permanently delete the <span className="font-semibold text-primary">"{roleName}"</span> role. 
             Members currently assigned to this role will lose its associated permissions.
             This action cannot be undone.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel disabled={isDeleting}>Cancel</AlertDialogCancel>
-          <AlertDialogAction
-            onClick={(e) => {
-              e.preventDefault()
-              onConfirm()
-            }}
-            className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-            disabled={isDeleting}
-          >
+<AlertDialogAction
+          onClick={(e) => {
+            e.preventDefault()
+            onConfirm()
+          }}
+          className="bg-danger-primary text-on-color hover:bg-danger-primary-hover"
+          disabled={isDeleting}
+        >
             {isDeleting ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />

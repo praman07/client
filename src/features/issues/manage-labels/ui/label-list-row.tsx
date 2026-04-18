@@ -75,7 +75,7 @@ export function LabelListRow({ label, projectId }: LabelListRowProps) {
             <Button
               variant="ghost"
               size="icon"
-              className="h-6 w-6 shrink-0 text-muted-foreground hover:text-destructive"
+              className="h-6 w-6 shrink-0 text-secondary hover:text-danger-primary"
               title="Delete label"
             >
               <Trash2 className="h-3.5 w-3.5" />
@@ -95,7 +95,7 @@ export function LabelListRow({ label, projectId }: LabelListRowProps) {
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
             <AlertDialogAction
-              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              className="bg-danger-primary text-on-color hover:bg-danger-primary/90"
               onClick={handleConfirmDelete}
             >
               Delete

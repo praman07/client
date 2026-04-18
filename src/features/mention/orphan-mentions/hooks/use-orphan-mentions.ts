@@ -11,7 +11,7 @@ export function useOrphanMentions() {
       const token = await getToken()
       const client = GqlClient(token)
       const data = await client.request(ORPHAN_MENTIONS, { targetEntityId })
-      return data.orphanMentions as number
+      return data.orphanMentions
     },
   })
 }

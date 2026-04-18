@@ -52,7 +52,7 @@ export function EditIssueHeader({
           size="sm"
           disabled={!isDirty || isSaving}
           onClick={onSave}
-          className="h-7 text-xs px-3"
+          className="h-7 text-11 px-3"
         >
           {isSaving ? 'Saving\u2026' : 'Save'}
         </Button>
@@ -67,7 +67,7 @@ export function EditIssueHeader({
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-40">
             <DropdownMenuItem
-              className="text-destructive focus:text-destructive"
+              className="text-danger-primary focus:text-danger-primary"
               onClick={onDelete}
             >
               <HugeiconsIcon
@@ -82,7 +82,7 @@ export function EditIssueHeader({
 
         <button
           onClick={onClose}
-          className="inline-flex items-center justify-center h-7 w-7 rounded-md hover:bg-muted/60 transition-colors cursor-pointer"
+          className="inline-flex items-center justify-center h-7 w-7 rounded-md hover:bg-layer-1-hover transition-colors cursor-pointer"
         >
           <HugeiconsIcon
             icon={Cancel01Icon}

@@ -54,18 +54,18 @@ export function WorkspaceRolesPanel() {
 
   if (isLoading || !currentWorkspace) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
-      </div>
+<div className="flex items-center justify-center h-64">
+      <Loader2 className="h-8 w-8 animate-spin text-secondary" />
+    </div>
     )
   }
 
   if (!roles || roles.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center h-64 text-muted-foreground">
-        <ShieldOff className="h-12 w-12 mb-4 opacity-20" />
-        <p>No roles found in this workspace.</p>
-      </div>
+<div className="flex flex-col items-center justify-center h-64 text-secondary">
+      <ShieldOff className="h-12 w-12 mb-4 opacity-20" />
+      <p>No roles found in this workspace.</p>
+    </div>
     )
   }
 
@@ -137,7 +137,7 @@ export function WorkspaceRolesPanel() {
             onDelete={setRoleToDelete}
           />
         ) : (
-          <div className="flex h-full items-center justify-center border-2 border-dashed rounded-lg text-muted-foreground min-h-[400px]">
+          <div className="flex h-full items-center justify-center border-2 border-dashed border-subtle rounded-lg text-secondary min-h-[400px]">
             Select a role to view permissions
           </div>
         )}

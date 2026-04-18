@@ -20,14 +20,14 @@ function RadioGroupItem({ className, ...props }: RadioPrimitive.Root.Props) {
     <RadioPrimitive.Root
       data-slot="radio-group-item"
       className={cn(
-        'border-input text-primary dark:bg-input/30 focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:aria-invalid:border-destructive/50 flex size-4 rounded-full focus-visible:ring-[3px] aria-invalid:ring-[3px] group/radio-group-item peer relative aspect-square shrink-0 border outline-none after:absolute after:-inset-x-3 after:-inset-y-2 disabled:cursor-not-allowed disabled:opacity-50 hardware-accelerated active:scale-[0.90] transition-all duration-(--transition-expressive)',
+        'border-subtle-1 bg-layer-1 text-accent-primary focus-visible:border-accent-strong focus-visible:ring-2 focus-visible:ring-accent-strong/20 aria-invalid:ring-2 aria-invalid:ring-danger-strong/20 aria-invalid:border-danger-strong flex size-4 rounded-full group/radio-group-item peer relative aspect-square shrink-0 border outline-none after:absolute after:-inset-x-3 after:-inset-y-2 disabled:cursor-not-allowed disabled:opacity-50 hardware-accelerated active:scale-[0.90] transition-all duration-100',
         className,
       )}
       {...props}
     >
       <RadioPrimitive.Indicator
         data-slot="radio-group-indicator"
-        className="group-aria-invalid/radio-group-item:text-destructive text-primary flex size-4 items-center justify-center"
+        className="group-aria-invalid/radio-group-item:text-danger-primary text-accent-primary flex size-4 items-center justify-center"
       >
         <HugeiconsIcon
           icon={CircleIcon}

@@ -29,7 +29,7 @@ import {
 } from '@/shared/lib/blocknote'
 import { VaultFileSource, markFilesUnreferenced } from '@/shared/api/vault'
 import { usePageById } from '@/entities/page'
-import { mentionSchema, MentionMenuController, useSyncMentions } from '@/features/mention'
+import { MentionMenuController, mentionSchema, useSyncMentions } from '@/features/mention'
 
 const log = createLogger('pages:page-editor')
 

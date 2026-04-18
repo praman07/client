@@ -18,19 +18,20 @@
  *
  * @layer Features → mention/ui
  */
-import { useCallback, useRef, useState, useMemo } from 'react'
+import { useCallback, useMemo, useRef, useState } from 'react'
 import {
+  
   SuggestionMenuController,
-  useBlockNoteEditor,
-  type SuggestionMenuProps,
-  type DefaultReactSuggestionItem,
+  
+  useBlockNoteEditor
 } from '@blocknote/react'
-import type { SearchEntityType } from '@/gql/graphql'
 import { useProjectEntities } from '../fetch-entities'
 import { searchEntities } from '../lib'
-import { MentionSuggestionMenu } from './MentionSuggestionMenu'
-
 import { ENTITY_META } from '../lib/entity-meta'
+import { MentionSuggestionMenu } from './MentionSuggestionMenu'
+import type {DefaultReactSuggestionItem, SuggestionMenuProps} from '@blocknote/react';
+
+import type { SearchEntityType } from '@/gql/graphql'
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -45,7 +46,7 @@ interface MentionMenuControllerProps {
 export function MentionMenuController({ projectId }: MentionMenuControllerProps) {
   // `useBlockNoteEditor` accesses the editor via React context.
   // We type as `any` — we only use `insertInlineContent` which is untyped-safe.
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+   
   const editor = useBlockNoteEditor<any, any, any>()
 
   const { data: entities } = useProjectEntities(projectId)
@@ -78,7 +79,7 @@ export function MentionMenuController({ projectId }: MentionMenuControllerProps)
   // Inline getItems — mirrors the official BlockNote example.
   // Async to satisfy the API contract; all filtering is synchronous.
   const getItems = useCallback(
-    async (query: string): Promise<DefaultReactSuggestionItem[]> => {
+    async (query: string): Promise<Array<DefaultReactSuggestionItem>> => {
       if (!entities || entities.length === 0) return []
 
       const filter = activeTypeFilterRef.current

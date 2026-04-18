@@ -15,6 +15,7 @@ import {
   MessageEventDescription,
   MessageEventTitle,
 } from './message'
+import { RichChatContent } from './RichChatContent'
 import type { MessageRowData } from '../../model/message-list.types'
 import type { DBMessage } from '@/shared/lib/db/schema'
 import type { ReactionGroup } from '@/entities/reaction'
@@ -46,7 +47,6 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/shared/ui/primitives/popover'
-import { RichChatContent } from './RichChatContent'
 
 // Lazy-load the heavy emoji picker only when opened
 const EmojiPicker = lazy(() => import('@emoji-mart/react'))
@@ -179,7 +179,7 @@ export function PrimaryMessage({ message, className }: PrimaryMessageProps) {
 
   return (
     <>
-      <MessageEvent className={cn('hover:bg-accent/50 group/msg mt-3', className)}>
+      <MessageEvent className={cn('hover:bg-accent-subtle group/msg mt-3', className)}>
         <MessageEventAddon>
           <Avatar
             className="rounded-full size-9 shrink-0 cursor-pointer hover:opacity-80 transition-opacity"
@@ -188,7 +188,7 @@ export function PrimaryMessage({ message, className }: PrimaryMessageProps) {
             {memberInfo?.avatarUrl && (
               <AvatarImage src={memberInfo.avatarUrl} alt={displayName} />
             )}
-            <AvatarFallback className="text-xs font-bold bg-muted">
+            <AvatarFallback className="text-11 font-bold bg-layer-1">
               {initials}
             </AvatarFallback>
           </Avatar>
@@ -210,7 +210,7 @@ export function PrimaryMessage({ message, className }: PrimaryMessageProps) {
 
           {/* ── Tombstone ────────────────────────────────────── */}
           {message.deletedAt ? (
-            <div className="flex items-center gap-2 text-muted-foreground/70 italic text-sm py-0.5 select-none">
+            <div className="flex items-center gap-2 text-tertiary italic text-14 py-0.5 select-none">
               <Trash2 className="h-3 w-3 shrink-0" />
               <span>This message was deleted.</span>
             </div>
@@ -219,7 +219,7 @@ export function PrimaryMessage({ message, className }: PrimaryMessageProps) {
             <div className="flex flex-col gap-1.5 mt-1.5">
               <textarea
                 autoFocus
-                className="w-full rounded-md border border-input bg-muted/20 px-3 py-2 text-sm resize-none focus:outline-none focus:ring-1 focus:ring-ring min-h-[60px]"
+                className="w-full rounded-md border-subtle-1 bg-layer-2 px-3 py-2 text-14 resize-none focus:outline-none min-h-[60px]"
                 value={editValue}
                 rows={Math.max(2, editValue.split('\n').length)}
                 onChange={(e) => setEditValue(e.target.value)}
@@ -234,7 +234,7 @@ export function PrimaryMessage({ message, className }: PrimaryMessageProps) {
                   }
                 }}
               />
-              <p className="text-xs text-muted-foreground">
+              <p className="text-xs text-secondary">
                 <span className="font-medium">escape</span> to cancel •{' '}
                 <span className="font-medium">enter</span> to save
               </p>
@@ -246,17 +246,17 @@ export function PrimaryMessage({ message, className }: PrimaryMessageProps) {
               {message.parentMessageId && (
                 <button
                   onClick={() => scrollToMessage(message.parentMessageId!)}
-                  className="flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground mb-1 border-l-2 border-muted-foreground/25 hover:border-primary/50 pl-2.5 py-0.5 max-h-10 overflow-hidden w-full text-left transition-colors rounded-sm"
+                  className="flex items-center gap-1.5 text-xs text-secondary hover:text-primary mb-1 border-l-2 border-subtle-1 hover:border-accent-subtle pl-2.5 py-0.5 max-h-10 overflow-hidden w-full text-left transition-colors rounded-sm"
                 >
                   <Reply className="h-3 w-3 shrink-0" />
                   {parentMessage ? (
                     <span>
                       Replying to{' '}
-                      <strong className="text-foreground/70">
+                      <strong className="text-primary">
                         @{getMemberInfo(parentMessage.authorId)?.fullName ?? parentMessage.authorId}
                       </strong>
                       {' '}
-                      <span className="text-muted-foreground/60 truncate">
+                      <span className="text-tertiary truncate">
                         {getSafeContent(parentMessage.content).slice(0, 60)}
                       </span>
                     </span>
@@ -270,7 +270,7 @@ export function PrimaryMessage({ message, className }: PrimaryMessageProps) {
                 <RichChatContent content={message.content} />
                 {message.isEdited && (
                   <span
-                    className="ml-1 text-[10px] text-muted-foreground/60 italic select-none"
+                    className="ml-1 text-[10px] text-tertiary italic select-none"
                     title={
                       message.editedAt
                         ? `Edited ${new Intl.DateTimeFormat('en-US', {
@@ -301,13 +301,13 @@ export function PrimaryMessage({ message, className }: PrimaryMessageProps) {
               {!message.deletedAt && (
                 <div className={cn(
                   'absolute -top-3 right-2 z-10 items-center gap-0.5',
-                  'bg-background border border-border/60 rounded-lg shadow-md px-1 py-0.5',
+                  'bg-surface-1 border border-subtle rounded-lg shadow-overlay-100 px-1 py-0.5',
                   isPickerOpen ? 'flex' : 'hidden group-hover/msg:flex'
                 )}>
                   {/* Emoji picker — lazy loaded, no bundle impact until opened */}
                   <Popover open={isPickerOpen} onOpenChange={setIsPickerOpen}>
                     <PopoverTrigger
-                      className="p-1 rounded hover:bg-accent text-muted-foreground hover:text-foreground transition-colors"
+                      className="p-1 rounded hover:bg-accent-subtle text-secondary hover:text-primary transition-colors"
                       aria-label="Add reaction"
                     >
                       <SmilePlus className="size-4" />
@@ -317,7 +317,7 @@ export function PrimaryMessage({ message, className }: PrimaryMessageProps) {
                       align="end"
                       className="p-0 w-auto border-0 shadow-none bg-transparent ring-0"
                     >
-                      <Suspense fallback={<div className="p-4 text-xs text-muted-foreground">Loading…</div>}>
+                      <Suspense fallback={<div className="p-4 text-xs text-secondary">Loading…</div>}>
                         <EmojiPicker
                           data={async () => {
                             const response = await import('@emoji-mart/data')
@@ -344,7 +344,7 @@ export function PrimaryMessage({ message, className }: PrimaryMessageProps) {
                         contentSnippet: currentContent.slice(0, 80),
                       })
                     }
-                    className="p-1 rounded hover:bg-accent text-muted-foreground hover:text-foreground transition-colors"
+                    className="p-1 rounded hover:bg-accent-subtle text-secondary hover:text-primary transition-colors"
                     title="Reply"
                     aria-label="Reply to message"
                   >
@@ -353,7 +353,7 @@ export function PrimaryMessage({ message, className }: PrimaryMessageProps) {
                   {canEdit && (
                     <button
                       onClick={startEdit}
-                      className="p-1 rounded hover:bg-accent text-muted-foreground hover:text-foreground transition-colors"
+                      className="p-1 rounded hover:bg-accent-subtle text-secondary hover:text-primary transition-colors"
                       title="Edit message"
                       aria-label="Edit message"
                     >
@@ -363,7 +363,7 @@ export function PrimaryMessage({ message, className }: PrimaryMessageProps) {
                   {canDelete && (
                     <button
                       onClick={() => setShowDeleteConfirm(true)}
-                      className="p-1 rounded hover:bg-destructive/10 text-muted-foreground hover:text-destructive transition-colors"
+                      className="p-1 rounded hover:bg-danger-subtle text-secondary hover:text-danger-primary transition-colors"
                       title="Delete message"
                       aria-label="Delete message"
                     >
@@ -388,7 +388,7 @@ export function PrimaryMessage({ message, className }: PrimaryMessageProps) {
 
               {/* ── Reply Count Badge (P6.1) ─────────────────────── */}
               {(message.replyCount ?? 0) > 0 && (
-                <button className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground mt-1.5 transition-colors">
+                <button className="flex items-center gap-1 text-xs text-secondary hover:text-primary mt-1.5 transition-colors">
                   <MessageSquare className="h-3 w-3" />
                   <span>
                     {message.replyCount} {message.replyCount === 1 ? 'reply' : 'replies'}
@@ -413,7 +413,7 @@ export function PrimaryMessage({ message, className }: PrimaryMessageProps) {
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
             <AlertDialogAction
-              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              className="bg-danger-primary hover:bg-danger-primary-hover text-on-color"
               onClick={handleConfirmDelete}
             >
               Delete

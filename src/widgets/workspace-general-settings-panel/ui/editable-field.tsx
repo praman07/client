@@ -80,7 +80,7 @@ export function EditableField({
           <button
             type="button"
             onClick={commit}
-            className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-input bg-primary/10 text-primary hover:bg-primary/20 transition-colors"
+            className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-subtle-1 bg-accent-subtle text-accent-primary hover:bg-accent-subtle-hover transition-colors"
             title="Confirm"
           >
             <Check className="h-3.5 w-3.5" />
@@ -88,13 +88,13 @@ export function EditableField({
           <button
             type="button"
             onClick={cancel}
-            className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-input hover:bg-muted transition-colors text-muted-foreground"
+            className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-subtle-1 hover:bg-layer-1 transition-colors text-secondary"
             title="Cancel"
           >
             <X className="h-3.5 w-3.5" />
           </button>
         </div>
-        {error && <p className="text-sm text-destructive">{error}</p>}
+{error && <p className="text-14 text-danger-primary">{error}</p>}
       </div>
     )
   }
@@ -106,21 +106,21 @@ export function EditableField({
         id={id}
         onClick={enterEdit}
         disabled={disabled}
-        className={cn(
-          'group flex h-10 w-full items-center justify-between rounded-md border border-input bg-transparent px-3 text-sm text-left',
-          'hover:border-primary/50 hover:bg-muted/30 transition-colors',
-          disabled && 'opacity-50 cursor-not-allowed',
-        )}
+className={cn(
+  'group flex h-10 w-full items-center justify-between rounded-md border border-subtle-1 bg-transparent px-3 text-14 text-left',
+  'hover:border-accent-primary hover:bg-layer-1 transition-colors',
+  disabled && 'text-disabled pointer-events-none',
+)}
         title="Click to edit"
       >
-        <span className={cn(!value && 'text-muted-foreground italic')}>
-          {value || placeholder || '—'}
-        </span>
-        {!disabled && (
-          <Pencil className="h-3.5 w-3.5 text-muted-foreground opacity-0 group-hover:opacity-100 transition-opacity shrink-0 ml-2" />
-        )}
+<span className={cn(!value && 'text-secondary italic')}>
+        {value || placeholder || '—'}
+      </span>
+      {!disabled && (
+        <Pencil className="h-3.5 w-3.5 text-secondary opacity-0 group-hover:opacity-100 transition-opacity shrink-0 ml-2" />
+      )}
       </button>
-      {error && <p className="text-sm text-destructive">{error}</p>}
+      {error && <p className="text-14 text-danger-primary">{error}</p>}
     </div>
   )
 }

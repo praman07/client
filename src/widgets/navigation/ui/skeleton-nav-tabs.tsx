@@ -13,7 +13,7 @@ interface SkeletonNavTabsProps {
  */
 export function SkeletonNavTabs({ count = 4 }: SkeletonNavTabsProps) {
   return (
-    <div className="w-full shrink-0 border-b bg-card px-6">
+    <div className="w-full shrink-0 border-b border-subtle bg-layer-1 px-6">
       <nav className="flex items-center gap-6 overflow-x-auto overflow-y-hidden">
         {Array.from({ length: count }).map((_, i) => (
           <div

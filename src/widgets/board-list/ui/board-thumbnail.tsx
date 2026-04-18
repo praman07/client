@@ -17,7 +17,7 @@ export function BoardThumbnail({ boardId }: BoardThumbnailProps) {
 
   if (thumbnail) {
     return (
-      <div className="relative w-full aspect-video bg-muted/60 overflow-hidden flex items-center justify-center">
+      <div className="relative w-full aspect-video bg-layer-2/60 overflow-hidden flex items-center justify-center">
         <img
           src={thumbnail}
           alt="Board preview"
@@ -29,8 +29,8 @@ export function BoardThumbnail({ boardId }: BoardThumbnailProps) {
 
   // Placeholder when no thumbnail available
   return (
-    <div className="relative w-full aspect-video bg-muted/60 overflow-hidden flex items-center justify-center">
-      <FileImage className="h-10 w-10 text-muted-foreground/25" />
+    <div className="relative w-full aspect-video bg-layer-2/60 overflow-hidden flex items-center justify-center">
+      <FileImage className="h-10 w-10 text-tertiary/25" />
     </div>
   )
 }

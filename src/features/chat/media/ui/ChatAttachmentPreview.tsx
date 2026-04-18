@@ -49,16 +49,16 @@ interface ChatAttachmentPreviewProps {
 // ── File type icons (Lucide — consistent with rest of project) ────────────────
 
 function FileTypeIcon({ mimeType, className }: { mimeType: string; className?: string }) {
-  if (mimeType.startsWith('video/')) return <Film className={cn('text-blue-400', className)} />
-  if (mimeType.startsWith('audio/')) return <Music className={cn('text-purple-400', className)} />
-  if (mimeType === 'application/pdf') return <FileText className={cn('text-red-400', className)} />
+  if (mimeType.startsWith('video/')) return <Film className={cn('text-accent-primary', className)} />
+  if (mimeType.startsWith('audio/')) return <Music className={cn('text-accent-secondary', className)} />
+  if (mimeType === 'application/pdf') return <FileText className={cn('text-danger-primary', className)} />
   if (mimeType.startsWith('text/') || mimeType === 'application/json') {
-    return <FileCode className={cn('text-green-400', className)} />
+    return <FileCode className={cn('text-success-primary', className)} />
   }
   if (mimeType.includes('zip') || mimeType.includes('tar') || mimeType.includes('gzip')) {
-    return <Archive className={cn('text-yellow-500', className)} />
+    return <Archive className={cn('text-warning-primary', className)} />
   }
-  return <FileText className={cn('text-muted-foreground', className)} />
+  return <FileText className={cn('text-secondary', className)} />
 }
 
 // ── Single attachment preview card ────────────────────────────────────────────
@@ -94,7 +94,7 @@ function AttachmentCard({
       {/* Card body */}
       <div
         className={cn(
-          'relative flex items-center overflow-hidden rounded-lg border border-border/60 bg-card',
+          'relative flex items-center overflow-hidden rounded-lg border border-subtle bg-layer-1',
           isImage ? 'w-16 h-16' : 'h-12 max-w-[140px] px-2 gap-2',
         )}
         title={`${attachment.name} (${formatBytes(attachment.sizeBytes)})`}
@@ -109,8 +109,8 @@ function AttachmentCard({
           />
         ) : isImage ? (
           // Image but no local preview yet
-          <div className="w-full h-full flex items-center justify-center bg-card">
-            <Film className="size-5 text-muted-foreground" />
+          <div className="w-full h-full flex items-center justify-center bg-layer-1">
+            <Film className="size-5 text-secondary" />
           </div>
         ) : (
           // Non-image file card
@@ -130,11 +130,11 @@ function AttachmentCard({
         {/* Upload progress overlay */}
         {isUploading && (
           <div
-            className="absolute inset-0 flex items-end bg-black/30 rounded-lg"
+            className="absolute inset-0 flex items-end bg-backdrop rounded-lg"
             aria-label={`Uploading ${attachment.uploadProgress}%`}
           >
             <div
-              className="h-1.5 bg-primary transition-all duration-150 rounded-b-lg"
+              className="h-1.5 bg-accent-primary transition-all duration-150 rounded-b-lg"
               style={{ width: `${attachment.uploadProgress}%` }}
             />
           </div>
@@ -142,10 +142,10 @@ function AttachmentCard({
 
         {/* Failed overlay — shows retry affordance */}
         {isFailed && (
-          <div className="absolute inset-0 flex items-center justify-center bg-destructive/20 rounded-lg">
+          <div className="absolute inset-0 flex items-center justify-center bg-danger-subtle rounded-lg">
             <button
               onClick={(e) => { e.stopPropagation(); onRetry() }}
-              className="flex items-center justify-center size-6 rounded-full bg-background/90 border border-destructive/40 text-destructive hover:bg-destructive hover:text-destructive-foreground transition-colors shadow-sm"
+              className="flex items-center justify-center size-6 rounded-full bg-canvas/90 border border-danger-strong text-danger-primary hover:bg-danger-primary hover:text-on-color transition-colors shadow-sm"
               title="Retry upload"
               aria-label={`Retry uploading ${attachment.name}`}
             >
@@ -162,9 +162,9 @@ function AttachmentCard({
           onRemove()
         }}
         className={cn(
-          'absolute -top-1.5 -right-1.5 size-4 rounded-full bg-background border border-border',
+          'absolute -top-1.5 -right-1.5 size-4 rounded-full bg-canvas border border-subtle',
           'flex items-center justify-center shadow-sm',
-          'text-muted-foreground hover:text-destructive hover:border-destructive transition-colors',
+          'text-secondary hover:text-danger-primary hover:border-danger-primary transition-colors',
           'opacity-0 group-hover/card:opacity-100',
           (!isUploading || isFailed) && 'opacity-100',
         )}
@@ -190,7 +190,7 @@ export function ChatAttachmentPreview({
   return (
     <div
       className={cn(
-        'flex items-center gap-2 px-4 py-3 border-border/50 overflow-x-auto scrollbar-none',
+        'flex items-center gap-2 px-4 py-3 border-subtle overflow-x-auto scrollbar-none',
         className,
       )}
       role="list"

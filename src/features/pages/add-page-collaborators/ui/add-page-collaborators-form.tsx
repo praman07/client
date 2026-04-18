@@ -98,7 +98,7 @@ export function AddPageCollaboratorsForm({
       className="space-y-4"
     >
       {rootError && (
-        <div className="rounded-md bg-destructive/15 p-3 text-sm text-destructive">
+        <div className="rounded-md bg-danger-subtle p-3 text-13 font-medium text-danger-primary">
           {rootError}
         </div>
       )}
@@ -128,8 +128,8 @@ export function AddPageCollaboratorsForm({
                         field.handleChange(next)
                       }}
                       className={cn(
-                        'flex w-full items-center gap-3 rounded-lg p-3 transition-colors hover:bg-accent',
-                        isSelected && 'bg-accent',
+                        'flex w-full items-center gap-3 rounded-lg p-3 transition-colors duration-100 hover:bg-layer-1-hover',
+                        isSelected && 'bg-layer-1-selected',
                       )}
                     >
                       <Avatar className="h-10 w-10">
@@ -142,7 +142,7 @@ export function AddPageCollaboratorsForm({
                         <span className="text-sm font-medium">
                           {member.user.fullName ?? 'Unknown'}
                         </span>
-                        <span className="text-xs text-muted-foreground">
+                        <span className="text-xs text-secondary">
                           {member.user.email}
                         </span>
                       </div>
@@ -153,7 +153,7 @@ export function AddPageCollaboratorsForm({
               </div>
             </ScrollArea>
             {field.state.meta.errors.length > 0 && (
-              <p className="text-sm text-destructive">
+              <p className="text-13 text-danger-primary">
                 {field.state.meta.errors.join(', ')}
               </p>
             )}

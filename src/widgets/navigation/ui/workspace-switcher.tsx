@@ -49,7 +49,7 @@ function WorkspaceSwitcherContent() {
         disabled={!workspaceSlug}
         className={cn(
           buttonVariants({ variant: 'ghost' }),
-          'h-8 gap-2 px-2 text-muted-foreground hover:text-foreground font-medium',
+          'h-8 gap-2 px-2 text-secondary hover:text-primary font-medium',
           !workspaceSlug && 'pointer-events-none opacity-50',
         )}
       >
@@ -67,7 +67,7 @@ function WorkspaceSwitcherContent() {
         <DropdownMenuTrigger
           className={cn(
             buttonVariants({ variant: 'ghost', size: 'icon' }),
-            'h-8 w-6 text-muted-foreground hover:text-foreground opacity-50 hover:opacity-100',
+            'h-8 w-6 text-secondary hover:text-primary hover:opacity-100',
           )}
         >
           <ChevronsUpDown className="h-4 w-4" />
@@ -85,7 +85,7 @@ function WorkspaceSwitcherContent() {
                 >
                   <Avatar className="h-4 w-4 rounded-md">
                     <AvatarImage src={workspace.logoUrl || undefined} />
-                    <AvatarFallback className="rounded-md bg-muted text-[10px]">
+                    <AvatarFallback className="rounded-md bg-layer-2 text-[10px]">
                       {workspace.name[0]}
                     </AvatarFallback>
                   </Avatar>

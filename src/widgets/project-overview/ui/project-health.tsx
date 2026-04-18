@@ -15,8 +15,8 @@ interface StatChipProps {
 }
 
 const StatChip: React.FC<StatChipProps> = ({ label, value, valueClass }) => (
-  <div className="flex-1 min-w-[100px] sm:min-w-[120px] bg-card border border-border rounded-xl px-4 py-3 sm:px-5 sm:py-4">
-    <p className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground mb-1.5 truncate">
+  <div className="flex-1 min-w-[100px] sm:min-w-[120px] bg-layer-1 border border-subtle rounded-xl px-4 py-3 sm:px-5 sm:py-4">
+    <p className="text-[10px] font-semibold uppercase tracking-widest text-secondary mb-1.5 truncate">
       {label}
     </p>
     <p className={`text-2xl font-bold tabular-nums leading-none truncate ${valueClass ?? ''}`}>

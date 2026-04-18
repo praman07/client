@@ -12,7 +12,7 @@ export function TeamSizeField({ form }: Props) {
     <form.Field name="teamSize">
       {(field) => (
         <div className="space-y-3">
-          <Label className="text-base font-medium">Team Size</Label>
+          <Label className="text-14 font-medium">Team Size</Label>
           <RadioGroup
             value={field.state.value}
             onValueChange={(val) => field.handleChange(val)}
@@ -33,8 +33,8 @@ export function TeamSizeField({ form }: Props) {
                       flex h-12 cursor-pointer items-center justify-center rounded-md border text-sm font-medium transition-all
                       ${
                         isSelected
-                          ? 'border-foreground bg-foreground text-background'
-                          : 'border-input bg-background hover:bg-muted'
+                          ? 'border-subtle bg-accent-primary text-on-color'
+                          : 'border-subtle-1 bg-layer-1 hover:bg-layer-1-hover'
                       }
                     `}
                   >

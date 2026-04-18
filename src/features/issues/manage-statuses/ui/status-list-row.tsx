@@ -47,20 +47,20 @@ export function StatusListRow({ status, projectId }: StatusListRowProps) {
       <StatusIconPicker status={status} projectId={projectId} />
       <Input
         defaultValue={status.name}
-        className="h-7 flex-1 border-transparent bg-transparent px-1 hover:border-border focus:border-border"
+        className="h-7 flex-1 border-transparent bg-transparent px-1 hover:border-subtle focus:border-subtle"
         disabled={status.isSystem}
         onBlur={handleNameBlur}
       />
       {status.isSystem ? (
         <Lock
-          className="h-3.5 w-3.5 shrink-0 text-muted-foreground"
+          className="h-3.5 w-3.5 shrink-0 text-secondary"
           aria-label="System column — cannot be deleted"
         />
       ) : (
         <Button
           variant="ghost"
           size="icon"
-          className="h-6 w-6 shrink-0 text-muted-foreground hover:text-destructive"
+          className="h-6 w-6 shrink-0 text-secondary hover:text-danger-primary"
           disabled={status.issueCount > 0}
           title={
             status.issueCount > 0

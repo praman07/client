@@ -116,7 +116,7 @@ export function BoardCardContextMenu({
 
             <ContextMenuItem
               onClick={handlers.handleDelete}
-              className="text-destructive focus:text-destructive"
+              className="text-danger-primary focus:text-danger-primary"
             >
               <Trash2 className="h-4 w-4 mr-2" />
               Delete

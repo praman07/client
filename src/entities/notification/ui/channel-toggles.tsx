@@ -19,8 +19,8 @@ export function ChannelToggles({
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <div>
-          <div className="font-medium">Email notifications</div>
-          <div className="text-sm text-muted-foreground">
+          <div className="text-14 font-medium text-primary">Email notifications</div>
+          <div className="text-13 text-secondary">
             Receive notifications via email
           </div>
         </div>
@@ -33,8 +33,8 @@ export function ChannelToggles({
 
       <div className="flex items-center justify-between">
         <div>
-          <div className="font-medium">Push notifications</div>
-          <div className="text-sm text-muted-foreground">
+          <div className="text-14 font-medium text-primary">Push notifications</div>
+          <div className="text-13 text-secondary">
             Receive push notifications on your devices
           </div>
         </div>

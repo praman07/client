@@ -12,18 +12,20 @@
  * @layer Features → mention/ui
  */
 import {
+  
   useCallback,
   useEffect,
   useMemo,
   useRef,
-  useState,
-  type RefObject,
+  useState
 } from 'react'
-import type { DefaultReactSuggestionItem } from '@blocknote/react'
 import { useProjectEntities } from '../fetch-entities'
 import { searchEntities } from '../lib/search-engine'
 import { ENTITY_META } from '../lib/entity-meta'
-import { MentionSuggestionMenu, type TabFilter } from './MentionSuggestionMenu'
+import { MentionSuggestionMenu  } from './MentionSuggestionMenu'
+import type {RefObject} from 'react';
+import type {TabFilter} from './MentionSuggestionMenu';
+import type { DefaultReactSuggestionItem } from '@blocknote/react'
 import type { MentionRef } from '@/widgets/chat-window/ui/components/RichChatContent'
 
 interface TriggerState {
@@ -37,8 +39,8 @@ export interface ChatMentionTriggerProps {
   projectId:         string
   content:           string
   onContentChange:   (next: string) => void
-  mentions:          MentionRef[]
-  onMentionsChange:  (next: MentionRef[]) => void
+  mentions:          Array<MentionRef>
+  onMentionsChange:  (next: Array<MentionRef>) => void
   /** Ref to the textarea — used to read & set caret position */
   inputRef:          RefObject<HTMLTextAreaElement | null>
   /** Called whenever the menu opens or closes */
@@ -161,7 +163,7 @@ export function ChatMentionTrigger({
 
   // ── Suggestion items (React-state driven, no stale closures) ─────────────
 
-  const items = useMemo((): DefaultReactSuggestionItem[] => {
+  const items = useMemo((): Array<DefaultReactSuggestionItem> => {
     if (!trigger.active || !entities) return []
 
     const filter   = activeTabRef.current
@@ -292,10 +294,10 @@ export function ChatMentionTrigger({
 
   if (!trigger.active || items.length === 0) return null
 
-  return (
+return (
     <div
-      className="absolute bottom-full left-0 right-0 mb-1 z-50"
-      onMouseDown={e => e.preventDefault()}   // prevent textarea blur on menu click
+      className="absolute bottom-full left-0 right-0 mb-1 z-[var(--z-dropdown)]"
+      onMouseDown={(e) => e.preventDefault()}   // prevent textarea blur on menu click
     >
       <MentionSuggestionMenu
         items={items}

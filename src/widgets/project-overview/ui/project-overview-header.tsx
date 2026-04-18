@@ -57,18 +57,18 @@ export function ProjectOverviewHeader({
         <div className="flex min-w-0 flex-col gap-1.5">
           <div className="flex flex-wrap items-center gap-2">
             {/* Project name */}
-            <h1 className="text-xl font-bold leading-tight text-foreground">
+            <h1 className="text-xl font-bold leading-tight text-primary">
               {name}
             </h1>
 
             {/* Key badge */}
-            <span className="shrink-0 rounded border border-border bg-muted/40 px-1.5 py-0.5 font-mono text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+            <span className="shrink-0 rounded border border-subtle bg-layer-2 px-1.5 py-0.5 font-mono text-[10px] font-semibold uppercase tracking-wider text-secondary">
               {projectKey}
             </span>
 
             {/* Privacy badge */}
             {isPrivate && (
-              <span className="flex shrink-0 items-center gap-1 rounded border border-border bg-muted/20 px-1.5 py-0.5 text-[10px] font-semibold text-muted-foreground">
+              <span className="flex shrink-0 items-center gap-1 rounded border border-subtle bg-layer-2 px-1.5 py-0.5 text-[10px] font-semibold text-secondary">
                 <Lock className="h-2.5 w-2.5" />
                 Private
               </span>
@@ -76,12 +76,12 @@ export function ProjectOverviewHeader({
 
             {/* Active/Archived status */}
             {isArchived ? (
-              <span className="flex shrink-0 items-center gap-1 rounded border border-yellow-500/30 bg-yellow-500/10 px-1.5 py-0.5 text-[10px] font-semibold text-yellow-600 dark:text-yellow-400">
+              <span className="flex shrink-0 items-center gap-1 rounded border border-warning-subtle bg-warning-subtle px-1.5 py-0.5 text-[10px] font-semibold text-warning-primary">
                 <Archive className="h-2.5 w-2.5" />
                 Archived
               </span>
             ) : (
-              <span className="flex shrink-0 items-center gap-1 rounded border border-emerald-500/30 bg-emerald-500/10 px-1.5 py-0.5 text-[10px] font-semibold text-emerald-600 dark:text-emerald-400">
+              <span className="flex shrink-0 items-center gap-1 rounded border border-success-subtle bg-success-subtle px-1.5 py-0.5 text-[10px] font-semibold text-success-primary">
                 <CheckCircle2 className="h-2.5 w-2.5" />
                 Active
               </span>
@@ -89,7 +89,7 @@ export function ProjectOverviewHeader({
           </div>
 
           {description && (
-            <p className="max-w-xl text-sm leading-relaxed text-muted-foreground">
+            <p className="max-w-xl text-sm leading-relaxed text-secondary">
               {description}
             </p>
           )}
@@ -101,7 +101,7 @@ export function ProjectOverviewHeader({
             <Link
               key={pill.key}
               to={pill.href as any}
-              className="flex items-center gap-1.5 rounded-md border border-border bg-muted/20 px-3 py-1.5 text-[12px] font-medium text-muted-foreground transition-colors hover:border-primary/40 hover:bg-primary/5 hover:text-foreground"
+              className="flex items-center gap-1.5 rounded-md border border-subtle bg-layer-2 px-3 py-1.5 text-[12px] font-medium text-secondary transition-colors hover:border-accent-subtle hover:bg-accent-subtle hover:text-primary"
             >
               {PLUGIN_ICONS[pill.key]}
               {pill.label}
@@ -125,7 +125,7 @@ export function ProjectOverviewHeader({
           <Link
             to={settingsPath as any}
             aria-label="Project settings"
-            className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-border bg-muted/20 text-muted-foreground transition-colors hover:bg-muted/40 hover:text-foreground"
+            className="flex h-8 w-8 shrink-0 items-center justify-center rounded-md border border-subtle bg-layer-2 text-secondary transition-colors hover:bg-layer-transparent-hover hover:text-primary"
           >
             <Settings className="h-4 w-4" />
           </Link>
@@ -133,7 +133,7 @@ export function ProjectOverviewHeader({
       </div>
 
       {/* Divider */}
-      <div className="h-px bg-border" />
+      <div className="h-px bg-subtle" />
     </div>
   )
 }

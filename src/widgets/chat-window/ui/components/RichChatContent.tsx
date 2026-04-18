@@ -26,7 +26,7 @@ export interface MentionRef {
 
 interface RichContent {
   text:     string
-  mentions: MentionRef[]
+  mentions: Array<MentionRef>
 }
 
 // ── Parse ─────────────────────────────────────────────────────────────────────
@@ -65,13 +65,13 @@ interface TextSegment  { kind: 'text';    value: string }
 interface ChipSegment  { kind: 'mention'; mention: MentionRef; key: string }
 type Segment = TextSegment | ChipSegment
 
-function buildSegments(text: string, mentions: MentionRef[]): Segment[] {
+function buildSegments(text: string, mentions: Array<MentionRef>): Array<Segment> {
   if (!mentions.length) return [{ kind: 'text', value: text }]
 
   // Sort mentions by offset ascending
   const sorted = [...mentions].sort((a, b) => a.offset - b.offset)
 
-  const segments: Segment[] = []
+  const segments: Array<Segment> = []
   let cursor = 0
 
   for (const mention of sorted) {
@@ -142,7 +142,7 @@ export function RichChatContent({ content, maxChars }: RichChatContentProps) {
 
   // Truncated rich render — count chars consumed across segments
   let remaining = maxChars
-  const nodes: React.ReactNode[] = []
+  const nodes: Array<React.ReactNode> = []
   let truncated = false
 
   for (let i = 0; i < segments.length; i++) {

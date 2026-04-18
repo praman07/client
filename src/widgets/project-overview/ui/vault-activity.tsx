@@ -49,23 +49,23 @@ export const VaultActivity: React.FC<VaultActivityProps> = ({ files, usage }) =>
   const { workspaceSlug, projectSlug } = useParams({ strict: false })
 
   return (
-    <div className="bg-card border border-border rounded-xl p-5">
+    <div className="bg-layer-1 border border-subtle rounded-xl p-5">
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-sm font-semibold text-foreground">Recent Vault Files</h3>
+        <h3 className="text-sm font-semibold text-primary">Recent Vault Files</h3>
 
         {/* Storage used badge — no quota, just raw usage */}
-        <div className="flex items-center gap-1.5 bg-muted/50 border border-border/60 rounded-lg px-2.5 py-1">
-          <HardDrive className="h-3 w-3 text-muted-foreground shrink-0" />
-          <span className="text-[11px] font-semibold text-foreground tabular-nums">
+        <div className="flex items-center gap-1.5 bg-layer-2/50 border border-subtle/60 rounded-lg px-2.5 py-1">
+          <HardDrive className="h-3 w-3 text-secondary shrink-0" />
+          <span className="text-[11px] font-semibold text-primary tabular-nums">
             {formatSize(usage.usedBytes)}
           </span>
-          <span className="text-[11px] text-muted-foreground">used</span>
-          <span className="text-[11px] text-muted-foreground">·</span>
-          <span className="text-[11px] font-semibold text-foreground tabular-nums">
+          <span className="text-[11px] text-secondary">used</span>
+          <span className="text-[11px] text-secondary">·</span>
+          <span className="text-[11px] font-semibold text-primary tabular-nums">
             {usage.fileCount}
           </span>
-          <span className="text-[11px] text-muted-foreground">
+          <span className="text-[11px] text-secondary">
             {usage.fileCount === 1 ? 'file' : 'files'}
           </span>
         </div>
@@ -73,9 +73,9 @@ export const VaultActivity: React.FC<VaultActivityProps> = ({ files, usage }) =>
 
       {/* File list */}
       {files.length === 0 ? (
-        <div className="py-8 text-center border-2 border-dashed border-border rounded-lg flex flex-col items-center gap-2">
-          <FolderOpen className="h-6 w-6 text-muted-foreground/30" />
-          <p className="text-[11px] text-muted-foreground">No files uploaded yet</p>
+        <div className="py-8 text-center border-2 border-dashed border-subtle rounded-lg flex flex-col items-center gap-2">
+          <FolderOpen className="h-6 w-6 text-secondary/30" />
+          <p className="text-[11px] text-secondary">No files uploaded yet</p>
         </div>
       ) : (
         <div className="space-y-0.5">
@@ -84,15 +84,15 @@ export const VaultActivity: React.FC<VaultActivityProps> = ({ files, usage }) =>
             return (
               <div
                 key={file.id}
-                className="flex items-center gap-3 py-2 px-2 rounded-lg hover:bg-muted/40 transition-colors group"
+                className="flex items-center gap-3 py-2 px-2 rounded-lg hover:bg-layer-2/40 transition-colors group"
               >
-                <div className="h-7 w-7 shrink-0 rounded bg-muted/50 flex items-center justify-center">
-                  <Icon className="h-3.5 w-3.5 text-muted-foreground group-hover:text-foreground transition-colors" />
+                <div className="h-7 w-7 shrink-0 rounded bg-layer-2/50 flex items-center justify-center">
+                  <Icon className="h-3.5 w-3.5 text-secondary group-hover:text-primary transition-colors" />
                 </div>
-                <p className="flex-1 min-w-0 text-[12px] font-medium text-foreground/80 truncate group-hover:text-foreground transition-colors">
+                <p className="flex-1 min-w-0 text-[12px] font-medium text-primary/80 truncate group-hover:text-primary transition-colors">
                   {file.name}
                 </p>
-                <span className="text-[11px] text-muted-foreground tabular-nums shrink-0">
+                <span className="text-[11px] text-secondary tabular-nums shrink-0">
                   {formatSize(file.sizeBytes)}
                 </span>
               </div>
@@ -105,7 +105,7 @@ export const VaultActivity: React.FC<VaultActivityProps> = ({ files, usage }) =>
         to="/workspace/$workspaceSlug/project/$projectSlug/vault"
         params={{ workspaceSlug: workspaceSlug ?? '', projectSlug: projectSlug ?? '' }}
         search={(prev: any) => prev}
-        className="flex items-center gap-1 mt-3 text-[11px] text-muted-foreground hover:text-primary transition-colors w-fit"
+        className="flex items-center gap-1 mt-3 text-[11px] text-secondary hover:text-primary transition-colors w-fit"
       >
         View all files
         <ChevronRight className="h-3 w-3" />

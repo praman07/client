@@ -88,7 +88,7 @@ export function WorkspaceProfileForm({
             )}
           </form.Field>
         </CardContent>
-        <CardFooter className="border-t bg-muted/30 px-6 py-4 flex justify-end">
+        <CardFooter className="border-t border-subtle bg-layer-1 px-6 py-4 flex justify-end">
           <form.Subscribe
             selector={(state) => [state.canSubmit, state.isSubmitting, state.isDirty]}
             children={([canSubmit, isSubmitting, isDirty]) => (

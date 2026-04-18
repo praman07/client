@@ -48,12 +48,12 @@ export function SettingsTab({ board, isCreator, onClose }: SettingsTabProps) {
   // ── No actions available ──────────────────────────────
   if (!canArchive && !canDelete) {
     return (
-      <div className="flex flex-col items-center justify-center py-10 gap-3 text-center">
-        <Lock className="h-8 w-8 text-muted-foreground/40" />
-        <p className="text-sm text-muted-foreground">
-          You don't have permission to manage board settings.
-        </p>
-      </div>
+<div className="flex flex-col items-center justify-center py-10 gap-3 text-center">
+      <Lock className="h-8 w-8 text-tertiary/40" />
+      <p className="text-14 text-secondary">
+        You don't have permission to manage board settings.
+      </p>
+    </div>
     )
   }
 
@@ -61,11 +61,11 @@ export function SettingsTab({ board, isCreator, onClose }: SettingsTabProps) {
     <div className="space-y-4">
       {/* ── Archive / Unarchive ────────────────────────── */}
       {canArchive && (
-        <div className="rounded-lg border border-border/60 p-4 space-y-2">
-          <h4 className="text-sm font-semibold">
-            {board.isArchived ? 'Restore board' : 'Archive board'}
-          </h4>
-          <p className="text-xs text-muted-foreground">
+<div className="rounded-lg border border-subtle p-4 space-y-2">
+      <h4 className="text-14 font-semibold">
+        {board.isArchived ? 'Restore board' : 'Archive board'}
+      </h4>
+      <p className="text-12 text-secondary">
             {board.isArchived
               ? 'Restore this board to make it active again.'
               : 'Archived boards are hidden from the main board list. You can restore them later.'}
@@ -91,11 +91,11 @@ export function SettingsTab({ board, isCreator, onClose }: SettingsTabProps) {
       {canDelete && isCreator && (
         <>
           {canArchive && <Separator />}
-          <div className="rounded-lg border border-destructive/30 bg-destructive/5 p-4 space-y-2">
-            <h4 className="text-sm font-semibold text-destructive">
-              Delete board
-            </h4>
-            <p className="text-xs text-muted-foreground">
+<div className="rounded-lg border border-danger-strong bg-danger-subtle p-4 space-y-2">
+      <h4 className="text-14 font-semibold text-danger-primary">
+        Delete board
+      </h4>
+      <p className="text-12 text-secondary">
               Permanently delete this board and all its content. This cannot be
               undone.
             </p>
@@ -116,8 +116,8 @@ export function SettingsTab({ board, isCreator, onClose }: SettingsTabProps) {
       {canDelete && !isCreator && (
         <>
           {canArchive && <Separator />}
-          <div className="rounded-lg border border-border/60 p-4">
-            <p className="text-xs text-muted-foreground">
+<div className="rounded-lg border border-subtle p-4">
+      <p className="text-12 text-secondary">
               Only the board creator can delete this board.
             </p>
           </div>

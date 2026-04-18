@@ -29,8 +29,8 @@ function ProjectCardSkeleton() {
         <Skeleton className="size-10 rounded-lg" />
         {/* Avatars Placeholder */}
         <div className="flex -space-x-2">
-          <Skeleton className="size-8 rounded-full border-2 border-background" />
-          <Skeleton className="size-8 rounded-full border-2 border-background" />
+          <Skeleton className="size-8 rounded-full border-2 border-surface-1" />
+          <Skeleton className="size-8 rounded-full border-2 border-surface-1" />
         </div>
       </div>
 
@@ -40,7 +40,7 @@ function ProjectCardSkeleton() {
         <Skeleton className="h-4 w-4/5" />
       </CardHeader>
 
-      <CardFooter className="pt-4 border-t border-border/10 flex justify-between items-center mt-4">
+      <CardFooter className="pt-4 border-t border-subtle flex justify-between items-center mt-4">
         <Skeleton className="h-4 w-20" />
         <Skeleton className="h-4 w-16" />
       </CardFooter>
@@ -73,7 +73,7 @@ export function ProjectsPage({ workspaceSlug }: ProjectsPageProps) {
     <div className="container mx-auto px-4 md:px-8 py-6 space-y-8">
       {/* Header */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-        <h1 className="text-2xl md:text-3xl font-bold tracking-tight">Projects</h1>
+        <h1 className="text-20 md:text-24 font-bold tracking-tight">Projects</h1>
         <Guard permission="project:create">
           <Button onClick={() => open()} className="w-full sm:w-auto">
             <Plus className="mr-2 h-4 w-4" /> Create Project
@@ -108,12 +108,12 @@ export function ProjectsPage({ workspaceSlug }: ProjectsPageProps) {
           <Guard permission="project:create">
             <button
               onClick={() => open()}
-              className="flex flex-col items-center justify-center h-full min-h-[200px] rounded-xl border-2 border-dashed border-border/40 hover:border-border/80 hover:bg-muted/20 transition-all cursor-pointer group outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              className="flex flex-col items-center justify-center h-full min-h-[200px] rounded-xl border-2 border-dashed border-subtle hover:border-strong hover:bg-layer-transparent transition-all cursor-pointer group outline-none focus-visible:ring-2 focus-visible:ring-accent-strong"
             >
-              <div className="flex items-center justify-center size-12 rounded-2xl bg-muted/50 group-hover:bg-muted transition-colors mb-3">
-                <Plus className="w-6 h-6 text-foreground/70 group-hover:text-foreground transition-colors" />
+              <div className="flex items-center justify-center size-12 rounded-2xl bg-layer-2 group-hover:bg-layer-2-hover transition-colors mb-3">
+                <Plus className="w-6 h-6 text-secondary group-hover:text-primary transition-colors" />
               </div>
-              <span className="font-medium text-sm text-muted-foreground group-hover:text-foreground transition-colors tracking-tight">
+              <span className="font-medium text-13 text-secondary group-hover:text-primary transition-colors tracking-tight">
                 New Project
               </span>
             </button>
@@ -123,9 +123,9 @@ export function ProjectsPage({ workspaceSlug }: ProjectsPageProps) {
 
       {/* Empty State (when 0 projects) */}
       {!isLoading && !hasProjects && (
-        <Empty className="mt-8 border-border/50">
+        <Empty className="mt-8 border-subtle">
           <EmptyMedia variant="icon">
-            <FolderGit2 className="text-muted-foreground" />
+            <FolderGit2 className="text-secondary" />
           </EmptyMedia>
           <EmptyHeader>
             <EmptyTitle>No projects found</EmptyTitle>

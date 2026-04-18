@@ -36,7 +36,7 @@ export function BoardViewPage({
   }, [boardId])
 
   return (
-    <div className="h-full w-full relative overflow-hidden bg-background">
+    <div className="h-full w-full relative overflow-hidden bg-surface-1">
       {/* Board deleted overlay — blocks canvas interaction */}
       {isBoardDeleted && (
         <BoardDeletedOverlay

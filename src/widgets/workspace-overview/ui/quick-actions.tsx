@@ -47,27 +47,27 @@ export function QuickActions() {
   ]
 
   return (
-    <Card className="flex flex-col p-6 shadow-sm">
-      <h3 className="text-sm font-bold text-foreground mb-5 tracking-tight">Quick Actions</h3>
-      <div className="flex flex-col space-y-2.5">
-        {actions.map(({ id, label, icon: Icon, permission, onClick }) => {
-          const button = (
-            <button
-              key={id}
-              onClick={onClick}
-              className="flex items-center justify-between p-3 rounded-lg border border-border/50 bg-surface-2 hover:bg-surface-2/80 hover:border-primary/50 transition-all group w-full text-left"
-            >
-              <div className="flex items-center gap-3">
-                <div className="flex items-center justify-center w-8 h-8 rounded-md bg-background text-foreground group-hover:text-primary group-hover:bg-primary/10 transition-colors">
-                  <Icon className="w-4 h-4" />
-                </div>
-                <span className="text-[13px] font-semibold text-foreground group-hover:text-primary transition-colors">
-                  {label}
-                </span>
-              </div>
-              <ChevronRight className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors group-hover:translate-x-0.5" />
-            </button>
-          )
+<Card className="flex flex-col p-6 shadow-raised-100 border border-subtle bg-layer-1">
+  <h3 className="text-14 font-semibold text-primary mb-5 tracking-tight">Quick Actions</h3>
+  <div className="flex flex-col space-y-2.5">
+    {actions.map(({ id, label, icon: Icon, permission, onClick }) => {
+      const button = (
+        <button
+          key={id}
+          onClick={onClick}
+          className="flex items-center justify-between p-3 rounded-lg border border-subtle bg-layer-2 hover:bg-layer-2-hover hover:border-accent-subtle transition-all group w-full text-left"
+        >
+          <div className="flex items-center gap-3">
+            <div className="flex items-center justify-center w-8 h-8 rounded-md bg-surface-1 text-primary group-hover:text-accent-primary group-hover:bg-accent-subtle transition-colors">
+              <Icon className="w-4 h-4" />
+            </div>
+            <span className="text-13 font-semibold text-primary group-hover:text-accent-primary transition-colors">
+              {label}
+            </span>
+          </div>
+          <ChevronRight className="w-4 h-4 text-secondary group-hover:text-accent-primary transition-colors group-hover:translate-x-0.5" />
+        </button>
+      )
 
           // Permission-gated actions — hidden for unauthorized users
           if (permission) {

@@ -80,7 +80,7 @@ export function KanbanColumn({
       ref={setSortableRef}
       style={style}
       className={cn(
-        'flex w-80 shrink-0 flex-col rounded-lg border border-border/40 bg-muted/20 h-full max-h-full',
+        'flex w-80 shrink-0 flex-col rounded-lg border border-subtle bg-layer-1 h-full max-h-full',
         isDragging && 'opacity-50',
       )}
     >
@@ -89,7 +89,7 @@ export function KanbanColumn({
         {/* Drag handle — only this triggers column drag */}
         <button
           type="button"
-          className="cursor-grab touch-none rounded p-0.5 text-muted-foreground/40 opacity-0 transition hover:text-muted-foreground group-hover/col:opacity-100 focus:opacity-100 focus:outline-none"
+          className="cursor-grab touch-none rounded p-0.5 text-tertiary opacity-0 transition hover:text-secondary group-hover/col:opacity-100 focus:opacity-100 focus:outline-none"
           aria-label="Drag to reorder column"
           {...attributes}
           {...listeners}
@@ -98,7 +98,7 @@ export function KanbanColumn({
         </button>
         <StatusPill status={status} />
         <Badge
-          variant="secondary"
+          variant="default"
           className="ml-auto rounded-full px-2 py-0 text-xs"
         >
           {issues.length}
@@ -111,7 +111,7 @@ export function KanbanColumn({
           <div
             ref={setDropRef}
             className={`flex min-h-20 flex-col gap-2 p-2 transition-colors ${
-              isOver ? 'bg-muted/40' : ''
+              isOver ? 'bg-layer-2' : ''
             }`}
           >
             {issues.map((issue) => (
@@ -126,8 +126,8 @@ export function KanbanColumn({
             {/* Empty column drop zone */}
             {issues.length === 0 && (
               <div
-                className={`flex min-h-20 items-center justify-center rounded-md border-2 border-dashed py-8 text-xs text-muted-foreground transition-colors ${
-                  isOver ? 'border-primary/40 text-primary' : 'border-border/40'
+                className={`flex min-h-20 items-center justify-center rounded-md border-2 border-dashed py-8 text-xs text-secondary transition-colors ${
+                  isOver ? 'border-accent-subtle text-primary' : 'border-subtle'
                 }`}
               >
                 {isOver ? 'Drop here' : 'No issues'}
@@ -143,7 +143,7 @@ export function KanbanColumn({
         <Button
           variant="ghost"
           size="sm"
-          className="w-full justify-start text-xs text-muted-foreground hover:text-foreground"
+          className="w-full justify-start text-xs text-secondary hover:text-primary"
           onClick={() => onAddIssue(status.id)}
         >
           <Plus className="mr-1.5 h-3.5 w-3.5" />

@@ -1,19 +1,16 @@
-/* ═══════════════════════════════════════════════════════════════
-   BlockNote Editor Overrides — Obsidian Architect design system
-   Scope: .bn-shadcn only — zero global side-effects
-   ═══════════════════════════════════════════════════════════════ */
+/* ═══════════════════════════════════════════════════════════════════════
+    BlockNote Editor Overrides — Collabify Design System
+    Scope: .bn-shadcn only — zero global side-effects
+    ═══════════════════════════════════════════════════════════════════════ */
 
 /* ── Editor surface + background match ─────────────────────────── */
-/* The outer BlockNote wrapper needs a transparent bg so the page
-   background (#0B0D10 via --pal-base) shows through */
 .bn-shadcn,
 .bn-shadcn .bn-editor {
   background: transparent;
 }
 
-/* Scoped to the BlockNote root — sets the writable content area bg */
 .bn-shadcn .bn-editor * {
-  caret-color: var(--pal-foreground, #E6EAF0);
+  caret-color: var(--txt-primary);
 }
 
 .bn-shadcn .bn-editor {
@@ -21,7 +18,7 @@
     "Segoe UI", Helvetica, Arial, sans-serif;
   font-size: 16px;
   line-height: 1.6;
-  color: var(--pal-foreground, #E6EAF0);
+  color: var(--txt-primary);
 }
 
 /* ── Block container spacing ────────────────────────────────────── */
@@ -38,22 +35,20 @@
 }
 
 /* ── Headings — only color + weight, preserve BlockNote's native sizes ── */
-/* BlockNote renders h1/h2/h3 natively — we only harmonize color/weight.
-   Do NOT override font-size or margins here to avoid making text too large. */
 .bn-shadcn .bn-editor h1 {
-  color: var(--pal-foreground, #E6EAF0);
+  color: var(--txt-primary);
   font-weight: 700;
   letter-spacing: -0.02em;
 }
 
 .bn-shadcn .bn-editor h2 {
-  color: var(--pal-foreground, #E6EAF0);
+  color: var(--txt-primary);
   font-weight: 600;
   letter-spacing: -0.015em;
 }
 
 .bn-shadcn .bn-editor h3 {
-  color: var(--pal-foreground, #E6EAF0);
+  color: var(--txt-primary);
   font-weight: 600;
   letter-spacing: -0.01em;
 }
@@ -83,25 +78,25 @@
   .bn-block-content[data-content-type="checkListItem"][data-checked="true"]
   .bn-inline-content {
   text-decoration: line-through;
-  color: var(--muted-foreground);
+  color: var(--txt-tertiary);
 }
 
 /* ── Quote / Callout placeholder-like styling ───────────────────── */
 .bn-shadcn .bn-editor [data-content-type="bulletListItem"]::marker,
 .bn-shadcn .bn-editor [data-content-type="numberedListItem"]::marker {
-  color: var(--muted-foreground);
+  color: var(--txt-tertiary);
 }
 
 /* ── Placeholder text ───────────────────────────────────────────── */
 .bn-shadcn .bn-editor .is-empty::before,
 .bn-shadcn .bn-editor .is-editor-empty::before,
 .bn-shadcn .bn-editor [data-placeholder]::before {
-  color: var(--muted-foreground);
+  color: var(--txt-tertiary);
   opacity: 0.7;
   pointer-events: none;
 }
 
-/* ── Code block ─────────────────────────────────────────────────── */
+/* ── Code block ──────────────��──────────────────────────────────── */
 .bn-shadcn .bn-editor pre,
 .bn-shadcn .bn-editor code {
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
@@ -111,19 +106,19 @@
 }
 
 .bn-shadcn .bn-editor pre {
-  background: var(--muted);
+  background: var(--bg-layer-1);
   padding: 14px 16px;
   border-radius: 6px;
-  border: 1px solid var(--border);
+  border: 1px solid var(--border-subtle);
   overflow-x: auto;
   line-height: 1.5;
 }
 
 .bn-shadcn .bn-editor :not(pre) > code {
-  background: var(--muted);
+  background: var(--bg-layer-1);
   padding: 2px 5px;
   border-radius: 4px;
-  border: 1px solid var(--border);
+  border: 1px solid var(--border-subtle);
 }
 
 /* ── Block focus / selected highlight ───────────────────────────── */
@@ -133,24 +128,20 @@
 
 /* ── Side menu drag handle ──────────────────────────────────────── */
 .bn-shadcn .bn-side-menu .bn-drag-handle {
-  color: var(--muted-foreground);
+  color: var(--txt-tertiary);
   transition: color 150ms ease;
 }
 
 .bn-shadcn .bn-side-menu .bn-drag-handle:hover {
-  color: var(--foreground);
+  color: var(--txt-primary);
 }
 
 /* ══════════════════════════════════════════════════════════════════
-   Collabify Slash Menu — "Obsidian Architect" design system
-   Tokens: --pal-surface-1 (#111418), --pal-surface-2 (#161A20),
-           --pal-border (#232A32), --pal-foreground (#E6EAF0),
-           --pal-muted (#8A94A6)
-   ══════════════════════════════════════════════════════════════════ */
+    Collabify Slash Menu — design system
+    ══════════════════════════════════════════════════════════════════ */
 
-/* Override BlockNote's suggestion menu container positioning */
 .bn-shadcn .bn-suggestion-menu {
-  all: unset; /* strip any BlockNote default */
+  all: unset;
   display: block;
 }
 
@@ -160,8 +151,8 @@
   max-height: 400px;
   display: flex;
   flex-direction: column;
-  background: var(--pal-surface-1, #111418);
-  border: 1px solid var(--pal-border, #232A32);
+  background: var(--bg-surface-1);
+  border: 1px solid var(--border-subtle);
   border-radius: 8px;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.35);
   overflow: hidden;
@@ -175,14 +166,14 @@
   overflow-x: hidden;
   padding: 6px;
   scrollbar-width: thin;
-  scrollbar-color: var(--pal-surface-2, #161A20) transparent;
+  scrollbar-color: var(--bg-surface-2) transparent;
 }
 
 .csm-list::-webkit-scrollbar {
   width: 4px;
 }
 .csm-list::-webkit-scrollbar-thumb {
-  background: var(--pal-border, #232A32);
+  background: var(--border-subtle);
   border-radius: 4px;
 }
 
@@ -192,7 +183,7 @@
   font-size: 11px;
   font-weight: 500;
   letter-spacing: 0.04em;
-  color: var(--pal-muted, #8A94A6);
+  color: var(--txt-tertiary);
   line-height: 1;
   user-select: none;
 }
@@ -215,11 +206,11 @@
 }
 
 .csm-item:hover {
-  background: var(--pal-surface-2, #161A20);
+  background: var(--bg-surface-2);
 }
 
 .csm-item[data-selected] {
-  background: var(--pal-surface-2, #161A20);
+  background: var(--bg-surface-2);
 }
 
 /* ── Icon box (28 × 28, Surface-2 fill, border) ─────────────────── */
@@ -231,16 +222,15 @@
   width: 28px;
   height: 28px;
   border-radius: 5px;
-  border: 1px solid var(--pal-border, #232A32);
-  background: var(--pal-surface-2, #161A20);
-  color: var(--pal-foreground, #E6EAF0);
-  /* icon SVGs from BlockNote are ~18px — let them inherit */
+  border: 1px solid var(--border-subtle);
+  background: var(--bg-surface-2);
+  color: var(--txt-primary);
 }
 
 .csm-item__icon svg {
   width: 16px;
   height: 16px;
-  color: var(--pal-foreground, #E6EAF0);
+  color: var(--txt-primary);
 }
 
 /* ── Body: title + optional inline subtext ──────────────────────── */
@@ -256,7 +246,7 @@
 .csm-item__title {
   font-size: 14px;
   font-weight: 400;
-  color: var(--pal-foreground, #E6EAF0);
+  color: var(--txt-primary);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -265,14 +255,14 @@
 
 .csm-item__dot {
   font-size: 13px;
-  color: var(--pal-muted, #8A94A6);
+  color: var(--txt-tertiary);
   flex-shrink: 0;
   padding: 0 1px;
 }
 
 .csm-item__subtext {
   font-size: 13px;
-  color: var(--pal-muted, #8A94A6);
+  color: var(--txt-tertiary);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -284,7 +274,7 @@
   flex-shrink: 0;
   font-size: 12px;
   font-family: "Geist Mono", ui-monospace, Menlo, monospace;
-  color: var(--pal-muted, #8A94A6);
+  color: var(--txt-tertiary);
   letter-spacing: 0.02em;
   margin-left: 6px;
 }
@@ -295,35 +285,35 @@
   align-items: center;
   justify-content: space-between;
   padding: 7px 12px;
-  border-top: 1px solid var(--pal-border, #232A32);
+  border-top: 1px solid var(--border-subtle);
   flex-shrink: 0;
 }
 
 .csm-footer__label {
   font-size: 13px;
-  color: var(--pal-muted, #8A94A6);
+  color: var(--txt-tertiary);
   font-weight: 400;
 }
 
 .csm-footer__badge {
   font-size: 11px;
   font-family: "Geist Mono", ui-monospace, Menlo, monospace;
-  color: var(--pal-muted, #8A94A6);
+  color: var(--txt-tertiary);
 }
 
 /* ── Empty state ────────────────────────────────────────────────── */
 .csm-empty {
   padding: 20px 12px;
   font-size: 13px;
-  color: var(--pal-muted, #8A94A6);
+  color: var(--txt-tertiary);
   text-align: center;
 }
 
 /* ══════════════════════════════════════════════════════════════════
-   Mention Menu — Category Tab Strip
-   Reuses csm-root panel + csm-* item styles.
-   Only the tab row (cmm-*) needs its own tokens.
-   ══════════════════════════════════════════════════════════════════ */
+    Mention Menu — Category Tab Strip
+    Reuses csm-root panel + csm-* item styles.
+    Only the tab row (cmm-*) needs its own tokens.
+    ══════════════════════════════════════════════════════════════════ */
 
 /* ── Tab strip container ─────────────────────────────────────────── */
 .cmm-tabs {
@@ -349,7 +339,7 @@
   border-radius: 4px;
   font-size: 12px;
   font-weight: 500;
-  color: var(--pal-muted, #8A94A6);
+  color: var(--txt-tertiary);
   background: transparent;
   border: none;
   cursor: pointer;
@@ -360,49 +350,43 @@
 }
 
 .cmm-tab:hover {
-  background: var(--pal-surface-2, #161A20);
-  color: var(--pal-foreground, #E6EAF0);
+  background: var(--bg-surface-2);
+  color: var(--txt-primary);
 }
 
 .cmm-tab--active {
-  background: var(--pal-surface-2, #161A20);
-  color: var(--pal-foreground, #E6EAF0);
+  background: var(--bg-surface-2);
+  color: var(--txt-primary);
 }
 
-/* ── Divider between tabs and results ────────────────────────────── */
+/* ── Divider between tabs and results ───────���─���──────────────────── */
 .cmm-divider {
   height: 1px;
-  background: var(--pal-border, #232A32);
+  background: var(--border-subtle);
   margin: 6px 0 0;
   flex-shrink: 0;
 }
 
 /* ── Modifier: fixed-height mention menu panel ───────────────────── */
-/* Overrides csm-root's max-height-only rule so the panel never
-   collapses when results are empty and never jumps when they appear. */
 .csm-root.cmm-root {
   height: 340px;
   max-height: 340px;
 }
 
 /* ── Results wrapper — fills remaining vertical space ────────────── */
-/* Sits between the tab strip + divider and the footer.
-   Allows .csm-list to scroll and .csm-empty to vertically center. */
 .cmm-results {
   flex: 1;
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  min-height: 0; /* required for flex child to scroll */
+  min-height: 0;
 }
 
-/* When used inside cmm-results, the list fills all available height */
 .cmm-results .csm-list {
   flex: 1;
   min-height: 0;
 }
 
-/* Centre the empty state vertically inside the results area */
 .cmm-results .csm-empty {
   flex: 1;
   display: flex;
@@ -410,5 +394,3 @@
   justify-content: center;
   padding: 0;
 }
-
-

@@ -15,12 +15,12 @@ export function WorkspaceCard({ workspace }: WorkspaceCardProps) {
       params={{ workspaceSlug: workspace.slug }}
       className="block outline-none cursor-pointer group h-full"
     >
-      <Card size="sm" className="h-full hover:border-primary/50 transition-all duration-300 shadow-sm">
+      <Card size="sm" className="h-full hover:border-accent-strong transition-all duration-300 shadow-sm">
         <CardContent>
           <div className="flex items-start justify-between gap-3">
-            <Avatar className="w-12 h-12 rounded-lg bg-muted border border-border shrink-0">
+            <Avatar className="w-12 h-12 rounded-lg bg-layer-2 border border-subtle shrink-0">
               <AvatarImage src={workspace.logoUrl ?? undefined} alt={workspace.name} />
-              <AvatarFallback className="rounded-lg text-lg font-bold text-foreground">
+              <AvatarFallback className="rounded-lg text-lg font-bold text-primary">
                 {workspace.name.slice(0, 2).toUpperCase()}
               </AvatarFallback>
             </Avatar>
@@ -34,7 +34,7 @@ export function WorkspaceCard({ workspace }: WorkspaceCardProps) {
             <h3 className="font-semibold text-foreground group-hover:text-primary transition-colors line-clamp-1">
               {workspace.name}
             </h3>
-            <p className="text-xs text-muted-foreground mt-1 font-mono truncate">
+            <p className="text-11 text-secondary mt-1 font-mono truncate">
               /{workspace.slug}
             </p>
           </div>

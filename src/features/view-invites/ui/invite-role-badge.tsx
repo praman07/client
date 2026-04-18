@@ -7,12 +7,12 @@ interface InviteRoleBadgeProps {
 function getRoleBadgeClass(roleName: string): string {
   const name = roleName.toUpperCase()
   if (name === 'OWNER')
-    return 'bg-amber-500/15 text-amber-400 border-amber-500/30'
+    return 'bg-warning-subtle text-warning-primary border-warning-subtle'
   if (name === 'ADMIN')
-    return 'bg-blue-500/15 text-blue-400 border-blue-500/30'
+    return 'bg-accent-subtle text-accent-primary border-accent-subtle'
   if (name === 'GUEST')
-    return 'bg-muted/50 text-muted-foreground/70 border-border/50'
-  return 'bg-muted/80 text-muted-foreground border-border'
+    return 'bg-layer-2 text-tertiary border-subtle'
+  return 'bg-layer-2 text-secondary border-subtle'
 }
 
 export function InviteRoleBadge({ role }: InviteRoleBadgeProps) {

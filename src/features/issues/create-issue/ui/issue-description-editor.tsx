@@ -26,8 +26,7 @@ import { BlockNoteView } from '@blocknote/shadcn'
 
 import { en } from '@blocknote/core/locales'
 import type { BlockNoteEditor } from '@blocknote/core'
-import { mentionSchema } from '@/features/mention'
-import { MentionMenuController } from '@/features/mention'
+import { MentionMenuController, mentionSchema  } from '@/features/mention'
 
 interface IssueDescriptionEditorProps {
    
@@ -75,7 +74,7 @@ export function IssueDescriptionEditor({
   useEffect(() => {
     // Cast to `any` — the parent only calls .document on this ref, which is
     // available regardless of the schema generic parameters.
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+     
     editorRef.current = editor as any
   }, [editor, editorRef])
 

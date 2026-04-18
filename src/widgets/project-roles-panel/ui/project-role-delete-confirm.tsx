@@ -31,7 +31,7 @@ export function ProjectRoleDeleteConfirm({
         <AlertDialogHeader>
           <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
           <AlertDialogDescription>
-            This will permanently delete the <span className="font-semibold text-foreground">"{roleName}"</span> role.
+            This will permanently delete the <span className="font-semibold text-primary">"{roleName}"</span> role.
             Project members currently assigned to this role will lose its associated permissions.
             This action cannot be undone.
           </AlertDialogDescription>
@@ -43,7 +43,7 @@ export function ProjectRoleDeleteConfirm({
               e.preventDefault()
               onConfirm()
             }}
-            className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            className="bg-danger-primary text-on-color hover:bg-danger-primary-hover"
             disabled={isDeleting}
           >
             {isDeleting ? (

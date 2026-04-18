@@ -78,22 +78,21 @@ export function RoleSelectorCell({
   const selectedRole = roles.find((r) => r.id === selectedRoleId)
   const displayName = selectedRole?.name ?? currentRoleName ?? 'No role'
 
-  // Badge colour: system roles → indigo, low-rank custom → green, others → secondary
+  // Badge colour: system roles → accent, low-rank custom → success, others → secondary
   const isSystemRole = selectedRole?.isSystem ?? false
   const isLowerRank = !isSystemRole && selectedRole ? selectedRole.rank <= 1 : false
   const badgeClass = cn(
-    'inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium transition-colors',
+    'inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-11 font-medium transition-colors cursor-pointer',
     isSystemRole
-      ? 'bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-300'
+      ? 'bg-accent-subtle text-accent-primary'
       : isLowerRank
-        ? 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-300'
-        : 'bg-secondary text-secondary-foreground',
-    'cursor-pointer ring-offset-background hover:ring-2 hover:ring-ring hover:ring-offset-1',
+        ? 'bg-success-subtle text-success-primary'
+        : 'bg-layer-2 text-primary',
   )
 
   if (isPending) {
     return (
-      <span className={cn(badgeClass, 'pointer-events-none opacity-70')}>
+      <span className={cn(badgeClass, 'pointer-events-none text-disabled')}>
         <Loader2 className="h-3 w-3 animate-spin" />
         {displayName}
       </span>
@@ -102,17 +101,17 @@ export function RoleSelectorCell({
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className={cn(badgeClass, 'outline-none focus-visible:ring-1 focus-visible:ring-ring/50')}>
+      <DropdownMenuTrigger className={cn(badgeClass, 'outline-none')}>
         {displayName}
-        <ChevronDown className="h-3 w-3 opacity-60" />
+        <ChevronDown className="h-3 w-3 text-tertiary" />
       </DropdownMenuTrigger>
       <DropdownMenuContent align="start" className="w-44 p-1">
-        <p className="px-2 py-1 text-[10px] uppercase tracking-widest text-muted-foreground font-medium">
+        <p className="px-2 py-1 text-10 uppercase tracking-widest text-tertiary font-medium">
           Assign role
         </p>
         <DropdownMenuSeparator />
         {roles.length === 0 ? (
-          <div className="px-2 py-1.5 text-xs text-muted-foreground">
+          <div className="px-2 py-1.5 text-11 text-secondary">
             No assignable roles
           </div>
         ) : (
@@ -122,7 +121,7 @@ export function RoleSelectorCell({
               <DropdownMenuItem
                 key={role.id}
                 onClick={() => !isSelected && handleSelect(role)}
-                className="flex items-center justify-between gap-2 text-xs"
+                className="flex items-center justify-between gap-2 text-11"
                 disabled={isPending}
               >
                 <span>{role.name}</span>

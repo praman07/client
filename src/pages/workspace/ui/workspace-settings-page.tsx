@@ -31,12 +31,12 @@ export function WorkspaceSettingsPage() {
   if (!canViewSettings) {
     return (
       <div className="flex flex-col items-center justify-center gap-4 py-20 text-center">
-        <div className="p-3 rounded-full bg-destructive/10">
-          <ShieldOff className="h-7 w-7 text-destructive" />
+        <div className="p-3 rounded-full bg-danger-subtle">
+          <ShieldOff className="h-7 w-7 text-danger-primary" />
         </div>
         <div className="space-y-1">
-          <h2 className="text-lg font-semibold">Access Restricted</h2>
-          <p className="text-sm text-muted-foreground max-w-sm">
+          <h2 className="text-lg font-semibold text-primary">Access Restricted</h2>
+          <p className="text-sm text-secondary max-w-sm">
             You don't have permission to view workspace settings. Contact an Owner or Admin
             to request access.
           </p>
@@ -49,8 +49,8 @@ export function WorkspaceSettingsPage() {
     <div className="flex flex-col gap-8">
       <div>
         <h1 className="text-3xl font-bold tracking-tight">Workspace Settings</h1>
-        <p className="text-muted-foreground mt-1">
-          Manage your workspace profile, security, and team roles.
+<p className="text-sm text-secondary mt-1">
+            Manage your workspace profile, security, and team roles.
         </p>
       </div>
 
@@ -68,10 +68,10 @@ export function WorkspaceSettingsPage() {
                   to={tab.to}
                   params={{ workspaceSlug: workspaceSlug! }}
                   className={cn(
-                    'flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-lg transition-colors',
+                    'flex items-center gap-3 px-3 py-2 text-14 font-medium rounded-lg transition-colors',
                     isActive
-                      ? 'bg-primary/10 text-primary'
-                      : 'text-muted-foreground hover:bg-muted hover:text-foreground'
+                      ? 'bg-accent-subtle text-primary'
+                      : 'text-secondary bg-layer-transparent hover:bg-layer-transparent-hover hover:text-primary'
                   )}
                 >
                   <Icon className="h-4 w-4" />

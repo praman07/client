@@ -9,7 +9,22 @@ function Input({ className, type, ...props }: React.ComponentProps<'input'>) {
       type={type}
       data-slot="input"
       className={cn(
-        'dark:bg-input/30 border-input focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:aria-invalid:border-destructive/50 h-9 rounded-md border bg-transparent px-2.5 py-1 text-base shadow-xs transition-[color,box-shadow] duration-(--transition-expressive) file:h-7 file:text-sm file:font-medium focus-visible:ring-[3px] aria-invalid:ring-[3px] md:text-sm file:text-foreground placeholder:text-muted-foreground w-full min-w-0 outline-none file:inline-flex file:border-0 file:bg-transparent disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50',
+        // Layout
+        'h-8 w-full min-w-0 rounded-md px-2.5 py-1.5',
+        // Typography
+        'text-13 text-primary placeholder:text-placeholder',
+        // Background + border
+        'bg-layer-1 border border-subtle-1',
+        // Transition
+        'transition-colors duration-100',
+        // Focus — no ring classes, handled by global :focus-visible but add border change
+        'focus-visible:outline-none focus-visible:border-accent-strong focus-visible:ring-2 focus-visible:ring-accent-strong/20',
+        // Error state
+        'aria-invalid:border-danger-strong aria-invalid:ring-2 aria-invalid:ring-danger-strong/20',
+        // Disabled
+        'disabled:pointer-events-none disabled:text-disabled disabled:border-subtle disabled:cursor-not-allowed',
+        // File input
+        'file:h-6 file:text-12 file:font-medium file:text-primary file:border-0 file:bg-transparent',
         className,
       )}
       {...props}

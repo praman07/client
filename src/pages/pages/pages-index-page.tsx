@@ -13,18 +13,18 @@ export function PagesIndexPage() {
   const { open } = useCreatePageModal()
 
   return (
-    <div className="flex h-full flex-col items-center justify-center text-muted-foreground p-4 text-center">
-      <div className="bg-muted/50 p-4 rounded-full mb-4">
+    <div className="flex h-full flex-col items-center justify-center text-secondary p-4 text-center">
+      <div className="bg-layer-2 p-4 rounded-full mb-4">
         <HugeiconsIcon
           icon={NoteIcon}
-          className="h-10 w-10 text-muted-foreground/50"
+          className="h-10 w-10 text-tertiary"
         />
       </div>
-      <h3 className="text-lg font-medium text-foreground">No page selected</h3>
-      <p className="max-w-xs text-sm mt-2">
+      <h3 className="text-18 font-medium text-primary">No page selected</h3>
+      <p className="max-w-xs text-13 mt-2">
         Select a page from the sidebar or{' '}
         <button
-          className="underline underline-offset-2 hover:text-foreground transition-colors"
+          className="underline underline-offset-2 hover:text-primary transition-colors"
           onClick={() => open({ parentId: null })}
         >
           create one

@@ -10,7 +10,7 @@ function FieldInfo({ field }: { field: any }) {
   return (
     <>
       {field.state.meta.isTouched && field.state.meta.errors.length ? (
-        <p className="text-sm font-medium text-destructive">
+        <p className="text-13 font-medium text-danger-primary">
           {field.state.meta.errors.join(', ')}
         </p>
       ) : null}
@@ -99,7 +99,7 @@ export function CreateProjectForm({
               }}
               placeholder="mobile-app"
             />
-            <p className="text-[0.8rem] text-muted-foreground">
+            <p className="text-12 text-secondary">
               Unique key for the project URL.
             </p>
             <FieldInfo field={field} />

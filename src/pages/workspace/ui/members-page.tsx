@@ -14,7 +14,7 @@ export function MembersPage() {
 
   if (!currentWorkspace) {
     return (
-      <div className="rounded-xl border border-border/40 p-10 text-center text-sm text-muted-foreground">
+      <div className="rounded-xl border border-subtle p-10 text-center text-13 text-secondary">
         Loading workspace…
       </div>
     )
@@ -27,12 +27,12 @@ export function MembersPage() {
   if (!canReadMembers) {
     return (
       <div className="flex flex-col items-center justify-center gap-4 py-20 text-center">
-        <div className="p-3 rounded-full bg-destructive/10">
-          <ShieldOff className="h-7 w-7 text-destructive" />
+        <div className="p-3 rounded-full bg-danger-subtle">
+          <ShieldOff className="h-7 w-7 text-danger-primary" />
         </div>
         <div className="space-y-1">
-          <h2 className="text-lg font-semibold">Access Restricted</h2>
-          <p className="text-sm text-muted-foreground max-w-sm">
+          <h2 className="text-lg font-semibold text-primary">Access Restricted</h2>
+          <p className="text-sm text-secondary max-w-sm">
             You don't have permission to view workspace members. Contact an Owner or Admin
             to request access.
           </p>
@@ -47,8 +47,8 @@ export function MembersPage() {
       <div className="space-y-6">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h2 className="text-2xl font-bold tracking-tight">Team Members</h2>
-            <p className="text-sm text-muted-foreground mt-0.5">
+            <h2 className="text-20 font-bold text-primary tracking-tight">Team Members</h2>
+            <p className="text-13 text-secondary mt-0.5">
               Manage who has access to this workspace.
             </p>
           </div>
@@ -65,8 +65,8 @@ export function MembersPage() {
       {canViewInvites && (
         <div className="space-y-5">
           <div>
-            <h2 className="text-xl font-bold tracking-tight">Pending Invitations</h2>
-            <p className="text-sm text-muted-foreground mt-0.5">
+            <h2 className="text-18 font-bold text-primary tracking-tight">Pending Invitations</h2>
+            <p className="text-13 text-secondary mt-0.5">
               Users who haven't accepted their invitation yet.
             </p>
           </div>

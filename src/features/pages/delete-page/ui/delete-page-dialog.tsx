@@ -52,7 +52,6 @@ export function DeletePageDialog({
             variant="destructive"
             onClick={onConfirm}
             disabled={isPending}
-            className="text-white"
           >
             {isPending ? 'Deleting...' : 'Delete'}
           </Button>

@@ -41,9 +41,9 @@ function DndActiveDisplay({
 
   return (
     <div className="space-y-3">
-      <div className="p-3 rounded-lg bg-muted">
-        <div className="font-medium">Notifications paused</div>
-        <div className="text-sm text-muted-foreground">
+      <div className="p-3 rounded-lg bg-layer-2">
+        <div className="text-14 font-medium text-primary">Notifications paused</div>
+        <div className="text-13 text-secondary">
           Resuming in {formatDndDuration(remainingMs)}
         </div>
       </div>
@@ -55,7 +55,7 @@ function DndActiveDisplay({
       >
         Resume notifications
       </Button>
-      <p className="text-xs text-muted-foreground text-center">
+      <p className="text-11 text-tertiary text-center">
         You will still receive direct @mentions
       </p>
     </div>
@@ -85,7 +85,7 @@ export function DndControls({
 
   return (
     <div className="space-y-3">
-      <div className="font-medium">Pause notifications</div>
+      <div className="text-14 font-medium text-primary">Pause notifications</div>
       <div className="grid grid-cols-3 gap-2">
         <Button variant="outline" onClick={onPause1Hour} disabled={isPending}>
           1 hour
@@ -97,7 +97,7 @@ export function DndControls({
           Tomorrow 8am
         </Button>
       </div>
-      <p className="text-xs text-muted-foreground text-center">
+      <p className="text-11 text-tertiary text-center">
         You will still receive direct @mentions
       </p>
     </div>

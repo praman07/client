@@ -30,7 +30,7 @@ export function PageSidebar({ projectId }: PageSidebarProps) {
   return (
     <Sidebar
       collapsible="icon"
-      className="border-r inset-y-0 z-0 relative h-full"
+      className="border-r border-subtle inset-y-0 z-0 relative h-full"
     >
       <SidebarContent className="overflow-hidden">
         <ScrollArea className="h-full w-full">

@@ -34,7 +34,7 @@ export function UserDropdown() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
-        className="rounded-full outline-none ring-offset-background focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 cursor-pointer"
+        className="rounded-full outline-none cursor-pointer"
         aria-label="User menu"
       >
         <Avatar className="h-8 w-8">
@@ -47,7 +47,7 @@ export function UserDropdown() {
         {/* User Info */}
         <div className="px-2 py-1.5">
           <p className="text-sm font-medium leading-none truncate">{user?.fullName ?? 'User'}</p>
-          <p className="text-xs text-muted-foreground mt-0.5 truncate">{user?.email}</p>
+          <p className="text-xs text-secondary mt-0.5 truncate">{user?.email}</p>
         </div>
 
         <DropdownMenuSeparator />
@@ -56,7 +56,7 @@ export function UserDropdown() {
           onClick={() => void navigate({ to: '/user/profile' as never })}
           className="gap-2 cursor-pointer"
         >
-          <Settings className="h-4 w-4 text-muted-foreground" />
+          <Settings className="h-4 w-4 text-secondary" />
           Profile & Settings
         </DropdownMenuItem>
 
@@ -64,7 +64,7 @@ export function UserDropdown() {
           onClick={() => void navigate({ to: '/user/workspaces' as never })}
           className="gap-2 cursor-pointer"
         >
-          <LayoutGrid className="h-4 w-4 text-muted-foreground" />
+          <LayoutGrid className="h-4 w-4 text-secondary" />
           My Workspaces
         </DropdownMenuItem>
 
@@ -72,7 +72,7 @@ export function UserDropdown() {
 
         <DropdownMenuItem
           onClick={() => void signOut({ redirectUrl: '/sign-in' })}
-          className="gap-2 cursor-pointer text-destructive focus:text-destructive"
+          className="gap-2 cursor-pointer text-danger-primary focus:text-danger-primary"
         >
           <LogOut className="h-4 w-4" />
           Log out

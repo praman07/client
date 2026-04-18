@@ -155,7 +155,7 @@ export function ProjectGeneralForm({
           >
             {(field) => (
               <div className="space-y-2">
-                <Label className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
+                <Label className="text-[11px] font-semibold uppercase tracking-widest text-secondary">
                   Project Name
                 </Label>
                 <EditableField
@@ -207,12 +207,12 @@ export function ProjectGeneralForm({
           >
             {(field) => (
               <div className="space-y-2">
-                <Label className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
+                <Label className="text-[11px] font-semibold uppercase tracking-widest text-secondary">
                   Project Key
                 </Label>
                 {/* Split key input: workspace prefix + editable key */}
-                <div className="flex h-10 rounded-md border border-input bg-transparent ring-offset-background focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 overflow-hidden">
-                  <span className="flex items-center shrink-0 px-2 sm:px-3 text-xs sm:text-sm text-muted-foreground bg-muted/40 border-r select-none">
+                <div className="flex h-10 rounded-md border border-subtle-1 bg-transparent overflow-hidden">
+                  <span className="flex items-center shrink-0 px-2 sm:px-3 text-xs sm:text-sm text-secondary bg-layer-2 border-r select-none">
                     {workspaceSlug}/
                   </span>
                   <div className="relative flex-1 min-w-0">
@@ -224,18 +224,18 @@ export function ProjectGeneralForm({
                         canUpdate && field.handleChange(toKey(e.target.value))
                       }
                       readOnly={!canUpdate}
-                      className="w-full h-full bg-transparent px-2 sm:px-3 text-sm outline-none placeholder:text-muted-foreground read-only:cursor-default read-only:opacity-70 truncate"
+                      className="w-full h-full bg-transparent px-2 sm:px-3 text-sm outline-none placeholder:text-placeholder read-only:cursor-default read-only:opacity-70 truncate"
                       placeholder="my-project"
                     />
                     {field.state.meta.isValidating && (
-                      <div className="absolute right-3 top-1/2 -translate-y-1/2 bg-background/80 pl-1">
-                        <Spinner className="h-3.5 w-3.5 text-muted-foreground" />
+                      <div className="absolute right-3 top-1/2 -translate-y-1/2 bg-surface-2 pl-1">
+                        <Spinner className="h-3.5 w-3.5 text-secondary" />
                       </div>
                     )}
                   </div>
                 </div>
                 {field.state.meta.errors.length > 0 ? (
-                  <p className="text-sm text-destructive">{field.state.meta.errors[0]}</p>
+                  <p className="text-sm text-danger-primary">{field.state.meta.errors[0]}</p>
                 ) : field.state.value !== initialKey ? (
                   <p className="flex items-center gap-1.5 text-xs text-amber-500">
                     <TriangleAlert className="h-3 w-3 shrink-0" />
@@ -258,7 +258,7 @@ export function ProjectGeneralForm({
           >
             {(field) => (
               <div className="space-y-2">
-                <Label className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
+                <Label className="text-[11px] font-semibold uppercase tracking-widest text-secondary">
                   Description
                 </Label>
                 <Textarea
@@ -272,9 +272,9 @@ export function ProjectGeneralForm({
                   maxLength={500}
                 />
                 {field.state.meta.errors[0] && (
-                  <p className="text-sm text-destructive">{field.state.meta.errors[0]}</p>
+                  <p className="text-sm text-danger-primary">{field.state.meta.errors[0]}</p>
                 )}
-                <p className="text-xs text-muted-foreground text-right">
+                <p className="text-xs text-secondary text-right">
                   {field.state.value?.length ?? 0}/500
                 </p>
               </div>
@@ -284,7 +284,7 @@ export function ProjectGeneralForm({
 
         {/* RIGHT COLUMN: Logo uploader (ordered first on mobile) */}
         <div className="space-y-2 lg:pt-6 order-first lg:order-0 mb-4 lg:mb-0">
-          <Label className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
+          <Label className="text-[11px] font-semibold uppercase tracking-widest text-secondary">
             Project Icon
           </Label>
           <ProjectLogoUploader

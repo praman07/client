@@ -59,7 +59,7 @@ export function ProjectGeneralSettings({
         <div className="flex items-center gap-3">
           <div>
             <h3 className="text-sm font-semibold">General Settings</h3>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-sm text-secondary">
               Update your project's name, key, description and icon.
             </p>
           </div>
@@ -85,12 +85,12 @@ export function ProjectGeneralSettings({
       <section className="space-y-3">
         <div>
           <h3 className="text-sm font-semibold">Danger Zone</h3>
-          <p className="text-sm text-muted-foreground">
+          <p className="text-sm text-secondary">
             These actions are irreversible. Proceed with caution.
           </p>
         </div>
 
-        <div className="rounded-lg border border-destructive/30 divide-y divide-destructive/20">
+        <div className="rounded-lg border border-danger-subtle divide-y divide-danger-subtle/20">
 
           {/* Archive / Unarchive */}
           <div className="flex items-center justify-between px-4 py-3 gap-4">
@@ -98,7 +98,7 @@ export function ProjectGeneralSettings({
               <p className="text-sm font-medium">
                 {isArchived ? 'Unarchive project' : 'Archive project'}
               </p>
-              <p className="text-xs text-muted-foreground">
+              <p className="text-xs text-secondary">
                 {isArchived
                   ? 'Restore project to active status.'
                   : 'Make this project read-only and hide it from active views.'}
@@ -121,7 +121,7 @@ export function ProjectGeneralSettings({
           <div className="flex items-center justify-between px-4 py-3 gap-4">
             <div className="min-w-0">
               <p className="text-sm font-medium">Delete project</p>
-              <p className="text-xs text-muted-foreground">
+              <p className="text-xs text-secondary">
                 Permanently delete this project and all its data. This cannot be undone.
               </p>
             </div>
@@ -129,7 +129,7 @@ export function ProjectGeneralSettings({
               <Button
                 variant="outline"
                 size="sm"
-                className="shrink-0 text-destructive border-destructive/40 hover:bg-destructive/10 hover:text-destructive"
+                className="shrink-0 text-danger-primary border-danger-subtle hover:bg-danger-subtle hover:text-danger-primary"
                 onClick={() => dispatch(openDeleteProjectDialog())}
               >
                 Delete Project

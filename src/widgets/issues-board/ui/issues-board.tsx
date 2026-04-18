@@ -148,8 +148,8 @@ export function IssuesBoard({
   // ── Error state ───────────────────────────────────────────────────────────
   if (isError) {
     return (
-      <div className="flex h-full flex-col items-center justify-center gap-4 text-muted-foreground">
-        <AlertTriangle className="h-8 w-8 text-destructive/60" />
+      <div className="flex h-full flex-col items-center justify-center gap-4 text-secondary">
+        <AlertTriangle className="h-8 w-8 text-danger-primary" />
         <p className="text-sm">Failed to load board.</p>
         <Button variant="outline" size="sm" onClick={refetch}>
           <RefreshCw className="mr-2 h-4 w-4" />
@@ -162,7 +162,7 @@ export function IssuesBoard({
   // ── Empty state ───────────────────────────────────────────────────────────
   if (statuses.length === 0) {
     return (
-      <div className="flex h-full flex-col items-center justify-center gap-4 text-muted-foreground">
+      <div className="flex h-full flex-col items-center justify-center gap-4 text-secondary">
         <p className="text-sm">No columns yet.</p>
         <Button
           variant="outline"

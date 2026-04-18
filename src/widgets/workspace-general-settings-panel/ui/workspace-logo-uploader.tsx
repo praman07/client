@@ -47,34 +47,34 @@ export function WorkspaceLogoUploader({
     <div className="flex items-center gap-4">
       {/* Square rounded avatar — matches reference image */}
       <div className="relative shrink-0">
-        <Avatar className="h-[72px] w-[72px] rounded-xl border border-border">
+        <Avatar className="h-[72px] w-[72px] rounded-xl border border-subtle">
           <AvatarImage
             src={displayUrl ?? undefined}
             alt={name}
             className="object-cover rounded-xl"
           />
-          <AvatarFallback className="rounded-xl text-lg font-bold bg-primary/15 text-primary">
+          <AvatarFallback className="rounded-xl text-lg font-bold bg-accent-subtle text-accent-primary">
             {initials}
           </AvatarFallback>
         </Avatar>
         {isUploading && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/60 rounded-xl">
-            <Loader2 className="h-5 w-5 animate-spin text-white" />
-            <span className="text-[9px] text-white mt-0.5">{progress}%</span>
-          </div>
+<div className="absolute inset-0 flex flex-col items-center justify-center bg-black/60 rounded-xl">
+          <Loader2 className="h-5 w-5 animate-spin text-on-color" />
+          <span className="text-10 text-on-color mt-0.5">{progress}%</span>
+        </div>
         )}
       </div>
 
       {/* Right: link + hint — hidden when readOnly */}
       {!readOnly && (
         <div className="space-y-1">
-          <label
-            htmlFor="logo-upload"
-            className="block text-sm font-semibold text-primary cursor-pointer hover:underline"
-          >
-            {isUploading ? 'Uploading...' : 'Upload new Icon'}
-          </label>
-          <p className="text-xs text-muted-foreground">Recommended 512×512px. PNG or JPG.</p>
+<label
+          htmlFor="logo-upload"
+          className="block text-14 font-semibold text-accent-primary cursor-pointer hover:underline"
+        >
+          {isUploading ? 'Uploading...' : 'Upload new Icon'}
+        </label>
+        <p className="text-12 text-secondary">Recommended 512×512px. PNG or JPG.</p>
           <input
             id="logo-upload"
             type="file"

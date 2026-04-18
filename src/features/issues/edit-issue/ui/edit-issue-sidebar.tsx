@@ -54,8 +54,8 @@ function SidebarRow({
   children: React.ReactNode
 }) {
   return (
-    <div className="flex items-center gap-2 min-h-7 rounded-md px-1 hover:bg-muted/30 transition-colors">
-      <span className="text-xs text-muted-foreground shrink-0 w-[68px]">
+    <div className="flex items-center gap-2 min-h-7 rounded-md px-1 hover:bg-layer-1-hover transition-colors">
+      <span className="text-11 text-secondary shrink-0 w-[68px]">
         {label}
       </span>
       <div className="min-w-0 flex-1 overflow-hidden flex items-center">
@@ -90,8 +90,8 @@ export function EditIssueSidebar({
   })
 
   return (
-    <div className="w-72 shrink-0 border-l px-3 py-4 overflow-y-auto flex flex-col">
-      <p className="text-xs font-medium text-muted-foreground mb-1.5 px-1">
+    <div className="w-72 shrink-0 border-l border-subtle px-3 py-4 overflow-y-auto flex flex-col">
+      <p className="text-11 font-medium text-secondary mb-1.5 px-1">
         Properties
       </p>
 

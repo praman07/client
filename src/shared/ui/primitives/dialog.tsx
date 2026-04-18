@@ -32,13 +32,12 @@ function DialogOverlay({
     <DialogPrimitive.Backdrop
       data-slot="dialog-overlay"
       className={cn(
-        // Layout
-        'fixed inset-0 isolate z-50 bg-black/60 supports-backdrop-filter:backdrop-blur-sm',
-        // Transition on GPU-composited property only
+        // Backdrop — use semantic backdrop token
+        'fixed inset-0 isolate z-[var(--z-overlay)] bg-backdrop',
+        'supports-backdrop-filter:backdrop-blur-sm',
+        // Transitions
         'transition-opacity duration-200 ease-out',
-        // Starting state (entering) — Base UI sets this on first-frame
         'data-starting-style:opacity-0',
-        // Ending state (leaving) — Base UI sets this just before unmount
         'data-ending-style:opacity-0 data-ending-style:duration-150 data-ending-style:ease-in',
         className,
       )}
@@ -61,21 +60,19 @@ function DialogContent({
       <DialogPrimitive.Popup
         data-slot="dialog-content"
         className={cn(
-          // Positioning — translate-x stays -50%, translate-y animated below
-          'fixed top-1/2 left-1/2 z-50 w-full -translate-x-1/2 outline-none',
-          // Container
-          'grid max-w-[calc(100%-2rem)] gap-6 rounded-xl border border-border bg-background p-6 text-sm shadow-xl sm:max-w-md lg:max-w-xl',
-          // GPU-accelerated transition on composited props only
+          // Positioning
+          'fixed top-1/2 left-1/2 z-[var(--z-modal)] w-full -translate-x-1/2 outline-none',
+          // Container — surface-2 sits on a different plane than surface-1
+          'grid max-w-[calc(100%-2rem)] gap-6 rounded-xl',
+          'bg-surface-2 border border-subtle shadow-dialog p-6 text-13',
+          // Animation
           '[transition:transform_220ms_cubic-bezier(0.16,1,0.3,1),opacity_200ms_ease]',
           '[will-change:transform,opacity]',
-          // Resting / open state
           '-translate-y-1/2 opacity-100 scale-100',
-          // Enter from: nudged 16px down, scaled 96%, invisible
           'data-starting-style:-translate-y-[calc(50%-16px)] data-starting-style:opacity-0 data-starting-style:scale-[0.96]',
-          // Exit to: nudged 8px down, scaled 97%, invisible
           'data-ending-style:-translate-y-[calc(50%-8px)] data-ending-style:opacity-0 data-ending-style:scale-[0.97]',
-          // Faster exit
           '[&[data-ending-style]]:[transition-duration:150ms]',
+          'sm:max-w-md lg:max-w-xl',
           className,
         )}
         {...props}
@@ -87,12 +84,12 @@ function DialogContent({
             render={
               <Button
                 variant="ghost"
+                size="icon-sm"
                 className="absolute top-4 right-4"
-                size="sm"
               />
             }
           >
-            <HugeiconsIcon icon={Cancel01Icon} strokeWidth={2} />
+            <HugeiconsIcon icon={Cancel01Icon} strokeWidth={2} size={16} />
             <span className="sr-only">Close</span>
           </DialogPrimitive.Close>
         )}
@@ -105,7 +102,7 @@ function DialogHeader({ className, ...props }: React.ComponentProps<'div'>) {
   return (
     <div
       data-slot="dialog-header"
-      className={cn('gap-2 flex flex-col', className)}
+      className={cn('flex flex-col gap-1.5', className)}
       {...props}
     />
   )
@@ -123,7 +120,7 @@ function DialogFooter({
     <div
       data-slot="dialog-footer"
       className={cn(
-        'gap-2 flex flex-col-reverse sm:flex-row sm:justify-end',
+        'flex flex-col-reverse gap-2 sm:flex-row sm:justify-end',
         className,
       )}
       {...props}
@@ -142,7 +139,7 @@ function DialogTitle({ className, ...props }: DialogPrimitive.Title.Props) {
   return (
     <DialogPrimitive.Title
       data-slot="dialog-title"
-      className={cn('leading-none font-medium', className)}
+      className={cn('text-16 font-semibold leading-snug text-primary tracking-tight', className)}
       {...props}
     />
   )
@@ -156,7 +153,8 @@ function DialogDescription({
     <DialogPrimitive.Description
       data-slot="dialog-description"
       className={cn(
-        'text-muted-foreground *:[a]:hover:text-foreground text-sm *:[a]:underline *:[a]:underline-offset-3',
+        'text-13 text-secondary',
+        '*:[a]:underline *:[a]:underline-offset-3 *:[a]:hover:text-primary',
         className,
       )}
       {...props}

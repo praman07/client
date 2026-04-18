@@ -15,8 +15,8 @@ function StatCard({
   icon: React.ComponentType<{ className?: string }>
 }) {
   return (
-    <div className="rounded-lg border bg-card p-4 space-y-2">
-      <div className="flex items-center gap-2 text-muted-foreground">
+    <div className="rounded-lg border border-subtle bg-layer-1 p-4 space-y-2">
+      <div className="flex items-center gap-2 text-secondary">
         <Icon className="h-4 w-4" />
         <span className="text-xs font-medium uppercase tracking-wide">
           {label}
@@ -37,7 +37,7 @@ export function ProjectOverviewStats({ projectId }: ProjectOverviewStatsProps) {
         {Array.from({ length: 4 }).map((_, i) => (
           <div
             key={i}
-            className="rounded-lg border p-4 h-20 animate-pulse bg-muted"
+            className="rounded-lg border border-subtle p-4 h-20 animate-pulse bg-layer-1"
           />
         ))}
       </div>
@@ -69,7 +69,7 @@ export function ProjectOverviewStats({ projectId }: ProjectOverviewStatsProps) {
       {overview.recentIssues && overview.recentIssues.length > 0 && (
         <div className="space-y-2">
           <h3 className="text-sm font-semibold">Recent Issues</h3>
-          <div className="rounded-lg border divide-y">
+          <div className="rounded-lg border border-subtle divide-y divide-subtle">
             {overview.recentIssues.slice(0, 5).map((issue) => (
               <div
                 key={issue.id}
@@ -80,7 +80,7 @@ export function ProjectOverviewStats({ projectId }: ProjectOverviewStatsProps) {
                   style={{ background: issue.statusColor }}
                 />
                 <span className="text-sm flex-1 truncate">{issue.title}</span>
-                <span className="text-xs text-muted-foreground shrink-0">
+                <span className="text-xs text-secondary shrink-0">
                   {issue.priority}
                 </span>
               </div>
@@ -101,14 +101,14 @@ export function ProjectOverviewStats({ projectId }: ProjectOverviewStatsProps) {
               <div
                 key={m.userId}
                 title={m.name}
-                className="h-8 w-8 rounded-full border-2 border-background bg-muted flex items-center justify-center text-xs font-medium"
+className="h-8 w-8 rounded-full border-2 border-subtle bg-layer-1 flex items-center justify-center text-xs font-medium"
               >
                 {/* eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- m.name is nullable in GQL */}
                 {m.name?.charAt(0).toUpperCase() ?? '?'}
               </div>
             ))}
             {overview.members.length > 8 && (
-              <div className="h-8 w-8 rounded-full border-2 border-background bg-muted flex items-center justify-center text-xs font-medium">
+              <div className="h-8 w-8 rounded-full border-2 border-subtle bg-layer-1 flex items-center justify-center text-xs font-medium">
                 +{overview.members.length - 8}
               </div>
             )}

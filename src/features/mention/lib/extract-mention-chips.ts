@@ -24,10 +24,10 @@ export interface MentionChipData {
 // ── Internal traversal ────────────────────────────────────────────────────────
 
 function collectFromInlineContent(
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  content: any[],
+   
+  content: Array<any>,
   blockId: string,
-  out: MentionChipData[],
+  out: Array<MentionChipData>,
 ): void {
   for (const node of content) {
     // Type guard: only custom inline content nodes have a `props` object.
@@ -50,8 +50,8 @@ function collectFromInlineContent(
   }
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function collectFromBlock(block: any, out: MentionChipData[]): void {
+ 
+function collectFromBlock(block: any, out: Array<MentionChipData>): void {
   if (Array.isArray(block.content)) {
     collectFromInlineContent(block.content, block.id as string, out)
   }
@@ -68,9 +68,9 @@ function collectFromBlock(block: any, out: MentionChipData[]): void {
  * Walk an entire BlockNote document and return all mention chips found.
  * Deduplicates by (blockId, entityId).
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function extractMentionChips(document: any[]): MentionChipData[] {
-  const out: MentionChipData[] = []
+ 
+export function extractMentionChips(document: Array<any>): Array<MentionChipData> {
+  const out: Array<MentionChipData> = []
   for (const block of document) {
     collectFromBlock(block, out)
   }

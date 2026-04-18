@@ -68,14 +68,14 @@ export const PriorityDistribution: React.FC<PriorityDistributionProps> = ({
   }
 
   return (
-    <div className="h-full bg-card border border-border rounded-xl p-5 flex flex-col">
-      <h3 className="text-sm font-semibold text-foreground mb-4">
+    <div className="h-full bg-layer-1 border border-subtle rounded-xl p-5 flex flex-col">
+      <h3 className="text-sm font-semibold text-primary mb-4">
         Issues by Priority
       </h3>
 
       {!hasData ? (
-        <div className="flex-1 flex items-center justify-center border-2 border-dashed border-border rounded-lg">
-          <p className="text-[11px] text-muted-foreground">No open issues</p>
+        <div className="flex-1 flex items-center justify-center border-2 border-dashed border-subtle rounded-lg">
+          <p className="text-[11px] text-secondary">No open issues</p>
         </div>
       ) : (
         <ChartContainer config={chartConfig} className="flex-1 w-full aspect-auto min-h-[160px]">
@@ -89,14 +89,14 @@ export const PriorityDistribution: React.FC<PriorityDistributionProps> = ({
               tick={{ fontSize: 10, fill: 'currentColor' }}
               tickLine={false}
               axisLine={false}
-              className="text-muted-foreground"
+              className="text-secondary"
             />
             <YAxis
               allowDecimals={false}
               tick={{ fontSize: 10, fill: 'currentColor' }}
               tickLine={false}
               axisLine={false}
-              className="text-muted-foreground"
+              className="text-secondary"
               width={28}
             />
             <ChartTooltip

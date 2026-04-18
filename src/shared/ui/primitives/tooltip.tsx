@@ -5,7 +5,7 @@ import { Tooltip as TooltipPrimitive } from '@base-ui/react/tooltip'
 import { cn } from '@/shared/lib/utils'
 
 function TooltipProvider({
-  delay = 0,
+  delay = 400,
   ...props
 }: TooltipPrimitive.Provider.Props) {
   return (
@@ -32,7 +32,7 @@ function TooltipTrigger({ ...props }: TooltipPrimitive.Trigger.Props) {
 function TooltipContent({
   className,
   side = 'top',
-  sideOffset = 4,
+  sideOffset = 6,
   align = 'center',
   alignOffset = 0,
   children,
@@ -49,18 +49,31 @@ function TooltipContent({
         alignOffset={alignOffset}
         side={side}
         sideOffset={sideOffset}
-        className="isolate z-50"
+        className="isolate z-[var(--z-tooltip)]"
       >
         <TooltipPrimitive.Popup
           data-slot="tooltip-content"
           className={cn(
-            'data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-[state=delayed-open]:animate-in data-[state=delayed-open]:fade-in-0 data-[state=delayed-open]:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 rounded-md px-3 py-1.5 text-xs bg-foreground text-background border border-foreground/10 shadow-md duration-(--transition-spring) z-50 w-fit max-w-xs origin-(--transform-origin)',
+            // Container — layer-3 is the deepest surface, sits above everything
+            'bg-layer-3 border border-strong text-primary rounded-md',
+            'px-2.5 py-1.5 text-12 leading-snug shadow-overlay-100',
+            'w-fit max-w-xs',
+            // Origin
+            'origin-[--transform-origin]',
+            // Animations
+            'data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95',
+            'data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95',
+            'data-[side=bottom]:slide-in-from-top-2',
+            'data-[side=left]:slide-in-from-right-2',
+            'data-[side=right]:slide-in-from-left-2',
+            'data-[side=top]:slide-in-from-bottom-2',
+            'duration-100',
             className,
           )}
           {...props}
         >
           {children}
-          <TooltipPrimitive.Arrow className="size-2.5 translate-y-[calc(-50%-2px)] rotate-45 rounded-[2px] bg-foreground fill-foreground z-50 data-[side=bottom]:top-1 data-[side=left]:top-1/2! data-[side=left]:-right-1 data-[side=left]:-translate-y-1/2 data-[side=right]:top-1/2! data-[side=right]:-left-1 data-[side=right]:-translate-y-1/2 data-[side=top]:-bottom-2.5" />
+          <TooltipPrimitive.Arrow className="size-2.5 translate-y-[calc(-50%-2px)] rotate-45 rounded-[2px] bg-layer-3 border border-strong z-50 data-[side=bottom]:top-1 data-[side=left]:top-1/2! data-[side=left]:-right-1 data-[side=left]:-translate-y-1/2 data-[side=right]:top-1/2! data-[side=right]:-left-1 data-[side=right]:-translate-y-1/2 data-[side=top]:-bottom-2.5" />
         </TooltipPrimitive.Popup>
       </TooltipPrimitive.Positioner>
     </TooltipPrimitive.Portal>

@@ -15,9 +15,9 @@ export function CreateChannelModal() {
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && close()}>
-      <DialogContent className="max-w-lg w-[calc(100vw-2rem)] flex flex-col p-0 gap-0 overflow-hidden bg-background border-border">
-        <DialogHeader className="px-6 pt-5 pb-4 shrink-0 border-b border-border">
-          <DialogTitle className="text-base font-semibold text-foreground">
+      <DialogContent className="max-w-lg w-[calc(100vw-2rem)] flex flex-col p-0 gap-0 overflow-hidden bg-surface-1 border-subtle">
+        <DialogHeader className="px-6 pt-5 pb-4 shrink-0 border-b border-subtle">
+          <DialogTitle className="text-14 font-semibold text-primary">
             Create a channel
           </DialogTitle>
           <p className="text-sm text-muted-foreground mt-0.5">
@@ -32,7 +32,7 @@ export function CreateChannelModal() {
               onSuccess={close}
             />
           ) : (
-            <div className="py-4 text-center text-sm text-muted-foreground">
+            <div className="py-4 text-center text-sm text-secondary">
               Loading project context…
             </div>
           )}

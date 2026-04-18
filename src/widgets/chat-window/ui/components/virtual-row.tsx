@@ -41,7 +41,7 @@ export const VirtualRow = React.memo(
         }}
         className={
           item.type === 'MESSAGE' && item.message?.id === highlightedMessageId
-            ? 'bg-amber-500/10 border-l-2 border-amber-400/70 rounded-r transition-colors duration-700'
+            ? 'bg-accent-subtle border-l-2 border-accent-strong rounded-r transition-colors duration-700'
             : 'border-l-2 border-transparent transition-colors duration-700'
         }
       >

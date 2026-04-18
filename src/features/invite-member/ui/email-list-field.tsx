@@ -35,7 +35,7 @@ export function EmailListField({ form }: Props) {
                           }
                         />
                         {subField.state.meta.errors.length > 0 && (
-                          <p className="text-sm font-medium text-destructive">
+                          <p className="text-13 font-medium text-danger-primary">
                             {subField.state.meta.errors
                               .map((e: any) => e?.message || e)
                               .join(', ')}
@@ -52,7 +52,7 @@ export function EmailListField({ form }: Props) {
                           onClick={() => field.removeValue(i)}
                           title="Remove email"
                         >
-                          <Trash2 className="h-4 w-4 text-muted-foreground" />
+                          <Trash2 className="h-4 w-4 text-secondary" />
                         </Button>
                       )}
                     </div>

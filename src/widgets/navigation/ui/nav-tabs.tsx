@@ -13,7 +13,7 @@ interface NavTabsProps {
 
 export function NavTabs({ items, from }: NavTabsProps) {
   return (
-    <div className="w-full shrink-0 border-b bg-card px-6">
+    <div className="w-full shrink-0 border-b border-subtle bg-layer-1 px-6">
       <nav className="flex items-center gap-6 overflow-x-auto overflow-y-hidden">
       {items.map((item) => (
         <Link
@@ -21,16 +21,16 @@ export function NavTabs({ items, from }: NavTabsProps) {
           to={item.href as any}
           from={from as any}
           activeOptions={item.activeOptions}
-          className="group relative flex h-12 items-center text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+          className="group relative flex h-12 items-center text-sm font-medium text-secondary transition-colors hover:text-primary"
           activeProps={{
-            className: 'text-foreground font-semibold',
+            className: 'text-primary font-semibold',
           }}
         >
           {({ isActive }) => (
             <>
               {item.label}
               {isActive && (
-                <div className="absolute -bottom-px left-0 right-0 h-0.5 bg-foreground transition-all" />
+                <div className="absolute -bottom-px left-0 right-0 h-0.5 bg-accent-primary transition-all" />
               )}
             </>
           )}

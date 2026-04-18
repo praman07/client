@@ -86,9 +86,9 @@ export function GeneralTab({ board, onClose }: GeneralTabProps) {
     <div className="space-y-5">
       {/* ── Board name ─────────────────────────────── */}
       <div className="space-y-1.5">
-        <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide px-1">
-          Board name
-        </p>
+<p className="text-11 font-medium text-secondary uppercase tracking-wide px-1">
+  Board name
+</p>
 
         {canUpdate && editingTitle ? (
           <div className="flex items-center gap-1.5">
@@ -108,7 +108,7 @@ export function GeneralTab({ board, onClose }: GeneralTabProps) {
             <Button
               size="icon"
               variant="ghost"
-              className="h-8 w-8 shrink-0 text-primary hover:text-primary hover:bg-primary/10"
+              className="h-8 w-8 shrink-0 text-accent-primary hover:text-accent-primary hover:bg-accent-subtle"
               onClick={handleTitleConfirm}
               disabled={renameBoard.isPending}
               aria-label="Confirm rename"
@@ -135,14 +135,14 @@ export function GeneralTab({ board, onClose }: GeneralTabProps) {
               if (canUpdate && (e.key === 'Enter' || e.key === ' '))
                 setEditingTitle(true)
             }}
-            className={`group flex items-center gap-2 rounded-lg px-3 py-2 transition-colors
-              ${canUpdate ? 'hover:bg-muted/50 cursor-text' : 'cursor-default'}`}
+className={`group flex items-center gap-2 rounded-lg px-3 py-2 transition-colors
+  ${canUpdate ? 'hover:bg-layer-1 cursor-text' : 'cursor-default'}`}
           >
-            <span className="flex-1 text-sm font-medium truncate">
-              {board.title}
-            </span>
-            {canUpdate && (
-              <Pencil className="h-3.5 w-3.5 text-muted-foreground shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" />
+<span className="flex-1 text-14 font-medium truncate">
+  {board.title}
+</span>
+{canUpdate && (
+<Pencil className="h-3.5 w-3.5 text-tertiary shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" />
             )}
           </div>
         )}
@@ -150,9 +150,9 @@ export function GeneralTab({ board, onClose }: GeneralTabProps) {
 
       {/* ── Description ────────────────────────────── */}
       <div className="space-y-1.5">
-        <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide px-1">
-          Description
-        </p>
+<p className="text-11 font-medium text-secondary uppercase tracking-wide px-1">
+  Description
+</p>
 
         {canUpdate && editingDesc ? (
           <div className="space-y-2">
@@ -199,41 +199,41 @@ export function GeneralTab({ board, onClose }: GeneralTabProps) {
               if (canUpdate && (e.key === 'Enter' || e.key === ' '))
                 setEditingDesc(true)
             }}
-            className={`group flex items-start gap-2 rounded-lg px-3 py-2 min-h-[3rem] transition-colors
-              ${canUpdate ? 'hover:bg-muted/50 cursor-text' : 'cursor-default'}`}
+className={`group flex items-start gap-2 rounded-lg px-3 py-2 min-h-[3rem] transition-colors
+  ${canUpdate ? 'hover:bg-layer-1 cursor-text' : 'cursor-default'}`}
           >
             {board.description ? (
-              <p className="flex-1 text-sm text-foreground leading-relaxed whitespace-pre-wrap break-words">
-                {board.description}
-              </p>
-            ) : (
-              <p className="flex-1 text-sm text-muted-foreground italic">
-                {canUpdate ? 'Click to add a description…' : 'No description'}
-              </p>
-            )}
-            {canUpdate && (
-              <Pencil className="h-3.5 w-3.5 text-muted-foreground shrink-0 mt-0.5 opacity-0 group-hover:opacity-100 transition-opacity" />
+<p className="flex-1 text-14 text-primary leading-relaxed whitespace-pre-wrap break-words">
+  {board.description}
+</p>
+) : (
+<p className="flex-1 text-14 text-secondary italic">
+  {canUpdate ? 'Click to add a description…' : 'No description'}
+</p>
+)}
+{canUpdate && (
+<Pencil className="h-3.5 w-3.5 text-tertiary shrink-0 mt-0.5 opacity-0 group-hover:opacity-100 transition-opacity" />
             )}
           </div>
         )}
       </div>
 
       {/* ── Read-only metadata ─────────────────────── */}
-      <div className="rounded-lg border border-border/50 divide-y divide-border/50 text-sm overflow-hidden">
-        <div className="flex items-center justify-between px-3 py-2.5">
-          <span className="text-muted-foreground">Elements</span>
+<div className="rounded-lg border border-subtle divide-y divide-border-subtle text-13 overflow-hidden">
+  <div className="flex items-center justify-between px-3 py-2.5">
+    <span className="text-secondary">Elements</span>
           <span className="font-medium tabular-nums">
             {board.elementCount.toLocaleString()}
           </span>
         </div>
-        <div className="flex items-center justify-between px-3 py-2.5">
-          <span className="text-muted-foreground">File size</span>
+<div className="flex items-center justify-between px-3 py-2.5">
+    <span className="text-secondary">File size</span>
           <span className="font-medium tabular-nums">
             {(Number(board.fileSizeBytes) / 1024).toFixed(1)} KB
           </span>
         </div>
-        <div className="flex items-center justify-between px-3 py-2.5">
-          <span className="text-muted-foreground">Status</span>
+<div className="flex items-center justify-between px-3 py-2.5">
+    <span className="text-secondary">Status</span>
           <span className="font-medium">
             {board.isArchived ? 'Archived' : board.isLocked ? 'Locked' : 'Active'}
           </span>

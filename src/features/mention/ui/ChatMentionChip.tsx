@@ -20,15 +20,21 @@ export interface ChatMentionChipProps {
 // ── Chip color map (mirrors MentionChip) ──────────────────────────────────────
 
 const CHIP_COLORS: Record<string, string> = {
-  [SearchEntityType.Page]:        'bg-indigo-100 text-indigo-700 hover:bg-indigo-200 dark:bg-indigo-900/40 dark:text-indigo-300',
-  [SearchEntityType.Issue]:       'bg-amber-100 text-amber-700 hover:bg-amber-200 dark:bg-amber-900/40 dark:text-amber-300',
-  [SearchEntityType.VaultFile]:   'bg-emerald-100 text-emerald-700 hover:bg-emerald-200 dark:bg-emerald-900/40 dark:text-emerald-300',
-  [SearchEntityType.VaultFolder]: 'bg-teal-100 text-teal-700 hover:bg-teal-200 dark:bg-teal-900/40 dark:text-teal-300',
-  [SearchEntityType.Whiteboard]:  'bg-violet-100 text-violet-700 hover:bg-violet-200 dark:bg-violet-900/40 dark:text-violet-300',
-  [SearchEntityType.User]:        'bg-sky-100 text-sky-700 hover:bg-sky-200 dark:bg-sky-900/40 dark:text-sky-300',
+  [SearchEntityType.Page]:
+    'bg-layer-2 text-primary hover:bg-layer-2-hover',
+  [SearchEntityType.Issue]:
+    'bg-layer-2 text-primary hover:bg-layer-2-hover',
+  [SearchEntityType.VaultFile]:
+    'bg-layer-2 text-primary hover:bg-layer-2-hover',
+  [SearchEntityType.VaultFolder]:
+    'bg-layer-2 text-primary hover:bg-layer-2-hover',
+  [SearchEntityType.Whiteboard]:
+    'bg-layer-2 text-primary hover:bg-layer-2-hover',
+  [SearchEntityType.User]:
+    'bg-layer-2 text-primary hover:bg-layer-2-hover',
 }
 
-const DEFAULT_COLOR = 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-gray-800 dark:text-gray-300'
+const DEFAULT_COLOR = 'bg-layer-2 text-secondary hover:bg-layer-2-hover'
 
 // ── Component ─────────────────────────────────────────────────────────────────
 
@@ -37,7 +43,7 @@ export function ChatMentionChip({ entityId, entityType, displayText }: ChatMenti
 
   const isOrphaned = !entityId
   const colorClass = isOrphaned
-    ? 'bg-red-50 text-red-400 line-through cursor-not-allowed dark:bg-red-900/30 dark:text-red-400'
+    ? 'bg-danger-subtle text-danger-primary line-through cursor-not-allowed'
     : (CHIP_COLORS[entityType] ?? DEFAULT_COLOR)
 
   function handleClick(e: React.MouseEvent) {
@@ -49,7 +55,7 @@ export function ChatMentionChip({ entityId, entityType, displayText }: ChatMenti
 
   return (
     <span
-      className={`mention-chip inline-flex items-center gap-0.5 rounded px-1.5 py-0.5 text-sm font-medium transition-colors select-none cursor-pointer ${colorClass}`}
+      className={`mention-chip inline-flex items-center gap-0.5 rounded-md px-1.5 py-0.5 text-13 font-medium transition-colors duration-100 select-none cursor-pointer ${colorClass}`}
       onClick={handleClick}
       title={isOrphaned ? 'This entity no longer exists' : `${entityType}: ${displayText}`}
     >

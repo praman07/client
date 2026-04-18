@@ -16,9 +16,9 @@ export function VaultUploadTray() {
   if (slots.length === 0) return null
 
   return (
-    <div className="fixed bottom-4 right-4 z-50 w-80 rounded-xl border bg-popover shadow-lg overflow-hidden">
+    <div className="fixed bottom-4 right-4 z-50 w-80 rounded-xl border border-subtle bg-surface-2 shadow-lg overflow-hidden">
       {/* Header */}
-      <div className="flex items-center justify-between px-4 py-2.5 border-b bg-muted/40">
+      <div className="flex items-center justify-between px-4 py-2.5 border-b border-subtle bg-layer-2">
         <span className="text-sm font-medium">
           Uploading{' '}
           {slots.filter((s) => s.status !== 'done').length > 0
@@ -27,7 +27,7 @@ export function VaultUploadTray() {
         </span>
         <button
           onClick={() => dispatch(uploadTrayActions.clearCompleted())}
-          className="text-muted-foreground hover:text-foreground transition-colors"
+          className="text-secondary hover:text-primary transition-colors"
           aria-label="Clear completed uploads"
         >
           <X className="h-4 w-4" />

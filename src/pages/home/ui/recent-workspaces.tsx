@@ -17,9 +17,9 @@ export function RecentWorkspaces({ workspaces, isLoading }: RecentWorkspacesProp
   return (
     <section>
       <div className="flex items-center justify-between mb-4">
-        <h2 className="font-semibold text-lg">Recent Workspaces</h2>
+        <h2 className="font-semibold text-18 text-primary">Recent Workspaces</h2>
         {!isLoading && workspaces.length > 0 && (
-          <Link to="/user/workspaces" className="text-xs text-primary font-medium hover:underline">
+          <Link to="/user/workspaces" className="text-11 text-primary font-medium hover:underline">
             View all
           </Link>
         )}
@@ -32,10 +32,10 @@ export function RecentWorkspaces({ workspaces, isLoading }: RecentWorkspacesProp
           ))}
         </div>
       ) : workspaces.length === 0 ? (
-        <div className="flex flex-col items-center justify-center rounded-xl border border-dashed py-16 text-center max-w-2xl mx-auto w-full">
-          <HugeiconsIcon icon={Folder01Icon} className="size-10 text-muted-foreground/40 mb-3" />
-          <p className="text-sm font-medium text-muted-foreground">No workspaces yet</p>
-          <p className="text-xs text-muted-foreground/70 mt-1 mb-4">Create your first workspace to start collaborating</p>
+        <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-subtle py-16 text-center max-w-2xl mx-auto w-full">
+          <HugeiconsIcon icon={Folder01Icon} className="size-10 text-tertiary mb-3" />
+          <p className="text-13 font-medium text-secondary">No workspaces yet</p>
+          <p className="text-11 text-tertiary mt-1 mb-4">Create your first workspace to start collaborating</p>
           <Button size="sm" onClick={() => void navigate({ to: '/workspace/new' })} className="gap-1.5">
             <HugeiconsIcon icon={Add01Icon} className="size-4" />
             Create workspace

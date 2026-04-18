@@ -42,31 +42,31 @@ function StepIndicator({ current }: { current: Step }) {
             <div className="flex items-center gap-2">
               <div
                 className={cn(
-                  'flex h-7 w-7 items-center justify-center rounded-full border-2 text-xs font-semibold transition-colors',
-                  done && 'border-primary bg-primary text-primary-foreground',
-                  active && 'border-primary bg-background text-primary',
+                  'flex h-7 w-7 items-center justify-center rounded-full border-2 text-11 font-semibold transition-colors',
+                  done && 'border-accent-subtle bg-accent-primary text-on-color',
+                  active && 'border-accent-subtle bg-surface-1 text-primary',
                   !done &&
                     !active &&
-                    'border-muted-foreground/30 bg-background text-muted-foreground',
+                    'border-subtle bg-surface-1 text-secondary',
                 )}
               >
                 {done ? <Check className="h-3.5 w-3.5" /> : i + 1}
               </div>
               <span
                 className={cn(
-                  'text-sm font-medium transition-colors',
+                  'text-13 font-medium transition-colors',
                   active
-                    ? 'text-foreground'
+                    ? 'text-primary'
                     : done
-                      ? 'text-foreground'
-                      : 'text-muted-foreground',
+                      ? 'text-primary'
+                      : 'text-secondary',
                 )}
               >
                 {label}
               </span>
             </div>
             {i < STEPS.length - 1 && (
-              <ChevronRight className="h-4 w-4 text-muted-foreground/40 mx-3 shrink-0" />
+              <ChevronRight className="h-4 w-4 text-secondary/40 mx-3 shrink-0" />
             )}
           </div>
         )
@@ -207,7 +207,7 @@ export function CreateProjectRoleDialog({
       <DialogContent className="max-w-5xl h-[680px] flex flex-col gap-0 p-0 overflow-hidden">
         {/* Header */}
         <DialogHeader className="px-6 pt-6 pb-4 border-b shrink-0">
-          <DialogTitle className="text-lg">Create Role</DialogTitle>
+          <DialogTitle className="text-18">Create Role</DialogTitle>
           <DialogDescription className="sr-only">
             Create a new project role with permissions and member assignments.
           </DialogDescription>
@@ -245,8 +245,8 @@ export function CreateProjectRoleDialog({
         </div>
 
         {/* Footer navigation */}
-        <div className="flex items-center justify-between px-6 py-4 border-t shrink-0 bg-muted/20">
-          <div className="text-xs text-muted-foreground">
+        <div className="flex items-center justify-between px-6 py-4 border-t shrink-0 bg-layer-2">
+          <div className="text-11 text-secondary">
             {step === 1 && selectedPermissionIds.size > 0 && (
               <span>
                 {selectedPermissionIds.size} permission

@@ -63,15 +63,15 @@ export function SignUpPage() {
   }
 
   return (
-    <div className="flex min-h-svh flex-col items-center justify-center bg-background p-6">
+    <div className="flex min-h-svh flex-col items-center justify-center bg-canvas p-6">
       <div className="w-full max-w-sm space-y-6">
         {/* Logo */}
         <div className="flex flex-col items-center gap-2 text-center">
           <img src="/logo2.png" alt="Collabify" className="h-10 w-10 rounded-xl object-contain" />
-          <h1 className="text-2xl font-semibold tracking-tight">
+          <h1 className="text-20 font-semibold tracking-tight text-primary">
             {step === 'credentials' ? 'Create your account' : 'Check your email'}
           </h1>
-          <p className="text-sm text-muted-foreground">
+          <p className="text-13 text-secondary">
             {step === 'credentials'
               ? 'Start collaborating with your team'
               : `We sent a 6-digit code to ${email}`}
@@ -101,14 +101,14 @@ export function SignUpPage() {
 
             <div className="relative">
               <Separator />
-              <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-background px-2 text-xs text-muted-foreground">
+              <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-canvas px-2 text-11 text-secondary">
                 or continue with email
               </span>
             </div>
 
             <form onSubmit={handleRegister} className="space-y-4">
               {error && (
-                <p className="rounded-lg border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive">
+                <p className="rounded-lg border border-danger-strong bg-danger-subtle px-3 py-2 text-13 text-danger-primary">
                   {error}
                 </p>
               )}
@@ -146,9 +146,9 @@ export function SignUpPage() {
           /* Step 2: OTP Verification */
           <form onSubmit={handleVerify} className="space-y-6">
             {error && (
-              <p className="rounded-lg border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive">
-                {error}
-              </p>
+<p className="rounded-lg border border-danger-strong bg-danger-subtle px-3 py-2 text-13 text-danger-primary">
+                  {error}
+                </p>
             )}
             <div className="flex justify-center">
               <InputOTP maxLength={6} value={code} onChange={setCode}>
@@ -168,7 +168,7 @@ export function SignUpPage() {
             <Button
               type="button"
               variant="ghost"
-              className="w-full text-muted-foreground"
+              className="w-full text-secondary"
               onClick={() => { setStep('credentials'); setError(null) }}
             >
               ← Back
@@ -177,9 +177,9 @@ export function SignUpPage() {
         )}
 
         {step === 'credentials' && (
-          <p className="text-center text-sm text-muted-foreground">
+          <p className="text-center text-13 text-secondary">
             Already have an account?{' '}
-            <a href="/sign-in" className="font-medium text-foreground underline underline-offset-4 hover:text-primary">
+            <a href="/sign-in" className="font-medium text-primary underline underline-offset-4 hover:text-accent-primary">
               Sign in
             </a>
           </p>

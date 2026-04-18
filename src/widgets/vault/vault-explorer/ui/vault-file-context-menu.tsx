@@ -52,7 +52,7 @@ export function VaultFileContextMenu({
         <Guard permission="vault:file:delete">
           <ContextMenuSeparator />
           <ContextMenuItem
-            className="text-destructive focus:text-destructive"
+            className="text-danger-primary focus:text-danger-primary"
             onClick={() => {
               if (window.confirm(`Delete "${file.name}"?`)) {
                 deleteFile({

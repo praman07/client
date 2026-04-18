@@ -115,7 +115,7 @@ export function RenamePageInput({
             />
             {field.state.meta.isTouched &&
               field.state.meta.errors.length > 0 && (
-                <p className="text-xs text-destructive">
+                <p className="text-11 text-danger-primary">
                   {field.state.meta.errors.join(', ')}
                 </p>
               )}

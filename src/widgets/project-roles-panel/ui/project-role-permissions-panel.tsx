@@ -84,8 +84,8 @@ function EditableText({ value, onCommit, disabled, placeholder, multiline, class
 
   if (disabled) {
     return (
-      <span className={cn('text-sm text-muted-foreground', className)}>
-        {value || <span className="italic opacity-50">{placeholder}</span>}
+      <span className={cn('text-sm text-secondary', className)}>
+        {value || <span className="italic text-disabled">{placeholder}</span>}
       </span>
     )
   }
@@ -108,7 +108,7 @@ function EditableText({ value, onCommit, disabled, placeholder, multiline, class
         <button onClick={commit} className="mt-1 p-1 rounded text-primary hover:bg-primary/10 shrink-0" type="button" title="Save">
           <Check className="h-3.5 w-3.5" />
         </button>
-        <button onClick={cancel} className="mt-1 p-1 rounded text-muted-foreground hover:bg-muted shrink-0" type="button" title="Cancel">
+        <button onClick={cancel} className="mt-1 p-1 rounded text-secondary hover:bg-layer-2 shrink-0" type="button" title="Cancel">
           <X className="h-3.5 w-3.5" />
         </button>
       </div>
@@ -118,11 +118,11 @@ function EditableText({ value, onCommit, disabled, placeholder, multiline, class
   return (
     <div className={cn('flex items-center gap-1.5 group/edit flex-1 min-w-0', className)}>
       <span className="text-sm truncate">
-        {value || <span className="italic text-muted-foreground opacity-60">{placeholder}</span>}
+        {value || <span className="italic text-secondary opacity-60">{placeholder}</span>}
       </span>
       <button
         onClick={() => setEditing(true)}
-        className="shrink-0 opacity-0 group-hover/edit:opacity-60 hover:opacity-100! transition-opacity p-0.5 rounded hover:bg-muted"
+        className="shrink-0 opacity-0 group-hover/edit:opacity-60 hover:opacity-100! transition-opacity p-0.5 rounded hover:bg-layer-2"
         type="button"
         title="Edit"
       >
@@ -153,21 +153,21 @@ function PermissionGroup({
   const grantedCount = permissions.filter((p) => pendingPermIds.has(p.id)).length
 
   return (
-    <div className="rounded-lg border bg-muted/5 overflow-hidden">
+    <div className="rounded-lg border border-subtle bg-layer-1 overflow-hidden">
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
-        className="w-full flex items-center justify-between px-4 py-2.5 bg-muted/30 hover:bg-muted/50 transition-colors"
+        className="w-full flex items-center justify-between px-4 py-2.5 bg-layer-2 hover:bg-layer-2-hover transition-colors"
       >
         <div className="flex items-center gap-2">
-          <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+          <span className="text-xs font-semibold uppercase tracking-wider text-secondary">
             {groupName}
           </span>
           <Badge variant="secondary" className="text-[9px] h-4 px-1.5">
             {grantedCount}/{permissions.length}
           </Badge>
         </div>
-        {open ? <ChevronUp className="h-3.5 w-3.5 text-muted-foreground" /> : <ChevronDown className="h-3.5 w-3.5 text-muted-foreground" />}
+        {open ? <ChevronUp className="h-3.5 w-3.5 text-secondary" /> : <ChevronDown className="h-3.5 w-3.5 text-secondary" />}
       </button>
 
       {open && (
@@ -177,14 +177,14 @@ function PermissionGroup({
               key={perm.id}
               className={cn(
                 'flex items-center justify-between px-4 py-3 transition-colors',
-                !disabled && 'hover:bg-muted/20'
+                !disabled && 'hover:bg-layer-2'
               )}
             >
               <div className="space-y-0.5 flex-1 min-w-0 pr-4">
                 <span className="text-sm font-medium">
                   {perm.name || `${perm.resource}:${perm.action}`}
                 </span>
-                <p className="text-[11px] text-muted-foreground font-mono">
+                <p className="text-[11px] text-secondary font-mono">
                   {perm.resource}:{perm.action}
                 </p>
               </div>
@@ -315,7 +315,7 @@ export function ProjectRolePermissionsPanel({
       <CardHeader className="pb-3 border-b space-y-0">
         <div className="flex flex-col sm:flex-row sm:items-center gap-4 min-w-0">
           <div className="flex items-center gap-3 min-w-0 w-full sm:w-auto">
-            <div className="p-1.5 rounded-lg bg-primary/10 shrink-0">
+            <div className="p-1.5 rounded-lg bg-accent-subtle shrink-0">
               <Shield className="h-4 w-4 text-primary" />
             </div>
 
@@ -365,7 +365,7 @@ export function ProjectRolePermissionsPanel({
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="h-8 w-8 text-destructive hover:bg-destructive/10 shrink-0"
+                  className="h-8 w-8 text-danger-primary hover:bg-danger-subtle shrink-0"
                   onClick={() => onDelete?.(role.id)}
                   disabled={isSaving}
                   title="Delete role"
@@ -380,7 +380,7 @@ export function ProjectRolePermissionsPanel({
         {/* Description + Rank row — inline edit */}
         <div className="flex flex-col sm:flex-row items-start gap-4 sm:gap-6 pt-4 sm:pt-3 pl-0 sm:pl-10">
           <div className="flex-1 min-w-0 w-full">
-            <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground mb-1">Description</p>
+            <p className="text-[10px] font-semibold uppercase tracking-wider text-secondary mb-1">Description</p>
             <EditableText
               value={description}
               onCommit={setDescription}
@@ -390,9 +390,9 @@ export function ProjectRolePermissionsPanel({
             />
           </div>
           <div className="shrink-0 w-full sm:w-24">
-            <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground mb-1">Rank</p>
+            <p className="text-[10px] font-semibold uppercase tracking-wider text-secondary mb-1">Rank</p>
             {!canEditIdentity ? (
-              <span className="text-sm text-muted-foreground">{rank}</span>
+              <span className="text-sm text-secondary">{rank}</span>
             ) : (
               <Input
                 type="number"
@@ -415,7 +415,7 @@ export function ProjectRolePermissionsPanel({
         </div>
 
         {role.isSystem && (
-          <p className="pl-0 sm:pl-10 mt-3 sm:mt-2 text-xs text-muted-foreground italic">
+          <p className="pl-0 sm:pl-10 mt-3 sm:mt-2 text-xs text-secondary italic">
             System roles are managed by Collabify and cannot be modified.
           </p>
         )}
@@ -423,12 +423,12 @@ export function ProjectRolePermissionsPanel({
 
       {/* ── Permissions Matrix ── */}
       <CardContent className="flex-1 overflow-y-auto py-5 space-y-3">
-        <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-4">
+        <p className="text-xs font-semibold uppercase tracking-wider text-secondary mb-4">
           Permissions
         </p>
 
         {availablePermissions.length === 0 ? (
-          <div className="flex items-center justify-center h-32 text-sm text-muted-foreground border-2 border-dashed rounded-lg">
+          <div className="flex items-center justify-center h-32 text-sm text-secondary border-2 border-dashed rounded-lg">
             No project permissions available
           </div>
         ) : (

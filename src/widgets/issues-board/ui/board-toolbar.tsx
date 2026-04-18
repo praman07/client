@@ -31,7 +31,7 @@ export function BoardToolbar({
   onManageLabels,
 }: BoardToolbarProps) {
   return (
-    <div className="flex items-center gap-2 border-b border-border/40 px-4 py-2">
+    <div className="flex items-center gap-2 border-b border-subtle px-4 py-2">
       {/* Filter chips */}
       <IssueFilterToolbar projectMembers={projectMembers} />
 
@@ -40,7 +40,7 @@ export function BoardToolbar({
           <Button
             variant="ghost"
             size="sm"
-            className="h-8 gap-1.5 text-xs text-muted-foreground hover:text-foreground"
+            className="h-8 gap-1.5 text-xs text-secondary hover:text-primary"
             onClick={onManageStatuses}
           >
             <Settings2 className="h-3.5 w-3.5" />
@@ -51,7 +51,7 @@ export function BoardToolbar({
           <Button
             variant="ghost"
             size="sm"
-            className="h-8 gap-1.5 text-xs text-muted-foreground hover:text-foreground"
+            className="h-8 gap-1.5 text-xs text-secondary hover:text-primary"
             onClick={onManageLabels}
           >
             <Tags className="h-3.5 w-3.5" />
@@ -62,7 +62,7 @@ export function BoardToolbar({
         <Button
           variant="ghost"
           size="sm"
-          className="h-8 w-8 p-0 text-muted-foreground hover:text-foreground"
+          className="h-8 w-8 p-0 text-secondary hover:text-primary"
           onClick={onRefresh}
           disabled={isRefreshing}
           title="Refresh board"

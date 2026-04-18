@@ -61,7 +61,7 @@ export function StatusIconPicker({ status, projectId }: StatusIconPickerProps) {
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger
-        className="flex shrink-0 cursor-pointer items-center justify-center rounded p-0.5 transition hover:bg-muted focus:outline-none focus:ring-2 focus:ring-ring"
+        className="flex shrink-0 cursor-pointer items-center justify-center rounded p-0.5 transition hover:bg-layer-2 focus:outline-none"
         aria-label="Edit status icon and color"
       >
         <StatusIcon iconKey={status.icon} color={status.color} size={16} />
@@ -69,7 +69,7 @@ export function StatusIconPicker({ status, projectId }: StatusIconPickerProps) {
 
       <PopoverContent className="w-52 p-3" align="start" side="bottom">
         {/* Icon section */}
-        <p className="mb-1.5 text-xs font-medium text-muted-foreground">Icon</p>
+        <p className="mb-1.5 text-11 font-medium text-secondary">Icon</p>
         <div className="mb-3 grid grid-cols-6 gap-1">
           {ICON_OPTIONS.map(({ key, label }) => (
             <button
@@ -77,10 +77,9 @@ export function StatusIconPicker({ status, projectId }: StatusIconPickerProps) {
               type="button"
               title={label}
               onClick={() => applyIcon(key)}
-              className={cn(
-                'flex items-center justify-center rounded p-1.5 transition hover:bg-muted',
-                status.icon === key && 'ring-2 ring-ring ring-offset-1',
-              )}
+className={cn(
+                  'flex items-center justify-center rounded p-1.5 transition hover:bg-layer-2',
+                )}
             >
               <StatusIcon iconKey={key} color={status.color} size={14} />
             </button>
@@ -88,7 +87,7 @@ export function StatusIconPicker({ status, projectId }: StatusIconPickerProps) {
         </div>
 
         {/* Color section */}
-        <p className="mb-1.5 text-xs font-medium text-muted-foreground">
+        <p className="mb-1.5 text-11 font-medium text-secondary">
           Color
         </p>
         <div className="mb-2 grid grid-cols-6 gap-1">
@@ -99,8 +98,7 @@ export function StatusIconPicker({ status, projectId }: StatusIconPickerProps) {
               title={hex}
               onClick={() => applyColor(hex)}
               className={cn(
-                'h-5 w-5 rounded-full border border-border/40 transition hover:scale-110',
-                status.color === hex && 'ring-2 ring-ring ring-offset-1',
+                'h-5 w-5 rounded-full border border-subtle transition hover:scale-110',
               )}
               style={{ backgroundColor: hex }}
             />

@@ -27,15 +27,21 @@ interface MentionChipProps {
 // ── Chip color map ────────────────────────────────────────────────────────────
 
 const CHIP_COLORS: Record<string, string> = {
-  [SearchEntityType.Page]:        'bg-indigo-100 text-indigo-700 hover:bg-indigo-200',
-  [SearchEntityType.Issue]:       'bg-amber-100 text-amber-700 hover:bg-amber-200',
-  [SearchEntityType.VaultFile]:   'bg-emerald-100 text-emerald-700 hover:bg-emerald-200',
-  [SearchEntityType.VaultFolder]: 'bg-teal-100 text-teal-700 hover:bg-teal-200',
-  [SearchEntityType.Whiteboard]:  'bg-violet-100 text-violet-700 hover:bg-violet-200',
-  [SearchEntityType.User]:        'bg-sky-100 text-sky-700 hover:bg-sky-200',
+  [SearchEntityType.Page]:
+    'bg-layer-2 text-primary hover:bg-layer-2-hover',
+  [SearchEntityType.Issue]:
+    'bg-layer-2 text-primary hover:bg-layer-2-hover',
+  [SearchEntityType.VaultFile]:
+    'bg-layer-2 text-primary hover:bg-layer-2-hover',
+  [SearchEntityType.VaultFolder]:
+    'bg-layer-2 text-primary hover:bg-layer-2-hover',
+  [SearchEntityType.Whiteboard]:
+    'bg-layer-2 text-primary hover:bg-layer-2-hover',
+  [SearchEntityType.User]:
+    'bg-layer-2 text-primary hover:bg-layer-2-hover',
 }
 
-const DEFAULT_COLOR = 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+const DEFAULT_COLOR = 'bg-layer-2 text-secondary hover:bg-layer-2-hover'
 
 // ── Component ─────────────────────────────────────────────────────────────────
 
@@ -45,7 +51,7 @@ export function MentionChip({ inlineContent }: MentionChipProps) {
 
   const isOrphaned = !entityId
   const colorClass = isOrphaned
-    ? 'bg-red-50 text-red-400 line-through cursor-not-allowed'
+    ? 'bg-danger-subtle text-danger-primary line-through cursor-not-allowed'
     : (CHIP_COLORS[entityType] ?? DEFAULT_COLOR)
 
   function handleClick(e: React.MouseEvent) {
@@ -57,7 +63,7 @@ export function MentionChip({ inlineContent }: MentionChipProps) {
 
   return (
     <span
-      className={`mention-chip inline-flex items-center gap-0.5 rounded px-1.5 py-0.5 text-sm font-medium transition-colors select-none cursor-pointer ${colorClass}`}
+      className={`mention-chip inline-flex items-center gap-0.5 rounded-md px-1.5 py-0.5 text-13 font-medium transition-colors duration-100 select-none cursor-pointer ${colorClass}`}
       contentEditable={false}
       onClick={handleClick}
       title={isOrphaned ? 'This entity no longer exists' : `${entityType}: ${displayText}`}

@@ -90,19 +90,19 @@ export function CreateLabelForm({
       <form.Field name="color">
         {(field) => (
           <div className="space-y-1">
-            <Label className="text-xs">Color</Label>
+            <Label className="text-11">Color</Label>
             <div className="flex items-center gap-1.5 flex-wrap">
               {COLOR_PRESETS.map((hex) => (
                 <button
                   key={hex}
                   type="button"
-                  className="h-5 w-5 rounded-full ring-offset-background transition-transform hover:scale-110 focus:outline-none"
+                  className="h-5 w-5 rounded-full transition-transform hover:scale-110 focus:outline-none"
                   style={{ backgroundColor: hex }}
                   aria-label={hex}
                   onClick={() => field.handleChange(hex)}
                 >
                   {field.state.value === hex && (
-                    <span className="flex h-full w-full items-center justify-center text-[10px] text-white">
+                    <span className="flex h-full w-full items-center justify-center text-[10px] text-on-color">
                       ✓
                     </span>
                   )}

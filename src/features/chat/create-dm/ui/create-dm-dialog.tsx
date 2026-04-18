@@ -88,7 +88,7 @@ export function CreateDmDialog() {
           <CommandList className="max-h-72">
             {membersLoading ? (
               <div className="py-6 flex justify-center">
-                <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
+                <Loader2 className="h-4 w-4 animate-spin text-secondary" />
               </div>
             ) : (
               <>
@@ -120,10 +120,10 @@ export function CreateDmDialog() {
                           </AvatarFallback>
                         </Avatar>
                         <div className="flex flex-col min-w-0">
-                          <span className="text-sm font-medium truncate">
+                          <span className="text-13 font-medium truncate">
                             {member.user.fullName ?? 'Unknown'}
                           </span>
-                          <span className="text-xs text-muted-foreground truncate">
+                          <span className="text-11 text-secondary truncate">
                             {member.user.email}
                           </span>
                         </div>

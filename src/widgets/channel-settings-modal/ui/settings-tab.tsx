@@ -24,17 +24,17 @@ interface ActionRowProps {
 
 function ActionRow({ label, description, action, variant = 'default' }: ActionRowProps) {
   const borderClass = {
-    default: 'border-border/40',
-    danger:  'border-destructive/20',
-    warning: 'border-amber-500/20',
-    success: 'border-emerald-500/20',
+    default: 'border-subtle-1',
+    danger:  'border-danger-strong',
+    warning: 'border-warning-strong',
+    success: 'border-success-strong',
   }[variant]
 
   const bgClass = {
     default: 'bg-transparent',
-    danger:  'bg-destructive/5',
-    warning: 'bg-amber-500/5',
-    success: 'bg-emerald-500/5',
+    danger:  'bg-danger-subtle',
+    warning: 'bg-warning-subtle',
+    success: 'bg-success-subtle',
   }[variant]
 
   return (
@@ -42,8 +42,8 @@ function ActionRow({ label, description, action, variant = 'default' }: ActionRo
       className={`flex items-start justify-between gap-4 px-4 py-4 rounded-lg border transition-colors ${borderClass} ${bgClass}`}
     >
       <div className="min-w-0 flex-1">
-        <p className="text-sm font-medium text-foreground">{label}</p>
-        <div className="text-xs text-muted-foreground mt-0.5 leading-relaxed space-y-0.5">
+        <p className="text-14 font-medium text-primary">{label}</p>
+        <div className="text-11 text-secondary mt-0.5 leading-relaxed space-y-0.5">
           {description}
         </div>
       </div>
@@ -72,7 +72,7 @@ export function SettingsTab({ conversation }: SettingsTabProps) {
 
       {/* ── Channel management ── */}
       <section className="space-y-2.5">
-        <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground px-1">
+        <p className="text-11 font-semibold uppercase tracking-widest text-tertiary px-1">
           Channel management
         </p>
 
@@ -89,7 +89,7 @@ export function SettingsTab({ conversation }: SettingsTabProps) {
                     variant="outline"
                     size="sm"
                     onClick={() => setArchiveDialogOpen(true)}
-                    className="h-8 text-xs font-medium border-amber-500/30 text-amber-400 hover:bg-amber-500/10 hover:border-amber-500/50"
+                    className="h-8 text-11 font-medium border-warning-subtle text-warning-primary hover:bg-warning-subtle border-subtle-1"
                   >
                     <HugeiconsIcon icon={ArchiveIcon} className="size-3.5 mr-1.5" />
                     Archive
@@ -106,7 +106,7 @@ export function SettingsTab({ conversation }: SettingsTabProps) {
                     variant="outline"
                     size="sm"
                     onClick={() => setUnarchiveDialogOpen(true)}
-                    className="h-8 text-xs font-medium border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/10 hover:border-emerald-500/50"
+                    className="h-8 text-11 font-medium border-success-subtle text-success-primary hover:bg-success-subtle border-subtle-1"
                   >
                     Unarchive
                   </Button>
@@ -123,7 +123,7 @@ export function SettingsTab({ conversation }: SettingsTabProps) {
                 <>
                   <span>Permanently remove this channel and all its messages.</span>
                   {!isArchived && (
-                    <span className="block text-amber-400/80 font-medium">
+                    <span className="block text-warning-primary font-medium">
                       Archive the channel first to enable deletion.
                     </span>
                   )}
@@ -136,7 +136,7 @@ export function SettingsTab({ conversation }: SettingsTabProps) {
                   size="sm"
                   onClick={() => setDeleteDialogOpen(true)}
                   disabled={!isArchived}
-                  className="h-8 text-xs font-medium border-destructive/30 text-destructive hover:bg-destructive/10 hover:border-destructive/50 disabled:opacity-40"
+                  className="h-8 text-11 font-medium border-danger-subtle text-danger-primary hover:bg-danger-subtle disabled:text-disabled disabled:pointer-events-none"
                 >
                   Delete
                 </Button>
@@ -148,13 +148,13 @@ export function SettingsTab({ conversation }: SettingsTabProps) {
 
       {/* ── Message permissions info ── */}
       <section className="space-y-2.5">
-        <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground px-1">
+        <p className="text-11 font-semibold uppercase tracking-widest text-tertiary px-1">
           Message permissions
         </p>
-        <div className="px-4 py-3.5 rounded-lg border border-border/30 bg-muted/10">
-          <p className="text-xs text-muted-foreground leading-relaxed">
+        <div className="px-4 py-3.5 rounded-lg border-subtle-1 bg-layer-1">
+          <p className="text-11 text-secondary leading-relaxed">
             All channel members can send messages. Use{' '}
-            <span className="font-medium text-foreground">Project Settings → Permissions</span>{' '}
+            <span className="font-medium text-primary">Project Settings → Permissions</span>{' '}
             to control access via roles.
           </p>
         </div>

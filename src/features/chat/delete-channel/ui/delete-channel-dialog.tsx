@@ -116,7 +116,7 @@ export function DeleteChannelDialog({
               handleDelete()
             }}
             disabled={!isConfirmed || !isArchived || isPending}
-            className="bg-destructive hover:bg-destructive/90"
+            className="bg-danger-primary hover:bg-danger-primary-hover"
           >
             {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             Yes, permanently delete the channel

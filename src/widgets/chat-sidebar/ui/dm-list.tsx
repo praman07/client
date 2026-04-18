@@ -68,13 +68,15 @@ export function DMList({ items }: DMListProps) {
                     </Avatar>
                     {'status' in dm && (
                       <span
-                        className={`absolute bottom-0 right-0 h-2 w-2 rounded-full border border-background ${
-                          dm.status === 'online'
-                            ? 'bg-green-500'
-                            : dm.status === 'away'
-                              ? 'bg-yellow-500'
-                              : 'bg-zinc-500'
-                        }`}
+                        className="absolute bottom-0 right-0 h-2 w-2 rounded-full border border-subtle"
+                        style={{
+                          backgroundColor:
+                            dm.status === 'online'
+                              ? 'var(--ext-green-500)'
+                              : dm.status === 'away'
+                                ? 'var(--ext-yellow-500)'
+                                : 'var(--ext-grey-600)',
+                        }}
                       />
                     )}
                   </div>

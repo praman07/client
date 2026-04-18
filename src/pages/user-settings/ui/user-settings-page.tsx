@@ -12,18 +12,18 @@ export function UserSettingsPage() {
   return (
     <div className="space-y-8 max-w-2xl">
       <div>
-        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">Settings</h1>
-        <p className="text-sm sm:text-base text-muted-foreground mt-1">Manage your sign-in method and account security.</p>
+        <h1 className="text-20 sm:text-24 font-bold tracking-tight">Settings</h1>
+        <p className="text-13 sm:text-14 text-secondary mt-1">Manage your sign-in method and account security.</p>
       </div>
 
       {/* Email / Identity */}
       <div className="space-y-4">
-        <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-wider">Identity</h3>
-        <div className="rounded-xl border bg-card p-4">
+        <h3 className="text-13 font-medium text-secondary uppercase tracking-wider">Identity</h3>
+        <div className="rounded-xl border border-subtle bg-layer-1 p-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
             <div>
-              <p className="text-sm font-medium">Email address</p>
-              <p className="text-sm text-muted-foreground break-all">{user?.email ?? '—'}</p>
+              <p className="text-13 font-medium text-primary">Email address</p>
+              <p className="text-13 text-secondary break-all">{user?.email ?? '—'}</p>
             </div>
             <div className="self-start sm:self-auto">
               <Badge variant="secondary" className="text-xs">
@@ -39,11 +39,11 @@ export function UserSettingsPage() {
 
       {/* Sessions */}
       <div className="space-y-4">
-        <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-wider">Session</h3>
-        <div className="rounded-xl border bg-card p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <h3 className="text-13 font-medium text-secondary uppercase tracking-wider">Session</h3>
+        <div className="rounded-xl border border-subtle bg-layer-1 p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <p className="text-sm font-medium">Current session</p>
-            <p className="text-xs text-muted-foreground mt-0.5">Active on this device</p>
+            <p className="text-13 font-medium text-primary">Current session</p>
+            <p className="text-11 text-tertiary mt-0.5">Active on this device</p>
           </div>
           <Button
             variant="outline"

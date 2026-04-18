@@ -61,7 +61,7 @@ export function ManageStatusesModal({
           <Button
             variant="ghost"
             size="sm"
-            className="mt-2 w-full justify-start text-muted-foreground"
+            className="mt-2 w-full justify-start text-secondary"
             onClick={() => setShowCreateForm(true)}
           >
             <Plus className="mr-1.5 h-4 w-4" /> Add column

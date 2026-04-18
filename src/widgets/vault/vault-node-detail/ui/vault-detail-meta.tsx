@@ -31,7 +31,7 @@ export function VaultDetailMeta({ node, type }: VaultDetailMetaProps) {
     <div className="flex flex-col gap-3">
       {rows.map(({ label, value }) => (
         <div key={label} className="flex flex-col gap-0.5">
-          <span className="text-xs text-muted-foreground">{label}</span>
+          <span className="text-xs text-secondary">{label}</span>
           <span className="text-sm truncate">{value}</span>
         </div>
       ))}

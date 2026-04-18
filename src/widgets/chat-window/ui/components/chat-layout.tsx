@@ -8,7 +8,7 @@ function ChatContainer({ className, ...props }: React.ComponentProps<'div'>) {
     <div
       data-slot="chat"
       className={cn(
-        'relative flex h-full w-full flex-col overflow-hidden bg-background @container/chat min-h-0',
+        'relative flex h-full w-full flex-col overflow-hidden bg-surface-1 @container/chat min-h-0',
         className,
       )}
       {...props}
@@ -21,7 +21,7 @@ function ChatHeader({ className, ...props }: React.ComponentProps<'header'>) {
     <header
       data-slot="chat-header"
       className={cn(
-        'sticky top-0 z-10 flex min-h-14 w-full shrink-0 items-center gap-2 bg-background/95 px-4 backdrop-blur-sm',
+        'sticky top-0 z-[var(--z-sticky)] flex min-h-14 w-full shrink-0 items-center gap-2 bg-surface-1/95 px-4 backdrop-blur-sm',
         className,
       )}
       {...props}
@@ -80,7 +80,7 @@ function ChatToolbar({ className, ...props }: React.ComponentProps<'footer'>) {
     <footer
       data-slot="chat-toolbar"
       className={cn(
-        'sticky bottom-0 z-10 w-full min-h-14 shrink-0 bg-background/95 p-4 backdrop-blur-sm',
+        'sticky bottom-0 z-[var(--z-sticky)] w-full min-h-14 shrink-0 bg-surface-1/95 p-4 backdrop-blur-sm',
         className,
       )}
       {...props}
@@ -124,7 +124,7 @@ function ChatToolbarTextarea({
     props: mergeProps<'textarea'>(
       {
         className: cn(
-          'flex min-h-[40px] w-full resize-none bg-transparent py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 overflow-hidden',
+          'flex min-h-[40px] w-full resize-none bg-transparent py-2 text-14 placeholder:text-placeholder focus-visible:outline-none disabled:cursor-not-allowed disabled:text-disabled overflow-hidden',
           className,
         ),
       },
