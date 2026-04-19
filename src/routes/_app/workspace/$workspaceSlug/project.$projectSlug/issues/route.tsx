@@ -1,7 +1,7 @@
 import { Outlet, createFileRoute, redirect } from '@tanstack/react-router'
 
 export const Route = createFileRoute(
-  '/_app/workspace/$workspaceSlug/project/$projectSlug/kanban',
+  '/_app/workspace/$workspaceSlug/project/$projectSlug/issues',
 )({
   component: BoardLayout,
   beforeLoad: ({ context }) => {

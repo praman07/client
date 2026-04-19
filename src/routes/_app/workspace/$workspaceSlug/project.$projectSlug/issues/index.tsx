@@ -7,7 +7,7 @@ import { IssuesBoard } from '@/widgets/issues-board'
 import { IssuesBoardSkeleton, PageSpinner, RouteError, WidgetError  } from '@/shared/ui'
 
 export const Route = createFileRoute(
-  '/_app/workspace/$workspaceSlug/project/$projectSlug/kanban/',
+  '/_app/workspace/$workspaceSlug/project/$projectSlug/issues/',
 )({
   component: RouteComponent,
   validateSearch: (search: Record<string, unknown>) => ({

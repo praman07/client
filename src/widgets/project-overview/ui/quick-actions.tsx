@@ -3,7 +3,7 @@ import { FileText, HardDrive, Layout, Plus } from 'lucide-react'
 import { Link, useParams } from '@tanstack/react-router'
 
 const ACTIONS = [
-  { label: 'New Issue',   icon: Plus,      to: '/workspace/$workspaceSlug/project/$projectSlug/kanban' as const },
+  { label: 'New Issue',   icon: Plus,      to: '/workspace/$workspaceSlug/project/$projectSlug/issues' as const },
   { label: 'New Page',    icon: FileText,  to: '/workspace/$workspaceSlug/project/$projectSlug/pages' as const },
   { label: 'Whiteboard',  icon: Layout,    to: '/workspace/$workspaceSlug/project/$projectSlug/whiteboard' as const },
   { label: 'Upload',      icon: HardDrive, to: '/workspace/$workspaceSlug/project/$projectSlug/vault' as const },

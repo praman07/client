@@ -32,7 +32,7 @@ export const PLUGIN_TAB_REGISTRY: Record<string, NavItem> = {
   WHITEBOARD: { label: 'Whiteboard', href: './whiteboard' },
   PAGES:      { label: 'Pages',      href: './pages' },
   VAULT:      { label: 'Vault',      href: './vault' },
-  ISSUES:     { label: 'Issues',     href: './kanban' },
+  ISSUES:     { label: 'Issues',     href: './issues' },
 }
 
 /**

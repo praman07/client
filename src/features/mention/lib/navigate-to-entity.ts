@@ -6,12 +6,12 @@
  *
  * `to` values come from `FileRoutesByTo` (NOT `fullPaths`) — index routes are
  * addressed WITHOUT a trailing slash in the `to` union:
- *   kanban/index.tsx → to: '/workspace/$workspaceSlug/project/$projectSlug/kanban'
+ *   issues/index.tsx → to: '/workspace/$workspaceSlug/project/$projectSlug/issues'
  *   vault/index.tsx  → to: '/workspace/$workspaceSlug/project/$projectSlug/vault'
  *
  * Route mapping:
  *   PAGE         → .../pages/$pageId
- *   ISSUE        → .../kanban  ?issueId=
+ *   ISSUE        → .../issues  ?issueId=
  *   VAULT_FILE   → .../vault
  *   VAULT_FOLDER → .../vault   ?folderId=
  *   WHITEBOARD   → .../whiteboard/$boardId
@@ -46,9 +46,9 @@ export function useNavigateToEntity() {
         break
 
       case SearchEntityType.Issue:
-        // No dedicated /issues/:id route — navigate to kanban with ?issueId=
+        // No dedicated /issues/:id route — navigate to issues with ?issueId=
         void navigate({
-          to: '/workspace/$workspaceSlug/project/$projectSlug/kanban',
+          to: '/workspace/$workspaceSlug/project/$projectSlug/issues',
           params: { workspaceSlug, projectSlug },
           search: (prev) => ({ ...prev, issueId: entityId }),
         })

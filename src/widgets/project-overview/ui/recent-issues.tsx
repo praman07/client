@@ -28,7 +28,7 @@ export const RecentIssues: React.FC<RecentIssuesProps> = ({ issues }) => {
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-14 font-semibold text-primary">Recent Issues</h3>
         <Link
-          to="/workspace/$workspaceSlug/project/$projectSlug/kanban"
+          to="/workspace/$workspaceSlug/project/$projectSlug/issues"
           params={{ workspaceSlug: workspaceSlug ?? '', projectSlug: projectSlug ?? '' }}
           className="text-11 text-secondary hover:text-accent-primary transition-colors flex items-center gap-0.5"
         >
