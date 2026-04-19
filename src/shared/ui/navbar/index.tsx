@@ -29,7 +29,7 @@ export const Navbar = React.forwardRef<HTMLElement, NavbarProps>(
       <header
         ref={ref}
         className={cn(
-          'sticky top-0 z-[var(--z-sticky)] w-full border-b border-subtle bg-canvas/95 backdrop-blur supports-backdrop-filter:bg-canvas/60',
+          'sticky top-0 z-[var(--z-sticky)] w-full border-b border-subtle bg-canvas backdrop-blur supports-backdrop-filter:bg-canvas/80',
           className,
         )}
         {...props}
@@ -81,7 +81,7 @@ export const Navbar = React.forwardRef<HTMLElement, NavbarProps>(
                     <Link
                       key={link.href}
                       to={link.href}
-                      className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                      className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-layer-transparent-hover hover:text-primary focus:bg-layer-transparent-hover focus:text-primary"
                       onClick={() => setIsOpen(false)}
                     >
                       {link.label}

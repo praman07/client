@@ -58,7 +58,7 @@ export function EditIssueHeader({
         </Button>
 
         <DropdownMenu>
-          <DropdownMenuTrigger className="inline-flex items-center justify-center h-7 w-7 rounded-md hover:bg-muted/60 transition-colors cursor-pointer">
+          <DropdownMenuTrigger className="inline-flex items-center justify-center h-7 w-7 rounded-md hover:bg-layer-transparent-hover transition-colors cursor-pointer">
             <HugeiconsIcon
               icon={MoreHorizontalIcon}
               strokeWidth={2}

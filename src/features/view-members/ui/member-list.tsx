@@ -168,8 +168,8 @@ export function MemberList({ workspaceId }: MemberListProps) {
           )}
           
           {totalCount > 0 && (
-            <p className="text-10 text-tertiary/60 uppercase tracking-widest font-semibold flex items-center gap-2">
-              <span className="h-1 w-1 rounded-full bg-tertiary/40" />
+            <p className="text-10 text-tertiary uppercase tracking-widest font-semibold flex items-center gap-2">
+              <span className="h-1 w-1 rounded-full bg-layer-2" />
               {totalCount} {totalCount === 1 ? 'member' : 'members'} synced
               {search && (
                 <> — filtered by "<span className="text-primary">{search}</span>"</>

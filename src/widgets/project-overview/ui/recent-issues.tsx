@@ -26,11 +26,11 @@ export const RecentIssues: React.FC<RecentIssuesProps> = ({ issues }) => {
   return (
     <div className="h-full bg-layer-1 border border-subtle rounded-xl p-5 flex flex-col">
       <div className="flex items-center justify-between mb-4">
-        <h3 className="text-sm font-semibold text-primary">Recent Issues</h3>
+        <h3 className="text-14 font-semibold text-primary">Recent Issues</h3>
         <Link
           to="/workspace/$workspaceSlug/project/$projectSlug/kanban"
           params={{ workspaceSlug: workspaceSlug ?? '', projectSlug: projectSlug ?? '' }}
-          className="text-[11px] text-secondary hover:text-accent-primary transition-colors flex items-center gap-0.5"
+          className="text-11 text-secondary hover:text-accent-primary transition-colors flex items-center gap-0.5"
         >
           View all
           <ChevronRight className="h-3 w-3" />
@@ -39,8 +39,8 @@ export const RecentIssues: React.FC<RecentIssuesProps> = ({ issues }) => {
 
       {issues.length === 0 ? (
         <div className="flex-1 flex flex-col items-center justify-center border-2 border-dashed border-subtle rounded-lg gap-2">
-          <History className="h-6 w-6 text-tertiary/30" />
-          <p className="text-[11px] text-secondary">No recent issues</p>
+          <History className="h-6 w-6 text-disabled" />
+          <p className="text-11 text-secondary">No recent issues</p>
         </div>
       ) : (
         <div className="space-y-0.5">
@@ -58,14 +58,14 @@ export const RecentIssues: React.FC<RecentIssuesProps> = ({ issues }) => {
               {/* Number + title */}
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-1.5 mb-0.5">
-                  <span className="text-[10px] font-mono text-secondary shrink-0">
+                  <span className="text-10 font-mono text-secondary shrink-0">
                     #{issue.number}
                   </span>
-                  <p className="text-[12px] font-medium text-primary/90 truncate group-hover:text-primary transition-colors">
+                  <p className="text-12 font-medium text-primary truncate group-hover:text-primary transition-colors">
                     {issue.title}
                   </p>
                 </div>
-                <p className="text-[10px] text-secondary">
+                <p className="text-10 text-secondary">
                   Updated {formatDistanceToNow(new Date(issue.updatedAt))} ago
                 </p>
               </div>
@@ -73,7 +73,7 @@ export const RecentIssues: React.FC<RecentIssuesProps> = ({ issues }) => {
               {/* Assignee avatar */}
               <Avatar className="h-5 w-5 shrink-0 border border-subtle">
                 <AvatarImage src={issue.assigneeAvatar || ''} />
-                <AvatarFallback className="bg-layer-2 text-[8px] font-bold">
+                <AvatarFallback className="bg-layer-2 text-8 font-bold">
                   {issue.assigneeName
                     ? issue.assigneeName.charAt(0).toUpperCase()
                     : <User className="h-3 w-3" />}

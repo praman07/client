@@ -62,7 +62,7 @@ export function MemberGridCard({
           actorRank={actorRank} 
           actorUserId={actorUserId} 
         />
-        <p className="text-10 text-tertiary/60 uppercase tracking-widest font-medium">
+        <p className="text-10 text-tertiary uppercase tracking-widest font-medium">
           Joined {formatDate(member.joinedAt)}
         </p>
       </div>

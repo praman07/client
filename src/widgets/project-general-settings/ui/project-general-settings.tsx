@@ -84,21 +84,20 @@ export function ProjectGeneralSettings({
       {/* ── Danger Zone ───────────────────────────────────────────────── */}
       <section className="space-y-3">
         <div>
-          <h3 className="text-sm font-semibold">Danger Zone</h3>
-          <p className="text-sm text-secondary">
+<h3 className="text-14 font-semibold">Danger Zone</h3>
+          <p className="text-14 text-secondary">
             These actions are irreversible. Proceed with caution.
           </p>
         </div>
 
-        <div className="rounded-lg border border-danger-subtle divide-y divide-danger-subtle/20">
-
+        <div className="rounded-lg border border-danger-subtle divide-y divide-danger-subtle">
           {/* Archive / Unarchive */}
           <div className="flex items-center justify-between px-4 py-3 gap-4">
             <div className="min-w-0">
-              <p className="text-sm font-medium">
+              <p className="text-14 font-medium">
                 {isArchived ? 'Unarchive project' : 'Archive project'}
               </p>
-              <p className="text-xs text-secondary">
+              <p className="text-12 text-secondary">
                 {isArchived
                   ? 'Restore project to active status.'
                   : 'Make this project read-only and hide it from active views.'}

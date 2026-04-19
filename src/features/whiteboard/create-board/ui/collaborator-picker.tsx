@@ -121,7 +121,7 @@ export function CollaboratorPicker({
                   </AvatarFallback>
                 </Avatar>
                 <span>{member.user.fullName}</span>
-                {isOwner && <span className="text-xs opacity-70">(You)</span>}
+                {isOwner && <span className="text-xs text-secondary">(You)</span>}
                 {!isOwner && (
                   <button
                     type="button"
@@ -158,7 +158,7 @@ export function CollaboratorPicker({
                     'flex w-full items-center gap-3 rounded-md p-2 transition-colors',
                     isSelected && 'bg-accent-subtle',
                     !isOwner && 'hover:bg-layer-2 cursor-pointer',
-                    isOwner && 'opacity-60 cursor-not-allowed',
+                    isOwner && 'text-tertiary cursor-not-allowed',
                   )}
                 >
                   <Avatar className="h-8 w-8 shrink-0">

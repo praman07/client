@@ -202,7 +202,7 @@ export function MembersTab({ board }: MembersTabProps) {
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="h-7 w-7 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity text-secondary hover:text-danger-primary hover:bg-danger-subtle"
+                  className="h-7 w-7 shrink-0 invisible group-hover:visible transition-opacity text-secondary hover:text-danger-primary hover:bg-danger-subtle"
                   onClick={() => handleRemoveClick(c)}
                   disabled={removeCollaborator.isPending}
                   aria-label={`Remove ${c.user.fullName}`}

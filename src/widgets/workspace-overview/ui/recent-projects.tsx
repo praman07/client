@@ -7,11 +7,11 @@ import { useWorkspaceOverview } from '@/entities/workspace/hooks'
 
 // Cycle through a set of distinct project icon styles
 const PROJECT_ICON_STYLES = [
-  { icon: Layers, color: 'text-indigo-400', bg: 'bg-indigo-500/10' },
-  { icon: FolderGit2, color: 'text-slate-400', bg: 'bg-white/5' },
-  { icon: FolderArchive, color: 'text-emerald-400', bg: 'bg-emerald-500/10' },
-  { icon: Folder, color: 'text-amber-400', bg: 'bg-amber-500/10' },
-  { icon: Layers, color: 'text-violet-400', bg: 'bg-violet-500/10' },
+  { icon: Layers, color: 'text-accent-primary', bg: 'bg-accent-subtle', borderColor: 'border-subtle' },
+  { icon: FolderGit2, color: 'text-secondary', bg: 'bg-layer-2', borderColor: 'border-subtle' },
+  { icon: FolderArchive, color: 'text-success-primary', bg: 'bg-success-subtle', borderColor: 'border-subtle' },
+  { icon: Folder, color: 'text-warning-primary', bg: 'bg-warning-subtle', borderColor: 'border-subtle' },
+  { icon: Layers, color: 'text-accent-primary', bg: 'bg-accent-subtle', borderColor: 'border-subtle' },
 ]
 
 function RecentProjectsSkeleton() {
@@ -25,7 +25,7 @@ function RecentProjectsSkeleton() {
         {[1, 2, 3].map((i) => (
           <div
             key={i}
-            className="flex items-center justify-between p-4 rounded-lg border border-border/50 bg-surface-2"
+            className="flex items-center justify-between p-4 rounded-lg border border-subtle bg-surface-2"
           >
             <div className="flex items-center gap-4 min-w-0">
               <Skeleton className="w-10 h-10 rounded-md shrink-0" />
@@ -64,7 +64,7 @@ export function RecentProjects() {
       <Link
         to="/workspace/$workspaceSlug/projects"
         params={{ workspaceSlug: workspaceSlug! }}
-        className="text-11 font-semibold uppercase tracking-widest text-accent-primary hover:text-accent-primary/80 transition-colors"
+        className="text-11 font-semibold uppercase tracking-widest text-accent-primary hover:text-primary transition-colors"
       >
           View All
         </Link>
@@ -72,7 +72,7 @@ export function RecentProjects() {
 
       {projects.length === 0 ? (
 <div className="flex flex-col items-center justify-center py-10 text-center">
-      <Folder className="w-8 h-8 text-tertiary/30 mb-3" />
+      <Folder className="w-8 h-8 text-disabled mb-3" />
       <p className="text-14 text-secondary">No projects yet</p>
       <p className="text-12 text-secondary/70 mt-1">Create your first project to get started</p>
     </div>
@@ -88,10 +88,10 @@ export function RecentProjects() {
                 key={project.id}
                 to="/workspace/$workspaceSlug/project/$projectSlug"
                 params={{ workspaceSlug: workspaceSlug!, projectSlug: project.key }}
-                className="group p-4 flex items-center justify-between rounded-lg border border-subtle bg-layer-2 hover:bg-layer-2-hover hover:border-accent-subtle transition-all"
+                className="group p-4 flex items-center justify-between rounded-lg border border-subtle bg-layer-2 hover:bg-layer-2-hover border-accent-subtle transition-all"
               >
                 <div className="flex items-center gap-4 min-w-0">
-                  <div className={`flex items-center justify-center w-10 h-10 rounded-md ${style.bg} border border-white/5 shrink-0 group-hover:scale-105 transition-transform`}>
+                  <div className={`flex items-center justify-center w-10 h-10 rounded-md ${style.bg} ${style.borderColor} border shrink-0 group-hover:scale-105 transition-transform`}>
                     <IconComponent className={`w-5 h-5 ${style.color}`} />
                   </div>
 <div className="flex flex-col overflow-hidden">

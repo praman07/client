@@ -157,7 +157,7 @@ export function CollaboratorPicker({
                     'flex w-full items-center gap-3 rounded-md p-2 transition-colors duration-100',
                     isSelected && 'bg-layer-1-selected',
                     !isOwner && 'hover:bg-layer-1-hover cursor-pointer',
-                    isOwner && 'opacity-60 cursor-not-allowed',
+                    isOwner && 'text-tertiary cursor-not-allowed',
                   )}
                 >
                   <Avatar className="h-8 w-8 shrink-0">

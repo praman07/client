@@ -14,7 +14,7 @@ export function ScrollToBottomButton({
   if (!show) return null
 
   return (
-    <div className="sticky bottom-4 w-full flex justify-center z-50 pointer-events-none">
+    <div className="sticky bottom-4 w-full flex justify-center z-[var(--z-dropdown)] pointer-events-none">
       <Button
         size="sm"
         variant="secondary"
@@ -22,7 +22,7 @@ export function ScrollToBottomButton({
         onClick={onClick}
       >
         <HugeiconsIcon icon={ArrowDownIcon} className="size-3.5" />
-        <span className="text-xs font-medium">New Messages</span>
+        <span className="text-11 font-medium">New Messages</span>
       </Button>
     </div>
   )

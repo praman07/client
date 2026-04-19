@@ -19,11 +19,11 @@ interface ProjectOverviewHeaderProps {
 }
 
 const PLUGIN_ICONS: Record<string, React.ReactNode> = {
-  ISSUES:     <span className="text-[10px]">⊙</span>,
-  PAGES:      <span className="text-[10px]">□</span>,
-  CHAT:       <span className="text-[10px]">⌥</span>,
-  VAULT:      <span className="text-[10px]">⊞</span>,
-  WHITEBOARD: <span className="text-[10px]">⊟</span>,
+  ISSUES:     <span className="text-10">⊙</span>,
+  PAGES:      <span className="text-10">□</span>,
+  CHAT:       <span className="text-10">⌥</span>,
+  VAULT:      <span className="text-10">⊞</span>,
+  WHITEBOARD: <span className="text-10">⊟</span>,
 }
 
 export function ProjectOverviewHeader({
@@ -62,13 +62,13 @@ export function ProjectOverviewHeader({
             </h1>
 
             {/* Key badge */}
-            <span className="shrink-0 rounded border border-subtle bg-layer-2 px-1.5 py-0.5 font-mono text-[10px] font-semibold uppercase tracking-wider text-secondary">
+            <span className="shrink-0 rounded border border-subtle bg-layer-2 px-1.5 py-0.5 font-mono text-10 font-semibold uppercase tracking-wider text-secondary">
               {projectKey}
             </span>
 
             {/* Privacy badge */}
             {isPrivate && (
-              <span className="flex shrink-0 items-center gap-1 rounded border border-subtle bg-layer-2 px-1.5 py-0.5 text-[10px] font-semibold text-secondary">
+              <span className="flex shrink-0 items-center gap-1 rounded border border-subtle bg-layer-2 px-1.5 py-0.5 text-10 font-semibold text-secondary">
                 <Lock className="h-2.5 w-2.5" />
                 Private
               </span>
@@ -76,12 +76,12 @@ export function ProjectOverviewHeader({
 
             {/* Active/Archived status */}
             {isArchived ? (
-              <span className="flex shrink-0 items-center gap-1 rounded border border-warning-subtle bg-warning-subtle px-1.5 py-0.5 text-[10px] font-semibold text-warning-primary">
+              <span className="flex shrink-0 items-center gap-1 rounded border border-warning-subtle bg-warning-subtle px-1.5 py-0.5 text-10 font-semibold text-warning-primary">
                 <Archive className="h-2.5 w-2.5" />
                 Archived
               </span>
             ) : (
-              <span className="flex shrink-0 items-center gap-1 rounded border border-success-subtle bg-success-subtle px-1.5 py-0.5 text-[10px] font-semibold text-success-primary">
+              <span className="flex shrink-0 items-center gap-1 rounded border border-success-subtle bg-success-subtle px-1.5 py-0.5 text-10 font-semibold text-success-primary">
                 <CheckCircle2 className="h-2.5 w-2.5" />
                 Active
               </span>
@@ -89,7 +89,7 @@ export function ProjectOverviewHeader({
           </div>
 
           {description && (
-            <p className="max-w-xl text-sm leading-relaxed text-secondary">
+            <p className="max-w-xl text-14 leading-relaxed text-secondary">
               {description}
             </p>
           )}
@@ -101,7 +101,7 @@ export function ProjectOverviewHeader({
             <Link
               key={pill.key}
               to={pill.href as any}
-              className="flex items-center gap-1.5 rounded-md border border-subtle bg-layer-2 px-3 py-1.5 text-[12px] font-medium text-secondary transition-colors hover:border-accent-subtle hover:bg-accent-subtle hover:text-primary"
+              className="flex items-center gap-1.5 rounded-md border border-subtle bg-layer-2 px-3 py-1.5 text-12 font-medium text-secondary transition-colors hover:border-accent-subtle hover:bg-accent-subtle hover:text-primary"
             >
               {PLUGIN_ICONS[pill.key]}
               {pill.label}
@@ -114,7 +114,7 @@ export function ProjectOverviewHeader({
               size="sm"
               variant="default"
               onClick={() => dispatch(openAddMemberDialog())}
-              className="h-8 shrink-0 px-3 text-[12px] font-semibold"
+              className="h-8 shrink-0 px-3 text-12 font-semibold"
             >
               <UserPlus className="mr-1.5 h-3.5 w-3.5" />
               Add Member
@@ -133,7 +133,7 @@ export function ProjectOverviewHeader({
       </div>
 
       {/* Divider */}
-      <div className="h-px bg-subtle" />
+      <div className="h-px border-subtle" />
     </div>
   )
 }

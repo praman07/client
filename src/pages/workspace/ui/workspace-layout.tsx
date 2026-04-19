@@ -26,7 +26,7 @@ export function WorkspaceLayout({ workspaceSlug }: WorkspaceLayoutProps) {
       <main className="flex-1 flex flex-col overflow-hidden">
         {isLoading ? (
           <div className="flex-1 flex flex-col items-center justify-center min-h-[50vh]">
-            <Spinner className="size-8 text-secondary/50" />
+            <Spinner className="size-8 text-secondary" />
           </div>
         ) : error || !data?.workspaceBySlug ? (
           <WorkspaceErrorState />

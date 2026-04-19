@@ -23,7 +23,7 @@ export function DndControls({ isDndActive, dndUntil, disabled }: DndControlsProp
   if (isDndActive) {
     return (
       <div className="space-y-2">
-        <p className="text-sm text-muted-foreground">
+        <p className="text-14 text-secondary">
           Notifications paused until {formatUntil(dndUntil)}
         </p>
         <Button

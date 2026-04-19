@@ -48,7 +48,7 @@ export function UserSettingsPage() {
           <Button
             variant="outline"
             size="sm"
-            className="gap-1.5 text-destructive border-destructive/30 hover:bg-destructive/10 sm:w-auto w-full"
+            className="gap-1.5 text-danger-primary border-danger-strong hover:bg-danger-subtle sm:w-auto w-full"
             onClick={() => void signOut({ redirectUrl: '/sign-in' })}
           >
             <LogOut className="h-3.5 w-3.5" />

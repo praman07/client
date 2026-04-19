@@ -224,20 +224,20 @@ export function ProjectGeneralForm({
                         canUpdate && field.handleChange(toKey(e.target.value))
                       }
                       readOnly={!canUpdate}
-                      className="w-full h-full bg-transparent px-2 sm:px-3 text-sm outline-none placeholder:text-placeholder read-only:cursor-default read-only:opacity-70 truncate"
+                      className="w-full h-full bg-transparent px-2 sm:px-3 text-14 outline-none placeholder:text-placeholder read-only:cursor-default read-only:opacity-70 truncate"
                       placeholder="my-project"
                     />
                     {field.state.meta.isValidating && (
-                      <div className="absolute right-3 top-1/2 -translate-y-1/2 bg-surface-2 pl-1">
+                      <div className="absolute right-3 top-1/2 -translate-y-1/2 bg-layer-1 pl-1">
                         <Spinner className="h-3.5 w-3.5 text-secondary" />
                       </div>
                     )}
                   </div>
                 </div>
                 {field.state.meta.errors.length > 0 ? (
-                  <p className="text-sm text-danger-primary">{field.state.meta.errors[0]}</p>
+                  <p className="text-14 text-danger-primary">{field.state.meta.errors[0]}</p>
                 ) : field.state.value !== initialKey ? (
-                  <p className="flex items-center gap-1.5 text-xs text-amber-500">
+                  <p className="flex items-center gap-1.5 text-12 text-warning-primary">
                     <TriangleAlert className="h-3 w-3 shrink-0" />
                     Changing the key will update all project URLs
                   </p>

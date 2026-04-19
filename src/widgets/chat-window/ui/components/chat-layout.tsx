@@ -21,7 +21,7 @@ function ChatHeader({ className, ...props }: React.ComponentProps<'header'>) {
     <header
       data-slot="chat-header"
       className={cn(
-        'sticky top-0 z-[var(--z-sticky)] flex min-h-14 w-full shrink-0 items-center gap-2 bg-surface-1/95 px-4 backdrop-blur-sm',
+        'sticky top-0 z-[var(--z-sticky)] flex h-[var(--height-header)] w-full shrink-0 items-center gap-2 bg-surface-1 px-4 backdrop-blur-sm border-b border-subtle',
         className,
       )}
       {...props}
@@ -80,7 +80,7 @@ function ChatToolbar({ className, ...props }: React.ComponentProps<'footer'>) {
     <footer
       data-slot="chat-toolbar"
       className={cn(
-        'sticky bottom-0 z-[var(--z-sticky)] w-full min-h-14 shrink-0 bg-surface-1/95 p-4 backdrop-blur-sm',
+        'sticky bottom-0 z-[var(--z-sticky)] w-full min-h-[var(--height-header)] shrink-0 bg-surface-1 p-4 backdrop-blur-sm border-t border-subtle',
         className,
       )}
       {...props}

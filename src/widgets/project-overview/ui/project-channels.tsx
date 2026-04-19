@@ -21,7 +21,7 @@ export const ProjectChannels: React.FC<ProjectChannelsProps> = ({ channels }) =>
 
   return (
     <div className="flex items-center gap-2 flex-wrap">
-      <span className="text-[10px] font-bold uppercase tracking-widest text-secondary mr-1">
+      <span className="text-10 font-bold uppercase tracking-widest text-secondary mr-1">
         Channels
       </span>
       {channels.map((ch) => (
@@ -30,8 +30,8 @@ export const ProjectChannels: React.FC<ProjectChannelsProps> = ({ channels }) =>
           to="/workspace/$workspaceSlug/project/$projectSlug/chat/$conversationId"
           params={{ workspaceSlug: workspaceSlug ?? '', projectSlug: projectSlug ?? '', conversationId: ch.id }}
           className={cn(
-            'flex items-center gap-1 px-2.5 py-1 rounded-full border text-[12px] font-medium transition-colors group min-w-0 max-w-full',
-            'bg-layer-1 border-subtle hover:border-accent-strong hover:text-primary text-primary/80',
+            'flex items-center gap-1 px-2.5 py-1 rounded-full border text-12 font-medium transition-colors group min-w-0 max-w-full',
+            'bg-layer-1 border-subtle hover:border-accent-strong hover:text-primary text-secondary',
           )}
         >
           <Hash className="h-3 w-3 shrink-0" />

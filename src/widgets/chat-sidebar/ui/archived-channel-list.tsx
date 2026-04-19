@@ -39,7 +39,7 @@ export function ArchivedChannelList({ channels }: ArchivedChannelListProps) {
               <SidebarMenuButton
                 isActive={conversationId === channel.id}
                 tooltip={channel.name}
-                className="opacity-60 hover:opacity-80"
+                className="text-tertiary hover:text-secondary"
                 render={
                   <Link
                     to="/workspace/$workspaceSlug/project/$projectSlug/chat/$conversationId"

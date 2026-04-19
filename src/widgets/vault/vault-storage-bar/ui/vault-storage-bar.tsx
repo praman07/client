@@ -33,8 +33,8 @@ export function VaultStorageBar({ projectId }: VaultStorageBarProps) {
     percentUsed >= 90
       ? 'bg-danger-primary'
       : percentUsed >= 80
-        ? 'bg-amber-500'
-        : 'bg-primary'
+        ? 'bg-warning-primary'
+        : 'bg-accent-primary'
 
   return (
     <div className="px-3 py-2 space-y-1.5">
@@ -47,7 +47,7 @@ export function VaultStorageBar({ projectId }: VaultStorageBarProps) {
       </div>
 
       {/* Label */}
-      <p className="text-xs text-secondary leading-none">
+      <p className="text-11 text-secondary leading-none">
         {formatBytes(projectUsedBytes)} of {formatBytes(projectLimitBytes)} used
       </p>
     </div>

@@ -356,7 +356,7 @@ function SidebarSeparator({
     <Separator
       data-slot="sidebar-separator"
       data-sidebar="separator"
-      className={cn('bg-border-subtle mx-2 w-auto', className)}
+      className={cn('bg-layer-transparent-hover mx-2 w-auto', className)}
       {...props}
     />
   )
@@ -397,7 +397,7 @@ function SidebarGroupLabel({
     props: mergeProps<'div'>(
       {
         className: cn(
-          'text-secondary h-8 rounded-md px-2 text-xs font-medium transition-[margin,opacity] duration-200 ease-linear group-data-[collapsible=icon]:-mt-8 group-data-[collapsible=icon]:opacity-0 [&>svg]:size-4 flex shrink-0 items-center outline-hidden [&>svg]:shrink-0',
+          'text-tertiary h-8 rounded-md px-2 text-11 font-medium uppercase tracking-wide transition-[margin,opacity] duration-200 ease-linear group-data-[collapsible=icon]:-mt-8 group-data-[collapsible=icon]:opacity-0 [&>svg]:size-4 flex shrink-0 items-center outline-hidden [&>svg]:shrink-0',
           className,
         ),
       },
@@ -443,7 +443,7 @@ function SidebarGroupContent({
     <div
       data-slot="sidebar-group-content"
       data-sidebar="group-content"
-      className={cn('text-sm w-full', className)}
+      className={cn('text-13 w-full', className)}
       {...props}
     />
   )
@@ -481,9 +481,9 @@ const sidebarMenuButtonVariants = cva(
           'bg-layer-2 hover:bg-layer-transparent-hover hover:text-primary border border-subtle',
       },
       size: {
-        default: 'h-8 text-sm',
-        sm: 'h-7 text-xs',
-        lg: 'h-12 text-sm group-data-[collapsible=icon]:p-0!',
+        default: 'h-8 text-13',
+        sm: 'h-7 text-11',
+        lg: 'h-12 text-13 group-data-[collapsible=icon]:p-0!',
       },
     },
     defaultVariants: {
@@ -643,7 +643,7 @@ function SidebarMenuSub({ className, ...props }: React.ComponentProps<'ul'>) {
       data-slot="sidebar-menu-sub"
       data-sidebar="menu-sub"
       className={cn(
-        'border-sidebar-border mx-3.5 translate-x-px gap-1 border-l px-2.5 py-0.5 group-data-[collapsible=icon]:hidden flex min-w-0 flex-col',
+        'border-subtle mx-3.5 translate-x-px gap-1 border-l px-2.5 py-0.5 group-data-[collapsible=icon]:hidden flex min-w-0 flex-col',
         className,
       )}
       {...props}

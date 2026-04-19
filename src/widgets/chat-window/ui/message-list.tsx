@@ -153,7 +153,7 @@ export function MessageList({ projectId, channelId }: MessageListProps) {
     <div
       ref={parentRef}
       onScroll={onScroll}
-      className="flex-1 w-full overflow-y-auto no-scrollbar bg-surface-1 min-h-0 relative"
+      className="flex-1 w-full overflow-y-auto scrollbar-hide bg-surface-1 min-h-0 relative"
       style={{ overflowAnchor: 'none' }}
     >
       <div

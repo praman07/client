@@ -44,10 +44,10 @@ export function MoreMenu({ dueDate, onDueDateChange }: MoreMenuProps) {
     <DropdownMenu open={open} onOpenChange={setOpen}>
       <DropdownMenuTrigger
         className={cn(
-          'inline-flex items-center gap-1.5 rounded-md border px-2 py-1 text-xs whitespace-nowrap transition-colors cursor-pointer',
+          'inline-flex items-center gap-1.5 rounded-md border border-subtle px-2 py-1 text-12 whitespace-nowrap transition-colors cursor-pointer',
           isActive
-            ? 'border-primary/40 bg-primary/5 text-foreground'
-            : 'border-border bg-transparent text-foreground hover:bg-muted/50',
+            ? 'border-subtle bg-layer-2 text-primary'
+            : 'border-subtle bg-transparent text-primary hover:bg-layer-2-hover',
         )}
       >
         {/* Due date chip — visible when a date is set */}
@@ -56,7 +56,7 @@ export function MoreMenu({ dueDate, onDueDateChange }: MoreMenuProps) {
             <HugeiconsIcon
               icon={Calendar01Icon}
               strokeWidth={2}
-              className="size-3 text-muted-foreground"
+              className="size-3 text-tertiary"
             />
             <span>{formattedDate}</span>
           </span>
@@ -79,7 +79,7 @@ export function MoreMenu({ dueDate, onDueDateChange }: MoreMenuProps) {
             <HugeiconsIcon
               icon={Calendar01Icon}
               strokeWidth={2}
-              className="size-3.5 text-muted-foreground"
+              className="size-3.5 text-tertiary"
             />
             {dueDate ? 'Change due date' : 'Set due date'}
           </DropdownMenuSubTrigger>

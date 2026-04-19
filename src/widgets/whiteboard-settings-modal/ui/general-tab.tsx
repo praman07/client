@@ -142,7 +142,7 @@ className={`group flex items-center gap-2 rounded-lg px-3 py-2 transition-colors
   {board.title}
 </span>
 {canUpdate && (
-<Pencil className="h-3.5 w-3.5 text-tertiary shrink-0 opacity-0 group-hover:opacity-100 transition-opacity" />
+<Pencil className="h-3.5 w-3.5 text-tertiary shrink-0 invisible group-hover:visible transition-opacity" />
             )}
           </div>
         )}

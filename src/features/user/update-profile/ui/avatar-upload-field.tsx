@@ -120,7 +120,7 @@ export function AvatarUploadField() {
 
         {/* Upload spinner overlay */}
         {isUploading && (
-          <div className="absolute inset-0 flex items-center justify-center rounded-full bg-surface-1/70">
+          <div className="absolute inset-0 flex items-center justify-center rounded-full bg-surface-1/80">
             <Loader2 className="h-5 w-5 animate-spin text-primary" />
           </div>
         )}

@@ -20,7 +20,7 @@ export function CreateChannelModal() {
           <DialogTitle className="text-14 font-semibold text-primary">
             Create a channel
           </DialogTitle>
-          <p className="text-sm text-muted-foreground mt-0.5">
+          <p className="text-sm text-secondary mt-0.5">
             Channels are where your team communicates on a topic.
           </p>
         </DialogHeader>

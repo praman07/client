@@ -9,7 +9,7 @@ export function ChatSkeleton() {
   return (
     <div className="flex flex-col h-full">
       {/* Header */}
-      <div className="h-14 border-b flex items-center px-4 gap-3 shrink-0">
+      <div className="h-14 border-b border-subtle flex items-center px-4 gap-3 shrink-0">
         <Skeleton className="h-8 w-8 rounded-full" />
         <Skeleton className="h-4 w-32" />
       </div>
@@ -42,7 +42,7 @@ export function ChatSkeleton() {
       </div>
 
       {/* Input bar */}
-      <div className="h-16 border-t px-4 flex items-center">
+      <div className="h-16 border-t border-subtle px-4 flex items-center">
         <Skeleton className="h-10 w-full rounded-lg" />
       </div>
     </div>

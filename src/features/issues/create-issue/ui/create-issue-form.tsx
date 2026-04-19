@@ -216,6 +216,7 @@ export function CreateIssueForm({
         {/* Description — BlockNote editor */}
         <div>
           <IssueDescriptionEditor
+            projectId={projectId}
             editorRef={editorRef}
             onChange={setDescriptionBlocks}
             editable={!isPending && !isUploading}

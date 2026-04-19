@@ -47,10 +47,10 @@ export function PriorityPicker({ value, onChange }: PriorityPickerProps) {
     <DropdownMenu open={open} onOpenChange={setOpen}>
       <DropdownMenuTrigger
         className={cn(
-          'inline-flex items-center gap-1.5 rounded-md border px-2 py-1 text-xs whitespace-nowrap transition-colors cursor-pointer',
+          'inline-flex items-center gap-1.5 rounded-md border border-subtle px-2 py-1 text-12 whitespace-nowrap transition-colors cursor-pointer',
           isSet
-            ? 'border-primary/40 bg-primary/5 text-foreground hover:bg-primary/10'
-            : 'border-border bg-transparent text-foreground hover:bg-muted/50',
+            ? 'border-subtle bg-layer-2 text-primary hover:bg-layer-2-hover'
+            : 'border-subtle bg-transparent text-primary hover:bg-layer-2-hover',
         )}
       >
         <PriorityBadge priority={value} size={12} />

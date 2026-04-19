@@ -34,7 +34,7 @@ export function PageSidebar({ projectId }: PageSidebarProps) {
     >
       <SidebarContent className="overflow-hidden">
         <ScrollArea className="h-full w-full">
-          <div className="flex flex-col gap-2 p-2">
+          <div className="flex flex-col gap-1 px-1 py-2 animate-fade-in">
             {isLoading ? (
               <PageTreeSkeleton />
             ) : (
@@ -53,13 +53,13 @@ function PageTreeSkeleton() {
   return (
     <div className="flex flex-col gap-1 px-2 py-2">
       <div className="flex items-center justify-between px-2 py-1.5">
-        <Skeleton className="h-4 w-12" />
-        <Skeleton className="h-4 w-4" />
+        <Skeleton className="h-4 w-12 animate-pulse-subtle" />
+        <Skeleton className="h-4 w-4 animate-pulse-subtle" />
       </div>
       {Array.from({ length: 5 }).map((_, i) => (
         <div key={i} className="flex items-center gap-2 px-2 py-1.5">
-          <Skeleton className="h-4 w-4" />
-          <Skeleton className="h-4 w-32" />
+          <Skeleton className="h-4 w-4 animate-pulse-subtle" />
+          <Skeleton className="h-4 w-32 animate-pulse-subtle" />
         </div>
       ))}
     </div>

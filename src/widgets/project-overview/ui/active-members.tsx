@@ -97,7 +97,7 @@ export const ActiveMembers: React.FC<ActiveMembersProps> = ({
               params={{ workspaceSlug: workspaceSlug ?? '', projectSlug: projectSlug ?? '', conversationId: ch.id }}
               className="flex items-center gap-2 text-[12px] text-secondary hover:text-primary transition-colors group"
             >
-              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 shrink-0 group-hover:bg-emerald-400 transition-colors" />
+              <span className="h-1.5 w-1.5 rounded-full bg-success-primary shrink-0 group-hover:bg-success-primary-hover transition-colors" />
               <span className="flex-1 min-w-0 truncate">{ch.name}</span>
             </Link>
           ))}

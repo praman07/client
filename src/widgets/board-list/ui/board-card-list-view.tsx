@@ -89,7 +89,7 @@ export function BoardCardListView({
           type="button"
           onClick={onOpenMenu}
           aria-label="Board options"
-          className="absolute right-3 top-1/2 -translate-y-1/2 h-7 w-7 flex items-center justify-center rounded-md text-tertiary hover:text-primary hover:bg-layer-1 transition-colors opacity-0 group-hover:opacity-100 focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary/60"
+          className="absolute right-3 top-1/2 -translate-y-1/2 h-7 w-7 flex items-center justify-center rounded-md text-tertiary hover:text-primary hover:bg-layer-1 transition-colors invisible group-hover:visible focus-visible:visible focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary/60"
         >
           <MoreHorizontal className="h-4 w-4" />
         </button>

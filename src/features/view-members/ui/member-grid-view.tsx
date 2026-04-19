@@ -25,15 +25,15 @@ export function MemberGridView({
 }: MemberGridViewProps) {
   if (members.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center py-24 text-muted-foreground gap-4 bg-card/10 rounded-xl border border-dashed border-border/40">
-        <div className="p-4 bg-muted/20 rounded-full border border-border/40">
-          <UserX className="h-10 w-10 opacity-30" />
+      <div className="flex flex-col items-center justify-center py-24 text-secondary gap-4 bg-surface-1 rounded-xl border border-dashed border-subtle">
+        <div className="p-4 bg-layer-2 rounded-full border border-subtle">
+          <UserX className="h-10 w-10 text-disabled" />
         </div>
         <div className="text-center space-y-1">
-          <p className="text-sm font-semibold text-foreground">No members found</p>
-          <p className="text-xs max-w-[240px] leading-relaxed italic">
+          <p className="text-14 font-semibold text-primary">No members found</p>
+          <p className="text-12 max-w-[240px] leading-relaxed italic">
             {search ? (
-              <>No members match your search "<span className="text-foreground not-italic font-medium">{search}</span>"</>
+              <>No members match your search "<span className="text-primary not-italic font-medium">{search}</span>"</>
             ) : (
               'This workspace does not have any members yet.'
             )}

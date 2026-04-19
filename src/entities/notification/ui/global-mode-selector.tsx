@@ -36,8 +36,8 @@ export function GlobalModeSelector({
         <label
           key={mode.value}
           className={cn(
-            'flex items-start gap-3 p-3 rounded-lg border border-subtle cursor-pointer transition-colors',
-            'hover:bg-layer-1-hover',
+            'flex items-start gap-3 p-3 rounded-lg border cursor-pointer transition-colors',
+            'hover:bg-layer-1-hover border-subtle',
             value === mode.value && 'border-accent-strong bg-accent-subtle',
             disabled && 'text-disabled pointer-events-none'
           )}

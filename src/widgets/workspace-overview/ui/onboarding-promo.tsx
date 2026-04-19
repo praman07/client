@@ -9,7 +9,7 @@ export function OnboardingPromo() {
   </div>
 
   <h3 className="text-14 font-semibold mb-2 relative z-10">Need help with onboarding?</h3>
-  <p className="text-12 text-on-color/90 mb-5 leading-relaxed relative z-10 max-w-[95%]">
+  <p className="text-12 text-on-color mb-5 leading-relaxed relative z-10 max-w-[95%]">
     Check our interactive guide to get your team up to speed in minutes.
   </p>
 

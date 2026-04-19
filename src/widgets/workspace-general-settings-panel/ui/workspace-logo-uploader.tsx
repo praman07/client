@@ -58,7 +58,7 @@ export function WorkspaceLogoUploader({
           </AvatarFallback>
         </Avatar>
         {isUploading && (
-<div className="absolute inset-0 flex flex-col items-center justify-center bg-black/60 rounded-xl">
+<div className="absolute inset-0 flex flex-col items-center justify-center bg-backdrop rounded-xl">
           <Loader2 className="h-5 w-5 animate-spin text-on-color" />
           <span className="text-10 text-on-color mt-0.5">{progress}%</span>
         </div>

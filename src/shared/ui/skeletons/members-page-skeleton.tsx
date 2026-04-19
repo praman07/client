@@ -12,7 +12,7 @@ export function MembersPageSkeleton() {
         <Skeleton className="h-9 w-32 rounded-md" />
       </div>
       {/* Table header */}
-      <div className="flex gap-4 border-b pb-2">
+      <div className="flex gap-4 border-b border-subtle pb-2">
         <Skeleton className="h-4 w-32" />
         <Skeleton className="h-4 w-24 ml-auto" />
         <Skeleton className="h-4 w-20" />

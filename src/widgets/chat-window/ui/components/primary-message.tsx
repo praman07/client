@@ -179,7 +179,7 @@ export function PrimaryMessage({ message, className }: PrimaryMessageProps) {
 
   return (
     <>
-      <MessageEvent className={cn('hover:bg-accent-subtle group/msg mt-3', className)}>
+      <MessageEvent className={cn('hover:bg-layer-transparent-hover group/msg mt-3', className)}>
         <MessageEventAddon>
           <Avatar
             className="rounded-full size-9 shrink-0 cursor-pointer hover:opacity-80 transition-opacity"
@@ -188,7 +188,7 @@ export function PrimaryMessage({ message, className }: PrimaryMessageProps) {
             {memberInfo?.avatarUrl && (
               <AvatarImage src={memberInfo.avatarUrl} alt={displayName} />
             )}
-            <AvatarFallback className="text-11 font-bold bg-layer-1">
+            <AvatarFallback className="text-11 font-semibold bg-layer-1">
               {initials}
             </AvatarFallback>
           </Avatar>
@@ -234,7 +234,7 @@ export function PrimaryMessage({ message, className }: PrimaryMessageProps) {
                   }
                 }}
               />
-              <p className="text-xs text-secondary">
+              <p className="text-11 text-secondary">
                 <span className="font-medium">escape</span> to cancel •{' '}
                 <span className="font-medium">enter</span> to save
               </p>
@@ -388,7 +388,7 @@ export function PrimaryMessage({ message, className }: PrimaryMessageProps) {
 
               {/* ── Reply Count Badge (P6.1) ─────────────────────── */}
               {(message.replyCount ?? 0) > 0 && (
-                <button className="flex items-center gap-1 text-xs text-secondary hover:text-primary mt-1.5 transition-colors">
+                <button className="flex items-center gap-1 text-11 text-secondary hover:text-primary mt-1.5 transition-colors">
                   <MessageSquare className="h-3 w-3" />
                   <span>
                     {message.replyCount} {message.replyCount === 1 ? 'reply' : 'replies'}

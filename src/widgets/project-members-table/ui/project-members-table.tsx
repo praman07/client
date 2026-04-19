@@ -362,8 +362,8 @@ export function ProjectMembersTable({
 
       {/* Footer count */}
       {!isLoading && members.length > 0 && (
-        <p className="text-[11px] text-secondary/60 uppercase tracking-widest font-semibold flex items-center gap-2 px-1">
-          <span className="h-1 w-1 rounded-full bg-secondary/40" />
+        <p className="text-11 text-tertiary uppercase tracking-widest font-semibold flex items-center gap-2 px-1">
+          <span className="h-1 w-1 rounded-full bg-layer-2" />
           {members.length} {members.length === 1 ? 'member' : 'members'}
           {search && (
             <>

@@ -8,7 +8,7 @@ export function VaultSkeleton() {
   return (
     <div className="h-full flex overflow-hidden">
       {/* Sidebar tree */}
-      <div className="w-64 border-r flex flex-col gap-1 p-3 shrink-0">
+      <div className="w-64 border-r border-subtle flex flex-col gap-1 p-3 shrink-0">
         <Skeleton className="h-8 w-full rounded-md mb-2" />
         {Array.from({ length: 8 }).map((_, i) => (
           <div key={i} className="flex items-center gap-2 px-1 py-0.5" style={{ paddingLeft: i % 3 === 0 ? 4 : i % 2 === 0 ? 20 : 36 }}>
@@ -28,7 +28,7 @@ export function VaultSkeleton() {
         {/* File grid */}
         <div className="grid grid-cols-4 gap-3">
           {Array.from({ length: 12 }).map((_, i) => (
-            <div key={i} className="flex flex-col items-center gap-2 p-3 rounded-lg border">
+            <div key={i} className="flex flex-col items-center gap-2 p-3 rounded-lg border border-subtle">
               <Skeleton className="h-12 w-10 rounded" />
               <Skeleton className="h-3 w-full" />
               <Skeleton className="h-2.5 w-3/4" />

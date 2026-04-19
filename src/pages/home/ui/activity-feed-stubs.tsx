@@ -16,7 +16,7 @@ export function ActivityFeedStubs() {
                   <h4 className="font-semibold text-primary">Website Redesign</h4>
                   <span className="text-10 text-tertiary uppercase font-bold tracking-widest">Nova Design Studio</span>
                 </div>
-                <div className="size-2 rounded-full bg-success-primary shadow-[0_0_8px_rgba(16,185,129,0.6)]"></div>
+                <div className="size-2 rounded-full bg-success-primary shadow-[0_0_8px_var(--ext-green-500)]"></div>
               </div>
               <div className="pt-4 border-t border-subtle flex justify-between items-center text-11">
                 <span className="text-secondary">Updated 14m ago</span>
@@ -29,7 +29,7 @@ export function ActivityFeedStubs() {
                   <h4 className="font-semibold text-primary">Mobile App v2.0</h4>
                   <span className="text-10 text-tertiary uppercase font-bold tracking-widest">Skyline Arch</span>
                 </div>
-                <div className="size-2 rounded-full bg-warning-primary shadow-[0_0_8px_rgba(245,158,11,0.6)]"></div>
+                <div className="size-2 rounded-full bg-warning-primary shadow-[0_0_8px_var(--ext-yellow-500)]"></div>
               </div>
               <div className="pt-4 border-t border-subtle flex justify-between items-center text-11">
                 <span className="text-secondary">Updated 1h ago</span>

@@ -72,7 +72,7 @@ export function UnarchiveChannelDialog({
               handleUnarchive()
             }}
             disabled={isPending}
-            className="bg-success-primary hover:bg-success-primary text-on-color"
+            className="bg-success-primary hover:bg-success-primary-hover text-on-color"
           >
             {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             Unarchive Channel

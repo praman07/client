@@ -120,7 +120,7 @@ export function MemberActionsMenu({
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
             <AlertDialogAction
-              className="bg-danger-primary text-on-color hover:bg-danger-primary/90"
+              className="bg-danger-primary text-on-color hover:bg-danger-primary-hover"
               onClick={() => {
                 removeMember({ memberId: member.id })
                 setConfirmRemove(false)

@@ -62,7 +62,7 @@ export function ChatHeader({
           </Avatar>
         </ChatHeaderStart>
         <ChatHeaderMain>
-          <h2 className="text-sm font-semibold truncate max-w-[200px]">
+          <h2 className="text-14 font-semibold truncate max-w-[200px]">
             {displayName}
           </h2>
           {children}
@@ -83,7 +83,7 @@ export function ChatHeader({
       <ChatHeaderMain>
         <div className="flex items-center gap-2">
           <h2
-            className="text-sm font-semibold truncate max-w-[200px] cursor-pointer hover:underline"
+            className="text-14 font-semibold truncate max-w-[200px] cursor-pointer hover:text-accent-primary transition-colors duration-100"
             onClick={() => openChannelSettings(channelId)}
           >
             {channelName}

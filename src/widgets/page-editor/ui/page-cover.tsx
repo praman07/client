@@ -201,7 +201,7 @@ export function PageCoverBanner({ coverUrl }: PageCoverProps) {
 
   if (!coverUrl) {
     return (
-      <div className="mx-auto w-full max-w-3xl px-16 pt-16 pb-0 flex gap-2 opacity-0 hover:opacity-100 transition-opacity">
+      <div className="mx-auto w-full max-w-3xl px-16 pt-16 pb-0 flex gap-2 invisible hover:visible transition-opacity">
         <button
           onClick={() => fileInputRef.current?.click()}
           className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-11 text-secondary hover:bg-layer-2-hover transition-colors"
@@ -235,8 +235,8 @@ export function PageCoverBanner({ coverUrl }: PageCoverProps) {
       ) : (
         <div className="w-full h-full bg-layer-1 animate-pulse" />
       )}
-      <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity" />
-      <div className="absolute bottom-3 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+      <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
+      <div className="absolute bottom-3 right-4 flex gap-2 invisible group-hover:visible transition-opacity">
         <button
           onClick={() => fileInputRef.current?.click()}
           className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-11 bg-surface-1/80 backdrop-blur-sm text-primary hover:bg-surface-1 transition-colors"

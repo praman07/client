@@ -20,7 +20,7 @@ export function FilterChip({ chip, onRemove }: FilterChipProps) {
   return (
     <Badge
       variant="outline"
-      className="h-7 gap-1 rounded-md px-2 text-xs font-normal text-foreground"
+      className="h-7 gap-1 rounded-md px-2 text-12 font-normal text-primary"
     >
       <span className="max-w-[200px] truncate">{chip.label}</span>
       <Button

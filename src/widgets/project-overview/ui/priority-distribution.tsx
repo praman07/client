@@ -21,11 +21,11 @@ const PRIORITY_CONFIG: Record<
   string,
   { label: string; shortLabel: string; color: string }
 > = {
-  URGENT:      { label: 'Urgent', shortLabel: 'Urgent', color: '#ef4444' },
-  HIGH:        { label: 'High',   shortLabel: 'High',   color: '#f59e0b' },
-  MEDIUM:      { label: 'Medium', shortLabel: 'Medium', color: '#6366f1' },
-  LOW:         { label: 'Low',    shortLabel: 'Low',    color: '#22c55e' },
-  NO_PRIORITY: { label: 'None',   shortLabel: 'None',   color: '#6b7280' },
+  URGENT:      { label: 'Urgent', shortLabel: 'Urgent', color: 'var(--ext-red-500)' },
+  HIGH:        { label: 'High',   shortLabel: 'High',   color: 'var(--ext-amber-500)' },
+  MEDIUM:      { label: 'Medium', shortLabel: 'Medium', color: 'var(--ext-indigo-500)' },
+  LOW:         { label: 'Low',    shortLabel: 'Low',    color: 'var(--ext-green-500)' },
+  NO_PRIORITY: { label: 'None',   shortLabel: 'None',   color: 'var(--ext-grey-500)' },
 }
 
 const ORDER = ['URGENT', 'HIGH', 'MEDIUM', 'LOW', 'NO_PRIORITY']
@@ -43,7 +43,7 @@ export const PriorityDistribution: React.FC<PriorityDistributionProps> = ({
     const cfg = PRIORITY_CONFIG[d.priority] ?? {
       label: d.priority,
       shortLabel: d.priority,
-      color: '#9ca3af',
+      color: 'var(--ext-grey-500)',
     }
     return {
       priority: d.priority,
@@ -60,7 +60,7 @@ export const PriorityDistribution: React.FC<PriorityDistributionProps> = ({
       sorted.map((d) => {
         const cfg = PRIORITY_CONFIG[d.priority] ?? {
           label: d.priority,
-          color: '#9ca3af',
+          color: 'var(--ext-grey-500)',
         }
         return [d.priority, { label: cfg.label, color: cfg.color }]
       }),
@@ -69,13 +69,13 @@ export const PriorityDistribution: React.FC<PriorityDistributionProps> = ({
 
   return (
     <div className="h-full bg-layer-1 border border-subtle rounded-xl p-5 flex flex-col">
-      <h3 className="text-sm font-semibold text-primary mb-4">
+      <h3 className="text-14 font-semibold text-primary mb-4">
         Issues by Priority
       </h3>
 
       {!hasData ? (
         <div className="flex-1 flex items-center justify-center border-2 border-dashed border-subtle rounded-lg">
-          <p className="text-[11px] text-secondary">No open issues</p>
+          <p className="text-11 text-secondary">No open issues</p>
         </div>
       ) : (
         <ChartContainer config={chartConfig} className="flex-1 w-full aspect-auto min-h-[160px]">
@@ -100,7 +100,7 @@ export const PriorityDistribution: React.FC<PriorityDistributionProps> = ({
               width={28}
             />
             <ChartTooltip
-              cursor={{ fill: 'hsl(var(--muted) / 0.3)' }}
+              cursor={{ fill: 'var(--bg-layer-2)' }}
               content={
                 <ChartTooltipContent
                   hideLabel

@@ -22,7 +22,7 @@ const ContributorCard: React.FC<{ contributor: ContributorStats }> = ({ contribu
     <div className="flex-1 min-w-[140px] bg-layer-1 border border-subtle rounded-xl px-4 py-4 flex flex-col items-start gap-3 relative overflow-hidden">
       {/* Online / active indicator */}
       {isOnline && (
-        <span className="absolute top-3 right-3 h-2 w-2 rounded-full bg-orange-400" />
+        <span className="absolute top-3 right-3 h-2 w-2 rounded-full bg-warning-primary" />
       )}
 
       <Avatar className="h-10 w-10 border-2 border-subtle">

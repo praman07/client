@@ -31,7 +31,7 @@ export function WorkspaceCard({ workspace }: WorkspaceCardProps) {
             )}
           </div>
           <div className="mt-4">
-            <h3 className="font-semibold text-foreground group-hover:text-primary transition-colors line-clamp-1">
+            <h3 className="font-semibold text-primary group-hover:text-accent-primary transition-colors line-clamp-1">
               {workspace.name}
             </h3>
             <p className="text-11 text-secondary mt-1 font-mono truncate">

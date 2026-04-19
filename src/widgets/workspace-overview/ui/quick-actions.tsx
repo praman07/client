@@ -58,7 +58,7 @@ export function QuickActions() {
           className="flex items-center justify-between p-3 rounded-lg border border-subtle bg-layer-2 hover:bg-layer-2-hover hover:border-accent-subtle transition-all group w-full text-left"
         >
           <div className="flex items-center gap-3">
-            <div className="flex items-center justify-center w-8 h-8 rounded-md bg-surface-1 text-primary group-hover:text-accent-primary group-hover:bg-accent-subtle transition-colors">
+            <div className="flex items-center justify-center w-8 h-8 rounded-md bg-layer-2 text-primary group-hover:text-accent-primary group-hover:bg-accent-subtle transition-colors">
               <Icon className="w-4 h-4" />
             </div>
             <span className="text-13 font-semibold text-primary group-hover:text-accent-primary transition-colors">

@@ -25,11 +25,11 @@ export const IssueStatusBreakdown: React.FC<IssueStatusBreakdownProps> = ({
 
   return (
     <div className="h-full bg-layer-1 border border-subtle rounded-xl p-5 flex flex-col">
-      <h3 className="text-sm font-bold text-primary mb-4">Issues by Status</h3>
+      <h3 className="text-14 font-bold text-primary mb-4">Issues by Status</h3>
 
       {statuses.length === 0 ? (
         <div className="flex-1 flex items-center justify-center">
-          <p className="text-[11px] text-secondary">No statuses configured</p>
+          <p className="text-11 text-secondary">No statuses configured</p>
         </div>
       ) : (
         <div className="flex flex-col">
@@ -40,13 +40,13 @@ export const IssueStatusBreakdown: React.FC<IssueStatusBreakdownProps> = ({
               <div key={status.statusId} className="py-3 first:pt-0 last:pb-0">
                 {/* Label + count */}
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-sm text-secondary">{status.name}</span>
-                  <span className="text-sm font-semibold text-primary tabular-nums">
+                  <span className="text-14 text-secondary">{status.name}</span>
+                  <span className="text-14 font-semibold text-primary tabular-nums">
                     {status.issueCount}
                   </span>
                 </div>
                 <ProgressRoot.Root value={percentage} className="w-full">
-                  <ProgressTrack className="h-[5px] bg-layer-2/20">
+                  <ProgressTrack className="h-[5px] bg-layer-transparent">
                     <ProgressIndicator
                       className="transition-all duration-700 rounded-full"
                       style={{

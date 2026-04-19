@@ -27,10 +27,10 @@ export function RouteError({ error, reset }: RouteErrorProps) {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-[50vh] p-4 animate-in fade-in zoom-in-95 duration-300">
-      <Card className="w-full max-w-md shadow-raised-100 border-danger-strong/20">
+      <Card className="w-full max-w-md shadow-raised-100 border-danger-strong">
         <CardHeader className="text-center pb-2">
           <div className="flex justify-center mb-4">
-            <div className="p-3 bg-danger-subtle rounded-full ring-8 ring-danger-subtle/5">
+            <div className="p-3 bg-danger-subtle rounded-full">
               <AlertTriangleIcon className="w-8 h-8 text-danger-primary" />
             </div>
           </div>
@@ -41,7 +41,7 @@ export function RouteError({ error, reset }: RouteErrorProps) {
         </CardHeader>
 
         <CardContent className="space-y-4">
-          <div className="p-3 text-13 font-mono text-danger-primary bg-danger-subtle rounded-md border border-danger-strong/10 overflow-auto max-h-32">
+          <div className="p-3 text-13 font-mono text-danger-primary bg-danger-subtle rounded-md border border-danger-strong overflow-auto max-h-32">
             {error instanceof Error ? error.message : 'Unknown error occurred'}
           </div>
         </CardContent>

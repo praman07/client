@@ -59,9 +59,9 @@ export function ProjectLogoUploader({
           </AvatarFallback>
         </Avatar>
         {isUploading && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/60 rounded-xl">
-            <Loader2 className="h-5 w-5 animate-spin text-white" />
-            <span className="text-[9px] text-white mt-0.5">{progress}%</span>
+          <div className="absolute inset-0 flex flex-col items-center justify-center bg-backdrop rounded-xl">
+            <Loader2 className="h-5 w-5 animate-spin text-on-color" />
+            <span className="text-9 text-on-color mt-0.5">{progress}%</span>
           </div>
         )}
       </div>
@@ -71,11 +71,11 @@ export function ProjectLogoUploader({
         <div className="space-y-1">
           <label
             htmlFor="project-logo-upload"
-            className="block text-sm font-semibold text-primary cursor-pointer hover:underline"
+            className="block text-14 font-semibold text-primary cursor-pointer hover:underline"
           >
             {isUploading ? 'Uploading...' : 'Upload new Icon'}
           </label>
-          <p className="text-xs text-secondary">Recommended 512×512px. PNG or JPG.</p>
+          <p className="text-12 text-secondary">Recommended 512×512px. PNG or JPG.</p>
           <input
             id="project-logo-upload"
             type="file"

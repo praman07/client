@@ -16,10 +16,10 @@ interface StatChipProps {
 
 const StatChip: React.FC<StatChipProps> = ({ label, value, valueClass }) => (
   <div className="flex-1 min-w-[100px] sm:min-w-[120px] bg-layer-1 border border-subtle rounded-xl px-4 py-3 sm:px-5 sm:py-4">
-    <p className="text-[10px] font-semibold uppercase tracking-widest text-secondary mb-1.5 truncate">
+    <p className="text-10 font-semibold uppercase tracking-widest text-secondary mb-1.5 truncate">
       {label}
     </p>
-    <p className={`text-2xl font-bold tabular-nums leading-none truncate ${valueClass ?? ''}`}>
+    <p className={`text-20 font-bold tabular-nums leading-none truncate ${valueClass ?? ''}`}>
       {value}
     </p>
   </div>
@@ -39,7 +39,7 @@ export const ProjectHealth: React.FC<ProjectHealthProps> = ({
       <StatChip
         label="Overdue"
         value={overdueIssues}
-        valueClass={overdueIssues > 0 ? 'text-red-500' : ''}
+        valueClass={overdueIssues > 0 ? 'text-danger-primary' : ''}
       />
       <StatChip label="Pages" value={pageCount} />
       <StatChip label="Members" value={memberCount} />

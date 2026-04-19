@@ -71,7 +71,7 @@ export function CreateWorkspaceRoleForm({
       className="space-y-4 pt-4"
     >
       {rootError && (
-        <div className="rounded-md bg-danger-subtle p-3 text-sm font-medium text-danger-primary">
+        <div className="rounded-md bg-danger-subtle p-3 text-14 font-medium text-danger-primary">
           {rootError}
         </div>
       )}
@@ -106,7 +106,7 @@ export function CreateWorkspaceRoleForm({
               autoFocus
             />
             {field.state.meta.errors.length > 0 && (
-              <p className="text-sm text-danger-primary font-medium">
+              <p className="text-14 text-danger-primary font-medium">
                 {field.state.meta.errors.join(', ')}
               </p>
             )}
@@ -138,7 +138,7 @@ export function CreateWorkspaceRoleForm({
               rows={3}
             />
             {field.state.meta.errors.length > 0 && (
-              <p className="text-sm text-danger-primary font-medium">
+              <p className="text-14 text-danger-primary font-medium">
                 {field.state.meta.errors.join(', ')}
               </p>
             )}
@@ -173,7 +173,7 @@ export function CreateWorkspaceRoleForm({
               Higher rank roles can manage lower rank members.
             </p>
             {field.state.meta.errors.length > 0 && (
-              <p className="text-sm text-danger-primary font-medium">
+              <p className="text-12 text-danger-primary font-medium">
                 {field.state.meta.errors.join(', ')}
               </p>
             )}

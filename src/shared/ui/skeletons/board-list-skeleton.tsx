@@ -26,7 +26,7 @@ export function BoardListSkeleton() {
       {/* Board grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         {Array.from({ length: 8 }).map((_, i) => (
-          <div key={i} className="flex flex-col gap-2 rounded-xl border p-3">
+          <div key={i} className="flex flex-col gap-2 rounded-xl border border-subtle p-3">
             <Skeleton className="h-32 rounded-lg w-full" />
             <Skeleton className="h-4 w-3/4" />
             <Skeleton className="h-3 w-1/2" />

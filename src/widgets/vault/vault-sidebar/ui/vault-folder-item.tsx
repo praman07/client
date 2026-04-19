@@ -30,13 +30,13 @@ export function VaultFolderItem({
     <button
       onClick={onClick}
       className={cn(
-        'group flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-sm transition-colors text-left',
+        'group flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-13 transition-colors text-left',
         isActive
-          ? 'bg-accent-subtle text-accent-primary font-medium'
-          : 'text-secondary hover:bg-accent-subtle hover:text-primary',
+          ? 'bg-layer-1-selected text-primary font-medium'
+          : 'text-secondary bg-layer-transparent hover:bg-layer-transparent-hover hover:text-primary',
       )}
     >
-      <Folder className="h-4 w-4 shrink-0" />
+      <Folder className="h-4 w-4 shrink-0 text-icon-secondary" />
       <span className="flex-1 truncate">{folder.name}</span>
 
       {/* Pin toggle — visible on hover */}
@@ -53,14 +53,14 @@ export function VaultFolderItem({
             }
           }}
           className={cn(
-            'opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer rounded p-0.5 hover:bg-accent-subtle',
+            'opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer rounded-xs p-0.5 hover:bg-layer-1',
             (pinning || unpinning) && 'opacity-50 pointer-events-none',
           )}
         >
           {isPinned ? (
-            <PinOff className="h-3 w-3" />
+            <PinOff className="h-3 w-3 text-icon-secondary" />
           ) : (
-            <Pin className="h-3 w-3" />
+            <Pin className="h-3 w-3 text-icon-secondary" />
           )}
         </span>
       )}

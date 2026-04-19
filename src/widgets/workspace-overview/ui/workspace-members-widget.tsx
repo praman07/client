@@ -12,7 +12,7 @@ function WorkspaceMembersSkeleton() {
       </div>
       <div className="flex items-center -space-x-3 py-1 mb-6 px-1">
         {[1, 2, 3, 4, 5].map((i) => (
-          <Skeleton key={i} className="w-10 h-10 rounded-full border-2 border-background shrink-0" />
+          <Skeleton key={i} className="w-10 h-10 rounded-full border-2 border-subtle shrink-0" />
         ))}
       </div>
       <Skeleton className="w-full h-9 rounded-md" />

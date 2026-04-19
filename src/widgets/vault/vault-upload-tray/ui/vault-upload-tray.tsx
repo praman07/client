@@ -16,10 +16,10 @@ export function VaultUploadTray() {
   if (slots.length === 0) return null
 
   return (
-    <div className="fixed bottom-4 right-4 z-50 w-80 rounded-xl border border-subtle bg-surface-2 shadow-lg overflow-hidden">
+    <div className="fixed bottom-4 right-4 w-80 rounded-xl border border-subtle bg-surface-2 shadow-overlay-100 overflow-hidden z-[var(--z-toast)]">
       {/* Header */}
       <div className="flex items-center justify-between px-4 py-2.5 border-b border-subtle bg-layer-2">
-        <span className="text-sm font-medium">
+        <span className="text-14 font-medium text-primary">
           Uploading{' '}
           {slots.filter((s) => s.status !== 'done').length > 0
             ? `${slots.filter((s) => s.status !== 'done').length} file${slots.filter((s) => s.status !== 'done').length !== 1 ? 's' : ''}`
@@ -35,7 +35,7 @@ export function VaultUploadTray() {
       </div>
 
       {/* Slots */}
-      <div className="max-h-64 overflow-y-auto divide-y divide-border">
+      <div className="max-h-64 overflow-y-auto divide-y divide-border-subtle">
         {slots.map((slot) => (
           <VaultUploadSlot
             key={slot.localId}

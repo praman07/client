@@ -70,7 +70,7 @@ export function ArchiveChannelDialog({
               handleArchive()
             }}
             disabled={isPending}
-            className="bg-warning-primary hover:bg-warning-primary/90 text-on-color"
+            className="bg-warning-primary hover:bg-warning-primary text-on-color"
           >
             {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             Archive Channel

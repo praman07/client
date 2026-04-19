@@ -87,7 +87,7 @@ export function DeleteChannelDialog({
             </div>
 
             {!isArchived && (
-              <div className="bg-yellow-50 border border-yellow-200 rounded-md p-3 text-sm text-yellow-800">
+              <div className="bg-warning-subtle border border-warning-subtle rounded-md p-3 text-sm text-warning-primary">
                 ⚠️ Channel must be archived before deletion
               </div>
             )}

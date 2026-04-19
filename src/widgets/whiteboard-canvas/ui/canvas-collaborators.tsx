@@ -31,7 +31,7 @@ export function CanvasCollaborators() {
         />
       ))}
       {overflow > 0 && (
-        <div className="flex items-center justify-center h-8 w-8 rounded-full bg-muted border border-border text-xs font-medium text-muted-foreground">
+        <div className="flex items-center justify-center h-8 w-8 rounded-full bg-layer-2 border border-subtle text-11 font-medium text-secondary">
           +{overflow}
         </div>
       )}

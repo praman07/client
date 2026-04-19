@@ -60,7 +60,7 @@ export function PageTreeItemActions({
         <DropdownMenuTrigger
           render={
             <button
-              className="text-secondary hover:text-primary hover:bg-layer-transparent-hover absolute top-1.5 right-1 aspect-square w-5 rounded-md p-0 flex items-center justify-center opacity-0 group-hover/menu-item:opacity-100 transition-opacity focus:opacity-100"
+              className="text-secondary hover:text-primary hover:bg-layer-transparent-hover absolute top-1.5 right-1 aspect-square w-5 rounded-md p-0 flex items-center justify-center invisible group-hover/menu-item:visible focus:visible transition-opacity"
               aria-label={`More actions for ${pageTitle}`}
             >
               <HugeiconsIcon icon={MoreVerticalIcon} className="h-4 w-4" />

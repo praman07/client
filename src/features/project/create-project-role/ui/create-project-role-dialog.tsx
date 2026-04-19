@@ -66,7 +66,7 @@ function StepIndicator({ current }: { current: Step }) {
               </span>
             </div>
             {i < STEPS.length - 1 && (
-              <ChevronRight className="h-4 w-4 text-secondary/40 mx-3 shrink-0" />
+              <ChevronRight className="h-4 w-4 text-tertiary mx-3 shrink-0" />
             )}
           </div>
         )

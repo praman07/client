@@ -51,7 +51,7 @@ export function BoardCardGridView({
             {board.isArchived && (
               <Badge
                 variant="secondary"
-                className="gap-1 text-10 h-5 px-1.5 bg-canvas/85 backdrop-blur-sm border border-subtle/40"
+                className="gap-1 text-10 h-5 px-1.5 bg-surface-1/85 backdrop-blur-sm border border-subtle/40"
               >
                 <Archive className="h-2.5 w-2.5" />
                 Archived
@@ -60,7 +60,7 @@ export function BoardCardGridView({
             {board.isLocked && (
               <Badge
                 variant="secondary"
-                className="gap-1 text-10 h-5 px-1.5 bg-canvas/85 backdrop-blur-sm border border-subtle/40"
+                className="gap-1 text-10 h-5 px-1.5 bg-surface-1/85 backdrop-blur-sm border border-subtle/40"
               >
                 <Lock className="h-2.5 w-2.5" />
                 Locked
@@ -92,7 +92,7 @@ export function BoardCardGridView({
             type="button"
             onClick={onOpenMenu}
             aria-label="Board options"
-            className="shrink-0 mt-0.5 h-6 w-6 flex items-center justify-center rounded-md text-tertiary hover:text-primary hover:bg-layer-1 transition-colors opacity-0 group-hover:opacity-100 focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary/60"
+            className="shrink-0 mt-0.5 h-6 w-6 flex items-center justify-center rounded-md text-tertiary hover:text-primary hover:bg-layer-1 transition-colors invisible group-hover:visible focus-visible:visible focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary/60"
           >
             <MoreHorizontal className="h-3.5 w-3.5" />
           </button>

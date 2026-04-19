@@ -88,7 +88,7 @@ export function CreateDmDialog() {
           <CommandList className="max-h-72">
             {membersLoading ? (
               <div className="py-6 flex justify-center">
-                <Loader2 className="h-4 w-4 animate-spin text-secondary" />
+                <Loader2 className="h-4 w-4 animate-spin text-tertiary" />
               </div>
             ) : (
               <>
@@ -128,7 +128,7 @@ export function CreateDmDialog() {
                           </span>
                         </div>
                         {isPending && (
-                          <Loader2 className="ml-auto h-3.5 w-3.5 animate-spin text-muted-foreground" />
+                          <Loader2 className="ml-auto h-3.5 w-3.5 animate-spin text-tertiary" />
                         )}
                       </CommandItem>
                     )

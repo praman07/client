@@ -91,7 +91,7 @@ export function DeleteProjectDialog({
             onChange={(e) => setConfirmText(e.target.value)}
             placeholder={projectName}
             autoComplete="off"
-            className="font-mono text-sm"
+            className="font-mono text-14"
           />
         </div>
 
@@ -100,7 +100,7 @@ export function DeleteProjectDialog({
           <AlertDialogAction
             onClick={handleDelete}
             disabled={!isConfirmed || isPending}
-            className="bg-danger-primary hover:bg-danger-primary/90 text-on-color disabled:opacity-50"
+            className="bg-danger-primary hover:bg-danger-primary-hover text-on-color disabled:text-disabled disabled:pointer-events-none"
           >
             {isPending ? 'Deleting...' : 'Delete Project'}
           </AlertDialogAction>

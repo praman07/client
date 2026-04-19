@@ -56,7 +56,7 @@ export function PageTreeItem({ node, depth = 0 }: PageTreeItemProps) {
   )
 
   const icon = node.page.icon ? (
-    <span className="text-sm">{node.page.icon}</span>
+    <span className="text-13">{node.page.icon}</span>
   ) : (
     <HugeiconsIcon icon={File01Icon} />
   )
@@ -80,7 +80,7 @@ export function PageTreeItem({ node, depth = 0 }: PageTreeItemProps) {
               <span className="truncate">{node.page.title || 'Untitled'}</span>
             </SidebarMenuButton>
             <CollapsibleTrigger
-              className="absolute right-6 flex h-4 w-4 items-center justify-center text-secondary hover:text-primary"
+              className="absolute right-6 flex h-4 w-4 items-center justify-center text-secondary hover:text-primary transition-colors duration-100"
               onClick={(e) => {
                 e.preventDefault()
                 e.stopPropagation()
