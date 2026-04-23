@@ -1,6 +1,10 @@
 import { useState } from 'react'
 import { Loader2 } from 'lucide-react'
-import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/primitives/avatar'
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from '@/shared/ui/primitives/avatar'
 import { useUploadWorkspaceLogo } from '@/features/workspace/upload-workspace-logo'
 
 interface WorkspaceLogoUploaderProps {
@@ -53,23 +57,25 @@ export function WorkspaceLogoUploader({
           </AvatarFallback>
         </Avatar>
         {isUploading && (
-<div className="absolute inset-0 flex flex-col items-center justify-center bg-backdrop rounded-xl">
-          <Loader2 className="h-5 w-5 animate-spin text-on-color" />
-          <span className="text-10 text-on-color mt-0.5">{progress}%</span>
-        </div>
+          <div className="absolute inset-0 flex flex-col items-center justify-center bg-backdrop rounded-xl">
+            <Loader2 className="h-5 w-5 animate-spin text-on-color" />
+            <span className="text-10 text-on-color mt-0.5">{progress}%</span>
+          </div>
         )}
       </div>
 
       {/* Right: link + hint — hidden when readOnly */}
       {!readOnly && (
         <div className="space-y-1">
-<label
-          htmlFor="logo-upload"
-          className="block text-14 font-semibold text-accent-primary cursor-pointer hover:underline"
-        >
-          {isUploading ? 'Uploading...' : 'Upload new Icon'}
-        </label>
-        <p className="text-12 text-secondary">Recommended 512×512px. PNG or JPG.</p>
+          <label
+            htmlFor="logo-upload"
+            className="block text-14 font-semibold text-accent-primary cursor-pointer hover:underline"
+          >
+            {isUploading ? 'Uploading...' : 'Upload new Icon'}
+          </label>
+          <p className="text-12 text-secondary">
+            Recommended 512×512px. PNG or JPG.
+          </p>
           <input
             id="logo-upload"
             type="file"

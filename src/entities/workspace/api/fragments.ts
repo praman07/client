@@ -164,6 +164,14 @@ export const CHECK_SLUG_AVAILABILITY_MUTATION = gql(`
   }
 `)
 
+export const GET_WORKSPACE_DETAILS = gql(`
+  query GetWorkspaceDetails($workspaceId: ID!) {
+    workspaceById(workspaceId: $workspaceId) {
+      ...WorkspaceSettingsFragment
+    }
+  }
+`)
+
 // ── Workspace Members ─────────────────────────────────────────────────────────
 
 /**

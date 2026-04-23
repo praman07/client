@@ -1,25 +1,9 @@
 import { useQuery } from '@tanstack/react-query'
-import { gql } from '@/gql'
+import { workspaceKeys } from '../api/query-keys'
+import { GET_WORKSPACE_DETAILS } from '../api/fragments'
 import { useAuth } from '@/shared/hooks'
 import { GqlClient } from '@/shared/api'
-import { workspaceKeys } from '../api/query-keys'
 
-const WORKSPACE_DETAILS_FRAGMENT = gql`
-  fragment WorkspaceDetailsFields on Workspace {
-    id
-    name
-    slug
-    logoUrl
-  }
-`
-
-const GET_WORKSPACE_DETAILS = gql`
-  query GetWorkspaceDetails($workspaceId: ID!) {
-    workspaceById(workspaceId: $workspaceId) {
-      ...WorkspaceDetailsFields
-    }
-  }
-`
 
 export function useWorkspaceDetails(workspaceId: string) {
   const { getToken } = useAuth()

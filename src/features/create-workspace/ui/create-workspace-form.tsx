@@ -13,6 +13,7 @@ import { Button, Separator, Spinner } from '@/shared/ui'
 export function CreateWorkspaceForm() {
   const navigate = useNavigate()
   const [rootError, setRootError] = useState<string | null>(null)
+  const [logoFile, setLogoFile] = useState<File | null>(null)
 
   const { mutateAsync: createWorkspace, isPending: isCreating } =
     useCreateWorkspace()
@@ -29,10 +30,11 @@ export function CreateWorkspaceForm() {
         const data = await createWorkspace({
           slug: value.slug,
           name: value.name,
+          logoFile,
         })
 
-        toast.success(`Workspace ${data.createWorkspace.name} created!`)
-        navigate({ to: '/workspace/$workspaceSlug', params: { workspaceSlug: data.createWorkspace.slug } })
+        toast.success(`Workspace ${data.name} created!`)
+        navigate({ to: '/workspace/$workspaceSlug', params: { workspaceSlug: data.slug } })
       } catch (error) {
         const message = mapCreateWorkspaceError(error)
         setRootError(message)
@@ -63,7 +65,7 @@ export function CreateWorkspaceForm() {
           }}
           className="space-y-8"
         >
-          <WorkspaceLogoField />
+          <WorkspaceLogoField value={logoFile} onChange={setLogoFile} />
           <WorkspaceNameField form={form} />
           <WorkspaceSlugField form={form} />
           <TeamSizeField form={form} />
