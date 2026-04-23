@@ -54,56 +54,58 @@ export function CreateWorkspaceForm() {
         </p>
       </div>
 
-      <form
-        onSubmit={(e) => {
-          e.preventDefault()
-          e.stopPropagation()
-          form.handleSubmit()
-        }}
-        className="space-y-8"
-      >
-        <WorkspaceLogoField />
-        <WorkspaceNameField form={form} />
-        <WorkspaceSlugField form={form} />
-        <TeamSizeField form={form} />
+      <div className="bg-layer-1 border border-subtle rounded-xl p-6 shadow-raised-100 animate-fade-in">
+        <form
+          onSubmit={(e) => {
+            e.preventDefault()
+            e.stopPropagation()
+            form.handleSubmit()
+          }}
+          className="space-y-8"
+        >
+          <WorkspaceLogoField />
+          <WorkspaceNameField form={form} />
+          <WorkspaceSlugField form={form} />
+          <TeamSizeField form={form} />
 
-        {rootError && (
-          <div className="rounded-md bg-danger-subtle p-3 text-13 font-medium text-danger-primary">
-            {rootError}
-          </div>
-        )}
+          {rootError && (
+            <div className="rounded-md bg-danger-subtle p-3 text-13 font-medium text-danger-primary">
+              {rootError}
+            </div>
+          )}
 
-        <div className="space-y-6 pt-2">
-          <Separator />
-          <div className="flex items-center justify-between">
-            <Button
-              type="button"
-              variant="link"
-              className="px-0 text-secondary hover:text-primary"
-            >
-              Join existing workspace instead
-            </Button>
-            <form.Subscribe
-              selector={(state) => [state.canSubmit, state.isSubmitting]}
-              children={([canSubmit]) => (
-                <Button
-                  type="submit"
-                  className="h-10 px-8 text-14"
-                  disabled={!canSubmit || isCreating}
-                >
-                  {isCreating ? (
-                    <>
-                      <Spinner className="mr-2 h-4 w-4" /> Creating...
-                    </>
-                  ) : (
-                    'Create Workspace'
-                  )}
-                </Button>
-              )}
-            />
+          <div className="space-y-6 pt-2">
+            <Separator />
+            <div className="flex items-center justify-between">
+              <Button
+                type="button"
+                variant="link"
+                className="px-0 text-secondary hover:text-primary"
+              >
+                Join existing workspace instead
+              </Button>
+              <form.Subscribe
+                selector={(state) => [state.canSubmit, state.isSubmitting]}
+                children={([canSubmit]) => (
+                  <Button
+                    type="submit"
+                    className="h-10 px-8 text-14"
+                    disabled={!canSubmit || isCreating}
+                  >
+                    {isCreating ? (
+                      <>
+                        <Spinner className="mr-2 h-4 w-4" /> Creating...
+                      </>
+                    ) : (
+                      'Create Workspace'
+                    )}
+                  </Button>
+                )}
+              />
+            </div>
           </div>
-        </div>
-      </form>
+        </form>
+      </div>
     </div>
   )
 }

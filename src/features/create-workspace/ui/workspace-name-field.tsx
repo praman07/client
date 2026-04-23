@@ -30,7 +30,7 @@ export function WorkspaceNameField({ form }: Props) {
             onBlur={field.handleBlur}
             onChange={(e) => field.handleChange(e.target.value)}
             placeholder="e.g., Acme Corporation"
-            className="h-12 text-14 px-4"
+            className="h-10 text-14 px-4"
           />
           {field.state.meta.errors.length > 0 && (
             <p className="text-13 text-danger-primary font-medium">

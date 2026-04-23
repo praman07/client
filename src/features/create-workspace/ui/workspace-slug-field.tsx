@@ -53,7 +53,7 @@ export function WorkspaceSlugField({ form }: Props) {
           </Label>
           <div className="flex rounded-md shadow-sm">
             <div className="flex items-center rounded-l-md border border-r-0 border-subtle-1 bg-layer-2 px-3 text-12 text-secondary">
-              collabifyy.com/workspace/
+              {typeof window !== 'undefined' ? `${window.location.origin}/workspace/` : '/workspace/'}
             </div>
             <div className="relative flex-1">
               <Input
@@ -71,7 +71,7 @@ export function WorkspaceSlugField({ form }: Props) {
                   )
                 }
                 placeholder="acme-corp"
-                className="h-12 rounded-l-none text-14 px-4 pr-10"
+                className="h-10 rounded-l-none text-14 px-4 pr-10"
               />
               {field.state.meta.isValidating && (
                 <div className="absolute right-3 top-1/2 -translate-y-1/2">
