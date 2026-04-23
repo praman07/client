@@ -111,6 +111,7 @@ export function UpdateProjectRoleForm({
               onBlur={field.handleBlur}
               onChange={(e) => field.handleChange(e.target.value)}
               rows={2}
+              maxHeight="xl"
             />
             <FieldError field={field} />
           </div>

@@ -87,7 +87,7 @@ export function UpdateProjectForm({
               placeholder="What is this project about?"
               rows={3}
               maxLength={500}
-              className="resize-none max-h-32"
+              maxHeight="lg"
             />
             <div className="flex items-center justify-between">
               <FieldError field={field} />

@@ -136,6 +136,7 @@ export function CreateWorkspaceRoleForm({
               placeholder="Briefly describe the purpose of this role"
               disabled={isPending}
               rows={3}
+              maxHeight="xl"
             />
             {field.state.meta.errors.length > 0 && (
               <p className="text-14 text-danger-primary font-medium">

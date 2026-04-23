@@ -268,7 +268,7 @@ export function ProjectGeneralForm({
                   onBlur={field.handleBlur}
                   readOnly={!canUpdate}
                   placeholder="What is this project about?"
-                  className="min-h-[88px] max-h-[200px] resize-y text-sm"
+                  maxHeight="xl"
                   maxLength={500}
                 />
                 {field.state.meta.errors[0] && (

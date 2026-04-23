@@ -124,6 +124,7 @@ return (
           <Textarea
             {...sharedProps}
             rows={2}
+            maxHeight="lg"
             onKeyDown={(e) => {
               if (e.key === 'Escape') cancel()
             }}

@@ -184,6 +184,7 @@ export function UpdateProfileForm() {
               placeholder="Tell your team a bit about yourself…"
               rows={3}
               maxLength={300}
+              maxHeight="xl"
               disabled={isPending}
             />
             <p className="text-11 text-secondary text-right">

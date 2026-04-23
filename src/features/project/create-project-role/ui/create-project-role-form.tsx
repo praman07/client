@@ -80,7 +80,7 @@ export function StepRoleDetails({
           onChange={(e) => onChange('description', e.target.value)}
           placeholder="Briefly describe what this role can do..."
           rows={3}
-          className="resize-none"
+          maxHeight="xl"
         />
         {errors.description && (
           <p className="text-13 text-danger-primary">{errors.description}</p>

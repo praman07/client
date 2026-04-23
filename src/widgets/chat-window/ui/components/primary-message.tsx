@@ -219,7 +219,7 @@ export function PrimaryMessage({ message, className }: PrimaryMessageProps) {
             <div className="flex flex-col gap-1.5 mt-1.5">
               <textarea
                 autoFocus
-                className="w-full rounded-md border-subtle-1 bg-layer-2 px-3 py-2 text-14 resize-none focus:outline-none min-h-[60px]"
+                className="w-full rounded-md border-subtle-1 bg-layer-2 px-3 py-2 text-14 resize-none focus:outline-none min-h-[60px] max-h-[240px] overflow-y-auto"
                 value={editValue}
                 rows={Math.max(2, editValue.split('\n').length)}
                 onChange={(e) => setEditValue(e.target.value)}

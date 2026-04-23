@@ -169,7 +169,7 @@ className={`group flex items-center gap-2 rounded-lg px-3 py-2 transition-colors
               placeholder="What is this board about?"
               rows={3}
               maxLength={512}
-              className="resize-none w-full"
+              maxHeight="xl"
               disabled={updateDescription.isPending}
             />
             <div className="flex justify-end gap-2">

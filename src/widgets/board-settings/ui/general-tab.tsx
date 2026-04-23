@@ -87,6 +87,7 @@ export function GeneralTab({ boardId }: GeneralTabProps) {
           placeholder="Add a description for this board..."
           rows={4}
           disabled={isPending}
+          maxHeight="xl"
         />
         <p className="text-12 text-secondary">
           Optional description to help others understand the board's purpose

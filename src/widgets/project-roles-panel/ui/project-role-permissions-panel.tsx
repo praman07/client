@@ -101,7 +101,7 @@ function EditableText({ value, onCommit, disabled, placeholder, multiline, class
     return (
       <div className="flex items-start gap-1.5 flex-1 min-w-0">
         {multiline ? (
-          <Textarea {...sharedProps} rows={2} onKeyDown={(e) => { if (e.key === 'Escape') cancel() }} />
+          <Textarea {...sharedProps} rows={2} maxHeight="lg" onKeyDown={(e) => { if (e.key === 'Escape') cancel() }} />
         ) : (
           <Input {...sharedProps} onKeyDown={(e) => { if (e.key === 'Enter') commit(); if (e.key === 'Escape') cancel() }} />
         )}

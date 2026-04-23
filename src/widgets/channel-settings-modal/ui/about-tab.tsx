@@ -43,7 +43,7 @@ function InlineTextArea({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className="resize-none text-14 min-h-[72px] bg-layer-2 border-subtle-1 w-full"
+        maxHeight="lg"
         maxLength={maxLength}
         autoFocus
       />

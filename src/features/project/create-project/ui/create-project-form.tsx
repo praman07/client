@@ -121,6 +121,7 @@ export function CreateProjectForm({
               onBlur={field.handleBlur}
               onChange={(e) => field.handleChange(e.target.value)}
               placeholder="Project details..."
+              maxHeight="xl"
             />
             <FieldInfo field={field} />
           </div>
