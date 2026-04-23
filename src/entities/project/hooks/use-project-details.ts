@@ -1,8 +1,8 @@
 import { useQuery } from '@tanstack/react-query'
 import { projectKeys } from '../api/query-keys'
-import { GET_PROJECT } from '../api/fragments'
+import { GET_PROJECT, PROJECT_FRAGMENT } from '../api/fragments'
 import { useAuth } from '@/shared/hooks'
-import { GqlClient } from '@/shared/api'
+import { GqlClient, getFragmentData } from '@/shared/api'
 
 export function useProjectDetails(projectId: string, workspaceId?: string) {
   const { getToken } = useAuth()
@@ -13,7 +13,7 @@ export function useProjectDetails(projectId: string, workspaceId?: string) {
       const token = await getToken()
       const client = GqlClient(token)
       const result = await client.request(GET_PROJECT, { id: projectId })
-      return result.project
+      return getFragmentData(PROJECT_FRAGMENT, result.project)
     },
     enabled: !!projectId,
     staleTime: 5 * 60 * 1000,

@@ -31,7 +31,6 @@ export function ProjectGeneralSettings({
   const dispatch = useAppDispatch()
   const project = useAppSelector(selectCurrentProject)
   const isArchived = useAppSelector(selectCurrentProjectIsArchived)
-  const { getToken } = useAuth()
   const queryClient = useQueryClient()
 
   const { data: projectData, isLoading } = useProjectDetails(project?.id ?? '', workspaceId)
