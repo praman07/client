@@ -16,7 +16,7 @@ export function HomePage() {
   return (
     <>
       <HomeHeader firstName={firstName} isLoading={!isUserLoading} />
-      <div className="w-full max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8 flex-1 py-6 md:py-8 space-y-8 md:space-y-10">
+      <div className="w-full max-w-screen-2xl mx-auto px-[var(--padding-page)] flex-1 py-6 md:py-8 space-y-8 md:space-y-10">
         <RecentWorkspaces workspaces={workspaces} isLoading={isWorkspacesLoading} />
         {/* <ActivityFeedStubs /> */}
       </div>

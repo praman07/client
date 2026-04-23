@@ -28,7 +28,7 @@ export function RecentWorkspaces({ workspaces, isLoading }: RecentWorkspacesProp
       {isLoading ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4">
           {Array.from({ length: 5 }).map((_, i) => (
-            <Skeleton key={i} className="h-28 rounded-xl" />
+            <Skeleton key={i} className="h-28 rounded-xl animate-pulse-subtle" />
           ))}
         </div>
       ) : workspaces.length === 0 ? (

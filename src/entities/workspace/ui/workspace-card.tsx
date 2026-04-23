@@ -15,17 +15,17 @@ export function WorkspaceCard({ workspace }: WorkspaceCardProps) {
       params={{ workspaceSlug: workspace.slug }}
       className="block outline-none cursor-pointer group h-full"
     >
-      <Card size="sm" className="h-full hover:border-accent-strong transition-all duration-300 shadow-sm">
+      <Card size="sm" className="h-full hover:border-accent-strong transition-colors duration-300 shadow-raised-100 active:scale-[0.98] hardware-accelerated">
         <CardContent>
           <div className="flex items-start justify-between gap-3">
             <Avatar className="w-12 h-12 rounded-lg bg-layer-2 border border-subtle shrink-0">
               <AvatarImage src={workspace.logoUrl ?? undefined} alt={workspace.name} />
-              <AvatarFallback className="rounded-lg text-lg font-bold text-primary">
+              <AvatarFallback className="rounded-lg text-lg font-semibold text-primary">
                 {workspace.name.slice(0, 2).toUpperCase()}
               </AvatarFallback>
             </Avatar>
             {workspace.memberRole && (
-              <Badge variant="secondary" className="px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wide">
+              <Badge variant="default" className="px-1.5 py-0.5 text-10 font-semibold uppercase tracking-wide">
                 {workspace.memberRole}
               </Badge>
             )}

@@ -20,12 +20,12 @@ export function HomeHeader({ firstName, isLoading }: HomeHeaderProps) {
   else if (hour < 18) greeting = 'Good afternoon'
 
   return (
-    <section className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-2 px-4 sm:px-6 lg:px-8 pt-8">
+    <section className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-2 px-[var(--padding-page)] pt-8">
       <div className="flex items-start gap-3">
         <SidebarTrigger className="-ml-3 mt-1 hidden md:flex" />
         <div className="flex flex-col">
-          <h1 className="text-24 font-bold tracking-tight text-primary">
-            {isLoading ? <Skeleton className="h-9 w-48 inline-block" /> : `${greeting}, ${firstName}`}
+          <h1 className="text-24 font-semibold tracking-tight text-primary">
+            {isLoading ? <Skeleton className="h-9 w-48 inline-block animate-pulse-subtle" /> : `${greeting}, ${firstName}`}
           </h1>
           <p className="text-secondary mt-1.5 text-13 sm:text-14 max-w-lg">
             Here's what's happening across your workspaces today.
@@ -33,7 +33,7 @@ export function HomeHeader({ firstName, isLoading }: HomeHeaderProps) {
         </div>
       </div>
       <div className="flex items-center shrink-0">
-        <Button onClick={() => void navigate({ to: '/workspace/new' })} className="gap-2 shadow-sm">
+        <Button onClick={() => void navigate({ to: '/workspace/new' })} className="gap-2 shadow-raised-100">
           <HugeiconsIcon icon={Add01Icon} className="size-4" />
           Create Workspace
         </Button>

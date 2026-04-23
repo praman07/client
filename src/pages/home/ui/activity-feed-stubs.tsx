@@ -14,7 +14,7 @@ export function ActivityFeedStubs() {
               <div className="flex justify-between items-start">
                 <div>
                   <h4 className="font-semibold text-primary">Website Redesign</h4>
-                  <span className="text-10 text-tertiary uppercase font-bold tracking-widest">Nova Design Studio</span>
+                  <span className="text-10 text-tertiary uppercase font-semibold tracking-wide">Nova Design Studio</span>
                 </div>
                 <div className="size-2 rounded-full bg-success-primary shadow-[0_0_8px_var(--ext-green-500)]"></div>
               </div>
@@ -27,7 +27,7 @@ export function ActivityFeedStubs() {
               <div className="flex justify-between items-start">
                 <div>
                   <h4 className="font-semibold text-primary">Mobile App v2.0</h4>
-                  <span className="text-10 text-tertiary uppercase font-bold tracking-widest">Skyline Arch</span>
+                  <span className="text-10 text-tertiary uppercase font-semibold tracking-wide">Skyline Arch</span>
                 </div>
                 <div className="size-2 rounded-full bg-warning-primary shadow-[0_0_8px_var(--ext-yellow-500)]"></div>
               </div>
@@ -49,7 +49,7 @@ export function ActivityFeedStubs() {
               <div className="w-8 h-8 rounded-lg bg-layer-2 shrink-0" />
               <div className="flex-1">
                 <p className="text-13 leading-tight text-primary">
-                  <span className="font-bold">Jimmy</span> created a new issue in <span className="text-primary font-medium">Project X</span>
+                  <span className="font-semibold">Jimmy</span> created a new issue in <span className="text-primary font-medium">Project X</span>
                 </p>
                 <span className="text-10 text-tertiary mt-1 inline-block">2 minutes ago</span>
               </div>
@@ -58,7 +58,7 @@ export function ActivityFeedStubs() {
               <div className="w-8 h-8 rounded-lg bg-layer-2 shrink-0" />
               <div className="flex-1">
                 <p className="text-13 leading-tight text-primary">
-                  <span className="font-bold">Maria</span> commented on <span className="text-primary font-medium">Dashboard Layout</span>
+                  <span className="font-semibold">Maria</span> commented on <span className="text-primary font-medium">Dashboard Layout</span>
                 </p>
                 <span className="text-10 text-tertiary mt-1 inline-block">15 minutes ago</span>
               </div>
@@ -67,7 +67,7 @@ export function ActivityFeedStubs() {
               <div className="w-8 h-8 rounded-lg bg-layer-2 shrink-0" />
               <div className="flex-1">
                 <p className="text-13 leading-tight text-primary">
-                  <span className="font-bold">Alex</span> uploaded a new file to <span className="text-primary font-medium">Marketing Assets</span>
+                  <span className="font-semibold">Alex</span> uploaded a new file to <span className="text-primary font-medium">Marketing Assets</span>
                 </p>
                 <span className="text-10 text-tertiary mt-1 inline-block">2 hours ago</span>
               </div>
@@ -76,7 +76,7 @@ export function ActivityFeedStubs() {
               <div className="w-8 h-8 rounded-lg bg-layer-2 shrink-0" />
               <div className="flex-1">
                 <p className="text-13 leading-tight text-primary">
-                  <span className="font-bold">Sarah</span> updated the status of <span className="text-primary font-medium">Q3 Roadmap</span> to <span className="font-semibold text-success-primary">Completed</span>
+                  <span className="font-semibold">Sarah</span> updated the status of <span className="text-primary font-medium">Q3 Roadmap</span> to <span className="font-semibold text-success-primary">Completed</span>
                 </p>
                 <span className="text-10 text-tertiary mt-1 inline-block">4 hours ago</span>
               </div>
@@ -85,7 +85,7 @@ export function ActivityFeedStubs() {
               <div className="w-8 h-8 rounded-lg bg-layer-2 shrink-0" />
               <div className="flex-1">
                 <p className="text-13 leading-tight text-primary">
-                  <span className="font-bold">Jimmy</span> invited <span className="font-bold">David</span> to join <span className="text-primary font-medium">Project X</span>
+                  <span className="font-semibold">Jimmy</span> invited <span className="font-semibold">David</span> to join <span className="text-primary font-medium">Project X</span>
                 </p>
                 <span className="text-10 text-tertiary mt-1 inline-block">1 day ago</span>
               </div>
