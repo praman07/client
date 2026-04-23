@@ -137,14 +137,14 @@ export const RENAME_WORKSPACE_SLUG_MUTATION = gql(`
 
 /**
  * Step 1 of workspace logo upload flow.
- * Returns a presigned PUT URL + final logoUrl to store after S3 upload succeeds.
- * After upload: call updateWorkspace({ logoUrl }) with the returned logoUrl.
+ * Returns a presigned PUT URL + final logoS3Key to store after S3 upload succeeds.
+ * After upload: call updateWorkspace({ logoS3Key }) with the returned logoS3Key.
  */
 export const REQUEST_WORKSPACE_LOGO_UPLOAD_MUTATION = gql(`
   mutation RequestWorkspaceLogoUpload($workspaceId: ID!, $mimeType: String!, $sizeBytes: Int!) {
     requestWorkspaceLogoUpload(workspaceId: $workspaceId, mimeType: $mimeType, sizeBytes: $sizeBytes) {
       presignedUrl
-      logoUrl
+      logoS3Key
       expiresAt
     }
   }

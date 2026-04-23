@@ -41,35 +41,40 @@ export function useUploadProjectLogo(projectId: string, workspaceId: string) {
         sizeBytes: file.size,
       })
 
-      const { presignedUrl, logoUrl } = requestResult.requestProjectLogoUpload
+      const { presignedUrl, logoS3Key } = requestResult.requestProjectLogoUpload
 
       // Step 2: Upload to S3
       await uploadToS3(presignedUrl, file, onProgress || (() => {}))
 
-      // Step 3: Persist logoUrl on the project record
+      // Step 3: Persist logoS3Key on the project record
       await client.request(UPDATE_PROJECT, {
         projectId,
-        input: { logoUrl },
+        input: { logoS3Key },
       })
 
       // Step 4: Optimistic Redux update — immediately reflect the new logo
       if (currentProject) {
-        dispatch(setCurrentProject({ ...currentProject, logoUrl }))
+        dispatch(setCurrentProject({ ...currentProject, logoS3Key }))
       }
 
       // Step 5: Invalidate TanStack Query cache for list + detail
       queryClient.invalidateQueries({ queryKey: projectKeys.list(workspaceId) })
       if (currentProject) {
-        queryClient.invalidateQueries({
+        await queryClient.invalidateQueries({
           queryKey: projectKeys.detail(workspaceId, currentProject.id),
         })
-        queryClient.invalidateQueries({
+        await queryClient.invalidateQueries({
           queryKey: projectKeys.bySlug(workspaceId, currentProject.key),
+        })
+        // Force refetch to get fresh logoUrl immediately
+        await queryClient.fetchQuery({
+          queryKey: projectKeys.detail(workspaceId, currentProject.id),
+          staleTime: 0,
         })
       }
 
       toast.success('Logo updated successfully')
-      return logoUrl
+      return logoS3Key
     } catch (err: any) {
       toast.error(err.message || 'Failed to upload logo')
       throw err

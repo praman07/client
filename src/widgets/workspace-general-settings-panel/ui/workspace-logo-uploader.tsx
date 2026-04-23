@@ -18,8 +18,6 @@ export function WorkspaceLogoUploader({
 }: WorkspaceLogoUploaderProps) {
   const [isUploading, setIsUploading] = useState(false)
   const [progress, setProgress] = useState(0)
-  // Local optimistic state — updates immediately after upload without waiting for Redux/Query refetch
-  const [localLogoUrl, setLocalLogoUrl] = useState<string | null | undefined>(logoUrl)
   const uploadLogo = useUploadWorkspaceLogo(workspaceId)
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -28,9 +26,7 @@ export function WorkspaceLogoUploader({
     try {
       setIsUploading(true)
       setProgress(0)
-      const uploadedUrl = await uploadLogo(file, setProgress)
-      // Immediately update local display — don't wait for Redux cycle
-      if (uploadedUrl) setLocalLogoUrl(uploadedUrl)
+      await uploadLogo(file, setProgress)
     } catch {
       // Toast shown by hook
     } finally {
@@ -40,7 +36,6 @@ export function WorkspaceLogoUploader({
     }
   }
 
-  const displayUrl = localLogoUrl ?? logoUrl
   const initials = name.substring(0, 2).toUpperCase()
 
   return (
@@ -49,7 +44,7 @@ export function WorkspaceLogoUploader({
       <div className="relative shrink-0">
         <Avatar className="h-[72px] w-[72px] rounded-xl border border-subtle">
           <AvatarImage
-            src={displayUrl ?? undefined}
+            src={logoUrl ?? undefined}
             alt={name}
             className="object-cover rounded-xl"
           />

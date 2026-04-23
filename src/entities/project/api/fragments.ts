@@ -197,7 +197,7 @@ export const REQUEST_PROJECT_LOGO_UPLOAD_MUTATION = gql(`
   mutation RequestProjectLogoUpload($projectId: ID!, $mimeType: String!, $sizeBytes: Int!) {
     requestProjectLogoUpload(projectId: $projectId, mimeType: $mimeType, sizeBytes: $sizeBytes) {
       presignedUrl
-      logoUrl
+      logoS3Key
       expiresAt
     }
   }

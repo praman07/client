@@ -469,6 +469,7 @@ type Workspace {
   id: ID!
   slug: String!
   name: String!
+  logoS3Key: String
   logoUrl: String
   domainWhitelist: String
   memberRole: String
@@ -537,7 +538,7 @@ type InviteResponse {
 
 input UpdateWorkspaceInput {
   name: String
-  logoUrl: String
+  logoS3Key: String
   domainWhitelist: String
 }
 
@@ -556,8 +557,8 @@ input UpdateWorkspaceRoleInput {
 type WorkspaceLogoUploadPayload {
   presignedUrl: String!
 
-  """The final S3 URL to store in Workspace.logoUrl after PUT succeeds."""
-  logoUrl: String!
+  """The S3 key to store in Workspace.logoS3Key after PUT succeeds."""
+  logoS3Key: String!
   expiresAt: String!
 }
 
@@ -745,6 +746,7 @@ type Project {
   description: String
   isPrivate: Boolean
   isArchived: Boolean
+  logoS3Key: String
   logoUrl: String
   createdAt: String!
   updatedAt: String!
@@ -775,7 +777,7 @@ input UpdateProjectInput {
   name: String
   description: String
   isPrivate: Boolean
-  logoUrl: String
+  logoS3Key: String
   key: String
 }
 
@@ -795,8 +797,8 @@ type ProjectLogoUploadPayload {
   """The presigned S3 PUT URL the client uses to upload directly."""
   presignedUrl: String!
 
-  """The final S3 URL to store in Project.logoUrl after PUT succeeds."""
-  logoUrl: String!
+  """The S3 key to store in Project.logoS3Key after PUT succeeds."""
+  logoS3Key: String!
 
   """ISO timestamp after which the presigned PUT URL expires."""
   expiresAt: String!

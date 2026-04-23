@@ -20,8 +20,6 @@ export function ProjectLogoUploader({
 }: ProjectLogoUploaderProps) {
   const [isUploading, setIsUploading] = useState(false)
   const [progress, setProgress] = useState(0)
-  // Local optimistic state — updates immediately after upload without waiting for cache refetch
-  const [localLogoUrl, setLocalLogoUrl] = useState<string | null | undefined>(logoUrl)
   const uploadLogo = useUploadProjectLogo(projectId, workspaceId)
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -30,8 +28,7 @@ export function ProjectLogoUploader({
     try {
       setIsUploading(true)
       setProgress(0)
-      const uploadedUrl = await uploadLogo(file, setProgress)
-      if (uploadedUrl) setLocalLogoUrl(uploadedUrl)
+      await uploadLogo(file, setProgress)
     } catch {
       // Toast shown by hook
     } finally {
@@ -41,7 +38,6 @@ export function ProjectLogoUploader({
     }
   }
 
-  const displayUrl = localLogoUrl ?? logoUrl
   const initials = name.substring(0, 2).toUpperCase()
 
   return (
@@ -50,7 +46,7 @@ export function ProjectLogoUploader({
       <div className="relative shrink-0">
         <Avatar className="h-[72px] w-[72px] rounded-xl border border-subtle">
           <AvatarImage
-            src={displayUrl ?? undefined}
+            src={logoUrl ?? undefined}
             alt={name}
             className="object-cover rounded-xl"
           />

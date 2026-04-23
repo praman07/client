@@ -68,7 +68,9 @@ type Documents = {
     "\n  mutation UnarchiveProject($projectId: ID!) {\n    unarchiveProject(projectId: $projectId) {\n      id\n      isArchived\n    }\n  }\n": typeof types.UnarchiveProjectDocument,
     "\n  mutation DeleteProject($projectId: ID!) {\n    deleteProject(projectId: $projectId)\n  }\n": typeof types.DeleteProjectDocument,
     "\n  mutation ToggleProjectPlugin($projectId: ID!, $workspaceId: ID!, $type: String!, $enable: Boolean!) {\n    toggleProjectPlugin(projectId: $projectId, workspaceId: $workspaceId, type: $type, enable: $enable)\n  }\n": typeof types.ToggleProjectPluginDocument,
-    "\n  mutation RequestProjectLogoUpload($projectId: ID!, $mimeType: String!, $sizeBytes: Int!) {\n    requestProjectLogoUpload(projectId: $projectId, mimeType: $mimeType, sizeBytes: $sizeBytes) {\n      presignedUrl\n      logoUrl\n      expiresAt\n    }\n  }\n": typeof types.RequestProjectLogoUploadDocument,
+    "\n  mutation RequestProjectLogoUpload($projectId: ID!, $mimeType: String!, $sizeBytes: Int!) {\n    requestProjectLogoUpload(projectId: $projectId, mimeType: $mimeType, sizeBytes: $sizeBytes) {\n      presignedUrl\n      logoS3Key\n      expiresAt\n    }\n  }\n": typeof types.RequestProjectLogoUploadDocument,
+    "\n  fragment ProjectDetailsFields on Project {\n    id\n    name\n    key\n    logoUrl\n  }\n": typeof types.ProjectDetailsFieldsFragmentDoc,
+    "\n  query GetProjectDetails($projectId: ID!) {\n    project(id: $projectId) {\n      ...ProjectDetailsFields\n    }\n  }\n": typeof types.GetProjectDetailsDocument,
     "\n  mutation SessionSyncUser(\n    $clerkId: String!\n    $email: String!\n    $fullName: String\n    $avatarUrl: String\n  ) {\n    syncUser(\n      clerkId: $clerkId\n      email: $email\n      fullName: $fullName\n      avatarUrl: $avatarUrl\n    ) {\n      id\n      email\n      fullName\n      avatarUrl\n    }\n  }": typeof types.SessionSyncUserDocument,
     "\n  query GetMe {\n    me {\n      ...User\n    }\n  }\n": typeof types.GetMeDocument,
     "\n  fragment User on User {\n    id\n    email\n    fullName\n    avatarUrl\n    bio\n    timezone\n    language\n  }\n": typeof types.UserFragmentDoc,
@@ -86,9 +88,11 @@ type Documents = {
     "\n  query GetWorkspaceRoles($workspaceId: ID!) {\n    workspaceRoles(workspaceId: $workspaceId) {\n      id\n      name\n      description\n      isSystem\n      rank\n    }\n  }\n": typeof types.GetWorkspaceRolesDocument,
     "\n  mutation UpdateWorkspace($workspaceId: ID!, $input: UpdateWorkspaceInput!) {\n    updateWorkspace(workspaceId: $workspaceId, input: $input) {\n      ...WorkspaceSettingsFragment\n    }\n  }\n": typeof types.UpdateWorkspaceDocument,
     "\n  mutation RenameWorkspaceSlug($workspaceId: ID!, $slug: String!) {\n    renameWorkspaceSlug(workspaceId: $workspaceId, slug: $slug) {\n      ...WorkspaceSettingsFragment\n    }\n  }\n": typeof types.RenameWorkspaceSlugDocument,
-    "\n  mutation RequestWorkspaceLogoUpload($workspaceId: ID!, $mimeType: String!, $sizeBytes: Int!) {\n    requestWorkspaceLogoUpload(workspaceId: $workspaceId, mimeType: $mimeType, sizeBytes: $sizeBytes) {\n      presignedUrl\n      logoUrl\n      expiresAt\n    }\n  }\n": typeof types.RequestWorkspaceLogoUploadDocument,
+    "\n  mutation RequestWorkspaceLogoUpload($workspaceId: ID!, $mimeType: String!, $sizeBytes: Int!) {\n    requestWorkspaceLogoUpload(workspaceId: $workspaceId, mimeType: $mimeType, sizeBytes: $sizeBytes) {\n      presignedUrl\n      logoS3Key\n      expiresAt\n    }\n  }\n": typeof types.RequestWorkspaceLogoUploadDocument,
     "\n  mutation CheckSlugAvailability($slug: String!) {\n    checkSlugAvailability(slug: $slug) {\n      available\n      message\n      reservationId\n    }\n  }\n": typeof types.CheckSlugAvailabilityDocument,
     "\n  query GetWorkspaceMembers($workspaceId: ID!) {\n    workspaceMembers(workspaceId: $workspaceId) {\n      id\n      role\n      roleId\n      roleRank\n      joinedAt\n      user {\n        id\n        fullName\n        email\n        avatarUrl\n      }\n    }\n  }\n": typeof types.GetWorkspaceMembersDocument,
+    "\n  fragment WorkspaceDetailsFields on Workspace {\n    id\n    name\n    slug\n    logoUrl\n  }\n": typeof types.WorkspaceDetailsFieldsFragmentDoc,
+    "\n  query GetWorkspaceDetails($workspaceId: ID!) {\n    workspaceById(workspaceId: $workspaceId) {\n      ...WorkspaceDetailsFields\n    }\n  }\n": typeof types.GetWorkspaceDetailsDocument,
     "\n  mutation ArchiveChannel($input: ArchiveChannelInput!) {\n    archiveChannel(input: $input) {\n      id\n      name\n      type\n      isArchived\n      deletedAt\n      workspaceId\n      projectId\n      updatedAt\n    }\n  }\n": typeof types.ArchiveChannelDocument,
     "\n  mutation AddChannelMembers($workspaceId: ID!, $channelId: ID!, $userIds: [ID!]!) {\n    addChannelMembers(workspaceId: $workspaceId, channelId: $channelId, userIds: $userIds) {\n      success\n      addedCount\n      skippedCount\n      members {\n        userId\n        user {\n          id\n          fullName\n          email\n          avatarUrl\n        }\n      }\n    }\n  }\n": typeof types.AddChannelMembersDocument,
     "\n  mutation RemoveChannelMember($workspaceId: ID!, $channelId: ID!, $userId: ID!) {\n    removeChannelMember(workspaceId: $workspaceId, channelId: $channelId, userId: $userId) {\n      success\n      channelId\n      userId\n    }\n  }\n": typeof types.RemoveChannelMemberDocument,
@@ -267,7 +271,9 @@ const documents: Documents = {
     "\n  mutation UnarchiveProject($projectId: ID!) {\n    unarchiveProject(projectId: $projectId) {\n      id\n      isArchived\n    }\n  }\n": types.UnarchiveProjectDocument,
     "\n  mutation DeleteProject($projectId: ID!) {\n    deleteProject(projectId: $projectId)\n  }\n": types.DeleteProjectDocument,
     "\n  mutation ToggleProjectPlugin($projectId: ID!, $workspaceId: ID!, $type: String!, $enable: Boolean!) {\n    toggleProjectPlugin(projectId: $projectId, workspaceId: $workspaceId, type: $type, enable: $enable)\n  }\n": types.ToggleProjectPluginDocument,
-    "\n  mutation RequestProjectLogoUpload($projectId: ID!, $mimeType: String!, $sizeBytes: Int!) {\n    requestProjectLogoUpload(projectId: $projectId, mimeType: $mimeType, sizeBytes: $sizeBytes) {\n      presignedUrl\n      logoUrl\n      expiresAt\n    }\n  }\n": types.RequestProjectLogoUploadDocument,
+    "\n  mutation RequestProjectLogoUpload($projectId: ID!, $mimeType: String!, $sizeBytes: Int!) {\n    requestProjectLogoUpload(projectId: $projectId, mimeType: $mimeType, sizeBytes: $sizeBytes) {\n      presignedUrl\n      logoS3Key\n      expiresAt\n    }\n  }\n": types.RequestProjectLogoUploadDocument,
+    "\n  fragment ProjectDetailsFields on Project {\n    id\n    name\n    key\n    logoUrl\n  }\n": types.ProjectDetailsFieldsFragmentDoc,
+    "\n  query GetProjectDetails($projectId: ID!) {\n    project(id: $projectId) {\n      ...ProjectDetailsFields\n    }\n  }\n": types.GetProjectDetailsDocument,
     "\n  mutation SessionSyncUser(\n    $clerkId: String!\n    $email: String!\n    $fullName: String\n    $avatarUrl: String\n  ) {\n    syncUser(\n      clerkId: $clerkId\n      email: $email\n      fullName: $fullName\n      avatarUrl: $avatarUrl\n    ) {\n      id\n      email\n      fullName\n      avatarUrl\n    }\n  }": types.SessionSyncUserDocument,
     "\n  query GetMe {\n    me {\n      ...User\n    }\n  }\n": types.GetMeDocument,
     "\n  fragment User on User {\n    id\n    email\n    fullName\n    avatarUrl\n    bio\n    timezone\n    language\n  }\n": types.UserFragmentDoc,
@@ -285,9 +291,11 @@ const documents: Documents = {
     "\n  query GetWorkspaceRoles($workspaceId: ID!) {\n    workspaceRoles(workspaceId: $workspaceId) {\n      id\n      name\n      description\n      isSystem\n      rank\n    }\n  }\n": types.GetWorkspaceRolesDocument,
     "\n  mutation UpdateWorkspace($workspaceId: ID!, $input: UpdateWorkspaceInput!) {\n    updateWorkspace(workspaceId: $workspaceId, input: $input) {\n      ...WorkspaceSettingsFragment\n    }\n  }\n": types.UpdateWorkspaceDocument,
     "\n  mutation RenameWorkspaceSlug($workspaceId: ID!, $slug: String!) {\n    renameWorkspaceSlug(workspaceId: $workspaceId, slug: $slug) {\n      ...WorkspaceSettingsFragment\n    }\n  }\n": types.RenameWorkspaceSlugDocument,
-    "\n  mutation RequestWorkspaceLogoUpload($workspaceId: ID!, $mimeType: String!, $sizeBytes: Int!) {\n    requestWorkspaceLogoUpload(workspaceId: $workspaceId, mimeType: $mimeType, sizeBytes: $sizeBytes) {\n      presignedUrl\n      logoUrl\n      expiresAt\n    }\n  }\n": types.RequestWorkspaceLogoUploadDocument,
+    "\n  mutation RequestWorkspaceLogoUpload($workspaceId: ID!, $mimeType: String!, $sizeBytes: Int!) {\n    requestWorkspaceLogoUpload(workspaceId: $workspaceId, mimeType: $mimeType, sizeBytes: $sizeBytes) {\n      presignedUrl\n      logoS3Key\n      expiresAt\n    }\n  }\n": types.RequestWorkspaceLogoUploadDocument,
     "\n  mutation CheckSlugAvailability($slug: String!) {\n    checkSlugAvailability(slug: $slug) {\n      available\n      message\n      reservationId\n    }\n  }\n": types.CheckSlugAvailabilityDocument,
     "\n  query GetWorkspaceMembers($workspaceId: ID!) {\n    workspaceMembers(workspaceId: $workspaceId) {\n      id\n      role\n      roleId\n      roleRank\n      joinedAt\n      user {\n        id\n        fullName\n        email\n        avatarUrl\n      }\n    }\n  }\n": types.GetWorkspaceMembersDocument,
+    "\n  fragment WorkspaceDetailsFields on Workspace {\n    id\n    name\n    slug\n    logoUrl\n  }\n": types.WorkspaceDetailsFieldsFragmentDoc,
+    "\n  query GetWorkspaceDetails($workspaceId: ID!) {\n    workspaceById(workspaceId: $workspaceId) {\n      ...WorkspaceDetailsFields\n    }\n  }\n": types.GetWorkspaceDetailsDocument,
     "\n  mutation ArchiveChannel($input: ArchiveChannelInput!) {\n    archiveChannel(input: $input) {\n      id\n      name\n      type\n      isArchived\n      deletedAt\n      workspaceId\n      projectId\n      updatedAt\n    }\n  }\n": types.ArchiveChannelDocument,
     "\n  mutation AddChannelMembers($workspaceId: ID!, $channelId: ID!, $userIds: [ID!]!) {\n    addChannelMembers(workspaceId: $workspaceId, channelId: $channelId, userIds: $userIds) {\n      success\n      addedCount\n      skippedCount\n      members {\n        userId\n        user {\n          id\n          fullName\n          email\n          avatarUrl\n        }\n      }\n    }\n  }\n": types.AddChannelMembersDocument,
     "\n  mutation RemoveChannelMember($workspaceId: ID!, $channelId: ID!, $userId: ID!) {\n    removeChannelMember(workspaceId: $workspaceId, channelId: $channelId, userId: $userId) {\n      success\n      channelId\n      userId\n    }\n  }\n": types.RemoveChannelMemberDocument,
@@ -645,7 +653,15 @@ export function gql(source: "\n  mutation ToggleProjectPlugin($projectId: ID!, $
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "\n  mutation RequestProjectLogoUpload($projectId: ID!, $mimeType: String!, $sizeBytes: Int!) {\n    requestProjectLogoUpload(projectId: $projectId, mimeType: $mimeType, sizeBytes: $sizeBytes) {\n      presignedUrl\n      logoUrl\n      expiresAt\n    }\n  }\n"): (typeof documents)["\n  mutation RequestProjectLogoUpload($projectId: ID!, $mimeType: String!, $sizeBytes: Int!) {\n    requestProjectLogoUpload(projectId: $projectId, mimeType: $mimeType, sizeBytes: $sizeBytes) {\n      presignedUrl\n      logoUrl\n      expiresAt\n    }\n  }\n"];
+export function gql(source: "\n  mutation RequestProjectLogoUpload($projectId: ID!, $mimeType: String!, $sizeBytes: Int!) {\n    requestProjectLogoUpload(projectId: $projectId, mimeType: $mimeType, sizeBytes: $sizeBytes) {\n      presignedUrl\n      logoS3Key\n      expiresAt\n    }\n  }\n"): (typeof documents)["\n  mutation RequestProjectLogoUpload($projectId: ID!, $mimeType: String!, $sizeBytes: Int!) {\n    requestProjectLogoUpload(projectId: $projectId, mimeType: $mimeType, sizeBytes: $sizeBytes) {\n      presignedUrl\n      logoS3Key\n      expiresAt\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  fragment ProjectDetailsFields on Project {\n    id\n    name\n    key\n    logoUrl\n  }\n"): (typeof documents)["\n  fragment ProjectDetailsFields on Project {\n    id\n    name\n    key\n    logoUrl\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  query GetProjectDetails($projectId: ID!) {\n    project(id: $projectId) {\n      ...ProjectDetailsFields\n    }\n  }\n"): (typeof documents)["\n  query GetProjectDetails($projectId: ID!) {\n    project(id: $projectId) {\n      ...ProjectDetailsFields\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -717,7 +733,7 @@ export function gql(source: "\n  mutation RenameWorkspaceSlug($workspaceId: ID!,
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "\n  mutation RequestWorkspaceLogoUpload($workspaceId: ID!, $mimeType: String!, $sizeBytes: Int!) {\n    requestWorkspaceLogoUpload(workspaceId: $workspaceId, mimeType: $mimeType, sizeBytes: $sizeBytes) {\n      presignedUrl\n      logoUrl\n      expiresAt\n    }\n  }\n"): (typeof documents)["\n  mutation RequestWorkspaceLogoUpload($workspaceId: ID!, $mimeType: String!, $sizeBytes: Int!) {\n    requestWorkspaceLogoUpload(workspaceId: $workspaceId, mimeType: $mimeType, sizeBytes: $sizeBytes) {\n      presignedUrl\n      logoUrl\n      expiresAt\n    }\n  }\n"];
+export function gql(source: "\n  mutation RequestWorkspaceLogoUpload($workspaceId: ID!, $mimeType: String!, $sizeBytes: Int!) {\n    requestWorkspaceLogoUpload(workspaceId: $workspaceId, mimeType: $mimeType, sizeBytes: $sizeBytes) {\n      presignedUrl\n      logoS3Key\n      expiresAt\n    }\n  }\n"): (typeof documents)["\n  mutation RequestWorkspaceLogoUpload($workspaceId: ID!, $mimeType: String!, $sizeBytes: Int!) {\n    requestWorkspaceLogoUpload(workspaceId: $workspaceId, mimeType: $mimeType, sizeBytes: $sizeBytes) {\n      presignedUrl\n      logoS3Key\n      expiresAt\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -726,6 +742,14 @@ export function gql(source: "\n  mutation CheckSlugAvailability($slug: String!) 
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "\n  query GetWorkspaceMembers($workspaceId: ID!) {\n    workspaceMembers(workspaceId: $workspaceId) {\n      id\n      role\n      roleId\n      roleRank\n      joinedAt\n      user {\n        id\n        fullName\n        email\n        avatarUrl\n      }\n    }\n  }\n"): (typeof documents)["\n  query GetWorkspaceMembers($workspaceId: ID!) {\n    workspaceMembers(workspaceId: $workspaceId) {\n      id\n      role\n      roleId\n      roleRank\n      joinedAt\n      user {\n        id\n        fullName\n        email\n        avatarUrl\n      }\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  fragment WorkspaceDetailsFields on Workspace {\n    id\n    name\n    slug\n    logoUrl\n  }\n"): (typeof documents)["\n  fragment WorkspaceDetailsFields on Workspace {\n    id\n    name\n    slug\n    logoUrl\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  query GetWorkspaceDetails($workspaceId: ID!) {\n    workspaceById(workspaceId: $workspaceId) {\n      ...WorkspaceDetailsFields\n    }\n  }\n"): (typeof documents)["\n  query GetWorkspaceDetails($workspaceId: ID!) {\n    workspaceById(workspaceId: $workspaceId) {\n      ...WorkspaceDetailsFields\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
