@@ -83,7 +83,7 @@ export function SignInPage() {
 
         <div className="relative">
           <Separator />
-          <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-canvas px-2 text-11 text-secondary">
+          <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-layer-transparent px-2 text-11 text-secondary">
             or continue with email
           </span>
         </div>

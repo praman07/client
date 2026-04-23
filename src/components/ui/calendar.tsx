@@ -513,7 +513,7 @@ export function CalendarDemo() {
   }
 
   return (
-    <div className="h-screen w-screen p-4 bg-canvas">
+    <div className="h-screen w-screen p-4 bg-surface-1">
       <CalendarProvider className="h-full w-full">
         <CalendarDate>
           <CalendarDatePicker>

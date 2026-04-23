@@ -30,7 +30,7 @@ export function BoardDeletedOverlay({
   }
 
   return (
-    <div className="absolute inset-0 z-[var(--z-overlay)] flex items-center justify-center bg-canvas/90 backdrop-blur-sm">
+    <div className="absolute inset-0 z-[var(--z-overlay)] flex items-center justify-center bg-layer-transparent/90 backdrop-blur-sm">
       <div className="flex flex-col items-center gap-4 text-center max-w-sm px-6">
         <div className="flex h-16 w-16 items-center justify-center rounded-full bg-danger-subtle">
           <Trash2 className="h-8 w-8 text-danger-primary" />

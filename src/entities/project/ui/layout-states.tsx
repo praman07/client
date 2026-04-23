@@ -3,7 +3,7 @@ import { Button, Spinner } from '@/shared/ui'
 
 export function ProjectLoadingState() {
   return (
-    <div className="flex bg-canvas h-screen w-full items-center justify-center">
+    <div className="flex bg-layer-transparent h-screen w-full items-center justify-center">
       <Spinner className="size-6 text-tertiary" />
     </div>
   )
@@ -15,7 +15,7 @@ interface ProjectErrorStateProps {
 
 export function ProjectErrorState({ workspaceSlug }: ProjectErrorStateProps) {
   return (
-    <div className="flex bg-canvas h-screen w-full flex-col items-center justify-center gap-4">
+    <div className="flex bg-layer-transparent h-screen w-full flex-col items-center justify-center gap-4">
       <div className="space-y-2 text-center">
         <h1 className="text-20 font-semibold text-primary tracking-tight">
           Project not found

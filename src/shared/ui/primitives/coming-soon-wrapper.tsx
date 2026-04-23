@@ -19,7 +19,7 @@ export function ComingSoonWrapper({
       {...props}
     >
       {/* Overlay */}
-      <div className="absolute inset-0 z-50 flex items-center justify-center bg-canvas/10 backdrop-blur-[1px] cursor-not-allowed transition-all duration-300 rounded-[inherit]">
+      <div className="absolute inset-0 z-50 flex items-center justify-center bg-layer-transparent/10 backdrop-blur-[1px] cursor-not-allowed transition-all duration-300 rounded-[inherit]">
         {/* Gradient vignette */}
         <div className="absolute inset-0 bg-linear-to-b from-transparent via-transparent to-canvas/20 rounded-[inherit]" />
 
