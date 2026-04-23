@@ -32,11 +32,10 @@ export function CreateWorkspaceForm() {
         })
 
         toast.success(`Workspace ${data.createWorkspace.name} created!`)
-        navigate({ to: `/workspace/${data.createWorkspace.slug}` })
+        navigate({ to: '/workspace/$workspaceSlug', params: { workspaceSlug: data.createWorkspace.slug } })
       } catch (error) {
         const message = mapCreateWorkspaceError(error)
         setRootError(message)
-        // Only toast if it's a generic fallback that wouldn't show in the UI alert
         if (message.includes('Failed to create')) {
           toast.error(message)
         }
@@ -50,7 +49,7 @@ export function CreateWorkspaceForm() {
         <h1 className="text-32 font-semibold tracking-tight text-primary">
           Create your workspace
         </h1>
-        <p className="text-secondary text-16">
+        <p className="text-16 text-secondary">
           Set up your team's collaborative environment
         </p>
       </div>
@@ -69,7 +68,7 @@ export function CreateWorkspaceForm() {
         <TeamSizeField form={form} />
 
         {rootError && (
-          <div className="rounded-md bg-danger-subtle p-3 text-sm font-medium text-danger-primary">
+          <div className="rounded-md bg-danger-subtle p-3 text-13 font-medium text-danger-primary">
             {rootError}
           </div>
         )}
@@ -89,7 +88,7 @@ export function CreateWorkspaceForm() {
               children={([canSubmit]) => (
                 <Button
                   type="submit"
-                  className="h-10 px-8 text-base"
+                  className="h-10 px-8 text-14"
                   disabled={!canSubmit || isCreating}
                 >
                   {isCreating ? (

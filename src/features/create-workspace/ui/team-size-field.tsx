@@ -30,7 +30,7 @@ export function TeamSizeField({ form }: Props) {
                   <Label
                     htmlFor={size}
                     className={`
-                      flex h-12 cursor-pointer items-center justify-center rounded-md border text-sm font-medium transition-all
+                      flex h-12 cursor-pointer items-center justify-center rounded-md border text-13 font-medium transition-colors duration-100
                       ${
                         isSelected
                           ? 'border-subtle bg-accent-primary text-on-color'

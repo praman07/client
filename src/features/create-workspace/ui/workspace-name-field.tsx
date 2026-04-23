@@ -33,7 +33,7 @@ export function WorkspaceNameField({ form }: Props) {
             className="h-12 text-14 px-4"
           />
           {field.state.meta.errors.length > 0 && (
-            <p className="text-sm text-danger-primary font-medium">
+            <p className="text-13 text-danger-primary font-medium">
               {field.state.meta.errors.join(', ')}
             </p>
           )}

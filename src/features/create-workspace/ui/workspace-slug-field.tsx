@@ -52,8 +52,8 @@ export function WorkspaceSlugField({ form }: Props) {
             Workspace URL
           </Label>
           <div className="flex rounded-md shadow-sm">
-            <div className="flex items-center rounded-l-md border border-r-0 border-subtle-1 bg-layer-2 px-3 text-secondary sm:text-12 h-12">
-              collabify.com/
+            <div className="flex items-center rounded-l-md border border-r-0 border-subtle-1 bg-layer-2 px-3 text-12 text-secondary">
+              collabifyy.com/workspace/
             </div>
             <div className="relative flex-1">
               <Input
@@ -75,13 +75,13 @@ export function WorkspaceSlugField({ form }: Props) {
               />
               {field.state.meta.isValidating && (
                 <div className="absolute right-3 top-1/2 -translate-y-1/2">
-                  <Spinner className="h-4 w-4 text-muted-foreground" />
+                  <Spinner className="h-4 w-4 text-tertiary" />
                 </div>
               )}
             </div>
           </div>
           {field.state.meta.errors.length > 0 && (
-            <p className="text-sm text-danger-primary font-medium">
+            <p className="text-13 text-danger-primary font-medium">
               {field.state.meta.errors.join(', ')}
             </p>
           )}
