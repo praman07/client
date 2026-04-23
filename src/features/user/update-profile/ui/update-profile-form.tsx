@@ -36,6 +36,10 @@ const LANGUAGES = [
   { value: 'ar', label: 'Arabic' },
 ]
 
+const LANGUAGE_LABELS = Object.fromEntries(
+  LANGUAGES.map(({ value, label }) => [value, label])
+)
+
 /**
  * UpdateProfileForm — TanStack Form for editing user profile data.
  *
@@ -55,13 +59,14 @@ export function UpdateProfileForm() {
   const { updateClerkName } = useClerkProfile()
   const [rootError, setRootError] = useState<string | null>(null)
   const [saved, setSaved] = useState(false)
+  const [isLoaded, setIsLoaded] = useState(false)
 
   const form = useForm({
     defaultValues: {
-      fullName: '',
-      bio: '',
-      timezone: 'UTC',
-      language: 'en',
+      fullName: user?.fullName ?? '',
+      bio: user?.bio ?? '',
+      timezone: user?.timezone ?? 'UTC',
+      language: user?.language ?? 'en',
     },
     onSubmit: async ({ value }) => {
       setRootError(null)
@@ -79,7 +84,7 @@ export function UpdateProfileForm() {
         // Step 2: Persist all fields to our DB (always runs regardless of Clerk result)
         await updateProfile({
           fullName: value.fullName,
-          bio: value.bio ?? null,
+          bio: value.bio || null,
           timezone: value.timezone,
           language: value.language,
         })
@@ -95,8 +100,6 @@ export function UpdateProfileForm() {
     },
   })
 
-  // Populate form once user data loads. Use reset() so these become the
-  // new baseline — isDirty stays false until the user actually edits a field.
   useEffect(() => {
     if (!user) return
     form.reset({
@@ -105,9 +108,9 @@ export function UpdateProfileForm() {
       timezone: user.timezone ?? 'UTC',
       language: user.language ?? 'en',
     })
-  // Architecture: depend only on user.id to avoid resetting while user types
+    setIsLoaded(true)
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user?.id])
+  }, [user?.id, user?.fullName, user?.bio, user?.timezone, user?.language])
 
   return (
     <form
@@ -184,7 +187,7 @@ export function UpdateProfileForm() {
               disabled={isPending}
             />
             <p className="text-11 text-secondary text-right">
-              {(field.state.value ?? '').length}/300
+              {field.state.value.length}/300
             </p>
             {field.state.meta.errors.length > 0 && (
               <p className="text-13 text-danger-primary">
@@ -235,7 +238,9 @@ export function UpdateProfileForm() {
                 disabled={isPending}
               >
                 <SelectTrigger id="profile-language">
-                  <SelectValue placeholder="Select language" />
+                  <SelectValue>
+                    {LANGUAGE_LABELS[field.state.value] ?? field.state.value}
+                  </SelectValue>
                 </SelectTrigger>
                 <SelectContent>
                   {LANGUAGES.map(({ value, label }) => (
@@ -252,16 +257,23 @@ export function UpdateProfileForm() {
       <div className="flex items-center gap-3 pt-1">
         <form.Subscribe
           selector={(state) => [state.canSubmit, state.isSubmitting, state.isDirty]}
-          children={([canSubmit, , isDirty]) => (
-            <Button type="submit" disabled={!canSubmit || !isDirty || isPending}>
-              {isPending ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Saving…
-                </>
-              ) : 'Save changes'}
-            </Button>
-          )}
+          children={([canSubmit, , isDirty]) => {
+            if (!isLoaded) return null
+            if (!isDirty) return null
+            return (
+              <Button
+                type="submit"
+                disabled={!canSubmit || isPending}
+              >
+                {isPending ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Saving…
+                  </>
+                ) : 'Save changes'}
+              </Button>
+            )
+          }}
         />
         {saved && (
           <span className="flex items-center gap-1 text-13 text-success-primary">
