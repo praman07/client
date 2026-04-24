@@ -8,7 +8,7 @@ interface VaultFile {
   name: string
   mimeType: string
   sizeBytes: number
-  updatedAt: string
+  createdAt: string
 }
 
 interface WhiteboardItem {
@@ -85,7 +85,7 @@ export const RecentFiles: React.FC<RecentFilesProps> = ({ files, whiteboards }) 
       id: f.id,
       title: f.name,
       meta: formatSize(f.sizeBytes),
-      updatedAt: f.updatedAt,
+      updatedAt: f.createdAt,
       mimeType: f.mimeType,
     })),
     ...whiteboards.map((w) => ({
