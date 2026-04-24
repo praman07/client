@@ -78,6 +78,7 @@ export const GET_WORKSPACE_OVERVIEW_QUERY = gql(`
         name
         key
         description
+        logoUrl
         memberCount
         openIssues
         updatedAt

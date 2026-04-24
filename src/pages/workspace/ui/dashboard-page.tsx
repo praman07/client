@@ -1,41 +1,21 @@
-import { ComingSoonWrapper } from '@/shared/ui/primitives/coming-soon-wrapper'
 import {
-  ActivityFeed,
   OverviewHeader,
-  QuickActions,
   RecentProjects,
-  WorkspaceMembersWidget,
-  WorkspaceSummary,
-  // StorageUsage,
-  // OnboardingPromo,
 } from '@/widgets/workspace-overview'
 
 export function DashboardPage() {
   return (
-    <div className="flex flex-col min-h-full w-full pb-10">
-      <OverviewHeader />
-      
-      {/* 3-Column Bento Grid Layout */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-8">
-        
-        {/* Left MAIN Column (Spans 2/3) */}
-        <div className="lg:col-span-2 flex flex-col gap-10">
-          <WorkspaceSummary />
-          <RecentProjects />
-          <ComingSoonWrapper label="Activity Feed">
-            <ActivityFeed />
-          </ComingSoonWrapper>
-        </div>
+    <div className="flex flex-col h-full pb-10 px-[var(--padding-page)]">
+      {/* Header — left-aligned at top */}
+      {/* <div className="pt-[var(--padding-page)]"> */}
+        <OverviewHeader />
+      {/* </div> */}
 
-        {/* Right SIDEBAR Column (Spans 1/3) */}
-        <div className="lg:col-span-1 flex flex-col gap-6">
-          <QuickActions />
-          <WorkspaceMembersWidget />
-          {/* These sections are commented out by developer for future use */}
-          {/* <StorageUsage /> */}
-          {/* <OnboardingPromo /> */}
+      {/* Recent projects — centered in remaining viewport space */}
+      <div className="flex-1 flex items-start justify-center pt-40">
+        <div className="max-w-2xl w-full">
+          <RecentProjects />
         </div>
-        
       </div>
     </div>
   )

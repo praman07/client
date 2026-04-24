@@ -1,50 +1,52 @@
-import { ChevronRight, Folder, FolderArchive, FolderGit2, Layers } from 'lucide-react'
+import { ChevronRight, Folder } from 'lucide-react'
 import { formatDistanceToNow } from 'date-fns'
 import { Link, useParams } from '@tanstack/react-router'
-import { Card } from '@/shared/ui'
 import { Skeleton } from '@/shared/ui/primitives/skeleton'
 import { useWorkspaceOverview } from '@/entities/workspace/hooks'
 
-// Cycle through a set of distinct project icon styles
-const PROJECT_ICON_STYLES = [
-  { icon: Layers, color: 'text-accent-primary', bg: 'bg-accent-subtle', borderColor: 'border-subtle' },
-  { icon: FolderGit2, color: 'text-secondary', bg: 'bg-layer-2', borderColor: 'border-subtle' },
-  { icon: FolderArchive, color: 'text-success-primary', bg: 'bg-success-subtle', borderColor: 'border-subtle' },
-  { icon: Folder, color: 'text-warning-primary', bg: 'bg-warning-subtle', borderColor: 'border-subtle' },
-  { icon: Layers, color: 'text-accent-primary', bg: 'bg-accent-subtle', borderColor: 'border-subtle' },
+const PROJECT_ICON_COLORS = [
+  { bg: 'bg-accent-subtle', color: 'text-accent-primary' },
+  { bg: 'bg-layer-2', color: 'text-secondary' },
+  { bg: 'bg-success-subtle', color: 'text-success-primary' },
 ]
 
 function RecentProjectsSkeleton() {
   return (
-    <Card className="flex flex-col p-6 shadow-sm border-none bg-surface-1">
-      <div className="flex items-center justify-between mb-5">
-        <Skeleton className="h-3.5 w-32" />
-        <Skeleton className="h-3 w-12" />
-      </div>
-      <div className="flex flex-col space-y-2.5">
-        {[1, 2, 3].map((i) => (
-          <div
-            key={i}
-            className="flex items-center justify-between p-4 rounded-lg border border-subtle bg-surface-2"
-          >
-            <div className="flex items-center gap-4 min-w-0">
-              <Skeleton className="w-10 h-10 rounded-md shrink-0" />
-              <div className="flex flex-col gap-1.5 overflow-hidden">
-                <Skeleton className="h-3.5 w-36" />
-                <Skeleton className="h-3 w-24" />
-              </div>
-            </div>
-            <div className="flex items-center gap-4 shrink-0 pl-2">
-              <div className="hidden sm:flex -space-x-2 mr-2">
-                <Skeleton className="w-7 h-7 rounded-full" />
-                <Skeleton className="w-7 h-7 rounded-full" />
-              </div>
-              <Skeleton className="w-4 h-4 rounded" />
-            </div>
+    <div className="flex flex-col gap-1.5">
+      {[1, 2, 3].map((i) => (
+        <div
+          key={i}
+          className="flex items-center gap-3 p-3 rounded-lg bg-layer-1"
+        >
+          <Skeleton className="w-8 h-8 rounded-full shrink-0" />
+          <div className="flex flex-col gap-1.5 min-w-0 flex-1">
+            <Skeleton className="h-3.5 w-40" />
+            <Skeleton className="h-3 w-28" />
           </div>
-        ))}
-      </div>
-    </Card>
+          <Skeleton className="w-4 h-4 rounded shrink-0" />
+        </div>
+      ))}
+    </div>
+  )
+}
+
+function ProjectIcon({ logoUrl, bg, color }: { logoUrl?: string; bg: string; color: string }) {
+  if (logoUrl) {
+    return (
+      <img
+        src={logoUrl}
+        alt=""
+        className="w-8 h-8 rounded-full object-cover shrink-0"
+      />
+    )
+  }
+
+  return (
+    <div
+      className={`flex items-center justify-center w-8 h-8 rounded-full ${bg} shrink-0`}
+    >
+      <Folder className={`w-4 h-4 ${color}`} />
+    </div>
   )
 }
 
@@ -54,84 +56,52 @@ export function RecentProjects() {
 
   if (isLoading) return <RecentProjectsSkeleton />
 
-  const projects = data?.workspaceOverview?.activeProjects ?? []
-
+  const projects = (data?.workspaceOverview?.activeProjects ?? []).slice(0, 3)
 
   return (
-    <Card className="flex flex-col p-6 shadow-sm border-none bg-surface-1">
-      <div className="flex items-center justify-between mb-5">
-<h2 className="text-14 font-semibold text-primary tracking-tight">Recent Projects</h2>
-      <Link
-        to="/workspace/$workspaceSlug/projects"
-        params={{ workspaceSlug: workspaceSlug! }}
-        className="text-11 font-semibold uppercase tracking-widest text-accent-primary hover:text-primary transition-colors"
-      >
-          View All
-        </Link>
-      </div>
-
+    <div className="flex flex-col gap-1.5">
       {projects.length === 0 ? (
-<div className="flex flex-col items-center justify-center py-10 text-center">
-      <Folder className="w-8 h-8 text-disabled mb-3" />
-      <p className="text-14 text-secondary">No projects yet</p>
-      <p className="text-12 text-secondary/70 mt-1">Create your first project to get started</p>
-    </div>
+        <div className="flex flex-col items-center justify-center py-8 text-center">
+          <Folder className="w-6 h-6 text-disabled mb-2.5" />
+          <p className="text-13 text-secondary">No projects yet</p>
+          <p className="text-12 text-tertiary mt-0.5">
+            Create your first project to get started.
+          </p>
+        </div>
       ) : (
-        <div className="flex flex-col space-y-2.5">
-          {projects.map((project, index) => {
-            const style = PROJECT_ICON_STYLES[index % PROJECT_ICON_STYLES.length]
-            const IconComponent = style.icon
-            const updatedAt = formatDistanceToNow(new Date(project.updatedAt), { addSuffix: true })
+        projects.map((project, index) => {
+          const { bg, color } = PROJECT_ICON_COLORS[index % PROJECT_ICON_COLORS.length]
+          const updatedAt = formatDistanceToNow(new Date(project.updatedAt), {
+            addSuffix: true,
+          })
 
-            return (
-              <Link
-                key={project.id}
-                to="/workspace/$workspaceSlug/project/$projectSlug"
-                params={{ workspaceSlug: workspaceSlug!, projectSlug: project.key }}
-                className="group p-4 flex items-center justify-between rounded-lg border border-subtle bg-layer-2 hover:bg-layer-2-hover border-accent-subtle transition-all"
-              >
-                <div className="flex items-center gap-4 min-w-0">
-                  <div className={`flex items-center justify-center w-10 h-10 rounded-md ${style.bg} ${style.borderColor} border shrink-0 group-hover:scale-105 transition-transform`}>
-                    <IconComponent className={`w-5 h-5 ${style.color}`} />
-                  </div>
-<div className="flex flex-col overflow-hidden">
-                <span className="font-semibold text-13 text-primary truncate group-hover:text-accent-primary transition-colors">
+          return (
+            <Link
+              key={project.id}
+              to="/workspace/$workspaceSlug/project/$projectSlug"
+              params={{ workspaceSlug: workspaceSlug!, projectSlug: project.key }}
+              className="group flex items-center gap-3 p-3 rounded-lg bg-layer-1 hover:bg-layer-1-hover transition-all duration-100"
+            >
+              <ProjectIcon
+                logoUrl={project.logoUrl ?? undefined}
+                bg={bg}
+                color={color}
+              />
+
+              <div className="flex flex-col min-w-0 flex-1">
+                <span className="text-13 font-medium text-primary truncate group-hover:text-accent-primary transition-colors">
                   {project.name}
                 </span>
-                <span className="text-12 text-secondary mt-0.5 truncate">
-                  Updated {updatedAt} · {project.memberCount} member{project.memberCount !== 1 ? 's' : ''} · {project.openIssues} open issue{project.openIssues !== 1 ? 's' : ''}
+                <span className="text-12 text-secondary truncate mt-0.5">
+                  {updatedAt}
                 </span>
               </div>
-                </div>
 
-                <div className="flex items-center gap-3 shrink-0 pl-2">
-                  {/* Member & issue count pills — hidden on mobile */}
-<div className="hidden sm:flex items-center gap-2">
-                <span className="inline-flex items-center gap-1 text-11 font-medium text-secondary">
-                      <svg className="w-3 h-3" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="8" cy="5" r="3" stroke="currentColor" strokeWidth="1.5" />
-                        <path d="M2 13c0-2.761 2.686-5 6-5s6 2.239 6 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-                      </svg>
-                      {project.memberCount}
-                    </span>
-{project.openIssues > 0 && (
-                <span className="inline-flex items-center gap-1 text-11 font-medium text-warning-primary">
-                        <svg className="w-3 h-3" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                          <circle cx="8" cy="8" r="6" stroke="currentColor" strokeWidth="1.5" />
-                          <path d="M8 5v3.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-                          <circle cx="8" cy="11" r="0.75" fill="currentColor" />
-                        </svg>
-                        {project.openIssues}
-                      </span>
-                    )}
-                  </div>
-                  <ChevronRight className="w-4 h-4 text-secondary group-hover:text-accent-primary transition-colors translate-x-0 group-hover:translate-x-0.5" />
-                </div>
-              </Link>
-            )
-          })}
-        </div>
+              <ChevronRight className="w-4 h-4 text-tertiary group-hover:text-secondary shrink-0 transition-colors" />
+            </Link>
+          )
+        })
       )}
-    </Card>
+    </div>
   )
 }
