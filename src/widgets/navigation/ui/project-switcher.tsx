@@ -1,6 +1,9 @@
-import { ChevronsUpDown, Layers } from 'lucide-react'
+import { ChevronsUpDown, Plus } from 'lucide-react'
 import { useNavigate, useParams } from '@tanstack/react-router'
 import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuGroup,
@@ -44,9 +47,12 @@ export function ProjectSwitcher() {
           'h-8 gap-2 px-2 text-secondary hover:text-primary',
         )}
       >
-        <div className="flex h-5 w-5 items-center justify-center rounded-md bg-accent-subtle text-accent-primary">
-          <Layers className="h-3 w-3" />
-        </div>
+        <Avatar className="h-5 w-5 rounded-md">
+          <AvatarImage src={currentProject?.logoUrl || undefined} />
+          <AvatarFallback className="rounded-md">
+            {currentProject?.name[0] || 'P'}
+          </AvatarFallback>
+        </Avatar>
         <span className="font-medium text-primary">
           {currentProject?.name || 'Select Project'}
         </span>
@@ -90,8 +96,13 @@ function ProjectDropdownContent({ workspaceSlug, currentProjectId }: { workspace
               project.id === currentProjectId && 'bg-layer-1-selected',
             )}
           >
-            <Layers className="mr-2 h-5 w-5" />
-            {project.name}
+            <Avatar className="h-5 w-5 rounded-md">
+                <AvatarImage src={project.logoUrl || undefined} />
+                <AvatarFallback className="rounded-md bg-layer-2 text-10">
+                  {project.name[0]}
+                </AvatarFallback>
+              </Avatar>
+              {project.name}
           </DropdownMenuItem>
         ))}
       </DropdownMenuGroup>
