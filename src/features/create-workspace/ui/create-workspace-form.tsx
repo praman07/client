@@ -4,7 +4,6 @@ import { useState } from 'react'
 import { toast } from 'sonner'
 import { mapCreateWorkspaceError } from '../lib'
 import { useCreateWorkspace } from '../hooks'
-import { TeamSizeField } from './team-size-field'
 import { WorkspaceLogoField } from './workspace-logo-field'
 import { WorkspaceNameField } from './workspace-name-field'
 import { WorkspaceSlugField } from './workspace-slug-field'
@@ -22,7 +21,6 @@ export function CreateWorkspaceForm() {
     defaultValues: {
       name: '',
       slug: '',
-      teamSize: 'just_me' as 'just_me' | '1-10' | '10-50' | '50+',
     },
     onSubmit: async ({ value }) => {
       setRootError(null)
@@ -68,7 +66,6 @@ export function CreateWorkspaceForm() {
           <WorkspaceLogoField value={logoFile} onChange={setLogoFile} />
           <WorkspaceNameField form={form} />
           <WorkspaceSlugField form={form} />
-          <TeamSizeField form={form} />
 
           {rootError && (
             <div className="rounded-md bg-danger-subtle p-3 text-13 font-medium text-danger-primary">

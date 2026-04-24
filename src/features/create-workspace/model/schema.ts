@@ -21,5 +21,4 @@ export const createWorkspaceSchema = z.object({
       message: 'This slug is reserved for system use',
     })
     .transform((s) => s.toLowerCase()),
-  teamSize: z.enum(['just_me', '1-10', '10-50', '50+']).default('just_me'),
 })

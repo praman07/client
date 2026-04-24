@@ -5,7 +5,6 @@ interface CreateWorkspaceStateShape {
       name: string
       slug: string
       logoUrl?: string
-      teamSize?: 'just_me' | '1-10' | '10-50' | '50+'
     }
   }
 }
