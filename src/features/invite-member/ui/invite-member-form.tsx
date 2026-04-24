@@ -47,7 +47,11 @@ export function InviteMemberForm({ onClose }: Props) {
           },
           onError: (error) => {
             const message = mapInviteMemberError(error)
-            toast.error(message)
+            // If error mapping returns empty string, error is intentionally suppressed
+            // (e.g. NOTIFICATION_PROVIDER_ERROR — invite was created, just email failed)
+            if (message !== '') {
+              toast.error(message)
+            }
           },
         },
       )
