@@ -33,15 +33,11 @@ function ProjectOverview() {
   return (
     <OverviewPage
       projectId={project.id}
-      projectSlug={projectSlug}
-      workspaceId={workspace.id}
-      workspaceSlug={workspaceSlug}
       name={project.name}
       projectKey={project.key}
       description={project.description ?? null}
       isPrivate={project.isPrivate ?? null}
       isArchived={project.isArchived ?? null}
-      activePlugins={project.activePlugins}
     />
   )
 }

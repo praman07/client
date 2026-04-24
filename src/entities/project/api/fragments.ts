@@ -55,19 +55,6 @@ export const GET_PROJECT_BY_SLUG = gql(`
 export const GET_PROJECT_OVERVIEW = gql(`
   query GetProjectOverview($projectId: ID!) {
     projectOverview(projectId: $projectId) {
-      totalIssues
-      openIssues
-      completedIssues
-      overdueIssues
-      pageCount
-      memberCount
-      issuesByStatus {
-        statusId
-        name
-        color
-        icon
-        issueCount
-      }
       recentIssues {
         id
         number
@@ -81,30 +68,6 @@ export const GET_PROJECT_OVERVIEW = gql(`
         assigneeName
         assigneeAvatar
       }
-      members {
-        userId
-        name
-        email
-        avatarUrl
-        roleName
-        roleRank
-        joinedAt
-      }
-      
-      issuesByPriority {
-        priority
-        count
-      }
-      upcomingIssues {
-        id
-        number
-        title
-        dueDate
-        assigneeName
-        assigneeAvatar
-        statusName
-        statusColor
-      }
       recentPages {
         id
         title
@@ -117,7 +80,6 @@ export const GET_PROJECT_OVERVIEW = gql(`
         name
         mimeType
         sizeBytes
-        createdByName
         createdAt
       }
       recentWhiteboards {
@@ -126,16 +88,6 @@ export const GET_PROJECT_OVERVIEW = gql(`
         elementCount
         updatedAt
         isLocked
-      }
-      vaultUsage {
-        usedBytes
-        fileCount
-      }
-      projectChannels {
-        id
-        name
-        topic
-        updatedAt
       }
     }
   }
