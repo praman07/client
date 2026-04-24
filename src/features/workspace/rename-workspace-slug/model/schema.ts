@@ -4,8 +4,8 @@ import { RESERVED_SLUGS } from '@/shared/config/limits'
 export const slugRenameSchema = z.object({
   slug: z
     .string()
-    .min(8, 'Slug must be at least 8 characters')
-    .max(50, 'Slug must be less than 50 characters')
+    .min(3, 'Slug must be at least 3 characters')
+    .max(64, 'Slug must be at most 64 characters')
     .regex(
       /^(?![0-9]+$)[a-z0-9]+(?:-[a-z0-9]+)*$/,
       'Slug must be lowercase, alphanumeric.',

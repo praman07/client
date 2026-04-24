@@ -44,10 +44,13 @@ const TIMEZONES = [
 ]
 
 const nameSchema = z.string().min(1, 'Workspace name is required').max(100)
+// Slug schema aligned with server SLUG_CONFIG (MIN=3, MAX=64).
+// Client regex is intentionally more permissive (allows leading/trailing/consecutive hyphens)
+// — server SLUG_REGEX is authoritative; this gives fast local feedback only.
 const slugSchema = z
   .string()
   .min(3, 'Slug must be at least 3 characters')
-  .max(64)
+  .max(64, 'Slug must be at most 64 characters')
   .regex(/^[a-z0-9-]+$/, 'Only lowercase letters, numbers, and hyphens')
 
 /** Same normalization as create-workspace slug field */

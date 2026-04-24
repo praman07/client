@@ -15,7 +15,7 @@ export const createProjectSchema = z.object({
   slug: z
     .string()
     .min(3, 'Slug must be at least 3 characters')
-    .max(10, 'Slug must be at most 10 characters')
+    .max(64, 'Slug must be at most 64 characters')
     .regex(/^[a-z0-9-]+$/, 'Slug must be lowercase alphanumeric (a-z, 0-9, -)')
     .refine((val) => !RESERVED_SLUGS.includes(val as any), {
       message: 'This slug is reserved',
