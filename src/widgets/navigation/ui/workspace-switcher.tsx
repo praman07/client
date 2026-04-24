@@ -72,25 +72,28 @@ function WorkspaceSwitcherContent() {
         >
           <ChevronsUpDown className="h-4 w-4" />
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="start" className="w-56">
+        <DropdownMenuContent align="start" className="w-56 bg-surface-2 border border-subtle rounded-lg shadow-overlay-100 p-1">
           <DropdownMenuGroup>
             <DropdownMenuLabel>Workspaces</DropdownMenuLabel>
             <DropdownMenuSeparator />
             {myWorkspaces.map((workspace) => (
-              <DropdownMenuItem key={workspace.id}>
-                <Link
-                  to="/workspace/$workspaceSlug"
-                  params={{ workspaceSlug: workspace.slug }}
-                  className="flex items-center gap-2 cursor-pointer w-full"
-                >
-                  <Avatar className="h-4 w-4 rounded-md">
-                    <AvatarImage src={workspace.logoUrl || undefined} />
-                    <AvatarFallback className="rounded-md bg-layer-2 text-[10px]">
-                      {workspace.name[0]}
-                    </AvatarFallback>
-                  </Avatar>
-                  <span>{workspace.name}</span>
-                </Link>
+              <DropdownMenuItem
+                key={workspace.id}
+                onClick={() => {
+                  navigate({ to: '/workspace/$workspaceSlug', params: { workspaceSlug: workspace.slug } })
+                }}
+                className={cn(
+                  'flex items-center gap-2 cursor-pointer w-full rounded-md px-2 py-1.5',
+                  workspace.id === currentWorkspace?.id && 'bg-layer-1-selected',
+                )}
+              >
+                <Avatar className="h-5 w-5 rounded-md">
+                  <AvatarImage src={workspace.logoUrl || undefined} />
+                  <AvatarFallback className="rounded-md bg-layer-2 text-10">
+                    {workspace.name[0]}
+                  </AvatarFallback>
+                </Avatar>
+                <span>{workspace.name}</span>
               </DropdownMenuItem>
             ))}
           </DropdownMenuGroup>

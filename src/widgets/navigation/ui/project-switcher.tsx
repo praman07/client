@@ -1,5 +1,5 @@
 import { ChevronsUpDown, Layers } from 'lucide-react'
-import { Link, useParams } from '@tanstack/react-router'
+import { useNavigate, useParams } from '@tanstack/react-router'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -52,7 +52,7 @@ export function ProjectSwitcher() {
         </span>
         <ChevronsUpDown className="h-4 w-4 text-disabled" />
       </DropdownMenuTrigger>
-      <ProjectDropdownContent workspaceSlug={workspaceSlug} />
+      <ProjectDropdownContent workspaceSlug={workspaceSlug} currentProjectId={currentProject?.id} />
     </DropdownMenu>
   )
 }
@@ -61,7 +61,8 @@ export function ProjectSwitcher() {
  * The dropdown content — split so the project list fetch only triggers
  * when the dropdown is opened (DropdownMenuContent mounts on open).
  */
-function ProjectDropdownContent({ workspaceSlug }: { workspaceSlug?: string }) {
+function ProjectDropdownContent({ workspaceSlug, currentProjectId }: { workspaceSlug?: string; currentProjectId?: string }) {
+  const navigate = useNavigate()
   // Read workspaceId from Redux — workspace is always synced before the project route renders
   const workspace = useAppSelector((state) =>
     selectWorkspaceBySlug(state, workspaceSlug),
@@ -72,35 +73,37 @@ function ProjectDropdownContent({ workspaceSlug }: { workspaceSlug?: string }) {
   if (!workspaceSlug) return <Skeleton className="h-8 w-32" />
 
   return (
-    <DropdownMenuContent align="start" className="w-56">
+    <DropdownMenuContent align="start" className="w-56 bg-surface-2 border border-subtle rounded-lg shadow-overlay-100 p-1">
       <DropdownMenuGroup>
         <DropdownMenuLabel>Projects</DropdownMenuLabel>
         {allProjects?.map((project) => (
-          <DropdownMenuItem key={project.id} className="p-0">
-            <Link
-              to="/workspace/$workspaceSlug/project/$projectSlug"
-              params={{
-                workspaceSlug,
-                projectSlug: project.key,
-              }}
-              className="w-full cursor-pointer flex items-center px-2 py-1.5"
-            >
-              <Layers className="mr-2 h-4 w-4" />
-              {project.name}
-            </Link>
+          <DropdownMenuItem
+            key={project.id}
+            onClick={() => {
+              navigate({
+                to: '/workspace/$workspaceSlug/project/$projectSlug',
+                params: { workspaceSlug: workspaceSlug || '', projectSlug: project.key },
+              })
+            }}
+            className={cn(
+              'flex items-center gap-2 cursor-pointer rounded-md px-2 py-1.5',
+              project.id === currentProjectId && 'bg-layer-1-selected',
+            )}
+          >
+            <Layers className="mr-2 h-5 w-5" />
+            {project.name}
           </DropdownMenuItem>
         ))}
       </DropdownMenuGroup>
       <DropdownMenuSeparator />
       <DropdownMenuGroup>
-        <DropdownMenuItem className="p-0">
-          <Link
-            to="/workspace/$workspaceSlug/projects"
-            params={{ workspaceSlug }}
-            className="w-full cursor-pointer flex items-center px-2 py-1.5"
-          >
-            View All Projects
-          </Link>
+        <DropdownMenuItem
+          onClick={() => {
+            navigate({ to: '/workspace/$workspaceSlug/projects', params: { workspaceSlug: workspaceSlug || '' } })
+          }}
+          className="flex items-center gap-2 cursor-pointer rounded-md px-2 py-1.5"
+        >
+          View All Projects
         </DropdownMenuItem>
       </DropdownMenuGroup>
     </DropdownMenuContent>
