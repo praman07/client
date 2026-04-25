@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { Check, Users } from 'lucide-react'
+import { useState, useRef, useEffect } from 'react'
+import { Check, ChevronDown, Users } from 'lucide-react'
 import {
   closeAddMemberDialog,
   selectIsAddMemberDialogOpen,
@@ -23,10 +23,6 @@ import {
   EmptyMedia,
   EmptyTitle,
   ScrollArea,
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
 } from '@/shared/ui'
 import { useAppDispatch, useAppSelector } from '@/shared/hooks'
 import { useWorkspaceMembers } from '@/entities/workspace'
@@ -65,6 +61,9 @@ export function AddMemberDialog({
   const [selectedRoleId, setSelectedRoleId] = useState<string>(
     assignableRoles[0]?.id ?? '',
   )
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false)
+  const dropdownRef = useRef<HTMLDivElement>(null)
+  const triggerRef = useRef<HTMLButtonElement>(null)
   const { mutate: addMember, isPending } = useAddProjectMember()
 
   const { data: membersData, isLoading } = useWorkspaceMembers(workspaceId)
@@ -73,10 +72,47 @@ export function AddMemberDialog({
     (m) => !existingMemberIds.includes(m.user.id),
   )
 
+  const selectedRole = assignableRoles.find((r) => r.id === selectedRoleId)
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    if (!isDropdownOpen) return
+
+    function handleClickOutside(e: MouseEvent) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(e.target as Node) &&
+        triggerRef.current &&
+        !triggerRef.current.contains(e.target as Node)
+      ) {
+        setIsDropdownOpen(false)
+      }
+    }
+
+    function handleKeyDown(e: KeyboardEvent) {
+      if (e.key === 'Escape') {
+        setIsDropdownOpen(false)
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside)
+    document.addEventListener('keydown', handleKeyDown)
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+      document.removeEventListener('keydown', handleKeyDown)
+    }
+  }, [isDropdownOpen])
+
   function handleClose() {
     dispatch(closeAddMemberDialog())
     setSelectedUserId(null)
     setSelectedRoleId(assignableRoles[0]?.id ?? '')
+    setIsDropdownOpen(false)
+  }
+
+  function handleSelectRole(role: AssignableRole) {
+    setSelectedRoleId(role.id)
+    setIsDropdownOpen(false)
   }
 
   function handleAdd() {
@@ -88,7 +124,7 @@ export function AddMemberDialog({
   }
 
   return (
-    <Dialog open={isOpen} onOpenChange={(open) => !open && handleClose()}>
+    <Dialog open={isOpen} onOpenChange={(open) => !open && handleClose()} modal={false}>
       <DialogContent className="sm:max-w-[440px]">
         <DialogHeader>
           <DialogTitle>Add Member</DialogTitle>
@@ -103,33 +139,72 @@ export function AddMemberDialog({
             <div className="space-y-1.5 flex flex-col">
               <label
                 htmlFor="project-role"
-                className="text-13 font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                className="text-13 font-medium leading-none"
               >
                 Role
               </label>
-              <Select
-                value={selectedRoleId}
-                onValueChange={(val) => val && setSelectedRoleId(val)}
-              >
-                <SelectTrigger id="project-role" className="w-full">
-                  <span className="flex-1 text-left text-13 truncate">
-                    {assignableRoles.find((r) => r.id === selectedRoleId)?.name ?? 'Select a role'}
+              <div className="relative" ref={dropdownRef}>
+                <button
+                  ref={triggerRef}
+                  type="button"
+                  id="project-role"
+                  onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                  className={cn(
+                    'flex w-full items-center justify-between gap-1.5',
+                    'rounded-md px-2.5 py-1.5 pr-2',
+                    'bg-layer-1 border border-subtle-1',
+                    'text-13 text-primary',
+                    'hover:bg-layer-1-hover',
+                    'transition-colors duration-100',
+                    isDropdownOpen && 'ring-2 ring-accent-strong ring-offset-1 ring-offset-surface-2',
+                  )}
+                >
+                  <span className="flex-1 text-left truncate">
+                    {selectedRole?.name ?? 'Select a role'}
                   </span>
-                </SelectTrigger>
-                <SelectContent>
-                  {assignableRoles.map((role) => (
-                    <SelectItem key={role.id} value={role.id}>
-                      {role.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+                  <ChevronDown
+                    className={cn(
+                      'h-4 w-4 text-tertiary shrink-0 transition-transform duration-100',
+                      isDropdownOpen && 'rotate-180',
+                    )}
+                  />
+                </button>
+
+                {isDropdownOpen && (
+                  <div className="absolute top-full left-0 right-0 mt-1 z-[var(--z-dropdown)]">
+                    <div className="bg-surface-2 border border-subtle rounded-lg p-1 shadow-overlay-100 overflow-hidden">
+                      {assignableRoles.map((role) => {
+                        const isSelected = role.id === selectedRoleId
+                        return (
+                          <button
+                            key={role.id}
+                            type="button"
+                            onClick={() => handleSelectRole(role)}
+                            className={cn(
+                              'flex w-full items-center justify-between gap-2',
+                              'px-2 py-1.5 rounded-md text-13 text-primary',
+                              'hover:bg-layer-1-hover cursor-pointer',
+                              'transition-colors duration-75',
+                              isSelected && 'bg-layer-1',
+                            )}
+                          >
+                            <span>{role.name}</span>
+                            {isSelected && (
+                              <Check className="h-4 w-4 text-primary shrink-0" />
+                            )}
+                          </button>
+                        )
+                      })}
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
           )}
 
           {/* Member list */}
           <div className="space-y-1.5 flex flex-col">
-            <label className="text-13 font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+            <label className="text-13 font-medium leading-none">
               Member
             </label>
             {isLoading ? (
@@ -197,7 +272,11 @@ export function AddMemberDialog({
           </Button>
           <Button
             onClick={handleAdd}
-            disabled={!selectedUserId || !selectedRoleId || isPending}
+            disabled={
+              !selectedUserId ||
+              (assignableRoles.length > 0 && !selectedRoleId) ||
+              isPending
+            }
           >
             {isPending ? 'Adding...' : 'Add Member'}
           </Button>

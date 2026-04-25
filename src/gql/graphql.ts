@@ -472,6 +472,16 @@ export type CursorPosition = {
   y: Scalars['Float']['output'];
 };
 
+export type DeclineResponse = {
+  __typename?: 'DeclineResponse';
+  message: Scalars['String']['output'];
+  success: Scalars['Boolean']['output'];
+};
+
+export type DeclineWorkspaceInviteInput = {
+  token: Scalars['String']['input'];
+};
+
 export type DeleteBoardResult = {
   __typename?: 'DeleteBoardResult';
   boardId: Scalars['ID']['output'];
@@ -786,6 +796,12 @@ export type MentionEvent = {
   payload: Scalars['JSON']['output'];
 };
 
+export type MentionResult = {
+  __typename?: 'MentionResult';
+  mentions: Array<SourceMention>;
+  sourceId: Scalars['String']['output'];
+};
+
 export enum MentionStatus {
   Active = 'ACTIVE',
   Orphaned = 'ORPHANED',
@@ -894,6 +910,7 @@ export type Mutation = {
   createVaultFolder: CreateFolderResult;
   createWorkspace: Workspace;
   createWorkspaceRole: WorkspaceRole;
+  declineWorkspaceInvite: DeclineResponse;
   deleteAccount: Scalars['Boolean']['output'];
   deleteBoard: DeleteBoardResult;
   deleteChannel: DeleteChannelResult;
@@ -1224,6 +1241,11 @@ export type MutationCreateWorkspaceArgs = {
 export type MutationCreateWorkspaceRoleArgs = {
   input: CreateWorkspaceRoleInput;
   workspaceId: Scalars['ID']['input'];
+};
+
+
+export type MutationDeclineWorkspaceInviteArgs = {
+  input: DeclineWorkspaceInviteInput;
 };
 
 
@@ -2090,6 +2112,7 @@ export type Query = {
   getLastReadMessage?: Maybe<Scalars['ID']['output']>;
   getMentionEvents: Array<MentionEvent>;
   getMentions: Array<Mention>;
+  getMentionsBySourceIds: Array<MentionResult>;
   getMessageById?: Maybe<ChatMessage>;
   getMessagesAfterCursor: Array<ChatMessage>;
   getMissingMessages: Array<ChatMessage>;
@@ -2296,6 +2319,11 @@ export type QueryGetMentionEventsArgs = {
 
 export type QueryGetMentionsArgs = {
   sourceEntityId: Scalars['ID']['input'];
+};
+
+
+export type QueryGetMentionsBySourceIdsArgs = {
+  sourceIds: Array<Scalars['String']['input']>;
 };
 
 
@@ -2798,6 +2826,14 @@ export enum SortDirection {
   Asc = 'ASC',
   Desc = 'DESC'
 }
+
+export type SourceMention = {
+  __typename?: 'SourceMention';
+  displayText: Scalars['String']['output'];
+  id: Scalars['ID']['output'];
+  targetEntityId: Scalars['String']['output'];
+  targetEntityType: Scalars['String']['output'];
+};
 
 export type SubscribeThreadResult = {
   __typename?: 'SubscribeThreadResult';

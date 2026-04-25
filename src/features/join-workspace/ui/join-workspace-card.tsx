@@ -79,7 +79,7 @@ export function JoinWorkspaceCard({
       </CardHeader>
       <CardContent>
         <div className="text-center text-13 text-secondary pb-4">
-          You are joining as <b>{user?.primaryEmailAddress?.emailAddress}</b>
+          You are joining as <b>{user?.email}</b>
         </div>
       </CardContent>
       <CardFooter className="flex justify-center pb-8">

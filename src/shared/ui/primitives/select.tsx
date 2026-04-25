@@ -122,10 +122,10 @@ function SelectContent({
             'min-w-36 max-h-[--available-height] w-[--anchor-width]',
             'overflow-x-hidden overflow-y-auto',
             'origin-[--transform-origin] relative isolate',
-            // Animations
+            // Animations — use only defined tw-animate utilities
             'data-open:animate-in data-closed:animate-out',
-            'data-closed:fade-out-0 data-open:fade-in-0',
-            'data-closed:zoom-out-95 data-open:zoom-in-95',
+            'data-open:fade-in data-closed:fade-out',
+            'data-open:zoom-in data-closed:zoom-out',
             'data-[side=bottom]:slide-in-from-top-2',
             'data-[side=left]:slide-in-from-right-2',
             'data-[side=right]:slide-in-from-left-2',

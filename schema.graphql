@@ -188,6 +188,7 @@ type Mutation {
   setGlobalNotifMode(mode: GlobalNotifMode!): Boolean!
   pauseNotifications(until: String!): Boolean!
   resumeNotifications: Boolean!
+  declineWorkspaceInvite(input: DeclineWorkspaceInviteInput!): DeclineResponse!
   acceptWorkspaceInvite(input: AcceptInviteInput!): JoinResponse!
   checkSlugAvailability(slug: String!): AvailabilityResponse!
   createOnboardingWorkspace: Workspace!
@@ -407,6 +408,15 @@ input UpdateGlobalNotifPrefsInput {
   globalMode: GlobalNotifMode
   muteUntil: String
   categories: [CategoryPreferenceInput!]
+}
+
+input DeclineWorkspaceInviteInput {
+  token: String!
+}
+
+type DeclineResponse {
+  success: Boolean!
+  message: String!
 }
 
 type User {
