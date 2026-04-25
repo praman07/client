@@ -39,6 +39,16 @@ export async function commitMessage(
         reactions: [],
       } as any)
 
+      // DEBUG: Log what we're committing
+      log.debug('Committing message to Dexie:', {
+        messageId: payload.messageId,
+        contentType: typeof payload.content,
+        contentPreview: typeof payload.content === 'string'
+          ? (payload.content.length > 100 ? payload.content.slice(0, 100) + '...' : payload.content)
+          : JSON.stringify(payload.content),
+        hasMentions: typeof payload.content === 'string' && payload.content.includes('"mentions"'),
+      })
+
       await db.conversation_state.put({
         conversationId: state.conversationId,
         projectId,
@@ -106,7 +116,11 @@ export async function commitMessageBatch(
       },
     )
 
-    log.debug(`Batch committed ${sorted.length} messages`)
+    log.debug(`Batch committed ${sorted.length} messages`, {
+      firstMessageId: sorted[0]?.messageId,
+      firstContentType: typeof sorted[0]?.content,
+      firstHasMentions: typeof sorted[0]?.content === 'string' && sorted[0]?.content.includes('"mentions"'),
+    })
   } catch (err) {
     log.error('Batch commit failed:', err)
     throw err

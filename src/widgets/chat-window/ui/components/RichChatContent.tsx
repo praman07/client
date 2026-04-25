@@ -112,6 +112,14 @@ interface RichChatContentProps {
 export function RichChatContent({ content, maxChars }: RichChatContentProps) {
   const parsed = parseContent(content)
 
+  // DEBUG: Log incoming content
+  if (typeof content === 'string' && content.includes('mentions')) {
+    console.debug('[RichChatContent] Rendering with mentions:', {
+      contentLength: content.length,
+      preview: content.length > 100 ? content.slice(0, 100) + '...' : content,
+    })
+  }
+
   // Plain string path (legacy + no-mention messages)
   if ('plain' in parsed) {
     const text = maxChars ? parsed.plain.slice(0, maxChars) + (parsed.plain.length > maxChars ? '\u2026' : '') : parsed.plain
