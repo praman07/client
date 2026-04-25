@@ -176,6 +176,7 @@ type Query {
   getBacklinks(targetEntityId: ID!, limit: Int, cursor: ID, filters: BacklinkFilters): BacklinkResult!
   getMentions(sourceEntityId: ID!): [Mention!]!
   getMentionEvents(mentionId: ID!): [MentionEvent!]!
+  getMentionsBySourceIds(sourceIds: [String!]!): [MentionResult!]!
 }
 
 type Mutation {
@@ -2131,6 +2132,18 @@ type MentionEvent {
   payload: JSON!
   actorId: String
   createdAt: DateTime!
+}
+
+type MentionResult {
+  sourceId: String!
+  mentions: [SourceMention!]!
+}
+
+type SourceMention {
+  id: ID!
+  targetEntityId: String!
+  targetEntityType: String!
+  displayText: String!
 }
 
 input CreateMentionInput {
