@@ -62,6 +62,7 @@ function ConversationPage() {
               channelName={conversation.name || 'Unnamed Channel'}
               isPrivate={!conversation.isPublic}
               topic={conversation.topic ?? undefined}
+              createdAt={conversation.createdAt}
             />
           </Suspense>
         </ErrorBoundary>
@@ -84,6 +85,7 @@ function ConversationPage() {
               channelName={conversation.name || 'Direct Message'}
               isPrivate={true}
               isDm={true}
+              createdAt={conversation.createdAt}
               otherUser={{
                 fullName: otherMember?.user?.fullName ?? null,
                 avatarUrl: otherMember?.user?.avatarUrl ?? null,

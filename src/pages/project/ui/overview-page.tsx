@@ -4,9 +4,9 @@ import {
 } from '@/entities/project'
 import {
   ProjectOverviewHeader,
+  RecentFiles,
   RecentIssues,
   RecentPages,
-  RecentFiles,
 } from '@/widgets/project-overview'
 import { PageSpinner, RouteError, WidgetError } from '@/shared/ui'
 

@@ -1,5 +1,5 @@
 import React from 'react'
-import { ChevronRight, File, FileImage, FileCode, Folder, Layout, HardDrive } from 'lucide-react'
+import { ChevronRight, File, FileCode, FileImage, Folder, HardDrive, Layout } from 'lucide-react'
 import { formatDistanceToNow } from 'date-fns'
 import { useParams } from '@tanstack/react-router'
 

@@ -30,6 +30,7 @@ export const RecentIssues: React.FC<RecentIssuesProps> = ({ issues }) => {
         <Link
           to="/workspace/$workspaceSlug/project/$projectSlug/issues"
           params={{ workspaceSlug: workspaceSlug ?? '', projectSlug: projectSlug ?? '' }}
+          search={{ issueId: undefined }}
           className="text-11 text-secondary hover:text-accent-primary transition-colors flex items-center gap-0.5"
         >
           View all

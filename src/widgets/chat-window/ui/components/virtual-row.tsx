@@ -15,6 +15,7 @@ import React from 'react'
 import { AdditionalMessage } from './additional-message'
 import { DateSeparator } from './date-separator'
 import { PrimaryMessage } from './primary-message'
+import { ChannelGreetingBanner } from './channel-greeting-banner'
 import type { VirtualItem as TanstackVirtualItem } from '@tanstack/react-virtual'
 import type { VirtualItem } from '../../lib/transform-messages'
 
@@ -47,6 +48,13 @@ export const VirtualRow = React.memo(
       >
         {item.type === 'DATE' && item.timestamp !== undefined ? (
           <DateSeparator timestamp={item.timestamp} />
+        ) : item.type === 'GREETING' ? (
+          <ChannelGreetingBanner
+            type={item.greetingType ?? 'CHANNEL'}
+            channelName={item.channelName ?? ''}
+            createdAt={item.createdAt}
+            otherUser={item.otherUser}
+          />
         ) : item.isPrimary && item.message ? (
           <PrimaryMessage message={item.message} />
         ) : item.message ? (

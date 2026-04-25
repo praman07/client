@@ -1,11 +1,19 @@
 import type { MessageRowData } from '../model/message-list.types'
 
 export interface VirtualItem {
-  type: 'MESSAGE' | 'DATE'
+  type: 'MESSAGE' | 'DATE' | 'GREETING'
   message?: MessageRowData
   timestamp?: number
   isPrimary?: boolean
   id: string
+  // GREETING type fields
+  greetingType?: 'CHANNEL' | 'DM'
+  channelName?: string
+  createdAt?: string
+  otherUser?: {
+    fullName?: string | null
+    avatarUrl?: string | null
+  }
 }
 
 /**

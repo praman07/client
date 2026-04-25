@@ -2,14 +2,16 @@ import { useCallback, useEffect, useMemo, useRef } from 'react'
 import { useMessageWindow } from '../hooks/use-message-window'
 import { useWindowController } from '../hooks/use-window-controller'
 import { MESSAGE_WINDOW_SIZE } from '../lib/constants'
-import { transformMessages } from '../lib/transform-messages'
+import {  transformMessages } from '../lib/transform-messages'
 import { useChatScroll } from '../hooks/use-chat-scroll'
 import { useMessageAuthors } from '../hooks/use-message-authors'
 import { useScrollToMessage } from '../lib/scroll-to-message-context'
 import {
+  ChannelGreetingBanner,
   ScrollToBottomButton,
   VirtualRow,
 } from './components'
+import type {VirtualItem} from '../lib/transform-messages';
 import { useHistoryLoader } from '@/entities/chat-session'
 import { useUser } from '@/shared/hooks'
 import { createLogger } from '@/shared/lib/logger'
@@ -19,9 +21,23 @@ const log = createLogger('chat:messageList')
 interface MessageListProps {
   projectId: string
   channelId: string
+  channelName: string
+  isDm?: boolean
+  createdAt?: string
+  otherUser?: {
+    fullName?: string | null
+    avatarUrl?: string | null
+  }
 }
 
-export function MessageList({ projectId, channelId }: MessageListProps) {
+export function MessageList({
+  projectId,
+  channelId,
+  channelName,
+  isDm,
+  createdAt,
+  otherUser,
+}: MessageListProps) {
   // 1. Window Controller: Manages query bounds
   const { minSequence, maxSequence, loadOlder } = useWindowController(
     0,
@@ -75,7 +91,19 @@ export function MessageList({ projectId, channelId }: MessageListProps) {
   }
 
   // 4. Transform messages (dates + grouping)
-  const virtualData = useMemo(() => transformMessages(messages), [messages])
+  const greetingItem = useMemo<VirtualItem>(() => ({
+    id: 'channel-greeting',
+    type: 'GREETING',
+    greetingType: isDm ? 'DM' : 'CHANNEL',
+    channelName,
+    createdAt,
+    otherUser,
+  }), [isDm, channelName, createdAt, otherUser])
+
+  const virtualData = useMemo(() => {
+    const items = transformMessages(messages)
+    return [greetingItem, ...items]
+  }, [messages, greetingItem])
 
   // 5. Scroll Architecture
   const {
@@ -91,6 +119,7 @@ export function MessageList({ projectId, channelId }: MessageListProps) {
       // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- virtualizer calls estimateSize with stale indices during transitions
       if (!item) return 40
       if (item.type === 'DATE') return 40
+      if (item.type === 'GREETING') return 140  // Banner height estimate
 
       // Media-aware estimates: images use a 4:3 aspect-ratio container (320×240 + label).
       // Without this, all messages estimate at 28-64px, causing aggressive remeasurement

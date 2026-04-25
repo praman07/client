@@ -24,6 +24,7 @@ interface ChatWindowProps {
   isPrivate: boolean
   topic?: string
   isDm?: boolean
+  createdAt?: string
   otherUser?: {
     fullName?: string | null
     avatarUrl?: string | null
@@ -38,6 +39,7 @@ export function ChatWindow({
   isPrivate,
   topic,
   isDm,
+  createdAt,
   otherUser,
 }: ChatWindowProps) {
   // 0. Fetch conversation with members for cache
@@ -88,7 +90,7 @@ export function ChatWindow({
               >
                 <SyncStatusIndicator status={status} />
               </ChatHeader>
-              <MessageList channelId={channelId} projectId={projectId} />
+              <MessageList channelId={channelId} projectId={projectId} channelName={channelName} isDm={isDm} createdAt={createdAt} otherUser={otherUser} />
               <MessageInput channelId={channelId} projectId={projectId} workspaceId={workspaceId} channelName={channelName} />
             </ChatContainer>
           </ScrollToMessageProvider>
