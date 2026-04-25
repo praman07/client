@@ -111,6 +111,7 @@ export function MessageList({
     parentRef,
     onScroll,
     showScrollButton,
+    newMessagesCount,
     scrollToBottom,
   } = useChatScroll({
     count: virtualData.length,
@@ -207,7 +208,7 @@ export function MessageList({
       </div>
 
       {/* Floating Scroll Button */}
-      <ScrollToBottomButton onClick={scrollToBottom} show={showScrollButton} />
+      <ScrollToBottomButton onClick={scrollToBottom} show={showScrollButton} newMessagesCount={newMessagesCount} />
     </div>
   )
 }

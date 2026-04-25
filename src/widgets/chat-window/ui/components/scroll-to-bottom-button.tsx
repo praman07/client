@@ -5,11 +5,13 @@ import { Button } from '@/shared/ui/primitives/button'
 interface ScrollToBottomButtonProps {
   onClick: () => void
   show: boolean
+  newMessagesCount?: number
 }
 
 export function ScrollToBottomButton({
   onClick,
   show,
+  newMessagesCount = 0,
 }: ScrollToBottomButtonProps) {
   if (!show) return null
 
@@ -22,7 +24,9 @@ export function ScrollToBottomButton({
         onClick={onClick}
       >
         <HugeiconsIcon icon={ArrowDownIcon} className="size-3.5" />
-        <span className="text-11 font-medium">New Messages</span>
+        <span className="text-11 font-medium">
+          {newMessagesCount > 0 ? `${newMessagesCount} new` : 'New Messages'}
+        </span>
       </Button>
     </div>
   )
