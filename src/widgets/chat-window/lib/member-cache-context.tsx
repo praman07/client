@@ -18,6 +18,9 @@ export interface MemberInfo {
   fullName: string
   email: string
   avatarUrl?: string | null
+  // Chat membership data
+  role?: string
+  joinedAt?: Date
 }
 
 interface MemberCacheContextValue {
@@ -66,11 +69,13 @@ export function MemberCacheProvider({
     if (members) {
       log.debug('Building cache for', members.length, 'members')
       for (const member of members) {
-        const memberInfo = {
+        const memberInfo: MemberInfo = {
           userId: member.userId,
           fullName: member.user.fullName,
           email: member.user.email,
           avatarUrl: member.user.avatarUrl,
+          joinedAt: member.joinedAt ? new Date(member.joinedAt) : undefined,
+          role: member.role,
         }
         log.debug('Adding member:', memberInfo)
         map.set(member.userId, memberInfo)

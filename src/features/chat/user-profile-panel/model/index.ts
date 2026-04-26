@@ -3,5 +3,6 @@ export {
   closeUserProfilePanel,
   selectIsUserProfilePanelOpen,
   selectUserProfilePanelUserId,
+  selectUserProfilePanelProjectId,
   userProfilePanelReducer,
 } from './slice'
