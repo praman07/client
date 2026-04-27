@@ -19,7 +19,7 @@ export function InviteRoleBadge({ role }: InviteRoleBadgeProps) {
   return (
     <span
       className={cn(
-        'inline-flex items-center rounded-md border px-2 py-0.5 text-xs font-medium',
+        'inline-flex items-center rounded-full border px-2 py-0.5 text-11 font-medium',
         getRoleBadgeClass(role),
       )}
     >

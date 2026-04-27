@@ -1,8 +1,8 @@
-import { useAuth } from "@/shared/hooks/use-auth";
 import { useQuery } from "@tanstack/react-query";
-import { GqlClient } from "@/shared/api";
 import { GET_USER_HOME_QUERY, userHomeKeys } from "../api/user-home";
 import type { UserHomeData } from "@/gql/graphql";
+import { GqlClient } from "@/shared/api";
+import { useAuth } from "@/shared/hooks/use-auth";
 
 export function useUserHome() {
   const { getToken } = useAuth();

@@ -1,8 +1,8 @@
+import { Copy } from 'lucide-react'
+import { toast } from 'sonner'
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/primitives/avatar'
 import { Badge } from '@/shared/ui/primitives/badge'
 import { Button } from '@/shared/ui/primitives'
-import { Copy } from 'lucide-react'
-import { toast } from 'sonner'
 
 interface UserProfilePanelHeaderProps {
   avatarUrl?: string

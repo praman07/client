@@ -79,11 +79,11 @@ function RoleBadge({ role, rank }: RoleBadgeProps) {
       ? 'bg-accent-subtle text-accent-primary'
       : rank <= 1
         ? 'bg-success-subtle text-success-primary'
-        : 'bg-layer-1 text-primary'
+        : 'bg-layer-2 text-primary'
   return (
     <span
       className={cn(
-        'inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium',
+        'inline-flex items-center rounded-full px-2 py-0.5 text-11 font-medium',
         colorClass,
       )}
     >
@@ -188,20 +188,20 @@ export function ProjectMembersTable({
           <div className="flex items-center gap-3">
             <Avatar className="h-8 w-8 shrink-0 border border-subtle-1">
               <AvatarImage src={member.user.avatarUrl ?? undefined} />
-              <AvatarFallback className="text-[11px] font-bold bg-layer-2 text-secondary">
+              <AvatarFallback className="text-11 font-bold bg-layer-2 text-secondary">
                 {getInitials(member.user.fullName ?? member.user.email)}
               </AvatarFallback>
             </Avatar>
             <div className="min-w-0">
-              <p className="truncate text-sm font-semibold text-primary tracking-tight">
+              <p className="truncate text-13 font-semibold text-primary tracking-tight">
                 {member.user.fullName ?? 'Unknown User'}
                 {isCurrentUser && (
-                  <span className="ml-1.5 text-xs text-secondary font-normal">
+                  <span className="ml-1.5 text-12 text-secondary font-normal">
                     (you)
                   </span>
                 )}
               </p>
-              <p className="text-xs text-secondary truncate">
+              <p className="text-12 text-secondary truncate">
                 {member.user.email}
               </p>
             </div>
@@ -232,14 +232,14 @@ export function ProjectMembersTable({
         ) : member.role ? (
           <RoleBadge role={member.role} rank={memberRoleInfo?.rank} />
         ) : (
-          <span className="text-xs text-secondary">No role</span>
+          <span className="text-12 text-secondary">No role</span>
         )
       },
     },
     {
       key: 'joinedAt',
       header: 'Joined',
-      cellClassName: 'text-secondary text-xs',
+      cellClassName: 'text-secondary text-12',
       render: (member) => formatDate(member.joinedAt),
     },
     {
@@ -316,8 +316,8 @@ export function ProjectMembersTable({
       {/* Header */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h2 className="text-2xl font-bold tracking-tight">Project Members</h2>
-          <p className="text-sm text-secondary mt-0.5">
+          <h2 className="text-20 font-semibold text-primary tracking-tight">Project Members</h2>
+          <p className="text-13 text-secondary mt-0.5">
             Manage who has access to this project.
           </p>
         </div>
@@ -339,7 +339,7 @@ export function ProjectMembersTable({
             placeholder="Filter by name or email..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="pl-9 h-9 text-sm bg-layer-2 border-subtle-1 hover:bg-layer-1 transition-all rounded-lg"
+            className="pl-9 h-9 text-13 bg-layer-2 border-subtle-1 hover:bg-layer-2-hover transition-colors duration-100 rounded-md"
           />
         </div>
       </div>
@@ -380,8 +380,8 @@ export function ProjectMembersTable({
             <ShieldOff className="h-7 w-7 text-danger-primary" />
           </div>
           <div className="space-y-1">
-            <h2 className="text-lg font-semibold">Access Restricted</h2>
-            <p className="text-sm text-secondary max-w-sm">
+            <h2 className="text-18 font-semibold text-primary">Access Restricted</h2>
+            <p className="text-13 text-secondary max-w-sm">
               You don't have permission to manage project members.
             </p>
           </div>

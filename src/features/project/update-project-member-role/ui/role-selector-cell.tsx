@@ -82,7 +82,7 @@ export function RoleSelectorCell({
   const isSystemRole = selectedRole?.isSystem ?? false
   const isLowerRank = !isSystemRole && selectedRole ? selectedRole.rank <= 1 : false
   const badgeClass = cn(
-    'inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-11 font-medium transition-colors cursor-pointer',
+    'inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-11 font-medium transition-colors duration-100 hover:opacity-80 cursor-pointer',
     isSystemRole
       ? 'bg-accent-subtle text-accent-primary'
       : isLowerRank
@@ -105,8 +105,8 @@ export function RoleSelectorCell({
         {displayName}
         <ChevronDown className="h-3 w-3 text-tertiary" />
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="start" className="w-44 p-1">
-        <p className="px-2 py-1 text-10 uppercase tracking-widest text-tertiary font-medium">
+      <DropdownMenuContent align="start" className="w-44 p-1 z-[var(--z-dropdown)] bg-surface-2 border border-subtle rounded-lg shadow-overlay-100 animate-scale-in">
+        <p className="px-2 py-1 text-11 uppercase tracking-widest text-tertiary font-medium">
           Assign role
         </p>
         <DropdownMenuSeparator />

@@ -1,9 +1,9 @@
 'use client'
 
+import { Send, Settings, UserMinus } from 'lucide-react'
 import { TabsContent } from '@/shared/ui/primitives/tabs'
 import { Button } from '@/shared/ui/primitives'
 import { Guard } from '@/shared/lib/auth/guard'
-import { Send, Settings, UserMinus } from 'lucide-react'
 
 interface UserProfilePanelActionsTabProps {
   userId: string

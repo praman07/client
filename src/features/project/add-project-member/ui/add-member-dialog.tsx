@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Check, ChevronDown, Users } from 'lucide-react'
 import {
   closeAddMemberDialog,
@@ -125,7 +125,7 @@ export function AddMemberDialog({
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && handleClose()} modal={false}>
-      <DialogContent className="sm:max-w-[440px]">
+      <DialogContent className="sm:max-w-[440px] rounded-lg">
         <DialogHeader>
           <DialogTitle>Add Member</DialogTitle>
           <DialogDescription>
@@ -152,9 +152,8 @@ export function AddMemberDialog({
                   className={cn(
                     'flex w-full items-center justify-between gap-1.5',
                     'rounded-md px-2.5 py-1.5 pr-2',
-                    'bg-layer-1 border border-subtle-1',
+                    'bg-layer-2 border border-subtle-1 hover:bg-layer-2-hover',
                     'text-13 text-primary',
-                    'hover:bg-layer-1-hover',
                     'transition-colors duration-100',
                     isDropdownOpen && 'ring-2 ring-accent-strong ring-offset-1 ring-offset-surface-2',
                   )}
@@ -236,13 +235,13 @@ export function AddMemberDialog({
                           setSelectedUserId(isSelected ? null : member.user.id)
                         }
                         className={cn(
-                          'flex w-full items-center gap-3 rounded-xs px-3 py-2 text-left transition-colors hover:bg-layer-1-hover hover:text-primary',
+                          'flex w-full items-center gap-3 rounded-md px-3 py-2 text-left transition-colors duration-100 hover:bg-layer-1-hover hover:text-primary',
                           isSelected && 'bg-layer-1',
                         )}
                       >
                         <Avatar className="h-8 w-8 shrink-0">
                           <AvatarImage src={member.user.avatarUrl ?? ''} />
-                          <AvatarFallback className="text-11 bg-layer-1 text-secondary border border-subtle">
+                          <AvatarFallback className="text-11 font-bold bg-layer-2 text-secondary border border-subtle-1">
                             {getInitials(member.user.fullName ?? member.user.email)}
                           </AvatarFallback>
                         </Avatar>

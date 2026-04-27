@@ -8,9 +8,9 @@
  */
 
 import {
+  registerChatChannelMemberRemovedHandler,
   registerChatDmCreatedHandler,
   registerChatGroupMemberAddedHandler,
-  registerChatChannelMemberRemovedHandler,
   registerChatMessageMentionHandler,
   registerChatMessageNewHandler,
   registerChatMessageReplyHandler,

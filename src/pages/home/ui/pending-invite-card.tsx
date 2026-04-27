@@ -2,8 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { Building2Icon, Loader2Icon } from "lucide-react";
 import type { PendingInviteEntry } from "@/gql/graphql";
-import { Button } from "@/shared/ui";
-import { Badge } from "@/shared/ui";
+import { Badge, Button  } from "@/shared/ui";
 import { useDeclineInvite } from "@/entities/user/hooks/use-decline-invite";
 
 interface Props {

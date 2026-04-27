@@ -1,19 +1,19 @@
 'use client'
 
+import { Send, X } from 'lucide-react'
 import { useUserProfilePanel } from '@/features/chat/user-profile-panel'
 import { useCreateDm } from '@/features/chat/create-dm/hooks/use-create-dm'
 import {
   Sheet,
   SheetContent,
+  SheetDescription,
   SheetHeader,
   SheetTitle,
-  SheetDescription,
 } from '@/shared/ui/primitives/sheet'
 import { Button } from '@/shared/ui/primitives'
 import { Avatar, AvatarFallback, AvatarImage } from '@/shared/ui/primitives/avatar'
 import { Badge } from '@/shared/ui/primitives/badge'
 import { useMemberCache } from '@/widgets/chat-window/lib/member-cache-context'
-import { Send, X } from 'lucide-react'
 import { cn } from '@/shared/lib/utils'
 
 export function UserProfilePanel() {

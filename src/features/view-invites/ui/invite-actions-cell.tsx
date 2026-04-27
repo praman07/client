@@ -26,7 +26,7 @@ export function InviteActionsCell({
         <button
           onClick={() => resendInvite({ inviteId: invite.id })}
           disabled={isAnyPending}
-          className="text-11 font-semibold tracking-wider text-accent-primary hover:text-accent-secondary transition-colors disabled:opacity-40 disabled:cursor-not-allowed uppercase flex items-center gap-1"
+          className="text-11 font-semibold tracking-wider text-accent-primary hover:text-accent-primary-hover transition-colors duration-100 disabled:text-disabled pointer-events-none uppercase flex items-center gap-1 rounded-md"
         >
           {isResending && <Loader2 className="h-3 w-3 animate-spin" />}
           Resend
@@ -36,7 +36,7 @@ export function InviteActionsCell({
         <button
           onClick={() => cancelInvite({ inviteId: invite.id })}
           disabled={isAnyPending}
-          className="text-11 font-semibold tracking-wider text-danger-primary hover:text-danger-secondary transition-colors disabled:opacity-40 disabled:cursor-not-allowed uppercase flex items-center gap-1"
+          className="text-11 font-semibold tracking-wider text-danger-primary hover:text-danger-primary-hover transition-colors duration-100 disabled:text-disabled pointer-events-none uppercase flex items-center gap-1 rounded-md"
         >
           {isCancelling && <Loader2 className="h-3 w-3 animate-spin" />}
           Revoke

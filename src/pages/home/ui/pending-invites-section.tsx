@@ -1,9 +1,9 @@
 import { MailIcon } from "lucide-react";
-import type { PendingInviteEntry } from "@/gql/graphql";
 import { PendingInviteCard } from "./pending-invite-card";
+import type { PendingInviteEntry } from "@/gql/graphql";
 
 interface Props {
-  invites: PendingInviteEntry[];
+  invites: Array<PendingInviteEntry>;
 }
 
 export function PendingInvitesSection({ invites }: Props) {

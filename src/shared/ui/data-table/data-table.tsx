@@ -34,10 +34,10 @@ export function DataTable<TRow>({
       : emptyMessage
 
   return (
-    <div className={cn('rounded-xl border border-subtle/40 overflow-hidden bg-layer-1/20 shadow-raised-100', className)}>
+    <div className={cn('rounded-lg border border-subtle overflow-hidden bg-layer-1', className)}>
       <table className="w-full text-13">
         <thead>
-          <tr className="bg-layer-1/30 border-b border-subtle/40">
+          <tr className="bg-layer-2 border-b border-subtle">
             {columns.map((col) => (
               <th
                 key={col.key}
@@ -61,7 +61,7 @@ export function DataTable<TRow>({
             rows.map((row, index) => (
               <tr
                 key={rowKey(row)}
-                className="group border-b border-subtle/20 transition-colors hover:bg-layer-transparent-hover last:border-0"
+                className="group border-b border-subtle last:border-0 hover:bg-layer-transparent-hover transition-colors duration-100"
                 style={{
                   animationDelay: `${index * 30}ms`,
                 }}
@@ -70,7 +70,7 @@ export function DataTable<TRow>({
                   <td
                     key={col.key}
                     className={cn(
-                      'px-4 py-3 text-13 text-primary/90',
+                      'px-4 py-3 text-13 text-primary',
                       col.cellClassName,
                     )}
                   >

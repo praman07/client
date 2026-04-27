@@ -2,8 +2,8 @@ import {
   closeUserProfilePanel,
   openUserProfilePanel,
   selectIsUserProfilePanelOpen,
-  selectUserProfilePanelUserId,
   selectUserProfilePanelProjectId,
+  selectUserProfilePanelUserId,
 } from '../model'
 import { useAppDispatch, useAppSelector } from '@/shared/hooks'
 

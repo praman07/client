@@ -1,10 +1,10 @@
-import { useAuth } from "@/shared/hooks/use-auth";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { GqlClient } from "@/shared/api";
+import { toast } from "sonner";
 import { DECLINE_WORKSPACE_INVITE } from "../api/decline-invite";
 import { userHomeKeys } from "../api/user-home";
 import type { DeclineWorkspaceInviteInput } from "@/gql/graphql";
-import { toast } from "sonner";
+import { useAuth } from "@/shared/hooks/use-auth";
+import { GqlClient } from "@/shared/api";
 
 export function useDeclineInvite() {
   const { getToken } = useAuth();
