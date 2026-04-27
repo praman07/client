@@ -53,7 +53,7 @@ function Slider({
           <SliderPrimitive.Thumb
             data-slot="slider-thumb"
             key={index}
-            className="border-accent-strong size-4 rounded-full border bg-on-color shadow-sm transition-[color,box-shadow,transform] hardware-accelerated active:scale-[0.95] duration-(--transition-expressive) block shrink-0 select-none disabled:pointer-events-none disabled:text-disabled"
+            className="border-accent-strong size-4 rounded-full border bg-white shadow-sm transition-[color,box-shadow,transform] hardware-accelerated active:scale-[0.95] duration-(--transition-expressive) block shrink-0 select-none disabled:pointer-events-none disabled:text-disabled"
           />
         ))}
       </SliderPrimitive.Control>

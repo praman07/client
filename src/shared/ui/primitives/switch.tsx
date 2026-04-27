@@ -43,11 +43,10 @@ function Switch({
       <SwitchPrimitive.Thumb
         data-slot="switch-thumb"
         className={cn(
-          'bg-on-color rounded-full pointer-events-none block ring-0 transition-transform',
+          'bg-white rounded-full pointer-events-none block ring-0 transition-transform',
           // Sizes
           'group-data-[size=default]/switch:size-3.5',
           'group-data-[size=sm]/switch:size-2.5',
-          // Position: unchecked
           'group-data-[size=default]/switch:data-unchecked:translate-x-[2px]',
           'group-data-[size=sm]/switch:data-unchecked:translate-x-[2px]',
           // Position: checked
