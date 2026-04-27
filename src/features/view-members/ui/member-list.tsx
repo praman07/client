@@ -1,13 +1,13 @@
 import { useState } from 'react'
-import { LayoutGrid, LayoutList, Search, SlidersHorizontal } from 'lucide-react'
-import { usePaginatedMembers, useWorkspaceMembers } from '../hooks'
+import { LayoutGrid, LayoutList, Search } from 'lucide-react'
+import { usePaginatedMembers, useSearchValidation, useWorkspaceMembers } from '../hooks'
 import { mapMembersError } from '../lib'
 import { MemberTableView } from './member-table-view'
 import { MemberGridView } from './member-grid-view'
 import { MemberListSkeleton } from './member-list-skeleton'
 import { MemberGridSkeleton } from './member-grid-skeleton'
 import { PaginationControls } from './pagination-controls'
-import { Button, Input } from '@/shared/ui'
+import { Input } from '@/shared/ui'
 import { cn } from '@/shared/lib/utils'
 import { useWorkspaceRoles } from '@/entities/workspace/hooks'
 import { useAuth } from '@/shared/hooks'
@@ -35,6 +35,22 @@ export function MemberList({ workspaceId }: MemberListProps) {
     Number(localStorage.getItem('members_page_size')) || 25
   )
 
+  // Search validation with debounce and character limit
+  const {
+    processedValue,
+    isAtLimit,
+    isNearLimit,
+    currentLength,
+    handleChange,
+    maxLength,
+  } = useSearchValidation({
+    initialValue: '',
+    onDebouncedSearch: (value) => {
+      setSearch(value)
+      setPage(1)
+    },
+  })
+
   // Data fetching
   const { data, isLoading, error } = useWorkspaceMembers(workspaceId)
   const { data: roles = [] } = useWorkspaceRoles()
@@ -56,11 +72,6 @@ export function MemberList({ workspaceId }: MemberListProps) {
   )
 
   // Handlers
-  const handleSearch = (value: string) => {
-    setSearch(value)
-    setPage(1) // Always reset page on search
-  }
-
   const handleViewMode = (mode: ViewMode) => {
     setViewMode(mode)
     localStorage.setItem('members_view_mode', mode)
@@ -95,10 +106,37 @@ export function MemberList({ workspaceId }: MemberListProps) {
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-tertiary group-focus-within:text-primary transition-colors pointer-events-none" />
             <Input
               placeholder="Filter by name or email..."
-              value={search}
-              onChange={(e) => handleSearch(e.target.value)}
-              className="pl-9 h-9 text-14 bg-layer-2 border-subtle focus-visible:ring-accent-subtle hover:bg-layer-2-hover transition-all rounded-lg"
+              value={processedValue}
+              onChange={handleChange}
+              maxLength={maxLength}
+              aria-label="Search members"
+              aria-describedby="member-search-counter"
+              className={cn(
+                'pl-9 pr-14 h-9 text-14 bg-layer-2 border-subtle transition-all rounded-lg',
+                isAtLimit
+                  ? 'border-warning-primary ring-2 ring-warning-subtle'
+                  : isNearLimit
+                  ? 'border-warning-primary/60'
+                  : 'focus-visible:ring-accent-subtle hover:bg-layer-2-hover',
+                'focus-visible:outline-none',
+              )}
             />
+            {/* Character counter — accessible live region */}
+            <div
+              id="member-search-counter"
+              aria-live="polite"
+              aria-atomic="true"
+              className={cn(
+                'absolute right-3 top-1/2 -translate-y-1/2 text-11 font-medium transition-colors pointer-events-none',
+                isAtLimit
+                  ? 'text-warning-primary'
+                  : isNearLimit
+                  ? 'text-warning-secondary'
+                  : 'text-tertiary',
+              )}
+            >
+              {currentLength}/{maxLength}
+            </div>
           </div>
         </div>
 
