@@ -33,13 +33,13 @@ export function DashboardHeader({ children }: { children?: React.ReactNode }) {
             <AvatarFallback className="rounded-lg">C</AvatarFallback>
           </Avatar> */}
 
-          <div className="flex items-center gap-2 text-sm">
+          <div className="flex items-center gap-2 text-13">
             {breadcrumbs.map((crumb, index) => {
               const Component = crumb.component
               return (
                 <Fragment key={crumb.id}>
                   {index > 0 && (
-                    <span className="text-tertiary">/</span>
+                    <span className="text-tertiary font-light">/</span>
                   )}
                   <Component />
                 </Fragment>

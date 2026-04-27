@@ -21,14 +21,14 @@ export function NavTabs({ items, from }: NavTabsProps) {
           to={item.href as any}
           from={from as any}
           activeOptions={item.activeOptions}
-          className="group relative flex h-12 items-center text-sm font-medium text-secondary transition-colors hover:text-primary"
+          className="group relative flex h-12 items-center text-13 font-medium text-secondary hover:text-primary transition-colors duration-100"
           activeProps={{
             className: 'text-primary font-semibold',
           }}
         >
           {({ isActive }) => (
             <>
-              {item.label}
+              <span className="pb-0.5">{item.label}</span>
               {isActive && (
                 <div className="absolute -bottom-px left-0 right-0 h-0.5 bg-accent-primary transition-all" />
               )}

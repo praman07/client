@@ -59,7 +59,7 @@ function WorkspaceSwitcherContent() {
             {currentWorkspace?.name[0] || 'W'}
           </AvatarFallback>
         </Avatar>
-        <span>{currentWorkspace?.name || 'Select Workspace'}</span>
+        <span className="text-13 font-medium text-primary">{currentWorkspace?.name || 'Select Workspace'}</span>
       </Link>
 
       {/* 2. Dropdown Trigger */}
@@ -74,7 +74,7 @@ function WorkspaceSwitcherContent() {
         </DropdownMenuTrigger>
         <DropdownMenuContent align="start" className="w-56 bg-surface-2 border border-subtle rounded-lg shadow-overlay-100 p-1">
           <DropdownMenuGroup>
-            <DropdownMenuLabel>Workspaces</DropdownMenuLabel>
+            <DropdownMenuLabel className="px-2 py-1 text-11 text-tertiary font-medium uppercase tracking-wide">Workspaces</DropdownMenuLabel>
             <DropdownMenuSeparator />
             {myWorkspaces.map((workspace) => (
               <DropdownMenuItem
@@ -93,7 +93,7 @@ function WorkspaceSwitcherContent() {
                     {workspace.name[0]}
                   </AvatarFallback>
                 </Avatar>
-                <span>{workspace.name}</span>
+                <span className="text-13 font-medium text-primary">{workspace.name}</span>
               </DropdownMenuItem>
             ))}
           </DropdownMenuGroup>
@@ -101,6 +101,7 @@ function WorkspaceSwitcherContent() {
           <DropdownMenuGroup>
             <DropdownMenuItem
               onClick={() => navigate({ to: '/workspace/new' })}
+              className="flex items-center gap-2 cursor-pointer w-full rounded-md px-2 py-1.5 text-13 text-secondary hover:bg-layer-transparent-hover hover:text-primary transition-colors"
             >
               <Plus className="mr-2 h-4 w-4" />
               Create Workspace
