@@ -14,6 +14,7 @@ import {
 } from './components/chat-layout'
 import type { StagedAttachment } from '@/features/chat/media'
 import type { MentionRef } from '@/widgets/chat-window/ui/components/RichChatContent'
+import { RichChatContent } from '@/widgets/chat-window/ui/components/RichChatContent'
 import { Separator } from '@/shared/ui/primitives/separator'
 import {
   Tooltip,
@@ -275,7 +276,9 @@ export function MessageInput({ channelId, projectId, workspaceId, channelName }:
           <div className="flex items-center gap-1.5 min-w-0">
             <span className="text-secondary shrink-0">Replying to</span>
             <strong className="text-primary shrink-0">{replyingTo.displayName}</strong>
-            <span className="text-tertiary truncate">{replyingTo.contentSnippet}</span>
+            <span className="text-tertiary truncate inline-flex items-center gap-0.5 flex-wrap">
+              <RichChatContent content={replyingTo.content} maxChars={80} />
+            </span>
           </div>
           <button
             onClick={clearReply}

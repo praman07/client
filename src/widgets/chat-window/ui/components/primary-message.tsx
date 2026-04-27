@@ -240,8 +240,8 @@ export function PrimaryMessage({ message, className }: PrimaryMessageProps) {
                         @{getMemberInfo(parentMessage.authorId)?.fullName ?? parentMessage.authorId}
                       </strong>
                       {' '}
-                      <span className="text-tertiary truncate">
-                        {getSafeContent(parentMessage.content).slice(0, 60)}
+                      <span className="text-tertiary truncate inline-flex items-center gap-0.5 flex-wrap">
+                        <RichChatContent content={parentMessage.content} maxChars={60} />
                       </span>
                     </span>
                   ) : (
