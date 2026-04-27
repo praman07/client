@@ -57,6 +57,8 @@ export function useUpdateDescription() {
     onSettled: (_, __, { boardId }) => {
       // Refetch to sync with server
       queryClient.invalidateQueries({ queryKey: boardKeys.detail(boardId) })
+      // Invalidate lists so board list views show updated description
+      queryClient.invalidateQueries({ queryKey: boardKeys.lists() })
     },
   })
 }
