@@ -37,7 +37,7 @@ import {
   useAssignRolePermission,
   useRemoveRolePermission,
 } from '@/features/project/manage-role-permissions'
-import { CreateProjectRoleDialog, openCreateRoleDialog  } from '@/features/project/create-project-role'
+import { CreateProjectRoleDialog, openCreateProjectRoleDialog } from '@/features/project/create-project-role'
 import { UpdateProjectRoleDialog, openUpdateRoleDialog  } from '@/features/project/update-project-role'
 import { useFragment } from '@/gql'
 
@@ -190,7 +190,7 @@ export function ProjectRolesList({
           )}
         </div>
         <Guard permission="project:role:create">
-          <Button size="sm" onClick={() => dispatch(openCreateRoleDialog())}>
+          <Button size="sm" onClick={() => dispatch(openCreateProjectRoleDialog())}>
             <UserPlus className="mr-1.5 h-4 w-4" />
             Create Role
           </Button>
@@ -356,6 +356,7 @@ export function ProjectRolesList({
       <CreateProjectRoleDialog
         projectId={projectId}
         workspaceId={workspaceId}
+        existingRoleNames={roles.map((r) => r.name)}
       />
       <UpdateProjectRoleDialog
         projectId={projectId}

@@ -4,19 +4,22 @@ const createProjectRoleSlice = createSlice({
   name: 'createProjectRole',
   initialState: { isOpen: false },
   reducers: {
-    openCreateRoleDialog: (state) => {
+    openCreateProjectRoleDialog: (state) => {
       state.isOpen = true
     },
-    closeCreateRoleDialog: (state) => {
+    closeCreateProjectRoleDialog: (state) => {
       state.isOpen = false
     },
   },
   selectors: {
-    selectIsCreateRoleDialogOpen: (state) => state.isOpen,
+    selectIsCreateProjectRoleDialogOpen: (state) => state.isOpen,
   },
 })
 
-export const { openCreateRoleDialog, closeCreateRoleDialog } =
-  createProjectRoleSlice.actions
-export const { selectIsCreateRoleDialogOpen } = createProjectRoleSlice.selectors
+export const {
+  openCreateProjectRoleDialog,
+  closeCreateProjectRoleDialog,
+} = createProjectRoleSlice.actions
+export const { selectIsCreateProjectRoleDialogOpen } =
+  createProjectRoleSlice.selectors
 export const createProjectRoleReducer = createProjectRoleSlice.reducer

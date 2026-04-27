@@ -100,7 +100,7 @@ function ProjectLayout({
       </div>
 
       {/* Project-scoped modal registry — portaled to <body>, zero visual impact */}
-      <CreateProjectRoleDialog projectId={project.id} workspaceId={workspace.id} />
+      <CreateProjectRoleDialog projectId={project.id} workspaceId={workspace.id} existingRoleNames={[]} />
     </div>
   )
 }
