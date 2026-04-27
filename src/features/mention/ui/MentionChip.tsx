@@ -27,28 +27,28 @@ interface MentionChipProps {
 // ── Chip color map ────────────────────────────────────────────────────────────
 
 const CHIP_COLORS: Record<string, string> = {
-  // Documents — Indigo
+  // Documents — muted blue/indigo tint
   [SearchEntityType.Page]:
-    'bg-label-indigo-bg text-label-indigo-text hover:bg-label-indigo-hover border border-subtle',
+    'bg-[hsl(220_50%_55%/0.12)] text-[hsl(220_70%_70%)] hover:bg-[hsl(220_50%_55%/0.20)]',
   [SearchEntityType.VaultFile]:
-    'bg-label-indigo-bg text-label-indigo-text hover:bg-label-indigo-hover border border-subtle',
+    'bg-[hsl(220_50%_55%/0.12)] text-[hsl(220_70%_70%)] hover:bg-[hsl(220_50%_55%/0.20)]',
   [SearchEntityType.VaultFolder]:
-    'bg-label-indigo-bg text-label-indigo-text hover:bg-label-indigo-hover border border-subtle',
+    'bg-[hsl(220_50%_55%/0.12)] text-[hsl(220_70%_70%)] hover:bg-[hsl(220_50%_55%/0.20)]',
 
-  // Tasks — Orange
+  // Tasks — muted amber
   [SearchEntityType.Issue]:
-    'bg-label-orange-bg text-label-orange-text hover:bg-label-orange-hover border border-subtle',
+    'bg-[hsl(38_70%_50%/0.12)] text-[hsl(38_80%_65%)] hover:bg-[hsl(38_70%_50%/0.20)]',
 
-  // Canvases — Emerald (teal equivalent)
+  // Canvases — muted teal
   [SearchEntityType.Whiteboard]:
-    'bg-label-emerald-bg text-label-emerald-text hover:bg-label-emerald-hover border border-subtle',
+    'bg-[hsl(168_50%_45%/0.12)] text-[hsl(168_60%_60%)] hover:bg-[hsl(168_50%_45%/0.20)]',
 
-  // People — Purple
+  // People — muted violet
   [SearchEntityType.User]:
-    'bg-label-purple-bg text-label-purple-text hover:bg-label-purple-hover border border-subtle',
+    'bg-[hsl(265_50%_60%/0.12)] text-[hsl(265_70%_72%)] hover:bg-[hsl(265_50%_60%/0.20)]',
 }
 
-const DEFAULT_COLOR = 'bg-layer-2 text-secondary hover:bg-layer-2-hover'
+const DEFAULT_COLOR = 'bg-white/5 text-secondary hover:bg-white/10'
 
 // ── Component ─────────────────────────────────────────────────────────────────
 
@@ -70,7 +70,7 @@ export function MentionChip({ inlineContent }: MentionChipProps) {
 
   return (
     <span
-      className={`mention-chip inline-flex items-center gap-0.5 rounded-md px-1.5 py-0.5 text-13 font-medium transition-colors duration-100 select-none cursor-pointer ${colorClass}`}
+      className={`mention-chip inline-flex items-center gap-0.5 rounded px-1 py-px text-[11px] font-medium leading-snug transition-colors duration-100 select-none cursor-pointer ${colorClass}`}
       contentEditable={false}
       onClick={handleClick}
       title={isOrphaned ? 'This entity no longer exists' : `${entityType}: ${displayText}`}

@@ -14,6 +14,7 @@ import {
   MessageEventDescription,
 } from './message'
 import { RichChatContent } from './RichChatContent'
+import { InlineEditBox } from './inline-edit-box'
 import type { MessageRowData } from '../../model/message-list.types'
 import type { DBMessage } from '@/shared/lib/db/schema'
 import type { ReactionGroup } from '@/entities/reaction'
@@ -71,8 +72,6 @@ export function AdditionalMessage({ message }: AdditionalMessageProps) {
   const currentContent = getSafeContent(message.content)
   const {
     isEditing,
-    editValue,
-    setEditValue,
     startEdit,
     cancelEdit,
     submitEdit,
@@ -190,29 +189,12 @@ export function AdditionalMessage({ message }: AdditionalMessageProps) {
             </div>
           ) : isEditing ? (
             /* ── Edit mode ─────────────────────────────────────── */
-            <div className="flex flex-col gap-1.5 mt-1.5">
-              <textarea
-                autoFocus
-                className="w-full rounded-md border border-subtle-1 bg-layer-2 px-3 py-2 text-sm resize-none focus:outline-none min-h-[60px] max-h-[240px] overflow-y-auto"
-                value={editValue}
-                rows={Math.max(2, editValue.split('\n').length)}
-                onChange={(e) => setEditValue(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === 'Escape') {
-                    e.preventDefault()
-                    cancelEdit()
-                  }
-                  if (e.key === 'Enter' && !e.shiftKey) {
-                    e.preventDefault()
-                    submitEdit()
-                  }
-                }}
-              />
-              <p className="text-xs text-secondary">
-                <span className="font-medium">escape</span> to cancel •{' '}
-                <span className="font-medium">enter</span> to save
-              </p>
-            </div>
+            <InlineEditBox
+              initialContent={message.content}
+              projectId={message.projectId}
+              onSave={(rich) => submitEdit(rich)}
+              onCancel={cancelEdit}
+            />
           ) : (
             /* ── Read mode ─────────────────────────────────────── */
             <div className="relative">

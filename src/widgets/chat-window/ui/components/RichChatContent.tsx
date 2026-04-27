@@ -31,7 +31,7 @@ interface RichContent {
 
 // ── Parse ─────────────────────────────────────────────────────────────────────
 
-function parseContent(raw: unknown): { plain: string } | { rich: RichContent } {
+export function parseContent(raw: unknown): { plain: string } | { rich: RichContent } {
   if (typeof raw === 'string') {
     // Try to parse as JSON rich content
     try {

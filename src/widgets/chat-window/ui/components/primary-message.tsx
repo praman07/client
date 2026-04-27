@@ -16,6 +16,7 @@ import {
   MessageEventTitle,
 } from './message'
 import { RichChatContent } from './RichChatContent'
+import { InlineEditBox } from './inline-edit-box'
 import type { MessageRowData } from '../../model/message-list.types'
 import type { DBMessage } from '@/shared/lib/db/schema'
 import type { ReactionGroup } from '@/entities/reaction'
@@ -75,7 +76,7 @@ export function PrimaryMessage({ message, className }: PrimaryMessageProps) {
   const { scrollToMessage } = useScrollToMessage()
 
   const currentContent = getSafeContent(message.content)
-  const { isEditing, editValue, setEditValue, startEdit, cancelEdit, submitEdit } =
+  const { isEditing, startEdit, cancelEdit, submitEdit } =
     useMessageEdit(message.id, currentContent)
 
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
@@ -183,7 +184,7 @@ export function PrimaryMessage({ message, className }: PrimaryMessageProps) {
         <MessageEventAddon>
           <Avatar
             className="rounded-full size-9 shrink-0 cursor-pointer hover:opacity-80 transition-opacity"
-            onClick={() => openUserProfile(message.authorId)}
+            onClick={() => openUserProfile(message.authorId, message.projectId)}
           >
             {memberInfo?.avatarUrl && (
               <AvatarImage src={memberInfo.avatarUrl} alt={displayName} />
@@ -197,7 +198,7 @@ export function PrimaryMessage({ message, className }: PrimaryMessageProps) {
           <div className="flex items-center gap-2">
             <MessageEventTitle
               className="hover:underline cursor-pointer"
-              onClick={() => openUserProfile(message.authorId)}
+              onClick={() => openUserProfile(message.authorId, message.projectId)}
             >
               {displayName}
             </MessageEventTitle>
@@ -216,29 +217,12 @@ export function PrimaryMessage({ message, className }: PrimaryMessageProps) {
             </div>
           ) : isEditing ? (
             /* ── Edit mode ─────────────────────────────────────── */
-            <div className="flex flex-col gap-1.5 mt-1.5">
-              <textarea
-                autoFocus
-                className="w-full rounded-md border-subtle-1 bg-layer-2 px-3 py-2 text-14 resize-none focus:outline-none min-h-[60px] max-h-[240px] overflow-y-auto"
-                value={editValue}
-                rows={Math.max(2, editValue.split('\n').length)}
-                onChange={(e) => setEditValue(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === 'Escape') {
-                    e.preventDefault()
-                    cancelEdit()
-                  }
-                  if (e.key === 'Enter' && !e.shiftKey) {
-                    e.preventDefault()
-                    submitEdit()
-                  }
-                }}
-              />
-              <p className="text-11 text-secondary">
-                <span className="font-medium">escape</span> to cancel •{' '}
-                <span className="font-medium">enter</span> to save
-              </p>
-            </div>
+            <InlineEditBox
+              initialContent={message.content}
+              projectId={message.projectId}
+              onSave={(rich) => submitEdit(rich)}
+              onCancel={cancelEdit}
+            />
           ) : (
             /* ── Read mode ─────────────────────────────────────── */
             <div className="relative">
