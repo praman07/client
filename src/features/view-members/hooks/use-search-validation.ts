@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 
 /** Maximum characters allowed in the member search input. */
 const MAX_LENGTH = 100

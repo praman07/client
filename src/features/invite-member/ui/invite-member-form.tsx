@@ -6,10 +6,10 @@ import { CheckCircle2, Loader2 } from 'lucide-react'
 
 import { mapInviteMemberError } from '../lib'
 import { inviteMemberSchema } from '../model'
-import { useInviteMember } from '../hooks'
-import { useWorkspaceRoles } from '../hooks/use-workspace-roles'
+import { useInviteFormValidation, useInviteMember, validateAllEmails } from '../hooks'
 import { EmailListField } from './email-list-field'
 import type { InviteMemberFormValues } from '../model'
+import { useWorkspaceMembers, useWorkspaceRoles } from '@/entities/workspace/hooks'
 import { useAppSelector } from '@/shared/hooks'
 import { Button } from '@/shared/ui'
 import { selectCurrentWorkspace } from '@/entities/workspace'
@@ -23,6 +23,13 @@ export function InviteMemberForm({ onClose }: Props) {
   const currentWorkspace = useAppSelector(selectCurrentWorkspace)
   const { mutate, isPending } = useInviteMember()
   const { data: roles } = useWorkspaceRoles()
+
+  // Get workspace members for validation
+  const { data: membersData } = useWorkspaceMembers(currentWorkspace?.id ?? '')
+  const members = membersData?.workspaceMembers ?? []
+
+  // Validation hook
+  const { existingMemberEmails } = useInviteFormValidation({ members })
 
   const memberRoleId = roles?.find((r) => r.name === 'MEMBER')?.id ?? ''
 
@@ -47,8 +54,6 @@ export function InviteMemberForm({ onClose }: Props) {
           },
           onError: (error) => {
             const message = mapInviteMemberError(error)
-            // If error mapping returns empty string, error is intentionally suppressed
-            // (e.g. NOTIFICATION_PROVIDER_ERROR — invite was created, just email failed)
             if (message !== '') {
               toast.error(message)
             }
@@ -57,6 +62,7 @@ export function InviteMemberForm({ onClose }: Props) {
       )
     },
   })
+
 
   if (isSuccess) {
     return (
@@ -80,21 +86,38 @@ export function InviteMemberForm({ onClose }: Props) {
       }}
       className="space-y-5 pt-2"
     >
-      <EmailListField form={form} />
+      <EmailListField
+        form={form}
+        existingMemberEmails={existingMemberEmails}
+      />
 
       <div className="flex justify-end gap-2 pt-1">
         <Button type="button" variant="outline" onClick={onClose}>
           Cancel
         </Button>
+        {/* form.Subscribe ensures this re-renders reactively when form values change */}
         <form.Subscribe
-          selector={(state) => [state.canSubmit]}
-          children={([canSubmit]) => (
-            <Button type="submit" disabled={!canSubmit || isPending}>
-              {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              Send Invites
-            </Button>
-          )}
-        />
+          selector={(state) => ({
+            canFormSubmit: state.canSubmit,
+            emails: state.values.emails as Array<{ email: string }>,
+          })}
+        >
+          {({ canFormSubmit, emails }) => {
+            const validationErrors = validateAllEmails(emails, existingMemberEmails)
+            const hasValidationErrors = Object.keys(validationErrors).length > 0
+            const hasAtLeastOneValidEmail = emails.some(
+              (f) => f.email.trim().length > 0 && f.email.includes('@'),
+            )
+            const canSubmit =
+              canFormSubmit && !hasValidationErrors && hasAtLeastOneValidEmail
+            return (
+              <Button type="submit" disabled={!canSubmit || isPending}>
+                {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                Send Invites
+              </Button>
+            )
+          }}
+        </form.Subscribe>
       </div>
     </form>
   )
