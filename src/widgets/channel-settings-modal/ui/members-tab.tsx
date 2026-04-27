@@ -60,16 +60,17 @@ interface MemberRowProps {
   isCurrentUser: boolean
   canRemove: boolean
   onRemove: () => void
-  onOpenProfile: (userId: string) => void
+  projectId: string
+  onOpenProfile: (userId: string, projectId: string) => void
 }
 
-function MemberRow({ member, isCurrentUser, canRemove, onRemove, onOpenProfile }: MemberRowProps) {
+function MemberRow({ member, isCurrentUser, canRemove, onRemove, onOpenProfile, projectId }: MemberRowProps) {
   const roleColor = ROLE_COLORS[member.role] ?? ROLE_COLORS.MEMBER
   return (
     <li className="flex items-center gap-3 px-2 py-2 rounded-md hover:bg-layer-1-hover group transition-colors">
       <Avatar
         className="size-8 shrink-0 border-subtle-1 cursor-pointer hover:opacity-80 transition-opacity"
-        onClick={() => onOpenProfile(member.user.id)}
+        onClick={() => onOpenProfile(member.user.id, projectId)}
       >
         <AvatarImage src={member.user.avatarUrl ?? undefined} />
         <AvatarFallback className="text-10 font-bold bg-layer-1 text-secondary">
@@ -80,7 +81,7 @@ function MemberRow({ member, isCurrentUser, canRemove, onRemove, onOpenProfile }
       <div className="flex-1 min-w-0">
         <p
           className="text-14 font-medium text-primary truncate cursor-pointer hover:underline"
-          onClick={() => onOpenProfile(member.user.id)}
+          onClick={() => onOpenProfile(member.user.id, projectId)}
         >
           {member.user.fullName ?? member.user.email}
           {isCurrentUser && (
@@ -199,6 +200,7 @@ export function MembersTab({ conversation }: MembersTabProps) {
                 member={member}
                 isCurrentUser={member.userId === currentUserId}
                 canRemove={canRemove}
+                projectId={conversation.projectId ?? ''}
                 onRemove={() => setRemovingUserId(member.userId)}
                 onOpenProfile={openUserProfile}
               />
