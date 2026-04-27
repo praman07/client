@@ -74,7 +74,7 @@ className={cn(
         <span className="text-14 font-medium truncate">{role.name}</span>
               {role.isSystem && (
                 <Badge
-                  variant="secondary"
+                  variant="default"
                   className="text-10 h-4 px-1.5 py-0 uppercase tracking-wider opacity-60 shrink-0"
                 >
                   System

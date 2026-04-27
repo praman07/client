@@ -259,7 +259,7 @@ export function WorkspaceRolePermissionsPanel({
 }: WorkspaceRolePermissionsPanelProps) {
   const [name, setName] = useState(role.name)
   const [description, setDescription] = useState(role.description ?? '')
-  const [rank, setRank] = useState(role.rank)
+  const [rank, setRank] = useState<number | undefined>(role.rank)
   const [pendingPermIds, setPendingPermIds] = useState<Set<string>>(
     new Set(role.permissions.map((p) => p.id))
   )
@@ -443,7 +443,10 @@ export function WorkspaceRolePermissionsPanel({
                 type="number"
                 value={rank}
                 onChange={(e) => {
-                  if (e.target.value === '') return setRank(0)
+                  if (e.target.value === '') {
+                    setRank(undefined)
+                    return
+                  }
                   let val = parseInt(e.target.value, 10)
                   if (isNaN(val)) return
                   if (val < 0) val = 0

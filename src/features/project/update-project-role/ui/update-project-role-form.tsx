@@ -90,7 +90,14 @@ export function UpdateProjectRoleForm({
               max={99}
               value={field.state.value ?? ''}
               onBlur={field.handleBlur}
-              onChange={(e) => field.handleChange(Number(e.target.value))}
+              onChange={(e) => {
+                const val = e.target.value
+                if (val === '') {
+                  field.handleChange(undefined)
+                } else {
+                  field.handleChange(Number(val))
+                }
+              }}
             />
             <FieldError field={field} />
           </div>

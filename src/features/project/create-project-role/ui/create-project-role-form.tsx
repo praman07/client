@@ -56,7 +56,14 @@ export function StepRoleDetails({
             min={2}
             max={98}
             value={values.rank}
-            onChange={(e) => onChange('rank', Number(e.target.value))}
+            onChange={(e) => {
+              const val = e.target.value
+              if (val === '') {
+                onChange('rank', undefined)
+              } else {
+                onChange('rank', Number(val))
+              }
+            }}
           />
           <p className="text-11 text-secondary leading-tight">
             Lower = higher authority.

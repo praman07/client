@@ -166,7 +166,14 @@ export function CreateWorkspaceRoleForm({
               name={field.name}
               value={field.state.value}
               onBlur={field.handleBlur}
-              onChange={(e) => field.handleChange(Number(e.target.value))}
+              onChange={(e) => {
+                const val = e.target.value
+                if (val === '') {
+                  field.handleChange(undefined)
+                } else {
+                  field.handleChange(Number(val))
+                }
+              }}
               placeholder="10"
               disabled={isPending}
             />

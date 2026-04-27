@@ -25,6 +25,8 @@ function Input({ className, type, ...props }: React.ComponentProps<'input'>) {
         'disabled:pointer-events-none disabled:text-disabled disabled:border-subtle disabled:cursor-not-allowed',
         // File input
         'file:h-6 file:text-12 file:font-medium file:text-primary file:border-0 file:bg-transparent',
+        // Number input — hide spinners
+        '[[type=number]&]:[appearance:textfield] [[type=number]&]:[&::-webkit-outer-spin-button]:appearance-none [[type=number]&]:[&::-webkit-inner-spin-button]:appearance-none',
         className,
       )}
       {...props}
