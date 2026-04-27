@@ -20,18 +20,25 @@ export interface ChatMentionChipProps {
 // ── Chip color map (mirrors MentionChip) ──────────────────────────────────────
 
 const CHIP_COLORS: Record<string, string> = {
+  // Documents — Indigo
   [SearchEntityType.Page]:
-    'bg-layer-2 text-primary hover:bg-layer-2-hover',
-  [SearchEntityType.Issue]:
-    'bg-layer-2 text-primary hover:bg-layer-2-hover',
+    'bg-label-indigo-bg text-label-indigo-text hover:bg-label-indigo-hover border border-subtle',
   [SearchEntityType.VaultFile]:
-    'bg-layer-2 text-primary hover:bg-layer-2-hover',
+    'bg-label-indigo-bg text-label-indigo-text hover:bg-label-indigo-hover border border-subtle',
   [SearchEntityType.VaultFolder]:
-    'bg-layer-2 text-primary hover:bg-layer-2-hover',
+    'bg-label-indigo-bg text-label-indigo-text hover:bg-label-indigo-hover border border-subtle',
+
+  // Tasks — Orange
+  [SearchEntityType.Issue]:
+    'bg-label-orange-bg text-label-orange-text hover:bg-label-orange-hover border border-subtle',
+
+  // Canvases — Emerald (teal equivalent)
   [SearchEntityType.Whiteboard]:
-    'bg-layer-2 text-primary hover:bg-layer-2-hover',
+    'bg-label-emerald-bg text-label-emerald-text hover:bg-label-emerald-hover border border-subtle',
+
+  // People — Purple
   [SearchEntityType.User]:
-    'bg-layer-2 text-primary hover:bg-layer-2-hover',
+    'bg-label-purple-bg text-label-purple-text hover:bg-label-purple-hover border border-subtle',
 }
 
 const DEFAULT_COLOR = 'bg-layer-2 text-secondary hover:bg-layer-2-hover'
