@@ -8,8 +8,7 @@ import { useCreateProjectModal } from '@/features/project/create-project'
 import {
   Button,
   Card,
-  CardFooter,
-  CardHeader,
+  CardContent,
   Empty,
   EmptyContent,
   EmptyDescription,
@@ -23,27 +22,30 @@ import { Guard } from '@/shared/lib/auth/guard'
 
 function ProjectCardSkeleton() {
   return (
-    <Card className="h-full flex flex-col justify-between">
-      <div className="flex justify-between items-start px-6 pt-6 pb-0">
-        {/* Logo Placeholder */}
-        <Skeleton className="size-10 rounded-lg" />
-        {/* Avatars Placeholder */}
-        <div className="flex -space-x-2">
-          <Skeleton className="size-8 rounded-full border-2 border-surface-1" />
-          <Skeleton className="size-8 rounded-full border-2 border-surface-1" />
+    <Card className="h-full bg-layer-1 border border-subtle rounded-lg shadow-raised-100 animate-fade-in">
+      <CardContent className="p-4 flex flex-col h-full gap-3">
+        {/* Header */}
+        <div className="flex items-center gap-3">
+          <div className="size-8 rounded-md bg-layer-2 animate-pulse-subtle shrink-0" />
+          <div className="h-4 w-1/2 bg-layer-2 animate-pulse-subtle rounded-md" />
         </div>
-      </div>
 
-      <CardHeader className="py-0 flex-1 mt-4 space-y-2">
-        <Skeleton className="h-6 w-2/3" />
-        <Skeleton className="h-4 w-full" />
-        <Skeleton className="h-4 w-4/5" />
-      </CardHeader>
+        {/* Title + Desc */}
+        <div className="flex-1 pt-1 space-y-2">
+          <div className="h-3 w-full bg-layer-2 animate-pulse-subtle rounded-md" />
+          <div className="h-3 w-2/3 bg-layer-2 animate-pulse-subtle rounded-md" />
+        </div>
 
-      <CardFooter className="pt-4 border-t border-subtle flex justify-between items-center mt-4">
-        <Skeleton className="h-4 w-20" />
-        <Skeleton className="h-4 w-16" />
-      </CardFooter>
+        {/* Footer */}
+        <div className="flex items-center justify-between mt-auto pt-3 border-t border-subtle">
+          <div className="flex -space-x-2">
+            <div className="size-6 rounded-full border-2 border-layer-1 bg-layer-2 animate-pulse-subtle" />
+            <div className="size-6 rounded-full border-2 border-layer-1 bg-layer-2 animate-pulse-subtle" />
+            <div className="size-6 rounded-full border-2 border-layer-1 bg-layer-2 animate-pulse-subtle" />
+          </div>
+          <div className="h-3 w-16 bg-layer-2 animate-pulse-subtle rounded-md" />
+        </div>
+      </CardContent>
     </Card>
   )
 }
@@ -103,17 +105,16 @@ export function ProjectsPage({ workspaceSlug }: ProjectsPageProps) {
             </Link>
           ))}
 
-        {/* Append 'New Project' Inline Card */}
         {!isLoading && hasProjects && (
           <Guard permission="project:create">
             <button
               onClick={() => open()}
-              className="flex flex-col items-center justify-center h-full min-h-[200px] rounded-xl border-2 border-dashed border-subtle hover:border-strong hover:bg-layer-transparent transition-all cursor-pointer group outline-none focus-visible:ring-2 focus-visible:ring-accent-strong"
+              className="flex flex-col items-center justify-center h-full min-h-[200px] rounded-xl border-2 border-dashed border-subtle hover:border-strong hover:bg-layer-transparent transition-colors duration-100 cursor-pointer group outline-none focus-visible:ring-2 focus-visible:ring-accent-strong"
             >
-              <div className="flex items-center justify-center size-12 rounded-2xl bg-layer-2 group-hover:bg-layer-2-hover transition-colors mb-3">
-                <Plus className="w-6 h-6 text-secondary group-hover:text-primary transition-colors" />
+              <div className="flex items-center justify-center size-12 rounded-2xl bg-layer-transparent group-hover:bg-layer-transparent-hover transition-colors duration-100 mb-3">
+                <Plus className="w-6 h-6 text-secondary group-hover:text-primary transition-colors duration-100" />
               </div>
-              <span className="font-medium text-13 text-secondary group-hover:text-primary transition-colors tracking-tight">
+              <span className="font-medium text-13 text-secondary group-hover:text-primary transition-colors duration-100 tracking-tight">
                 New Project
               </span>
             </button>

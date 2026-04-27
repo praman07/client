@@ -128,7 +128,8 @@ function AvatarGroup({ className, ...props }: React.ComponentProps<'div'>) {
       data-slot="avatar-group"
       className={cn(
         'flex -space-x-2 group/avatar-group',
-        '*:data-[slot=avatar]:ring-2 *:data-[slot=avatar]:ring-canvas',
+        // Optional border for avatar group separation (instead of hardcoded canvas ring)
+        '*:data-[slot=avatar]:border-2 *:data-[slot=avatar]:border-layer-1',
         // Shape support for group
         '*:data-[shape=circle]:rounded-full',
         '*:data-[shape=square]:rounded-xl',
@@ -164,8 +165,8 @@ function AvatarGroupCount({
         '[&>svg]:size-4',
         'group-has-data-[size=lg]/avatar-group:[&>svg]:size-5',
         'group-has-data-[size=sm]/avatar-group:[&>svg]:size-3',
-        // Ring
-        'ring-2 ring-canvas relative flex shrink-0 items-center justify-center select-none',
+        // Border instead of canvas ring
+        'border-2 border-layer-1 relative flex shrink-0 items-center justify-center select-none',
         className,
       )}
       {...props}

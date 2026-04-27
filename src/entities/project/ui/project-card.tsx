@@ -1,16 +1,4 @@
-import * as React from 'react'
-import {
-  Clock,
-  Database,
-  Megaphone,
-  Rocket,
-  Shield,
-  Sparkles,
-  Terminal,
-  Users,
-} from 'lucide-react'
 import type { Project } from '../model/types'
-import { formatDateRelative } from '@/shared/lib'
 import {
   Avatar,
   AvatarFallback,
@@ -18,29 +6,10 @@ import {
   AvatarGroupCount,
   AvatarImage,
   Card,
+  CardContent,
   CardDescription,
-  CardFooter,
-  CardHeader,
   CardTitle,
 } from '@/shared/ui'
-
-const DEMO_LOGOS = [
-  { icon: Terminal, color: 'bg-accent-subtle text-accent-primary' },
-  { icon: Sparkles, color: 'bg-layer-2 text-accent-primary' },
-  { icon: Database, color: 'bg-success-subtle text-success-primary' },
-  { icon: Megaphone, color: 'bg-warning-subtle text-warning-primary' },
-  { icon: Shield, color: 'bg-danger-subtle text-danger-primary' },
-  { icon: Rocket, color: 'bg-layer-2 text-accent-primary' },
-]
-
-function getDemoLogo(projectId: string) {
-  let hash = 0
-  for (let i = 0; i < projectId.length; i++) {
-    hash = projectId.charCodeAt(i) + ((hash << 5) - hash)
-  }
-  const index = Math.abs(hash) % DEMO_LOGOS.length
-  return DEMO_LOGOS[index]
-}
 
 interface ProjectCardProps {
   project: Project
@@ -48,58 +17,59 @@ interface ProjectCardProps {
 }
 
 export function ProjectCard({ project, onClick }: ProjectCardProps) {
-  const LogoConfig = React.useMemo(() => getDemoLogo(project.id), [project.id])
-  const LogoIcon = LogoConfig.icon
-
-  const visibleMembers = project.members.slice(0, 2)
-  const excessMembersCount = project.members.length - 2
+  const visibleMembers = project.members.slice(0, 3)
+  const excessMembersCount = project.members.length - 3
 
   return (
     <Card
-      className="hover:bg-layer-1-hover cursor-pointer transition-colors group/project-card h-full border border-subtle"
+      className="group/project-card h-full bg-layer-1 hover:bg-layer-1-hover border border-subtle rounded-lg shadow-raised-100 cursor-pointer transition-colors duration-100 active:scale-[0.99] hardware-accelerated"
       onClick={onClick}
     >
-      <div className="flex justify-between items-start px-6">
-        <div
-          className={`flex items-center justify-center size-10 rounded-lg ${LogoConfig.color}`}
-        >
-          <LogoIcon className="w-5 h-5" />
+      <CardContent className="p-4 flex flex-col h-full gap-3">
+        {/* Header */}
+        <div className="flex items-center gap-3">
+          <Avatar shape="square" className="size-8 rounded-md border border-subtle bg-layer-2 shrink-0">
+            <AvatarImage src={project.logoUrl ?? undefined} alt={project.name} className="object-cover" />
+            <AvatarFallback className="text-xs font-medium text-secondary">
+              {project.name.slice(0, 2).toUpperCase()}
+            </AvatarFallback>
+          </Avatar>
+          <div className="flex-1 min-w-0">
+            <CardTitle className="text-14 font-semibold text-primary truncate">
+              {project.name}
+            </CardTitle>
+          </div>
         </div>
-        
-        {project.members.length > 0 && (
-          <AvatarGroup>
-            {visibleMembers.map((member) => (
-              <Avatar key={member.userId}>
-                <AvatarImage src={member.user.avatarUrl || ''} alt={member.user.fullName || 'User'} />
-                <AvatarFallback>
-                  {member.user.fullName?.charAt(0).toUpperCase() || 'U'}
-                </AvatarFallback>
-              </Avatar>
-            ))}
-            {excessMembersCount > 0 && (
-              <AvatarGroupCount>{excessMembersCount}+</AvatarGroupCount>
-            )}
-          </AvatarGroup>
-        )}
-      </div>
 
-      <CardHeader>
-        <CardTitle className="text-18 line-clamp-1 text-primary">{project.name}</CardTitle>
-        <CardDescription className="text-13 line-clamp-2 text-secondary">
-          {project.description || 'No description provided'}
+        {/* Description */}
+        <CardDescription className="text-13 text-secondary line-clamp-2 leading-relaxed flex-1 pt-1">
+          {project.description || <span className="opacity-50">No description provided</span>}
         </CardDescription>
-      </CardHeader>
 
-      <CardFooter className="border-t border-subtle justify-between text-11 text-tertiary w-full mt-auto">
-        <div className="flex items-center gap-1.5">
-          <Users className="w-4 h-4" />
-          <span>{project.members.length} member{project.members.length === 1 ? '' : 's'}</span>
+        {/* Footer */}
+        <div className="flex items-center justify-between mt-auto pt-3 border-t border-subtle">
+          {project.members.length > 0 ? (
+            <>
+              <AvatarGroup>
+                {visibleMembers.map((member) => (
+                  <Avatar key={member.userId} className="size-6">
+                    <AvatarImage src={member.user.avatarUrl || ''} alt={member.user.fullName || 'User'} />
+                    <AvatarFallback className="text-[10px] font-medium bg-layer-2 text-secondary">
+                      {member.user.fullName?.charAt(0).toUpperCase() || 'U'}
+                    </AvatarFallback>
+                  </Avatar>
+                ))}
+                {excessMembersCount > 0 && <AvatarGroupCount />}
+              </AvatarGroup>
+              <span className="text-12 text-tertiary font-medium">
+                {project.members.length} member{project.members.length !== 1 ? 's' : ''}
+              </span>
+            </>
+          ) : (
+            <span className="text-12 text-tertiary font-medium">No members yet</span>
+          )}
         </div>
-        <div className="flex items-center gap-1.5">
-          <Clock className="w-4 h-4" />
-          <span>{formatDateRelative(project.createdAt)}</span>
-        </div>
-      </CardFooter>
+      </CardContent>
     </Card>
   )
 }
