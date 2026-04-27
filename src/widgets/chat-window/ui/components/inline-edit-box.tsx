@@ -150,7 +150,7 @@ export function InlineEditBox({
   // ── Render ────────────────────────────────────────────────────────────────
 
   return (
-    <div className={cn('flex flex-col gap-1.5 mt-1', className)}>
+    <div className={cn('flex flex-col gap-1.5 mt-1', className)} data-inline-edit-box>
 
       {/* Mention trigger — positioned relative to this container */}
       <div className="relative">

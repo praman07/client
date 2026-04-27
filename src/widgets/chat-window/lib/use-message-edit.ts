@@ -1,5 +1,6 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { editMessage } from '@/features/chat/events/api'
+import { useEditModeContext } from './edit-mode-context'
 
 /**
  * useMessageEdit — Manages the isEditing toggle for a single message.
@@ -18,6 +19,20 @@ import { editMessage } from '@/features/chat/events/api'
  */
 export function useMessageEdit(messageId: string, currentContent: string) {
   const [isEditing, setIsEditing] = useState(false)
+  const { registerEdit, unregisterEdit } = useEditModeContext()
+
+  // Stable cancel fn — ref so the context always has a fresh reference
+  const cancelRef = useRef<() => void>(() => setIsEditing(false))
+
+  // Sync cancelRef whenever edit state changes
+  useEffect(() => {
+    if (isEditing) {
+      cancelRef.current = () => setIsEditing(false)
+      registerEdit(messageId, cancelRef.current)
+    } else {
+      unregisterEdit(messageId)
+    }
+  }, [isEditing, messageId, registerEdit, unregisterEdit])
 
   const startEdit = useCallback(() => {
     setIsEditing(true)
