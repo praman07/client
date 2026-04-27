@@ -30,6 +30,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/shared/ui/primitives/popover'
+import { ScrollArea } from '@/shared/ui/primitives/scroll-area'
 import { usePermission } from '@/shared/lib/auth/use-permission'
 
 interface Collaborator {
@@ -177,42 +178,44 @@ export function MembersTab({ board }: MembersTabProps) {
 
       {/* ── Collaborator list ──────────────────────────── */}
       {collaborators.length > 0 ? (
-        <ul className="space-y-1">
-          {collaborators.map((c) => (
-            <li
-              key={c.userId}
-              className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-layer-1-hover transition-colors group"
-            >
-              <Avatar className="h-8 w-8 shrink-0">
-                <AvatarImage src={c.user.avatarUrl ?? ''} />
-                <AvatarFallback className="text-xs">
-                  {getInitials(c.user.fullName)}
-                </AvatarFallback>
-              </Avatar>
+        <ScrollArea className="-mx-2 px-2 max-h-64">
+          <ul className="space-y-1">
+            {collaborators.map((c) => (
+              <li
+                key={c.userId}
+                className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-layer-1-hover transition-colors group"
+              >
+                <Avatar className="h-8 w-8 shrink-0">
+                  <AvatarImage src={c.user.avatarUrl ?? ''} />
+                  <AvatarFallback className="text-xs">
+                    {getInitials(c.user.fullName)}
+                  </AvatarFallback>
+                </Avatar>
 
-              <div className="flex-1 min-w-0">
-<p className="text-14 font-medium truncate">{c.user.fullName}</p>
-              <p className="text-12 text-secondary truncate">
-                {c.user.email}
-              </p>
-              </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-14 font-medium truncate">{c.user.fullName}</p>
+                  <p className="text-12 text-secondary truncate">
+                    {c.user.email}
+                  </p>
+                </div>
 
-              {/* Remove — only for users with whiteboard:collaborator:remove */}
-              {canRemove && (
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="h-7 w-7 shrink-0 invisible group-hover:visible transition-opacity text-secondary hover:text-danger-primary hover:bg-danger-subtle"
-                  onClick={() => handleRemoveClick(c)}
-                  disabled={removeCollaborator.isPending}
-                  aria-label={`Remove ${c.user.fullName}`}
-                >
-                  <X className="h-3.5 w-3.5" />
-                </Button>
-              )}
-            </li>
-          ))}
-        </ul>
+                {/* Remove — only for users with whiteboard:collaborator:remove */}
+                {canRemove && (
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="h-7 w-7 shrink-0 invisible group-hover:visible transition-opacity text-secondary hover:text-danger-primary hover:bg-danger-subtle"
+                    onClick={() => handleRemoveClick(c)}
+                    disabled={removeCollaborator.isPending}
+                    aria-label={`Remove ${c.user.fullName}`}
+                  >
+                    <X className="h-3.5 w-3.5" />
+                  </Button>
+                )}
+              </li>
+            ))}
+          </ul>
+        </ScrollArea>
       ) : (
 <div className="text-center py-8">
       <p className="text-14 text-secondary">

@@ -19,6 +19,7 @@ import { useAuthorizationContext, usePermission } from '@/shared/lib/auth'
 import { useAuth } from '@/shared/hooks'
 import { useRemoveChannelMember } from '@/features/chat/channel-members'
 import { useUserProfilePanel } from '@/features/chat/user-profile-panel'
+import { ScrollArea } from '@/shared/ui/primitives/scroll-area'
 
 interface MembersTabProps {
   conversation: ConversationFieldsFragment
@@ -190,18 +191,20 @@ export function MembersTab({ conversation }: MembersTabProps) {
       {filtered.length === 0 ? (
         <EmptyState query={search} />
       ) : (
-        <ul className="space-y-0.5">
-          {filtered.map((member) => (
-            <MemberRow
-              key={member.userId}
-              member={member}
-              isCurrentUser={member.userId === currentUserId}
-              canRemove={canRemove}
-              onRemove={() => setRemovingUserId(member.userId)}
-              onOpenProfile={openUserProfile}
-            />
-          ))}
-        </ul>
+        <ScrollArea className="-mx-2 px-2 max-h-64">
+          <ul className="space-y-0.5">
+            {filtered.map((member) => (
+              <MemberRow
+                key={member.userId}
+                member={member}
+                isCurrentUser={member.userId === currentUserId}
+                canRemove={canRemove}
+                onRemove={() => setRemovingUserId(member.userId)}
+                onOpenProfile={openUserProfile}
+              />
+            ))}
+          </ul>
+        </ScrollArea>
       )}
 
       {/* ── Confirm remove dialog ── */}
