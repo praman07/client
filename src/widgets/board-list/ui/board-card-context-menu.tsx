@@ -1,7 +1,6 @@
 import {
   Archive,
   ArchiveRestore,
-  Copy,
   Link2,
   Lock,
   Pencil,
@@ -27,7 +26,6 @@ interface BoardCardContextMenuProps {
   handlers: {
     handleRename: (e?: React.MouseEvent) => void
     handleCopyLink: (e?: React.MouseEvent) => void
-    handleDuplicate: (e?: React.MouseEvent) => void
     handleLock: (e?: React.MouseEvent) => void
     handleUnlock: (e?: React.MouseEvent) => void
     handleManageCollaborators: (e?: React.MouseEvent) => void
@@ -67,12 +65,6 @@ export function BoardCardContextMenu({
         </ContextMenuItem>
 
         <ContextMenuSeparator />
-
-        <ContextMenuItem onClick={handlers.handleDuplicate}>
-          <Copy className="h-4 w-4 mr-2" />
-          Duplicate
-          <ContextMenuShortcut>⌘D</ContextMenuShortcut>
-        </ContextMenuItem>
 
         {board.isLocked ? (
           <ContextMenuItem onClick={handlers.handleUnlock}>

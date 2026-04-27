@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useBoardFilters, useViewMode } from '../hooks'
-import { filterBoards, sortBoards } from '../lib'
+import { sortBoards } from '../lib'
 import { BoardCard } from './board-card'
 import { BoardListHeader } from './board-list-header'
 import { EmptyState } from './empty-state'
@@ -30,8 +30,6 @@ export function BoardList({ workspaceId, projectId }: BoardListProps) {
   const { userId } = useAuth()
   const { data, isLoading, refetch } = useUserBoards(workspaceId, projectId)
   const {
-    searchQuery,
-    setSearchQuery,
     showArchived,
     setShowArchived,
     sortBy,
@@ -63,9 +61,11 @@ export function BoardList({ workspaceId, projectId }: BoardListProps) {
       }))
     }) ?? []
 
-  // Apply filters and sorting
-  const filteredBoards = filterBoards(boards, { searchQuery, showArchived })
-  const sortedBoards = sortBoards(filteredBoards, sortBy)
+  // Apply sorting (no search filter since search bar was removed)
+  const sortedBoards = sortBoards(
+    boards.filter((b) => showArchived || !b.isArchived),
+    sortBy,
+  )
 
   if (isLoading) {
     return <BoardListSkeleton />
@@ -91,8 +91,6 @@ export function BoardList({ workspaceId, projectId }: BoardListProps) {
   return (
     <div className="p-6">
       <BoardListHeader
-        searchQuery={searchQuery}
-        onSearchChange={setSearchQuery}
         sortBy={sortBy}
         onSortChange={setSortBy}
         viewMode={viewMode}
