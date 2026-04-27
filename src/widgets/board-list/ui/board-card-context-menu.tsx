@@ -1,7 +1,6 @@
 import {
   Archive,
   ArchiveRestore,
-  Link2,
   Lock,
   Pencil,
   Settings,
@@ -25,7 +24,6 @@ interface BoardCardContextMenuProps {
   isCreator: boolean
   handlers: {
     handleRename: (e?: React.MouseEvent) => void
-    handleCopyLink: (e?: React.MouseEvent) => void
     handleLock: (e?: React.MouseEvent) => void
     handleUnlock: (e?: React.MouseEvent) => void
     handleManageCollaborators: (e?: React.MouseEvent) => void
@@ -56,12 +54,6 @@ export function BoardCardContextMenu({
           <Pencil className="h-4 w-4 mr-2" />
           Rename
           <ContextMenuShortcut>⌘R</ContextMenuShortcut>
-        </ContextMenuItem>
-
-        <ContextMenuItem onClick={handlers.handleCopyLink}>
-          <Link2 className="h-4 w-4 mr-2" />
-          Copy Link
-          <ContextMenuShortcut>⌘⇧C</ContextMenuShortcut>
         </ContextMenuItem>
 
         <ContextMenuSeparator />
