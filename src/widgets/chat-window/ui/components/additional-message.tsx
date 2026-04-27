@@ -1,6 +1,6 @@
 import { useLiveQuery } from 'dexie-react-hooks'
 import { MessageSquare, Pencil, Reply, SmilePlus, Trash2 } from 'lucide-react'
-import { Suspense, lazy, useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useMessageEdit } from '../../lib/use-message-edit'
 import { useEditRequest } from '../../lib/edit-request-context'
 import { useReplyRequest } from '../../lib/reply-request-context'
@@ -48,8 +48,8 @@ import {
 } from '@/shared/ui/primitives/popover'
 import { ChatAttachmentRenderer } from '@/features/chat/media'
 
-// Lazy-load the heavy emoji picker only when opened
-const EmojiPicker = lazy(() => import('@emoji-mart/react'))
+import data from '@emoji-mart/data'
+import Picker from '@emoji-mart/react'
 
 function getSafeContent(content: unknown): string {
   if (typeof content === 'string') return content
@@ -70,12 +70,10 @@ export function AdditionalMessage({ message }: AdditionalMessageProps) {
   const { scrollToMessage } = useScrollToMessage()
 
   const currentContent = getSafeContent(message.content)
-  const {
-    isEditing,
-    startEdit,
-    cancelEdit,
-    submitEdit,
-  } = useMessageEdit(message.id, currentContent)
+  const { isEditing, startEdit, cancelEdit, submitEdit } = useMessageEdit(
+    message.id,
+    currentContent,
+  )
 
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
   const [isPickerOpen, setIsPickerOpen] = useState(false)
@@ -174,7 +172,7 @@ export function AdditionalMessage({ message }: AdditionalMessageProps) {
     <>
       <MessageEvent className="hover:bg-layer-2 group/msg">
         <MessageEventAddon>
-          <MessageEventDescription className="text-right text-xs group-hover/msg:opacity-100 opacity-0 select-none transition-opacity duration-150">
+          <MessageEventDescription className="text-right text-10 group-hover/msg:opacity-100 opacity-0 select-none transition-opacity duration-150">
             {new Intl.DateTimeFormat('en-US', {
               timeStyle: 'short',
             }).format(new Date(message.createdAt))}
@@ -278,29 +276,20 @@ export function AdditionalMessage({ message }: AdditionalMessageProps) {
                     <PopoverContent
                       side="top"
                       align="end"
+                      keepMounted
+                      noAnimation
                       className="p-0 w-auto border-0 shadow-none bg-transparent ring-0"
                     >
-                      <Suspense
-                        fallback={
-                          <div className="p-4 text-xs text-secondary">
-                            Loading…
-                          </div>
-                        }
-                      >
-                        <EmojiPicker
-                          data={async () => {
-                            const response = await import('@emoji-mart/data')
-                            return response.default
-                          }}
-                          onEmojiSelect={(e: { native: string }) => {
-                            handleReactionToggle(e.native)
-                            setIsPickerOpen(false)
-                          }}
-                          theme="auto"
-                          previewPosition="none"
-                          skinTonePosition="none"
-                        />
-                      </Suspense>
+                      <Picker
+                        data={data}
+                        onEmojiSelect={(e: { native: string }) => {
+                          handleReactionToggle(e.native)
+                          setIsPickerOpen(false)
+                        }}
+                        theme="auto"
+                        previewPosition="none"
+                        skinTonePosition="none"
+                      />
                     </PopoverContent>
                   </Popover>
                   <button

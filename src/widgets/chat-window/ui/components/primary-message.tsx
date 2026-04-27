@@ -1,5 +1,5 @@
 import { MessageSquare, Pencil, Reply, SmilePlus, Trash2 } from 'lucide-react'
-import { Suspense, lazy, useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useLiveQuery } from 'dexie-react-hooks'
 import { useMemberCache } from '../../lib/member-cache-context'
 import { getInitials } from '../../lib/get-initials'
@@ -49,8 +49,8 @@ import {
   PopoverTrigger,
 } from '@/shared/ui/primitives/popover'
 
-// Lazy-load the heavy emoji picker only when opened
-const EmojiPicker = lazy(() => import('@emoji-mart/react'))
+import data from '@emoji-mart/data'
+import Picker from '@emoji-mart/react'
 
 const log = createLogger('chat:message')
 
@@ -202,7 +202,7 @@ export function PrimaryMessage({ message, className }: PrimaryMessageProps) {
             >
               {displayName}
             </MessageEventTitle>
-            <MessageEventDescription>
+            <MessageEventDescription className='text-10'>
               {new Intl.DateTimeFormat('en-US', {
                 timeStyle: 'short',
               }).format(new Date(message.createdAt))}
@@ -299,23 +299,20 @@ export function PrimaryMessage({ message, className }: PrimaryMessageProps) {
                     <PopoverContent
                       side="top"
                       align="end"
+                      keepMounted
+                      noAnimation
                       className="p-0 w-auto border-0 shadow-none bg-transparent ring-0"
                     >
-                      <Suspense fallback={<div className="p-4 text-xs text-secondary">Loading…</div>}>
-                        <EmojiPicker
-                          data={async () => {
-                            const response = await import('@emoji-mart/data')
-                            return response.default
-                          }}
-                          onEmojiSelect={(e: { native: string }) => {
-                            handleReactionToggle(e.native)
-                            setIsPickerOpen(false)
-                          }}
-                          theme="auto"
-                          previewPosition="none"
-                          skinTonePosition="none"
-                        />
-                      </Suspense>
+                      <Picker
+                        data={data}
+                        onEmojiSelect={(e: { native: string }) => {
+                          handleReactionToggle(e.native)
+                          setIsPickerOpen(false)
+                        }}
+                        theme="auto"
+                        previewPosition="none"
+                        skinTonePosition="none"
+                      />
                     </PopoverContent>
                   </Popover>
                   <button

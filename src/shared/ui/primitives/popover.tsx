@@ -17,14 +17,19 @@ function PopoverContent({
   alignOffset = 0,
   side = 'bottom',
   sideOffset = 6,
+  keepMounted = false,
+  noAnimation = false,
   ...props
 }: PopoverPrimitive.Popup.Props &
   Pick<
     PopoverPrimitive.Positioner.Props,
     'align' | 'alignOffset' | 'side' | 'sideOffset'
-  >) {
+  > & {
+    keepMounted?: boolean
+    noAnimation?: boolean
+  }) {
   return (
-    <PopoverPrimitive.Portal>
+    <PopoverPrimitive.Portal keepMounted={keepMounted}>
       <PopoverPrimitive.Positioner
         align={align}
         alignOffset={alignOffset}
@@ -42,15 +47,19 @@ function PopoverContent({
             'flex flex-col gap-4 w-72 outline-none',
             // Origin
             'origin-[--transform-origin]',
-            // Animations
-            'data-open:animate-in data-closed:animate-out',
-            'data-closed:fade-out-0 data-open:fade-in-0',
-            'data-closed:zoom-out-95 data-open:zoom-in-95',
-            'data-[side=bottom]:slide-in-from-top-2',
-            'data-[side=left]:slide-in-from-right-2',
-            'data-[side=right]:slide-in-from-left-2',
-            'data-[side=top]:slide-in-from-bottom-2',
-            'duration-150',
+            // Animations (disabled when noAnimation=true)
+            noAnimation
+              ? ''
+              : cn(
+                  'data-open:animate-in data-closed:animate-out',
+                  'data-closed:fade-out-0 data-open:fade-in-0',
+                  'data-closed:zoom-out-95 data-open:zoom-in-95',
+                  'data-[side=bottom]:slide-in-from-top-2',
+                  'data-[side=left]:slide-in-from-right-2',
+                  'data-[side=right]:slide-in-from-left-2',
+                  'data-[side=top]:slide-in-from-bottom-2',
+                  'duration-150',
+                ),
             className,
           )}
           {...props}
