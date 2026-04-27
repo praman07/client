@@ -1,7 +1,14 @@
 import { Link, useLocation } from '@tanstack/react-router'
-import { Settings2, Shield, ShieldOff, Users } from 'lucide-react'
-import { cn } from '@/shared/lib/utils'
+import { Settings2, Shield, Users } from 'lucide-react'
 import { useAuthorizationContext, usePermission } from '@/shared/lib/auth'
+import {
+  SidebarProvider,
+  SidebarGroup,
+  SidebarGroupLabel,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+} from '@/shared/ui/primitives/sidebar'
 
 const SETTINGS_TABS = [
   { label: 'General', path: 'general', icon: Settings2 },
@@ -31,11 +38,11 @@ export function ProjectSettingsTabs({
     return (
       <div className="flex flex-col items-center justify-center gap-4 py-20 text-center">
         <div className="p-3 rounded-full bg-danger-subtle">
-          <ShieldOff className="h-7 w-7 text-danger-primary" />
+          <Shield className="h-7 w-7 text-danger-primary" />
         </div>
         <div className="space-y-1">
-          <h2 className="text-lg font-semibold">Access Restricted</h2>
-          <p className="text-sm text-secondary max-w-sm">
+          <h2 className="text-16 font-semibold">Access Restricted</h2>
+          <p className="text-13 text-secondary max-w-sm">
             You don't have permission to view project settings. Contact a project Manager
             to request access.
           </p>
@@ -45,49 +52,48 @@ export function ProjectSettingsTabs({
   }
 
   return (
-    <div className="flex flex-col gap-8">
-      {/* Page header */}
-      <div>
-        <h1 className="text-3xl font-bold tracking-tight">Project Settings</h1>
-        <p className="text-secondary mt-1">
-          Manage this project's configuration, members, and access roles.
-        </p>
-      </div>
+    <SidebarProvider>
+      <div className="flex flex-col gap-8 animate-fade-in">
+        {/* Page header */}
+        <div>
+          <h1 className="text-20 font-semibold tracking-tight">Project Settings</h1>
+          <p className="text-13 text-secondary mt-1">
+            Manage this project's configuration, members, and access roles.
+          </p>
+        </div>
 
-      {/* Sidebar + content */}
-      <div className="flex flex-col md:flex-row gap-6 md:gap-10 min-h-[600px]">
-        {/* Sidebar navigation */}
-        <aside className="w-full md:w-56 shrink-0 overflow-x-auto md:overflow-visible pb-2 md:pb-0 hide-scrollbar">
-          <nav className="flex flex-row md:flex-col gap-2 md:gap-1 w-max md:w-full">
-            {SETTINGS_TABS.map((tab) => {
-              const Icon = tab.icon
-              const isActive = pathname.endsWith(`/settings/${tab.path}`)
-              const href = `/workspace/${workspaceSlug}/project/${projectSlug}/settings/${tab.path}`
+        {/* Sidebar + content */}
+        <div className="flex flex-col md:flex-row gap-6 md:gap-10 min-h-[600px]">
+          {/* Sidebar navigation */}
+          <SidebarGroup className="w-[var(--sidebar-width)] shrink-0">
+            <SidebarGroupLabel>Settings</SidebarGroupLabel>
+            <SidebarMenu>
+              {SETTINGS_TABS.map((tab) => {
+                const isActive = pathname.endsWith(`/settings/${tab.path}`)
+                const href = `/workspace/${workspaceSlug}/project/${projectSlug}/settings/${tab.path}`
 
-              return (
-                <Link
-                  key={tab.path}
-                  to={href}
-                  className={cn(
-                    'flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-lg transition-colors',
-                    isActive
-                      ? 'bg-primary/10 text-primary'
-                      : 'text-secondary hover:bg-layer-2 hover:text-primary'
-                  )}
-                >
-                  <Icon className="h-4 w-4" />
-                  {tab.label}
-                </Link>
-              )
-            })}
-          </nav>
-        </aside>
+                return (
+                  <SidebarMenuItem key={tab.path}>
+                    <SidebarMenuButton
+                      isActive={isActive}
+                      tooltip={tab.label}
+                      render={<Link to={href} />}
+                    >
+                      <tab.icon className="size-4 shrink-0" />
+                      <span>{tab.label}</span>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                )
+              })}
+            </SidebarMenu>
+          </SidebarGroup>
 
-        {/* Content area */}
-        <div className="flex-1 min-w-0">
-          {children}
+          {/* Content area */}
+          <div className="flex-1 min-w-0">
+            {children}
+          </div>
         </div>
       </div>
-    </div>
+    </SidebarProvider>
   )
 }

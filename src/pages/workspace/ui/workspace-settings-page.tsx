@@ -1,7 +1,14 @@
 import { Link, Outlet, useLocation, useParams } from '@tanstack/react-router'
-import { Settings, ShieldCheck, ShieldOff } from 'lucide-react'
-import { cn } from '@/shared/lib/utils'
+import { Settings, Shield, ShieldOff } from 'lucide-react'
 import { useAuthorizationContext, usePermission } from '@/shared/lib/auth'
+import {
+  SidebarProvider,
+  SidebarGroup,
+  SidebarGroupLabel,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+} from '@/shared/ui/primitives/sidebar'
 
 export function WorkspaceSettingsPage() {
   const { workspaceSlug } = useParams({ strict: false })
@@ -18,7 +25,7 @@ export function WorkspaceSettingsPage() {
     },
     {
       label: 'Roles & Permissions',
-      icon: ShieldCheck,
+      icon: Shield,
       to: '/workspace/$workspaceSlug/settings/roles' as const,
       segment: 'roles',
     },
@@ -35,8 +42,8 @@ export function WorkspaceSettingsPage() {
           <ShieldOff className="h-7 w-7 text-danger-primary" />
         </div>
         <div className="space-y-1">
-          <h2 className="text-lg font-semibold text-primary">Access Restricted</h2>
-          <p className="text-sm text-secondary max-w-sm">
+          <h2 className="text-16 font-semibold text-primary">Access Restricted</h2>
+          <p className="text-13 text-secondary max-w-sm">
             You don't have permission to view workspace settings. Contact an Owner or Admin
             to request access.
           </p>
@@ -46,47 +53,52 @@ export function WorkspaceSettingsPage() {
   }
 
   return (
-    <div className="flex flex-col gap-8">
-      <div>
-        <h1 className="text-3xl font-bold tracking-tight">Workspace Settings</h1>
-<p className="text-sm text-secondary mt-1">
+    <SidebarProvider>
+      <div className="flex flex-col gap-8 animate-fade-in">
+        {/* Page header */}
+        <div>
+          <h1 className="text-20 font-semibold tracking-tight">Workspace Settings</h1>
+          <p className="text-13 text-secondary mt-1">
             Manage your workspace profile, security, and team roles.
-        </p>
-      </div>
+          </p>
+        </div>
 
-      <div className="flex flex-col md:flex-row gap-6 md:gap-10 min-h-[600px]">
-        {/* Sidebar Navigation */}
-        <aside className="w-full md:w-56 shrink-0 overflow-x-auto md:overflow-visible pb-2 md:pb-0 hide-scrollbar">
-          <nav className="flex flex-row md:flex-col gap-2 md:gap-1 w-max md:w-full">
-            {SETTINGS_TABS.map((tab) => {
-              const Icon = tab.icon
-              const isActive = pathname.endsWith(`/settings/${tab.segment}`)
+        {/* Sidebar + content */}
+        <div className="flex flex-col md:flex-row gap-6 md:gap-10 min-h-[600px]">
+          {/* Sidebar navigation */}
+          <SidebarGroup className="w-[var(--sidebar-width)] shrink-0">
+            <SidebarGroupLabel>Settings</SidebarGroupLabel>
+            <SidebarMenu>
+              {SETTINGS_TABS.map((tab) => {
+                const isActive = pathname.endsWith(`/settings/${tab.segment}`)
 
-              return (
-                <Link
-                  key={tab.label}
-                  to={tab.to}
-                  params={{ workspaceSlug: workspaceSlug! }}
-                  className={cn(
-                    'flex items-center gap-3 px-3 py-2 text-14 font-medium rounded-lg transition-colors',
-                    isActive
-                      ? 'bg-accent-subtle text-primary'
-                      : 'text-secondary bg-layer-transparent hover:bg-layer-transparent-hover hover:text-primary'
-                  )}
-                >
-                  <Icon className="h-4 w-4" />
-                  {tab.label}
-                </Link>
-              )
-            })}
-          </nav>
-        </aside>
+                return (
+                  <SidebarMenuItem key={tab.label}>
+                    <SidebarMenuButton
+                      isActive={isActive}
+                      tooltip={tab.label}
+                      render={
+                        <Link
+                          to={tab.to}
+                          params={{ workspaceSlug: workspaceSlug! }}
+                        />
+                      }
+                    >
+                      <tab.icon className="size-4 shrink-0" />
+                      <span>{tab.label}</span>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                )
+              })}
+            </SidebarMenu>
+          </SidebarGroup>
 
-        {/* Content Area */}
-        <div className="flex-1 min-w-0">
-          <Outlet />
+          {/* Content area */}
+          <div className="flex-1 min-w-0">
+            <Outlet />
+          </div>
         </div>
       </div>
-    </div>
+    </SidebarProvider>
   )
 }

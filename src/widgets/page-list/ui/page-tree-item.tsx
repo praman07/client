@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { Link, useMatch, useParams } from '@tanstack/react-router'
-import { HugeiconsIcon } from '@hugeicons/react'
-import { ChevronRight, File01Icon } from '@hugeicons/core-free-icons'
+import { ChevronRight, File } from 'lucide-react'
 import { PageTreeItemActions } from './page-tree-item-actions'
 import type { PageTreeNode } from '../lib/types'
 import {
@@ -58,7 +57,7 @@ export function PageTreeItem({ node, depth = 0 }: PageTreeItemProps) {
   const icon = node.page.icon ? (
     <span className="text-13">{node.page.icon}</span>
   ) : (
-    <HugeiconsIcon icon={File01Icon} />
+    <File className="size-4 shrink-0" />
   )
 
   return (
@@ -86,8 +85,7 @@ export function PageTreeItem({ node, depth = 0 }: PageTreeItemProps) {
                 e.stopPropagation()
               }}
             >
-              <HugeiconsIcon
-                icon={ChevronRight}
+              <ChevronRight
                 className={`h-3 w-3 transition-transform ${open ? 'rotate-90' : ''}`}
               />
             </CollapsibleTrigger>

@@ -1,13 +1,12 @@
 import { useState } from 'react'
-import { HugeiconsIcon } from '@hugeicons/react'
 import {
-  Archive01Icon,
-  Delete01Icon,
-  File01Icon,
-  MoreVerticalIcon,
-  UserAdd01Icon,
-  UserSharingIcon,
-} from '@hugeicons/core-free-icons'
+  Archive,
+  FilePlus,
+  MoreHorizontal,
+  Trash2,
+  UserPlus,
+  Users,
+} from 'lucide-react'
 import { useParams } from '@tanstack/react-router'
 import {
   DropdownMenu,
@@ -63,25 +62,25 @@ export function PageTreeItemActions({
               className="text-secondary hover:text-primary hover:bg-layer-transparent-hover absolute top-1.5 right-1 aspect-square w-5 rounded-md p-0 flex items-center justify-center invisible group-hover/menu-item:visible focus:visible transition-opacity"
               aria-label={`More actions for ${pageTitle}`}
             >
-              <HugeiconsIcon icon={MoreVerticalIcon} className="h-4 w-4" />
+              <MoreHorizontal className="h-4 w-4" />
             </button>
           }
         />
         <DropdownMenuContent side="right" align="start" className="w-52">
           <Guard permission="page:create">
             <DropdownMenuItem onClick={() => open({ parentId: pageId })}>
-              <HugeiconsIcon icon={File01Icon} className="mr-2 h-4 w-4" />
+              <FilePlus className="mr-2 h-4 w-4" />
               Add child page
             </DropdownMenuItem>
           </Guard>
           <Guard permission="page:update">
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={() => setAddCollabOpen(true)}>
-              <HugeiconsIcon icon={UserAdd01Icon} className="mr-2 h-4 w-4" />
+              <UserPlus className="mr-2 h-4 w-4" />
               Add Collaborators
             </DropdownMenuItem>
             <DropdownMenuItem onClick={() => setManageCollabOpen(true)}>
-              <HugeiconsIcon icon={UserSharingIcon} className="mr-2 h-4 w-4" />
+              <Users className="mr-2 h-4 w-4" />
               Manage Collaborators
             </DropdownMenuItem>
           </Guard>
@@ -92,7 +91,7 @@ export function PageTreeItemActions({
                 if (project?.id) archivePage({ pageId, projectId: project.id })
               }}
             >
-              <HugeiconsIcon icon={Archive01Icon} className="mr-2 h-4 w-4" />
+              <Archive className="mr-2 h-4 w-4" />
               Archive
             </DropdownMenuItem>
             <DropdownMenuItem
@@ -106,7 +105,7 @@ export function PageTreeItemActions({
                   })
               }}
             >
-              <HugeiconsIcon icon={Delete01Icon} className="mr-2 h-4 w-4" />
+              <Trash2 className="mr-2 h-4 w-4" />
               Delete
             </DropdownMenuItem>
           </Guard>

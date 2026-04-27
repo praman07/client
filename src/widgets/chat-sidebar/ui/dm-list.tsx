@@ -1,6 +1,5 @@
-import { HugeiconsIcon } from '@hugeicons/react'
-import { PlusSignIcon } from '@hugeicons/core-free-icons'
 import { Link, useParams } from '@tanstack/react-router'
+import { Plus } from 'lucide-react'
 import type { DMItem, GroupItem } from '../model/types'
 import {
   SidebarGroup,
@@ -35,7 +34,7 @@ export function DMList({ items }: DMListProps) {
       <SidebarGroup>
         <SidebarGroupLabel>Direct Messages</SidebarGroupLabel>
         <SidebarGroupAction title="New Message" onClick={open}>
-          <HugeiconsIcon icon={PlusSignIcon} />
+          <Plus className="size-4" />
         </SidebarGroupAction>
         <SidebarGroupContent>
           <SidebarMenu>
@@ -47,7 +46,7 @@ export function DMList({ items }: DMListProps) {
                   render={
                     <Link
                       to="/workspace/$workspaceSlug/project/$projectSlug/chat/$conversationId"
-                       
+
                       params={(prev: any) => ({ ...prev, conversationId: dm.id })}
                     />
                   }

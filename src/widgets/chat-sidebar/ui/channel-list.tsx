@@ -1,11 +1,4 @@
-import { HugeiconsIcon } from '@hugeicons/react'
-import {
-  Copy01Icon,
-  HashtagIcon,
-  LockKeyIcon,
-  PlusSignIcon,
-  Settings01Icon,
-} from '@hugeicons/core-free-icons'
+import { Copy, Hash, Lock, Plus, Settings } from 'lucide-react'
 import { Link, useParams } from '@tanstack/react-router'
 import type { ChannelItem } from '../model/types'
 import {
@@ -42,7 +35,7 @@ export function ChannelList({ channels }: ChannelListProps) {
       <SidebarGroupLabel>Channels</SidebarGroupLabel>
       <Guard permission="chat:channel:create">
         <SidebarGroupAction title="Create Channel" onClick={open}>
-          <HugeiconsIcon icon={PlusSignIcon} />
+          <Plus className="size-4" />
         </SidebarGroupAction>
       </Guard>
       <SidebarGroupContent>
@@ -57,7 +50,7 @@ export function ChannelList({ channels }: ChannelListProps) {
                     render={
                       <Link
                         to="/workspace/$workspaceSlug/project/$projectSlug/chat/$conversationId"
-                         
+
                         params={(prev: any) => ({
                           ...prev,
                           conversationId: channel.id,
@@ -65,9 +58,11 @@ export function ChannelList({ channels }: ChannelListProps) {
                       />
                     }
                   >
-                    <HugeiconsIcon
-                      icon={channel.type === 'private' ? LockKeyIcon : HashtagIcon}
-                    />
+                    {channel.type === 'private' ? (
+                      <Lock className="size-4 shrink-0" />
+                    ) : (
+                      <Hash className="size-4 shrink-0" />
+                    )}
                     <span>{channel.name}</span>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
@@ -76,7 +71,7 @@ export function ChannelList({ channels }: ChannelListProps) {
                 <ContextMenuItem
                   onClick={() => openSettings(channel.id)}
                 >
-                  <HugeiconsIcon icon={Settings01Icon} className="size-4" />
+                  <Settings className="size-4" />
                   View channel details
                 </ContextMenuItem>
                 <ContextMenuSeparator />
@@ -85,7 +80,7 @@ export function ChannelList({ channels }: ChannelListProps) {
                     navigator.clipboard.writeText(channel.id)
                   }
                 >
-                  <HugeiconsIcon icon={Copy01Icon} className="size-4" />
+                  <Copy className="size-4" />
                   Copy channel ID
                 </ContextMenuItem>
               </ContextMenuContent>
