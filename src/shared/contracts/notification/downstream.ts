@@ -43,6 +43,16 @@ export interface ChatGroupMemberAddedPayload {
   addedUserName: string
 }
 
+export interface ChatChannelMemberRemovedPayload {
+  conversationId: string
+  conversationName: string
+  workspaceId: string
+  workspaceSlug: string
+  removedUserId: string
+  actorId: string
+  actorName: string
+}
+
 export interface ChatThreadCreatedPayload {
   threadId: string
   parentMessageId: string
@@ -427,6 +437,7 @@ export type ChatMessageNewContract = DownstreamContract<NotificationDownstreamEv
 export type ChatMessageMentionContract = DownstreamContract<NotificationDownstreamEvent.ChatMessageMention, ChatMessageMentionPayload>
 export type ChatDmCreatedContract = DownstreamContract<NotificationDownstreamEvent.ChatDmCreated, ChatDmCreatedPayload>
 export type ChatGroupMemberAddedContract = DownstreamContract<NotificationDownstreamEvent.ChatGroupMemberAdded, ChatGroupMemberAddedPayload>
+export type ChatChannelMemberRemovedContract = DownstreamContract<NotificationDownstreamEvent.ChatChannelMemberRemoved, ChatChannelMemberRemovedPayload>
 export type ChatThreadCreatedContract = DownstreamContract<NotificationDownstreamEvent.ChatThreadCreated, ChatThreadCreatedPayload>
 export type ChatThreadReplyContract = DownstreamContract<NotificationDownstreamEvent.ChatThreadReply, ChatThreadReplyPayload>
 export type ChatMessageReplyContract = DownstreamContract<NotificationDownstreamEvent.ChatMessageReply, ChatMessageReplyPayload>
@@ -480,6 +491,7 @@ export type NotificationDownstreamContract =
   | ChatMessageMentionContract
   | ChatDmCreatedContract
   | ChatGroupMemberAddedContract
+  | ChatChannelMemberRemovedContract
   | ChatThreadCreatedContract
   | ChatThreadReplyContract
   | ChatMessageReplyContract

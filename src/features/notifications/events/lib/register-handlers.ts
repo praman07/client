@@ -10,6 +10,7 @@
 import {
   registerChatDmCreatedHandler,
   registerChatGroupMemberAddedHandler,
+  registerChatChannelMemberRemovedHandler,
   registerChatMessageMentionHandler,
   registerChatMessageNewHandler,
   registerChatMessageReplyHandler,
@@ -67,6 +68,7 @@ export function registerNotificationHandlers(context: NotificationEventHandlerCo
     registerChatMessageMentionHandler(context),
     registerChatDmCreatedHandler(context),
     registerChatGroupMemberAddedHandler(context),
+    registerChatChannelMemberRemovedHandler(context),
     registerChatThreadCreatedHandler(context),
     registerChatThreadReplyHandler(context),
     registerChatMessageReplyHandler(context),
