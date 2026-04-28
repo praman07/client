@@ -23,10 +23,10 @@
  */
 import { AtSign } from 'lucide-react'
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
-import { ChatMentionTrigger } from '@/features/mention'
 import { ChatToolbarTextarea } from './chat-layout'
 import { parseContent } from './RichChatContent'
 import type { MentionRef } from './RichChatContent'
+import { ChatMentionTrigger } from '@/features/mention'
 import { Button } from '@/shared/ui/primitives/button'
 import { cn } from '@/shared/lib/utils'
 

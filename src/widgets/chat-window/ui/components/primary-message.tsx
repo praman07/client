@@ -1,6 +1,8 @@
 import { MessageSquare, Pencil, Reply, SmilePlus, Trash2 } from 'lucide-react'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { useLiveQuery } from 'dexie-react-hooks'
+import data from '@emoji-mart/data'
+import Picker from '@emoji-mart/react'
 import { useMemberCache } from '../../lib/member-cache-context'
 import { getInitials } from '../../lib/get-initials'
 import { useMessageEdit } from '../../lib/use-message-edit'
@@ -49,8 +51,6 @@ import {
   PopoverTrigger,
 } from '@/shared/ui/primitives/popover'
 
-import data from '@emoji-mart/data'
-import Picker from '@emoji-mart/react'
 
 const log = createLogger('chat:message')
 

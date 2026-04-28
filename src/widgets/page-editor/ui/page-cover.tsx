@@ -201,14 +201,16 @@ export function PageCoverBanner({ coverUrl }: PageCoverProps) {
 
   if (!coverUrl) {
     return (
-      <div className="mx-auto w-full max-w-3xl px-16 pt-16 pb-0 flex gap-2 invisible hover:visible transition-opacity">
-        <button
-          onClick={() => fileInputRef.current?.click()}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-11 text-secondary hover:bg-layer-2-hover transition-colors"
-        >
-          <HugeiconsIcon icon={Image01Icon} className="h-4 w-4" />
-          Add cover
-        </button>
+      <div className="mx-auto w-full max-w-3xl px-16 pt-16 pb-0 group">
+        <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+          <button
+            onClick={() => fileInputRef.current?.click()}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-11 text-secondary hover:bg-layer-2-hover transition-colors"
+          >
+            <HugeiconsIcon icon={Image01Icon} className="h-4 w-4" />
+            Add cover
+          </button>
+        </div>
         <input
           ref={fileInputRef}
           type="file"

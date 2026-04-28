@@ -129,7 +129,7 @@ export function PageTitle({ ydoc, isLocked, dbTitle }: PageTitleProps) {
 
   return (
     <input
-      className="w-full bg-transparent text-32 font-semibold tracking-tight text-primary placeholder:text-tertiary/40 outline-none border-none resize-none mb-2 leading-tight disabled:cursor-default"
+      className="w-full bg-transparent text-32 font-semibold tracking-tight text-primary placeholder:text-tertiary/40 outline-none border-none resize-none mb-2 leading-tight disabled:cursor-default pl-[53px]"
       value={title}
       onChange={(e) => handleChange(e.target.value)}
       onBlur={handleBlur}

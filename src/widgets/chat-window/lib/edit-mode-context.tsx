@@ -15,13 +15,14 @@
  * @layer Widgets → chat-window/lib
  */
 import {
+  
   createContext,
   useCallback,
   useContext,
   useEffect,
-  useRef,
-  type RefObject,
+  useRef
 } from 'react'
+import type {RefObject} from 'react';
 
 interface EditModeContextValue {
   /** Set when a message enters edit mode; null otherwise */

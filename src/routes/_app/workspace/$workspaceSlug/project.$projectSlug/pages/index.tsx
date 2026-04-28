@@ -9,8 +9,9 @@ export const Route = createFileRoute(
 
 /**
  * Pages index — shown when no page is selected.
- * Delegates to PagesIndexPage (empty state + create shortcut).
+ * Reads route params here (route boundary) and passes them to the page.
  */
 function PagesIndexRoute() {
-  return <PagesIndexPage />
+  const { workspaceSlug, projectSlug } = Route.useParams()
+  return <PagesIndexPage workspaceSlug={workspaceSlug} projectSlug={projectSlug} />
 }

@@ -2,12 +2,12 @@ import { Link, useLocation } from '@tanstack/react-router'
 import { Settings2, Shield, Users } from 'lucide-react'
 import { useAuthorizationContext, usePermission } from '@/shared/lib/auth'
 import {
-  SidebarProvider,
   SidebarGroup,
   SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarProvider,
 } from '@/shared/ui/primitives/sidebar'
 
 const SETTINGS_TABS = [

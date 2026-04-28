@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useParams } from '@tanstack/react-router'
 import data from '@emoji-mart/data'
 import Picker from '@emoji-mart/react'
+import { SmilePlus } from 'lucide-react'
 import { useUpdatePageDetails } from '@/features/pages/update-page-details'
 import { useAppSelector } from '@/shared/hooks'
 import { selectCurrentProject } from '@/entities/project'
@@ -46,7 +47,7 @@ export function PageEmojiPicker({ icon, hasCover, isLocked }: PageEmojiProps) {
   }
 
   return (
-    <div className={`flex items-center gap-2 ${hasCover ? '-mt-8 mb-2' : 'mb-2'}`}>
+    <div className={`flex items-center gap-2 pl-[36px] ${hasCover ? '-mt-8 mb-2' : 'mb-2'}`}>
       <Popover open={open} onOpenChange={isLocked ? undefined : setOpen}>
         <PopoverTrigger>
           <button
@@ -58,7 +59,7 @@ export function PageEmojiPicker({ icon, hasCover, isLocked }: PageEmojiProps) {
             `}
             title={icon ? 'Change emoji' : 'Add emoji'}
           >
-            {icon ?? '😶'}
+            {icon ?? <SmilePlus className="size-4" />}
           </button>
         </PopoverTrigger>
         <PopoverContent

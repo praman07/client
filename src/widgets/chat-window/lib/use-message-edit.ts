@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { editMessage } from '@/features/chat/events/api'
 import { useEditModeContext } from './edit-mode-context'
+import { editMessage } from '@/features/chat/events/api'
 
 /**
  * useMessageEdit — Manages the isEditing toggle for a single message.

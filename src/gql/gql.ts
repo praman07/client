@@ -71,8 +71,10 @@ type Documents = {
     "\n  mutation RequestProjectLogoUpload($projectId: ID!, $mimeType: String!, $sizeBytes: Int!) {\n    requestProjectLogoUpload(projectId: $projectId, mimeType: $mimeType, sizeBytes: $sizeBytes) {\n      presignedUrl\n      logoS3Key\n      expiresAt\n    }\n  }\n": typeof types.RequestProjectLogoUploadDocument,
     "\n  mutation SessionSyncUser(\n    $clerkId: String!\n    $email: String!\n    $fullName: String\n    $avatarUrl: String\n  ) {\n    syncUser(\n      clerkId: $clerkId\n      email: $email\n      fullName: $fullName\n      avatarUrl: $avatarUrl\n    ) {\n      id\n      email\n      fullName\n      avatarUrl\n    }\n  }": typeof types.SessionSyncUserDocument,
     "\n  query GetMe {\n    me {\n      ...User\n    }\n  }\n": typeof types.GetMeDocument,
+    "\n  mutation DeclineWorkspaceInvite($input: DeclineWorkspaceInviteInput!) {\n    declineWorkspaceInvite(input: $input) {\n      success\n      message\n    }\n  }\n": typeof types.DeclineWorkspaceInviteDocument,
     "\n  fragment User on User {\n    id\n    email\n    fullName\n    avatarUrl\n    bio\n    timezone\n    language\n  }\n": typeof types.UserFragmentDoc,
     "\n  mutation UpdateProfileMutation($input: UpdateProfileInput!) {\n    updateProfile(input: $input) {\n      ...User\n    }\n  }\n": typeof types.UpdateProfileMutationDocument,
+    "\n  query GetUserHome {\n    userHome {\n      user {\n        id\n        fullName\n        avatarUrl\n        email\n      }\n      workspaces {\n        id\n        slug\n        name\n        logoUrl\n        memberRole\n      }\n      pendingInvites {\n        id\n        token\n        workspaceName\n        role\n      }\n    }\n  }\n": typeof types.GetUserHomeDocument,
     "\n  fragment VaultFileFields on VaultFile {\n    id\n    projectId\n    workspaceId\n    folderId\n    uploaderUserId\n    name\n    mimeType\n    sizeBytes\n    s3Key\n    source\n    sourceId\n    status\n    uploader {\n      id\n      fullName\n      avatarUrl\n    }\n    confirmedAt\n    createdAt\n    updatedAt\n  }\n": typeof types.VaultFileFieldsFragmentDoc,
     "\n  fragment VaultFolderFields on VaultFolder {\n    id\n    projectId\n    parentFolderId\n    name\n    isSystem\n    createdAt\n    updatedAt\n  }\n": typeof types.VaultFolderFieldsFragmentDoc,
     "\n  fragment BoardFields on Whiteboard {\n    id\n    workspaceId\n    projectId\n    title\n    description\n    elementCount\n    fileSizeBytes\n    isArchived\n    isLocked\n    createdBy\n    createdAt\n    updatedAt\n  }\n": typeof types.BoardFieldsFragmentDoc,
@@ -145,6 +147,7 @@ type Documents = {
     "\n  query GetActivePageCollaborators($pageId: ID!) {\n    getActivePageCollaborators(pageId: $pageId) {\n      userId\n      role\n      user {\n        id\n        fullName\n        avatarUrl\n      }\n    }\n  }\n": typeof types.GetActivePageCollaboratorsDocument,
     "\n  query GetPageCollaborators($pageId: ID!) {\n    getPageCollaborators(pageId: $pageId) {\n      userId\n      role\n      joinedAt\n      user {\n        id\n        fullName\n        email\n        avatarUrl\n      }\n    }\n  }\n": typeof types.GetPageCollaboratorsDocument,
     "\n  query GetPage($pageId: ID!) {\n    getPage(pageId: $pageId) {\n      id\n      title\n      workspaceId\n      projectId\n      parentId\n      icon\n      coverUrl\n      position\n      isArchived\n      isLocked\n      s3Key\n      createdBy\n      createdAt\n      updatedAt\n    }\n  }\n": typeof types.GetPageDocument,
+    "\n  query GetPagesHome($limit: Int) {\n    getPagesHome(limit: $limit) {\n      pages {\n        id\n        title\n        emojiIcon\n        updatedAt\n        createdByName\n      }\n    }\n  }\n": typeof types.GetPagesHomeDocument,
     "\n  query GetProjectPages($projectId: ID!) {\n    getProjectPages(projectId: $projectId) {\n      ...PageWithChildren\n    }\n  }\n": typeof types.GetProjectPagesDocument,
     "\n  query GetPageSnapshot($pageId: ID!) {\n    getPageSnapshot(pageId: $pageId) {\n      snapshot\n      lastStreamId\n      snapshotTimestamp\n    }\n  }\n": typeof types.GetPageSnapshotDocument,
     "\n  mutation RemovePageCollaborator($input: RemovePageCollaboratorInput!) {\n    removePageCollaborator(input: $input) {\n      success\n    }\n  }\n": typeof types.RemovePageCollaboratorDocument,
@@ -271,8 +274,10 @@ const documents: Documents = {
     "\n  mutation RequestProjectLogoUpload($projectId: ID!, $mimeType: String!, $sizeBytes: Int!) {\n    requestProjectLogoUpload(projectId: $projectId, mimeType: $mimeType, sizeBytes: $sizeBytes) {\n      presignedUrl\n      logoS3Key\n      expiresAt\n    }\n  }\n": types.RequestProjectLogoUploadDocument,
     "\n  mutation SessionSyncUser(\n    $clerkId: String!\n    $email: String!\n    $fullName: String\n    $avatarUrl: String\n  ) {\n    syncUser(\n      clerkId: $clerkId\n      email: $email\n      fullName: $fullName\n      avatarUrl: $avatarUrl\n    ) {\n      id\n      email\n      fullName\n      avatarUrl\n    }\n  }": types.SessionSyncUserDocument,
     "\n  query GetMe {\n    me {\n      ...User\n    }\n  }\n": types.GetMeDocument,
+    "\n  mutation DeclineWorkspaceInvite($input: DeclineWorkspaceInviteInput!) {\n    declineWorkspaceInvite(input: $input) {\n      success\n      message\n    }\n  }\n": types.DeclineWorkspaceInviteDocument,
     "\n  fragment User on User {\n    id\n    email\n    fullName\n    avatarUrl\n    bio\n    timezone\n    language\n  }\n": types.UserFragmentDoc,
     "\n  mutation UpdateProfileMutation($input: UpdateProfileInput!) {\n    updateProfile(input: $input) {\n      ...User\n    }\n  }\n": types.UpdateProfileMutationDocument,
+    "\n  query GetUserHome {\n    userHome {\n      user {\n        id\n        fullName\n        avatarUrl\n        email\n      }\n      workspaces {\n        id\n        slug\n        name\n        logoUrl\n        memberRole\n      }\n      pendingInvites {\n        id\n        token\n        workspaceName\n        role\n      }\n    }\n  }\n": types.GetUserHomeDocument,
     "\n  fragment VaultFileFields on VaultFile {\n    id\n    projectId\n    workspaceId\n    folderId\n    uploaderUserId\n    name\n    mimeType\n    sizeBytes\n    s3Key\n    source\n    sourceId\n    status\n    uploader {\n      id\n      fullName\n      avatarUrl\n    }\n    confirmedAt\n    createdAt\n    updatedAt\n  }\n": types.VaultFileFieldsFragmentDoc,
     "\n  fragment VaultFolderFields on VaultFolder {\n    id\n    projectId\n    parentFolderId\n    name\n    isSystem\n    createdAt\n    updatedAt\n  }\n": types.VaultFolderFieldsFragmentDoc,
     "\n  fragment BoardFields on Whiteboard {\n    id\n    workspaceId\n    projectId\n    title\n    description\n    elementCount\n    fileSizeBytes\n    isArchived\n    isLocked\n    createdBy\n    createdAt\n    updatedAt\n  }\n": types.BoardFieldsFragmentDoc,
@@ -345,6 +350,7 @@ const documents: Documents = {
     "\n  query GetActivePageCollaborators($pageId: ID!) {\n    getActivePageCollaborators(pageId: $pageId) {\n      userId\n      role\n      user {\n        id\n        fullName\n        avatarUrl\n      }\n    }\n  }\n": types.GetActivePageCollaboratorsDocument,
     "\n  query GetPageCollaborators($pageId: ID!) {\n    getPageCollaborators(pageId: $pageId) {\n      userId\n      role\n      joinedAt\n      user {\n        id\n        fullName\n        email\n        avatarUrl\n      }\n    }\n  }\n": types.GetPageCollaboratorsDocument,
     "\n  query GetPage($pageId: ID!) {\n    getPage(pageId: $pageId) {\n      id\n      title\n      workspaceId\n      projectId\n      parentId\n      icon\n      coverUrl\n      position\n      isArchived\n      isLocked\n      s3Key\n      createdBy\n      createdAt\n      updatedAt\n    }\n  }\n": types.GetPageDocument,
+    "\n  query GetPagesHome($limit: Int) {\n    getPagesHome(limit: $limit) {\n      pages {\n        id\n        title\n        emojiIcon\n        updatedAt\n        createdByName\n      }\n    }\n  }\n": types.GetPagesHomeDocument,
     "\n  query GetProjectPages($projectId: ID!) {\n    getProjectPages(projectId: $projectId) {\n      ...PageWithChildren\n    }\n  }\n": types.GetProjectPagesDocument,
     "\n  query GetPageSnapshot($pageId: ID!) {\n    getPageSnapshot(pageId: $pageId) {\n      snapshot\n      lastStreamId\n      snapshotTimestamp\n    }\n  }\n": types.GetPageSnapshotDocument,
     "\n  mutation RemovePageCollaborator($input: RemovePageCollaboratorInput!) {\n    removePageCollaborator(input: $input) {\n      success\n    }\n  }\n": types.RemovePageCollaboratorDocument,
@@ -659,11 +665,19 @@ export function gql(source: "\n  query GetMe {\n    me {\n      ...User\n    }\n
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
+export function gql(source: "\n  mutation DeclineWorkspaceInvite($input: DeclineWorkspaceInviteInput!) {\n    declineWorkspaceInvite(input: $input) {\n      success\n      message\n    }\n  }\n"): (typeof documents)["\n  mutation DeclineWorkspaceInvite($input: DeclineWorkspaceInviteInput!) {\n    declineWorkspaceInvite(input: $input) {\n      success\n      message\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
 export function gql(source: "\n  fragment User on User {\n    id\n    email\n    fullName\n    avatarUrl\n    bio\n    timezone\n    language\n  }\n"): (typeof documents)["\n  fragment User on User {\n    id\n    email\n    fullName\n    avatarUrl\n    bio\n    timezone\n    language\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "\n  mutation UpdateProfileMutation($input: UpdateProfileInput!) {\n    updateProfile(input: $input) {\n      ...User\n    }\n  }\n"): (typeof documents)["\n  mutation UpdateProfileMutation($input: UpdateProfileInput!) {\n    updateProfile(input: $input) {\n      ...User\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  query GetUserHome {\n    userHome {\n      user {\n        id\n        fullName\n        avatarUrl\n        email\n      }\n      workspaces {\n        id\n        slug\n        name\n        logoUrl\n        memberRole\n      }\n      pendingInvites {\n        id\n        token\n        workspaceName\n        role\n      }\n    }\n  }\n"): (typeof documents)["\n  query GetUserHome {\n    userHome {\n      user {\n        id\n        fullName\n        avatarUrl\n        email\n      }\n      workspaces {\n        id\n        slug\n        name\n        logoUrl\n        memberRole\n      }\n      pendingInvites {\n        id\n        token\n        workspaceName\n        role\n      }\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -952,6 +966,10 @@ export function gql(source: "\n  query GetPageCollaborators($pageId: ID!) {\n   
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "\n  query GetPage($pageId: ID!) {\n    getPage(pageId: $pageId) {\n      id\n      title\n      workspaceId\n      projectId\n      parentId\n      icon\n      coverUrl\n      position\n      isArchived\n      isLocked\n      s3Key\n      createdBy\n      createdAt\n      updatedAt\n    }\n  }\n"): (typeof documents)["\n  query GetPage($pageId: ID!) {\n    getPage(pageId: $pageId) {\n      id\n      title\n      workspaceId\n      projectId\n      parentId\n      icon\n      coverUrl\n      position\n      isArchived\n      isLocked\n      s3Key\n      createdBy\n      createdAt\n      updatedAt\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  query GetPagesHome($limit: Int) {\n    getPagesHome(limit: $limit) {\n      pages {\n        id\n        title\n        emojiIcon\n        updatedAt\n        createdByName\n      }\n    }\n  }\n"): (typeof documents)["\n  query GetPagesHome($limit: Int) {\n    getPagesHome(limit: $limit) {\n      pages {\n        id\n        title\n        emojiIcon\n        updatedAt\n        createdByName\n      }\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

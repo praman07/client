@@ -1,6 +1,8 @@
 import { useLiveQuery } from 'dexie-react-hooks'
 import { MessageSquare, Pencil, Reply, SmilePlus, Trash2 } from 'lucide-react'
 import { useCallback, useEffect, useRef, useState } from 'react'
+import data from '@emoji-mart/data'
+import Picker from '@emoji-mart/react'
 import { useMessageEdit } from '../../lib/use-message-edit'
 import { useEditRequest } from '../../lib/edit-request-context'
 import { useReplyRequest } from '../../lib/reply-request-context'
@@ -48,8 +50,6 @@ import {
 } from '@/shared/ui/primitives/popover'
 import { ChatAttachmentRenderer } from '@/features/chat/media'
 
-import data from '@emoji-mart/data'
-import Picker from '@emoji-mart/react'
 
 function getSafeContent(content: unknown): string {
   if (typeof content === 'string') return content
