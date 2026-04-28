@@ -23,6 +23,7 @@ import '@blocknote/shadcn/style.css'
 import { useEffect, useRef } from 'react'
 import { useCreateBlockNote } from '@blocknote/react'
 import { BlockNoteView } from '@blocknote/shadcn'
+import { BlockNoteEmojiPicker } from '@/features/blocknote/emoji-picker'
 
 import { en } from '@blocknote/core/locales'
 import type { BlockNoteEditor } from '@blocknote/core'
@@ -102,9 +103,11 @@ export function IssueDescriptionEditor({
       // Remove the floating formatting toolbar — issue descriptions are
       // simple; full toolbar is available in the edit modal.
       formattingToolbar={false}
+      emojiPicker={false}
     >
       {/* @-mention suggestion menu — backed by TanStack entity cache */}
       <MentionMenuController projectId={projectId} />
+      <BlockNoteEmojiPicker />
     </BlockNoteView>
   )
 }

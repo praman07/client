@@ -4,6 +4,7 @@ import { reset as resetLinkify } from 'linkifyjs'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { SuggestionMenuController, useCreateBlockNote } from '@blocknote/react'
 import { BlockNoteView } from '@blocknote/shadcn'
+import { BlockNoteEmojiPicker } from '@/features/blocknote/emoji-picker'
 import { usePageSync } from '../hooks/use-page-sync'
 import { NotionSlashMenu } from './notion-slash-menu'
 import { PageEditorSkeleton } from './page-editor-skeleton'
@@ -259,13 +260,14 @@ function PageEditorBody({
         {isLocked && <LockedBanner />}
 
         {/* System Design Decision: uploadFile injects directly into the editor instance constructor, not the UI view component. */}
-        <BlockNoteView editor={editor} editable={!isLocked} slashMenu={false}>
+        <BlockNoteView editor={editor} editable={!isLocked} slashMenu={false} emojiPicker={false}>
           <SuggestionMenuController
             triggerCharacter="/"
             suggestionMenuComponent={NotionSlashMenu}
           />
           {/* @-mention suggestion menu — backed by TanStack entity cache */}
           <MentionMenuController projectId={project.id} />
+          <BlockNoteEmojiPicker />
         </BlockNoteView>
       </div>
     </div>

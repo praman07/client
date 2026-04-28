@@ -27,6 +27,7 @@ import {
 import { VaultFileSource, markFilesUnreferenced } from '@/shared/api/vault'
 import { createLogger } from '@/shared/lib/logger'
 import { MentionMenuController, mentionSchema, useSyncMentions } from '@/features/mention'
+import { BlockNoteEmojiPicker } from '@/features/blocknote/emoji-picker'
 
 interface EditIssueDescriptionEditorProps {
   issueId: string
@@ -204,9 +205,11 @@ export function EditIssueDescriptionEditor({
       editable={editable}
       theme="light"
       sideMenu={false}
+      emojiPicker={false}
     >
       {/* @-mention suggestion menu — backed by TanStack entity cache */}
       {project?.id && <MentionMenuController projectId={project.id} />}
+      <BlockNoteEmojiPicker />
     </BlockNoteView>
   )
 }
