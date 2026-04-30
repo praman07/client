@@ -1,29 +1,52 @@
-import * as React from "react"
-import { cva, type VariantProps } from "class-variance-authority"
+import * as React from 'react'
+import { cva } from 'class-variance-authority'
+import type { VariantProps } from 'class-variance-authority'
 
-import { cn } from "@/shared/lib/utils"
+import { cn } from '@/shared/lib/utils'
 
 const alertVariants = cva(
-  "group/alert relative grid w-full gap-0.5 rounded-lg border px-2.5 py-2 text-left text-sm has-data-[slot=alert-action]:relative has-data-[slot=alert-action]:pr-18 has-[>svg]:grid-cols-[auto_1fr] has-[>svg]:gap-x-2 *:[svg]:row-span-2 *:[svg]:translate-y-0.5 *:[svg]:text-current *:[svg:not([class*='size-'])]:size-4",
+  [
+    // Layout
+    'grid gap-0.5 rounded-lg border px-4 py-3 text-left text-13',
+    // Action support
+    'has-data-[slot=alert-action]:relative has-data-[slot=alert-action]:pr-18',
+    // Icon layout
+    "has-[>svg]:grid-cols-[auto_1fr] has-[>svg]:gap-x-2.5",
+    "*:[svg]:row-span-2 *:[svg]:translate-y-0.5 *:[svg]:text-current",
+    "*:[svg:not([class*='size-'])]:size-4",
+    'w-full relative group/alert',
+  ],
   {
     variants: {
       variant: {
-        default: "bg-card text-card-foreground",
+        // Neutral / informational
+        default:
+          'bg-layer-1 text-primary border-subtle',
+        // Accent / info
+        info:
+          'bg-accent-subtle text-accent-primary border-accent-subtle *:[svg]:text-accent-primary',
+        // Success
+        success:
+          'bg-success-subtle text-success-primary border-success-subtle *:[svg]:text-success-primary',
+        // Warning
+        warning:
+          'bg-warning-subtle text-warning-primary border-warning-subtle *:[svg]:text-warning-primary',
+        // Danger / destructive
         destructive:
-          "bg-card text-destructive *:data-[slot=alert-description]:text-destructive/90 *:[svg]:text-current",
+          'bg-danger-subtle text-danger-primary border-danger-subtle *:[svg]:text-danger-primary',
       },
     },
     defaultVariants: {
-      variant: "default",
+      variant: 'default',
     },
-  }
+  },
 )
 
 function Alert({
   className,
   variant,
   ...props
-}: React.ComponentProps<"div"> & VariantProps<typeof alertVariants>) {
+}: React.ComponentProps<'div'> & VariantProps<typeof alertVariants>) {
   return (
     <div
       data-slot="alert"
@@ -34,13 +57,15 @@ function Alert({
   )
 }
 
-function AlertTitle({ className, ...props }: React.ComponentProps<"div">) {
+function AlertTitle({ className, ...props }: React.ComponentProps<'div'>) {
   return (
     <div
       data-slot="alert-title"
       className={cn(
-        "font-medium group-has-[>svg]/alert:col-start-2 [&_a]:underline [&_a]:underline-offset-3 [&_a]:hover:text-foreground",
-        className
+        'text-13 font-semibold leading-snug',
+        'group-has-[>svg]/alert:col-start-2',
+        '[&_a]:hover:underline [&_a]:underline-offset-3',
+        className,
       )}
       {...props}
     />
@@ -50,24 +75,27 @@ function AlertTitle({ className, ...props }: React.ComponentProps<"div">) {
 function AlertDescription({
   className,
   ...props
-}: React.ComponentProps<"div">) {
+}: React.ComponentProps<'div'>) {
   return (
     <div
       data-slot="alert-description"
       className={cn(
-        "text-sm text-balance text-muted-foreground md:text-pretty [&_a]:underline [&_a]:underline-offset-3 [&_a]:hover:text-foreground [&_p:not(:last-child)]:mb-4",
-        className
+        'text-12 opacity-90 text-balance md:text-pretty leading-relaxed',
+        'group-has-[>svg]/alert:col-start-2',
+        '[&_p:not(:last-child)]:mb-3',
+        '[&_a]:underline [&_a]:underline-offset-3',
+        className,
       )}
       {...props}
     />
   )
 }
 
-function AlertAction({ className, ...props }: React.ComponentProps<"div">) {
+function AlertAction({ className, ...props }: React.ComponentProps<'div'>) {
   return (
     <div
       data-slot="alert-action"
-      className={cn("absolute top-2 right-2", className)}
+      className={cn('absolute top-2.5 right-3', className)}
       {...props}
     />
   )

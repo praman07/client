@@ -1,7 +1,8 @@
+import { HugeiconsIcon } from '@hugeicons/react'
 import {
-  Hash,
-  Lock,
-} from 'lucide-react'
+  HashtagIcon,
+  LockKeyIcon,
+} from '@hugeicons/core-free-icons'
 import {
   ChatHeaderMain,
   ChatHeader as ChatHeaderRoot,
@@ -73,7 +74,10 @@ export function ChatHeader({
   return (
     <ChatHeaderRoot className="border-b">
       <ChatHeaderStart>
-        {isPrivate ? <Lock className="text-secondary size-5" /> : <Hash className="text-secondary size-5" />}
+        <HugeiconsIcon
+          icon={isPrivate ? LockKeyIcon : HashtagIcon}
+          className="text-secondary size-5"
+        />
       </ChatHeaderStart>
 
       <ChatHeaderMain>

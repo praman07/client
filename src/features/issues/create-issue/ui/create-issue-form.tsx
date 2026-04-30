@@ -22,13 +22,14 @@
 import { useRef, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { toast } from 'sonner'
+import { HugeiconsIcon } from '@hugeicons/react'
 import {
-  Maximize2,
-  Minimize2,
-  Paperclip,
-  X,
-  FileText,
-} from 'lucide-react'
+  ArrowExpandDiagonal01Icon,
+  ArrowShrink01Icon,
+  AttachmentIcon,
+  Cancel01Icon,
+  NoteIcon,
+} from '@hugeicons/core-free-icons'
 import { useCreateIssue } from '../hooks/use-create-issue'
 import {
   isDescriptionEmpty,
@@ -155,7 +156,8 @@ export function CreateIssueForm({
     <form onSubmit={handleSubmit} className="flex flex-col h-full">
       {/* ── Header breadcrumb ─────────────────────────────────────────────────── */}
       <div className="flex items-center gap-2 px-4 py-3 border-b border-subtle">
-        <FileText
+        <HugeiconsIcon
+          icon={NoteIcon}
           strokeWidth={2}
           className="size-4 text-secondary shrink-0"
         />
@@ -175,7 +177,11 @@ export function CreateIssueForm({
             onClick={onToggleExpand}
             title={isExpanded ? 'Collapse' : 'Expand'}
           >
-            {isExpanded ? <Minimize2 strokeWidth={2} className="size-4" /> : <Maximize2 strokeWidth={2} className="size-4" />}
+            <HugeiconsIcon
+              icon={isExpanded ? ArrowShrink01Icon : ArrowExpandDiagonal01Icon}
+              strokeWidth={2}
+              className="size-4"
+            />
           </Button>
           <Button
             type="button"
@@ -185,7 +191,8 @@ export function CreateIssueForm({
             onClick={onCancel}
             title="Close"
           >
-            <X
+            <HugeiconsIcon
+              icon={Cancel01Icon}
               strokeWidth={2}
               className="size-4"
             />
@@ -249,7 +256,8 @@ export function CreateIssueForm({
           title="Attach file"
           disabled
         >
-          <Paperclip
+          <HugeiconsIcon
+            icon={AttachmentIcon}
             strokeWidth={2}
             className="size-4"
           />

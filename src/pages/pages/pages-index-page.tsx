@@ -1,5 +1,6 @@
 import { Link } from '@tanstack/react-router';
-import { FileText } from 'lucide-react';
+import { HugeiconsIcon } from '@hugeicons/react';
+import { NoteIcon } from '@hugeicons/core-free-icons';
 import { usePagesHome } from '@/features/pages/fetch-pages-home';
 import { useCreatePageModal } from '@/features/pages/create-page';
 import type { GetPagesHomeQuery } from '@/gql/graphql';
@@ -137,7 +138,7 @@ function EmptyState() {
   return (
     <div className="flex flex-col items-center justify-center flex-1 text-center px-4">
       <div className="bg-layer-1 border border-subtle rounded-full p-5 mb-4">
-        <FileText className="size-10 text-tertiary" />
+        <HugeiconsIcon icon={NoteIcon} className="size-10 text-tertiary" />
       </div>
       <h3 className="text-18 font-semibold text-primary tracking-tight mb-1.5">
         No pages yet

@@ -9,11 +9,12 @@
  *
  * @layer Features
  */
+import { HugeiconsIcon } from '@hugeicons/react'
 import {
-  X,
-  Trash2,
-  MoreHorizontal,
-} from 'lucide-react'
+  Cancel01Icon,
+  Delete02Icon,
+  MoreHorizontalIcon,
+} from '@hugeicons/core-free-icons'
 import { Button } from '@/shared/ui/primitives/button'
 import {
   DropdownMenu,
@@ -58,7 +59,8 @@ export function EditIssueHeader({
 
         <DropdownMenu>
           <DropdownMenuTrigger className="inline-flex items-center justify-center h-7 w-7 rounded-md hover:bg-layer-transparent-hover transition-colors cursor-pointer">
-            <MoreHorizontal
+            <HugeiconsIcon
+              icon={MoreHorizontalIcon}
               strokeWidth={2}
               className="size-4"
             />
@@ -68,7 +70,8 @@ export function EditIssueHeader({
               className="text-danger-primary focus:text-danger-primary"
               onClick={onDelete}
             >
-              <Trash2
+              <HugeiconsIcon
+                icon={Delete02Icon}
                 strokeWidth={2}
                 className="size-4 mr-2"
               />
@@ -81,7 +84,8 @@ export function EditIssueHeader({
           onClick={onClose}
           className="inline-flex items-center justify-center h-7 w-7 rounded-md hover:bg-layer-1-hover transition-colors cursor-pointer"
         >
-          <X
+          <HugeiconsIcon
+            icon={Cancel01Icon}
             strokeWidth={2}
             className="size-4"
           />

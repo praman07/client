@@ -12,7 +12,8 @@
  * @layer Features
  */
 import { useState } from 'react'
-import { Check, User } from 'lucide-react'
+import { HugeiconsIcon } from '@hugeicons/react'
+import { Tick02Icon, UserIcon } from '@hugeicons/core-free-icons'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -91,7 +92,7 @@ export function AssigneePicker({
           </>
         ) : (
           <>
-            <User strokeWidth={2} className="size-3" />
+            <HugeiconsIcon icon={UserIcon} strokeWidth={2} className="size-3" />
             <span>Assignee</span>
           </>
         )}
@@ -125,7 +126,8 @@ export function AssigneePicker({
             }}
           >
             <span className="text-tertiary">Unassigned</span>
-            <Check
+            <HugeiconsIcon
+              icon={Tick02Icon}
               strokeWidth={2}
               className={cn(
                 'ml-auto size-3.5',
@@ -153,7 +155,8 @@ export function AssigneePicker({
                 </AvatarFallback>
               </Avatar>
               <span className="max-w-[120px] truncate">{m.fullName}</span>
-              <Check
+              <HugeiconsIcon
+                icon={Tick02Icon}
                 strokeWidth={2}
                 className={cn(
                   'ml-auto size-3.5',

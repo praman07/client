@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { Archive } from 'lucide-react'
+import { ArchiveIcon } from '@hugeicons/core-free-icons'
+import { HugeiconsIcon } from '@hugeicons/react'
 import { useChannelSettings } from '../hooks'
 import type { ConversationFieldsFragment } from '@/gql/graphql'
 import { Button } from '@/shared/ui/primitives/button'
@@ -90,7 +91,7 @@ export function SettingsTab({ conversation }: SettingsTabProps) {
                     onClick={() => setArchiveDialogOpen(true)}
                     className="h-8 text-11 font-medium border-warning-subtle text-warning-primary hover:bg-warning-subtle border-subtle-1"
                   >
-                    <Archive className="size-3.5 mr-1.5" />
+                    <HugeiconsIcon icon={ArchiveIcon} className="size-3.5 mr-1.5" />
                     Archive
                   </Button>
                 }

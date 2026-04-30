@@ -1,4 +1,5 @@
-import { ArrowDown } from 'lucide-react'
+import { ArrowDownIcon } from '@hugeicons/core-free-icons'
+import { HugeiconsIcon } from '@hugeicons/react'
 import { Button } from '@/shared/ui/primitives/button'
 
 interface ScrollToBottomButtonProps {
@@ -22,7 +23,7 @@ export function ScrollToBottomButton({
         className="rounded-full shadow-overlay-100 pointer-events-auto h-8 px-3 gap-1.5 opacity-90 hover:opacity-100 transition-all animate-in slide-in-from-bottom-2 duration-200"
         onClick={onClick}
       >
-        <ArrowDown className="size-3.5" />
+        <HugeiconsIcon icon={ArrowDownIcon} className="size-3.5" />
         <span className="text-11 font-medium">
           {newMessagesCount > 0 ? `${newMessagesCount} new` : 'New Messages'}
         </span>

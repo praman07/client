@@ -1,6 +1,8 @@
-import { Progress as ProgressPrimitive } from "@base-ui/react/progress"
+'use client'
 
-import { cn } from "@/shared/lib/utils"
+import { Progress as ProgressPrimitive } from '@base-ui/react/progress'
+
+import { cn } from '@/shared/lib/utils'
 
 function Progress({
   className,
@@ -12,7 +14,7 @@ function Progress({
     <ProgressPrimitive.Root
       value={value}
       data-slot="progress"
-      className={cn("flex flex-wrap gap-3", className)}
+      className={cn('flex flex-wrap gap-2', className)}
       {...props}
     >
       {children}
@@ -26,11 +28,11 @@ function Progress({
 function ProgressTrack({ className, ...props }: ProgressPrimitive.Track.Props) {
   return (
     <ProgressPrimitive.Track
-      className={cn(
-        "relative flex h-1 w-full items-center overflow-x-hidden rounded-full bg-muted",
-        className
-      )}
       data-slot="progress-track"
+      className={cn(
+        'bg-layer-2 h-1.5 rounded-full relative flex w-full items-center overflow-x-hidden',
+        className,
+      )}
       {...props}
     />
   )
@@ -43,7 +45,10 @@ function ProgressIndicator({
   return (
     <ProgressPrimitive.Indicator
       data-slot="progress-indicator"
-      className={cn("h-full bg-primary transition-all", className)}
+      className={cn(
+        'bg-accent-primary h-full rounded-full transition-all duration-300',
+        className,
+      )}
       {...props}
     />
   )
@@ -52,8 +57,8 @@ function ProgressIndicator({
 function ProgressLabel({ className, ...props }: ProgressPrimitive.Label.Props) {
   return (
     <ProgressPrimitive.Label
-      className={cn("text-sm font-medium", className)}
       data-slot="progress-label"
+      className={cn('text-13 font-medium text-primary', className)}
       {...props}
     />
   )
@@ -62,11 +67,8 @@ function ProgressLabel({ className, ...props }: ProgressPrimitive.Label.Props) {
 function ProgressValue({ className, ...props }: ProgressPrimitive.Value.Props) {
   return (
     <ProgressPrimitive.Value
-      className={cn(
-        "ml-auto text-sm text-muted-foreground tabular-nums",
-        className
-      )}
       data-slot="progress-value"
+      className={cn('ml-auto text-12 text-secondary tabular-nums', className)}
       {...props}
     />
   )

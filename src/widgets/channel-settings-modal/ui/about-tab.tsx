@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { Copy, Pencil, Globe, Lock } from 'lucide-react'
+import { Copy01Icon, Edit02Icon, Globe02Icon, LockIcon } from '@hugeicons/core-free-icons'
+import { HugeiconsIcon } from '@hugeicons/react'
 import { useChannelSettings } from '../hooks'
 import type { Conversation, ConversationFieldsFragment } from '@/gql/graphql'
 import type { AppPermission } from '@/shared/lib/auth'
@@ -42,6 +43,7 @@ function InlineTextArea({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
+        maxHeight="lg"
         maxLength={maxLength}
         autoFocus
       />
@@ -80,7 +82,7 @@ function CopyButton({ value }: { value: string }) {
         copied ? 'text-accent-primary' : 'text-secondary hover:text-primary',
       )}
     >
-      <Copy className="size-3.5" />
+      <HugeiconsIcon icon={Copy01Icon} className="size-3.5" />
     </button>
   )
 }
@@ -108,7 +110,7 @@ function SectionRow({ title, editPermission, onEdit, children }: SectionRowProps
             onClick={onEdit}
             className="shrink-0 h-7 text-11 text-primary hover:bg-layer-transparent-hover font-medium px-2"
           >
-            <Pencil className="size-3 mr-1" />
+            <HugeiconsIcon icon={Edit02Icon} className="size-3 mr-1" />
             Edit
           </Button>
         </Guard>
@@ -241,7 +243,10 @@ export function AboutTab({ conversation }: AboutTabProps) {
       <div className="flex items-start justify-between gap-4 px-4 py-3.5 rounded-lg border-subtle bg-layer-1">
         <div className="flex items-start gap-3 min-w-0">
           <div className="mt-0.5 shrink-0 p-1.5 rounded-md bg-layer-1-hover">
-            {conversation.isPublic ? <Globe className="size-4 text-secondary" /> : <Lock className="size-4 text-secondary" />}
+            <HugeiconsIcon
+              icon={conversation.isPublic ? Globe02Icon : LockIcon}
+              className="size-4 text-secondary"
+            />
           </div>
           <div className="min-w-0">
             <p className="text-14 font-semibold text-primary">

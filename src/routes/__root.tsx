@@ -14,7 +14,6 @@ import TanStackQueryDevtools from '@/app/providers/tanstack-query/devtools'
 import { Toaster } from '@/shared/ui/primitives/sonner'
 import appCss from '@/app/styles/globals.css?url'
 import { env } from '@/shared/config/env'
-import { ThemeProvider } from '@/app/providers/theme/theme-provider'
 
 
 interface MyRouterContext {
@@ -66,15 +65,13 @@ function RootComponent() {
   }, [])
 
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en">
       <head>
         <HeadContent />
       </head>
       <body>
         <ClerkProvider>
-          <ThemeProvider defaultTheme="dark" storageKey="collabify-theme">
-            <Outlet />
-          </ThemeProvider>
+          <Outlet />
           <Toaster />
             <TanStackDevtools
               config={{ position: 'bottom-right' }}

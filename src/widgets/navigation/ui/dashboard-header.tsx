@@ -1,8 +1,9 @@
 import { useRouterState } from '@tanstack/react-router'
+import { Bell } from 'lucide-react'
 import { Fragment } from 'react/jsx-runtime'
 import { UserDropdown } from './user-dropdown'
 import type { RouteStaticData } from '../model'
-import { ThemeToggle } from '@/app/providers/theme/theme-toggle'
+import { Button } from '@/shared/ui'
 
 // Define the known shape of staticData for breadcrumbs
 
@@ -49,7 +50,9 @@ export function DashboardHeader({ children }: { children?: React.ReactNode }) {
 
         {/* Right: Actions & User */}
         <div className="flex items-center gap-4">
-          <ThemeToggle />
+          {/* <Button variant="ghost" size="icon" className="text-secondary">
+            <Bell className="h-5 w-5" />
+          </Button> */}
           <UserDropdown />
         </div>
       </div>
