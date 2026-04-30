@@ -7,8 +7,7 @@
  * @layer Features
  */
 import { useState } from 'react'
-import { HugeiconsIcon } from '@hugeicons/react'
-import { Tick02Icon } from '@hugeicons/core-free-icons'
+import { Check } from 'lucide-react'
 import type { IssueStatus } from '@/entities/issue-status'
 import {
   DropdownMenu,
@@ -55,8 +54,7 @@ export function StatusPicker({ statuses, value, onChange }: StatusPickerProps) {
             }}
           >
             <StatusPill status={status} iconSize={13} />
-            <HugeiconsIcon
-              icon={Tick02Icon}
+            <Check
               strokeWidth={2}
               className={cn(
                 'ml-auto size-3.5',

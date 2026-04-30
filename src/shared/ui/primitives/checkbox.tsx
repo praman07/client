@@ -1,40 +1,26 @@
-import { Checkbox as CheckboxPrimitive } from '@base-ui/react/checkbox'
+"use client"
 
-import { HugeiconsIcon } from '@hugeicons/react'
-import { Tick02Icon } from '@hugeicons/core-free-icons'
-import { cn } from '@/shared/lib/utils'
+import { Checkbox as CheckboxPrimitive } from "@base-ui/react/checkbox"
+
+import { cn } from "@/shared/lib/utils"
+import { CheckIcon } from "lucide-react"
 
 function Checkbox({ className, ...props }: CheckboxPrimitive.Root.Props) {
   return (
     <CheckboxPrimitive.Root
       data-slot="checkbox"
       className={cn(
-        // Base
-        'relative flex size-4 shrink-0 items-center justify-center rounded-[4px] border outline-none peer',
-        // Unchecked
-        'border-subtle-1 bg-layer-1',
-        // Checked
-        'data-checked:bg-accent-primary data-checked:border-accent-strong data-checked:text-on-color',
-        // Focus
-        'focus-visible:ring-2 focus-visible:ring-accent-strong/30 focus-visible:border-accent-strong',
-        // Error
-        'aria-invalid:border-danger-strong aria-invalid:ring-2 aria-invalid:ring-danger-strong/20',
-        // Press
-        'hardware-accelerated active:scale-[0.95] transition-all duration-100',
-        // Extended tap area
-        'after:absolute after:-inset-x-3 after:-inset-y-2',
-        // Disabled
-        'disabled:cursor-not-allowed disabled:opacity-50',
-        'group-has-disabled/field:opacity-50',
-        className,
+        "peer relative flex size-4 shrink-0 items-center justify-center rounded-[4px] border border-input transition-colors outline-none group-has-disabled/field:opacity-50 after:absolute after:-inset-x-3 after:-inset-y-2 focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-3 aria-invalid:ring-destructive/20 aria-invalid:aria-checked:border-primary dark:bg-input/30 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 data-checked:border-primary data-checked:bg-primary data-checked:text-primary-foreground dark:data-checked:bg-primary",
+        className
       )}
       {...props}
     >
       <CheckboxPrimitive.Indicator
         data-slot="checkbox-indicator"
-        className="[&>svg]:size-3.5 grid place-content-center text-current transition-none"
+        className="grid place-content-center text-current transition-none [&>svg]:size-3.5"
       >
-        <HugeiconsIcon icon={Tick02Icon} strokeWidth={2.5} />
+        <CheckIcon
+        />
       </CheckboxPrimitive.Indicator>
     </CheckboxPrimitive.Root>
   )

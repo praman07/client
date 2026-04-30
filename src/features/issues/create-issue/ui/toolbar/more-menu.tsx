@@ -10,8 +10,7 @@
  * @layer Features
  */
 import { useState } from 'react'
-import { HugeiconsIcon } from '@hugeicons/react'
-import { Calendar01Icon, MoreHorizontalIcon } from '@hugeicons/core-free-icons'
+import { Calendar as CalendarIcon, MoreHorizontal } from 'lucide-react'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -53,16 +52,14 @@ export function MoreMenu({ dueDate, onDueDateChange }: MoreMenuProps) {
         {/* Due date chip — visible when a date is set */}
         {formattedDate && (
           <span className="flex items-center gap-1">
-            <HugeiconsIcon
-              icon={Calendar01Icon}
+            <CalendarIcon
               strokeWidth={2}
               className="size-3 text-tertiary"
             />
             <span>{formattedDate}</span>
           </span>
         )}
-        <HugeiconsIcon
-          icon={MoreHorizontalIcon}
+        <MoreHorizontal
           strokeWidth={2}
           className="size-3.5"
         />
@@ -76,8 +73,7 @@ export function MoreMenu({ dueDate, onDueDateChange }: MoreMenuProps) {
       >
         <DropdownMenuSub>
           <DropdownMenuSubTrigger>
-            <HugeiconsIcon
-              icon={Calendar01Icon}
+            <CalendarIcon
               strokeWidth={2}
               className="size-3.5 text-tertiary"
             />

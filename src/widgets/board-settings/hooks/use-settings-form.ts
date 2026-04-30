@@ -1,9 +1,4 @@
-import { useForm } from 'react-hook-form'
-
-interface BoardFormData {
-  name: string
-  description: string
-}
+import { useForm } from '@tanstack/react-form'
 
 interface UseSettingsFormOptions {
   defaultName?: string
@@ -13,13 +8,13 @@ interface UseSettingsFormOptions {
 /**
  * Hook managing board settings form state
  *
- * Uses react-hook-form for validation and state management
+ * Uses TanStack Form for validation and state management
  */
 export function useSettingsForm({
   defaultName = '',
   defaultDescription = '',
 }: UseSettingsFormOptions) {
-  const form = useForm<BoardFormData>({
+  const form = useForm({
     defaultValues: {
       name: defaultName,
       description: defaultDescription,

@@ -1,493 +1,29 @@
-/* ============================================================
-   COLLABIFY DESIGN SYSTEM — globals.css
-   Inspired by Linear (UX atmosphere) + Plane (token depth)
-   Dark-mode native · oklch color space · Inter Variable
-   ============================================================ */
-
-/* ── Google Fonts ── */
 @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap');
 
 @import 'tailwindcss';
 @import 'tw-animate-css';
+@import 'shadcn/tailwind.css';
+@import '@fontsource-variable/geist';
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+@import "@fontsource-variable/geist";
 
+@custom-variant dark (&:is(.dark *));
 
-/* BlockNote shadcn — generates Tailwind utility classes */
 @source "../../node_modules/@blocknote/shadcn";
 
-/* ── Dark mode via data-theme attribute (Plane pattern) ───── */
-@custom-variant dark (&:where([data-theme*="dark"], [data-theme*="dark"] *));
-
-/* ============================================================
-   SECTION 1 · RAW ALPHA PALETTE
-   Semi-transparent white/black stops used for borders,
-   overlays, and luminance-step surfaces (Linear pattern).
-   ============================================================ */
-:root {
-  /* White alpha stops */
-  --alpha-white-25:  oklch(100% 0 0 / 1%);
-  --alpha-white-50:  oklch(100% 0 0 / 2%);
-  --alpha-white-100: oklch(100% 0 0 / 4%);
-  --alpha-white-150: oklch(100% 0 0 / 6%);
-  --alpha-white-200: oklch(100% 0 0 / 8%);
-  --alpha-white-300: oklch(100% 0 0 / 12%);
-  --alpha-white-400: oklch(100% 0 0 / 18%);
-  --alpha-white-500: oklch(100% 0 0 / 28%);
-  --alpha-white-600: oklch(100% 0 0 / 40%);
-  --alpha-white-700: oklch(100% 0 0 / 54%);
-  --alpha-white-800: oklch(100% 0 0 / 68%);
-  --alpha-white-900: oklch(100% 0 0 / 82%);
-
-  /* Black alpha stops */
-  --alpha-black-25:  oklch(0% 0 0 / 1%);
-  --alpha-black-50:  oklch(0% 0 0 / 2%);
-  --alpha-black-100: oklch(0% 0 0 / 4%);
-  --alpha-black-150: oklch(0% 0 0 / 6%);
-  --alpha-black-200: oklch(0% 0 0 / 8%);
-  --alpha-black-300: oklch(0% 0 0 / 12%);
-  --alpha-black-400: oklch(0% 0 0 / 20%);
-  --alpha-black-500: oklch(0% 0 0 / 32%);
-  --alpha-black-600: oklch(0% 0 0 / 48%);
-  --alpha-black-700: oklch(0% 0 0 / 64%);
-  --alpha-black-800: oklch(0% 0 0 / 80%);
-  --alpha-black-900: oklch(0% 0 0 / 92%);
-}
-
-/* ============================================================
-   SECTION 2 · EXTENDED COLOR PALETTE
-   Status / label colors. Not brand colors.
-   Use these for issue labels, priority chips, status badges.
-   ============================================================ */
-:root {
-  /* Violet (Collabify brand) */
-  --ext-violet-100: oklch(0.97 0.02 275);
-  --ext-violet-200: oklch(0.93 0.05 275);
-  --ext-violet-300: oklch(0.86 0.09 275);
-  --ext-violet-400: oklch(0.76 0.13 275);
-  --ext-violet-500: oklch(0.65 0.18 275);
-  --ext-violet-600: oklch(0.54 0.18 275);
-  --ext-violet-700: oklch(0.45 0.16 275);
-  --ext-violet-800: oklch(0.36 0.13 275);
-  --ext-violet-900: oklch(0.28 0.10 275);
-  --ext-violet-1000: oklch(0.22 0.07 275);
-
-  /* Red / Danger */
-  --ext-red-100: oklch(0.97 0.02 20);
-  --ext-red-200: oklch(0.93 0.06 20);
-  --ext-red-300: oklch(0.86 0.12 20);
-  --ext-red-400: oklch(0.75 0.18 20);
-  --ext-red-500: oklch(0.63 0.22 20);
-  --ext-red-600: oklch(0.53 0.22 20);
-  --ext-red-700: oklch(0.44 0.18 20);
-  --ext-red-800: oklch(0.35 0.14 20);
-  --ext-red-900: oklch(0.27 0.10 20);
-
-  /* Orange / Warning */
-  --ext-orange-100: oklch(0.97 0.03 50);
-  --ext-orange-200: oklch(0.93 0.07 50);
-  --ext-orange-300: oklch(0.86 0.13 50);
-  --ext-orange-400: oklch(0.77 0.18 50);
-  --ext-orange-500: oklch(0.68 0.20 50);
-  --ext-orange-600: oklch(0.58 0.18 50);
-  --ext-orange-700: oklch(0.48 0.15 50);
-  --ext-orange-800: oklch(0.38 0.11 50);
-  --ext-orange-900: oklch(0.29 0.08 50);
-
-  /* Green / Success */
-  --ext-green-100: oklch(0.97 0.03 155);
-  --ext-green-200: oklch(0.93 0.07 155);
-  --ext-green-300: oklch(0.86 0.12 155);
-  --ext-green-400: oklch(0.76 0.16 155);
-  --ext-green-500: oklch(0.65 0.18 155);
-  --ext-green-600: oklch(0.54 0.17 155);
-  --ext-green-700: oklch(0.44 0.14 155);
-  --ext-green-800: oklch(0.35 0.11 155);
-  --ext-green-900: oklch(0.27 0.08 155);
-
-  /* Yellow */
-  --ext-yellow-100: oklch(0.98 0.04 90);
-  --ext-yellow-200: oklch(0.95 0.09 90);
-  --ext-yellow-300: oklch(0.90 0.16 90);
-  --ext-yellow-400: oklch(0.84 0.20 90);
-  --ext-yellow-500: oklch(0.78 0.22 90);
-  --ext-yellow-600: oklch(0.68 0.20 90);
-  --ext-yellow-700: oklch(0.56 0.16 90);
-  --ext-yellow-800: oklch(0.44 0.12 90);
-  --ext-yellow-900: oklch(0.33 0.08 90);
-
-  /* Teal */
-  --ext-teal-100: oklch(0.97 0.03 195);
-  --ext-teal-200: oklch(0.93 0.07 195);
-  --ext-teal-300: oklch(0.86 0.12 195);
-  --ext-teal-400: oklch(0.76 0.16 195);
-  --ext-teal-500: oklch(0.65 0.18 195);
-  --ext-teal-600: oklch(0.54 0.17 195);
-  --ext-teal-700: oklch(0.44 0.14 195);
-  --ext-teal-800: oklch(0.35 0.10 195);
-  --ext-teal-900: oklch(0.27 0.07 195);
-
-  /* Pink */
-  --ext-pink-100: oklch(0.97 0.03 340);
-  --ext-pink-200: oklch(0.93 0.07 340);
-  --ext-pink-300: oklch(0.87 0.12 340);
-  --ext-pink-400: oklch(0.78 0.17 340);
-  --ext-pink-500: oklch(0.67 0.21 340);
-  --ext-pink-600: oklch(0.56 0.20 340);
-  --ext-pink-700: oklch(0.46 0.17 340);
-  --ext-pink-800: oklch(0.36 0.13 340);
-  --ext-pink-900: oklch(0.28 0.09 340);
-
-  /* Grey / Neutral */
-  --ext-grey-100: oklch(0.97 0 0);
-  --ext-grey-200: oklch(0.93 0 0);
-  --ext-grey-300: oklch(0.86 0 0);
-  --ext-grey-400: oklch(0.76 0 0);
-  --ext-grey-500: oklch(0.63 0 0);
-  --ext-grey-600: oklch(0.50 0 0);
-  --ext-grey-700: oklch(0.38 0 0);
-  --ext-grey-800: oklch(0.27 0 0);
-  --ext-grey-900: oklch(0.18 0 0);
-  --ext-grey-1000: oklch(0.12 0 0);
-  --ext-grey-1100: oklch(0.08 0 0);
-  --ext-grey-1200: oklch(0.05 0 0);
-}
-
-/* ============================================================
-   SECTION 3 · DARK MODE SEMANTIC TOKENS  (default theme)
-   Canvas → Surface → Layer hierarchy (Plane pattern).
-   These are the ONLY tokens components should reference.
-   ============================================================ */
-:root,
-[data-theme="dark"] {
-  color-scheme: dark;
-
-  /* ── Canvas ── One per app root. Never nest. */
-  --bg-canvas: oklch(0.12 0.005 275);
-
-  /* ── Surfaces ── Page-level containers. Siblings of each other. */
-  --bg-surface-1: oklch(0.15 0.006 275);
-  --bg-surface-2: oklch(0.17 0.007 275);
-
-  /* ── Layers ── Nested depth inside a surface. */
-  --bg-layer-1:            oklch(0.19 0.007 275);
-  --bg-layer-1-hover:      oklch(0.21 0.007 275);
-  --bg-layer-1-active:     oklch(0.23 0.008 275);
-  --bg-layer-1-selected:   oklch(0.22 0.010 275);
-
-  --bg-layer-2:            oklch(0.22 0.008 275);
-  --bg-layer-2-hover:      oklch(0.24 0.008 275);
-  --bg-layer-2-active:     oklch(0.26 0.009 275);
-  --bg-layer-2-selected:   oklch(0.25 0.011 275);
-
-  --bg-layer-3:            oklch(0.26 0.009 275);
-  --bg-layer-3-hover:      oklch(0.28 0.009 275);
-  --bg-layer-3-active:     oklch(0.30 0.010 275);
-
-  /* ── Transparent layers ── For hover states on non-opaque bg */
-  --bg-layer-transparent:          oklch(100% 0 0 / 0%);
-  --bg-layer-transparent-hover:    oklch(100% 0 0 / 4%);
-  --bg-layer-transparent-active:   oklch(100% 0 0 / 7%);
-  --bg-layer-transparent-selected: oklch(100% 0 0 / 6%);
-
-  /* ── Accent (brand violet-blue) ── */
-  --bg-accent-primary:       var(--ext-violet-600);
-  --bg-accent-primary-hover: var(--ext-violet-700);
-  --bg-accent-subtle:        oklch(0.54 0.18 275 / 12%);
-  --bg-accent-subtle-hover:  oklch(0.54 0.18 275 / 18%);
-
-  /* ── Status backgrounds ── */
-  --bg-danger-primary: var(--ext-red-600);
-  --bg-danger-subtle:  oklch(0.53 0.22 20 / 12%);
-  --bg-warning-primary: var(--ext-orange-600);
-  --bg-warning-subtle:  oklch(0.58 0.18 50 / 12%);
-  --bg-success-primary: var(--ext-green-600);
-  --bg-success-subtle:  oklch(0.54 0.17 155 / 12%);
-
-  /* ── Backdrop / overlay ── */
-  --bg-backdrop: oklch(0% 0 0 / 60%);
-
-  /* ── Borders ── Semi-transparent white (Linear pattern) */
-  --border-subtle:         oklch(100% 0 0 / 5%);
-  --border-subtle-1:       oklch(100% 0 0 / 8%);
-  --border-strong:         oklch(100% 0 0 / 12%);
-  --border-strong-1:       oklch(100% 0 0 / 18%);
-  --border-accent-strong:  oklch(0.54 0.18 275 / 60%);
-  --border-accent-subtle:  oklch(0.54 0.18 275 / 25%);
-  --border-danger-strong:  oklch(0.53 0.22 20 / 60%);
-  --border-success-strong: oklch(0.54 0.17 155 / 60%);
-  --border-warning-strong: oklch(0.58 0.18 50 / 60%);
-
-  /* ── Text ── */
-  --txt-primary:     oklch(0.93 0.005 275);
-  --txt-secondary:   oklch(0.72 0.008 275);
-  --txt-tertiary:    oklch(0.55 0.006 275);
-  --txt-placeholder: oklch(0.45 0.005 275);
-  --txt-disabled:    oklch(0.38 0.004 275);
-  --txt-on-color:    oklch(0.98 0 0);
-
-  --txt-accent-primary:   var(--ext-violet-400);
-  --txt-accent-secondary: var(--ext-violet-500);
-  --txt-danger-primary:   var(--ext-red-400);
-  --txt-success-primary:  var(--ext-green-400);
-  --txt-warning-primary:  var(--ext-yellow-400);
-
-  /* ── Scrollbar ── */
-  --scrollbar-thumb: oklch(0.28 0.006 275);
-  --scrollbar-thumb-hover: oklch(0.34 0.007 275);
-  --scrollbar-track: transparent;
-
-  /* ── Animation speeds ── */
-  --transition-expressive: 300ms cubic-bezier(0.4, 0, 0.2, 1);
-  --transition-spring:     500ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  --transition-snappy:     150ms cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-/* ============================================================
-   SECTION 4 · @theme — Tailwind Token Registration
-   Maps CSS vars → Tailwind utility classes.
-   bg-canvas, bg-surface-1, text-primary, border-subtle, etc.
-   ============================================================ */
-@theme {
-  /* ── CRITICAL: Reset Tailwind's default color palette ── */
-  --color-*:    initial;
-  --color-white: oklch(1 0 0);
-  --color-black: oklch(0.1472 0.0034 230.83);
-
-  /* ── CRITICAL: Reset 4xl radius to prevent Tailwind default leak ── */
-  --radius-4xl: initial;
-
-  /* ── Fonts ── */
-  --font-body:    "Inter Variable", ui-sans-serif, system-ui, -apple-system, sans-serif;
-  --font-heading: "Inter Variable", ui-sans-serif, system-ui, -apple-system, sans-serif;
-  --font-code:    "IBM Plex Mono", ui-monospace, "Cascadia Code", monospace;
-
-  /* ── Font weights (Plane + Linear 510 signature) ── */
-  --font-weight-light:    300;
-  --font-weight-regular:  400;
-  --font-weight-medium:   500;
-  --font-weight-semibold: 600;
-  --font-weight-bold:     700;
-  --font-weight-heavy:    800;
-  --font-weight-linear:   510; /* Linear signature weight — between regular and medium */
-
-  /* ── Font sizes (pixel-named, Plane convention) ── */
-  --text-9:  0.5625rem;   /*  9px */
-  --text-10: 0.625rem;    /* 10px */
-  --text-11: 0.6875rem;   /* 11px */
-  --text-12: 0.75rem;     /* 12px */
-  --text-13: 0.8125rem;   /* 13px — Linear body default */
-  --text-14: 0.875rem;    /* 14px */
-  --text-16: 1rem;        /* 16px */
-  --text-18: 1.125rem;    /* 18px */
-  --text-20: 1.25rem;     /* 20px */
-  --text-24: 1.5rem;      /* 24px */
-  --text-28: 1.75rem;     /* 28px */
-  --text-32: 2rem;        /* 32px */
-  --text-40: 2.5rem;      /* 40px */
-
-  /* ── Letter spacing (Plane canonical names) ── */
-  --tracking-extra-tight: -0.025rem; /* Plane — tight UI labels */
-  --tracking-tight:       -0.05rem;  /* Plane — compact display */
-  --tracking-default:      0rem;     /* Plane — body */
-  --tracking-wide:         0.05rem;  /* Plane — uppercase labels */
-  /* Linear display-size tracking (additive — for marketing/hero) */
-  --tracking-display-xl:  -0.022em; /* 72px hero */
-  --tracking-display-lg:  -0.022em; /* 64px display */
-  --tracking-display:     -0.022em; /* 48px section titles */
-  --tracking-title:       -0.022em; /* 32px headings */
-  --tracking-snug:        -0.008em; /* 24px sub-headings */
-  --tracking-normal:       0em;     /* 16px body */
-
-  /* ── Radius scale (Linear-inspired) ── */
-  --radius-micro: 0.125rem;  /*  2px — inline badges, toolbar icons */
-  --radius-xs:    0.1875rem; /*  3px — compact chips */
-  --radius-sm:    0.25rem;   /*  4px — small containers */
-  --radius-md:    0.375rem;  /*  6px — buttons, inputs */
-  --radius-lg:    0.5rem;    /*  8px — cards, dropdowns */
-  --radius-xl:    0.75rem;   /* 12px — panels, modals */
-  --radius-2xl:   1.375rem;  /* 22px — large panels */
-  --radius-full:  9999px;    /* pills / avatars */
-
-  /* ── Shadows (Plane exact + Linear additions) ── */
-  --shadow-raised-100: 0px 1px 6px -1px #292f3d08, 0px 1px 4px 0px #292f3d0a;
-  --shadow-raised-200: 0px 1px 2px -1px #292f3d0f, 0px 1px 3px 0px #292f3d0d;
-  --shadow-raised-300: 0px 2px 4px -1px #292f3d0a, 0px 4px 6px -1px #292f3d0d;
-  --shadow-overlay-100: 0px 10px 10px -5px #292f3d0a, 0px 10px 40px -5px #292f3d0a;
-  --shadow-overlay-200: 0px 10px 10px -10px #292f3d0a, 0px 30px 60px -12px #292f3d1a;
-  --shadow-direction-left:  -10px 0px 30px -5px #292f3d05, -5px 0px 80px -5px #292f3d0a;
-  --shadow-direction-right:  10px 0px 30px -5px #0000000a,  5px 0px 80px -5px #0000000a;
-  --shadow-dialog:
-    oklch(0% 0 0 / 0%)  0px 8px 2px,
-    oklch(0% 0 0 / 1%)  0px 5px 2px,
-    oklch(0% 0 0 / 4%)  0px 3px 2px,
-    oklch(0% 0 0 / 7%)  0px 1px 1px,
-    oklch(0% 0 0 / 8%)  0px 0px 1px;
-
-  /* ── Z-index scale ── */
-  --z-base:     0;
-  --z-raised:   10;
-  --z-dropdown: 100;
-  --z-sticky:   200;
-  --z-overlay:  300;
-  --z-modal:    400;
-  --z-toast:    500;
-  --z-tooltip:  600;
-
-  /* ── Layout constants (Plane exact) ── */
-  --height-header:      3.25rem;
-  --width-sidebar:      15rem;
-  --width-sidebar-rail: 3.5rem;
-  --padding-page:       1.35rem;
-  --padding-page-x:     1.35rem;
-  --padding-page-y:     1.35rem;
-
-  /* ── Animations ── */
-  --animate-fade-in:             fadeIn 0.2s ease-out forwards;
-  --animate-fade-out:            fadeOut 0.2s ease-out forwards;
-  --animate-slide-up:            slideUp 0.25s ease-out forwards;
-  --animate-slide-down:          slideDown 0.25s ease-out forwards;
-  --animate-slide-in-from-left:  slideInLeft 0.25s ease-out forwards;
-  --animate-slide-in-from-right: slideInRight 0.25s ease-out forwards;
-  --animate-scale-in:            scaleIn 0.15s ease-out forwards;
-  --animate-scale-out:           scaleOut 0.1s ease-in forwards;
-  --animate-pulse-subtle:        pulseSubtle 2s ease-in-out infinite;
-}
-
-/* ── @theme inline — Correct Tailwind v4 prefix convention ──────────────
-   --background-color-*  →  bg-* only
-   --text-color-*        →  text-* only
-   --border-color-*      →  border-* only
-   This generates: bg-canvas, text-primary, border-subtle (NOT text-text-primary etc.)
-   ────────────────────────────────────────────────────────────────────── */
-@theme inline {
-  /* ── Background utilities (bg-*) ── */
-  --background-color-canvas:                    var(--bg-canvas);
-  --background-color-surface-1:                 var(--bg-surface-1);
-  --background-color-surface-2:                 var(--bg-surface-2);
-  --background-color-layer-1:                   var(--bg-layer-1);
-  --background-color-layer-1-hover:             var(--bg-layer-1-hover);
-  --background-color-layer-1-active:            var(--bg-layer-1-active);
-  --background-color-layer-1-selected:          var(--bg-layer-1-selected);
-  --background-color-layer-2:                   var(--bg-layer-2);
-  --background-color-layer-2-hover:             var(--bg-layer-2-hover);
-  --background-color-layer-2-active:            var(--bg-layer-2-active);
-  --background-color-layer-2-selected:          var(--bg-layer-2-selected);
-  --background-color-layer-3:                   var(--bg-layer-3);
-  --background-color-layer-3-hover:             var(--bg-layer-3-hover);
-  --background-color-layer-3-active:            var(--bg-layer-3-active);
-  --background-color-layer-3-selected:          var(--bg-layer-3-active);
-  --background-color-layer-transparent:         var(--bg-layer-transparent);
-  --background-color-layer-transparent-hover:   var(--bg-layer-transparent-hover);
-  --background-color-layer-transparent-active:  var(--bg-layer-transparent-active);
-  --background-color-layer-transparent-selected: var(--bg-layer-transparent-selected);
-  --background-color-layer-disabled:            var(--bg-layer-disabled);
-  --background-color-accent-primary:            var(--bg-accent-primary);
-  --background-color-accent-primary-hover:      var(--bg-accent-primary-hover);
-  --background-color-accent-primary-active:     var(--bg-accent-primary-active);
-  --background-color-accent-subtle:             var(--bg-accent-subtle);
-  --background-color-accent-subtle-hover:       var(--bg-accent-subtle-hover);
-  --background-color-accent-subtle-active:      var(--bg-accent-subtle-active);
-  --background-color-danger-primary:            var(--bg-danger-primary);
-  --background-color-danger-primary-hover:      var(--bg-danger-primary-hover);
-  --background-color-danger-primary-active:     var(--bg-danger-primary-active);
-  --background-color-danger-primary-selected:   var(--bg-danger-primary-selected);
-  --background-color-danger-subtle:             var(--bg-danger-subtle);
-  --background-color-danger-subtle-hover:       var(--bg-danger-subtle-hover);
-  --background-color-danger-subtle-active:      var(--bg-danger-subtle-active);
-  --background-color-danger-subtle-selected:    var(--bg-danger-subtle-selected);
-  --background-color-danger-transparent:        var(--bg-danger-transparent);
-  --background-color-danger-transparent-hover:  var(--bg-danger-transparent-hover);
-  --background-color-danger-transparent-active: var(--bg-danger-transparent-active);
-  --background-color-warning-primary:           var(--bg-warning-primary);
-  --background-color-warning-subtle:            var(--bg-warning-subtle);
-  --background-color-success-primary:           var(--bg-success-primary);
-  --background-color-success-subtle:            var(--bg-success-subtle);
-  --background-color-success-subtle-1:          var(--bg-success-subtle-1);
-  --background-color-backdrop:                  var(--bg-backdrop);
-  --background-color-inverse:                   var(--bg-inverse);
-  /* Scrollbar bg utilities */
-  --background-color-scrollbar-thumb:              var(--scrollbar-thumb);
-  --background-color-scrollbar-thumb-hover:        var(--scrollbar-thumb-hover);
-  --background-color-scrollbar-thumb-surface-hover: var(--scrollbar-thumb);
-  --background-color-scrollbar-thumb-active:       var(--scrollbar-thumb-hover);
-
-  /* ── Border utilities (border-*) ── */
-  --border-color-subtle:         var(--border-subtle);
-  --border-color-subtle-1:       var(--border-subtle-1);
-  --border-color-strong:         var(--border-strong);
-  --border-color-strong-1:       var(--border-strong-1);
-  --border-color-accent-strong:  var(--border-accent-strong);
-  --border-color-accent-subtle:  var(--border-accent-subtle);
-  --border-color-danger-strong:  var(--border-danger-strong);
-  --border-color-danger-subtle:  var(--border-danger-subtle);
-  --border-color-success-strong: var(--border-success-strong);
-  --border-color-success-subtle: var(--border-success-subtle);
-  --border-color-warning-strong: var(--border-warning-strong);
-  --border-color-warning-subtle: var(--border-warning-subtle);
-  --border-color-disabled:       var(--border-disabled);
-  --border-color-inverse:        var(--border-inverse);
-  /* Priority borders */
-  --border-color-priority-urgent: var(--priority-urgent);
-  --border-color-priority-high:   var(--priority-high);
-  --border-color-priority-medium: var(--priority-medium);
-  --border-color-priority-low:    var(--priority-low);
-  --border-color-priority-none:   var(--priority-none);
-
-  /* ── Text utilities (text-*) ── */
-  --text-color-primary:          var(--txt-primary);
-  --text-color-secondary:        var(--txt-secondary);
-  --text-color-tertiary:         var(--txt-tertiary);
-  --text-color-placeholder:      var(--txt-placeholder);
-  --text-color-disabled:         var(--txt-disabled);
-  --text-color-on-color:         var(--txt-on-color);
-  --text-color-on-color-disabled: var(--txt-on-color-disabled);
-  --text-color-inverse:          var(--txt-inverse);
-  --text-color-accent-primary:   var(--txt-accent-primary);
-  --text-color-accent-secondary: var(--txt-accent-secondary);
-  --text-color-danger-primary:   var(--txt-danger-primary);
-  --text-color-danger-secondary: var(--txt-danger-secondary);
-  --text-color-success-primary:  var(--txt-success-primary);
-  --text-color-success-secondary: var(--txt-success-secondary);
-  --text-color-warning-primary:  var(--txt-warning-primary);
-  --text-color-warning-secondary: var(--txt-warning-secondary);
-  --text-color-link-primary:     var(--txt-link-primary);
-  --text-color-link-primary-hover: var(--txt-link-primary-hover);
-  --text-color-link-secondary:   var(--txt-link-secondary);
-  /* Icon text utilities */
-  --text-color-icon-primary:     var(--txt-icon-primary);
-  --text-color-icon-secondary:   var(--txt-icon-secondary);
-  --text-color-icon-tertiary:    var(--txt-icon-tertiary);
-  --text-color-icon-disabled:    var(--txt-icon-disabled);
-  --text-color-icon-accent-primary: var(--txt-icon-accent-primary);
-  --text-color-icon-accent-subtle:  var(--txt-icon-accent-subtle);
-  --text-color-icon-danger:      var(--txt-icon-danger);
-  --text-color-icon-success-primary: var(--txt-icon-success-primary);
-  --text-color-icon-warning-primary: var(--txt-icon-warning-primary);
-  --text-color-icon-on-color:    var(--txt-icon-on-color);
-  --text-color-icon-inverse:     var(--txt-icon-inverse);
-  /* Priority text utilities */
-  --text-color-priority-urgent:  var(--priority-urgent);
-  --text-color-priority-high:    var(--priority-high);
-  --text-color-priority-medium:  var(--priority-medium);
-  --text-color-priority-low:     var(--priority-low);
-  --text-color-priority-none:    var(--priority-none);
-}
-
-/* ============================================================
-   SECTION 5 · @layer base — Global Resets & Body Styles
-   ============================================================ */
 @layer base {
   *,
   *::before,
   *::after {
     box-sizing: border-box;
     /* Linear Inter OpenType features */
-    font-feature-settings: "cv01", "ss03";
+    font-feature-settings: 'cv01', 'ss03';
     font-variant-ligatures: none;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
-    /* Default border and outline use our subtle tokens */
     border-color: var(--border-subtle);
     outline-color: oklch(from var(--bg-accent-primary) l c h / 50%);
   }
@@ -498,901 +34,129 @@
     margin: 0;
   }
 
-  /* App root always gets bg-canvas */
-  body {
-    background-color: var(--bg-canvas);
-    color: var(--txt-primary);
-    font-family: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
-    font-size: 0.8125rem; /* 13px — Linear default */
-    font-weight: 400;
-    line-height: 1.5;
-  }
-
-  code, pre, kbd, samp {
-    font-family: "IBM Plex Mono", ui-monospace, monospace;
-    font-size: 0.8125em;
-  }
-
-  /* BlockNote compatibility — preserve border token */
-  .bn-shadcn * {
-    border-color: var(--border-subtle);
-    outline-color: oklch(from var(--bg-accent-primary) l c h / 50%);
-  }
-
-  /* Hardware acceleration utility */
   .hardware-accelerated {
     transform: translateZ(0);
     will-change: transform, opacity;
   }
-
-  /* Focus ring — keyboard only, not mouse */
-  :focus-visible {
-    outline: 2px solid var(--border-accent-strong);
-    outline-offset: 2px;
+  * {
+    @apply border-border outline-ring/50;
   }
-
-  /* Selection highlight */
-  ::selection {
-    background-color: var(--bg-accent-subtle);
-    color: var(--txt-primary);
-  }
-}
-
-/* ============================================================
-   SECTION 6 · Scrollbar Utilities (Plane pattern)
-   ============================================================ */
-@layer base {
-  /* Default app scrollbar — thin, dark */
-  ::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
-  }
-  ::-webkit-scrollbar-track {
-    background: var(--scrollbar-track);
-  }
-  ::-webkit-scrollbar-thumb {
-    background: var(--scrollbar-thumb);
-    border-radius: var(--radius-full);
-  }
-  ::-webkit-scrollbar-thumb:hover {
-    background: var(--scrollbar-thumb-hover);
-  }
-  ::-webkit-scrollbar-corner {
-    background: transparent;
+  body {
+    @apply bg-background text-foreground;
   }
   html {
-    scrollbar-width: thin;
-    scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+    @apply font-sans;
   }
-}
-
-/* ── Named scrollbar size variants ── */
-@utility scrollbar-xs {
-  &::-webkit-scrollbar { width: 2px; height: 2px; }
-}
-@utility scrollbar-sm {
-  &::-webkit-scrollbar { width: 4px; height: 4px; }
-}
-@utility scrollbar-md {
-  &::-webkit-scrollbar { width: 6px; height: 6px; }
-}
-@utility scrollbar-lg {
-  &::-webkit-scrollbar { width: 8px; height: 8px; }
-}
-@utility scrollbar-hide {
-  &::-webkit-scrollbar { display: none; }
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-
-/* ============================================================
-   SECTION 7 · Keyframe Animations
-   ============================================================ */
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to   { opacity: 1; }
-}
-@keyframes fadeOut {
-  from { opacity: 1; }
-  to   { opacity: 0; }
-}
-@keyframes slideUp {
-  from { opacity: 0; transform: translateY(8px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-@keyframes slideDown {
-  from { opacity: 0; transform: translateY(-8px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-@keyframes slideInLeft {
-  from { opacity: 0; transform: translateX(-12px); }
-  to   { opacity: 1; transform: translateX(0); }
-}
-@keyframes slideInRight {
-  from { opacity: 0; transform: translateX(12px); }
-  to   { opacity: 1; transform: translateX(0); }
-}
-@keyframes scaleIn {
-  from { opacity: 0; transform: scale(0.95); }
-  to   { opacity: 1; transform: scale(1); }
-}
-@keyframes scaleOut {
-  from { opacity: 1; transform: scale(1); }
-  to   { opacity: 0; transform: scale(0.95); }
-}
-@keyframes pulseSubtle {
-  0%, 100% { opacity: 1; }
-  50%       { opacity: 0.6; }
-}
-
-/* ============================================================
-   SECTION 8 · Marketing Dark Override
-   Applied to the landing/marketing routes only.
-   Uses pure black base instead of the app near-black.
-   ============================================================ */
-.marketing-dark {
-  --bg-canvas:    oklch(0.08 0 0);
-  --bg-surface-1: oklch(0.11 0 0);
-  --bg-surface-2: oklch(0.13 0 0);
-  --bg-layer-1:   oklch(0.15 0 0);
-  --txt-primary:  oklch(0.96 0 0);
-  color-scheme: dark;
-}
-
-/* ============================================================
-   MISSING 1 · Priority tokens + Plane exact color scales
-   These are referenced by semantic tokens via var() chains.
-   ============================================================ */
-:root {
-  /* ── Priority colors (Plane exact) ── */
-  --priority-urgent: oklch(0.5798 0.1766 26.99);
-  --priority-high:   oklch(0.6802 0.1633 50.67);
-  --priority-medium: oklch(0.79 0.1466 82.04);
-  --priority-low:    oklch(0.579 0.1807 262.31);
-  --priority-none:   oklch(0.6376 0.0129 231.77);
-
-  /* ── Plane neutral scale (light) ── */
-  --neutral-white: oklch(1 0 0);
-  --neutral-100:   oklch(0.9848 0.0003 230.66);
-  --neutral-200:   oklch(0.9696 0.0007 230.67);
-  --neutral-300:   oklch(0.9543 0.001 230.67);
-  --neutral-400:   oklch(0.9389 0.0014 230.68);
-  --neutral-500:   oklch(0.9235 0.0017 230.69);
-  --neutral-600:   oklch(0.8925 0.0024 230.7);
-  --neutral-700:   oklch(0.8612 0.0032 230.71);
-  --neutral-800:   oklch(0.6668 0.0079 230.82);
-  --neutral-900:   oklch(0.6161 0.0092 230.87);
-  --neutral-1000:  oklch(0.5288 0.0083 230.88);
-  --neutral-1100:  oklch(0.4377 0.0066 230.87);
-  --neutral-1200:  oklch(0.2378 0.0029 230.83);
-  --neutral-black: oklch(0.1472 0.0034 230.83);
-
-  /* ── Collabify brand scale (light — violet-blue) ── */
-  --brand-100:     oklch(0.97 0.015 275);
-  --brand-200:     oklch(0.94 0.030 275);
-  --brand-300:     oklch(0.89 0.055 275);
-  --brand-400:     oklch(0.83 0.090 275);
-  --brand-500:     oklch(0.74 0.130 275);
-  --brand-600:     oklch(0.65 0.160 275);
-  --brand-700:     oklch(0.57 0.170 275);
-  --brand-900:     oklch(0.42 0.140 275);
-  --brand-1000:    oklch(0.33 0.110 275);
-  --brand-1100:    oklch(0.25 0.080 275);
-  --brand-1200:    oklch(0.19 0.055 275);
-  --brand-default: oklch(0.54 0.18 275);
-
-  /* ── Green/Success scale (light) ── */
-  --green-100:  oklch(0.9819 0.0181 155.83);
-  --green-200:  oklch(0.9624 0.0434 156.74);
-  --green-300:  oklch(0.9258 0.0845 155.86);
-  --green-400:  oklch(0.8704 0.149 154.62);
-  --green-500:  oklch(0.7914 0.2091 151.66);
-  --green-600:  oklch(0.7289 0.2119 147.82);
-  --green-700:  oklch(0.632 0.186 147.37);
-  --green-800:  oklch(0.5296 0.1495 148.99);
-  --green-900:  oklch(0.4468 0.1187 151.4);
-  --green-1000: oklch(0.3935 0.0957 152.28);
-  --green-1100: oklch(0.2654 0.0651 152.77);
-
-  /* ── Amber/Warning scale (light) ── */
-  --amber-100:  oklch(0.9869 0.0214 95.28);
-  --amber-200:  oklch(0.9617 0.0592 95.89);
-  --amber-300:  oklch(0.9244 0.1203 95.85);
-  --amber-400:  oklch(0.8781 0.1688 91.86);
-  --amber-500:  oklch(0.829 0.1712 81.04);
-  --amber-600:  oklch(0.7724 0.1728 65.37);
-  --amber-700:  oklch(0.6671 0.1685 53.38);
-  --amber-800:  oklch(0.557 0.1583 45.36);
-  --amber-900:  oklch(0.4747 0.1358 44.98);
-  --amber-1000: oklch(0.4149 0.1126 45.88);
-  --amber-1100: oklch(0.279 0.0773 45.6);
-
-  /* ── Red/Danger scale (light) ── */
-  --red-100:  oklch(0.9705 0.0129 17.38);
-  --red-200:  oklch(0.9365 0.032 17.74);
-  --red-300:  oklch(0.8834 0.0616 18.39);
-  --red-400:  oklch(0.8053 0.1109 19.78);
-  --red-500:  oklch(0.7022 0.1892 22.23);
-  --red-600:  oklch(0.6378 0.2373 25.44);
-  --red-700:  oklch(0.583 0.2387 28.48);
-  --red-800:  oklch(0.5095 0.2086 28.51);
-  --red-900:  oklch(0.4446 0.1774 26.79);
-  --red-1000: oklch(0.3967 0.1408 25.71);
-  --red-1100: oklch(0.3493 0.1215 25.21);
-}
-
-/* ── Dark mode overrides for the color scales ── */
-@variant dark {
-  :root,
-  [data-theme="dark"] {
-    --neutral-black: oklch(0.1689 0.0021 230.81);
-    --neutral-100:   oklch(0.1932 0.002 230.81);
-    --neutral-200:   oklch(0.2158 0.0025 230.82);
-    --neutral-300:   oklch(0.2378 0.0029 230.83);
-    --neutral-400:   oklch(0.2593 0.0033 230.84);
-    --neutral-500:   oklch(0.3011 0.0041 230.85);
-    --neutral-600:   oklch(0.3415 0.0049 230.86);
-    --neutral-700:   oklch(0.3999 0.0059 230.87);
-    --neutral-800:   oklch(0.5989 0.0096 230.88);
-    --neutral-900:   oklch(0.6835 0.0074 230.81);
-    --neutral-1000:  oklch(0.7655 0.0054 230.76);
-    --neutral-1100:  oklch(0.8455 0.0035 230.72);
-    --neutral-1200:  oklch(0.9235 0.0017 230.69);
-    --neutral-white: oklch(0.9702 0 0);
-
-    --brand-100:     oklch(0.2029 0.03 275);
-    --brand-200:     oklch(0.2513 0.042 275);
-    --brand-300:     oklch(0.3208 0.058 275);
-    --brand-400:     oklch(0.4088 0.078 275);
-    --brand-500:     oklch(0.4511 0.087 275);
-    --brand-700:     oklch(0.7408 0.10 275);
-    --brand-900:     oklch(0.8969 0.040 275);
-    --brand-1000:    oklch(0.9409 0.023 275);
-    --brand-1100:    oklch(0.9704 0.011 275);
-    --brand-1200:    oklch(0.9856 0.005 275);
-    --brand-default: oklch(0.65 0.18 275);
-
-    --green-100:  oklch(0.2721 0.0673 152.52);
-    --green-200:  oklch(0.3935 0.0957 152.28);
-    --green-300:  oklch(0.4468 0.1187 151.4);
-    --green-400:  oklch(0.5296 0.1495 148.99);
-    --green-500:  oklch(0.632 0.186 147.37);
-    --green-600:  oklch(0.7289 0.2119 147.82);
-    --green-700:  oklch(0.7914 0.2091 151.66);
-    --green-800:  oklch(0.8704 0.149 154.62);
-    --green-900:  oklch(0.9258 0.0845 155.86);
-    --green-1000: oklch(0.9624 0.0434 156.74);
-    --green-1100: oklch(0.9819 0.0181 155.83);
-
-    --amber-100:  oklch(0.3042 0.0853 45.16);
-    --amber-200:  oklch(0.4149 0.1126 45.88);
-    --amber-300:  oklch(0.4747 0.1358 44.98);
-    --amber-400:  oklch(0.557 0.1583 45.36);
-    --amber-500:  oklch(0.6671 0.1685 53.38);
-    --amber-600:  oklch(0.7724 0.1728 65.37);
-    --amber-700:  oklch(0.829 0.1712 81.04);
-    --amber-800:  oklch(0.8781 0.1688 91.86);
-    --amber-900:  oklch(0.9244 0.1203 95.85);
-    --amber-1000: oklch(0.9617 0.0592 95.89);
-    --amber-1100: oklch(0.9869 0.0214 95.28);
-
-    --red-100:  oklch(0.2615 0.085 24.41);
-    --red-200:  oklch(0.3967 0.1408 25.71);
-    --red-300:  oklch(0.4446 0.1774 26.79);
-    --red-400:  oklch(0.5095 0.2086 28.51);
-    --red-500:  oklch(0.583 0.2387 28.48);
-    --red-600:  oklch(0.6378 0.2373 25.44);
-    --red-700:  oklch(0.7022 0.1892 22.23);
-    --red-800:  oklch(0.8053 0.1109 19.78);
-    --red-900:  oklch(0.8834 0.0616 18.39);
-    --red-1000: oklch(0.9365 0.032 17.74);
-    --red-1100: oklch(0.9705 0.0129 17.38);
-  }
-}
-
-/* ============================================================
-   MISSING 2 · Label color tokens  (light default)
-   Used for issue labels, priority chips, state badges.
-   Dark overrides below via @variant dark.
-   ============================================================ */
-:root {
-  --label-indigo-bg:        var(--ext-indigo-50,   oklch(0.94 0.022 263));
-  --label-indigo-bg-strong: var(--ext-indigo-700,  oklch(0.46 0.175 262));
-  --label-indigo-hover:     var(--ext-indigo-100,  oklch(0.88 0.045 263));
-  --label-indigo-icon:      var(--ext-indigo-700,  oklch(0.46 0.175 262));
-  --label-indigo-text:      var(--ext-indigo-700,  oklch(0.46 0.175 262));
-  --label-indigo-border:    var(--ext-indigo-700,  oklch(0.46 0.175 262));
-  --label-indigo-focus:     var(--ext-indigo-500,  oklch(0.579 0.1807 262));
-
-  --label-emerald-bg:        oklch(0.956 0.026 154);
-  --label-emerald-bg-strong: oklch(0.657 0.16 149);
-  --label-emerald-hover:     oklch(0.868 0.083 153);
-  --label-emerald-icon:      oklch(0.497 0.117 149);
-  --label-emerald-text:      oklch(0.497 0.117 149);
-  --label-emerald-border:    oklch(0.497 0.117 149);
-  --label-emerald-focus:     oklch(0.589 0.141 149);
-
-  --label-grey-bg:        oklch(0.946 0 0);
-  --label-grey-bg-strong: oklch(0.521 0 0);
-  --label-grey-hover:     oklch(0.907 0 0);
-  --label-grey-icon:      oklch(0.521 0 0);
-  --label-grey-text:      oklch(0.521 0 0);
-  --label-grey-border:    oklch(0.521 0 0);
-  --label-grey-focus:     oklch(0.65 0 0);
-
-  --label-crimson-bg:        oklch(0.950 0.019 22);
-  --label-crimson-bg-strong: oklch(0.475 0.165 29);
-  --label-crimson-hover:     oklch(0.885 0.046 23);
-  --label-crimson-icon:      oklch(0.475 0.165 29);
-  --label-crimson-text:      oklch(0.475 0.165 29);
-  --label-crimson-border:    oklch(0.475 0.165 29);
-  --label-crimson-focus:     oklch(0.596 0.196 29);
-
-  --label-yellow-bg:        oklch(0.963 0.027 86);
-  --label-yellow-bg-strong: oklch(0.740 0.149 79);
-  --label-yellow-hover:     oklch(0.930 0.055 86);
-  --label-yellow-icon:      oklch(0.683 0.137 80);
-  --label-yellow-text:      oklch(0.683 0.137 80);
-  --label-yellow-border:    oklch(0.740 0.149 79);
-  --label-yellow-focus:     oklch(0.817 0.134 84);
-
-  --label-orange-bg:        oklch(0.964 0.022 58);
-  --label-orange-bg-strong: oklch(0.660 0.188 45);
-  --label-orange-hover:     oklch(0.915 0.052 57);
-  --label-orange-icon:      oklch(0.660 0.188 45);
-  --label-orange-text:      oklch(0.660 0.188 45);
-  --label-orange-border:    oklch(0.660 0.188 45);
-  --label-orange-focus:     oklch(0.801 0.132 55);
-
-  --label-pink-bg:        oklch(0.939 0.020 341);
-  --label-pink-bg-strong: oklch(0.570 0.157 345);
-  --label-pink-hover:     oklch(0.876 0.042 340);
-  --label-pink-icon:      oklch(0.570 0.157 345);
-  --label-pink-text:      oklch(0.570 0.157 345);
-  --label-pink-border:    oklch(0.570 0.157 345);
-  --label-pink-focus:     oklch(0.667 0.121 343);
-
-  --label-purple-bg:        oklch(0.942 0.016 294);
-  --label-purple-bg-strong: oklch(0.553 0.136 289);
-  --label-purple-hover:     oklch(0.881 0.034 293);
-  --label-purple-icon:      oklch(0.553 0.136 289);
-  --label-purple-text:      oklch(0.490 0.157 287);
-  --label-purple-border:    oklch(0.490 0.157 287);
-  --label-purple-focus:     oklch(0.698 0.089 291);
-}
-
-/* ── Dark mode label overrides ── */
-@variant dark {
-  :root,
-  [data-theme="dark"] {
-    --label-indigo-bg:        oklch(0.30 0.105 262);
-    --label-indigo-bg-strong: oklch(0.579 0.181 262);
-    --label-indigo-hover:     oklch(0.386 0.144 262);
-    --label-indigo-icon:      oklch(0.632 0.156 263);
-    --label-indigo-text:      oklch(0.632 0.156 263);
-    --label-indigo-border:    oklch(0.632 0.156 263);
-
-    --label-emerald-bg:        oklch(0.298 0.063 151);
-    --label-emerald-bg-strong: oklch(0.657 0.16 149);
-    --label-emerald-hover:     oklch(0.400 0.092 149);
-    --label-emerald-icon:      oklch(0.779 0.14 151);
-    --label-emerald-text:      oklch(0.779 0.14 151);
-    --label-emerald-border:    oklch(0.779 0.14 151);
-
-    --label-grey-bg:        oklch(0.341 0 0);
-    --label-grey-bg-strong: oklch(0.65 0 0);
-    --label-grey-hover:     oklch(0.400 0 0);
-    --label-grey-icon:      oklch(0.699 0 0);
-    --label-grey-text:      oklch(0.699 0 0);
-    --label-grey-border:    oklch(0.699 0 0);
-
-    --label-crimson-bg:        oklch(0.246 0.074 28);
-    --label-crimson-bg-strong: oklch(0.596 0.196 29);
-    --label-crimson-hover:     oklch(0.325 0.106 28);
-    --label-crimson-icon:      oklch(0.656 0.160 26);
-    --label-crimson-text:      oklch(0.656 0.160 26);
-    --label-crimson-border:    oklch(0.656 0.160 26);
-
-    --label-yellow-bg:        oklch(0.314 0.059 82);
-    --label-yellow-bg-strong: oklch(0.79 0.147 82);
-    --label-yellow-hover:     oklch(0.425 0.082 81);
-    --label-yellow-icon:      oklch(0.816 0.134 84);
-    --label-yellow-text:      oklch(0.816 0.134 84);
-    --label-yellow-border:    oklch(0.816 0.134 84);
-
-    --label-orange-bg:        oklch(0.290 0.075 51);
-    --label-orange-bg-strong: oklch(0.756 0.164 52);
-    --label-orange-hover:     oklch(0.390 0.105 46);
-    --label-orange-icon:      oklch(0.801 0.132 55);
-    --label-orange-text:      oklch(0.801 0.132 55);
-    --label-orange-border:    oklch(0.801 0.132 55);
-
-    --label-pink-bg:        oklch(0.326 0.081 344);
-    --label-pink-bg-strong: oklch(0.619 0.139 344);
-    --label-pink-hover:     oklch(0.416 0.111 345);
-    --label-pink-icon:      oklch(0.667 0.121 343);
-    --label-pink-text:      oklch(0.667 0.121 343);
-    --label-pink-border:    oklch(0.667 0.121 343);
-
-    --label-purple-bg:        oklch(0.286 0.080 288);
-    --label-purple-bg-strong: oklch(0.42 0.130 287);
-    --label-purple-hover:     oklch(0.362 0.108 287);
-    --label-purple-icon:      oklch(0.614 0.116 290);
-    --label-purple-text:      oklch(0.614 0.116 290);
-    --label-purple-border:    oklch(0.614 0.116 290);
-  }
-}
-
-/* ============================================================
-   MISSING 3 · Icon color tokens + Link color tokens
-   ============================================================ */
-:root,
-[data-theme="dark"] {
-  /* Icon colors — use for SVG fills/strokes */
-  --txt-icon-primary:               var(--txt-primary);
-  --txt-icon-secondary:             var(--txt-secondary);
-  --txt-icon-tertiary:              var(--txt-tertiary);
-  --txt-icon-placeholder:           var(--txt-placeholder);
-  --txt-icon-disabled:              var(--txt-disabled);
-  --txt-icon-on-color:              var(--txt-on-color);
-  --txt-icon-accent-primary:        var(--txt-accent-primary);
-  --txt-icon-accent-secondary:      var(--txt-accent-secondary);
-  --txt-icon-accent-subtle:         var(--brand-500);
-  --txt-icon-accent-primary-inverse: var(--brand-900);
-  --txt-icon-danger:                var(--txt-danger-primary);
-  --txt-icon-danger-primary:        var(--txt-danger-primary);
-  --txt-icon-danger-secondary:      var(--ext-red-500);
-  --txt-icon-success-primary:       var(--txt-success-primary);
-  --txt-icon-success-secondary:     var(--ext-green-500);
-  --txt-icon-warning-primary:       var(--txt-warning-primary);
-  --txt-icon-warning-secondary:     var(--ext-yellow-500);
-  --txt-icon-inverse:               var(--bg-canvas);
-  --txt-icon-on-color-disabled:     oklch(100% 0 0 / 28%);
-
-  /* Link colors */
-  --txt-link-primary:       var(--txt-accent-primary);
-  --txt-link-primary-hover: var(--brand-700);
-  --txt-link-secondary:     var(--txt-secondary);
-
-  /* Extra semantic missing states */
-  --txt-on-color-disabled:  oklch(100% 0 0 / 28%);
-  --txt-inverse:            var(--bg-canvas);
-  --txt-success-secondary:  var(--ext-green-500);
-  --txt-warning-secondary:  var(--ext-yellow-500);
-  --txt-danger-secondary:   var(--ext-red-500);
-
-  /* Missing bg states */
-  --bg-accent-primary-active:        var(--brand-400);
-  --bg-accent-subtle-active:         oklch(0.54 0.18 275 / 22%);
-  --bg-danger-primary-hover:         var(--red-400);
-  --bg-danger-primary-active:        var(--red-500);
-  --bg-danger-primary-selected:      var(--red-500);
-  --bg-danger-subtle-hover:          var(--red-200);
-  --bg-danger-subtle-active:         var(--red-300);
-  --bg-danger-subtle-selected:       var(--red-300);
-  --bg-danger-transparent:           oklch(0.53 0.22 20 / 8%);
-  --bg-danger-transparent-hover:     oklch(0.53 0.22 20 / 12%);
-  --bg-danger-transparent-active:    oklch(0.53 0.22 20 / 16%);
-  --bg-danger-transparent-selected:  oklch(0.53 0.22 20 / 14%);
-  --bg-success-subtle-1:             var(--green-100);
-  --bg-layer-disabled:               oklch(0.30 0.006 275);
-  --bg-inverse:                      oklch(100% 0 0 / 80%);
-
-  /* Missing border states */
-  --border-subtle-hover:    oklch(100% 0 0 / 10%);
-  --border-success-subtle:  oklch(0.54 0.17 155 / 30%);
-  --border-warning-subtle:  oklch(0.58 0.18 50 / 30%);
-  --border-danger-subtle:   oklch(0.53 0.22 20 / 30%);
-  --border-disabled:        oklch(100% 0 0 / 4%);
-  --border-inverse:         var(--bg-canvas);
-}
-
-/* ============================================================
-   MISSING 4 · @theme inline — complete Plane-parity bridge
-   Outline, ring, stroke, fill, icon, link, label, priority.
-   ============================================================ */
-@theme inline {
-  /* Outline = border (Plane maps them identically) */
-  --outline-color-subtle:        var(--border-subtle);
-  --outline-color-subtle-1:      var(--border-subtle-1);
-  --outline-color-strong:        var(--border-strong);
-  --outline-color-strong-1:      var(--border-strong-1);
-  --outline-color-accent-strong: var(--border-accent-strong);
-  --outline-color-accent-subtle: var(--border-accent-subtle);
-  --outline-color-danger-strong: var(--border-danger-strong);
-  --outline-color-success-strong: var(--border-success-strong);
-  --outline-color-warning-strong: var(--border-warning-strong);
-  --outline-color-disabled:      var(--border-disabled);
-  --outline-color-inverse:       var(--border-inverse);
-
-  /* Ring colors (same as border/outline) */
-  --ring-color-subtle:          var(--border-subtle);
-  --ring-color-subtle-1:        var(--border-subtle-1);
-  --ring-color-accent-strong:   var(--border-accent-strong);
-  --ring-color-accent-subtle:   var(--border-accent-subtle);
-  --ring-color-danger-strong:   var(--border-danger-strong);
-  --ring-color-success-strong:  var(--border-success-strong);
-  --ring-color-warning-strong:  var(--border-warning-strong);
-
-  /* Icon colors — text-icon-* utility classes */
-  --text-color-icon-primary:              var(--txt-icon-primary);
-  --text-color-icon-secondary:            var(--txt-icon-secondary);
-  --text-color-icon-tertiary:             var(--txt-icon-tertiary);
-  --text-color-icon-placeholder:          var(--txt-icon-placeholder);
-  --text-color-icon-disabled:             var(--txt-icon-disabled);
-  --text-color-icon-on-color:             var(--txt-icon-on-color);
-  --text-color-icon-accent-primary:       var(--txt-icon-accent-primary);
-  --text-color-icon-accent-secondary:     var(--txt-icon-accent-secondary);
-  --text-color-icon-accent-subtle:        var(--txt-icon-accent-subtle);
-  --text-color-icon-danger:               var(--txt-icon-danger);
-  --text-color-icon-danger-primary:       var(--txt-icon-danger-primary);
-  --text-color-icon-success-primary:      var(--txt-icon-success-primary);
-  --text-color-icon-warning-primary:      var(--txt-icon-warning-primary);
-  --text-color-icon-inverse:              var(--txt-icon-inverse);
-
-  /* Link colors */
-  --text-color-link-primary:       var(--txt-link-primary);
-  --text-color-link-primary-hover: var(--txt-link-primary-hover);
-  --text-color-link-secondary:     var(--txt-link-secondary);
-
-  /* Extra text utilities */
-  --text-color-on-color-disabled:  var(--txt-on-color-disabled);
-  --text-color-inverse:            var(--txt-inverse);
-  --text-color-success-secondary:  var(--txt-success-secondary);
-  --text-color-warning-secondary:  var(--txt-warning-secondary);
-  --text-color-danger-secondary:   var(--txt-danger-secondary);
-
-  /* Stroke = same as text colors (for SVG) */
-  --stroke-primary:         var(--txt-primary);
-  --stroke-secondary:       var(--txt-secondary);
-  --stroke-tertiary:        var(--txt-tertiary);
-  --stroke-accent-primary:  var(--txt-accent-primary);
-  --stroke-danger-primary:  var(--txt-danger-primary);
-  --stroke-success-primary: var(--txt-success-primary);
-  --stroke-warning-primary: var(--txt-warning-primary);
-  --stroke-on-color:        var(--txt-on-color);
-  --stroke-inverse:         var(--txt-inverse);
-
-  /* Fill = same as text (for SVG) */
-  --fill-primary:         var(--txt-primary);
-  --fill-secondary:       var(--txt-secondary);
-  --fill-tertiary:        var(--txt-tertiary);
-  --fill-accent-primary:  var(--txt-accent-primary);
-  --fill-danger-primary:  var(--txt-danger-primary);
-  --fill-success-primary: var(--txt-success-primary);
-  --fill-warning-primary: var(--txt-warning-primary);
-  --fill-on-color:        var(--txt-on-color);
-  --fill-inverse:         var(--txt-inverse);
-
-  /* Scrollbar utility classes */
-  --background-color-scrollbar-thumb:              var(--scrollbar-thumb);
-  --background-color-scrollbar-thumb-hover:        var(--scrollbar-thumb-hover);
-  --background-color-scrollbar-thumb-surface-hover: oklch(from var(--scrollbar-thumb) calc(l + 0.04) c h);
-  --background-color-scrollbar-thumb-active:       oklch(from var(--scrollbar-thumb) calc(l + 0.08) c h);
-
-  /* Extra bg utilities */
-  --background-color-layer-disabled:           var(--bg-layer-disabled);
-  --background-color-layer-3-selected:         var(--bg-layer-3-active);
-  --background-color-accent-primary-active:    var(--bg-accent-primary-active);
-  --background-color-accent-subtle-active:     var(--bg-accent-subtle-active);
-  --background-color-danger-primary-hover:     var(--bg-danger-primary-hover);
-  --background-color-danger-primary-active:    var(--bg-danger-primary-active);
-  --background-color-danger-primary-selected:  var(--bg-danger-primary-selected);
-  --background-color-danger-subtle-hover:      var(--bg-danger-subtle-hover);
-  --background-color-danger-subtle-active:     var(--bg-danger-subtle-active);
-  --background-color-danger-subtle-selected:   var(--bg-danger-subtle-selected);
-  --background-color-danger-transparent:       var(--bg-danger-transparent);
-  --background-color-danger-transparent-hover: var(--bg-danger-transparent-hover);
-  --background-color-danger-transparent-active: var(--bg-danger-transparent-active);
-  --background-color-success-subtle-1:         var(--bg-success-subtle-1);
-  --background-color-inverse:                  var(--bg-inverse);
-
-  /* Extra border utilities */
-  --border-color-subtle-hover:    var(--border-subtle-hover);
-  --border-color-success-subtle:  var(--border-success-subtle);
-  --border-color-warning-subtle:  var(--border-warning-subtle);
-  --border-color-danger-subtle:   var(--border-danger-subtle);
-  --border-color-disabled:        var(--border-disabled);
-  --border-color-inverse:         var(--border-inverse);
-
-  /* Label color utilities */
-  --color-label-indigo-bg:        var(--label-indigo-bg);
-  --color-label-indigo-bg-strong: var(--label-indigo-bg-strong);
-  --color-label-indigo-hover:     var(--label-indigo-hover);
-  --color-label-indigo-icon:      var(--label-indigo-icon);
-  --color-label-indigo-text:      var(--label-indigo-text);
-  --color-label-indigo-border:    var(--label-indigo-border);
-  --color-label-indigo-focus:     var(--label-indigo-focus);
-
-  --color-label-emerald-bg:        var(--label-emerald-bg);
-  --color-label-emerald-bg-strong: var(--label-emerald-bg-strong);
-  --color-label-emerald-hover:     var(--label-emerald-hover);
-  --color-label-emerald-icon:      var(--label-emerald-icon);
-  --color-label-emerald-text:      var(--label-emerald-text);
-  --color-label-emerald-border:    var(--label-emerald-border);
-
-  --color-label-grey-bg:        var(--label-grey-bg);
-  --color-label-grey-bg-strong: var(--label-grey-bg-strong);
-  --color-label-grey-hover:     var(--label-grey-hover);
-  --color-label-grey-icon:      var(--label-grey-icon);
-  --color-label-grey-text:      var(--label-grey-text);
-  --color-label-grey-border:    var(--label-grey-border);
-
-  --color-label-crimson-bg:        var(--label-crimson-bg);
-  --color-label-crimson-bg-strong: var(--label-crimson-bg-strong);
-  --color-label-crimson-hover:     var(--label-crimson-hover);
-  --color-label-crimson-icon:      var(--label-crimson-icon);
-  --color-label-crimson-text:      var(--label-crimson-text);
-  --color-label-crimson-border:    var(--label-crimson-border);
-
-  --color-label-yellow-bg:        var(--label-yellow-bg);
-  --color-label-yellow-bg-strong: var(--label-yellow-bg-strong);
-  --color-label-yellow-hover:     var(--label-yellow-hover);
-  --color-label-yellow-icon:      var(--label-yellow-icon);
-  --color-label-yellow-text:      var(--label-yellow-text);
-  --color-label-yellow-border:    var(--label-yellow-border);
-
-  --color-label-orange-bg:        var(--label-orange-bg);
-  --color-label-orange-bg-strong: var(--label-orange-bg-strong);
-  --color-label-orange-hover:     var(--label-orange-hover);
-  --color-label-orange-icon:      var(--label-orange-icon);
-  --color-label-orange-text:      var(--label-orange-text);
-  --color-label-orange-border:    var(--label-orange-border);
-
-  --color-label-pink-bg:        var(--label-pink-bg);
-  --color-label-pink-bg-strong: var(--label-pink-bg-strong);
-  --color-label-pink-hover:     var(--label-pink-hover);
-  --color-label-pink-icon:      var(--label-pink-icon);
-  --color-label-pink-text:      var(--label-pink-text);
-  --color-label-pink-border:    var(--label-pink-border);
-
-  --color-label-purple-bg:        var(--label-purple-bg);
-  --color-label-purple-bg-strong: var(--label-purple-bg-strong);
-  --color-label-purple-hover:     var(--label-purple-hover);
-  --color-label-purple-icon:      var(--label-purple-icon);
-  --color-label-purple-text:      var(--label-purple-text);
-  --color-label-purple-border:    var(--label-purple-border);
-
-  /* Priority color utilities */
-  --text-color-priority-urgent:   var(--priority-urgent);
-  --text-color-priority-high:     var(--priority-high);
-  --text-color-priority-medium:   var(--priority-medium);
-  --text-color-priority-low:      var(--priority-low);
-  --text-color-priority-none:     var(--priority-none);
-  --border-color-priority-urgent: var(--priority-urgent);
-  --border-color-priority-high:   var(--priority-high);
-  --border-color-priority-medium: var(--priority-medium);
-  --border-color-priority-low:    var(--priority-low);
-  --border-color-priority-none:   var(--priority-none);
-}
-
-/* ============================================================
-   MISSING 5 · Border width tokens + text-9
-   ============================================================ */
-@theme {
-  --text-9: 0.5625rem; /* 9px */
-
-  /* Border widths (Plane exact) */
-  --border-width-sm:      1px;
-  --border-width-md:      1.5px;
-  --border-width-lg:      2px;
-  --border-width-xl:      2.5px;
-  --default-border-width: 1px;
 }
 
 @theme inline {
-  --outline-width-sm:      var(--border-width-sm);
-  --outline-width-md:      var(--border-width-md);
-  --outline-width-lg:      var(--border-width-lg);
-  --outline-width-xl:      var(--border-width-xl);
-  --default-outline-width: var(--default-border-width);
-  --ring-width-sm:         var(--border-width-sm);
-  --ring-width-md:         var(--border-width-md);
-  --ring-width-lg:         var(--border-width-lg);
-  --ring-width-xl:         var(--border-width-xl);
-  --default-ring-width:    var(--default-border-width);
+  --font-heading: var(--font-sans);
+  --font-sans: 'Geist Variable', sans-serif;
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-foreground: var(--foreground);
+  --color-background: var(--background);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
 }
 
-/* ============================================================
-   MISSING 6 · Heading + body text composite tokens
-   (Plane typography system — font-size, line-height, weight)
-   ============================================================ */
-@theme {
-  --text-h1-semibold--font-size:      var(--text-32);
-  --text-h1-semibold--line-height:    1.2;
-  --text-h1-semibold--font-weight:    var(--font-weight-semibold);
-  --text-h2-semibold--font-size:      var(--text-28);
-  --text-h2-semibold--line-height:    1.2;
-  --text-h2-semibold--font-weight:    var(--font-weight-semibold);
-  --text-h3-semibold--font-size:      var(--text-24);
-  --text-h3-semibold--line-height:    1.2;
-  --text-h3-semibold--font-weight:    var(--font-weight-semibold);
-  --text-h4-semibold--font-size:      var(--text-20);
-  --text-h4-semibold--line-height:    1.2;
-  --text-h4-semibold--font-weight:    var(--font-weight-semibold);
-  --text-h5-semibold--font-size:      var(--text-18);
-  --text-h5-semibold--line-height:    1.2;
-  --text-h5-semibold--font-weight:    var(--font-weight-semibold);
-  --text-h6-semibold--font-size:      var(--text-16);
-  --text-h6-semibold--line-height:    1.2;
-  --text-h6-semibold--font-weight:    var(--font-weight-semibold);
-
-  --text-body-xs-regular--font-size:   var(--text-13);
-  --text-body-xs-regular--line-height: 1.4;
-  --text-body-xs-regular--font-weight: var(--font-weight-regular);
-  --text-body-sm-regular--font-size:   var(--text-14);
-  --text-body-sm-regular--line-height: 1.4;
-  --text-body-sm-regular--font-weight: var(--font-weight-regular);
-  --text-body-md-regular--font-size:   var(--text-16);
-  --text-body-md-regular--line-height: 1.4;
-  --text-body-md-regular--font-weight: var(--font-weight-regular);
-
-  --text-caption-md-regular--font-size:   var(--text-12);
-  --text-caption-md-regular--line-height: 1.1;
-  --text-caption-md-regular--font-weight: var(--font-weight-regular);
-  --text-caption-sm-regular--font-size:   var(--text-11);
-  --text-caption-sm-regular--line-height: 1.1;
-  --text-caption-sm-regular--font-weight: var(--font-weight-regular);
-  --text-caption-xs-regular--font-size:   var(--text-10);
-  --text-caption-xs-regular--line-height: 1;
-  --text-caption-xs-regular--font-weight: var(--font-weight-regular);
+:root {
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0.008 326);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.145 0.008 326);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.145 0.008 326);
+  --primary: oklch(0.496 0.265 301.924);
+  --primary-foreground: oklch(0.977 0.014 308.299);
+  --secondary: oklch(0.967 0.001 286.375);
+  --secondary-foreground: oklch(0.21 0.006 285.885);
+  --muted: oklch(0.96 0.003 325.6);
+  --muted-foreground: oklch(0.542 0.034 322.5);
+  --accent: oklch(0.96 0.003 325.6);
+  --accent-foreground: oklch(0.212 0.019 322.12);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.922 0.005 325.62);
+  --input: oklch(0.922 0.005 325.62);
+  --ring: oklch(0.711 0.019 323.02);
+  --chart-1: oklch(0.827 0.119 306.383);
+  --chart-2: oklch(0.627 0.265 303.9);
+  --chart-3: oklch(0.558 0.288 302.321);
+  --chart-4: oklch(0.496 0.265 301.924);
+  --chart-5: oklch(0.438 0.218 303.724);
+  --radius: 0.45rem;
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0.008 326);
+  --sidebar-primary: oklch(0.558 0.288 302.321);
+  --sidebar-primary-foreground: oklch(0.977 0.014 308.299);
+  --sidebar-accent: oklch(0.96 0.003 325.6);
+  --sidebar-accent-foreground: oklch(0.212 0.019 322.12);
+  --sidebar-border: oklch(0.922 0.005 325.62);
+  --sidebar-ring: oklch(0.711 0.019 323.02);
 }
 
-/* ============================================================
-   MISSING 7 · Remaining Plane animation tokens
-   ============================================================ */
-@theme {
-  --animate-slide-in-from-bottom: slideInFromBottom 0.25s ease-out forwards;
-  --animate-slide-in-from-top:    slideInFromTop 0.25s ease-out forwards;
-  --animate-slide-out:            slideOut 0.25s ease-out forwards;
-  --animate-slide-out-down:       slideOutDown 0.25s ease-out forwards;
-}
-
-@keyframes slideInFromBottom {
-  from { transform: translateY(100%); opacity: 0; }
-  to   { transform: translateY(0);    opacity: 1; }
-}
-@keyframes slideInFromTop {
-  from { transform: translateY(-100%); opacity: 0; }
-  to   { transform: translateY(0);     opacity: 1; }
-}
-@keyframes slideOut {
-  from { transform: translateY(0);    opacity: 1; }
-  to   { transform: translateY(-100%); opacity: 0; }
-}
-@keyframes slideOutDown {
-  from { transform: translateY(0);   opacity: 1; }
-  to   { transform: translateY(100%); opacity: 0; }
-}
-
-/* ============================================================
-   MISSING 8-12 · index.css utility classes (full Plane parity)
-   ============================================================ */
-
-/* Placeholder styling */
-::-webkit-input-placeholder,
-::placeholder,
-:-ms-input-placeholder {
-  color: var(--txt-placeholder);
-}
-
-@layer base {
-  html {
-    -webkit-text-size-adjust: 100%;
-    -ms-text-size-adjust: 100%;
-  }
-
-  button:not(:disabled),
-  [role="button"]:not(:disabled) {
-    cursor: pointer;
-  }
-
-  input::placeholder,
-  textarea::placeholder {
-    color: var(--txt-placeholder);
-  }
-}
-
-/* Scrollbar named classes (Plane pattern) */
-.vertical-scrollbar {
-  overflow-y: auto;
-}
-.horizontal-scrollbar {
-  overflow-x: auto;
-}
-.vertical-scrollbar::-webkit-scrollbar,
-.horizontal-scrollbar::-webkit-scrollbar {
-  display: block;
-  width: 6px;
-  height: 6px;
-}
-.vertical-scrollbar::-webkit-scrollbar-track,
-.horizontal-scrollbar::-webkit-scrollbar-track {
-  background: transparent;
-  border-radius: 9999px;
-}
-.vertical-scrollbar::-webkit-scrollbar-thumb,
-.horizontal-scrollbar::-webkit-scrollbar-thumb {
-  background: var(--scrollbar-thumb);
-  border-radius: 9999px;
-  background-clip: padding-box;
-}
-.vertical-scrollbar::-webkit-scrollbar-thumb:hover,
-.horizontal-scrollbar::-webkit-scrollbar-thumb:hover {
-  background: var(--scrollbar-thumb-hover);
-}
-.vertical-scrollbar::-webkit-scrollbar-corner,
-.horizontal-scrollbar::-webkit-scrollbar-corner {
-  background: transparent;
-}
-.vertical-scrollbar-margin-top-md::-webkit-scrollbar-track {
-  margin-top: 44px;
-}
-.hide-vertical-scrollbar::-webkit-scrollbar { width: 0 !important; }
-.hide-horizontal-scrollbar::-webkit-scrollbar { height: 0 !important; }
-.hide-both-scrollbars::-webkit-scrollbar { width: 0 !important; height: 0 !important; }
-
-/* Highlight utilities */
-@utility highlight {
-  border: 1px solid var(--border-accent-strong) !important;
-}
-@utility highlight-with-line {
-  border-left: 5px solid var(--border-accent-strong) !important;
-  background: var(--bg-layer-2);
-}
-
-/* Autofill override */
-@utility disable-autofill-style {
-  &:-webkit-autofill,
-  &:-webkit-autofill:hover,
-  &:-webkit-autofill:focus,
-  &:-webkit-autofill:active {
-    -webkit-background-clip: text;
-  }
-}
-
-/* Progress bar */
-@utility progress-bar {
-  fill: currentColor;
-  color: var(--txt-secondary);
-}
-
-/* Conical gradient (emoji picker) */
-@utility conical-gradient {
-  background: conic-gradient(
-    from 180deg at 50% 50%,
-    #ff6b00 0deg,
-    #f7ae59 70.5deg,
-    #3f76ff 151.12deg,
-    #05c3ff 213deg,
-    #18914f 289.87deg,
-    #f6f172 329.25deg,
-    #ff6b00 360deg
-  );
-}
-
-/* Vertical text */
-@utility vertical-lr {
-  writing-mode: vertical-lr;
-  width: fit-content;
-}
-
-/* Prose typography overrides */
-@utility prose {
-  --tw-prose-body:         var(--txt-primary);
-  --tw-prose-p:            var(--txt-primary);
-  --tw-prose-headings:     var(--txt-primary);
-  --tw-prose-lead:         var(--txt-primary);
-  --tw-prose-links:        var(--txt-link-primary);
-  --tw-prose-bold:         inherit;
-  --tw-prose-counters:     var(--txt-primary);
-  --tw-prose-bullets:      var(--txt-primary);
-  --tw-prose-hr:           var(--border-subtle);
-  --tw-prose-quotes:       var(--txt-primary);
-  --tw-prose-quote-borders: var(--border-subtle);
-  --tw-prose-code:         var(--txt-primary);
-  --tw-prose-pre-code:     var(--txt-primary);
-  --tw-prose-pre-bg:       var(--bg-layer-1);
-  --tw-prose-th-borders:   var(--border-subtle);
-  --tw-prose-td-borders:   var(--border-subtle);
+.dark {
+  --background: oklch(0.145 0.008 326);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.212 0.019 322.12);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.212 0.019 322.12);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.438 0.218 303.724);
+  --primary-foreground: oklch(0.977 0.014 308.299);
+  --secondary: oklch(0.274 0.006 286.033);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.263 0.024 320.12);
+  --muted-foreground: oklch(0.711 0.019 323.02);
+  --accent: oklch(0.263 0.024 320.12);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.542 0.034 322.5);
+  --chart-1: oklch(0.827 0.119 306.383);
+  --chart-2: oklch(0.627 0.265 303.9);
+  --chart-3: oklch(0.558 0.288 302.321);
+  --chart-4: oklch(0.496 0.265 301.924);
+  --chart-5: oklch(0.438 0.218 303.724);
+  --sidebar: oklch(0.212 0.019 322.12);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.627 0.265 303.9);
+  --sidebar-primary-foreground: oklch(0.977 0.014 308.299);
+  --sidebar-accent: oklch(0.263 0.024 320.12);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.542 0.034 322.5);
 }

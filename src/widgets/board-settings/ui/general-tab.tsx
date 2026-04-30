@@ -21,13 +21,7 @@ export function GeneralTab({ boardId }: GeneralTabProps) {
   const { data: board } = useBoard(boardId)
   const renameBoard = useRenameBoard()
   const updateDescription = useUpdateDescription()
-
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { isDirty },
-  } = useSettingsForm({
+  const form = useSettingsForm({
     defaultName: board?.getBoard?.title,
     defaultDescription: board?.getBoard?.description || '',
   })
@@ -35,12 +29,12 @@ export function GeneralTab({ boardId }: GeneralTabProps) {
   // Reset form when board data loads
   useEffect(() => {
     if (board?.getBoard) {
-      reset({
+      form.reset({
         name: board.getBoard.title,
         description: board.getBoard.description || '',
       })
     }
-  }, [board, reset])
+  }, [board, form])
 
   const onSubmit = async (data: { name: string; description: string }) => {
     const promises = []
@@ -65,37 +59,63 @@ export function GeneralTab({ boardId }: GeneralTabProps) {
   const isPending = renameBoard.isPending || updateDescription.isPending
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-      <div className="space-y-2">
-        <Label htmlFor="name">Board Name</Label>
-        <Input
-          id="name"
-          {...register('name', { required: true })}
-          placeholder="Enter board name..."
-          disabled={isPending}
-        />
-        <p className="text-12 text-secondary">
-          The name will be visible to all collaborators
-        </p>
-      </div>
+    <form
+      onSubmit={(e) => {
+        e.preventDefault()
+        form.handleSubmit(onSubmit)
+      }}
+      className="space-y-6"
+    >
+      <form.Field
+        name="name"
+        children={(field) => {
+          return (
+            <div className="space-y-2">
+              <Label htmlFor={field.name}>Board Name</Label>
+              <Input
+                id={field.name}
+                name={field.name}
+                value={field.state.value}
+                onBlur={field.handleBlur}
+                onChange={(e) => field.handleChange(e.target.value)}
+                placeholder="Enter board name..."
+                disabled={isPending}
+              />
+              <p className="text-12 text-secondary">
+                The name will be visible to all collaborators
+              </p>
+            </div>
+          )
+        }}
+      />
 
-      <div className="space-y-2">
-        <Label htmlFor="description">Description</Label>
-        <Textarea
-          id="description"
-          {...register('description')}
-          placeholder="Add a description for this board..."
-          rows={4}
-          disabled={isPending}
-          maxHeight="xl"
-        />
-        <p className="text-12 text-secondary">
-          Optional description to help others understand the board's purpose
-        </p>
-      </div>
+      <form.Field
+        name="description"
+        children={(field) => {
+          return (
+            <div className="space-y-2">
+              <Label htmlFor={field.name}>Description</Label>
+              <Textarea
+                id={field.name}
+                name={field.name}
+                value={field.state.value}
+                onBlur={field.handleBlur}
+                onChange={(e) => field.handleChange(e.target.value)}
+                placeholder="Add a description for this board..."
+                rows={4}
+                disabled={isPending}
+              />
+              <p className="text-12 text-secondary">
+                Optional description to help others understand the board's
+                purpose
+              </p>
+            </div>
+          )
+        }}
+      />
 
       <div className="flex justify-end">
-        <Button type="submit" disabled={!isDirty || isPending}>
+        <Button type="submit" disabled={isPending}>
           {isPending ? 'Saving...' : 'Save Changes'}
         </Button>
       </div>

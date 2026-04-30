@@ -1,7 +1,4 @@
-import { HugeiconsIcon } from '@hugeicons/react'
-import {
-  SmileIcon,
-} from '@hugeicons/core-free-icons'
+import { Smile } from 'lucide-react'
 import { AtSign, Bold, Link2 } from 'lucide-react'
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
@@ -404,7 +401,7 @@ export function MessageInput({ channelId, projectId, workspaceId, channelName }:
                 aria-label="Add emoji (coming soon)"
                 disabled
               >
-                <HugeiconsIcon icon={SmileIcon} className="size-4" />
+                <Smile className="size-4" />
               </Button>
               <Button
                 size="sm"

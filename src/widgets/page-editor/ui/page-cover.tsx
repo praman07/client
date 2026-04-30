@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { useParams } from '@tanstack/react-router'
-import { HugeiconsIcon } from '@hugeicons/react'
-import { Delete01Icon, Image01Icon } from '@hugeicons/core-free-icons'
+import { Delete, Image as ImageIcon } from 'lucide-react'
 import { toast } from 'sonner'
 import { useUpdatePageDetails } from '@/features/pages/update-page-details'
 import { VaultFileSource, markFilesUnreferenced, uploadToVault } from '@/shared/api/vault'
@@ -207,7 +206,7 @@ export function PageCoverBanner({ coverUrl }: PageCoverProps) {
             onClick={() => fileInputRef.current?.click()}
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-11 text-secondary hover:bg-layer-2-hover transition-colors"
           >
-            <HugeiconsIcon icon={Image01Icon} className="h-4 w-4" />
+            <ImageIcon className="h-4 w-4" />
             Add cover
           </button>
         </div>
@@ -243,14 +242,14 @@ export function PageCoverBanner({ coverUrl }: PageCoverProps) {
           onClick={() => fileInputRef.current?.click()}
           className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-11 bg-surface-1/80 backdrop-blur-sm text-primary hover:bg-surface-1 transition-colors"
         >
-          <HugeiconsIcon icon={Image01Icon} className="h-3.5 w-3.5" />
+          <ImageIcon className="h-3.5 w-3.5" />
           Change cover
         </button>
         <button
           onClick={handleRemove}
           className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-11 bg-surface-1/80 backdrop-blur-sm text-primary hover:bg-surface-1 transition-colors"
         >
-          <HugeiconsIcon icon={Delete01Icon} className="h-3.5 w-3.5" />
+          <Delete className="h-3.5 w-3.5" />
           Remove
         </button>
       </div>

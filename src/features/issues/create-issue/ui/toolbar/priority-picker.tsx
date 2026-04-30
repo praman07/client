@@ -7,8 +7,7 @@
  * @layer Features
  */
 import { useState } from 'react'
-import { HugeiconsIcon } from '@hugeicons/react'
-import { Tick02Icon } from '@hugeicons/core-free-icons'
+import { Check } from 'lucide-react'
 import type { IssuePriority } from '@/entities/issue'
 import {
   DropdownMenu,
@@ -72,8 +71,7 @@ export function PriorityPicker({ value, onChange }: PriorityPickerProps) {
             }}
           >
             <PriorityBadge priority={p} size={13} showLabel />
-            <HugeiconsIcon
-              icon={Tick02Icon}
+            <Check
               strokeWidth={2}
               className={cn(
                 'ml-auto size-3.5',

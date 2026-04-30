@@ -1,6 +1,5 @@
 import { useNavigate } from '@tanstack/react-router'
-import { HugeiconsIcon } from '@hugeicons/react'
-import { Add01Icon } from '@hugeicons/core-free-icons'
+import { Plus } from 'lucide-react'
 import { Button } from '@/shared/ui/primitives/button'
 import { Skeleton } from '@/shared/ui/primitives/skeleton'
 
@@ -32,7 +31,7 @@ export function HomeHeader({ firstName, isLoading }: HomeHeaderProps) {
       </div>
       <div className="flex items-center shrink-0">
         <Button onClick={() => void navigate({ to: '/workspace/new' })} className="gap-2 shadow-raised-100">
-          <HugeiconsIcon icon={Add01Icon} className="size-4" />
+          <Plus className="size-4" />
           Create Workspace
         </Button>
       </div>
