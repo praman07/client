@@ -3,7 +3,6 @@ import { HugeiconsIcon } from '@hugeicons/react'
 import { Add01Icon } from '@hugeicons/core-free-icons'
 import { Button } from '@/shared/ui/primitives/button'
 import { Skeleton } from '@/shared/ui/primitives/skeleton'
-import { SidebarTrigger } from '@/shared/ui/primitives/sidebar'
 
 export interface HomeHeaderProps {
   firstName: string
@@ -22,7 +21,6 @@ export function HomeHeader({ firstName, isLoading }: HomeHeaderProps) {
   return (
     <section className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-2 px-[var(--padding-page)] pt-8">
       <div className="flex items-start gap-3">
-        <SidebarTrigger className="-ml-3 mt-1 hidden md:flex" />
         <div className="flex flex-col">
           <h1 className="text-24 font-semibold tracking-tight text-primary">
             {isLoading ? <Skeleton className="h-9 w-48 inline-block animate-pulse-subtle" /> : `${greeting}, ${firstName}`}
