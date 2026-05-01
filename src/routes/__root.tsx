@@ -12,6 +12,7 @@ import { NotFoundPage } from '@/pages/not-found'
 import ClerkProvider from '@/app/providers/clerk/provider'
 import TanStackQueryDevtools from '@/app/providers/tanstack-query/devtools'
 import { Toaster } from '@/shared/ui/primitives/sonner'
+import { ThemeProvider } from '@/app/providers/theme/theme-provider'
 import appCss from '@/app/styles/globals.css?url'
 import { env } from '@/shared/config/env'
 
@@ -65,14 +66,16 @@ function RootComponent() {
   }, [])
 
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <HeadContent />
       </head>
       <body>
         <ClerkProvider>
-          <Outlet />
-          <Toaster />
+          <ThemeProvider defaultTheme="dark" storageKey="collabify-theme">
+            <Outlet />
+            <Toaster />
+          </ThemeProvider>
             <TanStackDevtools
               config={{ position: 'bottom-right' }}
               plugins={[

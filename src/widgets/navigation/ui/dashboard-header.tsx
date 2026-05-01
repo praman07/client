@@ -2,6 +2,7 @@ import { useRouterState } from '@tanstack/react-router'
 import { Bell } from 'lucide-react'
 import { Fragment } from 'react/jsx-runtime'
 import { UserDropdown } from './user-dropdown'
+import { ThemeToggle } from './theme-toggle'
 import type { RouteStaticData } from '../model'
 import { Button } from '@/shared/ui'
 
@@ -49,10 +50,8 @@ export function DashboardHeader({ children }: { children?: React.ReactNode }) {
         </div>
 
         {/* Right: Actions & User */}
-        <div className="flex items-center gap-4">
-          {/* <Button variant="ghost" size="icon" className="text-secondary">
-            <Bell className="h-5 w-5" />
-          </Button> */}
+        <div className="flex items-center gap-2">
+          <ThemeToggle />
           <UserDropdown />
         </div>
       </div>
