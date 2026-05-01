@@ -1,5 +1,4 @@
-import { HugeiconsIcon } from '@hugeicons/react'
-import { LockIcon } from '@hugeicons/core-free-icons'
+import { Lock } from 'lucide-react'
 
 /**
  * LockedBanner — shown when page is locked by an admin.
@@ -10,7 +9,7 @@ import { LockIcon } from '@hugeicons/core-free-icons'
 export function LockedBanner() {
   return (
     <div className="flex items-center gap-2 rounded-lg border border-warning-subtle bg-warning-subtle px-4 py-2.5 text-13 text-warning-primary mb-4">
-      <HugeiconsIcon icon={LockIcon} className="h-4 w-4 shrink-0" />
+      <Lock className="h-4 w-4 shrink-0" />
       <span>
         This page is locked by an admin and is currently{' '}
         <strong>read-only</strong>.

@@ -1,6 +1,5 @@
 import { useState } from 'react';
-import { AtIcon, MuteIcon, NotificationBubbleIcon } from '@hugeicons/core-free-icons';
-import { HugeiconsIcon } from '@hugeicons/react';
+import { Bell, AtSign, BellOff } from 'lucide-react'
 import { useSetConversationNotifMode } from '../hooks';
 import { muteDurationToISO } from '../model/schema';
 import type { MuteDuration } from '../model/types';
@@ -13,25 +12,25 @@ const NOTIFICATION_OPTIONS: Array<{
   value: ConversationNotifMode;
   label: string;
   description: string;
-  icon: typeof NotificationBubbleIcon;
+  icon: React.ComponentType<{ className?: string }>;
 }> = [
   {
     value: ConversationNotifMode.AllMessages,
     label: 'All messages',
     description: 'Notify for all new messages.',
-    icon: NotificationBubbleIcon,
+    icon: Bell,
   },
   {
     value: ConversationNotifMode.MentionsOnly,
     label: 'Mentions only',
     description: 'Only notify when @mentioned.',
-    icon: AtIcon,
+    icon: AtSign,
   },
   {
     value: ConversationNotifMode.Nothing,
     label: 'Nothing',
     description: 'Disable all notifications for this channel.',
-    icon: MuteIcon,
+    icon: BellOff,
   },
 ];
 
@@ -136,7 +135,7 @@ export function ChannelNotificationSettings({
               <RadioGroupItem value={opt.value} className="mt-0.5 shrink-0" />
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2">
-                  <HugeiconsIcon icon={opt.icon} className="size-4 text-secondary shrink-0" />
+                  <opt.icon className="size-4 text-secondary shrink-0" />
                   <span className="text-sm font-medium text-primary">{opt.label}</span>
                 </div>
                 <p className="text-xs text-secondary mt-0.5">{opt.description}</p>

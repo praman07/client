@@ -11,8 +11,10 @@
  * @layer Features
  */
 import { useState } from 'react'
-import { HugeiconsIcon } from '@hugeicons/react'
-import { Tag01Icon, Tick02Icon } from '@hugeicons/core-free-icons'
+import {
+  Tag,
+  Check,
+} from 'lucide-react'
 import type { IssueLabel } from '@/entities/issue-label'
 import { cn } from '@/shared/lib/utils'
 import {
@@ -71,11 +73,7 @@ export function LabelPicker({ labels, value, onToggle }: LabelPickerProps) {
           </>
         ) : (
           <>
-            <HugeiconsIcon
-              icon={Tag01Icon}
-              strokeWidth={2}
-              className="size-3"
-            />
+            <Tag className="size-3" />
             <span>Labels</span>
           </>
         )}
@@ -120,10 +118,7 @@ export function LabelPicker({ labels, value, onToggle }: LabelPickerProps) {
                   style={{ backgroundColor: label.color }}
                 />
                 <span>{label.name}</span>
-                <HugeiconsIcon
-                  icon={Tick02Icon}
-                  strokeWidth={2}
-                  className={cn(
+                <Check className={cn(
                     'ml-auto size-3.5 transition-opacity',
                     checked ? 'opacity-100' : 'opacity-0',
                   )}

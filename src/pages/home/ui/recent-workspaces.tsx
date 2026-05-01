@@ -1,6 +1,5 @@
 import { Link, useNavigate } from '@tanstack/react-router'
-import { Add01Icon, Folder01Icon } from '@hugeicons/core-free-icons'
-import { HugeiconsIcon } from '@hugeicons/react'
+import { Plus, Folder } from 'lucide-react'
 import type { WorkspaceFragmentFragment } from '@/gql/graphql'
 import { Button } from '@/shared/ui/primitives/button'
 import { Skeleton } from '@/shared/ui/primitives/skeleton'
@@ -33,11 +32,11 @@ export function RecentWorkspaces({ workspaces, isLoading }: RecentWorkspacesProp
         </div>
       ) : workspaces.length === 0 ? (
         <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-subtle py-16 text-center max-w-2xl mx-auto w-full">
-          <HugeiconsIcon icon={Folder01Icon} className="size-10 text-tertiary mb-3" />
+          <Folder className="size-10 text-tertiary mb-3" />
           <p className="text-13 font-medium text-secondary">No workspaces yet</p>
           <p className="text-11 text-tertiary mt-1 mb-4">Create your first workspace to start collaborating</p>
           <Button size="sm" onClick={() => void navigate({ to: '/workspace/new' })} className="gap-1.5">
-            <HugeiconsIcon icon={Add01Icon} className="size-4" />
+            <Plus className="size-4" />
             Create workspace
           </Button>
         </div>

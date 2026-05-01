@@ -10,8 +10,7 @@
  */
 
 import { useRef } from 'react'
-import { HugeiconsIcon } from '@hugeicons/react'
-import { Attachment01Icon } from '@hugeicons/core-free-icons'
+import { Paperclip } from 'lucide-react'
 import { Button } from '@/shared/ui/primitives/button'
 import { cn } from '@/shared/lib/utils'
 import { VAULT_ALLOWED_MIME_TYPES } from '@/features/vault/upload-file'
@@ -86,7 +85,7 @@ export function ChatAttachmentPicker({
         title={tooltipText}
         aria-label="Attach file"
       >
-        <HugeiconsIcon icon={Attachment01Icon} className="size-4" />
+        <Paperclip className="size-4" />
       </Button>
     </>
   )

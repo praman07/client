@@ -2,11 +2,7 @@ import * as React from 'react'
 import { mergeProps } from '@base-ui/react/merge-props'
 import { useRender } from '@base-ui/react/use-render'
 
-import { HugeiconsIcon } from '@hugeicons/react'
-import {
-  ArrowRight01Icon,
-  MoreHorizontalCircle01Icon,
-} from '@hugeicons/core-free-icons'
+import { ChevronRight, MoreHorizontal } from 'lucide-react'
 import { cn } from '@/shared/lib/utils'
 
 function Breadcrumb({ className, ...props }: React.ComponentProps<'nav'>) {
@@ -95,7 +91,7 @@ function BreadcrumbSeparator({
       className={cn('text-tertiary [&>svg]:size-3', className)}
       {...props}
     >
-      {children ?? <HugeiconsIcon icon={ArrowRight01Icon} strokeWidth={2} />}
+      {children ?? <ChevronRight />}
     </li>
   )
 }
@@ -116,7 +112,7 @@ function BreadcrumbEllipsis({
       )}
       {...props}
     >
-      <HugeiconsIcon icon={MoreHorizontalCircle01Icon} strokeWidth={2} />
+      <MoreHorizontal />
       <span className="sr-only">More</span>
     </span>
   )
