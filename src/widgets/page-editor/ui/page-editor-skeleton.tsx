@@ -8,7 +8,7 @@ import { Skeleton } from '@/shared/ui/primitives/skeleton'
  */
 export function PageEditorSkeleton() {
   return (
-    <div className="mx-auto max-w-3xl px-8 py-12 space-y-4 animate-pulse">
+    <div className="mx-auto max-w-3xl px-8 py-12 space-y-4 animate-pulse-subtle">
       {/* Cover placeholder */}
       <Skeleton className="h-40 w-full rounded-xl" />
       {/* Title */}

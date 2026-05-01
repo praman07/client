@@ -18,7 +18,7 @@ function Switch({
       className={cn(
         // Base
         'peer group/switch relative inline-flex shrink-0 items-center rounded-full outline-none',
-        'border border-transparent shadow-xs',
+        'border border-transparent shadow-raised-100',
         // Transition
         'hardware-accelerated active:scale-[0.95] transition-all duration-150',
         // Unchecked track

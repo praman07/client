@@ -19,7 +19,7 @@ export function VaultStorageBar({ projectId }: VaultStorageBarProps) {
   if (isLoading || !data) {
     return (
       <div className="px-3 py-2">
-        <div className="h-1.5 w-full rounded-full bg-layer-2 animate-pulse" />
+        <div className="h-1.5 w-full rounded-full bg-layer-2 animate-pulse-subtle" />
       </div>
     )
   }

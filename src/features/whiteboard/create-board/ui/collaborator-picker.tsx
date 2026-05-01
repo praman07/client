@@ -82,7 +82,7 @@ export function CollaboratorPicker({
     return (
       <div className="space-y-2">
         <Label>Add Collaborators (Optional)</Label>
-        <div className="text-sm text-secondary">Loading members...</div>
+        <div className="text-14 text-secondary">Loading members...</div>
       </div>
     )
   }
@@ -105,7 +105,7 @@ export function CollaboratorPicker({
       {/* Selected Members as Badges */}
       {selectedUserIds.length > 0 && (
         <div className="flex flex-wrap gap-2 p-3 bg-layer-2 rounded-md">
-          <span className="text-xs text-secondary w-full mb-1">
+          <span className="text-12 text-secondary w-full mb-1">
             Selected ({selectedUserIds.length}):
           </span>
           {selectedUserIds.map((userId) => {
@@ -121,7 +121,7 @@ export function CollaboratorPicker({
                   </AvatarFallback>
                 </Avatar>
                 <span>{member.user.fullName}</span>
-                {isOwner && <span className="text-xs text-secondary">(You)</span>}
+                {isOwner && <span className="text-12 text-secondary">(You)</span>}
                 {!isOwner && (
                   <button
                     type="button"
@@ -141,7 +141,7 @@ export function CollaboratorPicker({
       <ScrollArea className="h-[200px] rounded-md border">
         <div className="p-2 space-y-1">
           {filteredMembers.length === 0 ? (
-            <div className="text-sm text-secondary text-center py-8">
+            <div className="text-14 text-secondary text-center py-8">
               {searchQuery ? 'No members found' : 'No workspace members'}
             </div>
           ) : (
@@ -163,20 +163,20 @@ export function CollaboratorPicker({
                 >
                   <Avatar className="h-8 w-8 shrink-0">
                     <AvatarImage src={member.user.avatarUrl || ''} />
-                    <AvatarFallback className="text-xs">
+                    <AvatarFallback className="text-12">
                       {getInitials(member.user.fullName || 'User')}
                     </AvatarFallback>
                   </Avatar>
                   <div className="flex-1 text-left min-w-0">
-                    <p className="text-sm font-medium truncate text-primary">
+                    <p className="text-14 font-medium truncate text-primary">
                       {member.user.fullName}
                       {isOwner && (
-                        <span className="ml-2 text-xs text-secondary">
+                        <span className="ml-2 text-12 text-secondary">
                           (You)
                         </span>
                       )}
                     </p>
-                    <p className="text-xs text-secondary truncate">
+                    <p className="text-12 text-secondary truncate">
                       {member.user.email}
                     </p>
                   </div>

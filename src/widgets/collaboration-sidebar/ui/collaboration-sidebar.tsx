@@ -104,8 +104,8 @@ export function CollaborationSidebar(props: CollaborationSidebarProps) {
         {!isCollapsed && (
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <Users className="h-4 w-4 text-muted-foreground" />
-              <h3 className="text-sm font-semibold">Active Users</h3>
+              <Users className="h-4 w-4 text-tertiary" />
+              <h3 className="text-14 font-semibold">Active Users</h3>
             </div>
             <Badge variant="secondary" className="ml-auto">
               {count}
@@ -114,7 +114,7 @@ export function CollaborationSidebar(props: CollaborationSidebarProps) {
         )}
         {isCollapsed && (
           <div className="flex items-center justify-center">
-            <Users className="h-4 w-4 text-muted-foreground" />
+            <Users className="h-4 w-4 text-tertiary" />
           </div>
         )}
       </SidebarHeader>

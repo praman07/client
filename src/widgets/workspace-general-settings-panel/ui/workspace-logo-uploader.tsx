@@ -52,7 +52,7 @@ export function WorkspaceLogoUploader({
             alt={name}
             className="object-cover rounded-xl"
           />
-          <AvatarFallback className="rounded-xl text-lg font-bold bg-accent-subtle text-accent-primary">
+          <AvatarFallback className="rounded-xl text-18 font-bold bg-accent-subtle text-accent-primary">
             {initials}
           </AvatarFallback>
         </Avatar>

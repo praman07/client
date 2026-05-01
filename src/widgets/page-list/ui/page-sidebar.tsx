@@ -34,7 +34,7 @@ export function PageSidebar({ projectId }: PageSidebarProps) {
     >
       <SidebarContent className="overflow-hidden">
         <ScrollArea className="h-full w-full">
-          <div className="flex flex-col gap-1 px-1 py-2 animate-fade-in">
+          <div className="flex flex-col gap-1 px-1 py-2 animate-fade-in-in">
             {isLoading ? (
               <PageTreeSkeleton />
             ) : (

@@ -70,8 +70,8 @@ export function CreateStatusForm({
       <form.Field name="name">
         {(field) => (
           <div className="space-y-1">
-            <Label htmlFor={field.name} className="text-xs">
-              Column name <span className="text-destructive">*</span>
+            <Label htmlFor={field.name} className="text-12">
+              Column name <span className="text-danger-primary">*</span>
             </Label>
             <Input
               id={field.name}

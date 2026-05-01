@@ -18,7 +18,7 @@ interface RecentPagesProps {
 const PageIcon: React.FC<{ emoji?: string | null }> = ({ emoji }) => {
   if (emoji) {
     return (
-      <div className="h-8 w-8 shrink-0 rounded-lg bg-layer-2 flex items-center justify-center text-base">
+      <div className="h-8 w-8 shrink-0 rounded-lg bg-layer-2 flex items-center justify-center text-16">
         {emoji}
       </div>
     )

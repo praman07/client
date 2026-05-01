@@ -43,7 +43,7 @@ export function VaultFileDetail({ file, onClose }: VaultFileDetailProps) {
         </div>
         <div className="min-w-0">
           <h3 className="font-semibold truncate">{file.name}</h3>
-          <p className="text-xs text-secondary">{file.mimeType}</p>
+          <p className="text-12 text-secondary">{file.mimeType}</p>
         </div>
       </div>
 

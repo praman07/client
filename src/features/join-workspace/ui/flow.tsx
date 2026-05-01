@@ -27,9 +27,9 @@ export function JoinWorkspaceFlow({ token }: JoinWorkspaceFlowProps) {
 
   if (errorCode === 'INVITE_NOT_FOUND' || errorCode === 'INVITE_EXPIRED') {
     return (
-      <div className="rounded-md bg-danger-subtle p-6 text-center text-danger-primary max-w-md w-full border border-danger-strong shadow-sm">
+      <div className="rounded-md bg-danger-subtle p-6 text-center text-danger-primary max-w-md w-full border border-danger-strong shadow-raised-100">
         <h3 className="font-semibold text-16 mb-2">Invalid Invite</h3>
-        <p className="text-sm">
+        <p className="text-14">
           This invite link is either invalid or has expired. Please ask for a
           new invitation.
         </p>

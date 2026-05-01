@@ -119,10 +119,10 @@ export function TestimonialsSection() {
 
       <div className="mx-auto max-w-5xl space-y-8 relative z-10">
         <div className="flex flex-col gap-2">
-          <h2 className="text-3xl font-bold tracking-wide text-balance md:text-4xl lg:text-5xl xl:text-6xl xl:font-extrabold text-foreground">
+          <h2 className="text-28 font-bold tracking-wide text-balance md:text-32 lg:text-40 xl:text-40 xl:font-extrabold text-primary">
             Real teams. Real workflows.
           </h2>
-          <p className="text-muted-foreground text-sm md:text-base lg:text-lg">
+          <p className="text-tertiary text-14 md:text-16 lg:text-18">
             Freelancers, founders, and small teams who replaced their entire
             tool stack with Collabify.
           </p>
@@ -160,15 +160,15 @@ export function TestimonialsSection() {
               />
               <div>
                 <div className="-mt-0.5 -space-y-0.5">
-                  <p className="text-sm md:text-base font-semibold text-foreground">
+                  <p className="text-14 md:text-16 font-semibold text-primary">
                     {name}
                   </p>
-                  <span className="text-muted-foreground block text-[11px] font-light tracking-tight">
+                  <span className="text-tertiary block text-[11px] font-light tracking-tight">
                     {role} · {company}
                   </span>
                 </div>
                 <blockquote className="mt-3">
-                  <p className="text-foreground/80 text-sm font-light tracking-wide leading-relaxed">
+                  <p className="text-primary/80 text-14 font-light tracking-wide leading-relaxed">
                     {quote}
                   </p>
                 </blockquote>

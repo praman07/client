@@ -69,7 +69,7 @@ export function WorkspaceLogoField({ value, onChange }: WorkspaceLogoFieldProps)
                 className="object-cover rounded-xl"
               />
             ) : (
-              <AvatarFallback className="rounded-xl text-lg font-bold bg-layer-2 text-secondary">
+              <AvatarFallback className="rounded-xl text-18 font-bold bg-layer-2 text-secondary">
                 {initials || 'Upload'}
               </AvatarFallback>
             )}

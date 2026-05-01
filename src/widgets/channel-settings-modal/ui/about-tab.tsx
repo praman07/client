@@ -51,10 +51,10 @@ function InlineTextArea({
           {value.length}/{maxLength}
         </span>
         <div className="flex items-center gap-2">
-          <Button variant="ghost" size="sm" className="h-7 text-xs" onClick={onCancel}>
+          <Button variant="ghost" size="sm" className="h-7 text-12" onClick={onCancel}>
             Cancel
           </Button>
-          <Button size="sm" className="h-7 text-xs" onClick={onSave} disabled={isPending}>
+          <Button size="sm" className="h-7 text-12" onClick={onSave} disabled={isPending}>
             {isPending ? 'Saving…' : 'Save'}
           </Button>
         </div>

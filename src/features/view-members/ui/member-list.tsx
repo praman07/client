@@ -150,7 +150,7 @@ export function MemberList({ workspaceId }: MemberListProps) {
               className={cn(
                 'h-8 w-8 inline-flex items-center justify-center rounded-md transition-all duration-200',
                 viewMode === mode
-                  ? 'bg-layer-1 text-primary shadow-sm border border-subtle'
+                  ? 'bg-layer-1 text-primary shadow-raised-100 border border-subtle'
                   : 'text-tertiary hover:text-primary hover:bg-layer-transparent-hover',
               )}
             >

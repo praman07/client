@@ -136,9 +136,9 @@ export function ChannelNotificationSettings({
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2">
                   <opt.icon className="size-4 text-secondary shrink-0" />
-                  <span className="text-sm font-medium text-primary">{opt.label}</span>
+                  <span className="text-14 font-medium text-primary">{opt.label}</span>
                 </div>
-                <p className="text-xs text-secondary mt-0.5">{opt.description}</p>
+                <p className="text-12 text-secondary mt-0.5">{opt.description}</p>
               </div>
             </label>
           ))}
@@ -146,14 +146,14 @@ export function ChannelNotificationSettings({
 
         {showMuteOptions && (
           <div className="mt-2 pl-1">
-            <p className="py-2 text-xs text-secondary">Mute for...</p>
+            <p className="py-2 text-12 text-secondary">Mute for...</p>
             <div className="flex flex-wrap gap-2">
               {MUTE_DURATIONS.map((d) => (
                 <Button
                   key={d.value}
                   variant={muteDuration === d.value ? 'secondary' : 'outline'}
                   size="sm"
-                  className="h-7 text-xs"
+                  className="h-7 text-12"
                   onClick={() => handleMuteDurationChange(d.value)}
                   disabled={setMode.isPending}
                 >
@@ -161,7 +161,7 @@ export function ChannelNotificationSettings({
                 </Button>
               ))}
             </div>
-            <p className="text-xs text-secondary mt-2">
+            <p className="text-12 text-secondary mt-2">
               You will still be notified for direct @mentions.
             </p>
           </div>

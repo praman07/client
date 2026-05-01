@@ -98,7 +98,7 @@ export function AddCollaboratorsForm({
       className="space-y-4"
     >
       {rootError && (
-        <div className="rounded-md bg-danger-subtle p-3 text-sm text-danger-primary">
+        <div className="rounded-md bg-danger-subtle p-3 text-14 text-danger-primary">
           {rootError}
         </div>
       )}
@@ -148,10 +148,10 @@ export function AddCollaboratorsForm({
                         </AvatarFallback>
                       </Avatar>
                       <div className="flex flex-1 flex-col items-start">
-                        <span className="text-sm font-medium">
+                        <span className="text-14 font-medium">
                           {member.user.fullName}
                         </span>
-                        <span className="text-xs text-secondary">
+                        <span className="text-12 text-secondary">
                           {member.user.email}
                         </span>
                       </div>
@@ -162,7 +162,7 @@ export function AddCollaboratorsForm({
               </div>
             </ScrollArea>
             {field.state.meta.errors.length > 0 && (
-              <p className="text-sm text-danger-primary">
+              <p className="text-14 text-danger-primary">
                 {field.state.meta.errors.join(', ')}
               </p>
             )}

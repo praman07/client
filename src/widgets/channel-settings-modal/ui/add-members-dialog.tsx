@@ -167,13 +167,13 @@ export function AddMembersDialog({
         </div>
 
         <DialogFooter className="p-6 pt-2 bg-layer-1 border-t border-subtle-1">
-          <Button variant="ghost" onClick={handleClose} disabled={isPending} className="h-8 text-xs">
+          <Button variant="ghost" onClick={handleClose} disabled={isPending} className="h-8 text-12">
             Cancel
           </Button>
           <Button
             onClick={handleAdd}
             disabled={selectedUserIds.length === 0 || isPending}
-            className="h-8 text-xs px-4"
+            className="h-8 text-12 px-4"
           >
             {isPending ? 'Adding...' : `Add ${selectedUserIds.length > 0 ? selectedUserIds.length : ''} Member${selectedUserIds.length !== 1 ? 's' : ''}`}
           </Button>

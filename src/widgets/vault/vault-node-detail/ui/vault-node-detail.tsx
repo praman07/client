@@ -35,7 +35,7 @@ export function VaultNodeDetail({
     <aside className="w-72 shrink-0 border-l bg-surface-1 flex flex-col h-full overflow-y-auto">
       {/* Close button */}
       <div className="flex items-center justify-between px-4 py-3 border-b border-subtle">
-        <span className="text-sm font-medium text-secondary">
+        <span className="text-14 font-medium text-secondary">
           Details
         </span>
         <button

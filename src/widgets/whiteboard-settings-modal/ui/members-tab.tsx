@@ -187,7 +187,7 @@ export function MembersTab({ board }: MembersTabProps) {
               >
                 <Avatar className="h-8 w-8 shrink-0">
                   <AvatarImage src={c.user.avatarUrl ?? ''} />
-                  <AvatarFallback className="text-xs">
+                  <AvatarFallback className="text-12">
                     {getInitials(c.user.fullName)}
                   </AvatarFallback>
                 </Avatar>

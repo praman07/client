@@ -66,12 +66,12 @@ export function HeroSection() {
         <AnimatedGroup variants={heroVariants}>
 
           {/* Headline */}
-          <h1 className="max-w-3xl text-balance text-5xl font-black tracking-tight text-white md:text-6xl lg:text-[4.5rem] leading-[1.08]">
+          <h1 className="max-w-3xl text-balance text-40 font-black tracking-tight text-white md:text-40 lg:text-[4.5rem] leading-[1.08]">
             Everything app for <br /> Project Management
           </h1>
 
           {/* Sub-text */}
-          <p className="mt-6 max-w-xl text-base text-white/50 leading-relaxed md:text-lg">
+          <p className="mt-6 max-w-xl text-16 text-white/50 leading-relaxed md:text-18">
             Replace Slack, Jira, and Notion with one real-time platform.
             Chat, plan, draw, and ship — without the $300/mo bill.
           </p>
@@ -91,7 +91,7 @@ export function HeroSection() {
               asChild
               size="lg"
               variant="ghost"
-              className="h-[42px] rounded-xl px-5 text-base text-white/40 hover:text-white/80 hover:bg-white/5"
+              className="h-[42px] rounded-xl px-5 text-16 text-white/40 hover:text-white/80 hover:bg-white/5"
             >
               <Link to="/pricing">
                 <span className="text-nowrap">View Pricing</span>
@@ -101,7 +101,7 @@ export function HeroSection() {
           </div>
 
           {/* ── App mockup ─────────────────────────────────────────── */}
-          <div className="relative mt-14 w-full max-w-5xl overflow-hidden rounded-xl border border-border/20 shadow-2xl shadow-black/70 ring-1 ring-white/5">
+          <div className="relative mt-14 w-full max-w-5xl overflow-hidden rounded-xl border border-border/20 shadow-overlay-200 shadow-black/70 ring-1 ring-white/5">
             <AppMockup />
             
             {/* Bottom gradient fade into the next section */}

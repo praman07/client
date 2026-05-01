@@ -45,10 +45,10 @@ export function PendingInviteCard({ invite, onDeclined }: Props) {
 
       {/* Workspace + role info */}
       <div className="flex-1 min-w-0">
-        <p className="truncate text-sm font-medium text-[--txt-primary]">
+        <p className="truncate text-14 font-medium text-[--txt-primary]">
           {invite.workspaceName}
         </p>
-        <p className="text-xs text-[--txt-secondary]">
+        <p className="text-12 text-[--txt-secondary]">
           Invited as <Badge variant="outline">{invite.role}</Badge>
         </p>
       </div>

@@ -18,7 +18,7 @@ type PricingCardProps = {
 
 function FilledCheck() {
   return (
-    <div className="bg-primary text-primary-foreground rounded-full p-0.5 shrink-0">
+    <div className="bg-primary text-on-color rounded-full p-0.5 shrink-0">
       <CheckIcon className="size-3" strokeWidth={3} />
     </div>
   )
@@ -62,13 +62,13 @@ function HeroPricingCard() {
 
       <div className="flex flex-col p-4 lg:flex-row">
         <div className="pb-4 lg:w-[30%]">
-          <span className="font-mono text-5xl font-semibold tracking-tight text-foreground">
+          <span className="font-mono text-40 font-semibold tracking-tight text-primary">
             $29
           </span>
-          <span className="text-muted-foreground text-sm">/month</span>
-          <p className="text-muted-foreground mt-1 text-xs">Flat rate · No per-seat</p>
+          <span className="text-tertiary text-14">/month</span>
+          <p className="text-tertiary mt-1 text-12">Flat rate · No per-seat</p>
         </div>
-        <ul className="text-muted-foreground grid gap-4 text-sm lg:w-[70%]">
+        <ul className="text-tertiary grid gap-4 text-14 lg:w-[70%]">
           {[
             'Up to 5 workspaces per account',
             'Up to 50 members per workspace',
@@ -114,18 +114,18 @@ function PricingCard({
       </div>
 
       <div className="flex items-end gap-2 px-4 py-2">
-        <span className="font-mono text-5xl font-semibold tracking-tight text-foreground">
+        <span className="font-mono text-40 font-semibold tracking-tight text-primary">
           {priceLabel}
         </span>
         {!isFree && (
           <div className="flex flex-col pb-1">
-            <span className="text-muted-foreground text-sm">{priceSuffix}</span>
-            <span className="text-muted-foreground text-xs">Flat rate</span>
+            <span className="text-tertiary text-14">{priceSuffix}</span>
+            <span className="text-tertiary text-12">Flat rate</span>
           </div>
         )}
       </div>
 
-      <ul className="text-muted-foreground grid gap-4 p-4 text-sm">
+      <ul className="text-tertiary grid gap-4 p-4 text-14">
         {features.map((f, i) => (
           <li key={i} className="flex items-center gap-3">
             <FilledCheck />

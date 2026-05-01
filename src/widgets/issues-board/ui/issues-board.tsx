@@ -150,7 +150,7 @@ export function IssuesBoard({
     return (
       <div className="flex h-full flex-col items-center justify-center gap-4 text-secondary">
         <AlertTriangle className="h-8 w-8 text-danger-primary" />
-        <p className="text-sm">Failed to load board.</p>
+        <p className="text-14">Failed to load board.</p>
         <Button variant="outline" size="sm" onClick={refetch}>
           <RefreshCw className="mr-2 h-4 w-4" />
           Retry
@@ -163,7 +163,7 @@ export function IssuesBoard({
   if (statuses.length === 0) {
     return (
       <div className="flex h-full flex-col items-center justify-center gap-4 text-secondary">
-        <p className="text-sm">No columns yet.</p>
+        <p className="text-14">No columns yet.</p>
         <Button
           variant="outline"
           size="sm"

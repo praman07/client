@@ -123,7 +123,7 @@ export function RenameBoardInput({
               aria-label="Board title"
             />
             {field.state.meta.errors.length > 0 && (
-              <p className="mt-1 text-sm text-danger-primary">
+              <p className="mt-1 text-14 text-danger-primary">
                 {field.state.meta.errors.join(', ')}
               </p>
             )}

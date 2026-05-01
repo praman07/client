@@ -230,7 +230,7 @@ export function PrimaryMessage({ message, className }: PrimaryMessageProps) {
               {message.parentMessageId && (
                 <button
                   onClick={() => scrollToMessage(message.parentMessageId!)}
-                  className="flex items-center gap-1.5 text-xs text-secondary hover:text-primary mb-1 border-l-2 border-subtle-1 hover:border-accent-subtle pl-2.5 py-0.5 max-h-10 overflow-hidden w-full text-left transition-colors rounded-sm"
+                  className="flex items-center gap-1.5 text-12 text-secondary hover:text-primary mb-1 border-l-2 border-subtle-1 hover:border-accent-subtle pl-2.5 py-0.5 max-h-10 overflow-hidden w-full text-left transition-colors rounded-sm"
                 >
                   <Reply className="h-3 w-3 shrink-0" />
                   {parentMessage ? (

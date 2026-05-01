@@ -27,7 +27,7 @@ export function IssueNumber({
   return (
     <span
       className={cn(
-        'font-mono text-xs text-muted-foreground select-none shrink-0',
+        'font-mono text-12 text-tertiary select-none shrink-0',
         className,
       )}
     >

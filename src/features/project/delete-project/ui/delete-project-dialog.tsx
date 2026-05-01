@@ -61,7 +61,7 @@ export function DeleteProjectDialog({
             <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-danger-subtle">
               <TriangleAlert className="h-4 w-4 text-danger-primary" />
             </div>
-            <AlertDialogTitle className="text-base">
+            <AlertDialogTitle className="text-16">
               Delete Project
             </AlertDialogTitle>
           </div>
@@ -78,7 +78,7 @@ export function DeleteProjectDialog({
 
         {/* Confirmation input */}
         <div className="space-y-1.5 py-1">
-          <Label htmlFor="confirm-delete" className="text-sm">
+          <Label htmlFor="confirm-delete" className="text-14">
             Type{' '}
             <code className="rounded bg-layer-2 px-1 py-0.5 font-mono text-11 font-medium text-primary">
               {projectName}

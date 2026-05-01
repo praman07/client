@@ -148,7 +148,7 @@ function NavigationMenuIndicator({
       )}
       {...props}
     >
-      <div className="bg-subtle rounded-tl-sm shadow-md relative top-[60%] h-2 w-2 rotate-45" />
+      <div className="bg-subtle rounded-tl-sm shadow-raised-200 relative top-[60%] h-2 w-2 rotate-45" />
     </NavigationMenuPrimitive.Icon>
   )
 }

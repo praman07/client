@@ -105,7 +105,7 @@ export function RoleSelectorCell({
         {displayName}
         <ChevronDown className="h-3 w-3 text-tertiary" />
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="start" className="w-44 p-1 z-[var(--z-dropdown)] bg-surface-2 border border-subtle rounded-lg shadow-overlay-100 animate-scale-in">
+      <DropdownMenuContent align="start" className="w-44 p-1 z-[var(--z-dropdown)] bg-surface-2 border border-subtle rounded-lg shadow-overlay-100 animate-scale-in-in">
         <p className="px-2 py-1 text-11 uppercase tracking-widest text-tertiary font-medium">
           Assign role
         </p>

@@ -56,7 +56,7 @@ export function WorkspaceSlugRenameForm({
   })
 
   return (
-<Card className="border border-danger-strong shadow-sm">
+<Card className="border border-danger-strong shadow-raised-100">
         <CardHeader>
           <CardTitle className="text-danger-primary">Danger Zone: Workspace URL</CardTitle>
         <CardDescription>
@@ -74,7 +74,7 @@ export function WorkspaceSlugRenameForm({
           <Alert variant="destructive" className="bg-danger-subtle border border-danger-subtle">
             <Info className="h-4 w-4" />
             <AlertTitle>Heads up!</AlertTitle>
-            <AlertDescription className="text-xs">
+            <AlertDescription className="text-12">
               Anyone using your old URL will get a 404 error. Make sure to update your shared links.
             </AlertDescription>
           </Alert>

@@ -23,7 +23,7 @@ function formatDate(iso: string): string {
 
 function PageCardSkeleton() {
   return (
-    <div className="bg-layer-1 border border-subtle rounded-lg p-3 animate-fade-in">
+    <div className="bg-layer-1 border border-subtle rounded-lg p-3 animate-fade-in-in">
       <div className="h-8 flex items-center justify-center mb-2">
         <div className="size-8 bg-layer-2 animate-pulse-subtle rounded-md" />
       </div>
@@ -74,7 +74,7 @@ function PageCard({ page, workspaceSlug, projectSlug }: PageCardProps) {
     >
       {/* Emoji header */}
       <div className="h-10 flex items-center justify-center mb-3">
-        <span className="text-2xl select-none">{page.emojiIcon ?? '📄'}</span>
+        <span className="text-24 select-none">{page.emojiIcon ?? '📄'}</span>
       </div>
 
       {/* Title */}

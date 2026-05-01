@@ -16,10 +16,10 @@ export function MockupTabs({ active = 'Chat' }: { active?: string }) {
         return (
           <div
             key={tab}
-            className={`relative flex h-12 items-center text-xs font-medium transition-colors select-none ${
+            className={`relative flex h-12 items-center text-12 font-medium transition-colors select-none ${
               isActive
-                ? 'text-foreground font-semibold'
-                : 'text-muted-foreground'
+                ? 'text-primary font-semibold'
+                : 'text-tertiary'
             }`}
           >
             {tab}

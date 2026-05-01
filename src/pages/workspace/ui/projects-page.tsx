@@ -22,7 +22,7 @@ import { Guard } from '@/shared/lib/auth/guard'
 
 function ProjectCardSkeleton() {
   return (
-    <Card className="h-full bg-layer-1 border border-subtle rounded-lg shadow-raised-100 animate-fade-in">
+    <Card className="h-full bg-layer-1 border border-subtle rounded-lg shadow-raised-100 animate-fade-in-in">
       <CardContent className="p-4 flex flex-col h-full gap-3">
         {/* Header */}
         <div className="flex items-center gap-3">

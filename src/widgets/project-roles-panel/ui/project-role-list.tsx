@@ -39,7 +39,7 @@ export function ProjectRoleList({
       {/* Header */}
       <div className="px-4 py-3 border-b border-subtle bg-layer-2 flex items-center gap-2">
         <Shield className="h-4 w-4 text-primary shrink-0" />
-        <h3 className="text-sm font-semibold flex-1">Project Roles</h3>
+        <h3 className="text-14 font-semibold flex-1">Project Roles</h3>
       </div>
 
       {/* New Role Button — shown only to users with project:role:create */}
@@ -48,7 +48,7 @@ export function ProjectRoleList({
           <Button
             size="sm"
             variant="outline"
-            className="w-full justify-start gap-2 h-8 text-xs font-medium border-dashed hover:border-primary/50 hover:text-primary"
+            className="w-full justify-start gap-2 h-8 text-12 font-medium border-dashed hover:border-primary/50 hover:text-primary"
             onClick={openCreateModal}
           >
             <Plus className="h-3.5 w-3.5" />
@@ -71,7 +71,7 @@ export function ProjectRoleList({
             )}
           >
             <div className="flex items-center justify-between w-full gap-2">
-              <span className="text-sm font-medium truncate">{role.name}</span>
+              <span className="text-14 font-medium truncate">{role.name}</span>
               {role.isSystem && (
                 <Badge
                   variant="secondary"

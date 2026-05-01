@@ -9,10 +9,10 @@ import { DisplayCards } from './display-cards'
 
 // ── Chat mockup ───────────────────────────────────────────────────────────────
 const chatMessages = [
-  { initials: 'AL', name: 'Alex Liu', time: '10:28', text: 'Pushed v2 to staging 🚀', color: 'bg-blue-500/20 text-blue-400' },
-  { initials: 'MK', name: 'Maria K.', time: '10:29', text: 'Looks clean! Found one edge case on mobile — leaving a comment.', color: 'bg-rose-500/20 text-rose-400' },
-  { initials: 'SB', name: 'Sam B.', time: '10:30', text: 'Bundle still under 120kb ✅ LGTM from me.', color: 'bg-amber-500/20 text-amber-400' },
-  { initials: 'JD', name: 'You', time: '10:31', text: 'Merging and closing the sprint ticket.', color: 'bg-violet-500/20 text-violet-400' },
+  { initials: 'AL', name: 'Alex Liu', time: '10:28', text: 'Pushed v2 to staging 🚀', color: 'bg-accent-primary500/20 text-accent-primary400' },
+  { initials: 'MK', name: 'Maria K.', time: '10:29', text: 'Looks clean! Found one edge case on mobile — leaving a comment.', color: 'bg-danger-subtle500/20 text-danger-primary400' },
+  { initials: 'SB', name: 'Sam B.', time: '10:30', text: 'Bundle still under 120kb ✅ LGTM from me.', color: 'bg-warning-subtle500/20 text-warning-primary400' },
+  { initials: 'JD', name: 'You', time: '10:31', text: 'Merging and closing the sprint ticket.', color: 'bg-accent-subtle500/20 text-accent-primary400' },
 ]
 
 function ChatMockup() {
@@ -27,8 +27,8 @@ function ChatMockup() {
       {/* channel header */}
       <div className="flex items-center gap-1.5 border-b border-white/8 px-3 py-2">
         <Hash className="h-3 w-3 text-white/30" />
-        <span className="text-xs font-semibold text-white/70">general</span>
-        <div className="ml-auto h-1.5 w-1.5 rounded-full bg-emerald-500" />
+        <span className="text-12 font-semibold text-white/70">general</span>
+        <div className="ml-auto h-1.5 w-1.5 rounded-full bg-success-subtle500" />
       </div>
       {/* messages */}
       <div className="flex flex-1 flex-col gap-2 overflow-hidden p-3">
@@ -104,14 +104,14 @@ function PagesMockup() {
     <div className="flex flex-col h-full overflow-hidden rounded-lg border border-white/8 bg-[#111111]">
       {/* Doc header */}
       <div className="flex items-center gap-2 border-b border-white/8 px-4 py-2.5 bg-black/30">
-        <FileText className="h-3.5 w-3.5 text-pink-400 shrink-0" />
-        <span className="text-xs font-semibold text-white/70">Sprint Retrospective · Q1 2025</span>
+        <FileText className="h-3.5 w-3.5 text-accent-primary400 shrink-0" />
+        <span className="text-12 font-semibold text-white/70">Sprint Retrospective · Q1 2025</span>
         <div className="ml-auto flex items-center gap-1.5">
           {/* Presence avatars */}
-          {[{i:'AL',c:'bg-blue-500'},{i:'MK',c:'bg-rose-500'}].map(u => (
+          {[{i:'AL',c:'bg-accent-primary500'},{i:'MK',c:'bg-danger-subtle500'}].map(u => (
             <div key={u.i} className="relative">
               <div className={`flex h-5 w-5 items-center justify-center rounded-full text-[8px] font-bold text-white ${u.c}`}>{u.i}</div>
-              <div className="absolute -bottom-0.5 -right-0.5 h-1.5 w-1.5 rounded-full bg-emerald-500 border border-[#111]" />
+              <div className="absolute -bottom-0.5 -right-0.5 h-1.5 w-1.5 rounded-full bg-success-subtle500 border border-[#111]" />
             </div>
           ))}
           <Lock className="ml-1 h-3 w-3 text-white/20" />
@@ -122,7 +122,7 @@ function PagesMockup() {
       <div className="flex flex-1 flex-col overflow-y-auto px-6 py-5 gap-4 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
 
         {/* Page title */}
-        <h1 className="text-base font-black text-white/90 leading-tight">Sprint Retrospective</h1>
+        <h1 className="text-16 font-black text-white/90 leading-tight">Sprint Retrospective</h1>
 
         {/* Section: What went well */}
         <div className="flex flex-col gap-2">
@@ -135,12 +135,12 @@ function PagesMockup() {
                 <motion.span
                   initial={{ opacity: 0, y: 4 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="absolute bottom-full left-0 mb-0.5 whitespace-nowrap rounded-t rounded-br px-1 py-px text-[8px] font-semibold bg-blue-500 text-white leading-tight"
+                  className="absolute bottom-full left-0 mb-0.5 whitespace-nowrap rounded-t rounded-br px-1 py-px text-[8px] font-semibold bg-accent-primary500 text-white leading-tight"
                 >
                   Alex
                 </motion.span>
               )}
-              <span className={`inline-block w-px h-3.5 bg-blue-400 align-middle transition-opacity ${cursorOn ? 'opacity-100' : 'opacity-0'}`} />
+              <span className={`inline-block w-px h-3.5 bg-accent-primary400 align-middle transition-opacity ${cursorOn ? 'opacity-100' : 'opacity-0'}`} />
             </span>
           </div>
         </div>
@@ -156,7 +156,7 @@ function PagesMockup() {
                 key={`label-${mariaRange}`}
                 initial={{ opacity: 0, y: 4 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="absolute bottom-full left-0 mb-0.5 whitespace-nowrap rounded-t rounded-br px-1 py-px text-[8px] font-semibold bg-rose-500 text-white leading-tight"
+                className="absolute bottom-full left-0 mb-0.5 whitespace-nowrap rounded-t rounded-br px-1 py-px text-[8px] font-semibold bg-danger-subtle500 text-white leading-tight"
               >
                 Maria
               </motion.span>
@@ -193,16 +193,16 @@ function VaultMockup() {
   }, [])
 
   const files = [
-    { name: 'Designs', type: 'folder', color: 'text-amber-400' },
-    { name: 'Q1-Report.pdf', type: 'file', color: 'text-rose-400' },
-    { name: 'Assets', type: 'folder', color: 'text-amber-400' },
-    { name: 'README.md', type: 'file', color: 'text-blue-400' },
+    { name: 'Designs', type: 'folder', color: 'text-warning-primary400' },
+    { name: 'Q1-Report.pdf', type: 'file', color: 'text-danger-primary400' },
+    { name: 'Assets', type: 'folder', color: 'text-warning-primary400' },
+    { name: 'README.md', type: 'file', color: 'text-accent-primary400' },
   ]
 
   return (
     <div className="flex flex-col h-full overflow-hidden rounded-lg border border-white/8 bg-black/40">
       <div className="flex items-center gap-1.5 border-b border-white/8 px-3 py-2">
-        <ShieldCheck className="h-3 w-3 text-emerald-400" />
+        <ShieldCheck className="h-3 w-3 text-success-primary400" />
         <span className="text-[10px] font-semibold text-white/70">Project Vault</span>
         <Upload className="ml-auto h-3 w-3 text-white/30" />
       </div>
@@ -221,7 +221,7 @@ function VaultMockup() {
           <span>{Math.min(progress, 100)}%</span>
         </div>
         <div className="h-1 w-full rounded-full bg-white/8 overflow-hidden">
-          <motion.div className="h-full rounded-full bg-emerald-500" style={{ width: `${Math.min(progress, 100)}%` }} />
+          <motion.div className="h-full rounded-full bg-success-subtle500" style={{ width: `${Math.min(progress, 100)}%` }} />
         </div>
       </div>
     </div>
@@ -242,13 +242,13 @@ function SyncWidget() {
         {[0, 1, 2].map((i) => (
           <motion.div
             key={i}
-            className="absolute rounded-full border border-violet-400/30"
+            className="absolute rounded-full border border-accent-subtle400/30"
             style={{ width: 36 + i * 24, height: 36 + i * 24 }}
             animate={{ scale: [1, 1.2, 1], opacity: [0.7, 0.1, 0.7] }}
             transition={{ duration: 2, repeat: Infinity, delay: i * 0.6 }}
           />
         ))}
-        <Zap className="h-5 w-5 text-violet-400 relative z-10" />
+        <Zap className="h-5 w-5 text-accent-primary400 relative z-10" />
       </div>
       <AnimatePresence mode="wait">
         <motion.span
@@ -256,7 +256,7 @@ function SyncWidget() {
           initial={{ opacity: 0, y: 4 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -4 }}
-          className="text-3xl font-black text-white"
+          className="text-28 font-black text-white"
         >
           {ms}ms
         </motion.span>
@@ -276,16 +276,16 @@ function SyncWidget() {
 // ── Whiteboard mockup ─────────────────────────────────────────────────────────
 function WhiteboardMockup() {
   const cursors = [
-    { name: 'Alex', color: 'bg-blue-500', x: '25%', y: '40%', d: 4.5 },
-    { name: 'Maria', color: 'bg-rose-500', x: '60%', y: '25%', d: 5.2 },
-    { name: 'Sam', color: 'bg-amber-500', x: '75%', y: '60%', d: 4.8 },
+    { name: 'Alex', color: 'bg-accent-primary500', x: '25%', y: '40%', d: 4.5 },
+    { name: 'Maria', color: 'bg-danger-subtle500', x: '60%', y: '25%', d: 5.2 },
+    { name: 'Sam', color: 'bg-warning-subtle500', x: '75%', y: '60%', d: 4.8 },
   ]
 
   return (
-    <div className="relative h-full overflow-hidden rounded-lg border border-white/8 bg-zinc-950">
+    <div className="relative h-full overflow-hidden rounded-lg border border-white/8 bg-layer-950">
       {/* toolbar */}
       <div className="absolute top-0 inset-x-0 flex items-center gap-2 border-b border-white/8 bg-black/60 px-3 py-1.5 z-10">
-        <PenLine className="h-3 w-3 text-fuchsia-400" />
+        <PenLine className="h-3 w-3 text-accent-primary400" />
         <span className="text-[10px] font-semibold text-white/60">Sprint Planning Board</span>
         <div className="ml-auto flex items-center gap-1">
           {cursors.map(c => (
@@ -298,14 +298,14 @@ function WhiteboardMockup() {
       {/* canvas */}
       <div className="absolute inset-0 pt-8">
         {/* shapes */}
-        <div className="absolute left-[12%] top-[25%] h-14 w-24 rounded-lg border border-violet-500/40 bg-violet-500/8 flex items-center justify-center">
-          <span className="text-[9px] text-violet-300/60 font-medium">Auth Flow</span>
+        <div className="absolute left-[12%] top-[25%] h-14 w-24 rounded-lg border border-accent-subtle500/40 bg-accent-subtle500/8 flex items-center justify-center">
+          <span className="text-[9px] text-accent-primary300/60 font-medium">Auth Flow</span>
         </div>
-        <div className="absolute left-[45%] top-[30%] h-10 w-20 rounded border border-indigo-500/40 bg-indigo-500/8 flex items-center justify-center">
-          <span className="text-[9px] text-indigo-300/60 font-medium">API Layer</span>
+        <div className="absolute left-[45%] top-[30%] h-10 w-20 rounded border border-accent-subtle500/40 bg-accent-subtle500/8 flex items-center justify-center">
+          <span className="text-[9px] text-accent-primary300/60 font-medium">API Layer</span>
         </div>
-        <div className="absolute left-[68%] top-[50%] h-10 w-[70px] rounded-full border border-pink-500/40 bg-pink-500/8 flex items-center justify-center">
-          <span className="text-[9px] text-pink-300/60 font-medium">Deploy</span>
+        <div className="absolute left-[68%] top-[50%] h-10 w-[70px] rounded-full border border-accent-subtle500/40 bg-accent-subtle500/8 flex items-center justify-center">
+          <span className="text-[9px] text-accent-primary300/60 font-medium">Deploy</span>
         </div>
         {/* arrow line SVG */}
         <svg className="absolute inset-0 h-full w-full pointer-events-none">
@@ -335,15 +335,15 @@ function WhiteboardMockup() {
 // ── Members/workspace widget ──────────────────────────────────────────────────
 function MembersMockup() {
   const members = [
-    { initials: 'JD', name: 'James D.', role: 'Owner', color: 'bg-violet-500/20 text-violet-400' },
-    { initials: 'AL', name: 'Alex Liu', role: 'Admin', color: 'bg-blue-500/20 text-blue-400' },
-    { initials: 'MK', name: 'Maria K.', role: 'Member', color: 'bg-rose-500/20 text-rose-400' },
-    { initials: 'SB', name: 'Sam B.', role: 'Member', color: 'bg-amber-500/20 text-amber-400' },
+    { initials: 'JD', name: 'James D.', role: 'Owner', color: 'bg-accent-subtle500/20 text-accent-primary400' },
+    { initials: 'AL', name: 'Alex Liu', role: 'Admin', color: 'bg-accent-primary500/20 text-accent-primary400' },
+    { initials: 'MK', name: 'Maria K.', role: 'Member', color: 'bg-danger-subtle500/20 text-danger-primary400' },
+    { initials: 'SB', name: 'Sam B.', role: 'Member', color: 'bg-warning-subtle500/20 text-warning-primary400' },
   ]
   return (
     <div className="flex flex-col h-full overflow-hidden rounded-lg border border-white/8 bg-black/40">
       <div className="flex items-center gap-1.5 border-b border-white/8 px-3 py-2">
-        <Users className="h-3 w-3 text-sky-400" />
+        <Users className="h-3 w-3 text-accent-primary400" />
         <span className="text-[10px] font-semibold text-white/70">Workspace Members</span>
       </div>
       <div className="flex flex-1 flex-col gap-0.5 p-2">
@@ -378,7 +378,7 @@ function BentoCard({
       whileInView="visible"
       viewport={{ once: true }}
       transition={{ duration: 0.5, delay }}
-      className={`flex flex-col overflow-hidden rounded-xl border border-white/8 bg-zinc-900/80 p-5 hover:border-white/15 transition-colors ${className}`}
+      className={`flex flex-col overflow-hidden rounded-xl border border-white/8 bg-layer-900/80 p-5 hover:border-white/15 transition-colors ${className}`}
     >
       {children}
     </motion.div>
@@ -388,8 +388,8 @@ function BentoCard({
 function CardLabel({ icon, title, description }: { icon: React.ReactNode; title: string; description: string }) {
   return (
     <div className="mt-4 shrink-0">
-      <h3 className="flex items-center gap-2 text-base font-bold text-white">{icon}{title}</h3>
-      <p className="mt-0.5 text-xs text-white/40 leading-relaxed">{description}</p>
+      <h3 className="flex items-center gap-2 text-16 font-bold text-white">{icon}{title}</h3>
+      <p className="mt-0.5 text-12 text-white/40 leading-relaxed">{description}</p>
     </div>
   )
 }
@@ -401,7 +401,7 @@ export function FeaturesBentoSection() {
         {/* Header */}
         <div className="mb-12">
           <motion.h2
-            className="max-w-xl text-3xl font-black tracking-tight text-white md:text-5xl leading-tight"
+            className="max-w-xl text-28 font-black tracking-tight text-white md:text-40 leading-tight"
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -421,7 +421,7 @@ export function FeaturesBentoSection() {
           <BentoCard className="md:col-span-3 md:row-span-2" delay={0}>
             <div className="flex-1 min-h-0"><ChatMockup /></div>
             <CardLabel
-              icon={<MessageSquare className="h-4 w-4 text-violet-400" />}
+              icon={<MessageSquare className="h-4 w-4 text-accent-primary400" />}
               title="Chat"
               description="Channels, threads, group DMs, reactions, typing indicators and read receipts — 58 APIs, 13 WS events."
             />
@@ -435,7 +435,7 @@ export function FeaturesBentoSection() {
               </div>
             </div>
             <CardLabel
-              icon={<Layers className="h-4 w-4 text-indigo-400" />}
+              icon={<Layers className="h-4 w-4 text-accent-primary400" />}
               title="Issues & Kanban"
               description="Custom statuses, labels, drag-and-drop reorder, S3 attachments — 19 APIs across the full issue lifecycle."
             />
@@ -445,7 +445,7 @@ export function FeaturesBentoSection() {
           <BentoCard className="md:col-span-4 md:row-span-2" delay={0.12}>
             <div className="flex-1 min-h-0"><PagesMockup /></div>
             <CardLabel
-              icon={<FileText className="h-4 w-4 text-pink-400" />}
+              icon={<FileText className="h-4 w-4 text-accent-primary400" />}
               title="Pages"
               description="Live collaborative docs — real-time cursor presence, simultaneous editing, page locking. 4 WS events."
             />
@@ -455,7 +455,7 @@ export function FeaturesBentoSection() {
           <BentoCard className="md:col-span-2" delay={0.18}>
             <div className="flex-1 min-h-0"><VaultMockup /></div>
             <CardLabel
-              icon={<ShieldCheck className="h-4 w-4 text-emerald-400" />}
+              icon={<ShieldCheck className="h-4 w-4 text-success-primary400" />}
               title="Vault"
               description="S3-backed file storage with nested folders and role-based access."
             />
@@ -465,7 +465,7 @@ export function FeaturesBentoSection() {
           <BentoCard className="md:col-span-2" delay={0.24}>
             <div className="flex-1 min-h-0"><SyncWidget /></div>
             <CardLabel
-              icon={<Zap className="h-4 w-4 text-violet-400" />}
+              icon={<Zap className="h-4 w-4 text-accent-primary400" />}
               title="Real-time Sync"
               description="Sub-16ms updates across every tab via WebSocket events."
             />
@@ -475,7 +475,7 @@ export function FeaturesBentoSection() {
           <BentoCard className="md:col-span-4" delay={0.3}>
             <div className="flex-1 min-h-0"><WhiteboardMockup /></div>
             <CardLabel
-              icon={<PenLine className="h-4 w-4 text-fuchsia-400" />}
+              icon={<PenLine className="h-4 w-4 text-accent-primary400" />}
               title="Whiteboard"
               description="Infinite canvas with live cursors, pointer sync, selection awareness — 7 WS events, board locking."
             />
@@ -485,7 +485,7 @@ export function FeaturesBentoSection() {
           <BentoCard className="md:col-span-2" delay={0.36}>
             <div className="flex-1 min-h-0"><MembersMockup /></div>
             <CardLabel
-              icon={<Lock className="h-4 w-4 text-sky-400" />}
+              icon={<Lock className="h-4 w-4 text-accent-primary400" />}
               title="Roles & Access"
               description="Granular RBAC across workspace, project, channel, and file level."
             />

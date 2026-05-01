@@ -90,7 +90,7 @@ export function MemberActionsMenu({
                 <DropdownMenuItem
                   data-variant={isDestructive ? 'destructive' : undefined}
                   className={cn(
-                    'flex cursor-pointer items-center gap-2.5 text-sm',
+                    'flex cursor-pointer items-center gap-2.5 text-14',
                   )}
                   onClick={() => {
                     if (action.key === 'remove') setConfirmRemove(true)

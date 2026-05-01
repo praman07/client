@@ -159,7 +159,7 @@ function ImageAttachment({
       */}
       <div
         className={cn(
-          'relative max-w-[320px] rounded-lg border border-subtle bg-layer-1 overflow-hidden cursor-zoom-in shadow-sm hover:brightness-95 transition-all duration-150',
+          'relative max-w-[320px] rounded-lg border border-subtle bg-layer-1 overflow-hidden cursor-zoom-in shadow-raised-100 hover:brightness-95 transition-all duration-150',
           className,
         )}
         style={{ aspectRatio: '4 / 3' }}

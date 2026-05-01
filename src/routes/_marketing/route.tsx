@@ -25,9 +25,9 @@ const navItems = [
 
 // Reusable button style helpers — avoids NavbarButton as={Link} TS union issue
 const btnPrimary =
-  'px-4 py-2 rounded-full text-sm font-bold bg-foreground text-background hover:-translate-y-0.5 transition duration-200 hover:bg-foreground/90';
+  'px-4 py-2 rounded-full text-14 font-bold bg-foreground text-background hover:-translate-y-0.5 transition duration-200 hover:bg-foreground/90';
 const btnSecondary =
-  'px-4 py-2 rounded-full text-sm font-bold bg-transparent text-foreground hover:-translate-y-0.5 transition duration-200 hover:bg-white/8';
+  'px-4 py-2 rounded-full text-14 font-bold bg-transparent text-primary hover:-translate-y-0.5 transition duration-200 hover:bg-white/8';
 
 function MarketingNavbar() {
   const { isSignedIn, isLoaded } = useAuth();
@@ -39,9 +39,9 @@ function MarketingNavbar() {
       <NavBody>
         <Link
           to="/"
-          className="relative z-20 flex items-center gap-2 font-black text-xl tracking-tighter text-foreground mr-4 shrink-0"
+          className="relative z-20 flex items-center gap-2 font-black text-20 tracking-tighter text-primary mr-4 shrink-0"
         >
-          <span className="text-2xl leading-none">❖</span>
+          <span className="text-24 leading-none">❖</span>
           Collabify
         </Link>
 
@@ -49,7 +49,7 @@ function MarketingNavbar() {
 
         <div className="relative z-20 flex items-center gap-2 shrink-0">
           {!isLoaded ? (
-            <div className="w-24 h-9 bg-white/10 animate-pulse rounded-full" />
+            <div className="w-24 h-9 bg-white/10 animate-pulse-subtle rounded-full" />
           ) : isSignedIn ? (
             <Link to="/home" className={btnPrimary}>
               Go to Dashboard
@@ -72,9 +72,9 @@ function MarketingNavbar() {
         <MobileNavHeader>
           <Link
             to="/"
-            className="flex items-center gap-2 font-black text-xl tracking-tighter text-foreground"
+            className="flex items-center gap-2 font-black text-20 tracking-tighter text-primary"
           >
-            <span className="text-2xl leading-none">❖</span>
+            <span className="text-24 leading-none">❖</span>
             Collabify
           </Link>
           <MobileNavToggle
@@ -92,7 +92,7 @@ function MarketingNavbar() {
               key={`mob-${idx}`}
               to={item.link}
               onClick={() => setIsMobileMenuOpen(false)}
-              className="relative text-foreground/70 hover:text-foreground transition-colors font-medium"
+              className="relative text-primary/70 hover:text-primary transition-colors font-medium"
             >
               {item.name}
             </Link>
@@ -134,7 +134,7 @@ function MarketingNavbar() {
 
 function MarketingLayout() {
   return (
-    <div className="dark marketing-dark relative flex min-h-screen flex-col bg-background font-sans text-foreground selection:bg-primary/30">
+    <div className="dark marketing-dark relative flex min-h-screen flex-col bg-background font-sans text-primary selection:bg-primary/30">
       <div className="fixed top-0 left-0 right-0 h-[600px] w-full bg-linear-to-b from-white/5 via-transparent to-transparent pointer-events-none -z-10" />
 
       <MarketingNavbar />

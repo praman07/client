@@ -25,7 +25,7 @@ export function MemberGridCard({
   actorUserId,
 }: MemberGridCardProps) {
   return (
-    <div className="relative group rounded-xl border border-subtle bg-layer-1 p-5 flex flex-col items-center gap-3 hover:border-subtle hover:bg-layer-1-hover transition-all duration-[--transition-expressive] hover:shadow-lg">
+    <div className="relative group rounded-xl border border-subtle bg-layer-1 p-5 flex flex-col items-center gap-3 hover:border-subtle hover:bg-layer-1-hover transition-all duration-[--transition-expressive] hover:shadow-overlay-100">
       {/* Actions menu — top-right absolute */}
       <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity">
         <MemberActionsMenu 
@@ -39,7 +39,7 @@ export function MemberGridCard({
       {/* Avatar — large */}
       <Avatar className="h-16 w-16 border-2 border-subtle group-hover:border-accent-subtle transition-colors">
         <AvatarImage src={member.user.avatarUrl ?? undefined} />
-        <AvatarFallback className="text-xl font-semibold bg-layer-2">
+        <AvatarFallback className="text-20 font-semibold bg-layer-2">
           {(member.user.fullName ?? member.user.email)[0]?.toUpperCase()}
         </AvatarFallback>
       </Avatar>

@@ -68,8 +68,8 @@ export function ProjectGeneralSettings({
       <section className="space-y-6">
         <div className="flex items-center gap-3">
           <div>
-            <h3 className="text-sm font-semibold">General Settings</h3>
-            <p className="text-sm text-secondary">
+            <h3 className="text-14 font-semibold">General Settings</h3>
+            <p className="text-14 text-secondary">
               Update your project's name, key, description and icon.
             </p>
           </div>
@@ -129,8 +129,8 @@ export function ProjectGeneralSettings({
           {/* Delete */}
           <div className="flex items-center justify-between px-4 py-3 gap-4">
             <div className="min-w-0">
-              <p className="text-sm font-medium">Delete project</p>
-              <p className="text-xs text-secondary">
+              <p className="text-14 font-medium">Delete project</p>
+              <p className="text-12 text-secondary">
                 Permanently delete this project and all its data. This cannot be
                 undone.
               </p>

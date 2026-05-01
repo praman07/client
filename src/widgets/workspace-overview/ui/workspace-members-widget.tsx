@@ -5,7 +5,7 @@ import { useWorkspaceOverview } from '@/entities/workspace/hooks'
 
 function WorkspaceMembersSkeleton() {
   return (
-    <Card className="flex flex-col p-6 shadow-sm">
+    <Card className="flex flex-col p-6 shadow-raised-100">
       <div className="flex items-center justify-between mb-5">
         <Skeleton className="h-3.5 w-36" />
         <Skeleton className="h-3 w-16" />
@@ -44,7 +44,7 @@ export function WorkspaceMembersWidget() {
       {members.map((member) => (
         <Avatar
           key={member.userId}
-          className="w-10 h-10 border-2 border-subtle hover:-translate-y-1 hover:z-10 transition-all cursor-pointer shadow-sm relative"
+          className="w-10 h-10 border-2 border-subtle hover:-translate-y-1 hover:z-10 transition-all cursor-pointer shadow-raised-100 relative"
         >
             {member.avatarUrl && <AvatarImage src={member.avatarUrl} alt={member.fullName ?? member.email} />}
             <AvatarFallback>
@@ -53,7 +53,7 @@ export function WorkspaceMembersWidget() {
           </Avatar>
         ))}
 {overflowCount > 0 && (
-        <div className="relative z-0 flex items-center justify-center w-10 h-10 rounded-full border-2 border-subtle bg-layer-2 shadow-sm text-11 text-primary font-mono font-medium hover:-translate-y-1 hover:z-10 transition-all cursor-pointer">
+        <div className="relative z-0 flex items-center justify-center w-10 h-10 rounded-full border-2 border-subtle bg-layer-2 shadow-raised-100 text-11 text-primary font-mono font-medium hover:-translate-y-1 hover:z-10 transition-all cursor-pointer">
           +{overflowCount}
         </div>
       )}

@@ -17,7 +17,7 @@ export function ManifestoSection() {
 
       <div className="relative mx-auto max-w-4xl">
         {/* Eyebrow */}
-        <p className="mb-6 text-center text-xs font-bold uppercase tracking-[0.35em] text-muted-foreground/60">
+        <p className="mb-6 text-center text-12 font-bold uppercase tracking-[0.35em] text-tertiary/60">
           Our Philosophy
         </p>
 
@@ -29,7 +29,7 @@ export function ManifestoSection() {
           baseRotation={2}
           blurStrength={6}
           containerClassName="text-center"
-          textClassName="text-foreground/90 font-black leading-relaxed"
+          textClassName="text-primary/90 font-black leading-relaxed"
           rotationEnd="bottom 80%"
           wordAnimationEnd="bottom 70%"
         >
@@ -37,7 +37,7 @@ export function ManifestoSection() {
         </ScrollReveal>
 
         {/* Subtle strap below */}
-        <p className="mt-10 text-center text-sm text-muted-foreground/50 font-medium tracking-wide">
+        <p className="mt-10 text-center text-14 text-tertiary/50 font-medium tracking-wide">
           Built by a team tired of paying $300/mo for three tools that don't talk to each other.
         </p>
       </div>

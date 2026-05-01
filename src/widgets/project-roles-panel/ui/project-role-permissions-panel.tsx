@@ -84,7 +84,7 @@ function EditableText({ value, onCommit, disabled, placeholder, multiline, class
 
   if (disabled) {
     return (
-      <span className={cn('text-sm text-secondary', className)}>
+      <span className={cn('text-14 text-secondary', className)}>
         {value || <span className="italic text-disabled">{placeholder}</span>}
       </span>
     )
@@ -95,7 +95,7 @@ function EditableText({ value, onCommit, disabled, placeholder, multiline, class
       value: draft,
       onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setDraft(e.target.value),
       autoFocus: true,
-      className: 'text-sm',
+      className: 'text-14',
       placeholder,
     }
     return (
@@ -117,7 +117,7 @@ function EditableText({ value, onCommit, disabled, placeholder, multiline, class
 
   return (
     <div className={cn('flex items-center gap-1.5 group/edit flex-1 min-w-0', className)}>
-      <span className="text-sm truncate">
+      <span className="text-14 truncate">
         {value || <span className="italic text-secondary opacity-60">{placeholder}</span>}
       </span>
       <button
@@ -160,7 +160,7 @@ function PermissionGroup({
         className="w-full flex items-center justify-between px-4 py-2.5 bg-layer-2 hover:bg-layer-2-hover transition-colors"
       >
         <div className="flex items-center gap-2">
-          <span className="text-xs font-semibold uppercase tracking-wider text-secondary">
+          <span className="text-12 font-semibold uppercase tracking-wider text-secondary">
             {groupName}
           </span>
           <Badge variant="secondary" className="text-[9px] h-4 px-1.5">
@@ -181,7 +181,7 @@ function PermissionGroup({
               )}
             >
               <div className="space-y-0.5 flex-1 min-w-0 pr-4">
-                <span className="text-sm font-medium">
+                <span className="text-14 font-medium">
                   {perm.name || `${perm.resource}:${perm.action}`}
                 </span>
                 <p className="text-[11px] text-secondary font-mono">
@@ -310,7 +310,7 @@ export function ProjectRolePermissionsPanel({
   )
 
   return (
-    <Card className="flex flex-col h-full shadow-sm border-muted/60">
+    <Card className="flex flex-col h-full shadow-raised-100 border-muted/60">
       {/* ── Header ── */}
       <CardHeader className="pb-3 border-b space-y-0">
         <div className="flex flex-col sm:flex-row sm:items-center gap-4 min-w-0">
@@ -326,7 +326,7 @@ export function ProjectRolePermissionsPanel({
                 onCommit={setName}
                 disabled={!canEditIdentity}
                 placeholder="Role name"
-                className="font-semibold text-base"
+                className="font-semibold text-16"
               />
               {role.isSystem && (
                 <Badge variant="secondary" className="text-[9px] h-4 px-1.5 uppercase tracking-wide shrink-0">
@@ -345,7 +345,7 @@ export function ProjectRolePermissionsPanel({
                   size="sm"
                   onClick={handleCancel}
                   disabled={isSaving}
-                  className="h-8 text-xs flex-1 sm:flex-none"
+                  className="h-8 text-12 flex-1 sm:flex-none"
                 >
                   <X className="h-3.5 w-3.5 mr-1" />
                   Cancel
@@ -354,7 +354,7 @@ export function ProjectRolePermissionsPanel({
                   size="sm"
                   onClick={handleSave}
                   disabled={isSaving}
-                  className="h-8 text-xs px-4 flex-1 sm:flex-none"
+                  className="h-8 text-12 px-4 flex-1 sm:flex-none"
                 >
                   {isSaving ? 'Saving…' : 'Save'}
                 </Button>
@@ -392,7 +392,7 @@ export function ProjectRolePermissionsPanel({
           <div className="shrink-0 w-full sm:w-24">
             <p className="text-[10px] font-semibold uppercase tracking-wider text-secondary mb-1">Rank</p>
             {!canEditIdentity ? (
-              <span className="text-sm text-secondary">{rank}</span>
+              <span className="text-14 text-secondary">{rank}</span>
             ) : (
               <Input
                 type="number"
@@ -411,14 +411,14 @@ export function ProjectRolePermissionsPanel({
                 disabled={isSaving}
                 min={0}
                 max={99}
-                className="h-9 text-sm w-full [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                className="h-9 text-14 w-full [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
               />
             )}
           </div>
         </div>
 
         {role.isSystem && (
-          <p className="pl-0 sm:pl-10 mt-3 sm:mt-2 text-xs text-secondary italic">
+          <p className="pl-0 sm:pl-10 mt-3 sm:mt-2 text-12 text-secondary italic">
             System roles are managed by Collabify and cannot be modified.
           </p>
         )}
@@ -426,12 +426,12 @@ export function ProjectRolePermissionsPanel({
 
       {/* ── Permissions Matrix ── */}
       <CardContent className="flex-1 overflow-y-auto py-5 space-y-3">
-        <p className="text-xs font-semibold uppercase tracking-wider text-secondary mb-4">
+        <p className="text-12 font-semibold uppercase tracking-wider text-secondary mb-4">
           Permissions
         </p>
 
         {availablePermissions.length === 0 ? (
-          <div className="flex items-center justify-center h-32 text-sm text-secondary border-2 border-dashed rounded-lg">
+          <div className="flex items-center justify-center h-32 text-14 text-secondary border-2 border-dashed rounded-lg">
             No project permissions available
           </div>
         ) : (

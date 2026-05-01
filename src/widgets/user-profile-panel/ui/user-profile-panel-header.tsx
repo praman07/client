@@ -33,16 +33,16 @@ export function UserProfilePanelHeader({
     <div className="flex items-start gap-4 px-6 py-5 border-b border-subtle">
       <Avatar className="h-24 w-24 rounded-xl shrink-0">
         <AvatarImage src={avatarUrl} alt={displayName} />
-        <AvatarFallback className="rounded-xl text-2xl font-semibold">
+        <AvatarFallback className="rounded-xl text-24 font-semibold">
           {initials}
         </AvatarFallback>
       </Avatar>
       <div className="flex flex-col gap-1 min-w-0 flex-1">
-        <h2 className="text-lg font-semibold text-primary truncate">
+        <h2 className="text-18 font-semibold text-primary truncate">
           {displayName}
         </h2>
         <div className="flex items-center gap-2">
-          <p className="text-sm text-secondary truncate">{email}</p>
+          <p className="text-14 text-secondary truncate">{email}</p>
           <Button
             variant="ghost"
             size="icon-sm"

@@ -65,7 +65,7 @@ export function CreateBoardForm({
       className="space-y-4"
     >
       {rootError && (
-        <div className="rounded-md bg-danger-subtle p-3 text-sm text-danger-primary">
+        <div className="rounded-md bg-danger-subtle p-3 text-14 text-danger-primary">
           {rootError}
         </div>
       )}
@@ -95,7 +95,7 @@ export function CreateBoardForm({
               autoFocus
             />
             {field.state.meta.errors.length > 0 && (
-              <p className="text-sm text-danger-primary">
+              <p className="text-14 text-danger-primary">
                 {field.state.meta.errors.join(', ')}
               </p>
             )}
@@ -129,12 +129,12 @@ export function CreateBoardForm({
               maxHeight="xl"
             />
             {field.state.meta.errors.length > 0 && (
-              <p className="text-sm text-danger-primary">
+              <p className="text-14 text-danger-primary">
                 {field.state.meta.errors.join(', ')}
               </p>
             )}
             {field.state.value && (
-              <p className="text-sm text-secondary">
+              <p className="text-14 text-secondary">
                 {field.state.value.length}/500 characters
               </p>
             )}

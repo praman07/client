@@ -14,10 +14,10 @@ export function PendingInvitesSection({ invites }: Props) {
       {/* Section header */}
       <div className="flex items-center gap-2">
         <MailIcon className="h-4 w-4 text-[--txt-secondary]" />
-        <h2 className="text-sm font-semibold text-[--txt-primary]">
+        <h2 className="text-14 font-semibold text-[--txt-primary]">
           Pending Invites
         </h2>
-        <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-[--accent-primary] px-1.5 text-xs font-medium text-white">
+        <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-[--accent-primary] px-1.5 text-12 font-medium text-white">
           {invites.length}
         </span>
       </div>

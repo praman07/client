@@ -66,7 +66,7 @@ export const ListHeader = (props: ListHeaderProps) =>
         className="h-2 w-2 rounded-full"
         style={{ backgroundColor: props.color }}
       />
-      <p className="m-0 font-semibold text-sm">{props.name}</p>
+      <p className="m-0 font-semibold text-14">{props.name}</p>
     </div>
   )
 
@@ -117,7 +117,7 @@ export const ListItem = ({
   return (
     <div
       className={cn(
-        'flex cursor-grab items-center gap-2 rounded-md border bg-background p-2 shadow-sm',
+        'flex cursor-grab items-center gap-2 rounded-md border bg-background p-2 shadow-raised-100',
         isDragging && 'opacity-50',
         className,
       )}
@@ -130,7 +130,7 @@ export const ListItem = ({
       {...attributes}
       ref={setNodeRef}
     >
-      {children ?? <p className="m-0 font-medium text-sm">{name}</p>}
+      {children ?? <p className="m-0 font-medium text-14">{name}</p>}
     </div>
   )
 }
@@ -276,8 +276,8 @@ export function Demo() {
         </div>
         <DragOverlay>
           {activeItem ? (
-            <div className="flex cursor-grabbing items-center gap-2 rounded-md border bg-background p-2 shadow-lg">
-              <p className="m-0 font-medium text-sm">{activeItem.name}</p>
+            <div className="flex cursor-grabbing items-center gap-2 rounded-md border bg-background p-2 shadow-overlay-100">
+              <p className="m-0 font-medium text-14">{activeItem.name}</p>
             </div>
           ) : null}
         </DragOverlay>

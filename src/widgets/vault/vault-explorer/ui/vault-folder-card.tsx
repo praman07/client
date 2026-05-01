@@ -52,7 +52,7 @@ export function VaultFolderCard({
           }}
         >
           <Folder
-            className="h-16 w-16 drop-shadow-sm"
+            className="h-16 w-16 drop-shadow-raised-100"
             style={{ color: 'var(--ext-violet-500)' }}
             strokeWidth={1.5}
           />

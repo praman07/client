@@ -137,10 +137,10 @@ export function EditIssueSidebar({
 
       <div className="flex flex-col gap-0.5">
         <SidebarRow label="Author">
-          <span className="text-xs truncate">{createdByName}</span>
+          <span className="text-12 truncate">{createdByName}</span>
         </SidebarRow>
         <SidebarRow label="Created">
-          <span className="text-xs text-muted-foreground whitespace-nowrap">
+          <span className="text-12 text-tertiary whitespace-nowrap">
             {formattedDate}
           </span>
         </SidebarRow>

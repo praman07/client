@@ -20,7 +20,7 @@ export function WorkspaceCard({ workspace }: WorkspaceCardProps) {
           <div className="flex items-start justify-between gap-3">
             <Avatar className="w-12 h-12 rounded-lg bg-layer-2 border border-subtle shrink-0">
               <AvatarImage src={workspace.logoUrl ?? undefined} alt={workspace.name} />
-              <AvatarFallback className="rounded-lg text-lg font-semibold text-primary">
+              <AvatarFallback className="rounded-lg text-18 font-semibold text-primary">
                 {workspace.name.slice(0, 2).toUpperCase()}
               </AvatarFallback>
             </Avatar>

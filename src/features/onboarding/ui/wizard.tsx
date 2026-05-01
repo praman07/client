@@ -30,12 +30,12 @@ export function OnboardingWizard({ step }: OnboardingWizardProps) {
   if (step === 'needs_workspace') {
     return (
       <div className="flex h-screen w-full flex-col items-center justify-center bg-background p-4">
-        <Card className="w-full max-w-md animate-in fade-in zoom-in-95 duration-500 shadow-lg">
+        <Card className="w-full max-w-md animate-in fade-in zoom-in-95 duration-500 shadow-overlay-100">
           <CardHeader className="space-y-1 text-center">
             <div className="mx-auto mb-2 flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
               <Building2 className="h-6 w-6 text-primary" />
             </div>
-            <CardTitle className="text-2xl font-bold tracking-tight">
+            <CardTitle className="text-24 font-bold tracking-tight">
               Create your workspace
             </CardTitle>
             <CardDescription>
@@ -44,7 +44,7 @@ export function OnboardingWizard({ step }: OnboardingWizardProps) {
           </CardHeader>
           <CardContent className="space-y-4">
             {creationError && (
-              <p className="rounded-lg border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive text-center">
+              <p className="rounded-lg border border-destructive/30 bg-destructive/10 px-3 py-2 text-14 text-danger-primary text-center">
                 {creationError}
               </p>
             )}
@@ -75,9 +75,9 @@ export function OnboardingWizard({ step }: OnboardingWizardProps) {
 
   return (
     <div className="flex h-screen w-full flex-col items-center justify-center bg-background p-4">
-      <Card className="w-full max-w-md animate-in fade-in zoom-in-95 duration-500 shadow-lg">
+      <Card className="w-full max-w-md animate-in fade-in zoom-in-95 duration-500 shadow-overlay-100">
         <CardHeader className="space-y-1 text-center">
-          <CardTitle className="text-2xl font-bold tracking-tight">
+          <CardTitle className="text-24 font-bold tracking-tight">
             {step === 'redirecting' ? 'All set!' : 'Setting up your account'}
           </CardTitle>
           <CardDescription>
@@ -89,7 +89,7 @@ export function OnboardingWizard({ step }: OnboardingWizardProps) {
         <CardContent className="space-y-6">
           <div className="flex justify-center py-4">
             <div className="relative">
-              <div className="absolute inset-0 animate-ping rounded-full bg-primary/20" />
+              <div className="absolute inset-0 animate-pulse-subtle rounded-full bg-primary/20" />
               <div className="relative rounded-full bg-primary/10 p-4">
                 <Loader2 className="h-8 w-8 animate-spin text-primary" />
               </div>
@@ -97,9 +97,9 @@ export function OnboardingWizard({ step }: OnboardingWizardProps) {
           </div>
           <div className="space-y-2">
             <Progress value={progressValue} className="h-2 w-full" />
-            <div className="flex justify-between text-xs text-muted-foreground">
+            <div className="flex justify-between text-12 text-tertiary">
               <span>Setup</span>
-              <span className="font-medium animate-pulse">
+              <span className="font-medium animate-pulse-subtle">
                 {step === 'loading' && 'Checking account…'}
                 {step === 'redirecting' && 'Finalizing…'}
               </span>

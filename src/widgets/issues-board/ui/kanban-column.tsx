@@ -99,7 +99,7 @@ export function KanbanColumn({
         <StatusPill status={status} />
         <Badge
           variant="default"
-          className="ml-auto rounded-full px-2 py-0 text-xs"
+          className="ml-auto rounded-full px-2 py-0 text-12"
         >
           {issues.length}
         </Badge>
@@ -126,7 +126,7 @@ export function KanbanColumn({
             {/* Empty column drop zone */}
             {issues.length === 0 && (
               <div
-                className={`flex min-h-20 items-center justify-center rounded-md border-2 border-dashed py-8 text-xs text-secondary transition-colors ${
+                className={`flex min-h-20 items-center justify-center rounded-md border-2 border-dashed py-8 text-12 text-secondary transition-colors ${
                   isOver ? 'border-accent-subtle text-primary' : 'border-subtle'
                 }`}
               >
@@ -143,7 +143,7 @@ export function KanbanColumn({
         <Button
           variant="ghost"
           size="sm"
-          className="w-full justify-start text-xs text-secondary hover:text-primary"
+          className="w-full justify-start text-12 text-secondary hover:text-primary"
           onClick={() => onAddIssue(status.id)}
         >
           <Plus className="mr-1.5 h-3.5 w-3.5" />

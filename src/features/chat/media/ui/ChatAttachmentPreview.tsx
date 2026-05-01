@@ -117,10 +117,10 @@ function AttachmentCard({
           <>
             <FileTypeIcon mimeType={attachment.mimeType} className="size-4 shrink-0" />
             <div className="flex flex-col min-w-0">
-              <span className="text-xs font-medium text-foreground truncate leading-tight">
+              <span className="text-12 font-medium text-primary truncate leading-tight">
                 {attachment.name}
               </span>
-              <span className="text-xs text-muted-foreground leading-tight">
+              <span className="text-12 text-tertiary leading-tight">
                 {formatBytes(attachment.sizeBytes)}
               </span>
             </div>
@@ -145,7 +145,7 @@ function AttachmentCard({
           <div className="absolute inset-0 flex items-center justify-center bg-danger-subtle rounded-lg">
             <button
               onClick={(e) => { e.stopPropagation(); onRetry() }}
-              className="flex items-center justify-center size-6 rounded-full bg-layer-1/90 border border-danger-strong text-danger-primary hover:bg-danger-primary hover:text-on-color transition-colors shadow-sm"
+              className="flex items-center justify-center size-6 rounded-full bg-layer-1/90 border border-danger-strong text-danger-primary hover:bg-danger-primary hover:text-on-color transition-colors shadow-raised-100"
               title="Retry upload"
               aria-label={`Retry uploading ${attachment.name}`}
             >
@@ -163,7 +163,7 @@ function AttachmentCard({
         }}
         className={cn(
           'absolute -top-1.5 -right-1.5 size-4 rounded-full bg-layer-1 border border-subtle',
-          'flex items-center justify-center shadow-sm',
+          'flex items-center justify-center shadow-raised-100',
           'text-secondary hover:text-danger-primary hover:border-danger-primary transition-colors',
           'opacity-0 group-hover/card:opacity-100',
           (!isUploading || isFailed) && 'opacity-100',

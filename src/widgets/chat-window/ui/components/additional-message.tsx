@@ -181,7 +181,7 @@ export function AdditionalMessage({ message }: AdditionalMessageProps) {
         <MessageEventBody>
           {/* ── Tombstone ────────────────────────────────────── */}
           {message.deletedAt ? (
-            <div className="flex items-center gap-2 text-tertiary italic text-sm py-0.5 select-none">
+            <div className="flex items-center gap-2 text-tertiary italic text-14 py-0.5 select-none">
               <Trash2 className="h-3 w-3 shrink-0" />
               <span>This message was deleted.</span>
             </div>
@@ -200,7 +200,7 @@ export function AdditionalMessage({ message }: AdditionalMessageProps) {
               {message.parentMessageId && (
                 <button
                   onClick={() => scrollToMessage(message.parentMessageId!)}
-                  className="flex items-center gap-1.5 text-xs text-secondary hover:text-primary mb-1 border-l-2 border-subtle-1 hover:border-accent-subtle pl-2.5 py-0.5 max-h-10 overflow-hidden w-full text-left transition-colors rounded-sm"
+                  className="flex items-center gap-1.5 text-12 text-secondary hover:text-primary mb-1 border-l-2 border-subtle-1 hover:border-accent-subtle pl-2.5 py-0.5 max-h-10 overflow-hidden w-full text-left transition-colors rounded-sm"
                 >
                   <Reply className="h-3 w-3 shrink-0" />
                   {parentMessage ? (
@@ -348,7 +348,7 @@ export function AdditionalMessage({ message }: AdditionalMessageProps) {
 
               {/* ── Reply Count Badge ─────────────────────────────── */}
               {(message.replyCount ?? 0) > 0 && (
-                <button className="flex items-center gap-1 text-xs text-secondary hover:text-primary mt-1.5 transition-colors">
+                <button className="flex items-center gap-1 text-12 text-secondary hover:text-primary mt-1.5 transition-colors">
                   <MessageSquare className="h-3 w-3" />
                   <span>
                     {message.replyCount}{' '}

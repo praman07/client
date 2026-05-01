@@ -50,7 +50,7 @@ function MessageEventTitle({
   return (
     <span
       data-slot="chat-event-title"
-      className={cn('text-sm font-semibold leading-tight', className)}
+      className={cn('text-14 font-semibold leading-tight', className)}
       {...props}
     />
   )
@@ -76,7 +76,7 @@ function MessageEventContent({
   return (
     <div
       data-slot="chat-event-content"
-      className={cn('text-sm leading-relaxed min-w-0 wrap-break-words', className)}
+      className={cn('text-14 leading-relaxed min-w-0 wrap-break-words', className)}
       {...props}
     />
   )

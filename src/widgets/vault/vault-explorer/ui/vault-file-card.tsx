@@ -69,7 +69,7 @@ export function VaultFileCard({
             />
           ) : (
             <Icon
-              className="h-14 w-14 drop-shadow-sm"
+              className="h-14 w-14 drop-shadow-raised-100"
               style={{ color }}
               strokeWidth={1.25}
             />

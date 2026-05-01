@@ -55,16 +55,16 @@ export function MarketingFooter() {
       <div className="flex flex-col md:flex-row md:items-start md:justify-between p-10 gap-10">
         {/* Brand */}
         <div className="flex flex-col items-start gap-y-5 max-w-xs">
-          <Link to="/" className="flex items-center gap-2 font-black text-xl tracking-tighter">
-            <span className="text-foreground text-2xl leading-none">❖</span>
-            <span className="text-foreground">Collabify</span>
+          <Link to="/" className="flex items-center gap-2 font-black text-20 tracking-tighter">
+            <span className="text-primary text-24 leading-none">❖</span>
+            <span className="text-primary">Collabify</span>
           </Link>
-          <p className="text-sm text-muted-foreground leading-relaxed">
+          <p className="text-14 text-tertiary leading-relaxed">
             Replace Slack, Jira, and Notion with one real-time platform. Chat,
             plan, draw, and ship together — for free.
           </p>
           {/* SOC2 / trust badges placeholder — shown at correct size */}
-          <div className="flex items-center gap-3 text-[10px] uppercase tracking-widest text-muted-foreground/60 font-semibold">
+          <div className="flex items-center gap-3 text-[10px] uppercase tracking-widest text-tertiary/60 font-semibold">
             <span className="border border-border/40 rounded px-2 py-1">SOC2</span>
             <span className="border border-border/40 rounded px-2 py-1">GDPR</span>
             <span className="border border-border/40 rounded px-2 py-1">HIPAA</span>
@@ -76,13 +76,13 @@ export function MarketingFooter() {
           <div className="flex flex-col md:flex-row gap-8 md:justify-between lg:pl-10">
             {footerLinks.map((column, colIdx) => (
               <ul key={colIdx} className="flex flex-col gap-y-2 min-w-[120px]">
-                <li className="mb-2 text-xs font-bold uppercase tracking-widest text-foreground/50">
+                <li className="mb-2 text-12 font-bold uppercase tracking-widest text-primary/50">
                   {column.title}
                 </li>
                 {column.links.map((link) => (
                   <li
                     key={link.id}
-                    className="group inline-flex cursor-pointer items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors duration-200"
+                    className="group inline-flex cursor-pointer items-center gap-1 text-14 text-tertiary hover:text-primary transition-colors duration-200"
                   >
                     <Link to={link.url}>{link.title}</Link>
                     <div className="flex size-4 items-center justify-center border border-border/40 rounded translate-x-0 opacity-0 transition-all duration-300 ease-out group-hover:translate-x-1 group-hover:opacity-100">

@@ -196,7 +196,7 @@ export function EditIssueDescriptionEditor({
 
   if (isLoading) {
     return (
-      <div className="py-2 text-sm text-secondary animate-pulse">
+      <div className="py-2 text-14 text-secondary animate-pulse-subtle">
         Loading description…
       </div>
     )

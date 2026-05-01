@@ -55,7 +55,7 @@ function ChartContainer({
         data-slot="chart"
         data-chart={chartId}
         className={cn(
-          "[&_.recharts-cartesian-axis-tick_text]:fill-[var(--color-tertiary)] [&_.recharts-cartesian-grid_line[stroke='#ccc']]:stroke-subtle [&_.recharts-curve.recharts-tooltip-cursor]:stroke-subtle [&_.recharts-polar-grid_[stroke='#ccc']]:stroke-subtle [&_.recharts-radial-bar-background-sector]:fill-[var(--color-layer-2)] [&_.recharts-rectangle.recharts-tooltip-cursor]:fill-[var(--color-layer-2)] [&_.recharts-reference-line_[stroke='#ccc']]:stroke-subtle flex aspect-video justify-center text-xs [&_.recharts-dot[stroke='#fff']]:stroke-transparent [&_.recharts-layer]:outline-hidden [&_.recharts-sector]:outline-hidden [&_.recharts-sector[stroke='#fff']]:stroke-transparent [&_.recharts-surface]:outline-hidden",
+          "[&_.recharts-cartesian-axis-tick_text]:fill-[var(--color-tertiary)] [&_.recharts-cartesian-grid_line[stroke='#ccc']]:stroke-subtle [&_.recharts-curve.recharts-tooltip-cursor]:stroke-subtle [&_.recharts-polar-grid_[stroke='#ccc']]:stroke-subtle [&_.recharts-radial-bar-background-sector]:fill-[var(--color-layer-2)] [&_.recharts-rectangle.recharts-tooltip-cursor]:fill-[var(--color-layer-2)] [&_.recharts-reference-line_[stroke='#ccc']]:stroke-subtle flex aspect-video justify-center text-12 [&_.recharts-dot[stroke='#fff']]:stroke-transparent [&_.recharts-layer]:outline-hidden [&_.recharts-sector]:outline-hidden [&_.recharts-sector[stroke='#fff']]:stroke-transparent [&_.recharts-surface]:outline-hidden",
           className,
         )}
         {...props}

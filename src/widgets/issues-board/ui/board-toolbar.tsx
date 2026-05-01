@@ -40,7 +40,7 @@ export function BoardToolbar({
           <Button
             variant="ghost"
             size="sm"
-            className="h-8 gap-1.5 text-xs text-secondary hover:text-primary"
+            className="h-8 gap-1.5 text-12 text-secondary hover:text-primary"
             onClick={onManageStatuses}
           >
             <Settings2 className="h-3.5 w-3.5" />
@@ -51,7 +51,7 @@ export function BoardToolbar({
           <Button
             variant="ghost"
             size="sm"
-            className="h-8 gap-1.5 text-xs text-secondary hover:text-primary"
+            className="h-8 gap-1.5 text-12 text-secondary hover:text-primary"
             onClick={onManageLabels}
           >
             <Tags className="h-3.5 w-3.5" />

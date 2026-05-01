@@ -8,14 +8,14 @@ export function PricingSection() {
     >
       <div className="mx-auto max-w-7xl">
         <div className="mx-auto mb-10 max-w-2xl text-center space-y-4">
-          <p className="text-xs font-bold uppercase tracking-[0.3em] text-muted-foreground">
+          <p className="text-12 font-bold uppercase tracking-[0.3em] text-tertiary">
             Pricing
           </p>
-          <h2 className="text-3xl font-black tracking-tight text-foreground md:text-5xl">
+          <h2 className="text-28 font-black tracking-tight text-primary md:text-40">
             One flat price.{' '}
-            <span className="text-foreground/50 italic">No per-seat nonsense.</span>
+            <span className="text-primary/50 italic">No per-seat nonsense.</span>
           </h2>
-          <p className="text-muted-foreground text-base">
+          <p className="text-tertiary text-16">
             We charge the workspace owner — not every team member. Start free,
             upgrade when you need more.
           </p>

@@ -40,7 +40,7 @@ export function BoardDeletedOverlay({
           <h2 className="text-18 font-semibold tracking-tight">
             This board has been deleted
           </h2>
-          <p className="text-sm text-secondary">
+          <p className="text-14 text-secondary">
             The creator has permanently deleted this board.
           </p>
         </div>

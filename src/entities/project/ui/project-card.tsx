@@ -30,7 +30,7 @@ export function ProjectCard({ project, onClick }: ProjectCardProps) {
         <div className="flex items-center gap-3">
           <Avatar shape="square" className="size-8 rounded-md border border-subtle bg-layer-2 shrink-0">
             <AvatarImage src={project.logoUrl ?? undefined} alt={project.name} className="object-cover" />
-            <AvatarFallback className="text-xs font-medium text-secondary">
+            <AvatarFallback className="text-12 font-medium text-secondary">
               {project.name.slice(0, 2).toUpperCase()}
             </AvatarFallback>
           </Avatar>

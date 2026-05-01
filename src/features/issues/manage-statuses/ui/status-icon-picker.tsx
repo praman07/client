@@ -114,7 +114,7 @@ className={cn(
             if (e.key === 'Enter') handleHexCommit(e.currentTarget.value)
           }}
           placeholder="#6B7280"
-          className="h-7 text-xs font-mono"
+          className="h-7 text-12 font-mono"
           maxLength={7}
         />
       </PopoverContent>

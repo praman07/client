@@ -39,15 +39,15 @@ export function UserDropdown() {
       >
         <Avatar className="h-8 w-8">
           <AvatarImage src={user?.avatarUrl ?? undefined} alt={user?.fullName ?? 'User'} />
-          <AvatarFallback className="text-xs font-medium">{initials}</AvatarFallback>
+          <AvatarFallback className="text-12 font-medium">{initials}</AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
 
       <DropdownMenuContent align="end" className="w-52">
         {/* User Info */}
         <div className="px-2 py-1.5">
-          <p className="text-sm font-medium leading-none truncate">{user?.fullName ?? 'User'}</p>
-          <p className="text-xs text-secondary mt-0.5 truncate">{user?.email}</p>
+          <p className="text-14 font-medium leading-none truncate">{user?.fullName ?? 'User'}</p>
+          <p className="text-12 text-secondary mt-0.5 truncate">{user?.email}</p>
         </div>
 
         <DropdownMenuSeparator />

@@ -8,7 +8,7 @@ import { Skeleton } from '@/shared/ui'
  */
 export function MemberGridSkeleton() {
   return (
-    <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 animate-pulse">
+    <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 animate-pulse-subtle">
       {Array.from({ length: 10 }).map((_, i) => (
         <div key={i} className="rounded-xl border border-subtle bg-layer-1 p-5 flex flex-col items-center gap-4">
           {/* Avatar Skeleton */}

@@ -174,11 +174,7 @@ export function CreateIssueForm({
             onClick={onToggleExpand}
             title={isExpanded ? 'Collapse' : 'Expand'}
           >
-            <HugeiconsIcon
-              {isExpanded ? <Minimize2 className="size-4" /> : <Maximize2 className="size-4" />}
-              strokeWidth={2}
-              className="size-4"
-            />
+            {isExpanded ? <Minimize2 className="size-4" /> : <Maximize2 className="size-4" />}
           </Button>
           <Button
             type="button"
@@ -247,7 +243,7 @@ export function CreateIssueForm({
           type="button"
           variant="ghost"
           size="icon"
-          className="size-7 text-muted-foreground"
+          className="size-7 text-tertiary"
           title="Attach file"
           disabled
         >

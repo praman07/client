@@ -30,7 +30,7 @@ export function ProjectOverviewHeader({
         <div className="flex min-w-0 flex-col gap-1">
           <div className="flex flex-wrap items-center gap-2">
             {/* Project name */}
-            <h1 className="text-xl font-bold leading-tight text-primary">
+            <h1 className="text-20 font-bold leading-tight text-primary">
               {name}
             </h1>
 

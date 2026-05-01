@@ -212,7 +212,7 @@ export function ProjectGeneralForm({
                 </Label>
                 {/* Split key input: workspace prefix + editable key */}
                 <div className="flex h-10 rounded-md border border-subtle-1 bg-transparent overflow-hidden">
-                  <span className="flex items-center shrink-0 px-2 sm:px-3 text-xs sm:text-sm text-secondary bg-layer-2 border-r select-none">
+                  <span className="flex items-center shrink-0 px-2 sm:px-3 text-12 sm:text-14 text-secondary bg-layer-2 border-r select-none">
                     {workspaceSlug}/
                   </span>
                   <div className="relative flex-1 min-w-0">
@@ -272,9 +272,9 @@ export function ProjectGeneralForm({
                   maxLength={500}
                 />
                 {field.state.meta.errors[0] && (
-                  <p className="text-sm text-danger-primary">{field.state.meta.errors[0]}</p>
+                  <p className="text-14 text-danger-primary">{field.state.meta.errors[0]}</p>
                 )}
-                <p className="text-xs text-secondary text-right">
+                <p className="text-12 text-secondary text-right">
                   {field.state.value?.length ?? 0}/500
                 </p>
               </div>

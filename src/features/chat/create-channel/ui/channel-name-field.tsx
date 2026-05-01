@@ -63,7 +63,7 @@ export function ChannelNameField({ form, projectId }: Props) {
           </div>
 
           {field.state.meta.errors.length > 0 ? (
-            <p className="text-sm font-medium text-destructive">
+            <p className="text-14 font-medium text-danger-primary">
               {field.state.meta.errors.join(', ')}
             </p>
           ) : (

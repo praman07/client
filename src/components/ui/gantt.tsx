@@ -320,7 +320,7 @@ export const GanttContentHeader: FC<GanttContentHeaderProps> = ({
     >
       <div>
         <div
-          className="sticky inline-flex whitespace-nowrap px-3 py-2 text-muted-foreground text-xs"
+          className="sticky inline-flex whitespace-nowrap px-3 py-2 text-tertiary text-12"
           style={{
             left: 'var(--gantt-sidebar-width)',
           }}
@@ -336,7 +336,7 @@ export const GanttContentHeader: FC<GanttContentHeaderProps> = ({
       >
         {Array.from({ length: columns }).map((_, index) => (
           <div
-            className="shrink-0 border-border/50 border-b py-1 text-center text-xs"
+            className="shrink-0 border-border/50 border-b py-1 text-center text-12"
             key={`${id}-${index}`}
           >
             {renderHeaderItem(index)}
@@ -362,7 +362,7 @@ const DailyHeader: FC = () => {
                 <p>
                   {format(addDays(new Date(year.year, index, 1), item), 'd')}
                 </p>
-                <p className="text-muted-foreground">
+                <p className="text-tertiary">
                   {format(
                     addDays(new Date(year.year, index, 1), item),
                     'EEEEE',
@@ -493,7 +493,7 @@ export const GanttSidebarItem: FC<GanttSidebarItemProps> = ({
   return (
     <div
       className={cn(
-        'relative flex items-center gap-2.5 p-2.5 text-xs hover:bg-secondary',
+        'relative flex items-center gap-2.5 p-2.5 text-12 hover:bg-secondary',
         className,
       )}
       key={feature.id}
@@ -515,14 +515,14 @@ export const GanttSidebarItem: FC<GanttSidebarItemProps> = ({
       <p className="pointer-events-none flex-1 truncate text-left font-medium">
         {feature.name}
       </p>
-      <p className="pointer-events-none text-muted-foreground">{duration}</p>
+      <p className="pointer-events-none text-tertiary">{duration}</p>
     </div>
   )
 }
 
 export const GanttSidebarHeader: FC = () => (
   <div
-    className="sticky top-0 z-10 flex shrink-0 items-end justify-between gap-2.5 border-border/50 border-b bg-backdrop/90 p-2.5 font-medium text-muted-foreground text-xs backdrop-blur-sm"
+    className="sticky top-0 z-10 flex shrink-0 items-end justify-between gap-2.5 border-border/50 border-b bg-backdrop/90 p-2.5 font-medium text-tertiary text-12 backdrop-blur-sm"
     style={{ height: 'var(--gantt-header-height)' }}
   >
     {/* <Checkbox className="shrink-0" /> */}
@@ -544,7 +544,7 @@ export const GanttSidebarGroup: FC<GanttSidebarGroupProps> = ({
 }) => (
   <div className={className}>
     <p
-      className="w-full truncate p-2.5 text-left font-medium text-muted-foreground text-xs"
+      className="w-full truncate p-2.5 text-left font-medium text-tertiary text-12"
       style={{ height: 'var(--gantt-row-height)' }}
     >
       {name}
@@ -611,7 +611,7 @@ export const GanttAddFeatureHelper: FC<GanttAddFeatureHelperProps> = ({
         type="button"
       >
         <PlusIcon
-          className="pointer-events-none select-none text-muted-foreground"
+          className="pointer-events-none select-none text-tertiary"
           size={16}
         />
       </button>
@@ -742,9 +742,9 @@ export const GanttCreateMarkerTrigger: FC<GanttCreateMarkerTriggerProps> = ({
           onClick={handleClick}
           type="button"
         >
-          <PlusIcon className="text-muted-foreground" size={12} />
+          <PlusIcon className="text-tertiary" size={12} />
         </button>
-        <div className="whitespace-nowrap rounded-full border border-border/50 bg-background/90 px-2 py-1 text-foreground text-xs backdrop-blur-lg">
+        <div className="whitespace-nowrap rounded-full border border-border/50 bg-background/90 px-2 py-1 text-primary text-12 backdrop-blur-lg">
           {formatDate(date, 'MMM dd, yyyy')}
         </div>
       </div>
@@ -784,7 +784,7 @@ export const GanttFeatureDragHelper: FC<GanttFeatureDragHelperProps> = ({
     >
       <div
         className={cn(
-          '-translate-y-1/2 absolute top-1/2 h-[80%] w-1 rounded-sm bg-muted-foreground opacity-0 transition-all',
+          '-translate-y-1/2 absolute top-1/2 h-[80%] w-1 rounded-sm bg-accent-primary opacity-0 transition-all',
           direction === 'left' ? 'left-2.5' : 'right-2.5',
           direction === 'left' ? 'group-hover:left-0' : 'group-hover:right-0',
           isPressed && (direction === 'left' ? 'left-0' : 'right-0'),
@@ -795,7 +795,7 @@ export const GanttFeatureDragHelper: FC<GanttFeatureDragHelperProps> = ({
       {date && (
         <div
           className={cn(
-            '-translate-x-1/2 absolute top-10 hidden whitespace-nowrap rounded-lg border border-border/50 bg-background/90 px-2 py-1 text-foreground text-xs backdrop-blur-lg group-hover:block',
+            '-translate-x-1/2 absolute top-10 hidden whitespace-nowrap rounded-lg border border-border/50 bg-background/90 px-2 py-1 text-primary text-12 backdrop-blur-lg group-hover:block',
             isPressed && 'block',
           )}
         >
@@ -821,7 +821,7 @@ export const GanttFeatureItemCard: FC<GanttFeatureItemCardProps> = ({
   useEffect(() => setDragging(isPressed), [isPressed, setDragging])
 
   return (
-    <Card className="h-full w-full rounded-md bg-background p-2 text-xs shadow-sm">
+    <Card className="h-full w-full rounded-md bg-background p-2 text-12 shadow-raised-100">
       <div
         className={cn(
           'flex h-full w-full items-center justify-between gap-2 text-left',
@@ -960,7 +960,7 @@ export const GanttFeatureItem: FC<GanttFeatureItemProps> = ({
         >
           <GanttFeatureItemCard id={feature.id}>
             {children ?? (
-              <p className="flex-1 truncate text-xs">{feature.name}</p>
+              <p className="flex-1 truncate text-12">{feature.name}</p>
             )}
           </GanttFeatureItemCard>
         </DndContext>
@@ -1064,7 +1064,7 @@ export const GanttFeatureRow: FC<GanttFeatureRowProps> = ({
             {children ? (
               children(feature)
             ) : (
-              <p className="flex-1 truncate text-xs">{feature.name}</p>
+              <p className="flex-1 truncate text-12">{feature.name}</p>
             )}
           </GanttFeatureItem>
         </div>
@@ -1136,7 +1136,7 @@ export const GanttMarker: FC<
           render={
             <div
               className={cn(
-                'group pointer-events-auto sticky top-0 flex select-auto flex-col flex-nowrap items-center justify-center whitespace-nowrap rounded-b-md bg-card px-2 py-1 text-foreground text-xs',
+                'group pointer-events-auto sticky top-0 flex select-auto flex-col flex-nowrap items-center justify-center whitespace-nowrap rounded-b-md bg-card px-2 py-1 text-primary text-12',
                 className,
               )}
             />
@@ -1150,7 +1150,7 @@ export const GanttMarker: FC<
         <ContextMenuContent>
           {onRemove ? (
             <ContextMenuItem
-              className="flex items-center gap-2 text-destructive"
+              className="flex items-center gap-2 text-danger-primary"
               onClick={handleRemove}
             >
               <TrashIcon size={16} />
@@ -1474,7 +1474,7 @@ export const GanttToday: FC<GanttTodayProps> = ({ className }) => {
     >
       <div
         className={cn(
-          'group pointer-events-auto sticky top-0 flex select-auto flex-col flex-nowrap items-center justify-center whitespace-nowrap rounded-b-md bg-card px-2 py-1 text-foreground text-xs',
+          'group pointer-events-auto sticky top-0 flex select-auto flex-col flex-nowrap items-center justify-center whitespace-nowrap rounded-b-md bg-card px-2 py-1 text-primary text-12',
           className,
         )}
       >
@@ -1547,19 +1547,19 @@ function createDemoData() {
       id: 'm1',
       date: addDays(today, -20),
       label: 'Kickoff',
-      className: 'bg-blue-100 text-blue-900',
+      className: 'bg-accent-primary100 text-accent-primary900',
     },
     {
       id: 'm2',
       date: addDays(today, 30),
       label: 'Beta Release',
-      className: 'bg-purple-100 text-purple-900',
+      className: 'bg-accent-subtle100 text-accent-primary900',
     },
     {
       id: 'm3',
       date: addDays(today, 50),
       label: 'Launch',
-      className: 'bg-green-100 text-green-900',
+      className: 'bg-success-subtle100 text-success-primary900',
     },
   ]
 
@@ -1592,7 +1592,7 @@ export function GanttDemo() {
 
   // Prevent SSR to avoid dnd-kit hydration mismatch
   if (!isClient || !data) {
-    return <div className="h-screen w-screen bg-muted/50 animate-pulse" />
+    return <div className="h-screen w-screen bg-muted/50 animate-pulse-subtle" />
   }
 
   return (
@@ -1615,7 +1615,7 @@ export function GanttDemo() {
                   onMove={handleMoveFeature}
                   {...feature}
                 >
-                  <p className="flex-1 truncate text-xs">{feature.name}</p>
+                  <p className="flex-1 truncate text-12">{feature.name}</p>
                 </GanttFeatureItem>
               ))}
             </GanttFeatureListGroup>

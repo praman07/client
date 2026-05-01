@@ -39,7 +39,7 @@ export function VaultFolderDetail({ folder, onClose }: VaultFolderDetailProps) {
         </div>
         <div className="min-w-0">
           <h3 className="font-semibold truncate">{folder.name}</h3>
-          <p className="text-xs text-secondary">Folder</p>
+          <p className="text-12 text-secondary">Folder</p>
         </div>
       </div>
 

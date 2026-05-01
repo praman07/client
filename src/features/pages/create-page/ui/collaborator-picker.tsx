@@ -162,7 +162,7 @@ export function CollaboratorPicker({
                 >
                   <Avatar className="h-8 w-8 shrink-0">
                     <AvatarImage src={member.user.avatarUrl || ''} />
-                    <AvatarFallback className="text-xs">
+                    <AvatarFallback className="text-12">
                       {getInitials(member.user.fullName || 'User')}
                     </AvatarFallback>
                   </Avatar>

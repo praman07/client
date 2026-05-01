@@ -68,7 +68,7 @@ export function CollaboratorItem({ collaborator }: CollaboratorItemProps) {
                 src={collaborator.avatarUrl}
                 alt={collaborator.fullName}
               />
-              <AvatarFallback className="text-xs font-medium">
+              <AvatarFallback className="text-12 font-medium">
                 {initials}
               </AvatarFallback>
             </Avatar>
@@ -77,18 +77,18 @@ export function CollaboratorItem({ collaborator }: CollaboratorItemProps) {
             <div
               className={`absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-full border-2 border-sidebar ${
                 collaborator.isActive
-                  ? 'bg-green-500'
-                  : 'bg-muted-foreground/40'
+                  ? 'bg-success-subtle500'
+                  : 'bg-accent-primary/40'
               }`}
             />
           </div>
 
           {/* User info */}
           <div className="flex-1 min-w-0">
-            <p className="text-sm font-medium truncate leading-tight text-left">
+            <p className="text-14 font-medium truncate leading-tight text-left">
               {collaborator.fullName}
             </p>
-            <p className="text-xs text-sidebar-foreground/70 truncate leading-tight mt-0.5 text-left">
+            <p className="text-12 text-sidebar-foreground/70 truncate leading-tight mt-0.5 text-left">
               {collaborator.isActive ? 'Active' : 'Idle'}
             </p>
           </div>
@@ -101,7 +101,7 @@ export function CollaboratorItem({ collaborator }: CollaboratorItemProps) {
       <TooltipContent side="left" className="max-w-xs">
         <div className="space-y-1">
           <p className="font-semibold">{collaborator.fullName}</p>
-          <div className="flex items-center gap-2 text-xs text-muted-foreground">
+          <div className="flex items-center gap-2 text-12 text-tertiary">
             <Badge
               variant={collaborator.isActive ? 'default' : 'secondary'}
               className="h-5"

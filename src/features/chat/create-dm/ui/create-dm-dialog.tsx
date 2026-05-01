@@ -115,7 +115,7 @@ export function CreateDmDialog() {
                             src={member.user.avatarUrl ?? undefined}
                             alt={member.user.fullName ?? ''}
                           />
-                          <AvatarFallback className="rounded-md text-xs">
+                          <AvatarFallback className="rounded-md text-12">
                             {initials ?? '??'}
                           </AvatarFallback>
                         </Avatar>

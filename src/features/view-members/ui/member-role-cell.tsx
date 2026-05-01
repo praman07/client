@@ -57,7 +57,7 @@ export function MemberRoleCell({
   const badge = (
     <span
       className={cn(
-        'inline-flex items-center gap-1 rounded-md border px-2 py-0.5 text-xs font-medium transition-colors',
+        'inline-flex items-center gap-1 rounded-md border px-2 py-0.5 text-12 font-medium transition-colors',
         getRoleBadgeClass(member.role),
         canEditThisMember && 'cursor-pointer',
       )}

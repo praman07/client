@@ -97,7 +97,7 @@ export function RenameChannelForm({
               autoFocus
             />
             {field.state.meta.errors.length > 0 && (
-              <p className="text-sm text-danger-primary">
+              <p className="text-14 text-danger-primary">
                 {field.state.meta.errors.join(', ')}
               </p>
             )}

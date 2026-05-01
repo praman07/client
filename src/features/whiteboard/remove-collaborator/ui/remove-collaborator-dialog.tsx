@@ -83,10 +83,10 @@ export function RemoveCollaboratorDialog({
               </AvatarFallback>
             </Avatar>
             <div className="flex flex-col">
-              <span className="text-sm font-medium text-primary">
+              <span className="text-14 font-medium text-primary">
                 {collaborator.user.fullName}
               </span>
-              <span className="text-xs text-secondary">
+              <span className="text-12 text-secondary">
                 {collaborator.user.email}
               </span>
             </div>

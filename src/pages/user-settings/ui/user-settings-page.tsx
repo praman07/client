@@ -26,7 +26,7 @@ export function UserSettingsPage() {
               <p className="text-13 text-secondary break-all">{user?.email ?? '—'}</p>
             </div>
             <div className="self-start sm:self-auto">
-              <Badge variant="secondary" className="text-xs">
+              <Badge variant="secondary" className="text-12">
                 <Shield className="h-3 w-3 mr-1" />
                 Verified
               </Badge>

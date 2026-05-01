@@ -53,8 +53,8 @@ export function PageEmojiPicker({ icon, hasCover, isLocked }: PageEmojiProps) {
           <button
             disabled={isLocked}
             className={`
-              text-5xl leading-none select-none rounded-lg p-1 transition-colors
-              ${icon ? 'hover:bg-layer-2-hover' : 'text-tertiary/40 hover:text-secondary hover:bg-layer-2-hover text-2xl'}
+              text-40 leading-none select-none rounded-lg p-1 transition-colors
+              ${icon ? 'hover:bg-layer-2-hover' : 'text-tertiary/40 hover:text-secondary hover:bg-layer-2-hover text-24'}
               disabled:cursor-default disabled:hover:bg-transparent
             `}
             title={icon ? 'Change emoji' : 'Add emoji'}

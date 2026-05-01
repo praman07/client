@@ -35,7 +35,7 @@ export function VaultSidebar({ projectId }: VaultSidebarProps) {
     >
       <SidebarContent className="overflow-hidden flex flex-col">
         <ScrollArea className="flex-1 w-full">
-          <div className="flex flex-col gap-2 p-2 animate-fade-in">
+          <div className="flex flex-col gap-2 p-2 animate-fade-in-in">
             {isLoading ? (
               <VaultSidebarSkeleton />
             ) : (

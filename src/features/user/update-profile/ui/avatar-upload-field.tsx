@@ -115,7 +115,7 @@ export function AvatarUploadField() {
       >
         <Avatar className="h-16 w-16 border-2 border-subtle transition-opacity group-hover:opacity-80">
           <AvatarImage src={avatarSrc} alt={user?.fullName ?? 'User'} />
-          <AvatarFallback className="text-xl font-semibold">{initials}</AvatarFallback>
+          <AvatarFallback className="text-20 font-semibold">{initials}</AvatarFallback>
         </Avatar>
 
         {/* Upload spinner overlay */}

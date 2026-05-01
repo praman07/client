@@ -20,7 +20,7 @@ export function CreateChannelModal() {
           <DialogTitle className="text-14 font-semibold text-primary">
             Create a channel
           </DialogTitle>
-          <p className="text-sm text-secondary mt-0.5">
+          <p className="text-14 text-secondary mt-0.5">
             Channels are where your team communicates on a topic.
           </p>
         </DialogHeader>
@@ -32,7 +32,7 @@ export function CreateChannelModal() {
               onSuccess={close}
             />
           ) : (
-            <div className="py-4 text-center text-sm text-secondary">
+            <div className="py-4 text-center text-14 text-secondary">
               Loading project context…
             </div>
           )}

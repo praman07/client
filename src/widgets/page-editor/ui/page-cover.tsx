@@ -234,7 +234,7 @@ export function PageCoverBanner({ coverUrl }: PageCoverProps) {
           className="w-full h-full object-cover"
         />
       ) : (
-        <div className="w-full h-full bg-layer-1 animate-pulse" />
+        <div className="w-full h-full bg-layer-1 animate-pulse-subtle" />
       )}
       <div className="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
       <div className="absolute bottom-3 right-4 flex gap-2 invisible group-hover:visible transition-opacity">

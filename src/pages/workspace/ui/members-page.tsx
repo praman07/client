@@ -31,8 +31,8 @@ export function MembersPage() {
           <ShieldOff className="h-7 w-7 text-danger-primary" />
         </div>
         <div className="space-y-1">
-          <h2 className="text-lg font-semibold text-primary">Access Restricted</h2>
-          <p className="text-sm text-secondary max-w-sm">
+          <h2 className="text-18 font-semibold text-primary">Access Restricted</h2>
+          <p className="text-14 text-secondary max-w-sm">
             You don't have permission to view workspace members. Contact an Owner or Admin
             to request access.
           </p>

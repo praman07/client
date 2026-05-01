@@ -100,7 +100,7 @@ export const NavItems = ({ items, className, onItemClick }: NavItemsProps) => {
     <motion.div
       onMouseLeave={() => setHovered(null)}
       className={cn(
-        'absolute inset-0 hidden flex-1 flex-row items-center justify-center space-x-1 text-sm font-medium lg:flex',
+        'absolute inset-0 hidden flex-1 flex-row items-center justify-center space-x-1 text-14 font-medium lg:flex',
         className,
       )}
     >
@@ -169,7 +169,7 @@ export const MobileNavMenu = ({
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: -8 }}
         className={cn(
-          'absolute inset-x-0 top-16 z-50 flex w-full flex-col items-start gap-4 rounded-xl border border-subtle/20 bg-surface-2/95 backdrop-blur-xl px-4 py-6 shadow-2xl',
+          'absolute inset-x-0 top-16 z-50 flex w-full flex-col items-start gap-4 rounded-xl border border-subtle/20 bg-surface-2/95 backdrop-blur-xl px-4 py-6 shadow-overlay-200',
           className,
         )}
       >
@@ -210,7 +210,7 @@ export const NavbarButton = ({
   | React.ComponentPropsWithoutRef<'button'>
 )) => {
   const base =
-    'px-4 py-2 rounded-full text-sm font-bold relative cursor-pointer hover:-translate-y-0.5 transition duration-200 inline-block text-center'
+    'px-4 py-2 rounded-full text-14 font-bold relative cursor-pointer hover:-translate-y-0.5 transition duration-200 inline-block text-center'
 
   const variants = {
     primary:

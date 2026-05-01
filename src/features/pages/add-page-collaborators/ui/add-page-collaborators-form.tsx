@@ -139,10 +139,10 @@ export function AddPageCollaboratorsForm({
                         </AvatarFallback>
                       </Avatar>
                       <div className="flex flex-1 flex-col items-start">
-                        <span className="text-sm font-medium">
+                        <span className="text-14 font-medium">
                           {member.user.fullName ?? 'Unknown'}
                         </span>
-                        <span className="text-xs text-secondary">
+                        <span className="text-12 text-secondary">
                           {member.user.email}
                         </span>
                       </div>

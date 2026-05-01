@@ -79,7 +79,7 @@ export const KanbanBoard = ({ id, children, className }: KanbanBoardProps) => {
   return (
     <div
       className={cn(
-        'flex size-full min-h-40 flex-col divide-y overflow-hidden rounded-md border bg-secondary text-xs shadow-sm ring-2 transition-all',
+        'flex size-full min-h-40 flex-col divide-y overflow-hidden rounded-md border bg-secondary text-12 shadow-raised-100 ring-2 transition-all',
         isOver ? 'ring-primary' : 'ring-transparent',
         className,
       )}
@@ -123,24 +123,24 @@ export const KanbanCard = <T extends KanbanItemProps = KanbanItemProps>({
       <div style={style} {...listeners} {...attributes} ref={setNodeRef}>
         <Card
           className={cn(
-            'cursor-grab gap-4 rounded-md p-3 shadow-sm',
+            'cursor-grab gap-4 rounded-md p-3 shadow-raised-100',
             isDragging && 'pointer-events-none cursor-grabbing opacity-30',
             className,
           )}
         >
-          {children ?? <p className="m-0 font-medium text-sm">{name}</p>}
+          {children ?? <p className="m-0 font-medium text-14">{name}</p>}
         </Card>
       </div>
       {activeCardId === id && (
         <t.In>
           <Card
             className={cn(
-              'cursor-grab gap-4 rounded-md p-3 shadow-sm ring-2 ring-primary',
+              'cursor-grab gap-4 rounded-md p-3 shadow-raised-100 ring-2 ring-primary',
               isDragging && 'cursor-grabbing',
               className,
             )}
           >
-            {children ?? <p className="m-0 font-medium text-sm">{name}</p>}
+            {children ?? <p className="m-0 font-medium text-14">{name}</p>}
           </Card>
         </t.In>
       )}
@@ -182,7 +182,7 @@ export type KanbanHeaderProps = HTMLAttributes<HTMLDivElement>
 
 export const KanbanHeader = ({ className, ...props }: KanbanHeaderProps) => (
   <div
-    className={cn('m-0 p-2 font-semibold text-sm', className)}
+    className={cn('m-0 p-2 font-semibold text-14', className)}
     {...(props as any)}
   />
 )
@@ -368,7 +368,7 @@ export function KanbanDemo() {
   const [data, setData] = useState(initialDemoData)
 
   if (!isClient) {
-    return <div className="h-screen w-screen bg-muted/50 animate-pulse" />
+    return <div className="h-screen w-screen bg-muted/50 animate-pulse-subtle" />
   }
 
   return (

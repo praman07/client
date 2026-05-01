@@ -115,7 +115,7 @@ function RolePermissionsPanel({
 
   if (allPermissions.length === 0) {
     return (
-      <div className="px-4 py-3 bg-muted/20 border-t text-sm text-muted-foreground">
+      <div className="px-4 py-3 bg-muted/20 border-t text-14 text-tertiary">
         No permissions available.
       </div>
     )
@@ -127,7 +127,7 @@ function RolePermissionsPanel({
         <div className="px-4 py-3 space-y-4">
           {Object.entries(byResource).map(([resource, perms]) => (
             <div key={resource}>
-              <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground mb-2">
+              <p className="text-12 font-semibold uppercase tracking-wide text-tertiary mb-2">
                 {resource.replace('.', ' › ')}
               </p>
               <div className="flex flex-wrap gap-x-8 gap-y-2">
@@ -137,7 +137,7 @@ function RolePermissionsPanel({
                     <label
                       key={p.id}
                       className={cn(
-                        'flex items-center gap-2 text-sm cursor-pointer select-none',
+                        'flex items-center gap-2 text-14 cursor-pointer select-none',
                         busy && 'opacity-60 pointer-events-none',
                       )}
                     >
@@ -148,7 +148,7 @@ function RolePermissionsPanel({
                         }
                         disabled={busy}
                       />
-                      <span className="text-sm">{p.action}</span>
+                      <span className="text-14">{p.action}</span>
                     </label>
                   )
                 })}
@@ -181,9 +181,9 @@ export function ProjectRolesList({
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h3 className="text-sm font-semibold">Roles</h3>
+          <h3 className="text-14 font-semibold">Roles</h3>
           {!isLoading && (
-            <p className="text-sm text-muted-foreground">
+            <p className="text-14 text-tertiary">
               {roles.length} role{roles.length !== 1 ? 's' : ''} — manage access
               levels for project members.
             </p>
@@ -213,7 +213,7 @@ export function ProjectRolesList({
 
         {/* Empty state */}
         {!isLoading && roles.length === 0 && (
-          <div className="py-10 text-center text-sm text-muted-foreground">
+          <div className="py-10 text-center text-14 text-tertiary">
             No custom roles yet. System roles (Manager, Contributor, Viewer) are
             always available.
           </div>
@@ -228,14 +228,14 @@ export function ProjectRolesList({
               <div className="flex items-center gap-3 px-4 py-3">
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-2 flex-wrap">
-                    <span className="text-sm font-medium">{role.name}</span>
-                    <Badge variant="default" className="text-xs">
+                    <span className="text-14 font-medium">{role.name}</span>
+                    <Badge variant="default" className="text-12">
                       Rank {role.rank}
                     </Badge>
                     {role.isSystem && (
                       <Badge
                         variant="outline"
-                        className="gap-1 text-xs text-muted-foreground"
+                        className="gap-1 text-12 text-tertiary"
                       >
                         <Lock className="h-3 w-3" />
                         System
@@ -243,7 +243,7 @@ export function ProjectRolesList({
                     )}
                   </div>
                   {role.description && (
-                    <p className="text-xs text-muted-foreground mt-0.5 truncate max-w-xs">
+                    <p className="text-12 text-tertiary mt-0.5 truncate max-w-xs">
                       {role.description}
                     </p>
                   )}
@@ -291,7 +291,7 @@ export function ProjectRolesList({
                       <Button
                         variant="ghost"
                         size="icon"
-                        className="h-7 w-7 text-destructive hover:text-destructive hover:bg-destructive/10"
+                        className="h-7 w-7 text-danger-primary hover:text-danger-primary hover:bg-destructive/10"
                         onClick={() => setDeletingRoleId(role.id)}
                         disabled={deleting}
                         title="Delete role"

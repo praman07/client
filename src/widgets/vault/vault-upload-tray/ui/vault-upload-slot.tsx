@@ -20,7 +20,7 @@ export function VaultUploadSlot({ slot, onDismiss }: VaultUploadSlotProps) {
 
       {/* File info */}
       <div className="flex-1 min-w-0">
-        <p className="text-sm font-medium truncate">{slot.name}</p>
+        <p className="text-14 font-medium truncate">{slot.name}</p>
         {slot.status === 'uploading' && (
           <div className="mt-1 h-1 w-full rounded-full bg-layer-2 overflow-hidden">
             <div
@@ -30,7 +30,7 @@ export function VaultUploadSlot({ slot, onDismiss }: VaultUploadSlotProps) {
           </div>
         )}
         {slot.status === 'error' && (
-          <p className="text-xs text-danger-primary mt-0.5 truncate">
+          <p className="text-12 text-danger-primary mt-0.5 truncate">
             {slot.error}
           </p>
         )}
@@ -57,7 +57,7 @@ function StatusIcon({ status }: { status: UploadSlot['status'] }) {
     case 'queued':
       return <Loader2 className="h-4 w-4 text-primary animate-spin shrink-0" />
     case 'done':
-      return <CheckCircle2 className="h-4 w-4 text-green-500 shrink-0" />
+      return <CheckCircle2 className="h-4 w-4 text-success-primary500 shrink-0" />
     case 'error':
       return <AlertCircle className="h-4 w-4 text-danger-primary shrink-0" />
   }

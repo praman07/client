@@ -49,7 +49,7 @@ export function UserProfilePanelActionsTab({
         <Guard permission="project:member:remove">
           <Button
             variant="outline"
-            className="w-full justify-start gap-2 text-destructive hover:text-destructive"
+            className="w-full justify-start gap-2 text-danger-primary hover:text-danger-primary"
             onClick={onRemoveFromProject}
           >
             <UserMinus size={16} />

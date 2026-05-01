@@ -72,8 +72,8 @@ const PlusCard: React.FC<{
   >
     <CornerPlusIcons />
     <div className="relative z-10 space-y-2">
-      <h3 className="text-xl font-bold text-white">{title}</h3>
-      <p className="text-white/50 text-sm leading-relaxed">{description}</p>
+      <h3 className="text-20 font-bold text-white">{title}</h3>
+      <p className="text-white/50 text-14 leading-relaxed">{description}</p>
     </div>
   </div>
 )
@@ -101,10 +101,10 @@ export function RuixenBentoSection() {
 
         {/* Bottom-right headline — exact pattern from the image */}
         <div className="max-w-2xl ml-auto text-right px-4 mt-6 lg:-mt-20">
-          <h2 className="text-4xl md:text-5xl font-black text-white mb-4 leading-tight">
+          <h2 className="text-32 md:text-40 font-black text-white mb-4 leading-tight">
             Built for performance.<br />Designed for flexibility.
           </h2>
-          <p className="text-white/40 text-base leading-relaxed">
+          <p className="text-white/40 text-16 leading-relaxed">
             Collabify gives you the tools to build, ship, and collaborate — without juggling five subscriptions.
             Every feature is thoughtfully integrated, not bolted on.
           </p>

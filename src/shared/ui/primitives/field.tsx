@@ -30,7 +30,7 @@ function FieldLegend({
       data-slot="field-legend"
       data-variant={variant}
       className={cn(
-        'mb-3 font-medium data-[variant=label]:text-sm data-[variant=legend]:text-base',
+        'mb-3 font-medium data-[variant=label]:text-14 data-[variant=legend]:text-16',
         className,
       )}
       {...props}
@@ -155,7 +155,7 @@ function FieldSeparator({
       data-slot="field-separator"
       data-content={!!children}
       className={cn(
-        '-my-2 h-5 text-sm group-data-[variant=outline]/field-group:-mb-2 relative',
+        '-my-2 h-5 text-14 group-data-[variant=outline]/field-group:-mb-2 relative',
         className,
       )}
       {...props}

@@ -54,7 +54,7 @@ export function WorkspaceSettingsPage() {
 
   return (
     <SidebarProvider>
-      <div className="flex flex-col gap-8 animate-fade-in">
+      <div className="flex flex-col gap-8 animate-fade-in-in">
         {/* Page header */}
         <div>
           <h1 className="text-20 font-semibold tracking-tight">Workspace Settings</h1>

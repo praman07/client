@@ -20,16 +20,16 @@ interface IssueCardProps {
 // ── Sub-components ────────────────────────────────────────────────────────────
 
 const priorityConfig: Record<Priority, { icon: React.ReactNode; color: string; label: string }> = {
-  urgent: { icon: <AlertCircle className="h-3 w-3" />, color: 'text-red-400',    label: 'Urgent' },
-  high:   { icon: <ArrowUp     className="h-3 w-3" />, color: 'text-orange-400', label: 'High'   },
-  medium: { icon: <Minus       className="h-3 w-3" />, color: 'text-yellow-400', label: 'Medium' },
-  low:    { icon: <ArrowDown   className="h-3 w-3" />, color: 'text-blue-400',   label: 'Low'    },
+  urgent: { icon: <AlertCircle className="h-3 w-3" />, color: 'text-danger-primary400',    label: 'Urgent' },
+  high:   { icon: <ArrowUp     className="h-3 w-3" />, color: 'text-warning-primary400', label: 'High'   },
+  medium: { icon: <Minus       className="h-3 w-3" />, color: 'text-warning-primary400', label: 'Medium' },
+  low:    { icon: <ArrowDown   className="h-3 w-3" />, color: 'text-accent-primary400',   label: 'Low'    },
 }
 
 const statusConfig: Record<Status, { icon: React.ReactNode; color: string; label: string }> = {
-  'in-progress': { icon: <Timer       className="h-3 w-3" />, color: 'text-violet-400', label: 'In Progress' },
+  'in-progress': { icon: <Timer       className="h-3 w-3" />, color: 'text-accent-primary400', label: 'In Progress' },
   'todo':        { icon: <Circle      className="h-3 w-3" />, color: 'text-white/40',   label: 'Todo'        },
-  'done':        { icon: <CheckCircle2 className="h-3 w-3" />, color: 'text-emerald-400', label: 'Done'      },
+  'done':        { icon: <CheckCircle2 className="h-3 w-3" />, color: 'text-success-primary400', label: 'Done'      },
   'backlog':     { icon: <Circle      className="h-3 w-3" />, color: 'text-white/25',   label: 'Backlog'     },
 }
 
@@ -41,7 +41,7 @@ function IssueCard({
   status = 'todo',
   labels = [],
   assignee = 'JD',
-  assigneeColor = 'bg-violet-500',
+  assigneeColor = 'bg-accent-subtle500',
 }: IssueCardProps) {
   const p = priorityConfig[priority]
   const s = statusConfig[status]
@@ -51,10 +51,10 @@ function IssueCard({
       className={cn(
         // size + skew (shared with original DisplayCards animation system)
         'relative flex w-80 -skew-y-[8deg] select-none flex-col gap-3 rounded-xl',
-        'border border-white/10 bg-zinc-900 px-4 py-3.5',
-        'shadow-xl shadow-black/50 transition-all duration-700',
+        'border border-white/10 bg-layer-900 px-4 py-3.5',
+        'shadow-overlay-200 shadow-black/50 transition-all duration-700',
         // hover lift
-        'hover:border-white/20 hover:bg-zinc-800',
+        'hover:border-white/20 hover:bg-layer-800',
         // original stacking pseudo-element fade
         'after:absolute after:-right-1 after:top-[-5%] after:h-[110%] after:w-[20rem]',
         'after:bg-linear-to-l after:from-background after:to-transparent after:content-[""]',
@@ -71,7 +71,7 @@ function IssueCard({
       </div>
 
       {/* Row 2: Title */}
-      <p className="text-sm font-semibold text-white/90 leading-snug line-clamp-2">{title}</p>
+      <p className="text-14 font-semibold text-white/90 leading-snug line-clamp-2">{title}</p>
 
       {/* Row 3: Status + labels + assignee */}
       <div className="flex items-center gap-2 flex-wrap">
@@ -107,7 +107,7 @@ const defaultIssues: Array<IssueCardProps> = [
     status: 'in-progress',
     labels: ['chat', 'websocket'],
     assignee: 'AL',
-    assigneeColor: 'bg-blue-500',
+    assigneeColor: 'bg-accent-primary500',
     className: '[grid-area:stack] hover:-translate-y-10 before:absolute before:w-[100%] before:outline-1 before:rounded-xl before:outline-border before:h-[100%] before:content-[""] before:bg-blend-overlay before:bg-background/50 grayscale-[100%] hover:before:opacity-0 before:transition-opacity before:duration-700 hover:grayscale-0 before:left-0 before:top-0',
   },
   {
@@ -117,7 +117,7 @@ const defaultIssues: Array<IssueCardProps> = [
     status: 'todo',
     labels: ['vault', 'auth'],
     assignee: 'MK',
-    assigneeColor: 'bg-rose-500',
+    assigneeColor: 'bg-danger-subtle500',
     className: '[grid-area:stack] translate-x-12 translate-y-10 hover:-translate-y-1 before:absolute before:w-[100%] before:outline-1 before:rounded-xl before:outline-border before:h-[100%] before:content-[""] before:bg-blend-overlay before:bg-background/50 grayscale-[100%] hover:before:opacity-0 before:transition-opacity before:duration-700 hover:grayscale-0 before:left-0 before:top-0',
   },
   {
@@ -127,7 +127,7 @@ const defaultIssues: Array<IssueCardProps> = [
     status: 'done',
     labels: ['whiteboard'],
     assignee: 'SB',
-    assigneeColor: 'bg-amber-500',
+    assigneeColor: 'bg-warning-subtle500',
     className: '[grid-area:stack] translate-x-24 translate-y-20 hover:translate-y-10',
   },
 ]

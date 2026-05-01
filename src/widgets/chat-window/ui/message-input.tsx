@@ -326,7 +326,7 @@ export function MessageInput({ channelId, projectId, workspaceId, channelName }:
               }}
               onKeyDown={handleKeyDown}
               onPaste={handlePaste}
-              className="max-h-[180px] text-sm leading-relaxed"
+              className="max-h-[180px] text-14 leading-relaxed"
             />
           </div>
 
@@ -405,7 +405,7 @@ export function MessageInput({ channelId, projectId, workspaceId, channelName }:
               </Button>
               <Button
                 size="sm"
-                className="h-7 px-3.5 rounded-full text-xs font-semibold uppercase tracking-wide"
+                className="h-7 px-3.5 rounded-full text-12 font-semibold uppercase tracking-wide"
                 onClick={handleSend}
                 disabled={!canSend || isUploading}
                 aria-label="Send message"

@@ -51,7 +51,7 @@ export function WorkspaceSlugField({ form }: Props) {
           <Label htmlFor={field.name} className="text-14 font-medium">
             Workspace URL
           </Label>
-          <div className="flex rounded-md shadow-sm">
+          <div className="flex rounded-md shadow-raised-100">
             <div className="flex items-center rounded-l-md border border-r-0 border-subtle-1 bg-layer-2 px-3 text-12 text-secondary">
               {typeof window !== 'undefined' ? `${window.location.origin}/workspace/` : '/workspace/'}
             </div>

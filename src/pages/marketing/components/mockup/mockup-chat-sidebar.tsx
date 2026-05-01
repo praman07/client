@@ -8,9 +8,9 @@ const channels = [
 ]
 
 const dms = [
-  { initials: 'AL', name: 'Alex Liu', online: true, color: 'bg-blue-500/20 text-blue-400' },
-  { initials: 'MK', name: 'Maria K.', online: true, color: 'bg-rose-500/20 text-rose-400' },
-  { initials: 'SB', name: 'Sam B.', online: false, color: 'bg-amber-500/20 text-amber-400' },
+  { initials: 'AL', name: 'Alex Liu', online: true, color: 'bg-accent-primary500/20 text-accent-primary400' },
+  { initials: 'MK', name: 'Maria K.', online: true, color: 'bg-danger-subtle500/20 text-danger-primary400' },
+  { initials: 'SB', name: 'Sam B.', online: false, color: 'bg-warning-subtle500/20 text-warning-primary400' },
 ]
 
 export function MockupChatSidebar() {
@@ -19,10 +19,10 @@ export function MockupChatSidebar() {
       {/* Channels */}
       <div className="flex flex-col gap-0.5">
         <div className="flex items-center justify-between px-2 py-1">
-          <span className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+          <span className="text-[10px] font-semibold uppercase tracking-wider text-tertiary">
             Channels
           </span>
-          <Plus className="h-3 w-3 text-muted-foreground" />
+          <Plus className="h-3 w-3 text-tertiary" />
         </div>
 
         {channels.map((ch) => (
@@ -30,8 +30,8 @@ export function MockupChatSidebar() {
             key={ch.name}
             className={`flex items-center gap-1.5 rounded-md px-2 py-1 text-[11px] transition-colors ${
               ch.active
-                ? 'bg-accent text-foreground font-medium'
-                : 'text-muted-foreground hover:text-foreground'
+                ? 'bg-accent text-primary font-medium'
+                : 'text-tertiary hover:text-primary'
             }`}
           >
             {ch.private ? (
@@ -53,22 +53,22 @@ export function MockupChatSidebar() {
       {/* DMs */}
       <div className="flex flex-col gap-0.5">
         <div className="flex items-center justify-between px-2 py-1">
-          <span className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+          <span className="text-[10px] font-semibold uppercase tracking-wider text-tertiary">
             Direct Messages
           </span>
-          <MessageSquare className="h-3 w-3 text-muted-foreground" />
+          <MessageSquare className="h-3 w-3 text-tertiary" />
         </div>
 
         {dms.map((dm) => (
           <div
             key={dm.name}
-            className="flex items-center gap-1.5 rounded-md px-2 py-1 text-[11px] text-muted-foreground hover:text-foreground transition-colors"
+            className="flex items-center gap-1.5 rounded-md px-2 py-1 text-[11px] text-tertiary hover:text-primary transition-colors"
           >
             <div className="relative shrink-0">
               <div className={`flex h-4 w-4 items-center justify-center rounded-full text-[7px] font-bold ${dm.color}`}>
                 {dm.initials}
               </div>
-              <div className={`absolute -bottom-px -right-px h-1.5 w-1.5 rounded-full border border-background ${dm.online ? 'bg-emerald-500' : 'bg-zinc-600'}`} />
+              <div className={`absolute -bottom-px -right-px h-1.5 w-1.5 rounded-full border border-background ${dm.online ? 'bg-success-subtle500' : 'bg-layer-600'}`} />
             </div>
             <span className="truncate">{dm.name}</span>
           </div>
