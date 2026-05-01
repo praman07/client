@@ -239,6 +239,9 @@
     --bg-layer-transparent-active: var(--alpha-black-200);
     --bg-layer-transparent-selected: var(--alpha-black-300);
     --bg-layer-disabled: var(--neutral-400);
+    --bg-scrolled: oklch(1 0 0 / 5%);
+    --bg-scrolled-hover: oklch(1 0 0 / 8%);
+    --bg-scrolled-active: oklch(1 0 0 / 10%);
     --bg-accent-primary: var(--brand-default);
     --bg-accent-primary-hover: var(--brand-900);
     --bg-accent-primary-active: var(--brand-1000);
@@ -266,6 +269,7 @@
     --bg-inverse: var(--alpha-black-1000);
     /* Border colors */
     --border-subtle: var(--neutral-400);
+    --border-scrolled: oklch(1 0 0 / 10%);
     --border-subtle-1: var(--neutral-500);
     --border-strong: var(--neutral-600);
     --border-strong-1: var(--neutral-700);
@@ -763,6 +767,9 @@
   --background-color-layer-transparent-active: var(--bg-layer-transparent-active);
   --background-color-layer-transparent-selected: var(--bg-layer-transparent-selected);
   --background-color-layer-disabled: var(--bg-layer-disabled);
+  --background-color-scrolled: var(--bg-scrolled);
+  --background-color-scrolled-hover: var(--bg-scrolled-hover);
+  --background-color-scrolled-active: var(--bg-scrolled-active);
   --background-color-accent-primary: var(--bg-accent-primary);
   --background-color-accent-primary-hover: var(--bg-accent-primary-hover);
   --background-color-accent-primary-active: var(--bg-accent-primary-active);
@@ -791,6 +798,7 @@
   /* Border colors */
   --border-color-subtle: var(--border-subtle);
   --border-color-subtle-1: var(--border-subtle-1);
+  --border-color-scrolled: var(--border-scrolled);
   --border-color-strong: var(--border-strong);
   --border-color-strong-1: var(--border-strong-1);
   --border-color-inverse: var(--border-inverse);

@@ -79,7 +79,7 @@ function PagesLayout() {
       </ErrorBoundary>
 
       <SidebarInset className="flex h-full flex-col overflow-hidden">
-        <main className="flex-1 flex flex-col overflow-hidden bg-background translate-z-0">
+        <main className="flex-1 flex flex-col overflow-hidden">
           {/* Each page route (editor/index) gets Suspense + ErrorBoundary at the outlet level */}
           <ErrorBoundary FallbackComponent={({ error, resetErrorBoundary }) => (
             <RouteError error={error} reset={resetErrorBoundary} />
