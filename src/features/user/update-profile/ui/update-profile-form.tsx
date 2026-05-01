@@ -11,34 +11,7 @@ import { Button } from '@/shared/ui/primitives/button'
 import { Input } from '@/shared/ui/primitives/input'
 import { Label } from '@/shared/ui/primitives/label'
 import { Textarea } from '@/shared/ui/primitives/textarea'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/shared/ui/primitives/select'
 
-const TIMEZONES = [
-  'UTC', 'America/New_York', 'America/Chicago', 'America/Denver',
-  'America/Los_Angeles', 'Europe/London', 'Europe/Paris', 'Europe/Berlin',
-  'Asia/Dubai', 'Asia/Kolkata', 'Asia/Singapore', 'Asia/Tokyo',
-  'Australia/Sydney',
-]
-
-const LANGUAGES = [
-  { value: 'en', label: 'English' },
-  { value: 'es', label: 'Spanish' },
-  { value: 'fr', label: 'French' },
-  { value: 'de', label: 'German' },
-  { value: 'ja', label: 'Japanese' },
-  { value: 'zh', label: 'Chinese' },
-  { value: 'ar', label: 'Arabic' },
-]
-
-const LANGUAGE_LABELS = Object.fromEntries(
-  LANGUAGES.map(({ value, label }) => [value, label])
-)
 
 /**
  * UpdateProfileForm — TanStack Form for editing user profile data.
@@ -65,8 +38,6 @@ export function UpdateProfileForm() {
     defaultValues: {
       fullName: user?.fullName ?? '',
       bio: user?.bio ?? '',
-      timezone: user?.timezone ?? 'UTC',
-      language: user?.language ?? 'en',
     },
     onSubmit: async ({ value }) => {
       setRootError(null)
@@ -85,8 +56,6 @@ export function UpdateProfileForm() {
         await updateProfile({
           fullName: value.fullName,
           bio: value.bio || null,
-          timezone: value.timezone,
-          language: value.language,
         })
 
         setSaved(true)
@@ -105,12 +74,10 @@ export function UpdateProfileForm() {
     form.reset({
       fullName: user.fullName ?? '',
       bio: user.bio ?? '',
-      timezone: user.timezone ?? 'UTC',
-      language: user.language ?? 'en',
     })
     setIsLoaded(true)
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user?.id, user?.fullName, user?.bio, user?.timezone, user?.language])
+  }, [user?.id, user?.fullName, user?.bio])
 
   return (
     <form
@@ -198,61 +165,6 @@ export function UpdateProfileForm() {
           </div>
         )}
       </form.Field>
-
-      {/* Timezone + Language selects */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        {/* Timezone */}
-        <form.Field name="timezone">
-          {(field) => (
-            <div className="space-y-1.5">
-              <Label htmlFor="profile-timezone">Timezone</Label>
-              {/* Hidden native input satisfies browser form field id/name requirement */}
-              <input type="hidden" name="timezone" value={field.state.value} />
-              <Select
-                value={field.state.value}
-                onValueChange={(v) => { if (v) field.handleChange(v) }}
-                disabled={isPending}
-              >
-                <SelectTrigger id="profile-timezone">
-                  <SelectValue placeholder="Select timezone" />
-                </SelectTrigger>
-                <SelectContent>
-                  {TIMEZONES.map((tz) => (
-                    <SelectItem key={tz} value={tz}>{tz}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-          )}
-        </form.Field>
-
-        {/* Language */}
-        <form.Field name="language">
-          {(field) => (
-            <div className="space-y-1.5">
-              <Label htmlFor="profile-language">Language</Label>
-              {/* Hidden native input satisfies browser form field id/name requirement */}
-              <input type="hidden" name="language" value={field.state.value} />
-              <Select
-                value={field.state.value}
-                onValueChange={(v) => { if (v) field.handleChange(v) }}
-                disabled={isPending}
-              >
-                <SelectTrigger id="profile-language">
-                  <SelectValue>
-                    {LANGUAGE_LABELS[field.state.value] ?? field.state.value}
-                  </SelectValue>
-                </SelectTrigger>
-                <SelectContent>
-                  {LANGUAGES.map(({ value, label }) => (
-                    <SelectItem key={value} value={value}>{label}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-          )}
-        </form.Field>
-      </div>
 
       {/* Submit row */}
       <div className="flex items-center gap-3 pt-1">

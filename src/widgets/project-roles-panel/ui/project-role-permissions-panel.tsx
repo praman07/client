@@ -163,7 +163,7 @@ function PermissionGroup({
           <span className="text-12 font-semibold uppercase tracking-wider text-secondary">
             {groupName}
           </span>
-          <Badge variant="secondary" className="text-[9px] h-4 px-1.5">
+          <Badge variant="default" className="text-[9px] h-4 px-1.5">
             {grantedCount}/{permissions.length}
           </Badge>
         </div>
@@ -310,7 +310,7 @@ export function ProjectRolePermissionsPanel({
   )
 
   return (
-    <Card className="flex flex-col h-full shadow-raised-100 border-muted/60">
+    <Card className="flex flex-col h-full shadow-raised-100 border border-subtle">
       {/* ── Header ── */}
       <CardHeader className="pb-3 border-b space-y-0">
         <div className="flex flex-col sm:flex-row sm:items-center gap-4 min-w-0">
@@ -329,7 +329,7 @@ export function ProjectRolePermissionsPanel({
                 className="font-semibold text-16"
               />
               {role.isSystem && (
-                <Badge variant="secondary" className="text-[9px] h-4 px-1.5 uppercase tracking-wide shrink-0">
+                <Badge variant="default" className="text-[9px] h-4 px-1.5 uppercase tracking-wide shrink-0">
                   System
                 </Badge>
               )}

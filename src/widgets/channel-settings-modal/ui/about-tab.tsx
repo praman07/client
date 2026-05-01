@@ -242,7 +242,7 @@ export function AboutTab({ conversation }: AboutTabProps) {
       <div className="flex items-start justify-between gap-4 px-4 py-3.5 rounded-lg border-subtle bg-layer-1">
         <div className="flex items-start gap-3 min-w-0">
           <div className="mt-0.5 shrink-0 p-1.5 rounded-md bg-layer-1-hover">
-            conversation.isPublic ? <Globe className="size-4 text-secondary" /> : <Lock className="size-4 text-secondary" />
+            {conversation.isPublic ? <Globe className="size-4 text-secondary" /> : <Lock className="size-4 text-secondary" />}
           </div>
           <div className="min-w-0">
             <p className="text-14 font-semibold text-primary">
@@ -265,9 +265,7 @@ export function AboutTab({ conversation }: AboutTabProps) {
           >
             {togglingVisibility
               ? 'Saving…'
-              : conversation.isPublic
-                ? 'Make private'
-                : 'Make public'}
+              : conversation.isPublic ? 'Make private' : 'Make public'}
           </Button>
         </Guard>
       </div>

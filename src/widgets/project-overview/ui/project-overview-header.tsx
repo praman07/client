@@ -1,8 +1,4 @@
 import { Archive, CheckCircle2, Lock } from 'lucide-react'
-import { Button } from '@/shared/ui/primitives/button'
-import { Guard } from '@/shared/lib/auth/guard'
-import { useAppDispatch } from '@/shared/hooks'
-import { openAddMemberDialog } from '@/features/project/add-project-member'
 
 interface ProjectOverviewHeaderProps {
   name: string
@@ -19,8 +15,6 @@ export function ProjectOverviewHeader({
   isPrivate,
   isArchived,
 }: ProjectOverviewHeaderProps) {
-  const dispatch = useAppDispatch()
-
   return (
     <div className="flex flex-col gap-3">
       {/* ── Main row ──────────────────────────────────────────── */}
@@ -68,19 +62,7 @@ export function ProjectOverviewHeader({
           )}
         </div>
 
-        {/* RIGHT: Add Member button */}
-        <div className="shrink-0">
-          <Guard permission="project:member:add">
-            <Button
-              size="sm"
-              variant="default"
-              onClick={() => dispatch(openAddMemberDialog())}
-              className="h-8 px-3 text-13 font-medium"
-            >
-              Add Member
-            </Button>
-          </Guard>
-        </div>
+        {/* RIGHT: Actions (placeholder for future features) */}
       </div>
     </div>
   )

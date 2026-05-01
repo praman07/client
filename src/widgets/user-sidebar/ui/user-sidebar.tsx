@@ -1,7 +1,6 @@
 import { Link, useLocation } from '@tanstack/react-router'
 import {
   ChevronsUpDown,
-  CreditCard,
   Home,
   Layers,
   LogOut,
@@ -150,16 +149,6 @@ export function UserSidebar() {
               >
                 <Settings />
                 <span>Settings</span>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-            <SidebarMenuItem>
-              <SidebarMenuButton
-                render={<Link to="/user/billing" />}
-                tooltip="Billing"
-                isActive={location.pathname.startsWith('/user/billing')}
-              >
-                <CreditCard />
-                <span>Billing</span>
               </SidebarMenuButton>
             </SidebarMenuItem>
           </SidebarMenu>

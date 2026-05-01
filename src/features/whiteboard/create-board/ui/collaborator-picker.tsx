@@ -113,7 +113,7 @@ export function CollaboratorPicker({
             if (!member) return null
             const isOwner = userId === currentUserId
             return (
-              <Badge key={userId} variant="secondary" className="gap-1.5 pr-1">
+              <Badge key={userId} variant="default" className="gap-1.5 pr-1">
                 <Avatar className="h-4 w-4">
                   <AvatarImage src={member.user.avatarUrl || ''} />
                   <AvatarFallback className="text-[8px]">
@@ -138,7 +138,7 @@ export function CollaboratorPicker({
       )}
 
       {/* Member List */}
-      <ScrollArea className="h-[200px] rounded-md border">
+      <ScrollArea className="h-[200px] rounded-md border border-subtle">
         <div className="p-2 space-y-1">
           {filteredMembers.length === 0 ? (
             <div className="text-14 text-secondary text-center py-8">
