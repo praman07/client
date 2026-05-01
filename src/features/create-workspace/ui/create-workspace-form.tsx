@@ -54,7 +54,7 @@ export function CreateWorkspaceForm() {
         </p>
       </div>
 
-      <div className="bg-layer-1 border border-subtle rounded-xl p-6 shadow-raised-100 animate-fade-in-in">
+      <div className="bg-layer-1 border border-subtle rounded-xl p-6 shadow-raised-100 animate-fade-in">
         <form
           onSubmit={(e) => {
             e.preventDefault()

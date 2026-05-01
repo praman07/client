@@ -63,7 +63,7 @@ export function SignUpPage() {
   }
 
   return (
-    <div className="flex min-h-svh flex-col items-center justify-center bg-canvas p-6">
+    <div className="flex min-h-svh flex-col items-center justify-center bg-surface-1 p-6">
       <div className="w-full max-w-sm space-y-6">
         {/* Logo */}
         <div className="flex flex-col items-center gap-2 text-center">

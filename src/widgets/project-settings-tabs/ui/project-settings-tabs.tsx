@@ -53,7 +53,7 @@ export function ProjectSettingsTabs({
 
   return (
     <SidebarProvider>
-      <div className="flex flex-col gap-8 animate-fade-in-in">
+      <div className="flex flex-col gap-8 animate-fade-in">
         {/* Page header */}
         <div>
           <h1 className="text-20 font-semibold tracking-tight">Project Settings</h1>

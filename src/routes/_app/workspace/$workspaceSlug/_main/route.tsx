@@ -22,7 +22,7 @@ function WorkspaceMainLayout() {
   return (
     <>
       <NavTabs items={WORKSPACE_TABS as any} from={Route.fullPath} />
-      <main className="flex-1 overflow-auto bg-background">
+      <main className="flex-1 overflow-auto bg-surface-1">
         <div className="mx-auto max-w-7xl w-full p-6 lg:p-8">
           <ErrorBoundary FallbackComponent={({ error, resetErrorBoundary }) => (
             <RouteError error={error} reset={resetErrorBoundary} />

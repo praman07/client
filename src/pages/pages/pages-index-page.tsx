@@ -23,7 +23,7 @@ function formatDate(iso: string): string {
 
 function PageCardSkeleton() {
   return (
-    <div className="bg-layer-1 border border-subtle rounded-lg p-3 animate-fade-in-in">
+    <div className="bg-layer-1 border border-subtle rounded-lg p-3 animate-fade-in">
       <div className="h-8 flex items-center justify-center mb-2">
         <div className="size-8 bg-layer-2 animate-pulse-subtle rounded-md" />
       </div>

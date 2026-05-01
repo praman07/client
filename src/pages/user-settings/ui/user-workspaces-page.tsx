@@ -12,7 +12,7 @@ export function UserWorkspacesPage() {
   const workspaces = (data?.myWorkspaces ?? []) as Array<any>
 
   return (
-    <div className="space-y-6">
+    <div className="flex-1 min-h-0 overflow-y-auto p-6 space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-20 sm:text-24 font-bold tracking-tight">Workspaces</h1>

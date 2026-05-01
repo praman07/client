@@ -282,7 +282,7 @@ function WhiteboardMockup() {
   ]
 
   return (
-    <div className="relative h-full overflow-hidden rounded-lg border border-white/8 bg-layer-950">
+    <div className="relative h-full overflow-hidden rounded-lg border border-white/8 bg-neutral-black">
       {/* toolbar */}
       <div className="absolute top-0 inset-x-0 flex items-center gap-2 border-b border-white/8 bg-black/60 px-3 py-1.5 z-10">
         <PenLine className="h-3 w-3 text-accent-primary400" />

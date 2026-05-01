@@ -10,7 +10,7 @@ export function AuthSplitLayout({ children }: AuthSplitLayoutProps) {
   return (
     <div className="grid min-h-screen w-full lg:grid-cols-2">
       {/* Visual Branding Side - Hidden on mobile */}
-      <div className="relative hidden h-full flex-col bg-layer-950 p-10 text-white dark:border-r lg:flex">
+      <div className="relative hidden h-full flex-col bg-neutral-black p-10 text-white dark:border-r lg:flex">
         {/* Logo */}
         <div className="relative z-20 flex items-center text-18 font-bold tracking-tight">
           <img src="/logo.png" alt="Collabify" className="mr-2 h-8 w-8" />
