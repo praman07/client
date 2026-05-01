@@ -11,7 +11,7 @@ import { useEffect, useRef } from 'react'
 import type { DefaultReactSuggestionItem } from '@blocknote/react'
 import { SearchEntityType } from '@/gql/graphql'
 // Side-effect import: makes csm-* + cmm-* styles available for all editors
-import '@/widgets/page-editor/ui/editor.css'
+import '@/app/styles/blocknote.css'
 
 // ── Category tabs config ──────────────────────────────────────────────────────
 

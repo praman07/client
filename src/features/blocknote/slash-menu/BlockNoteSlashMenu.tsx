@@ -2,19 +2,18 @@ import { useEffect, useRef } from 'react'
 import type {DefaultReactSuggestionItem, SuggestionMenuProps} from '@blocknote/react';
 
 /**
- * CollabifySlashMenu — custom slash menu matching the "Obsidian Architect" design system.
+ * BlockNoteSlashMenu — custom slash-command menu styled to the Collabify design system.
  *
- * Layout per reference image:
- *   [28px icon box] [title · subtext?]   [badge]
- * Grouped by `item.group` with a section label above each group.
- * A "Close menu" footer is appended.
+ * Layout: [28px icon box] [title · subtext?]  [badge]
+ * Grouped by `item.group` with a section label per group.
+ * A "Close menu · esc" footer is appended.
  *
- * Position, visibility, keyboard navigation, and filtering are handled entirely
- * by BlockNote's SuggestionMenuController — this component only handles rendering.
+ * Position, visibility, keyboard navigation, and filtering are fully handled by
+ * BlockNote's `SuggestionMenuController` — this component is rendering-only.
  *
- * @layer Widgets/page-editor
+ * @layer Features → blocknote/slash-menu
  */
-export function NotionSlashMenu(
+export function BlockNoteSlashMenu(
   props: SuggestionMenuProps<DefaultReactSuggestionItem>,
 ) {
   const { items, selectedIndex, onItemClick } = props

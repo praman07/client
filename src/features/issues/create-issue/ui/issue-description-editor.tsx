@@ -20,10 +20,13 @@
  * @layer Features
  */
 import '@blocknote/shadcn/style.css'
+import '@/app/styles/blocknote.css'
 import { useEffect, useRef } from 'react'
 import { useCreateBlockNote } from '@blocknote/react'
 import { BlockNoteView } from '@blocknote/shadcn'
+import { SuggestionMenuController } from '@blocknote/react'
 import { BlockNoteEmojiPicker } from '@/features/blocknote/emoji-picker'
+import { BlockNoteSlashMenu } from '@/features/blocknote/slash-menu'
 
 import { en } from '@blocknote/core/locales'
 import type { BlockNoteEditor } from '@blocknote/core'
@@ -97,14 +100,15 @@ export function IssueDescriptionEditor({
       editor={editor}
       editable={editable}
       theme="light"
-      // Remove side menu (drag handle / add-block button) — keeps the UI
-      // clean inside the create modal and also eliminates the side gutter.
       sideMenu={false}
-      // Remove the floating formatting toolbar — issue descriptions are
-      // simple; full toolbar is available in the edit modal.
+      slashMenu={false}
       formattingToolbar={false}
       emojiPicker={false}
     >
+      <SuggestionMenuController
+        triggerCharacter="/"
+        suggestionMenuComponent={BlockNoteSlashMenu}
+      />
       {/* @-mention suggestion menu — backed by TanStack entity cache */}
       <MentionMenuController projectId={projectId} />
       <BlockNoteEmojiPicker />

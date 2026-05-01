@@ -1,12 +1,12 @@
 import '@blocknote/shadcn/style.css'
-import './editor.css'
+import '@/app/styles/blocknote.css'
 import { reset as resetLinkify } from 'linkifyjs'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { SuggestionMenuController, useCreateBlockNote } from '@blocknote/react'
 import { BlockNoteView } from '@blocknote/shadcn'
 import { BlockNoteEmojiPicker } from '@/features/blocknote/emoji-picker'
 import { usePageSync } from '../hooks/use-page-sync'
-import { NotionSlashMenu } from './notion-slash-menu'
+import { BlockNoteSlashMenu } from '@/features/blocknote/slash-menu'
 import { PageEditorSkeleton } from './page-editor-skeleton'
 import { PageTitle } from './page-title'
 import { LockedBanner } from './locked-banner'
@@ -263,7 +263,7 @@ function PageEditorBody({
         <BlockNoteView editor={editor} editable={!isLocked} slashMenu={false} emojiPicker={false}>
           <SuggestionMenuController
             triggerCharacter="/"
-            suggestionMenuComponent={NotionSlashMenu}
+            suggestionMenuComponent={BlockNoteSlashMenu}
           />
           {/* @-mention suggestion menu — backed by TanStack entity cache */}
           <MentionMenuController projectId={project.id} />

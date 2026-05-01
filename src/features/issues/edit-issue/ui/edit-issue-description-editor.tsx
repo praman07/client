@@ -11,9 +11,11 @@
  * @layer Features
  */
 import '@blocknote/shadcn/style.css'
+import '@/app/styles/blocknote.css'
 import { useEffect, useRef } from 'react'
 import { useCreateBlockNote } from '@blocknote/react'
 import { BlockNoteView } from '@blocknote/shadcn'
+import { SuggestionMenuController } from '@blocknote/react'
 import { en } from '@blocknote/core/locales'
 import { useGetIssueDescription } from '../hooks/use-get-issue-description'
 import type { BlockNoteEditor } from '@blocknote/core'
@@ -28,6 +30,7 @@ import { VaultFileSource, markFilesUnreferenced } from '@/shared/api/vault'
 import { createLogger } from '@/shared/lib/logger'
 import { MentionMenuController, mentionSchema, useSyncMentions } from '@/features/mention'
 import { BlockNoteEmojiPicker } from '@/features/blocknote/emoji-picker'
+import { BlockNoteSlashMenu } from '@/features/blocknote/slash-menu'
 
 interface EditIssueDescriptionEditorProps {
   issueId: string
@@ -205,8 +208,13 @@ export function EditIssueDescriptionEditor({
       editable={editable}
       theme="light"
       sideMenu={false}
+      slashMenu={false}
       emojiPicker={false}
     >
+      <SuggestionMenuController
+        triggerCharacter="/"
+        suggestionMenuComponent={BlockNoteSlashMenu}
+      />
       {/* @-mention suggestion menu — backed by TanStack entity cache */}
       {project?.id && <MentionMenuController projectId={project.id} />}
       <BlockNoteEmojiPicker />
