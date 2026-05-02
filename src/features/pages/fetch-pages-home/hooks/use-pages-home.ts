@@ -10,15 +10,21 @@ import { GET_PAGES_HOME } from '../api/fragments'
 import { useAuth } from '@/shared/hooks'
 import { GqlClient } from '@/shared/api/graphql-client'
 
-export function usePagesHome(limit = 10) {
+interface UsePagesHomeParams {
+  workspaceId: string;
+  projectId: string;
+  limit?: number;
+}
+
+export function usePagesHome({ workspaceId, projectId, limit = 10 }: UsePagesHomeParams) {
   const { getToken } = useAuth()
 
   return useQuery({
-    queryKey: [...pagesHomeKeys.lists(), limit],
+    queryKey: pagesHomeKeys.list(workspaceId, projectId),
     queryFn: async () => {
       const token = await getToken()
       if (!token) throw new Error('Not authenticated')
-      return GqlClient(token).request(GET_PAGES_HOME, { limit })
+      return GqlClient(token).request(GET_PAGES_HOME, { workspaceId, projectId, limit })
     },
   })
 }

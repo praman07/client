@@ -100,7 +100,7 @@ type Query {
   Live presence from Redis ZSET (not DB). Reflects current editing sessions.
   """
   getActivePageCollaborators(pageId: ID!): [PageCollaborator!]!
-  getPagesHome(limit: Int): PagesHomeResult!
+  getPagesHome(workspaceId: ID!, projectId: ID!, limit: Int): PagesHomeResult!
 
   """
   Returns the immediate children (subfolders + files) of a folder.

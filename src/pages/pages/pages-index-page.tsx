@@ -160,6 +160,8 @@ function EmptyState() {
 interface PagesIndexPageProps {
   workspaceSlug: string;
   projectSlug: string;
+  workspaceId?: string;
+  projectId?: string;
 }
 
 /**
@@ -170,8 +172,8 @@ interface PagesIndexPageProps {
  *
  * @layer Pages
  */
-export function PagesIndexPage({ workspaceSlug, projectSlug }: PagesIndexPageProps) {
-  const { data, isLoading } = usePagesHome(10);
+export function PagesIndexPage({ workspaceSlug, projectSlug, workspaceId, projectId }: PagesIndexPageProps) {
+  const { data, isLoading } = usePagesHome({ workspaceId: workspaceId ?? '', projectId: projectId ?? '', limit: 10 });
 
   if (isLoading) return <LoadingView />;
 

@@ -10,8 +10,8 @@
 import { gql } from '@/gql';
 
 export const GET_PAGES_HOME = gql(`
-  query GetPagesHome($limit: Int) {
-    getPagesHome(limit: $limit) {
+  query GetPagesHome($workspaceId: ID!, $projectId: ID!, $limit: Int) {
+    getPagesHome(workspaceId: $workspaceId, projectId: $projectId, limit: $limit) {
       pages {
         id
         title
