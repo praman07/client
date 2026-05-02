@@ -23,7 +23,7 @@ function WorkspaceMainLayout() {
     <>
       <NavTabs items={WORKSPACE_TABS as any} from={Route.fullPath} />
       <main className="flex-1 overflow-auto">
-        <div className="mx-auto max-w-7xl w-full p-6 lg:p-8">
+        <div className="mx-auto max-w-screen-2xl w-full px-(--padding-page) py-6 lg:py-8">
           <ErrorBoundary FallbackComponent={({ error, resetErrorBoundary }) => (
             <RouteError error={error} reset={resetErrorBoundary} />
           )}>

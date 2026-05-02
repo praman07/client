@@ -72,7 +72,7 @@ export function ProjectsPage({ workspaceSlug }: ProjectsPageProps) {
   const hasProjects = projects && projects.length > 0
 
   return (
-    <div className="container mx-auto px-4 md:px-8 py-6 space-y-8">
+    <div className="space-y-8">
       {/* Header */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <h1 className="text-20 md:text-24 font-bold tracking-tight">Projects</h1>

@@ -16,12 +16,10 @@ export function HomePage() {
   const pendingInvites = userHomeData?.pendingInvites ?? []
 
   return (
-    <>
+    <div className="flex-1 min-h-0 space-y-6">
       <HomeHeader firstName={firstName} isLoading={!isUserLoading} />
-      <div className="w-full max-w-screen-2xl mx-auto px-[var(--padding-page)] flex-1 py-6 md:py-8 space-y-8 md:space-y-10">
-        <PendingInvitesSection invites={pendingInvites} />
-        <RecentWorkspaces workspaces={workspaces} isLoading={isUserHomeLoading} />
-      </div>
-    </>
+      <PendingInvitesSection invites={pendingInvites} />
+      <RecentWorkspaces workspaces={workspaces} isLoading={isUserHomeLoading} />
+    </div>
   )
 }

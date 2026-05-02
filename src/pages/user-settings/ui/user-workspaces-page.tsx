@@ -12,14 +12,13 @@ export function UserWorkspacesPage() {
   const workspaces = (data?.myWorkspaces ?? []) as Array<any>
 
   return (
-    <div className="flex-1 min-h-0 overflow-y-auto p-6 space-y-6">
+    <div className="flex-1 min-h-0 space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-20 sm:text-24 font-bold tracking-tight">Workspaces</h1>
+          <h1 className="text-20 sm:text-24 font-semibold tracking-tight">Workspaces</h1>
           <p className="text-13 sm:text-14 text-secondary mt-1">All your workspaces.</p>
         </div>
         <Button
-          size="sm"
           className="gap-1.5"
           onClick={() => void navigate({ to: '/workspace/new' })}
         >
@@ -40,7 +39,6 @@ export function UserWorkspacesPage() {
           <p className="text-13 font-medium text-secondary">No workspaces yet</p>
           <p className="text-11 text-tertiary mt-1 mb-4">Create your first workspace to start collaborating</p>
           <Button
-            size="sm"
             className="gap-1.5"
             onClick={() => void navigate({ to: '/workspace/new' })}
           >

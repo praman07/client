@@ -25,8 +25,8 @@ function SettingsLayout() {
   const { workspaceSlug, projectSlug } = Route.useParams()
 
   return (
-    <div className="h-full overflow-auto">
-      <div className="mx-auto max-w-7xl w-full px-6 py-8 lg:px-8">
+    <main className="flex-1 overflow-auto">
+      <div className="mx-auto max-w-screen-2xl w-full px-(--padding-page) py-6 lg:py-8">
         <ProjectSettingsTabs workspaceSlug={workspaceSlug} projectSlug={projectSlug}>
           <ErrorBoundary FallbackComponent={({ error, resetErrorBoundary }) => (
             <RouteError error={error} reset={resetErrorBoundary} />
@@ -37,6 +37,6 @@ function SettingsLayout() {
           </ErrorBoundary>
         </ProjectSettingsTabs>
       </div>
-    </div>
+    </main>
   )
 }

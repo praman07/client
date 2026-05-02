@@ -18,7 +18,7 @@ export function HomeHeader({ firstName, isLoading }: HomeHeaderProps) {
   else if (hour < 18) greeting = 'Good afternoon'
 
   return (
-    <section className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-2 px-[var(--padding-page)] pt-8">
+    <section className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
       <div className="flex items-start gap-3">
         <div className="flex flex-col">
           <h1 className="text-24 font-semibold tracking-tight text-primary">
@@ -30,7 +30,7 @@ export function HomeHeader({ firstName, isLoading }: HomeHeaderProps) {
         </div>
       </div>
       <div className="flex items-center shrink-0">
-        <Button onClick={() => void navigate({ to: '/workspace/new' })} className="gap-2 shadow-raised-100">
+        <Button onClick={() => void navigate({ to: '/workspace/new' })} className="gap-1.5">
           <Plus className="size-4" />
           Create Workspace
         </Button>
