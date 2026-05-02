@@ -1,1 +1,0 @@
-export { AppMockup } from './mockup'

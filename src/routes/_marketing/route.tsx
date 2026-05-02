@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Link, Outlet, createFileRoute } from '@tanstack/react-router';
 import { useAuth } from '@clerk/clerk-react';
-import { MarketingFooter } from '@/pages/marketing';
 import {
   MobileNav,
   MobileNavHeader,
@@ -141,7 +140,6 @@ function MarketingLayout() {
       <main className="flex-1 relative z-10 w-full overflow-hidden flex flex-col pt-20">
         <Outlet />
       </main>
-      <MarketingFooter />
     </div>
   );
 }

@@ -14,18 +14,11 @@ import { Route as UnauthorizedRouteRouteImport } from './routes/unauthorized/rou
 import { Route as MarketingRouteRouteImport } from './routes/_marketing/route'
 import { Route as AuthRouteRouteImport } from './routes/_auth/route'
 import { Route as AppRouteRouteImport } from './routes/_app/route'
-import { Route as MarketingIndexRouteImport } from './routes/_marketing/index'
-import { Route as MarketingPricingRouteImport } from './routes/_marketing/pricing'
-import { Route as MarketingContactRouteImport } from './routes/_marketing/contact'
-import { Route as MarketingChangelogRouteImport } from './routes/_marketing/changelog'
-import { Route as MarketingAboutRouteImport } from './routes/_marketing/about'
 import { Route as AuthSsoCallbackRouteImport } from './routes/_auth/sso-callback'
 import { Route as AuthSignUpRouteImport } from './routes/_auth/sign-up'
 import { Route as AuthSignInRouteImport } from './routes/_auth/sign-in'
 import { Route as AppOnboardingRouteImport } from './routes/_app/onboarding'
 import { Route as AppUserLayerRouteRouteImport } from './routes/_app/_user-layer/route'
-import { Route as MarketingFeaturesChatRouteImport } from './routes/_marketing/features/chat'
-import { Route as MarketingCompareSlackRouteImport } from './routes/_marketing/compare/slack'
 import { Route as AppWorkspaceNewRouteImport } from './routes/_app/workspace/new'
 import { Route as AppWorkspaceJoinRouteImport } from './routes/_app/workspace/join'
 import { Route as AppUserLayerHomeRouteImport } from './routes/_app/_user-layer/home'
@@ -85,31 +78,6 @@ const AppRouteRoute = AppRouteRouteImport.update({
   id: '/_app',
   getParentRoute: () => rootRouteImport,
 } as any)
-const MarketingIndexRoute = MarketingIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => MarketingRouteRoute,
-} as any)
-const MarketingPricingRoute = MarketingPricingRouteImport.update({
-  id: '/pricing',
-  path: '/pricing',
-  getParentRoute: () => MarketingRouteRoute,
-} as any)
-const MarketingContactRoute = MarketingContactRouteImport.update({
-  id: '/contact',
-  path: '/contact',
-  getParentRoute: () => MarketingRouteRoute,
-} as any)
-const MarketingChangelogRoute = MarketingChangelogRouteImport.update({
-  id: '/changelog',
-  path: '/changelog',
-  getParentRoute: () => MarketingRouteRoute,
-} as any)
-const MarketingAboutRoute = MarketingAboutRouteImport.update({
-  id: '/about',
-  path: '/about',
-  getParentRoute: () => MarketingRouteRoute,
-} as any)
 const AuthSsoCallbackRoute = AuthSsoCallbackRouteImport.update({
   id: '/sso-callback',
   path: '/sso-callback',
@@ -133,16 +101,6 @@ const AppOnboardingRoute = AppOnboardingRouteImport.update({
 const AppUserLayerRouteRoute = AppUserLayerRouteRouteImport.update({
   id: '/_user-layer',
   getParentRoute: () => AppRouteRoute,
-} as any)
-const MarketingFeaturesChatRoute = MarketingFeaturesChatRouteImport.update({
-  id: '/features/chat',
-  path: '/features/chat',
-  getParentRoute: () => MarketingRouteRoute,
-} as any)
-const MarketingCompareSlackRoute = MarketingCompareSlackRouteImport.update({
-  id: '/compare/slack',
-  path: '/compare/slack',
-  getParentRoute: () => MarketingRouteRoute,
 } as any)
 const AppWorkspaceNewRoute = AppWorkspaceNewRouteImport.update({
   id: '/workspace/new',
@@ -370,24 +328,18 @@ const AppWorkspaceWorkspaceSlugProjectProjectSlugChatConversationIdRoute =
   )
 
 export interface FileRoutesByFullPath {
-  '/': typeof MarketingIndexRoute
+  '/': typeof AppUserLayerRouteRouteWithChildren
   '/unauthorized': typeof UnauthorizedRouteRoute
   '/$': typeof SplatRoute
   '/onboarding': typeof AppOnboardingRoute
   '/sign-in': typeof AuthSignInRoute
   '/sign-up': typeof AuthSignUpRoute
   '/sso-callback': typeof AuthSsoCallbackRoute
-  '/about': typeof MarketingAboutRoute
-  '/changelog': typeof MarketingChangelogRoute
-  '/contact': typeof MarketingContactRoute
-  '/pricing': typeof MarketingPricingRoute
   '/user': typeof AppUserLayerUserRouteRouteWithChildren
   '/workspace/$workspaceSlug': typeof AppWorkspaceWorkspaceSlugMainRouteRouteWithChildren
   '/home': typeof AppUserLayerHomeRoute
   '/workspace/join': typeof AppWorkspaceJoinRoute
   '/workspace/new': typeof AppWorkspaceNewRoute
-  '/compare/slack': typeof MarketingCompareSlackRoute
-  '/features/chat': typeof MarketingFeaturesChatRoute
   '/user/billing': typeof AppUserLayerUserBillingRoute
   '/user/profile': typeof AppUserLayerUserProfileRoute
   '/user/settings': typeof AppUserLayerUserSettingsRoute
@@ -420,24 +372,18 @@ export interface FileRoutesByFullPath {
   '/workspace/$workspaceSlug/project/$projectSlug/whiteboard/': typeof AppWorkspaceWorkspaceSlugProjectProjectSlugWhiteboardIndexRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof MarketingIndexRoute
+  '/': typeof AppUserLayerRouteRouteWithChildren
   '/unauthorized': typeof UnauthorizedRouteRoute
   '/$': typeof SplatRoute
   '/onboarding': typeof AppOnboardingRoute
   '/sign-in': typeof AuthSignInRoute
   '/sign-up': typeof AuthSignUpRoute
   '/sso-callback': typeof AuthSsoCallbackRoute
-  '/about': typeof MarketingAboutRoute
-  '/changelog': typeof MarketingChangelogRoute
-  '/contact': typeof MarketingContactRoute
-  '/pricing': typeof MarketingPricingRoute
   '/user': typeof AppUserLayerUserRouteRouteWithChildren
   '/workspace/$workspaceSlug': typeof AppWorkspaceWorkspaceSlugMainIndexRoute
   '/home': typeof AppUserLayerHomeRoute
   '/workspace/join': typeof AppWorkspaceJoinRoute
   '/workspace/new': typeof AppWorkspaceNewRoute
-  '/compare/slack': typeof MarketingCompareSlackRoute
-  '/features/chat': typeof MarketingFeaturesChatRoute
   '/user/billing': typeof AppUserLayerUserBillingRoute
   '/user/profile': typeof AppUserLayerUserProfileRoute
   '/user/settings': typeof AppUserLayerUserSettingsRoute
@@ -465,7 +411,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_app': typeof AppRouteRouteWithChildren
   '/_auth': typeof AuthRouteRouteWithChildren
-  '/_marketing': typeof MarketingRouteRouteWithChildren
+  '/_marketing': typeof MarketingRouteRoute
   '/unauthorized': typeof UnauthorizedRouteRoute
   '/$': typeof SplatRoute
   '/_app/_user-layer': typeof AppUserLayerRouteRouteWithChildren
@@ -473,18 +419,11 @@ export interface FileRoutesById {
   '/_auth/sign-in': typeof AuthSignInRoute
   '/_auth/sign-up': typeof AuthSignUpRoute
   '/_auth/sso-callback': typeof AuthSsoCallbackRoute
-  '/_marketing/about': typeof MarketingAboutRoute
-  '/_marketing/changelog': typeof MarketingChangelogRoute
-  '/_marketing/contact': typeof MarketingContactRoute
-  '/_marketing/pricing': typeof MarketingPricingRoute
-  '/_marketing/': typeof MarketingIndexRoute
   '/_app/_user-layer/user': typeof AppUserLayerUserRouteRouteWithChildren
   '/_app/workspace/$workspaceSlug': typeof AppWorkspaceWorkspaceSlugRouteRouteWithChildren
   '/_app/_user-layer/home': typeof AppUserLayerHomeRoute
   '/_app/workspace/join': typeof AppWorkspaceJoinRoute
   '/_app/workspace/new': typeof AppWorkspaceNewRoute
-  '/_marketing/compare/slack': typeof MarketingCompareSlackRoute
-  '/_marketing/features/chat': typeof MarketingFeaturesChatRoute
   '/_app/workspace/$workspaceSlug/_main': typeof AppWorkspaceWorkspaceSlugMainRouteRouteWithChildren
   '/_app/_user-layer/user/billing': typeof AppUserLayerUserBillingRoute
   '/_app/_user-layer/user/profile': typeof AppUserLayerUserProfileRoute
@@ -527,17 +466,11 @@ export interface FileRouteTypes {
     | '/sign-in'
     | '/sign-up'
     | '/sso-callback'
-    | '/about'
-    | '/changelog'
-    | '/contact'
-    | '/pricing'
     | '/user'
     | '/workspace/$workspaceSlug'
     | '/home'
     | '/workspace/join'
     | '/workspace/new'
-    | '/compare/slack'
-    | '/features/chat'
     | '/user/billing'
     | '/user/profile'
     | '/user/settings'
@@ -577,17 +510,11 @@ export interface FileRouteTypes {
     | '/sign-in'
     | '/sign-up'
     | '/sso-callback'
-    | '/about'
-    | '/changelog'
-    | '/contact'
-    | '/pricing'
     | '/user'
     | '/workspace/$workspaceSlug'
     | '/home'
     | '/workspace/join'
     | '/workspace/new'
-    | '/compare/slack'
-    | '/features/chat'
     | '/user/billing'
     | '/user/profile'
     | '/user/settings'
@@ -622,18 +549,11 @@ export interface FileRouteTypes {
     | '/_auth/sign-in'
     | '/_auth/sign-up'
     | '/_auth/sso-callback'
-    | '/_marketing/about'
-    | '/_marketing/changelog'
-    | '/_marketing/contact'
-    | '/_marketing/pricing'
-    | '/_marketing/'
     | '/_app/_user-layer/user'
     | '/_app/workspace/$workspaceSlug'
     | '/_app/_user-layer/home'
     | '/_app/workspace/join'
     | '/_app/workspace/new'
-    | '/_marketing/compare/slack'
-    | '/_marketing/features/chat'
     | '/_app/workspace/$workspaceSlug/_main'
     | '/_app/_user-layer/user/billing'
     | '/_app/_user-layer/user/profile'
@@ -670,7 +590,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   AppRouteRoute: typeof AppRouteRouteWithChildren
   AuthRouteRoute: typeof AuthRouteRouteWithChildren
-  MarketingRouteRoute: typeof MarketingRouteRouteWithChildren
+  MarketingRouteRoute: typeof MarketingRouteRoute
   UnauthorizedRouteRoute: typeof UnauthorizedRouteRoute
   SplatRoute: typeof SplatRoute
 }
@@ -712,41 +632,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_marketing/': {
-      id: '/_marketing/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof MarketingIndexRouteImport
-      parentRoute: typeof MarketingRouteRoute
-    }
-    '/_marketing/pricing': {
-      id: '/_marketing/pricing'
-      path: '/pricing'
-      fullPath: '/pricing'
-      preLoaderRoute: typeof MarketingPricingRouteImport
-      parentRoute: typeof MarketingRouteRoute
-    }
-    '/_marketing/contact': {
-      id: '/_marketing/contact'
-      path: '/contact'
-      fullPath: '/contact'
-      preLoaderRoute: typeof MarketingContactRouteImport
-      parentRoute: typeof MarketingRouteRoute
-    }
-    '/_marketing/changelog': {
-      id: '/_marketing/changelog'
-      path: '/changelog'
-      fullPath: '/changelog'
-      preLoaderRoute: typeof MarketingChangelogRouteImport
-      parentRoute: typeof MarketingRouteRoute
-    }
-    '/_marketing/about': {
-      id: '/_marketing/about'
-      path: '/about'
-      fullPath: '/about'
-      preLoaderRoute: typeof MarketingAboutRouteImport
-      parentRoute: typeof MarketingRouteRoute
-    }
     '/_auth/sso-callback': {
       id: '/_auth/sso-callback'
       path: '/sso-callback'
@@ -781,20 +666,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof AppUserLayerRouteRouteImport
       parentRoute: typeof AppRouteRoute
-    }
-    '/_marketing/features/chat': {
-      id: '/_marketing/features/chat'
-      path: '/features/chat'
-      fullPath: '/features/chat'
-      preLoaderRoute: typeof MarketingFeaturesChatRouteImport
-      parentRoute: typeof MarketingRouteRoute
-    }
-    '/_marketing/compare/slack': {
-      id: '/_marketing/compare/slack'
-      path: '/compare/slack'
-      fullPath: '/compare/slack'
-      preLoaderRoute: typeof MarketingCompareSlackRouteImport
-      parentRoute: typeof MarketingRouteRoute
     }
     '/_app/workspace/new': {
       id: '/_app/workspace/new'
@@ -1321,34 +1192,10 @@ const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
   AuthRouteRouteChildren,
 )
 
-interface MarketingRouteRouteChildren {
-  MarketingAboutRoute: typeof MarketingAboutRoute
-  MarketingChangelogRoute: typeof MarketingChangelogRoute
-  MarketingContactRoute: typeof MarketingContactRoute
-  MarketingPricingRoute: typeof MarketingPricingRoute
-  MarketingIndexRoute: typeof MarketingIndexRoute
-  MarketingCompareSlackRoute: typeof MarketingCompareSlackRoute
-  MarketingFeaturesChatRoute: typeof MarketingFeaturesChatRoute
-}
-
-const MarketingRouteRouteChildren: MarketingRouteRouteChildren = {
-  MarketingAboutRoute: MarketingAboutRoute,
-  MarketingChangelogRoute: MarketingChangelogRoute,
-  MarketingContactRoute: MarketingContactRoute,
-  MarketingPricingRoute: MarketingPricingRoute,
-  MarketingIndexRoute: MarketingIndexRoute,
-  MarketingCompareSlackRoute: MarketingCompareSlackRoute,
-  MarketingFeaturesChatRoute: MarketingFeaturesChatRoute,
-}
-
-const MarketingRouteRouteWithChildren = MarketingRouteRoute._addFileChildren(
-  MarketingRouteRouteChildren,
-)
-
 const rootRouteChildren: RootRouteChildren = {
   AppRouteRoute: AppRouteRouteWithChildren,
   AuthRouteRoute: AuthRouteRouteWithChildren,
-  MarketingRouteRoute: MarketingRouteRouteWithChildren,
+  MarketingRouteRoute: MarketingRouteRoute,
   UnauthorizedRouteRoute: UnauthorizedRouteRoute,
   SplatRoute: SplatRoute,
 }
