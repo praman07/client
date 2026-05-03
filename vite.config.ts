@@ -55,7 +55,19 @@ function manualChunks(id: string): string | undefined {
 const config = defineConfig({
   plugins: [
     devtools(),
-    nitro(),
+    nitro({
+      // Cache hashed assets forever — fixes FOUC during client-side navigation.
+      // Without this the browser re-fetches CSS on each navigation and can
+      // show unstyled content while the request is in-flight.
+      // See: https://github.com/TanStack/router/issues/3023#issuecomment-2559735249
+      routeRules: {
+        '/assets/**': {
+          headers: {
+            'cache-control': 'public, max-age=31536000, immutable',
+          },
+        },
+      },
+    }),
     viteTsConfigPaths({
       projects: ['./tsconfig.json'],
     }),
@@ -82,3 +94,4 @@ const config = defineConfig({
 })
 
 export default config
+
