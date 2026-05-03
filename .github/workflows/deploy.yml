@@ -59,6 +59,7 @@ jobs:
           cache-to: type=gha,mode=max
 
       - name: Trigger Coolify redeploy
+        continue-on-error: true   # won't fail the workflow if webhook secrets aren't set
         run: |
           curl --silent --show-error --fail \
             -X GET "${{ secrets.COOLIFY_WEBHOOK_URL }}" \
