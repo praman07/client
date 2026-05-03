@@ -24,7 +24,7 @@ export function AuthSplitLayout({ children }: AuthSplitLayoutProps) {
               Where work comes together
             </h1>
             <p className="text-14 text-secondary leading-relaxed">
-              Docs, tasks, chat, and files — connected in one workspace.
+              Docs, tasks, chat, and files connected in one workspace.
             </p>
           </div>
 
@@ -36,7 +36,7 @@ export function AuthSplitLayout({ children }: AuthSplitLayoutProps) {
               'Your data, your infrastructure',
             ].map((item) => (
               <div key={item} className="flex items-start gap-2.5">
-                <span className="mt-0.5 shrink-0 text-accent-primary text-14">—</span>
+                <span className="mt-0.5 shrink-0 text-accent-primary text-14">•</span>
                 <span className="text-14 text-secondary">{item}</span>
               </div>
             ))}

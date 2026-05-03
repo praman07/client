@@ -17,7 +17,6 @@ export interface NavItem {
 }
 
 export const WORKSPACE_TABS: Array<NavItem> = [
-  { label: 'Overview', href: '.', activeOptions: { exact: true } },
   { label: 'Projects', href: './projects' },
   { label: 'Members', href: './members' },
   { label: 'Settings', href: './settings' },
