@@ -52,8 +52,9 @@ export function useLockBoard() {
       toast.success('Board locked')
     },
     onSettled: (_, __, boardId) => {
-      // Refetch to sync with server
+      // Refetch detail + all list views so the lock badge refreshes on cards
       queryClient.invalidateQueries({ queryKey: boardKeys.detail(boardId) })
+      queryClient.invalidateQueries({ queryKey: boardKeys.lists() })
     },
   })
 }

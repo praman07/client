@@ -1,5 +1,5 @@
-export * from './api'
 export * from './hooks'
 export * from './model'
 export * from './lib'
 export * from './ui'
+export { CreateProjectRoleDialog } from './ui/create-project-role-dialog'

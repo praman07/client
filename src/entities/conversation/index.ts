@@ -14,6 +14,7 @@ export type {
   Conversation,
   ConversationMember,
   ConversationDetail,
+  ConversationNotifPreference,
 } from './model/types'
 
 // Hooks

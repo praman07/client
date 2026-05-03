@@ -1,6 +1,6 @@
 /**
- * Maps a MIME type to a Lucide icon component and a Tailwind color class.
- * Used by VaultFileCard to render MIME-aware icons with semantic colors.
+ * Maps a MIME type to a Lucide icon component and color values.
+ * Uses extended palette tokens for semantic color coding.
  *
  * @layer Widgets — vault-explorer
  */
@@ -19,89 +19,37 @@ import type { LucideIcon } from 'lucide-react'
 
 export interface MimeIconConfig {
   Icon: LucideIcon
-  color: string // Tailwind text color class
-  bgColor: string // Tailwind bg tint class for the preview area
+  color: string
+  bgColor: string
 }
 
+type MimeEntry = MimeIconConfig
+
+const MIME_MAP: Record<string, MimeEntry> = {
+  'image/': { Icon: FileImage, color: 'var(--ext-violet-500)', bgColor: 'oklch(0.65 0.18 275 / 10%)' },
+  'video/': { Icon: FileVideo, color: 'var(--ext-pink-500)', bgColor: 'oklch(0.67 0.21 340 / 10%)' },
+  'audio/': { Icon: FileAudio, color: 'var(--ext-orange-500)', bgColor: 'oklch(0.68 0.20 50 / 10%)' },
+  'application/pdf': { Icon: FileText, color: 'var(--ext-red-500)', bgColor: 'oklch(0.63 0.22 20 / 10%)' },
+  'application/zip': { Icon: FileArchive, color: 'var(--ext-yellow-500)', bgColor: 'oklch(0.78 0.22 90 / 10%)' },
+  'application/x-tar': { Icon: FileArchive, color: 'var(--ext-yellow-500)', bgColor: 'oklch(0.78 0.22 90 / 10%)' },
+  'application/gzip': { Icon: FileArchive, color: 'var(--ext-yellow-500)', bgColor: 'oklch(0.78 0.22 90 / 10%)' },
+  'application/x-7z-compressed': { Icon: FileArchive, color: 'var(--ext-yellow-500)', bgColor: 'oklch(0.78 0.22 90 / 10%)' },
+  'application/x-rar-compressed': { Icon: FileArchive, color: 'var(--ext-yellow-500)', bgColor: 'oklch(0.78 0.22 90 / 10%)' },
+  'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': { Icon: FileSpreadsheet, color: 'var(--ext-green-500)', bgColor: 'oklch(0.65 0.18 155 / 10%)' },
+  'application/vnd.ms-excel': { Icon: FileSpreadsheet, color: 'var(--ext-green-500)', bgColor: 'oklch(0.65 0.18 155 / 10%)' },
+  'text/csv': { Icon: FileSpreadsheet, color: 'var(--ext-green-500)', bgColor: 'oklch(0.65 0.18 155 / 10%)' },
+  'application/vnd.openxmlformats-officedocument.presentationml.presentation': { Icon: Presentation, color: 'var(--ext-orange-600)', bgColor: 'oklch(0.58 0.18 50 / 10%)' },
+  'application/vnd.ms-powerpoint': { Icon: Presentation, color: 'var(--ext-orange-600)', bgColor: 'oklch(0.58 0.18 50 / 10%)' },
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document': { Icon: FileText, color: 'var(--ext-indigo-500)', bgColor: 'oklch(0.58 0.18 262 / 10%)' },
+  'application/msword': { Icon: FileText, color: 'var(--ext-indigo-500)', bgColor: 'oklch(0.58 0.18 262 / 10%)' },
+  'text/': { Icon: FileCode, color: 'var(--ext-teal-500)', bgColor: 'oklch(0.65 0.18 195 / 10%)' },
+  'application/json': { Icon: FileCode, color: 'var(--ext-teal-500)', bgColor: 'oklch(0.65 0.18 195 / 10%)' },
+  'application/xml': { Icon: FileCode, color: 'var(--ext-teal-500)', bgColor: 'oklch(0.65 0.18 195 / 10%)' },
+}
+
+const DEFAULT: MimeEntry = { Icon: File, color: 'var(--ext-grey-500)', bgColor: 'var(--bg-layer-2)' }
+
 export function getMimeIcon(mimeType: string): MimeIconConfig {
-  if (mimeType.startsWith('image/')) {
-    return {
-      Icon: FileImage,
-      color: 'text-violet-500',
-      bgColor: 'bg-violet-500/10',
-    }
-  }
-  if (mimeType.startsWith('video/')) {
-    return {
-      Icon: FileVideo,
-      color: 'text-pink-500',
-      bgColor: 'bg-pink-500/10',
-    }
-  }
-  if (mimeType.startsWith('audio/')) {
-    return {
-      Icon: FileAudio,
-      color: 'text-orange-500',
-      bgColor: 'bg-orange-500/10',
-    }
-  }
-  if (mimeType === 'application/pdf') {
-    return { Icon: FileText, color: 'text-red-500', bgColor: 'bg-red-500/10' }
-  }
-  if (
-    mimeType === 'application/zip' ||
-    mimeType === 'application/x-tar' ||
-    mimeType === 'application/gzip' ||
-    mimeType === 'application/x-7z-compressed' ||
-    mimeType === 'application/x-rar-compressed'
-  ) {
-    return {
-      Icon: FileArchive,
-      color: 'text-yellow-500',
-      bgColor: 'bg-yellow-500/10',
-    }
-  }
-  if (
-    mimeType ===
-      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' ||
-    mimeType === 'application/vnd.ms-excel' ||
-    mimeType === 'text/csv'
-  ) {
-    return {
-      Icon: FileSpreadsheet,
-      color: 'text-green-500',
-      bgColor: 'bg-green-500/10',
-    }
-  }
-  if (
-    mimeType ===
-      'application/vnd.openxmlformats-officedocument.presentationml.presentation' ||
-    mimeType === 'application/vnd.ms-powerpoint'
-  ) {
-    return {
-      Icon: Presentation,
-      color: 'text-amber-500',
-      bgColor: 'bg-amber-500/10',
-    }
-  }
-  if (
-    mimeType ===
-      'application/vnd.openxmlformats-officedocument.wordprocessingml.document' ||
-    mimeType === 'application/msword'
-  ) {
-    return { Icon: FileText, color: 'text-blue-500', bgColor: 'bg-blue-500/10' }
-  }
-  if (
-    mimeType.startsWith('text/') ||
-    mimeType === 'application/json' ||
-    mimeType === 'application/xml'
-  ) {
-    return {
-      Icon: FileCode,
-      color: 'text-emerald-500',
-      bgColor: 'bg-emerald-500/10',
-    }
-  }
-  // Default
-  return { Icon: File, color: 'text-blue-400', bgColor: 'bg-blue-500/10' }
+  const entry = MIME_MAP[mimeType]
+  return entry ?? DEFAULT
 }

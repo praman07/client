@@ -5,10 +5,6 @@ interface ConversationTopicProps {
   className?: string
 }
 
-/**
- * Conversation topic display
- * Shows conversation topic/description
- */
 export function ConversationTopic({
   topic,
   className,
@@ -16,7 +12,7 @@ export function ConversationTopic({
   if (!topic) return null
 
   return (
-    <p className={cn('text-xs text-muted-foreground truncate', className)}>
+    <p className={cn('text-11 text-secondary truncate', className)}>
       {topic}
     </p>
   )

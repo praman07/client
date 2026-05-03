@@ -18,17 +18,20 @@ import { useAppDispatch, useAppSelector } from '@/shared/hooks'
 interface LeaveProjectDialogProps {
   projectId: string
   workspaceSlug: string
+  workspaceId: string
 }
 
 export function LeaveProjectDialog({
   projectId,
   workspaceSlug,
+  workspaceId,
 }: LeaveProjectDialogProps) {
   const isOpen = useAppSelector(selectIsLeaveProjectDialogOpen)
   const dispatch = useAppDispatch()
   const { mutate: leaveProject, isPending } = useLeaveProject(
     projectId,
     workspaceSlug,
+    workspaceId,
   )
 
   return (
@@ -53,7 +56,7 @@ export function LeaveProjectDialog({
               })
             }
             disabled={isPending}
-            className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            className="bg-danger-primary hover:bg-danger-primary-hover text-on-color"
           >
             {isPending ? 'Leaving...' : 'Leave Project'}
           </AlertDialogAction>

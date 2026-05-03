@@ -43,7 +43,7 @@ export function ManageLabelsModal({
 
         <div className="space-y-1">
           {labels.length === 0 && (
-            <p className="py-4 text-center text-sm text-muted-foreground">
+            <p className="py-4 text-center text-13 text-secondary">
               No labels yet. Create one below.
             </p>
           )}
@@ -62,7 +62,7 @@ export function ManageLabelsModal({
           <Button
             variant="ghost"
             size="sm"
-            className="mt-2 w-full justify-start text-muted-foreground"
+            className="mt-2 w-full justify-start text-secondary"
             onClick={() => setShowCreateForm(true)}
           >
             <Plus className="mr-1.5 h-4 w-4" /> Add label

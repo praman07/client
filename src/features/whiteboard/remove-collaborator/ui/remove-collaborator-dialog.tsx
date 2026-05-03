@@ -83,10 +83,10 @@ export function RemoveCollaboratorDialog({
               </AvatarFallback>
             </Avatar>
             <div className="flex flex-col">
-              <span className="text-sm font-medium text-foreground">
+              <span className="text-14 font-medium text-primary">
                 {collaborator.user.fullName}
               </span>
-              <span className="text-xs text-muted-foreground">
+              <span className="text-12 text-secondary">
                 {collaborator.user.email}
               </span>
             </div>
@@ -100,7 +100,7 @@ export function RemoveCollaboratorDialog({
               handleRemove()
             }}
             disabled={isPending}
-            className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            className="bg-danger-primary text-on-color hover:bg-danger-primary-hover"
           >
             {isPending ? 'Removing...' : 'Remove'}
           </AlertDialogAction>

@@ -1,18 +1,57 @@
 import { useState } from 'react'
-import { Archive, ArchiveRestore, Trash2 } from 'lucide-react'
+import { Archive } from 'lucide-react'
 import { useChannelSettings } from '../hooks'
 import type { ConversationFieldsFragment } from '@/gql/graphql'
-
 import { Button } from '@/shared/ui/primitives/button'
-import { Separator } from '@/shared/ui/primitives/separator'
+import { Guard } from '@/shared/lib/auth'
 import { ArchiveChannelDialog } from '@/features/chat/archive-channel'
 import { UnarchiveChannelDialog } from '@/features/chat/unarchive-channel'
 import { DeleteChannelDialog } from '@/features/chat/delete-channel'
+import { ChannelNotificationSettings } from '@/features/chat/set-conversation-notif-mode'
 
 interface SettingsTabProps {
   conversation: ConversationFieldsFragment
 }
 
+// ── Action Row ─────────────────────────────────────────────────────────────────
+interface ActionRowProps {
+  label: string
+  description: React.ReactNode
+  action: React.ReactNode
+  variant?: 'default' | 'danger' | 'warning' | 'success'
+}
+
+function ActionRow({ label, description, action, variant = 'default' }: ActionRowProps) {
+  const borderClass = {
+    default: 'border-subtle-1',
+    danger:  'border-danger-strong',
+    warning: 'border-warning-strong',
+    success: 'border-success-strong',
+  }[variant]
+
+  const bgClass = {
+    default: 'bg-transparent',
+    danger:  'bg-danger-subtle',
+    warning: 'bg-warning-subtle',
+    success: 'bg-success-subtle',
+  }[variant]
+
+  return (
+    <div
+      className={`flex items-start justify-between gap-4 px-4 py-4 rounded-lg border transition-colors ${borderClass} ${bgClass}`}
+    >
+      <div className="min-w-0 flex-1">
+        <p className="text-14 font-medium text-primary">{label}</p>
+        <div className="text-11 text-secondary mt-0.5 leading-relaxed space-y-0.5">
+          {description}
+        </div>
+      </div>
+      <div className="shrink-0">{action}</div>
+    </div>
+  )
+}
+
+// ── Settings Tab ───────────────────────────────────────────────────────────────
 export function SettingsTab({ conversation }: SettingsTabProps) {
   const [archiveDialogOpen, setArchiveDialogOpen] = useState(false)
   const [unarchiveDialogOpen, setUnarchiveDialogOpen] = useState(false)
@@ -24,81 +63,112 @@ export function SettingsTab({ conversation }: SettingsTabProps) {
   const projectId = conversation.projectId || ''
 
   const handleDialogSuccess = () => {
-    // Close the settings modal after successful action
     close()
   }
 
   return (
     <div className="space-y-6">
-      {/* Future settings sections can go here */}
 
-      <Separator />
+      {/* ── Channel management ── */}
+      <section className="space-y-2.5">
+        <p className="text-11 font-semibold uppercase tracking-widest text-tertiary px-1">
+          Channel management
+        </p>
 
-      {/* Danger Zone */}
-      <div className="space-y-4">
-        <div>
-          <h3 className="text-lg font-semibold text-destructive">
-            Danger Zone
-          </h3>
-          <p className="text-sm text-muted-foreground">
-            Irreversible actions that affect this channel
+        <div className="space-y-2">
+          {/* Archive / Unarchive */}
+          <Guard permission="chat:channel:archive">
+            {!isArchived ? (
+              <ActionRow
+                label="Archive channel"
+                description="The channel becomes read-only and hidden for all members."
+                variant="warning"
+                action={
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setArchiveDialogOpen(true)}
+                    className="h-8 text-11 font-medium border-warning-subtle text-warning-primary hover:bg-warning-subtle border-subtle-1"
+                  >
+                    <Archive className="size-3.5 mr-1.5" />
+                    Archive
+                  </Button>
+                }
+              />
+            ) : (
+              <ActionRow
+                label="Unarchive channel"
+                description="Restore this channel so members can post messages again."
+                variant="success"
+                action={
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setUnarchiveDialogOpen(true)}
+                    className="h-8 text-11 font-medium border-success-subtle text-success-primary hover:bg-success-subtle border-subtle-1"
+                  >
+                    Unarchive
+                  </Button>
+                }
+              />
+            )}
+          </Guard>
+
+          {/* Delete */}
+          <Guard permission="chat:channel:delete">
+            <ActionRow
+              label="Delete channel"
+              description={
+                <>
+                  <span>Permanently remove this channel and all its messages.</span>
+                  {!isArchived && (
+                    <span className="block text-warning-primary font-medium">
+                      Archive the channel first to enable deletion.
+                    </span>
+                  )}
+                </>
+              }
+              variant="danger"
+              action={
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setDeleteDialogOpen(true)}
+                  disabled={!isArchived}
+                  className="h-8 text-11 font-medium border-danger-subtle text-danger-primary hover:bg-danger-subtle disabled:text-disabled disabled:pointer-events-none"
+                >
+                  Delete
+                </Button>
+              }
+            />
+          </Guard>
+        </div>
+      </section>
+
+      {/* ── Message permissions info ── */}
+      <section className="space-y-2.5">
+        <p className="text-11 font-semibold uppercase tracking-widest text-tertiary px-1">
+          Message permissions
+        </p>
+        <div className="px-4 py-3.5 rounded-lg border-subtle-1 bg-layer-1">
+          <p className="text-11 text-secondary leading-relaxed">
+            All channel members can send messages. Use{' '}
+            <span className="font-medium text-primary">Project Settings → Permissions</span>{' '}
+            to control access via roles.
           </p>
         </div>
+      </section>
 
-        {/* Archive / Unarchive Button - Conditional */}
-        {!isArchived && (
-          <div className="space-y-2">
-            <Button
-              variant="outline"
-              className="w-full justify-start"
-              onClick={() => setArchiveDialogOpen(true)}
-            >
-              <Archive className="mr-2 h-4 w-4" />
-              Archive Channel
-            </Button>
-          </div>
-        )}
+      {/* ── Notification settings ── */}
+      <section className="space-y-2.5">
+        <ChannelNotificationSettings
+          conversationId={conversation.id}
+          initialMode={conversation.myNotifMode ?? undefined}
+          initialMuteUntil={undefined}
+        />
+      </section>
 
-        {isArchived && (
-          <div className="space-y-2">
-            <Button
-              variant="outline"
-              className="w-full justify-start border-green-600/50 text-green-700 hover:bg-green-50 hover:text-green-700"
-              onClick={() => setUnarchiveDialogOpen(true)}
-            >
-              <ArchiveRestore className="mr-2 h-4 w-4" />
-              Unarchive Channel
-            </Button>
-            <p className="text-xs text-muted-foreground px-1">
-              💡 Unarchive to restore this channel
-            </p>
-          </div>
-        )}
-
-        {/* Delete Channel Button */}
-        <div className="space-y-2">
-          <Button
-            variant="outline"
-            className={
-              isArchived
-                ? 'w-full justify-start border-destructive/50 text-destructive hover:bg-destructive/10'
-                : 'w-full justify-start text-muted-foreground border-muted-foreground/20'
-            }
-            onClick={() => setDeleteDialogOpen(true)}
-            disabled={!isArchived}
-          >
-            <Trash2 className="mr-2 h-4 w-4" />
-            Delete Channel
-          </Button>
-          {!isArchived && (
-            <p className="text-xs text-muted-foreground px-1">
-              💡 Tip: Archive the channel first before deleting it
-            </p>
-          )}
-        </div>
-      </div>
-
-      {/* Dialogs */}
+      {/* ── Dialogs ── */}
       <ArchiveChannelDialog
         isOpen={archiveDialogOpen}
         onOpenChange={setArchiveDialogOpen}

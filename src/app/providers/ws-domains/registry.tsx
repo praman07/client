@@ -1,77 +1,43 @@
 import { useEffect } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
-import { createChatPlugin } from './chat-plugin'
-import { createWhiteboardPlugin } from './whiteboard-plugin'
-import { createPagesPlugin } from './pages-plugin'
+import { createAuthPlugin } from './auth-plugin'
 import { registerPlugin, unregisterPlugin } from '@/shared/ws/domains'
 import { createLogger } from '@/shared/lib/logger'
-import { useAppDispatch, useUser } from '@/shared/hooks'
 
 const log = createLogger('ws:domain-registry')
 
 /**
  * DOMAIN REGISTRY
  *
- * Responsibility:
- * - Register all domain plugins at app startup
- * - Initialize domain-specific event handlers
+ * Registers the auth plugin globally at app root.
  *
- * Architecture:
- * - Component mounts once in app root
- * - Registers plugins via centralized plugin registry
- * - Plugins handle their own cleanup
+ * Auth must be global — it handles auth.invalidated, flags.invalidated, and
+ * project.plugin.updated events that must be active regardless of which route
+ * the user is on.
+ *
+ * Chat, whiteboard, and pages plugins are now managed per-route:
+ *   - chat     → chat/route.tsx ChatLayout
+ *   - whiteboard → whiteboard/route.tsx WhiteboardLayout
+ *   - pages    → pages/route.tsx PagesLayout
+ *
+ * This means WS event handlers for those domains are only registered while
+ * the user is inside the relevant route subtree, reducing memory footprint
+ * and preventing stale handler accumulation.
  */
-
-interface DomainRegistryProps {
-  projectId: string | null
-}
-
-export function DomainRegistry({ projectId }: DomainRegistryProps) {
-  const dispatch = useAppDispatch()
+export function DomainRegistry() {
   const queryClient = useQueryClient()
-  const { user } = useUser()
 
   useEffect(() => {
-    log.debug('Initializing domain plugins')
+    log.debug('Registering auth plugin (global)')
+    const authPlugin = createAuthPlugin({ queryClient })
+    registerPlugin(authPlugin)
 
-    // Chat Plugin
-    // Provides: projectId for message persistence
-    const chatPlugin = createChatPlugin({
-      getProjectId: () => projectId ?? undefined,
-    })
-
-    registerPlugin(chatPlugin)
-
-    // Whiteboard Plugin
-    // Provides: dispatch, queryClient, userId for event handlers
-    const whiteboardPlugin = createWhiteboardPlugin({
-      dispatch,
-      queryClient,
-      userId: user?.id ?? null,
-    })
-
-    registerPlugin(whiteboardPlugin)
-
-    // Pages Plugin
-    // Provides: dispatch, queryClient, userId for page event handlers
-    const pagesPlugin = createPagesPlugin({
-      dispatch,
-      queryClient,
-      userId: user?.id ?? null,
-    })
-
-    registerPlugin(pagesPlugin)
-
-    log.debug('Domain plugins registered')
-
-    // Cleanup on unmount
     return () => {
-      log.debug('Cleaning up domain plugins')
-      unregisterPlugin('chat')
-      unregisterPlugin('whiteboard')
-      unregisterPlugin('pages')
+      log.debug('Cleaning up auth plugin')
+      unregisterPlugin('auth')
     }
-  }, [projectId, dispatch, queryClient, user?.id])
+  }, [queryClient])
 
   return null
 }
+

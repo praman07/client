@@ -40,7 +40,7 @@ export function EditIssueContent({
         onChange={(e) => onTitleChange(e.target.value)}
         placeholder="Issue title"
         disabled={!editable}
-        className="border-none bg-transparent px-0 h-auto py-0 text-2xl md:text-2xl font-semibold shadow-none focus-visible:ring-0 leading-snug placeholder:text-muted-foreground/50"
+        className="border-none bg-transparent px-0 h-auto py-0 text-24 font-semibold shadow-none focus-visible:ring-0 leading-snug placeholder:text-placeholder"
       />
 
       {/* Description — BlockNote editor wired to S3 */}

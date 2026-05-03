@@ -1,23 +1,10 @@
 import { useQuery } from '@tanstack/react-query'
 import { useAuth } from '@clerk/clerk-react'
 import { setCurrentWorkspaceId } from '../model/slice'
-import { workspaceKeys } from '../api'
-import { gql } from '@/gql'
+import { GET_WORKSPACE_BY_SLUG_QUERY, WORKSPACE_LIGHT_FRAGMENT, workspaceKeys } from '../api'
 import { GqlClient } from '@/shared/api'
 import { useAppDispatch } from '@/shared/hooks'
-
-// Inline all fields — no fragment spread so there is no masking and
-// the response fields are directly accessible outside a React component.
-const GET_WORKSPACE_BY_SLUG_QUERY = gql(`
-  query GetWorkspaceBySlug($slug: String!) {
-    workspaceBySlug(slug: $slug) {
-      id
-      name
-      slug
-      logoUrl
-    }
-  }
-`)
+import { useFragment } from '@/gql'
 
 export function useSyncWorkspaceContext(slug?: string) {
   const { getToken } = useAuth()
@@ -34,7 +21,8 @@ export function useSyncWorkspaceContext(slug?: string) {
 
       try {
         const data = await client.request(GET_WORKSPACE_BY_SLUG_QUERY, { slug })
-        const workspace = data.workspaceBySlug
+        // Unmask the fragment to access typed fields (codegen client-preset masking)
+        const workspace = useFragment(WORKSPACE_LIGHT_FRAGMENT, data.workspaceBySlug)
 
         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- GQL workspaceBySlug returns null for missing/forbidden slug
         if (workspace) {

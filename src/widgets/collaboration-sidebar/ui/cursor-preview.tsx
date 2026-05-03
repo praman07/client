@@ -19,13 +19,13 @@ export function CursorPreview({ color }: CursorPreviewProps) {
     <Tooltip>
       <TooltipTrigger>
         <div
-          className="h-3 w-3 rounded-full border border-border shadow-sm shrink-0"
+          className="h-3 w-3 rounded-full border border-border shadow-raised-100 shrink-0"
           style={{ backgroundColor: color }}
           aria-label="Cursor color"
         />
       </TooltipTrigger>
       <TooltipContent side="left">
-        <p className="text-xs">Cursor color</p>
+        <p className="text-12">Cursor color</p>
       </TooltipContent>
     </Tooltip>
   )

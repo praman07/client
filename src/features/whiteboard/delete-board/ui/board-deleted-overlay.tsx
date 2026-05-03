@@ -30,17 +30,17 @@ export function BoardDeletedOverlay({
   }
 
   return (
-    <div className="absolute inset-0 z-50 flex items-center justify-center bg-background/90 backdrop-blur-sm">
+    <div className="absolute inset-0 z-[var(--z-overlay)] flex items-center justify-center bg-layer-transparent/90 backdrop-blur-sm">
       <div className="flex flex-col items-center gap-4 text-center max-w-sm px-6">
-        <div className="flex h-16 w-16 items-center justify-center rounded-full bg-destructive/10">
-          <Trash2 className="h-8 w-8 text-destructive" />
+        <div className="flex h-16 w-16 items-center justify-center rounded-full bg-danger-subtle">
+          <Trash2 className="h-8 w-8 text-danger-primary" />
         </div>
 
         <div className="space-y-1">
-          <h2 className="text-xl font-semibold tracking-tight">
+          <h2 className="text-18 font-semibold tracking-tight">
             This board has been deleted
           </h2>
-          <p className="text-sm text-muted-foreground">
+          <p className="text-14 text-secondary">
             The creator has permanently deleted this board.
           </p>
         </div>

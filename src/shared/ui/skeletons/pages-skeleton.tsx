@@ -8,7 +8,7 @@ export function PagesSkeleton() {
   return (
     <div className="h-full flex overflow-hidden">
       {/* Sidebar list */}
-      <div className="w-56 border-r flex flex-col gap-1 p-3 shrink-0">
+      <div className="w-56 border-r border-subtle flex flex-col gap-1 p-3 shrink-0">
         <Skeleton className="h-8 w-full rounded-md mb-2" />
         {Array.from({ length: 7 }).map((_, i) => (
           <div key={i} className="flex items-center gap-2 py-0.5 px-1">

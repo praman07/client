@@ -1,9 +1,4 @@
-import { HugeiconsIcon } from '@hugeicons/react'
-import {
-  ArchiveIcon,
-  HashtagIcon,
-  LockKeyIcon,
-} from '@hugeicons/core-free-icons'
+import { Archive, Hash, Lock } from 'lucide-react'
 import { Link, useParams } from '@tanstack/react-router'
 import type { ChannelItem } from '../model/types'
 import {
@@ -28,8 +23,8 @@ export function ArchivedChannelList({ channels }: ArchivedChannelListProps) {
 
   return (
     <SidebarGroup>
-      <SidebarGroupLabel>
-        <HugeiconsIcon icon={ArchiveIcon} className="mr-1.5" />
+      <SidebarGroupLabel className="flex items-center gap-1.5">
+        <Archive className="size-3.5" />
         Archived ({channels.length})
       </SidebarGroupLabel>
       <SidebarGroupContent>
@@ -39,11 +34,11 @@ export function ArchivedChannelList({ channels }: ArchivedChannelListProps) {
               <SidebarMenuButton
                 isActive={conversationId === channel.id}
                 tooltip={channel.name}
-                className="opacity-60 hover:opacity-80"
+                className="text-tertiary hover:text-secondary"
                 render={
                   <Link
                     to="/workspace/$workspaceSlug/project/$projectSlug/chat/$conversationId"
-                     
+
                     params={(prev: any) => ({
                       ...prev,
                       conversationId: channel.id,
@@ -51,9 +46,11 @@ export function ArchivedChannelList({ channels }: ArchivedChannelListProps) {
                   />
                 }
               >
-                <HugeiconsIcon
-                  icon={channel.type === 'private' ? LockKeyIcon : HashtagIcon}
-                />
+                {channel.type === 'private' ? (
+                  <Lock className="size-4 shrink-0" />
+                ) : (
+                  <Hash className="size-4 shrink-0" />
+                )}
                 <span>{channel.name}</span>
               </SidebarMenuButton>
             </SidebarMenuItem>

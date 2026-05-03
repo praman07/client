@@ -1,7 +1,6 @@
 import { Checkbox as CheckboxPrimitive } from '@base-ui/react/checkbox'
 
-import { HugeiconsIcon } from '@hugeicons/react'
-import { Tick02Icon } from '@hugeicons/core-free-icons'
+import { Check } from 'lucide-react'
 import { cn } from '@/shared/lib/utils'
 
 function Checkbox({ className, ...props }: CheckboxPrimitive.Root.Props) {
@@ -9,7 +8,23 @@ function Checkbox({ className, ...props }: CheckboxPrimitive.Root.Props) {
     <CheckboxPrimitive.Root
       data-slot="checkbox"
       className={cn(
-        'border-input dark:bg-input/30 data-checked:bg-primary data-checked:text-primary-foreground dark:data-checked:bg-primary data-checked:border-primary aria-invalid:aria-checked:border-primary aria-invalid:border-destructive dark:aria-invalid:border-destructive/50 focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 flex size-4 items-center justify-center rounded-[4px] border shadow-xs transition-shadow group-has-disabled/field:opacity-50 focus-visible:ring-[3px] aria-invalid:ring-[3px] peer relative shrink-0 outline-none after:absolute after:-inset-x-3 after:-inset-y-2 disabled:cursor-not-allowed disabled:opacity-50',
+        // Base
+        'relative flex size-4 shrink-0 items-center justify-center rounded-[4px] border outline-none peer',
+        // Unchecked
+        'border-subtle-1 bg-layer-1',
+        // Checked
+        'data-checked:bg-accent-primary data-checked:border-accent-strong data-checked:text-on-color',
+        // Focus
+        'focus-visible:ring-2 focus-visible:ring-accent-strong/30 focus-visible:border-accent-strong',
+        // Error
+        'aria-invalid:border-danger-strong aria-invalid:ring-2 aria-invalid:ring-danger-strong/20',
+        // Press
+        'hardware-accelerated active:scale-[0.95] transition-all duration-100',
+        // Extended tap area
+        'after:absolute after:-inset-x-3 after:-inset-y-2',
+        // Disabled
+        'disabled:cursor-not-allowed disabled:opacity-50',
+        'group-has-disabled/field:opacity-50',
         className,
       )}
       {...props}
@@ -18,7 +33,7 @@ function Checkbox({ className, ...props }: CheckboxPrimitive.Root.Props) {
         data-slot="checkbox-indicator"
         className="[&>svg]:size-3.5 grid place-content-center text-current transition-none"
       >
-        <HugeiconsIcon icon={Tick02Icon} strokeWidth={2} />
+        <Check />
       </CheckboxPrimitive.Indicator>
     </CheckboxPrimitive.Root>
   )

@@ -5,6 +5,8 @@ import { registerHandler } from '@/shared/ws/event-bus'
 import { resequencer } from '@/entities/chat-session'
 import { db } from '@/shared/lib/db'
 import { createLogger } from '@/shared/lib/logger'
+import { downloadUrlKeys } from '@/features/chat/media'
+import { queryClient } from '@/shared/lib/tanstack-query/query-client'
 
 const log = createLogger('chat:ack')
 
@@ -67,6 +69,29 @@ export function registerAckMessageHandler(context: ChatEventHandlerContext) {
           content: outboxItem.payload.content,
           createdAt: new Date(outboxItem.createdAt).toISOString(),
           sequence: payload.sequence, // CRITICAL: Required for resequencer gap detection
+          parentMessageId: outboxItem.payload.parentMessageId,
+          // ── Media: carry metadata so attachments appear in the sender's chat view
+          metadata: outboxItem.payload.metadata,
+        }
+
+        // 3.5 Prime React Query download-url cache for each live attachment URL.
+        // The sender has the live URL from the upload result (stored in outbox payload).
+        // Priming here means useDownloadUrl(fileId) finds 'initialData' immediately
+        // and skips the GQL round-trip, giving instant image render.
+        const attachments = outboxItem.payload.metadata?.attachments ?? []
+        if (attachments.length > 0) {
+          const FIFTY_FIVE_MIN = 55 * 60 * 1000
+          attachments.forEach(({ fileId, url }) => {
+            if (url) {
+              // Set the live URL as query data so useDownloadUrl renders
+              // instantly for the sender without a GQL round-trip.
+              queryClient.setQueryData(
+                downloadUrlKeys.file(fileId),
+                url,
+                { updatedAt: Date.now() + FIFTY_FIVE_MIN },
+              )
+            }
+          })
         }
 
         log.debug('Fast-Tracking Message:', payload.streamId)

@@ -60,7 +60,7 @@ export function CreateChannelForm({
   return (
     <div className="space-y-8">
       {rootError && (
-        <div className="rounded-md bg-destructive/15 p-3 text-sm font-medium text-destructive">
+        <div className="rounded-md bg-danger-subtle p-3 text-14 font-medium text-danger-primary">
           {rootError}
         </div>
       )}

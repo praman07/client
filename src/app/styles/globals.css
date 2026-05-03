@@ -1,150 +1,353 @@
+/* ============================================================
+   COLLABIFY DESIGN SYSTEM — globals.css
+   Entry point. Imports reference token system + project-specific additions.
+   blocknote.css is untouched — edit it for BlockNote overrides only.
+   ============================================================ */
+
+/* ── Google Fonts ── */
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap');
+
 @import 'tailwindcss';
-
-/* BlockNote shadcn — generates Tailwind utility classes for BlockNote components */
-@source "../../node_modules/@blocknote/shadcn";
-
 @import 'tw-animate-css';
 
-@custom-variant dark (&:is(.dark *));
+/* Scan BlockNote shadcn for Tailwind utility class generation */
+@source "../../node_modules/@blocknote/shadcn";
 
-html,
-body {
-  height: 100%;
+/* ── Import order matters:
+   1. BlockNote base styles (foundation)
+   2. variables.css  — reference tokens + @custom-variant dark + @theme inline
+   3. animations.css — reference animation tokens
+   4. blocknote.css  — our overrides (must come last to win the cascade)
+   ── */
+@import "@blocknote/shadcn/style.css";
+@import './variables.css';
+@import './animations.css';
+@import './blocknote.css';
+
+/* ============================================================
+   PROJECT-SPECIFIC @theme ADDITIONS
+   Only tokens NOT already defined in reference variables.css.
+   ============================================================ */
+@theme {
+  /* ── Linear signature weight (between regular and medium) ── */
+  --font-weight-linear: 510;
+
+  /* ── Extended tracking scale (display / hero sizes) ── */
+  --tracking-display-xl: -0.022em;
+  --tracking-display-lg: -0.022em;
+  --tracking-display:    -0.022em;
+  --tracking-title:      -0.022em;
+  --tracking-snug:       -0.008em;
+  --tracking-normal:      0em;
+
+  /* ── Radius scale (Linear-inspired — variables.css only resets --radius-4xl) ── */
+  --radius-micro: 0.125rem;   /*  2px — inline badges */
+  --radius-xs:    0.1875rem;  /*  3px — compact chips */
+  --radius-sm:    0.25rem;    /*  4px — small containers */
+  --radius-md:    0.375rem;   /*  6px — buttons, inputs */
+  --radius-lg:    0.5rem;     /*  8px — cards, dropdowns */
+  --radius-xl:    0.75rem;    /* 12px — panels, modals */
+  --radius-2xl:   1.375rem;   /* 22px — large panels */
+  --radius-full:  9999px;     /* pills / avatars */
+
+  /* ── Z-index scale ── */
+  --z-base:     0;
+  --z-raised:   10;
+  --z-dropdown: 100;
+  --z-sticky:   200;
+  --z-overlay:  300;
+  --z-modal:    400;
+  --z-toast:    500;
+  --z-tooltip:  600;
+
+  /* ── Layout constants not in reference ── */
+  --width-sidebar:      15rem;
+  --width-sidebar-rail: 3.5rem;
+
+  /* ── Extra shadow (dialog) ── */
+  --shadow-dialog:
+    oklch(0% 0 0 / 0%)  0px 8px 2px,
+    oklch(0% 0 0 / 1%)  0px 5px 2px,
+    oklch(0% 0 0 / 4%)  0px 3px 2px,
+    oklch(0% 0 0 / 7%)  0px 1px 1px,
+    oklch(0% 0 0 / 8%)  0px 0px 1px;
+
+  /* ── Animation tokens NOT in reference animations.css ── */
+  --animate-slide-down:          slideDown 0.25s ease-out forwards;
+  --animate-slide-in-from-left:  slideInLeft 0.25s ease-out forwards;
+  --animate-slide-in-from-right: slideInRight 0.25s ease-out forwards;
+  --animate-scale-in:            scaleIn 0.15s ease-out forwards;
+  --animate-scale-out:           scaleOut 0.1s ease-in forwards;
+  --animate-pulse-subtle:        pulseSubtle 2s ease-in-out infinite;
 }
 
-body {
-  @apply m-0;
-  font-family:
-    -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu',
-    'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+/* ── Project keyframes (reference animations.css covers slide-up/in/out/down, fade-in/out) ── */
+@keyframes slideDown {
+  from { transform: translateY(-10px); opacity: 0; }
+  to   { transform: translateY(0);     opacity: 1; }
+}
+@keyframes slideInLeft {
+  from { transform: translateX(-100%); opacity: 0; }
+  to   { transform: translateX(0);     opacity: 1; }
+}
+@keyframes slideInRight {
+  from { transform: translateX(100%); opacity: 0; }
+  to   { transform: translateX(0);    opacity: 1; }
+}
+@keyframes scaleIn {
+  from { transform: scale(0.95); opacity: 0; }
+  to   { transform: scale(1);    opacity: 1; }
+}
+@keyframes scaleOut {
+  from { transform: scale(1);    opacity: 1; }
+  to   { transform: scale(0.95); opacity: 0; }
+}
+@keyframes pulseSubtle {
+  0%, 100% { opacity: 1;   }
+  50%       { opacity: 0.6; }
+}
+
+/* ── Transition speed helpers (not Tailwind tokens, just CSS vars) ── */
+:root {
+  --transition-expressive: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-spring:     500ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  --transition-snappy:     150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --scrollbar-track:       transparent;
+}
+
+/* ============================================================
+   SHADCN/UI CSS VARIABLE BRIDGE
+   Maps our semantic tokens → shadcn's expected --background, --border etc.
+   Required for BlockNote (which uses shadcn internals).
+   ============================================================ */
+@layer base {
+  :root {
+    --background:              var(--bg-canvas);
+    --foreground:              var(--txt-primary);
+    --card:                    var(--bg-surface-1);
+    --card-foreground:         var(--txt-primary);
+    --popover:                 var(--bg-surface-2);
+    --popover-foreground:      var(--txt-primary);
+    --primary:                 var(--bg-accent-primary);
+    --primary-foreground:      var(--txt-on-color);
+    --secondary:               var(--bg-layer-1);
+    --secondary-foreground:    var(--txt-secondary);
+    --muted:                   var(--bg-layer-2);
+    --muted-foreground:        var(--txt-tertiary);
+    --accent:                  var(--bg-accent-subtle);
+    --accent-foreground:       var(--txt-accent-primary);
+    --destructive:             var(--bg-danger-primary);
+    --destructive-foreground:  var(--txt-on-color);
+    --border:                  var(--border-subtle);
+    --input:                   var(--border-subtle);
+    --ring:                    var(--bg-accent-primary);
+    --radius:                  var(--radius-md);
+    --sidebar-background:      var(--bg-surface-1);
+    --sidebar-foreground:      var(--txt-primary);
+    --sidebar-primary:         var(--bg-accent-primary);
+    --sidebar-primary-foreground: var(--txt-on-color);
+    --sidebar-accent:          var(--bg-layer-1);
+    --sidebar-accent-foreground: var(--txt-secondary);
+    --sidebar-border:          var(--border-subtle);
+    --sidebar-ring:            var(--bg-accent-primary);
+  }
+}
+
+/* ============================================================
+   GLOBAL RESETS
+   ============================================================ */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-code {
-  font-family:
-    source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+body {
+  font-family: var(--font-body);
+  background-color: var(--bg-canvas);
+  color: var(--txt-primary);
+  font-size: var(--text-13);
+  line-height: 1.5;
+  min-height: 100dvh;
 }
 
-:root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.141 0.005 285.823);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.141 0.005 285.823);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.141 0.005 285.823);
-  --primary: oklch(0.21 0.006 285.885);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.967 0.001 286.375);
-  --secondary-foreground: oklch(0.21 0.006 285.885);
-  --muted: oklch(0.967 0.001 286.375);
-  --muted-foreground: oklch(0.552 0.016 285.938);
-  --accent: oklch(0.967 0.001 286.375);
-  --accent-foreground: oklch(0.21 0.006 285.885);
-  --destructive: oklch(0.577 0.245 27.325);
-  --destructive-foreground: oklch(0.577 0.245 27.325);
-  --border: oklch(0.92 0.004 286.32);
-  --input: oklch(0.92 0.004 286.32);
-  --ring: oklch(0.871 0.006 286.286);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.141 0.005 285.823);
-  --sidebar-primary: oklch(0.21 0.006 285.885);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.967 0.001 286.375);
-  --sidebar-accent-foreground: oklch(0.21 0.006 285.885);
-  --sidebar-border: oklch(0.92 0.004 286.32);
-  --sidebar-ring: oklch(0.871 0.006 286.286);
+/* Placeholder */
+::-webkit-input-placeholder,
+::placeholder,
+:-ms-input-placeholder {
+  color: var(--txt-placeholder);
 }
 
-.dark {
-  --background: oklch(0.141 0.005 285.823);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.141 0.005 285.823);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.141 0.005 285.823);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.985 0 0);
-  --primary-foreground: oklch(0.21 0.006 285.885);
-  --secondary: oklch(0.274 0.006 286.033);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.274 0.006 286.033);
-  --muted-foreground: oklch(0.705 0.015 286.067);
-  --accent: oklch(0.274 0.006 286.033);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.396 0.141 25.723);
-  --destructive-foreground: oklch(0.637 0.237 25.331);
-  --border: oklch(0.274 0.006 286.033);
-  --input: oklch(0.274 0.006 286.033);
-  --ring: oklch(0.442 0.017 285.786);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.21 0.006 285.885);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.274 0.006 286.033);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(0.274 0.006 286.033);
-  --sidebar-ring: oklch(0.442 0.017 285.786);
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
-  --color-popover: var(--popover);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-secondary: var(--secondary);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-muted: var(--muted);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-accent: var(--accent);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-destructive: var(--destructive);
-  --color-destructive-foreground: var(--destructive-foreground);
-  --color-border: var(--border);
-  --color-input: var(--input);
-  --color-ring: var(--ring);
-  --color-chart-1: var(--chart-1);
-  --color-chart-2: var(--chart-2);
-  --color-chart-3: var(--chart-3);
-  --color-chart-4: var(--chart-4);
-  --color-chart-5: var(--chart-5);
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
-  --color-sidebar: var(--sidebar);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-ring: var(--sidebar-ring);
+/* Code / pre / kbd */
+code, pre, kbd, samp {
+  font-family: var(--font-code);
 }
 
 @layer base {
-  * {
-    @apply border-border outline-ring/50;
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
   }
-  body {
-    @apply bg-background text-foreground;
+
+  input::placeholder,
+  textarea::placeholder {
+    color: var(--txt-placeholder);
   }
-  /* Required border styles for BlockNote shadcn components */
-  .bn-shadcn * {
-    @apply border-border outline-ring/50;
+
+  :focus-visible {
+    outline: 2px solid var(--border-accent-strong);
+    outline-offset: 2px;
   }
+
+  ::selection {
+    background-color: var(--bg-accent-subtle);
+    color: var(--txt-primary);
+  }
+}
+
+/* ── BlockNote compatibility fix ── */
+.bn-shadcn * {
+  border-color: var(--border-subtle);
+  outline-color: oklch(from var(--bg-accent-primary) l c h / 50%);
+}
+
+/* ============================================================
+   SCROLLBAR — Named classes (Plane pattern)
+   ============================================================ */
+::-webkit-scrollbar {
+  display: none;
+}
+
+.vertical-scrollbar   { overflow-y: auto; }
+.horizontal-scrollbar { overflow-x: auto; }
+
+.vertical-scrollbar::-webkit-scrollbar,
+.horizontal-scrollbar::-webkit-scrollbar {
+  display: block;
+  width: 6px;
+  height: 6px;
+}
+
+.vertical-scrollbar::-webkit-scrollbar-track,
+.horizontal-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 9999px;
+}
+
+.vertical-scrollbar::-webkit-scrollbar-thumb,
+.horizontal-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--scrollbar-thumb);
+  border-radius: 9999px;
+  background-clip: padding-box;
+}
+
+.vertical-scrollbar::-webkit-scrollbar-thumb:hover,
+.horizontal-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: var(--scrollbar-thumb-hover);
+}
+
+.vertical-scrollbar::-webkit-scrollbar-corner,
+.horizontal-scrollbar::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+.vertical-scrollbar-margin-top-md::-webkit-scrollbar-track {
+  margin-top: 44px;
+}
+
+.hide-vertical-scrollbar::-webkit-scrollbar   { width: 0 !important; }
+.hide-horizontal-scrollbar::-webkit-scrollbar { height: 0 !important; }
+.hide-both-scrollbars::-webkit-scrollbar      { width: 0 !important; height: 0 !important; }
+
+/* ============================================================
+   UTILITY CLASSES
+   ============================================================ */
+@utility highlight {
+  border: 1px solid var(--border-accent-strong) !important;
+}
+
+@utility highlight-with-line {
+  border-left: 5px solid var(--border-accent-strong) !important;
+  background: var(--bg-layer-2);
+}
+
+@utility disable-autofill-style {
+  &:-webkit-autofill,
+  &:-webkit-autofill:hover,
+  &:-webkit-autofill:focus,
+  &:-webkit-autofill:active {
+    -webkit-background-clip: text;
+  }
+}
+
+@utility progress-bar {
+  fill: currentColor;
+  color: var(--txt-secondary);
+}
+
+@utility conical-gradient {
+  background: conic-gradient(
+    from 180deg at 50% 50%,
+    #ff6b00 0deg,
+    #f7ae59 70.5deg,
+    #3f76ff 151.12deg,
+    #05c3ff 213deg,
+    #18914f 289.87deg,
+    #f6f172 329.25deg,
+    #ff6b00 360deg
+  );
+}
+
+@utility vertical-lr {
+  writing-mode: vertical-lr;
+  width: fit-content;
+}
+
+/* ── Scrollbar size variants ── */
+@utility scrollbar-xs {
+  &::-webkit-scrollbar { display: block; width: 2px; height: 2px; }
+  &::-webkit-scrollbar-track { background: transparent; }
+  &::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: 9999px; }
+  &::-webkit-scrollbar-thumb:hover { background: var(--scrollbar-thumb-hover); }
+}
+@utility scrollbar-sm {
+  &::-webkit-scrollbar { display: block; width: 4px; height: 4px; }
+  &::-webkit-scrollbar-track { background: transparent; }
+  &::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: 9999px; }
+  &::-webkit-scrollbar-thumb:hover { background: var(--scrollbar-thumb-hover); }
+}
+@utility scrollbar-md {
+  &::-webkit-scrollbar { display: block; width: 6px; height: 6px; }
+  &::-webkit-scrollbar-track { background: transparent; }
+  &::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: 9999px; }
+  &::-webkit-scrollbar-thumb:hover { background: var(--scrollbar-thumb-hover); }
+}
+@utility scrollbar-lg {
+  &::-webkit-scrollbar { display: block; width: 8px; height: 8px; }
+  &::-webkit-scrollbar-track { background: transparent; }
+  &::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: 9999px; }
+  &::-webkit-scrollbar-thumb:hover { background: var(--scrollbar-thumb-hover); }
+}
+
+/* ── Marketing section dark override ──
+   Applied to marketing route so dark tokens activate without needing
+   a parent data-theme attribute. Provides a scoped dark environment.
+   ── */
+.marketing-dark {
+  color-scheme: dark;
+  --bg-canvas:    var(--neutral-black);
+  --bg-surface-1: var(--neutral-100);
+  --bg-surface-2: var(--neutral-200);
+  --bg-layer-1:   var(--neutral-200);
+  --txt-primary:  var(--neutral-1200);
+  --txt-secondary: var(--neutral-1100);
+  --txt-tertiary: var(--neutral-1000);
+  --border-subtle: var(--alpha-white-200);
+  --border-strong: var(--alpha-white-400);
 }

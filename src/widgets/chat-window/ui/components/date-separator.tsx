@@ -8,9 +8,9 @@ interface DateSeparatorProps {
 
 export function DateSeparator({ timestamp, className }: DateSeparatorProps) {
   return (
-    <div className={cn('flex items-center gap-4 px-4 my-6', className)}>
+    <div className={cn('flex items-center gap-4 px-4 my-4', className)}>
       <Separator className="flex-1" />
-      <span className="text-muted-foreground text-[10px] font-bold uppercase tracking-widest whitespace-nowrap">
+      <span className="text-secondary text-11 font-medium uppercase tracking-wider whitespace-nowrap">
         {new Intl.DateTimeFormat('en-US', {
           dateStyle: 'long',
         }).format(new Date(timestamp))}

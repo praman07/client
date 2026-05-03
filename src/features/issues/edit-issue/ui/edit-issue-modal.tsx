@@ -188,7 +188,7 @@ export function EditIssueModal({
         showCloseButton={false}
       >
         {isLoading || !issue ? (
-          <div className="flex h-full items-center justify-center text-sm text-muted-foreground">
+          <div className="flex h-full items-center justify-center text-14 text-secondary">
             Loading…
           </div>
         ) : (

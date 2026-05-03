@@ -34,12 +34,12 @@ export function VaultFolderDetail({ folder, onClose }: VaultFolderDetailProps) {
 
       {/* Header */}
       <div className="flex items-center gap-3">
-        <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-muted">
-          <Folder className="h-6 w-6 text-muted-foreground" />
+        <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-layer-2">
+          <Folder className="h-6 w-6 text-secondary" />
         </div>
         <div className="min-w-0">
           <h3 className="font-semibold truncate">{folder.name}</h3>
-          <p className="text-xs text-muted-foreground">Folder</p>
+          <p className="text-12 text-secondary">Folder</p>
         </div>
       </div>
 

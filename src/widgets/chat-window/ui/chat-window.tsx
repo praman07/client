@@ -1,8 +1,13 @@
 import { MemberCacheProvider } from '../lib/member-cache-context'
+import { EditRequestProvider } from '../lib/edit-request-context'
+import { ReplyRequestProvider } from '../lib/reply-request-context'
+import { ScrollToMessageProvider } from '../lib/scroll-to-message-context'
+import { EditModeProvider } from '../lib/edit-mode-context'
 import { ChatHeader } from './chat-header'
 import { MessageInput } from './message-input'
 import { ChatContainer } from './components/chat-layout'
 import { MessageList } from './message-list'
+import { UserProfilePanel } from '@/widgets/user-profile-panel'
 import { useConversationSubscription } from '@/features/chat/subscribe-conversation'
 import { SyncStatusIndicator, useResequencerStatus  } from '@/entities/chat-session'
 import { useConversation } from '@/entities/conversation'
@@ -15,17 +20,28 @@ const log = createLogger('chat:window')
 interface ChatWindowProps {
   channelId: string
   projectId: string
+  workspaceId: string
   channelName: string
   isPrivate: boolean
-  description?: string
+  topic?: string
+  isDm?: boolean
+  createdAt?: string
+  otherUser?: {
+    fullName?: string | null
+    avatarUrl?: string | null
+  }
 }
 
 export function ChatWindow({
   channelId,
   projectId,
+  workspaceId,
   channelName,
   isPrivate,
-  description,
+  topic,
+  isDm,
+  createdAt,
+  otherUser,
 }: ChatWindowProps) {
   // 0. Fetch conversation with members for cache
   const { data: conversationData } = useConversation(channelId, {
@@ -61,20 +77,29 @@ export function ChatWindow({
 
   return (
     <MemberCacheProvider members={members}>
-      <ChatContainer>
-        <ChatHeader
-          channelId={channelId}
-          channelName={channelName}
-          isPrivate={isPrivate}
-          description={
-            description || 'Topic: General discussion about the project'
-          }
-        >
-          <SyncStatusIndicator status={status} />
-        </ChatHeader>
-        <MessageList channelId={channelId} projectId={projectId} />
-        <MessageInput channelId={channelId} projectId={projectId} />
-      </ChatContainer>
+      <EditRequestProvider>
+        <EditModeProvider>
+          <ReplyRequestProvider>
+            <ScrollToMessageProvider>
+              <ChatContainer>
+                <ChatHeader
+                channelId={channelId}
+                channelName={channelName}
+                isPrivate={isPrivate}
+                topic={topic}
+                isDm={isDm}
+                otherUser={otherUser}
+              >
+                <SyncStatusIndicator status={status} />
+              </ChatHeader>
+              <MessageList channelId={channelId} projectId={projectId} channelName={channelName} isDm={isDm} createdAt={createdAt} otherUser={otherUser} />
+              <MessageInput channelId={channelId} projectId={projectId} workspaceId={workspaceId} channelName={channelName} />
+            </ChatContainer>
+          </ScrollToMessageProvider>
+        </ReplyRequestProvider>
+        </EditModeProvider>
+      </EditRequestProvider>
+      <UserProfilePanel />
     </MemberCacheProvider>
   )
 }

@@ -65,21 +65,21 @@ export function JoinWorkspaceCard({
     <Card className="w-full max-w-md mx-auto mt-20">
       <CardHeader className="text-center">
         <div className="mx-auto mb-4 flex justify-center">
-          <Avatar className="h-20 w-20 ring-4 ring-background shadow-xl">
+          <Avatar className="h-20 w-20 ring-4 ring-subtle shadow-raised-200">
             <AvatarImage src={workspaceLogoUrl || undefined} />
-            <AvatarFallback className="text-2xl">
+            <AvatarFallback className="text-24">
               {workspaceName[0]}
             </AvatarFallback>
           </Avatar>
         </div>
-        <CardTitle className="text-2xl">Join {workspaceName}</CardTitle>
-        <CardDescription className="text-lg pt-2">
+        <CardTitle className="text-24">Join {workspaceName}</CardTitle>
+        <CardDescription className="text-16 pt-2">
           {inviterName} has invited you to join their workspace.
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="text-center text-sm text-muted-foreground pb-4">
-          You are joining as <b>{user?.primaryEmailAddress?.emailAddress}</b>
+        <div className="text-center text-13 text-secondary pb-4">
+          You are joining as <b>{user?.email}</b>
         </div>
       </CardContent>
       <CardFooter className="flex justify-center pb-8">

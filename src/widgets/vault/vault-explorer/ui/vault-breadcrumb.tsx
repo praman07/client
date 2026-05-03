@@ -21,12 +21,12 @@ export function VaultBreadcrumb({ trail, onNavigateTo }: VaultBreadcrumbProps) {
   return (
     <nav
       aria-label="Folder breadcrumb"
-      className="flex items-center gap-1 text-sm text-muted-foreground"
+      className="flex items-center gap-1 text-14 text-secondary"
     >
       {/* Home */}
       <button
         onClick={() => onNavigateTo(null)}
-        className="flex items-center gap-1 hover:text-foreground transition-colors"
+        className="flex items-center gap-1 hover:text-primary transition-colors"
       >
         <Home className="h-3.5 w-3.5" />
         Home
@@ -34,10 +34,10 @@ export function VaultBreadcrumb({ trail, onNavigateTo }: VaultBreadcrumbProps) {
 
       {trail.map((entry) => (
         <span key={entry.id} className="flex items-center gap-1">
-          <ChevronRight className="h-3.5 w-3.5 opacity-50" />
+          <ChevronRight className="h-3.5 w-3.5 text-tertiary" />
           <button
             onClick={() => onNavigateTo(entry.id)}
-            className="hover:text-foreground transition-colors truncate max-w-[120px]"
+            className="hover:text-primary transition-colors truncate max-w-[120px]"
           >
             {entry.name}
           </button>

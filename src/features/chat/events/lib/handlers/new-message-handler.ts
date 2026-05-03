@@ -107,6 +107,17 @@ export function registerNewMessageHandler(context: ChatEventHandlerContext) {
         // 3. Hand-off to Resequencer
         await resequencer.processNewMessage(payload, projectId)
 
+        // If this is a reply, increment the parent's replyCount in Dexie.
+        // useLiveQuery on the parent row will re-render the badge automatically.
+        // Fire-and-forget: a stale count is cosmetic, not correctness-critical.
+        if (payload.parentMessageId) {
+          db.messages
+            .where('id')
+            .equals(payload.parentMessageId)
+            .modify((msg) => { msg.replyCount = (msg.replyCount ?? 0) + 1 })
+            .catch(() => {})
+        }
+
         // 4. Slow Path Outbox Cleanup (Redundancy)
         // If Fast Path (AckHandler) failed or was skipped (e.g. duplicate),
         // we double-check if we need to clean up the Outbox here.

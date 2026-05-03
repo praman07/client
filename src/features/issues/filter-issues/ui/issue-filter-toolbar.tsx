@@ -60,7 +60,7 @@ export function IssueFilterToolbar({
         <button
           type="button"
           onClick={clearAllFilters}
-          className="text-xs text-muted-foreground underline-offset-2 hover:text-foreground hover:underline"
+          className="text-11 text-secondary underline-offset-2 hover:text-primary hover:underline"
         >
           Clear all
         </button>

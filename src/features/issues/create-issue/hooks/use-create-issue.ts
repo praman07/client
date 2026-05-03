@@ -18,6 +18,7 @@ import type { Issue } from '@/entities/issue'
 import { useAuth } from '@/shared/hooks'
 import { GqlClient } from '@/shared/api/graphql-client'
 import { addIssue, issueKeys } from '@/entities/issue'
+import { projectKeys } from '@/entities/project/api/query-keys'
 
 /**
  * Converts a date-only string ("YYYY-MM-DD") to a full ISO datetime string
@@ -67,6 +68,9 @@ export function useCreateIssue() {
       dispatch(addIssue(issue as unknown as Issue))
       queryClient.invalidateQueries({
         queryKey: issueKeys.list(projectId),
+      })
+      queryClient.invalidateQueries({
+        queryKey: projectKeys.overview(projectId),
       })
     },
   })

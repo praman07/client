@@ -1,12 +1,10 @@
 import { useState } from 'react'
-import { Plus } from 'lucide-react'
 import { useBoardFilters, useViewMode } from '../hooks'
-import { filterBoards, sortBoards } from '../lib'
+import { sortBoards } from '../lib'
 import { BoardCard } from './board-card'
 import { BoardListHeader } from './board-list-header'
 import { EmptyState } from './empty-state'
 import type { Board } from '@/entities/whiteboard-board'
-import { Button } from '@/shared/ui/primitives/button'
 import { useAuth } from '@/shared/hooks'
 import { CreateBoardModal } from '@/features/whiteboard/create-board'
 import { useUserBoards } from '@/features/whiteboard/fetch-user-boards'
@@ -32,8 +30,6 @@ export function BoardList({ workspaceId, projectId }: BoardListProps) {
   const { userId } = useAuth()
   const { data, isLoading, refetch } = useUserBoards(workspaceId, projectId)
   const {
-    searchQuery,
-    setSearchQuery,
     showArchived,
     setShowArchived,
     sortBy,
@@ -65,9 +61,11 @@ export function BoardList({ workspaceId, projectId }: BoardListProps) {
       }))
     }) ?? []
 
-  // Apply filters and sorting
-  const filteredBoards = filterBoards(boards, { searchQuery, showArchived })
-  const sortedBoards = sortBoards(filteredBoards, sortBy)
+  // Apply sorting (no search filter since search bar was removed)
+  const sortedBoards = sortBoards(
+    boards.filter((b) => showArchived || !b.isArchived),
+    sortBy,
+  )
 
   if (isLoading) {
     return <BoardListSkeleton />
@@ -77,23 +75,13 @@ export function BoardList({ workspaceId, projectId }: BoardListProps) {
     return (
       <>
         <EmptyState />
-
-        {/* FAB for creating first board */}
-        <Button
-          onClick={() => setIsCreateModalOpen(true)}
-          className="fixed bottom-8 right-8 h-14 w-14 rounded-full shadow-lg"
-          size="icon"
-        >
-          <Plus className="h-6 w-6" />
-        </Button>
-
         <CreateBoardModal
           workspaceId={workspaceId}
           projectId={projectId}
           open={isCreateModalOpen}
           onOpenChange={setIsCreateModalOpen}
           onSuccess={() => {
-            refetch() // Refresh board list
+            refetch()
           }}
         />
       </>
@@ -103,26 +91,25 @@ export function BoardList({ workspaceId, projectId }: BoardListProps) {
   return (
     <div className="p-6">
       <BoardListHeader
-        searchQuery={searchQuery}
-        onSearchChange={setSearchQuery}
         sortBy={sortBy}
         onSortChange={setSortBy}
         viewMode={viewMode}
         onViewModeToggle={toggleViewMode}
         showArchived={showArchived}
         onShowArchivedChange={setShowArchived}
+        onCreateBoard={() => setIsCreateModalOpen(true)}
       />
 
       {sortedBoards.length === 0 ? (
-        <div className="text-center py-16 text-muted-foreground">
+        <div className="text-center py-16 text-tertiary">
           <p>No boards found matching your filters</p>
         </div>
       ) : (
         <div
           className={
             viewMode === 'grid'
-              ? 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'
-              : 'space-y-2'
+              ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 md:gap-4'
+              : 'flex flex-col gap-2'
           }
         >
           {sortedBoards.map((board) => (
@@ -136,22 +123,13 @@ export function BoardList({ workspaceId, projectId }: BoardListProps) {
         </div>
       )}
 
-      {/* FAB for creating new board */}
-      <Button
-        onClick={() => setIsCreateModalOpen(true)}
-        className="fixed bottom-8 right-8 h-14 w-14 rounded-full shadow-lg"
-        size="icon"
-      >
-        <Plus className="h-6 w-6" />
-      </Button>
-
       <CreateBoardModal
         workspaceId={workspaceId}
         projectId={projectId}
         open={isCreateModalOpen}
         onOpenChange={setIsCreateModalOpen}
         onSuccess={() => {
-          refetch() // Refresh board list
+          refetch()
         }}
       />
     </div>

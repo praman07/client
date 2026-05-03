@@ -7,8 +7,9 @@
  * @layer Features
  */
 import { useState } from 'react'
-import { HugeiconsIcon } from '@hugeicons/react'
-import { Tick02Icon } from '@hugeicons/core-free-icons'
+import {
+  Check,
+} from 'lucide-react'
 import type { IssueStatus } from '@/entities/issue-status'
 import {
   DropdownMenu,
@@ -33,8 +34,8 @@ export function StatusPicker({ statuses, value, onChange }: StatusPickerProps) {
     <DropdownMenu open={open} onOpenChange={setOpen}>
       <DropdownMenuTrigger
         className={cn(
-          'inline-flex items-center gap-1.5 rounded-md border px-2 py-1 text-xs whitespace-nowrap max-w-full overflow-hidden transition-colors cursor-pointer',
-          'border-primary/40 bg-primary/5 text-foreground hover:bg-primary/10',
+          'inline-flex items-center gap-1.5 rounded-md border border-subtle px-2 py-1 text-12 whitespace-nowrap max-w-full overflow-hidden transition-colors cursor-pointer',
+          'border-subtle bg-layer-2 text-primary hover:bg-layer-2-hover',
         )}
       >
         <StatusPill status={selected} iconSize={12} />
@@ -55,10 +56,7 @@ export function StatusPicker({ statuses, value, onChange }: StatusPickerProps) {
             }}
           >
             <StatusPill status={status} iconSize={13} />
-            <HugeiconsIcon
-              icon={Tick02Icon}
-              strokeWidth={2}
-              className={cn(
+            <Check className={cn(
                 'ml-auto size-3.5',
                 value === status.id ? 'opacity-100' : 'opacity-0',
               )}

@@ -1,13 +1,15 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { Suspense } from 'react'
+import React, { Suspense } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
-import { Lock, MessageSquare } from 'lucide-react'
+import { MessageSquare } from 'lucide-react'
 import type { Conversation } from '@/entities/conversation'
+import type { ConversationMemberFieldsFragment } from '@/gql/graphql'
 import { ChatWindow } from '@/widgets/chat-window'
 import { RecoveryListener } from '@/entities/chat-session'
 import { useConversation } from '@/entities/conversation'
 import { ChannelSettingsModal } from '@/widgets/channel-settings-modal'
 import { ChatSkeleton, ErrorStateCard, RouteError, WidgetError  } from '@/shared/ui'
+import { useAuth } from '@/shared/hooks'
 
 export const Route = createFileRoute(
   '/_app/workspace/$workspaceSlug/project/$projectSlug/chat/$conversationId',
@@ -21,6 +23,7 @@ export const Route = createFileRoute(
 
 function ConversationPage() {
   const { conversationId } = Route.useParams()
+  const { userId: currentUserId } = useAuth()
 
   const { data: conversationData, isLoading } = useConversation(conversationId)
 
@@ -44,42 +47,58 @@ function ConversationPage() {
     )
   }
 
+  let content: React.ReactNode
+
   switch (conversation.type) {
     case 'CHANNEL':
-      return (
+      content = (
         <ErrorBoundary FallbackComponent={WidgetError}>
           <Suspense fallback={<ChatSkeleton />}>
             <RecoveryListener />
             <ChatWindow
               channelId={conversation.id}
               projectId={conversation.projectId || ''}
+              workspaceId={conversation.workspaceId}
               channelName={conversation.name || 'Unnamed Channel'}
               isPrivate={!conversation.isPublic}
-              description={conversation.description ?? undefined}
+              topic={conversation.topic ?? undefined}
+              createdAt={conversation.createdAt}
             />
-            <ChannelSettingsModal />
           </Suspense>
         </ErrorBoundary>
       )
+      break
 
     case 'DM':
-    case 'GROUP_DM':
-      return (
-        <div className="h-full flex items-center justify-center p-8">
-          <ErrorStateCard
-            icon={Lock}
-            title="Coming Soon"
-            description={
-              conversation.type === 'DM'
-                ? 'Direct messages are not yet implemented.'
-                : 'Group conversations are not yet implemented.'
-            }
-          />
-        </div>
+    case 'GROUP_DM': {
+      const otherMember = (conversation.members ?? [])
+        .map((m) => m as unknown as ConversationMemberFieldsFragment)
+        .find((m) => m.userId !== currentUserId)
+      content = (
+        <ErrorBoundary FallbackComponent={WidgetError}>
+          <Suspense fallback={<ChatSkeleton />}>
+            <RecoveryListener />
+            <ChatWindow
+              channelId={conversation.id}
+              projectId={conversation.projectId || ''}
+              workspaceId={conversation.workspaceId}
+              channelName={conversation.name || 'Direct Message'}
+              isPrivate={true}
+              isDm={true}
+              createdAt={conversation.createdAt}
+              otherUser={{
+                fullName: otherMember?.user?.fullName ?? null,
+                avatarUrl: otherMember?.user?.avatarUrl ?? null,
+              }}
+            />
+          </Suspense>
+        </ErrorBoundary>
       )
+      break
+    }
 
     default:
-      return (
+      content = (
         <div className="h-full flex items-center justify-center p-8">
           <ErrorStateCard
             icon={MessageSquare}
@@ -89,4 +108,11 @@ function ConversationPage() {
         </div>
       )
   }
+
+  return (
+    <>
+      {content}
+      <ChannelSettingsModal />
+    </>
+  )
 }

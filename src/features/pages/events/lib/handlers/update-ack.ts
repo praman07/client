@@ -12,6 +12,8 @@ import { addPendingStreamId } from './page-update'
 import type { UpdateAckPayload } from '@/shared/contracts/pages'
 import type { PageEventHandlerContext } from '../../model'
 import { pageOfflineQueue } from '@/entities/page-session'
+import { registerHandler } from '@/shared/ws/event-bus'
+import { PageDownstreamEvent } from '@/shared/contracts/pages'
 import { createLogger } from '@/shared/lib/logger'
 
 const log = createLogger('pages:update-ack')
@@ -42,5 +44,12 @@ export function handleUpdateAck(
   // Remove from offline queue — update is now durable
   pageOfflineQueue.cleanup(dedupeId).catch((err) => {
     log.error('Failed to cleanup offline queue after ACK', { dedupeId, err })
+  })
+}
+
+/** Registration wrapper — called by registerPageHandlers. */
+export function registerPageUpdateAckHandler(context: PageEventHandlerContext) {
+  return registerHandler(PageDownstreamEvent.UpdateAck, (event) => {
+    handleUpdateAck(event.payload as UpdateAckPayload, context)
   })
 }

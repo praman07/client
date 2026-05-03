@@ -1,5 +1,6 @@
 import type { OutboxItem } from '@/shared/lib/db/schema'
 import type { SendMessageContract } from '@/shared/contracts/chat/upstream'
+import type { ChatAttachment } from '@/shared/contracts/chat/message'
 import { ChatUpstreamEvent } from '@/shared/contracts/chat/upstream'
 import { db } from '@/shared/lib/db'
 import { wsManager } from '@/shared/ws'
@@ -9,8 +10,13 @@ export async function sendMessage(
   channelId: string,
   projectId: string,
   authorId: string,
+  parentMessageId?: string,
+  metadata?: { attachments?: Array<ChatAttachment> },
 ) {
-  if (!content.trim()) return
+  // Allow send if there is text OR at least one attachment
+  const hasContent = content.trim().length > 0
+  const hasAttachments = (metadata?.attachments?.length ?? 0) > 0
+  if (!hasContent && !hasAttachments) return
 
   // 1. Generate Dedupe ID
   const dedupeId = crypto.randomUUID()
@@ -24,7 +30,7 @@ export async function sendMessage(
     conversationId: channelId,
     dedupeId,
     authorId,
-    payload: { content }, // Minimal payload for now
+    payload: { content, parentMessageId, metadata },
     status: 'pending',
     createdAt: now,
   }
@@ -46,7 +52,8 @@ export async function sendMessage(
       conversationId: channelId,
       content,
       dedupeId,
-      replyToId: undefined, // Explicitly undefined if not present, to match shape if needed
+      parentMessageId,
+      metadata,
     },
   }
 

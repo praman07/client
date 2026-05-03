@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { MembersPage } from '@/pages/workspace'
-import { MembersPageSkeleton, RouteError  } from '@/shared/ui'
+import { MembersPageSkeleton, RouteError } from '@/shared/ui'
 
 export const Route = createFileRoute(
   '/_app/workspace/$workspaceSlug/_main/members',

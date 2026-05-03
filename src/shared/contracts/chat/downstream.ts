@@ -5,6 +5,7 @@
 
 import type { ChatDownstreamEvent } from './events'
 import type { DownstreamContract } from '../types'
+import type { ChatAttachment } from './message'
 
 // ═══════════════════════════════════════════════════════════════
 // PAYLOADS
@@ -19,11 +20,21 @@ export interface NewMessagePayload {
   content: string
   createdAt: string
   sequence: number
+  parentMessageId?: string
   threadId?: string
   meta?: {
     replay?: boolean
   }
   projectId?: string
+  /**
+   * Optional Vault file attachments carried with this message.
+   * url fields in attachments are short-lived (1-hour TTL).
+   * Renderers: call batchGetDownloadUrls(fileIds) to refresh urls after 55 min.
+   * DO NOT persist url to IndexedDB — only fileId, name, mimeType, sizeBytes.
+   */
+  metadata?: {
+    attachments?: Array<ChatAttachment>
+  }
 }
 
 export interface AckMessagePayload {
@@ -80,6 +91,20 @@ export interface SubscribeSuccessPayload {
   conversationType: 'CHANNEL' | 'DM' | 'GROUP_DM' | 'THREAD'
 }
 
+export interface ReactionAddedPayload {
+  messageId: string
+  userId: string
+  emoji: string
+  timestamp: number
+}
+
+export interface ReactionRemovedPayload {
+  messageId: string
+  userId: string
+  emoji: string
+  timestamp: number
+}
+
 // ═══════════════════════════════════════════════════════════════
 // CONTRACTS
 // ═══════════════════════════════════════════════════════════════
@@ -129,6 +154,16 @@ export type SubscribeSuccessContract = DownstreamContract<
   SubscribeSuccessPayload
 >
 
+export type ReactionAddedContract = DownstreamContract<
+  ChatDownstreamEvent.ReactionAdded,
+  ReactionAddedPayload
+>
+
+export type ReactionRemovedContract = DownstreamContract<
+  ChatDownstreamEvent.ReactionRemoved,
+  ReactionRemovedPayload
+>
+
 // ═══════════════════════════════════════════════════════════════
 // UNION TYPE
 // ═══════════════════════════════════════════════════════════════
@@ -143,6 +178,8 @@ export type ChatDownstreamContract =
   | MessageDeliveredContract
   | UserTypingContract
   | SubscribeSuccessContract
+  | ReactionAddedContract
+  | ReactionRemovedContract
 
 // ═══════════════════════════════════════════════════════════════
 // BACKWARD COMPATIBILITY - Event type aliases

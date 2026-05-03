@@ -1,0 +1,1 @@
+export { BlockNoteEmojiPicker } from './BlockNoteEmojiPicker'

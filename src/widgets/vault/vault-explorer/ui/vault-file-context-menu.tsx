@@ -8,6 +8,7 @@ import {
   ContextMenuTrigger,
 } from '@/shared/ui/primitives/context-menu'
 import { useDeleteFile } from '@/features/vault/delete-file'
+import { Guard } from '@/shared/lib/auth'
 
 interface VaultFileContextMenuProps {
   file: VaultFile
@@ -34,34 +35,38 @@ export function VaultFileContextMenu({
     <ContextMenu>
       <ContextMenuTrigger render={<div>{children}</div>}></ContextMenuTrigger>
       <ContextMenuContent className="w-48">
-        {onRename && (
-          <ContextMenuItem onClick={onRename}>
-            <Pencil className="h-4 w-4 mr-2" />
-            Rename
-          </ContextMenuItem>
-        )}
+        <Guard permission="vault:file:upload">
+          {onRename && (
+            <ContextMenuItem onClick={onRename}>
+              <Pencil className="h-4 w-4 mr-2" />
+              Rename
+            </ContextMenuItem>
+          )}
+        </Guard>
         {onDownload && (
           <ContextMenuItem onClick={onDownload}>
             <Download className="h-4 w-4 mr-2" />
             Download
           </ContextMenuItem>
         )}
-        <ContextMenuSeparator />
-        <ContextMenuItem
-          className="text-destructive focus:text-destructive"
-          onClick={() => {
-            if (window.confirm(`Delete "${file.name}"?`)) {
-              deleteFile({
-                fileId: file.id,
-                projectId,
-                folderId: file.folderId ?? null,
-              })
-            }
-          }}
-        >
-          <Trash2 className="h-4 w-4 mr-2" />
-          Delete
-        </ContextMenuItem>
+        <Guard permission="vault:file:delete">
+          <ContextMenuSeparator />
+          <ContextMenuItem
+            className="text-danger-primary focus:text-danger-primary"
+            onClick={() => {
+              if (window.confirm(`Delete "${file.name}"?`)) {
+                deleteFile({
+                  fileId: file.id,
+                  projectId,
+                  folderId: file.folderId ?? null,
+                })
+              }
+            }}
+          >
+            <Trash2 className="h-4 w-4 mr-2" />
+            Delete
+          </ContextMenuItem>
+        </Guard>
       </ContextMenuContent>
     </ContextMenu>
   )

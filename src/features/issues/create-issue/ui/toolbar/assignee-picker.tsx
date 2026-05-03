@@ -12,8 +12,10 @@
  * @layer Features
  */
 import { useState } from 'react'
-import { HugeiconsIcon } from '@hugeicons/react'
-import { Tick02Icon, UserIcon } from '@hugeicons/core-free-icons'
+import {
+  Check,
+  User,
+} from 'lucide-react'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -72,10 +74,10 @@ export function AssigneePicker({
     <DropdownMenu open={open} onOpenChange={handleOpenChange}>
       <DropdownMenuTrigger
         className={cn(
-          'inline-flex items-center gap-1.5 rounded-md border px-2 py-1 text-xs whitespace-nowrap transition-colors cursor-pointer',
+          'inline-flex items-center gap-1.5 rounded-md border border-subtle px-2 py-1 text-12 whitespace-nowrap transition-colors cursor-pointer',
           isActive
-            ? 'border-primary/40 bg-primary/5 text-foreground hover:bg-primary/10'
-            : 'border-border bg-transparent text-foreground hover:bg-muted/50',
+            ? 'border-subtle bg-layer-2 text-primary hover:bg-layer-2-hover'
+            : 'border-subtle bg-transparent text-primary hover:bg-layer-2-hover',
         )}
       >
         {selected ? (
@@ -92,7 +94,7 @@ export function AssigneePicker({
           </>
         ) : (
           <>
-            <HugeiconsIcon icon={UserIcon} strokeWidth={2} className="size-3" />
+            <User className="size-3" />
             <span>Assignee</span>
           </>
         )}
@@ -107,7 +109,7 @@ export function AssigneePicker({
         {/* Search input — plain, no cmdk */}
         <div className="p-1.5 pb-0">
           <input
-            className="w-full rounded-sm bg-muted/30 px-2 py-1 text-xs outline-none placeholder:text-muted-foreground"
+            className="w-full rounded-sm bg-layer-2 px-2 py-1 text-12 outline-none placeholder:text-tertiary"
             placeholder="Search members…"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
@@ -125,11 +127,8 @@ export function AssigneePicker({
               setOpen(false)
             }}
           >
-            <span className="text-muted-foreground">Unassigned</span>
-            <HugeiconsIcon
-              icon={Tick02Icon}
-              strokeWidth={2}
-              className={cn(
+            <span className="text-tertiary">Unassigned</span>
+            <Check className={cn(
                 'ml-auto size-3.5',
                 value === null ? 'opacity-100' : 'opacity-0',
               )}
@@ -155,10 +154,7 @@ export function AssigneePicker({
                 </AvatarFallback>
               </Avatar>
               <span className="max-w-[120px] truncate">{m.fullName}</span>
-              <HugeiconsIcon
-                icon={Tick02Icon}
-                strokeWidth={2}
-                className={cn(
+              <Check className={cn(
                   'ml-auto size-3.5',
                   value === m.id ? 'opacity-100' : 'opacity-0',
                 )}
@@ -167,7 +163,7 @@ export function AssigneePicker({
           ))}
 
           {filtered.length === 0 && (
-            <p className="px-2 py-3 text-center text-xs text-muted-foreground">
+            <p className="px-2 py-3 text-center text-12 text-tertiary">
               No members found
             </p>
           )}

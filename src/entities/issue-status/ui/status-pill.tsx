@@ -31,7 +31,7 @@ export function StatusPill({
   className,
 }: StatusPillProps) {
   return (
-    <span className={cn('inline-flex items-center gap-1.5 text-sm', className)}>
+    <span className={cn('inline-flex items-center gap-1.5 text-13', className)}>
       <StatusIcon iconKey={status.icon} color={status.color} size={iconSize} />
       {showName && <span className="truncate">{status.name}</span>}
     </span>

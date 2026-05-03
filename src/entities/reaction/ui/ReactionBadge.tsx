@@ -16,10 +16,10 @@ export function ReactionBadge({
     <button
       onClick={onClick}
       className={cn(
-        'inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-xs font-medium transition-colors border',
+        'inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-11 font-medium transition-colors border',
         reaction.hasReacted
-          ? 'bg-primary/10 border-primary/20 text-primary'
-          : 'bg-muted/50 border-transparent text-muted-foreground hover:bg-muted',
+          ? 'bg-accent-subtle border-accent-subtle text-primary'
+          : 'bg-layer-2 border-transparent text-secondary hover:bg-layer-2-hover',
         className,
       )}
     >

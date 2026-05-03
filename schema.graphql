@@ -18,6 +18,8 @@ type Query {
   me: User
   user(userId: ID!): PublicUser
   workspaceUser(workspaceId: ID!, userId: ID!): WorkspaceMember
+  userHome: UserHomeData
+  myNotificationSummary: NotificationSummary!
   getWorkspaceInviteInfo(token: String!): WorkspaceInviteInfo!
   myWorkspaces: [Workspace!]!
   onboardingStatus: OnboardingStatus!
@@ -28,11 +30,8 @@ type Query {
   workspaceRoles(workspaceId: ID!): [WorkspaceRole!]!
   rolePermissions(roleId: ID!, workspaceId: ID!): [RolePermission!]!
   workspaceOverview(workspaceId: ID!): WorkspaceOverview!
-
-  """Get paginated notifications for the current user."""
+  workspacePermissions(workspaceId: ID!): [Permission!]!
   notifications(limit: Int, cursor: String, isRead: Boolean): NotificationConnection!
-
-  """Get count of unread notifications."""
   unreadNotificationCount: Int!
   myProjects(workspaceId: ID!): [Project!]!
   projectBySlug(workspaceId: ID!, slug: String!): Project
@@ -41,6 +40,9 @@ type Query {
   projectRoles(projectId: ID!, workspaceId: ID!): [ProjectRole!]!
   projectOverview(projectId: ID!): ProjectOverview!
   allPermissions(workspaceId: ID!): [Permission!]!
+  projectPermissions(workspaceId: ID!, projectId: ID!): [Permission!]!
+  projectContributorStats(projectId: ID!): [ContributorStats!]!
+  getProjectEntities(projectId: ID!): [SearchEntity!]!
   getThreadMessages(parentMessageId: ID!, limit: Int, beforeCursor: ID): [ChatMessage!]!
   getMessageById(messageId: ID!): ChatMessage
   getMessagesAfterCursor(channelId: ID!, afterCursor: ID!, limit: Int): [ChatMessage!]!
@@ -56,6 +58,7 @@ type Query {
   getUserConversations(workspaceId: ID!, projectId: ID!, type: ConversationType, includeArchived: Boolean, limit: Int, cursor: String): ConversationConnection!
   getConversation(conversationId: ID!): Conversation!
   getDmByUsers(workspaceId: ID!, projectId: ID!, otherUserId: ID!): DmConversation
+  getProjectDms(projectId: ID!, workspaceId: ID!): [ProjectDmItem!]!
   getUsersByIds(userIds: [ID!]!): [UserBasic!]!
   getBoard(boardId: ID!): Whiteboard
   userBoards(workspaceId: ID!, projectId: ID, limit: Int, cursor: ID): BoardConnection!
@@ -97,6 +100,7 @@ type Query {
   Live presence from Redis ZSET (not DB). Reflects current editing sessions.
   """
   getActivePageCollaborators(pageId: ID!): [PageCollaborator!]!
+  getPagesHome(workspaceId: ID!, projectId: ID!, limit: Int): PagesHomeResult!
 
   """
   Returns the immediate children (subfolders + files) of a folder.
@@ -136,6 +140,15 @@ type Query {
   """
   getVaultAncestors(folderId: ID!): [VaultFolder!]!
 
+  """
+  Batch-fetch presigned GET URLs for a list of fileIds.
+  Returns one result entry per fileId in the same order as the input.
+  Failed or deleted files return a non-null entry with status != ACTIVE.
+  
+  Max 50 fileIds per call.
+  """
+  getBatchDownloadUrls(fileIds: [ID!]!): [VaultBatchDownloadResult!]!
+
   """Returns all Kanban columns for a project, ordered by position."""
   getIssueStatuses(projectId: ID!): [IssueStatus!]!
 
@@ -159,6 +172,12 @@ type Query {
   TTL: 5 minutes. Always request fresh — never cache.
   """
   getIssueDescriptionUrl(issueId: ID!): IssueDescriptionUrl!
+  activeContext(workspaceId: ID!, projectId: ID): ActiveUserContext!
+  featureFlags: [FeatureFlagRecord!]!
+  getBacklinks(targetEntityId: ID!, limit: Int, cursor: ID, filters: BacklinkFilters): BacklinkResult!
+  getMentions(sourceEntityId: ID!): [Mention!]!
+  getMentionEvents(mentionId: ID!): [MentionEvent!]!
+  getMentionsBySourceIds(sourceIds: [String!]!): [MentionResult!]!
 }
 
 type Mutation {
@@ -166,6 +185,11 @@ type Mutation {
   syncUser(clerkId: String!, email: String!, fullName: String, avatarUrl: String, emailVerified: Boolean): User!
   updateProfile(input: UpdateProfileInput!): User!
   deleteAccount: Boolean!
+  updateGlobalNotifPrefs(input: UpdateGlobalNotifPrefsInput!): GlobalNotificationPreference!
+  setGlobalNotifMode(mode: GlobalNotifMode!): Boolean!
+  pauseNotifications(until: String!): Boolean!
+  resumeNotifications: Boolean!
+  declineWorkspaceInvite(input: DeclineWorkspaceInviteInput!): DeclineResponse!
   acceptWorkspaceInvite(input: AcceptInviteInput!): JoinResponse!
   checkSlugAvailability(slug: String!): AvailabilityResponse!
   createOnboardingWorkspace: Workspace!
@@ -177,23 +201,24 @@ type Mutation {
   deleteWorkspace(workspaceId: ID!): Boolean!
   transferWorkspaceOwnership(workspaceId: ID!, newOwnerId: ID!): WorkspaceMember!
   removeWorkspaceMember(workspaceId: ID!, memberId: ID!): InviteResponse!
-  updateWorkspaceMemberRole(workspaceId: ID!, memberId: ID!, role: String!): WorkspaceMember!
+  updateWorkspaceMemberRole(workspaceId: ID!, memberId: ID!, roleId: ID!): WorkspaceMember!
   updateWorkspace(workspaceId: ID!, input: UpdateWorkspaceInput!): Workspace!
   createWorkspaceRole(workspaceId: ID!, input: CreateWorkspaceRoleInput!): WorkspaceRole!
   updateWorkspaceRole(roleId: ID!, workspaceId: ID!, input: UpdateWorkspaceRoleInput!): WorkspaceRole!
   deleteWorkspaceRole(roleId: ID!, workspaceId: ID!): Boolean!
   assignRolePermission(roleId: ID!, workspaceId: ID!, permissionId: ID!, effect: String, conditions: String): RolePermission!
   removeRolePermission(roleId: ID!, workspaceId: ID!, permissionId: ID!): Boolean!
-
-  """Mark specific notifications as read."""
+  renameWorkspaceSlug(workspaceId: ID!, slug: String!): Workspace!
+  requestWorkspaceLogoUpload(workspaceId: ID!, mimeType: String!, sizeBytes: Int!): WorkspaceLogoUploadPayload!
+  updateWorkspaceNotifPrefs(workspaceId: String!, input: UpdateScopedPreferencesInput!): ScopedNotificationPreference!
+  muteWorkspace(workspaceId: String!, until: String): Boolean!
+  unmuteWorkspace(workspaceId: String!): Boolean!
   markNotificationRead(ids: [ID!]!): Boolean!
-
-  """Mark all notifications as read."""
   markAllNotificationsRead: Boolean!
   createProject(workspaceId: ID!, input: CreateProjectInput!): Project!
   checkProjectSlugAvailability(workspaceId: ID!, slug: String!): AvailabilityResponse!
   updateProject(projectId: ID!, input: UpdateProjectInput!): Project!
-  addProjectMember(projectId: ID!, workspaceId: ID!, userId: ID!): ProjectMember!
+  addProjectMember(projectId: ID!, workspaceId: ID!, userId: ID!, roleId: ID!): ProjectMember!
   removeProjectMember(projectId: ID!, workspaceId: ID!, userId: ID!): Boolean!
   updateProjectMemberRole(projectId: ID!, workspaceId: ID!, userId: ID!, roleId: ID!): ProjectMember!
   archiveProject(projectId: ID!): Project!
@@ -203,6 +228,11 @@ type Mutation {
   createProjectRole(projectId: ID!, workspaceId: ID!, input: CreateProjectRoleInput!): ProjectRole!
   updateProjectRole(roleId: ID!, projectId: ID!, workspaceId: ID!, input: UpdateProjectRoleInput!): ProjectRole!
   deleteProjectRole(roleId: ID!, projectId: ID!, workspaceId: ID!): Boolean!
+  toggleProjectPlugin(projectId: ID!, workspaceId: ID!, type: String!, enable: Boolean!): Boolean!
+  requestProjectLogoUpload(projectId: ID!, mimeType: String!, sizeBytes: Int!): ProjectLogoUploadPayload!
+  updateProjectNotifPrefs(projectId: String!, input: UpdateScopedPreferencesInput!): ScopedNotificationPreference!
+  muteProject(projectId: String!, until: String): Boolean!
+  unmuteProject(projectId: String!): Boolean!
   createChannel(input: CreateChannelInput!): Conversation!
   archiveChannel(input: ArchiveChannelInput!): Conversation!
   renameChannel(input: RenameChannelInput!): Conversation!
@@ -223,6 +253,7 @@ type Mutation {
   addGroupMembers(workspaceId: ID!, groupId: ID!, userIds: [ID!]!): AddGroupMembersResult!
   removeGroupMember(workspaceId: ID!, groupId: ID!, userId: ID!): RemoveGroupMemberResult!
   leaveGroup(workspaceId: ID!, groupId: ID!): LeaveGroupResult!
+  setConversationNotifMode(conversationId: String!, mode: ConversationNotifMode!, muteUntil: String): ConversationNotificationPreference!
   closeThread(workspaceId: ID!, threadId: ID!): CloseThreadResult!
   reopenThread(workspaceId: ID!, threadId: ID!): ReopenThreadResult!
   deleteThread(workspaceId: ID!, threadId: ID!): DeleteThreadResult!
@@ -282,6 +313,7 @@ type Mutation {
 
   """Cannot remove the page creator."""
   removePageCollaborator(input: RemovePageCollaboratorInput!): RemovePageCollaboratorResult!
+  updatePageDetails(input: UpdatePageDetailsInput!): UpdatePageDetailsResult!
 
   """
   Step 1 of 2 for uploading a file to Vault.
@@ -295,6 +327,18 @@ type Mutation {
   Verifies the S3 object (size + MIME), sets the file to ACTIVE, and updates storage usage.
   """
   confirmVaultUpload(input: ConfirmVaultUploadInput!): ConfirmUploadResult!
+
+  """
+  Register a file upload initiated outside the standard Vault UI flow.
+  Used by Chat (attachments), Pages/Issues (BlockNote uploadFile adapter),
+  and Whiteboard (Excalidraw onAddFile).
+  
+  Enforces storage quota before issuing the presigned URL.
+  Creates a PENDING VaultFile row. The caller must:
+    1. PUT bytes to presignedUrl
+    2. Call confirmVaultUpload(fileId) to activate
+  """
+  registerExternalFile(input: RegisterExternalFileInput!): RegisterExternalFileResult!
   createVaultFolder(input: CreateVaultFolderInput!): CreateFolderResult!
   renameVaultFolder(input: RenameVaultFolderInput!): RenameFolderResult!
 
@@ -316,6 +360,15 @@ type Mutation {
   deleteVaultFile(input: DeleteVaultFileInput!): DeleteResult!
   pinVaultFolder(input: PinVaultFolderInput!): PinFolderResult!
   unpinVaultFolder(input: UnpinVaultFolderInput!): DeleteResult!
+
+  """
+  Called by the editor on save when one or more vault://fileId references
+  have been removed from the document content since the last save.
+  
+  Does NOT delete files immediately — sets unrefAt for the cleanup job to
+  process after a grace period (default 30 min), preserving in-session undo.
+  """
+  markFilesUnreferenced(input: MarkFilesUnreferencedInput!): MarkFilesUnreferencedResult!
   createIssue(input: CreateIssueInput!): CreateIssueResult!
   updateIssue(input: UpdateIssueInput!): UpdateIssueResult!
   deleteIssue(input: DeleteIssueInput!): DeleteResult!
@@ -334,11 +387,37 @@ type Mutation {
 
   """Step 2 of 2: verifies S3 upload and activates the description."""
   confirmIssueDescriptionUpload(input: ConfirmIssueDescriptionUploadInput!): ConfirmIssueDescriptionUploadResult!
+  toggleFeatureFlag(input: ToggleFeatureFlagInput!): ToggleFlagResult!
+  createMentions(mentions: [CreateMentionInput!]!): [Mention!]!
+  updateMention(input: UpdateMentionInput!): Mention!
+  deleteMentions(mentionIds: [ID!]!): Boolean!
+  deleteMentionsBySource(sourceEntityId: ID!): Int!
+  orphanMentions(targetEntityId: ID!): Int!
 }
 
 input UpdateProfileInput {
   fullName: String
   avatarUrl: String
+  bio: String
+  timezone: String
+  language: String
+}
+
+input UpdateGlobalNotifPrefsInput {
+  emailEnabled: Boolean
+  pushEnabled: Boolean
+  globalMode: GlobalNotifMode
+  muteUntil: String
+  categories: [CategoryPreferenceInput!]
+}
+
+input DeclineWorkspaceInviteInput {
+  token: String!
+}
+
+type DeclineResponse {
+  success: Boolean!
+  message: String!
 }
 
 type User {
@@ -346,6 +425,9 @@ type User {
   email: String!
   fullName: String
   avatarUrl: String
+  bio: String
+  timezone: String
+  language: String
   status: String!
   createdAt: String!
   updatedAt: String!
@@ -358,12 +440,51 @@ type PublicUser {
   email: String!
 }
 
-type Workspace {
+type WorkspaceHomeEntry {
   id: ID!
   slug: String!
   name: String!
   logoUrl: String
+  memberRole: String!
+}
+
+type PendingInviteEntry {
+  id: ID!
+  token: String!
+  workspaceName: String!
+  role: String!
+}
+
+type UserHomeProfile {
+  id: ID!
+  fullName: String
+  avatarUrl: String
+  email: String!
+}
+
+type UserHomeData {
+  user: UserHomeProfile!
+  workspaces: [WorkspaceHomeEntry!]!
+  pendingInvites: [PendingInviteEntry!]!
+}
+
+type NotificationSummary {
+  globalMode: GlobalNotifMode!
+  emailEnabled: Boolean!
+  pushEnabled: Boolean!
+  isDndActive: Boolean!
+  dndUntil: DateTime
+  categories: [CategoryPreferenceSetting!]!
+}
+
+type Workspace {
+  id: ID!
+  slug: String!
+  name: String!
+  logoS3Key: String
+  logoUrl: String
   domainWhitelist: String
+  memberRole: String
   createdAt: String!
   updatedAt: String!
 }
@@ -418,6 +539,7 @@ type AvailabilityResponse {
 input InviteToWorkspaceInput {
   workspaceId: ID!
   emails: [String!]!
+  roleId: ID!
 }
 
 type InviteResponse {
@@ -428,7 +550,7 @@ type InviteResponse {
 
 input UpdateWorkspaceInput {
   name: String
-  logoUrl: String
+  logoS3Key: String
   domainWhitelist: String
 }
 
@@ -442,6 +564,14 @@ input UpdateWorkspaceRoleInput {
   name: String
   description: String
   rank: Int
+}
+
+type WorkspaceLogoUploadPayload {
+  presignedUrl: String!
+
+  """The S3 key to store in Workspace.logoS3Key after PUT succeeds."""
+  logoS3Key: String!
+  expiresAt: String!
 }
 
 type WorkspaceInviteInfo {
@@ -460,6 +590,8 @@ type OnboardingStatus {
 type WorkspaceMember {
   id: ID!
   role: String!
+  roleId: ID!
+  roleRank: Int!
   joinedAt: String!
   user: User!
 }
@@ -468,6 +600,7 @@ type WorkspaceInvite {
   id: ID!
   email: String!
   role: String!
+  roleId: ID!
   expiresAt: String!
   createdAt: String!
 }
@@ -488,6 +621,7 @@ type WorkspaceOverviewProject {
   name: String!
   key: String!
   description: String
+  logoUrl: String
   memberCount: Int!
   openIssues: Int!
   updatedAt: String!
@@ -515,14 +649,27 @@ type WorkspaceOverviewIssue {
   dueDate: String
 }
 
-type NotificationConnection {
-  edges: [NotificationEdge!]!
-  pageInfo: PageInfo!
+enum NotificationCategory {
+  chat_messages
+  mentions
+  reactions
+  assignments
+  deadlines
+  access_changes
+  collaboration
+  system_admin
 }
 
-type NotificationEdge {
-  node: Notification!
-  cursor: String!
+enum ConversationNotifMode {
+  ALL_MESSAGES
+  MENTIONS_ONLY
+  NOTHING
+}
+
+enum GlobalNotifMode {
+  ALL
+  MENTIONS_ONLY
+  NOTHING
 }
 
 type Notification {
@@ -532,60 +679,67 @@ type Notification {
   entityType: String!
   entityId: String!
   category: String!
-  data: JSON
+  data: JSON!
   isRead: Boolean!
   isArchived: Boolean!
   createdAt: DateTime!
+  workspaceId: String
+  projectId: String
   actor: User
-  chatMessage: ChatMessage
   workspace: Workspace
   project: Project
-  task: Task
-  page: Page
 }
 
-type Task {
-  id: ID!
-  title: String!
-  statusName: String!
+type NotificationEdge {
+  cursor: String!
+  node: Notification!
 }
 
-"""
-A collaborative document page within a project.
-The Y.Doc content is synced via WebSocket and accessed via getPageSnapshot.
-"""
-type Page {
-  id: ID!
-  title: String!
-  workspaceId: ID!
-  projectId: ID!
+type NotificationConnection {
+  edges: [NotificationEdge!]!
+  pageInfo: PageInfo!
+}
 
-  """null = root-level page (no parent)"""
-  parentId: ID
+type CategoryPreferenceSetting {
+  category: NotificationCategory!
+  email: Boolean!
+  push: Boolean!
+  inApp: Boolean!
+}
 
-  """Emoji or absolute URL for the page icon"""
-  icon: String
-  coverUrl: String
+type GlobalNotificationPreference {
+  emailEnabled: Boolean!
+  pushEnabled: Boolean!
+  inAppEnabled: Boolean!
+  globalMode: GlobalNotifMode!
+  categories: [CategoryPreferenceSetting!]!
+}
 
-  """
-  Fractional index position for ordering within parent (e.g., 1.5 between 1.0 and 2.0)
-  """
-  position: Float!
-  isArchived: Boolean!
-  isLocked: Boolean!
+type ScopedNotificationPreference {
+  emailEnabled: Boolean
+  pushEnabled: Boolean
+  categories: [CategoryPreferenceSetting!]!
+}
 
-  """
-  S3 key for the latest compiled Yjs snapshot (disaster recovery reference)
-  """
-  s3Key: String
-  createdBy: ID!
-  createdAt: DateTime!
-  updatedAt: DateTime!
-  collaborators: [PageCollaborator!]!
-  creator: UserBasic!
+type ConversationNotificationPreference {
+  conversationId: String!
+  mode: ConversationNotifMode!
+  muteUntil: DateTime
+  pushEnabled: Boolean
+  emailEnabled: Boolean
+}
 
-  """Populated only by getProjectPages — empty in all other contexts"""
-  children: [Page!]!
+input CategoryPreferenceInput {
+  category: NotificationCategory!
+  email: Boolean!
+  push: Boolean!
+  inApp: Boolean!
+}
+
+input UpdateScopedPreferencesInput {
+  emailEnabled: Boolean
+  pushEnabled: Boolean
+  categories: [CategoryPreferenceInput!]
 }
 
 type ProjectMember {
@@ -593,6 +747,7 @@ type ProjectMember {
   user: User!
   userId: ID!
   role: String
+  roleId: ID
   joinedAt: String!
 }
 
@@ -604,9 +759,12 @@ type Project {
   description: String
   isPrivate: Boolean
   isArchived: Boolean
+  logoS3Key: String
+  logoUrl: String
   createdAt: String!
   updatedAt: String!
   members: [ProjectMember!]!
+  activePlugins: [String!]!
 }
 
 type ProjectRole {
@@ -632,6 +790,8 @@ input UpdateProjectInput {
   name: String
   description: String
   isPrivate: Boolean
+  logoS3Key: String
+  key: String
 }
 
 input CreateProjectRoleInput {
@@ -646,15 +806,87 @@ input UpdateProjectRoleInput {
   rank: Int
 }
 
+type ProjectLogoUploadPayload {
+  """The presigned S3 PUT URL the client uses to upload directly."""
+  presignedUrl: String!
+
+  """The S3 key to store in Project.logoS3Key after PUT succeeds."""
+  logoS3Key: String!
+
+  """ISO timestamp after which the presigned PUT URL expires."""
+  expiresAt: String!
+}
+
 type ProjectOverview {
   totalIssues: Int!
   openIssues: Int!
   completedIssues: Int!
   overdueIssues: Int!
   pageCount: Int!
+  memberCount: Int!
   issuesByStatus: [IssueStatusCount!]!
   recentIssues: [OverviewIssue!]!
   members: [OverviewMember!]!
+  issuesByPriority: [PriorityCount!]!
+  upcomingIssues: [UpcomingIssue!]!
+  recentPages: [PagePreview!]!
+  recentVaultFiles: [VaultFilePreview!]!
+  recentWhiteboards: [WhiteboardPreview!]!
+  vaultUsage: VaultUsageSummary!
+  projectChannels: [ChannelPreview!]!
+}
+
+type PriorityCount {
+  priority: String!
+  count: Int!
+}
+
+type UpcomingIssue {
+  id: ID!
+  number: Int!
+  title: String!
+  dueDate: String!
+  assigneeName: String
+  assigneeAvatar: String
+  statusName: String!
+  statusColor: String!
+}
+
+type PagePreview {
+  id: ID!
+  title: String!
+  emojiIcon: String
+  updatedAt: String!
+  createdByName: String
+}
+
+type VaultFilePreview {
+  id: ID!
+  name: String!
+  mimeType: String!
+  sizeBytes: Float!
+  createdByName: String
+  createdAt: String!
+}
+
+type WhiteboardPreview {
+  id: ID!
+  title: String!
+  elementCount: Int!
+  updatedAt: String!
+  isLocked: Boolean!
+}
+
+type VaultUsageSummary {
+  usedBytes: Float!
+  fileCount: Int!
+}
+
+type ChannelPreview {
+  id: ID!
+  name: String!
+  topic: String
+  updatedAt: String!
 }
 
 type IssueStatusCount {
@@ -689,6 +921,29 @@ type OverviewMember {
   joinedAt: String!
 }
 
+type ContributorStats {
+  userId: ID!
+  name: String!
+  avatarUrl: String
+  assigned: Int!
+  completed: Int!
+}
+
+enum SearchEntityType {
+  PAGE
+  ISSUE
+  VAULT_FILE
+  VAULT_FOLDER
+  WHITEBOARD
+  USER
+}
+
+type SearchEntity {
+  id: ID!
+  type: SearchEntityType!
+  name: String!
+}
+
 type Conversation {
   id: ID!
   workspaceId: ID!
@@ -707,6 +962,8 @@ type Conversation {
   deletedAt: DateTime
   members: [ConversationMember!]
   lastMessage: LastMessagePreview
+  myNotifMode: ConversationNotifMode
+  isMuted: Boolean!
 }
 
 enum ConversationType {
@@ -1009,6 +1266,24 @@ type DmMember {
   user: UserBasic!
 }
 
+"""
+A 1:1 DM conversation with the other participant's profile resolved.
+The caller's own userId must be used to identify 'otherUser' on the client.
+"""
+type ProjectDmItem {
+  id: ID!
+  otherUser: DmUserProfile!
+  unreadCount: Int!
+  updatedAt: DateTime!
+}
+
+type DmUserProfile {
+  id: ID!
+  fullName: String!
+  email: String
+  avatarUrl: String
+}
+
 type Whiteboard {
   id: ID!
   workspaceId: ID!
@@ -1090,6 +1365,44 @@ type ActiveCollaborator {
   joinedAt: DateTime!
   lastSeenAt: DateTime!
   cursorPosition: CursorPosition
+}
+
+"""
+A collaborative document page within a project.
+The Y.Doc content is synced via WebSocket and accessed via getPageSnapshot.
+"""
+type Page {
+  id: ID!
+  workspaceId: ID!
+  projectId: ID!
+
+  """null = root-level page (no parent)"""
+  parentId: ID
+  title: String!
+
+  """Emoji or absolute URL for the page icon"""
+  icon: String
+  coverUrl: String
+
+  """
+  Fractional index position for ordering within parent (e.g., 1.5 between 1.0 and 2.0)
+  """
+  position: Float!
+  isArchived: Boolean!
+  isLocked: Boolean!
+
+  """
+  S3 key for the latest compiled Yjs snapshot (disaster recovery reference)
+  """
+  s3Key: String
+  createdBy: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  collaborators: [PageCollaborator!]!
+  creator: UserBasic!
+
+  """Populated only by getProjectPages — empty in all other contexts"""
+  children: [Page!]!
 }
 
 type PageCollaborator {
@@ -1230,6 +1543,20 @@ type RemovePageCollaboratorResult {
   success: Boolean!
 }
 
+input UpdatePageDetailsInput {
+  pageId: ID!
+
+  """Emoji character to set as the page icon. Pass null to remove."""
+  emoji: String
+
+  """Permanent vault proxy URL for the cover image. Pass null to remove."""
+  coverImageUrl: String
+}
+
+type UpdatePageDetailsResult {
+  page: Page!
+}
+
 """
 Returned by getPageSnapshot.
 
@@ -1241,6 +1568,18 @@ type PageSnapshot {
   snapshot: String!
   lastStreamId: String!
   snapshotTimestamp: DateTime
+}
+
+type PageHomeItem {
+  id: ID!
+  title: String!
+  emojiIcon: String
+  updatedAt: String!
+  createdByName: String
+}
+
+type PagesHomeResult {
+  pages: [PageHomeItem!]!
 }
 
 enum VaultNodeType {
@@ -1324,7 +1663,7 @@ type VaultSidebar {
 
 type VaultDownloadUrl {
   url: String!
-  expiresAt: DateTime!
+  expiresAt: DateTime
 }
 
 type VaultUsage {
@@ -1345,6 +1684,28 @@ type VaultUsage {
 type DeleteResult {
   success: Boolean!
   id: ID!
+}
+
+"""
+Result entry for a single file in a batch download URL request.
+Clients must check status before using the url.
+"""
+type VaultBatchDownloadResult {
+  fileId: ID!
+
+  """Presigned GET URL valid for 1 hour. Null when status != ACTIVE."""
+  url: String
+
+  """
+  ACTIVE    — url is valid, render normally
+  DELETED   — file was removed; render tombstone ("Attachment deleted")
+  PENDING   — upload not yet confirmed; render placeholder
+  FORBIDDEN — caller is not a member of this file's project
+  """
+  status: String!
+  name: String!
+  mimeType: String!
+  sizeBytes: Float!
 }
 
 input RequestVaultUploadInput {
@@ -1370,6 +1731,44 @@ input ConfirmVaultUploadInput {
 
 type ConfirmUploadResult {
   file: VaultFile!
+}
+
+input RegisterExternalFileInput {
+  workspaceId: ID!
+  projectId: ID!
+
+  """
+  Which module is uploading the file. Determines the system folder it lands in.
+  """
+  source: VaultFileSource!
+
+  """
+  ID of the originating entity (conversationId, pageId, boardId, issueId).
+  Nullable — may not yet exist when uploading before the entity is created.
+  """
+  sourceId: ID
+  name: String!
+  mimeType: String!
+
+  """
+  File size in bytes. Use Float to stay JS-safe (no BigInt serialisation issues).
+  """
+  sizeBytes: Float!
+
+  """
+  Optional override folder. Defaults to the source module's system folder.
+  """
+  folderId: ID
+}
+
+"""
+Returned by registerExternalFile and requestVaultUpload.
+The client must PUT the file bytes to presignedUrl, then call confirmVaultUpload.
+"""
+type RegisterExternalFileResult {
+  fileId: ID!
+  presignedUrl: String!
+  expiresAt: DateTime!
 }
 
 input CreateVaultFolderInput {
@@ -1444,6 +1843,22 @@ type PinFolderResult {
 
 input UnpinVaultFolderInput {
   folderId: ID!
+}
+
+input MarkFilesUnreferencedInput {
+  """File IDs that are no longer present in the saved document content."""
+  fileIds: [ID!]!
+
+  """The entity (page or issue) whose save triggered this mark."""
+  entityId: ID!
+
+  """The entity type — PAGE or TASK."""
+  entityType: VaultFileSource!
+}
+
+type MarkFilesUnreferencedResult {
+  """Number of files successfully marked unreferenced."""
+  markedCount: Int!
 }
 
 type IssueStatus {
@@ -1521,6 +1936,7 @@ type CreateIssueResult {
 input UpdateIssueInput {
   issueId: ID!
   title: String
+  statusId: ID
   priority: IssuePriority
   assigneeId: ID
   labelIds: [ID!]
@@ -1630,4 +2046,140 @@ input ConfirmIssueDescriptionUploadInput {
 
 type ConfirmIssueDescriptionUploadResult {
   issue: Issue!
+}
+
+type ActiveUserContext {
+  userId: ID!
+  workspaceId: ID!
+  projectId: ID
+  workspaceRole: String
+  projectRole: String
+  grantedPermissions: [String!]!
+  featureFlags: [ActiveFeatureFlag!]!
+}
+
+type ActiveFeatureFlag {
+  key: String!
+  enabled: Boolean!
+}
+
+type FeatureFlagRecord {
+  id: ID!
+  key: String!
+  defaultEnabled: Boolean!
+  description: String
+  overrides: [FlagOverrideRecord!]!
+}
+
+type FlagOverrideRecord {
+  id: ID!
+  contextType: FlagContextType!
+  contextId: ID
+  enabled: Boolean!
+}
+
+input ToggleFeatureFlagInput {
+  flagKey: String!
+  contextType: FlagContextType!
+  contextId: ID
+  enabled: Boolean!
+}
+
+enum FlagContextType {
+  GLOBAL
+  WORKSPACE
+  PROJECT
+  USER
+}
+
+type ToggleFlagResult {
+  success: Boolean!
+  flagKey: String!
+  enabled: Boolean!
+}
+
+input BacklinkFilters {
+  sourceType: String
+  actorId: String
+  dateFrom: DateTime
+  dateTo: DateTime
+}
+
+type Backlink {
+  id: ID!
+  sourceEntityId: String!
+  sourceEntityType: String!
+  targetEntityId: String!
+  targetEntityType: String!
+  context: String
+  createdAt: DateTime!
+  sourceMention: Mention!
+}
+
+type BacklinkResult {
+  backlinks: [Backlink!]!
+  total: Int!
+  hasMore: Boolean!
+}
+
+type Mention {
+  id: ID!
+  sourceEntityId: String!
+  sourceEntityType: String!
+  targetEntityId: String!
+  targetEntityType: String!
+  displayText: String!
+  sourceLocation: JSON
+  tier: MentionTier!
+  status: MentionStatus!
+  createdAt: DateTime!
+  createdById: String!
+}
+
+enum MentionTier {
+  TIER_1
+  TIER_2
+  TIER_3
+}
+
+enum MentionStatus {
+  ACTIVE
+  ORPHANED
+  REMOVED
+}
+
+type MentionEvent {
+  id: ID!
+  mentionId: String!
+  eventType: String!
+  payload: JSON!
+  actorId: String
+  createdAt: DateTime!
+}
+
+type MentionResult {
+  sourceId: String!
+  mentions: [SourceMention!]!
+}
+
+type SourceMention {
+  id: ID!
+  targetEntityId: String!
+  targetEntityType: String!
+  displayText: String!
+}
+
+input CreateMentionInput {
+  sourceEntityId: ID!
+  sourceEntityType: String!
+  targetEntityId: ID!
+  targetEntityType: String!
+  displayText: String!
+  sourceLocation: JSON
+}
+
+input UpdateMentionInput {
+  mentionId: ID!
+  displayText: String
+  sourceLocation: JSON
 }

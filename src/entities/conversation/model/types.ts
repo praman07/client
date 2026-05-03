@@ -27,7 +27,15 @@ export interface ConversationMember {
  * Detailed conversation (matches ConversationDetails from GraphQL schema)
  * Includes members and additional metadata
  */
-export interface ConversationDetail extends Omit<Conversation, 'deletedAt'> {
+export interface ConversationDetail {
+  id: string
+  type: ConversationType
+  name: string | null
+  description: string | null
+  slug: string | null
+  isArchived: boolean
+  unreadCount: number
+  lastMessageAt: string | null
   parentMessageId?: string | null
   createdBy?: string | null
   members: Array<ConversationMember>
@@ -61,4 +69,13 @@ export const getConversationIcon = (type: ConversationType): string => {
     default:
       return '💬'
   }
+}
+
+// Notification preference shape returned by conversationNotifPreference query
+export interface ConversationNotifPreference {
+  conversationId: string;
+  mode: 'ALL_MESSAGES' | 'MENTIONS_ONLY' | 'NOTHING';
+  muteUntil: string | null;
+  pushEnabled: boolean | null;
+  emailEnabled: boolean | null;
 }

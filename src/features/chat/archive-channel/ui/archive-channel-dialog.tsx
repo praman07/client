@@ -48,16 +48,16 @@ export function ArchiveChannelDialog({
           <AlertDialogDescription className="space-y-3">
             <p>
               When you archive{' '}
-              <span className="font-semibold">#{channelName}</span>, it's
+              <span className="font-semibold text-primary">#{channelName}</span>, it's
               archived for everyone. That means:
             </p>
-            <ul className="space-y-1.5 text-sm">
+            <ul className="space-y-1.5 text-13 text-secondary">
               <li>• No one will be able to send messages to the channel</li>
               <li>• The channel will be hidden from the sidebar</li>
               <li>• All message history will be preserved</li>
               <li>• You can unarchive the channel anytime in the future</li>
             </ul>
-            <p className="text-sm">
+            <p className="text-13 text-secondary">
               You'll still be able to find the channel's contents via search.
             </p>
           </AlertDialogDescription>
@@ -70,7 +70,7 @@ export function ArchiveChannelDialog({
               handleArchive()
             }}
             disabled={isPending}
-            className="bg-orange-600 hover:bg-orange-700"
+            className="bg-warning-primary hover:bg-warning-primary text-on-color"
           >
             {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             Archive Channel

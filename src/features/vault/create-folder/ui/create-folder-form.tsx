@@ -65,7 +65,7 @@ export function CreateFolderForm({
     >
       {/* Root-level server error */}
       {rootError && (
-        <div className="rounded-md bg-destructive/15 px-3 py-2 text-sm text-destructive">
+        <div className="rounded-md bg-danger-subtle px-3 py-2 text-13 text-danger-primary">
           {rootError}
         </div>
       )}
@@ -95,7 +95,7 @@ export function CreateFolderForm({
               autoFocus
             />
             {field.state.meta.errors.length > 0 && (
-              <p className="text-sm text-destructive">
+              <p className="text-13 text-danger-primary">
                 {field.state.meta.errors.join(', ')}
               </p>
             )}

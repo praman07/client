@@ -1,0 +1,396 @@
+/* ═══════════════════════════════════════════════════════════════════════
+    BlockNote Editor Overrides — Collabify Design System
+    Scope: .bn-shadcn only — zero global side-effects
+    ═══════════════════════════════════════════════════════════════════════ */
+
+/* ── Editor surface + background match ─────────────────────────── */
+.bn-shadcn,
+.bn-shadcn .bn-editor {
+  background: transparent;
+}
+
+.bn-shadcn .bn-editor * {
+  caret-color: var(--txt-primary);
+}
+
+.bn-shadcn .bn-editor {
+  font-family: "Geist", ui-sans-serif, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--txt-primary);
+}
+
+/* ── Block container spacing ────────────────────────────────────── */
+.bn-shadcn [data-node-type="blockContainer"] {
+  margin-top: 1px;
+  margin-bottom: 1px;
+  padding-top: 1px;
+  padding-bottom: 1px;
+}
+
+/* ── Paragraph min-height ───────────────────────────────────────── */
+.bn-shadcn .bn-editor .bn-inline-content {
+  min-height: 1.5em;
+}
+
+/* ── Headings — only color + weight, preserve BlockNote's native sizes ── */
+.bn-shadcn .bn-editor h1 {
+  color: var(--txt-primary);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.bn-shadcn .bn-editor h2 {
+  color: var(--txt-primary);
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
+
+.bn-shadcn .bn-editor h3 {
+  color: var(--txt-primary);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+/* ── Lists ──────────────────────────────────────────────────────── */
+.bn-shadcn .bn-editor ul,
+.bn-shadcn .bn-editor ol {
+  padding-left: 1.6em;
+}
+
+.bn-shadcn .bn-editor ul li,
+.bn-shadcn .bn-editor ol li {
+  margin-top: 2px;
+  margin-bottom: 2px;
+  line-height: 1.6;
+}
+
+/* ── Checklist ──────────────────────────────────────────────────── */
+.bn-shadcn .bn-editor .bn-block-content[data-content-type="checkListItem"] {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.bn-shadcn
+  .bn-editor
+  .bn-block-content[data-content-type="checkListItem"][data-checked="true"]
+  .bn-inline-content {
+  text-decoration: line-through;
+  color: var(--txt-tertiary);
+}
+
+/* ── Quote / Callout placeholder-like styling ───────────────────── */
+.bn-shadcn .bn-editor [data-content-type="bulletListItem"]::marker,
+.bn-shadcn .bn-editor [data-content-type="numberedListItem"]::marker {
+  color: var(--txt-tertiary);
+}
+
+/* ── Placeholder text ───────────────────────────────────────────── */
+.bn-shadcn .bn-editor .is-empty::before,
+.bn-shadcn .bn-editor .is-editor-empty::before,
+.bn-shadcn .bn-editor [data-placeholder]::before {
+  color: var(--txt-tertiary);
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+/* ── Code block ──────────────��──────────────────────────────────── */
+.bn-shadcn .bn-editor pre,
+.bn-shadcn .bn-editor code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    "Liberation Mono", "Courier New", monospace;
+  font-size: 0.875em;
+  border-radius: 4px;
+}
+
+.bn-shadcn .bn-editor pre {
+  background: var(--bg-layer-1);
+  padding: 14px 16px;
+  border-radius: 6px;
+  border: 1px solid var(--border-subtle);
+  overflow-x: auto;
+  line-height: 1.5;
+}
+
+.bn-shadcn .bn-editor :not(pre) > code {
+  background: var(--bg-layer-1);
+  padding: 2px 5px;
+  border-radius: 4px;
+  border: 1px solid var(--border-subtle);
+}
+
+/* ── Block focus / selected highlight ───────────────────────────── */
+.bn-shadcn .bn-editor [data-node-type="blockContainer"].bn-focused {
+  border-radius: 4px;
+}
+
+/* ── Side menu drag handle ──────────────────────────────────────── */
+.bn-shadcn .bn-side-menu .bn-drag-handle {
+  color: var(--txt-tertiary);
+  transition: color 150ms ease;
+}
+
+.bn-shadcn .bn-side-menu .bn-drag-handle:hover {
+  color: var(--txt-primary);
+}
+
+/* ══════════════════════════════════════════════════════════════════
+    Collabify Slash Menu — design system
+    ══════════════════════════════════════════════════════════════════ */
+
+.bn-shadcn .bn-suggestion-menu {
+  all: unset;
+  display: block;
+}
+
+/* ── Root panel ─────────────────────────────────────────────────── */
+.csm-root {
+  width: 296px;
+  max-height: 400px;
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-surface-1);
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.35);
+  overflow: hidden;
+  font-family: "Geist", ui-sans-serif, system-ui, sans-serif;
+}
+
+/* ── Scrollable list area ───────────────────────────────────────── */
+.csm-list {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 6px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--bg-surface-2) transparent;
+}
+
+.csm-list::-webkit-scrollbar {
+  width: 4px;
+}
+.csm-list::-webkit-scrollbar-thumb {
+  background: var(--border-subtle);
+  border-radius: 4px;
+}
+
+/* ── Group section label ────────────────────────────────────────── */
+.csm-group-label {
+  padding: 10px 8px 4px;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--txt-tertiary);
+  line-height: 1;
+  user-select: none;
+}
+
+.csm-group-label:first-child {
+  padding-top: 4px;
+}
+
+/* ── Item row ───────────────────────────────────────────────────── */
+.csm-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 5px 6px;
+  border-radius: 5px;
+  cursor: pointer;
+  user-select: none;
+  min-height: 36px;
+  transition: background 80ms ease;
+}
+
+.csm-item:hover {
+  background: var(--bg-surface-2);
+}
+
+.csm-item[data-selected] {
+  background: var(--bg-surface-2);
+}
+
+/* ── Icon box (28 × 28, Surface-2 fill, border) ─────────────────── */
+.csm-item__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: 5px;
+  border: 1px solid var(--border-subtle);
+  background: var(--bg-surface-2);
+  color: var(--txt-primary);
+}
+
+.csm-item__icon svg {
+  width: 16px;
+  height: 16px;
+  color: var(--txt-primary);
+}
+
+/* ── Body: title + optional inline subtext ──────────────────────── */
+.csm-item__body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: baseline;
+  gap: 0;
+  overflow: hidden;
+}
+
+.csm-item__title {
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--txt-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.4;
+}
+
+.csm-item__dot {
+  font-size: 13px;
+  color: var(--txt-tertiary);
+  flex-shrink: 0;
+  padding: 0 1px;
+}
+
+.csm-item__subtext {
+  font-size: 13px;
+  color: var(--txt-tertiary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex-shrink: 1;
+}
+
+/* ── Right badge (keyboard shortcut: #, ##, ###) ────────────────── */
+.csm-item__badge {
+  flex-shrink: 0;
+  font-size: 12px;
+  font-family: "Geist Mono", ui-monospace, Menlo, monospace;
+  color: var(--txt-tertiary);
+  letter-spacing: 0.02em;
+  margin-left: 6px;
+}
+
+/* ── Footer (Close menu · esc) ──────────────────────────────────── */
+.csm-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 7px 12px;
+  border-top: 1px solid var(--border-subtle);
+  flex-shrink: 0;
+}
+
+.csm-footer__label {
+  font-size: 13px;
+  color: var(--txt-tertiary);
+  font-weight: 400;
+}
+
+.csm-footer__badge {
+  font-size: 11px;
+  font-family: "Geist Mono", ui-monospace, Menlo, monospace;
+  color: var(--txt-tertiary);
+}
+
+/* ── Empty state ────────────────────────────────────────────────── */
+.csm-empty {
+  padding: 20px 12px;
+  font-size: 13px;
+  color: var(--txt-tertiary);
+  text-align: center;
+}
+
+/* ══════════════════════════════════════════════════════════════════
+    Mention Menu — Category Tab Strip
+    Reuses csm-root panel + csm-* item styles.
+    Only the tab row (cmm-*) needs its own tokens.
+    ══════════════════════════════════════════════════════════════════ */
+
+/* ── Tab strip container ─────────────────────────────────────────── */
+.cmm-tabs {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 6px 6px 0;
+  flex-shrink: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.cmm-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+/* ── Individual tab button ───────────────────────────────────────── */
+.cmm-tab {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 9px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--txt-tertiary);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  user-select: none;
+  transition: background 80ms ease, color 80ms ease;
+  white-space: nowrap;
+  line-height: 1.6;
+}
+
+.cmm-tab:hover {
+  background: var(--bg-surface-2);
+  color: var(--txt-primary);
+}
+
+.cmm-tab--active {
+  background: var(--bg-surface-2);
+  color: var(--txt-primary);
+}
+
+/* ── Divider between tabs and results ───────���─���──────────────────── */
+.cmm-divider {
+  height: 1px;
+  background: var(--border-subtle);
+  margin: 6px 0 0;
+  flex-shrink: 0;
+}
+
+/* ── Modifier: fixed-height mention menu panel ───────────────────── */
+.csm-root.cmm-root {
+  height: 340px;
+  max-height: 340px;
+}
+
+/* ── Results wrapper — fills remaining vertical space ────────────── */
+.cmm-results {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  min-height: 0;
+}
+
+.cmm-results .csm-list {
+  flex: 1;
+  min-height: 0;
+}
+
+.cmm-results .csm-empty {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}

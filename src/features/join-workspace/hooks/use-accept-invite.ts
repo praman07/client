@@ -12,7 +12,7 @@ export function useAcceptInvite() {
   return useMutation({
     mutationFn: async (token: string) => {
       // 1. Validation
-      if (!userId || !user?.primaryEmailAddress?.emailAddress) {
+      if (!userId || !user?.email) {
         throw new Error('You must be logged in to join.')
       }
 
@@ -21,7 +21,7 @@ export function useAcceptInvite() {
       // We manually sync first to guarantee the record exists.
       await syncUser({
         clerkId: userId,
-        email: user.primaryEmailAddress.emailAddress,
+        email: user.email,
         fullName: user.fullName || '',
         avatarUrl: user.imageUrl,
       })
@@ -33,7 +33,7 @@ export function useAcceptInvite() {
         input: {
           token,
           userId,
-          userEmail: user.primaryEmailAddress.emailAddress,
+          userEmail: user.email,
         },
       })
     },

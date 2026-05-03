@@ -36,14 +36,15 @@ const PRIORITY_RULES = [
     type === WhiteboardUpstreamEvent.CursorMove,
 ]
 
-let cleanupHandlers: (() => void) | null = null
-
 /**
  * Creates whiteboard plugin with handler context.
  *
  * @param context - Whiteboard event handler dependencies
  */
 export function createWhiteboardPlugin(context: WhiteboardEventHandlerContext) {
+  // Scoped to this factory instance — safe for per-route lifecycle management.
+  let cleanupHandlers: (() => void) | null = null
+
   return createDomainPlugin({
     domain: 'whiteboard',
     upstreamEvents: UPSTREAM_EVENTS,

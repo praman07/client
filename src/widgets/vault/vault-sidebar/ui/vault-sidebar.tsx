@@ -31,11 +31,11 @@ export function VaultSidebar({ projectId }: VaultSidebarProps) {
   return (
     <Sidebar
       collapsible="icon"
-      className="border-r inset-y-0 z-0 relative h-full"
+      className="border-r border-subtle inset-y-0 z-0 relative h-full"
     >
       <SidebarContent className="overflow-hidden flex flex-col">
         <ScrollArea className="flex-1 w-full">
-          <div className="flex flex-col gap-2 p-2">
+          <div className="flex flex-col gap-2 p-2 animate-fade-in">
             {isLoading ? (
               <VaultSidebarSkeleton />
             ) : (
@@ -73,7 +73,7 @@ export function VaultSidebar({ projectId }: VaultSidebarProps) {
         </ScrollArea>
 
         {/* Storage bar — isolated so a usage API failure doesn't crash the sidebar */}
-        <div className="border-t mt-auto">
+        <div className="border-t border-subtle mt-auto">
           <ErrorBoundary FallbackComponent={WidgetError}>
             <VaultStorageBar projectId={projectId} />
           </ErrorBoundary>

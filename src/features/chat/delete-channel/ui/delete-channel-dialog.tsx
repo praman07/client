@@ -68,10 +68,10 @@ export function DeleteChannelDialog({
             <p>
               When you delete{' '}
               <span className="font-semibold">#{channelName}</span>, all
-              messages from this channel will be removed from Collabify
+              messages from this channel will be removed from Collabifyy
               immediately. This can't be undone.
             </p>
-            <div className="text-sm">
+            <div className="text-14">
               <p className="font-medium mb-2">Keep in mind that:</p>
               <ul className="space-y-1.5">
                 <li>
@@ -87,7 +87,7 @@ export function DeleteChannelDialog({
             </div>
 
             {!isArchived && (
-              <div className="bg-yellow-50 border border-yellow-200 rounded-md p-3 text-sm text-yellow-800">
+              <div className="bg-warning-subtle border border-warning-subtle rounded-md p-3 text-14 text-warning-primary">
                 ⚠️ Channel must be archived before deletion
               </div>
             )}
@@ -101,7 +101,7 @@ export function DeleteChannelDialog({
               />
               <Label
                 htmlFor="delete-confirm"
-                className="text-sm font-normal cursor-pointer select-none"
+                className="text-14 font-normal cursor-pointer select-none"
               >
                 I understand this action cannot be undone
               </Label>
@@ -116,7 +116,7 @@ export function DeleteChannelDialog({
               handleDelete()
             }}
             disabled={!isConfirmed || !isArchived || isPending}
-            className="bg-destructive hover:bg-destructive/90"
+            className="bg-danger-primary hover:bg-danger-primary-hover"
           >
             {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             Yes, permanently delete the channel

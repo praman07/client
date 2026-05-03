@@ -98,7 +98,7 @@ export function AddCollaboratorsForm({
       className="space-y-4"
     >
       {rootError && (
-        <div className="rounded-md bg-destructive/15 p-3 text-sm text-destructive">
+        <div className="rounded-md bg-danger-subtle p-3 text-14 text-danger-primary">
           {rootError}
         </div>
       )}
@@ -118,7 +118,7 @@ export function AddCollaboratorsForm({
             <ScrollArea
               className={cn(
                 getScrollAreaHeight(availableMembers.length),
-                'rounded-md border p-4',
+                'rounded-md border border-subtle p-4',
               )}
             >
               <div className="space-y-2">
@@ -137,8 +137,8 @@ export function AddCollaboratorsForm({
                         field.handleChange(newValue)
                       }}
                       className={cn(
-                        'flex w-full items-center gap-3 rounded-lg p-3 transition-colors hover:bg-accent',
-                        isSelected && 'bg-accent',
+                        'flex w-full items-center gap-3 rounded-lg p-3 transition-colors hover:bg-layer-2',
+                        isSelected && 'bg-accent-subtle',
                       )}
                     >
                       <Avatar className="h-10 w-10">
@@ -148,10 +148,10 @@ export function AddCollaboratorsForm({
                         </AvatarFallback>
                       </Avatar>
                       <div className="flex flex-1 flex-col items-start">
-                        <span className="text-sm font-medium">
+                        <span className="text-14 font-medium">
                           {member.user.fullName}
                         </span>
-                        <span className="text-xs text-muted-foreground">
+                        <span className="text-12 text-secondary">
                           {member.user.email}
                         </span>
                       </div>
@@ -162,7 +162,7 @@ export function AddCollaboratorsForm({
               </div>
             </ScrollArea>
             {field.state.meta.errors.length > 0 && (
-              <p className="text-sm text-destructive">
+              <p className="text-14 text-danger-primary">
                 {field.state.meta.errors.join(', ')}
               </p>
             )}

@@ -34,6 +34,8 @@ export function useWhiteboardSync(
   boardId: string,
   excalidrawAPI: ExcalidrawImperativeAPI | null,
   excalidrawRef: RefObject<HTMLElement>,
+  /** When true, skip ExcalidrawBinding — view mode doesn't support the binding's DOM requirements */
+  isReadOnly = false,
 ) {
   // 1. Create Y.Doc (once, with deterministic GUID)
   const [ydoc] = useState(() => createYDoc({ boardId }))
@@ -70,9 +72,13 @@ export function useWhiteboardSync(
   useIndexedDBSync(ydoc, boardId, serverSynced, handleIndexedDBSynced)
   useClientDiff(ydoc, boardId, indexeddbSynced, serverStateVectorRef)
   useNetworkSync(ydoc, boardId, serverSynced)
+  // Binding creates collaborative Y.js ↔ Excalidraw sync.
+  // MUST be skipped in read-only/view mode: ExcalidrawBinding attaches listeners
+  // to internal Excalidraw DOM nodes that don't exist when viewModeEnabled=true,
+  // causing "Cannot read properties of null (reading 'addEventListener')".
   useExcalidrawBinding(
     ydoc,
-    excalidrawAPI,
+    isReadOnly ? null : excalidrawAPI,  // pass null API → hook early-returns, no binding created
     excalidrawRef,
     serverSynced,
     setBinding,

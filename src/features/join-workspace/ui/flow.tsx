@@ -27,9 +27,9 @@ export function JoinWorkspaceFlow({ token }: JoinWorkspaceFlowProps) {
 
   if (errorCode === 'INVITE_NOT_FOUND' || errorCode === 'INVITE_EXPIRED') {
     return (
-      <div className="rounded-md bg-destructive/10 p-6 text-center text-destructive max-w-md w-full border border-destructive/20 shadow-sm">
-        <h3 className="font-semibold text-lg mb-2">Invalid Invite</h3>
-        <p className="text-sm opacity-90">
+      <div className="rounded-md bg-danger-subtle p-6 text-center text-danger-primary max-w-md w-full border border-danger-strong shadow-raised-100">
+        <h3 className="font-semibold text-16 mb-2">Invalid Invite</h3>
+        <p className="text-14">
           This invite link is either invalid or has expired. Please ask for a
           new invitation.
         </p>
@@ -39,9 +39,9 @@ export function JoinWorkspaceFlow({ token }: JoinWorkspaceFlowProps) {
 
   if (errorCode === 'ALREADY_WORKSPACE_MEMBER') {
     return (
-      <div className="rounded-md bg-blue-50 p-6 text-center text-blue-900 max-w-md w-full border border-blue-100 shadow-sm">
-        <h3 className="font-semibold text-lg mb-2">Already a Member</h3>
-        <p className="text-sm opacity-90 mb-4">
+      <div className="rounded-md bg-accent-subtle p-6 text-center text-primary max-w-md w-full border border-accent-subtle shadow-raised-100">
+        <h3 className="font-semibold text-16 mb-2">Already a Member</h3>
+        <p className="text-13 text-secondary mb-4">
           You are already a member of this workspace.
         </p>
         <Button variant="default" onClick={() => (window.location.href = '/')}>
@@ -54,7 +54,7 @@ export function JoinWorkspaceFlow({ token }: JoinWorkspaceFlowProps) {
   if (isLoading) {
     return (
       <div className="flex justify-center p-8">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" />
+        <div className="h-8 w-8 animate-spin rounded-full border-4 border-subtle border-t-transparent" />
       </div>
     )
   }

@@ -3,7 +3,6 @@ import { CreateChannelForm } from './create-channel-form'
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogHeader,
   DialogTitle,
 } from '@/shared/ui'
@@ -16,24 +15,28 @@ export function CreateChannelModal() {
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && close()}>
-      <DialogContent className="sm:max-w-[500px]">
-        <DialogHeader>
-          <DialogTitle>Create Channel</DialogTitle>
-          <DialogDescription>
-            Add a new channel to your project.
-          </DialogDescription>
+      <DialogContent className="max-w-lg w-[calc(100vw-2rem)] flex flex-col p-0 gap-0 overflow-hidden bg-surface-1 border-subtle">
+        <DialogHeader className="px-6 pt-5 pb-4 shrink-0 border-b border-subtle">
+          <DialogTitle className="text-14 font-semibold text-primary">
+            Create a channel
+          </DialogTitle>
+          <p className="text-14 text-secondary mt-0.5">
+            Channels are where your team communicates on a topic.
+          </p>
         </DialogHeader>
-        {project ? (
-          <CreateChannelForm
-            workspaceId={project.workspaceId}
-            projectId={project.id}
-            onSuccess={close}
-          />
-        ) : (
-          <div className="p-4 text-center text-muted-foreground">
-            Loading project context...
-          </div>
-        )}
+        <div className="flex-1 overflow-y-auto px-6 py-5">
+          {isOpen && project ? (
+            <CreateChannelForm
+              workspaceId={project.workspaceId}
+              projectId={project.id}
+              onSuccess={close}
+            />
+          ) : (
+            <div className="py-4 text-center text-14 text-secondary">
+              Loading project context…
+            </div>
+          )}
+        </div>
       </DialogContent>
     </Dialog>
   )

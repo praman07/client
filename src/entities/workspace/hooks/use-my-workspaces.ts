@@ -1,18 +1,9 @@
 import { useQuery } from '@tanstack/react-query'
 import { useAuth } from '@clerk/clerk-react'
 import { setMyWorkspaces } from '../model/slice'
-import { workspaceKeys } from '../api'
-import { gql } from '@/gql'
+import { GET_MY_WORKSPACES_QUERY, workspaceKeys } from '../api'
 import { GqlClient } from '@/shared/api/graphql-client'
 import { useAppDispatch } from '@/shared/hooks'
-
-const GET_MY_WORKSPACES_QUERY = gql(`
-  query GetMyWorkspaces {
-    myWorkspaces {
-      ...WorkspaceFragment
-    }
-  }
-`)
 
 export function useMyWorkspaces() {
   const { getToken } = useAuth()
@@ -28,5 +19,6 @@ export function useMyWorkspaces() {
       dispatch(setMyWorkspaces(data.myWorkspaces as any))
       return data
     },
+    staleTime: 5 * 60 * 1000,
   })
 }

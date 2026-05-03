@@ -57,19 +57,19 @@ export function ChannelNameField({ form, projectId }: Props) {
             />
             {field.state.meta.isValidating && (
               <div className="absolute right-3 top-1/2 -translate-y-1/2">
-                <Spinner className="h-4 w-4 text-muted-foreground" />
+                <Spinner className="h-4 w-4 text-secondary" />
               </div>
             )}
           </div>
 
           {field.state.meta.errors.length > 0 ? (
-            <p className="text-sm font-medium text-destructive">
+            <p className="text-14 font-medium text-danger-primary">
               {field.state.meta.errors.join(', ')}
             </p>
           ) : (
             !field.state.meta.isValidating &&
             field.state.value.length > 0 && (
-              <p className="text-[0.8rem] text-muted-foreground">
+              <p className="text-[0.8rem] text-secondary">
                 Lowercase, numbers, and hyphens only.
               </p>
             )

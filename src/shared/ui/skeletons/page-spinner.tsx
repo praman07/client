@@ -24,13 +24,13 @@ export function PageSpinner({ label, fullHeight = true, className }: PageSpinner
   return (
     <div
       className={cn(
-        'flex flex-col items-center justify-center gap-3 text-muted-foreground',
+        'flex flex-col items-center justify-center gap-3 text-tertiary',
         fullHeight && 'h-full w-full min-h-[200px]',
         className,
       )}
     >
       <Loader2 className="h-6 w-6 animate-spin text-primary" />
-      {label && <p className="text-sm">{label}</p>}
+      {label && <p className="text-13">{label}</p>}
     </div>
   )
 }

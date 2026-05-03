@@ -9,7 +9,10 @@
 
 import {
   registerAckMessageHandler,
+  registerDeleteMessageHandler,
+  registerEditMessageHandler,
   registerNewMessageHandler,
+  registerReactionHandlers,
   registerSyncRequiredHandler,
 } from './handlers'
 import { startOutboxRetryWorker } from './outbox-worker'
@@ -25,14 +28,17 @@ export function registerChatHandlers(context: ChatEventHandlerContext) {
   // Start the background worker
   const stopWorker = startOutboxRetryWorker()
 
-  const unsubs = [
+  const cleanups = [
     registerNewMessageHandler(context),
     registerAckMessageHandler(context),
-    registerSyncRequiredHandler(),
+    registerSyncRequiredHandler(context),
+    registerEditMessageHandler(),
+    registerDeleteMessageHandler(),
+    registerReactionHandlers(() => context.getCurrentUserId()),
   ]
 
   return () => {
-    stopWorker() // Stop the interval
-    unsubs.forEach((u) => u()) // Unsubscribe listeners
+    stopWorker()
+    cleanups.forEach((fn) => fn())
   }
 }

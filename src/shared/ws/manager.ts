@@ -88,7 +88,9 @@ export function createWSManager(): WSManager {
       payload: {},
     })
     if (!sent) {
-      log.warn('Failed to send ping (socket not ready)')
+      // Socket may be CONNECTING or a follower tab — this is expected during
+      // the handshake window. Log at debug level to avoid false-alarm noise.
+      log.debug('Ping skipped: socket not ready')
     }
   }
 

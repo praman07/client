@@ -1,7 +1,6 @@
 import { useForm } from '@tanstack/react-form'
 import { toast } from 'sonner'
-import { HugeiconsIcon } from '@hugeicons/react'
-import { Cancel01Icon } from '@hugeicons/core-free-icons'
+import { X } from 'lucide-react'
 import { useRenameChannel } from '../hooks'
 import { renameChannelSchema, sanitizeChannelName } from '../model/schema'
 import { mapRenameChannelError } from '../lib/error-mapping'
@@ -98,7 +97,7 @@ export function RenameChannelForm({
               autoFocus
             />
             {field.state.meta.errors.length > 0 && (
-              <p className="text-sm text-destructive">
+              <p className="text-14 text-danger-primary">
                 {field.state.meta.errors.join(', ')}
               </p>
             )}
@@ -114,7 +113,7 @@ export function RenameChannelForm({
           onClick={onCancel}
           disabled={isPending}
         >
-          <HugeiconsIcon icon={Cancel01Icon} className="size-4 mr-2" />
+          <X className="size-4 mr-2" />
           Cancel
         </Button>
         <form.Subscribe

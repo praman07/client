@@ -8,6 +8,8 @@
 import type { UserJoinedPayload } from '@/shared/contracts/pages'
 import type { PageEventHandlerContext } from '../../model'
 import { addPageCollaborator } from '@/entities/page-presence'
+import { registerHandler } from '@/shared/ws/event-bus'
+import { PageDownstreamEvent } from '@/shared/contracts/pages'
 import { createLogger } from '@/shared/lib/logger'
 
 const log = createLogger('pages:user-joined')
@@ -35,4 +37,11 @@ export function handleUserJoined(
       joinedAt: timestamp,
     }),
   )
+}
+
+/** Registration wrapper — called by registerPageHandlers. */
+export function registerPageUserJoinedHandler(context: PageEventHandlerContext) {
+  return registerHandler(PageDownstreamEvent.UserJoined, (event) => {
+    handleUserJoined(event.payload as UserJoinedPayload, context)
+  })
 }

@@ -86,7 +86,7 @@ export function ChannelTopicField({ form }: Props) {
 
         return (
           <div className="space-y-3">
-            <Label htmlFor={field.name} className="text-base font-medium">
+            <Label htmlFor={field.name} className="text-16 font-medium">
               Topic (Optional)
             </Label>
             <Textarea
@@ -97,10 +97,10 @@ export function ChannelTopicField({ form }: Props) {
               onChange={handleChange}
               onKeyDown={handleKeyDown}
               placeholder="What's this channel about?"
-              className="max-h-[120px] resize-none overflow-hidden"
+              maxHeight="md"
             />
             {field.state.meta.errors.length > 0 && (
-              <p className="text-sm text-destructive font-medium">
+              <p className="text-14 text-danger-primary font-medium">
                 {field.state.meta.errors.join(', ')}
               </p>
             )}

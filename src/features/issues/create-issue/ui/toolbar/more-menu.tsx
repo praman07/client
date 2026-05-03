@@ -10,8 +10,10 @@
  * @layer Features
  */
 import { useState } from 'react'
-import { HugeiconsIcon } from '@hugeicons/react'
-import { Calendar01Icon, MoreHorizontalIcon } from '@hugeicons/core-free-icons'
+import {
+  Calendar as CalendarIcon,
+  MoreHorizontal,
+} from 'lucide-react'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -44,28 +46,22 @@ export function MoreMenu({ dueDate, onDueDateChange }: MoreMenuProps) {
     <DropdownMenu open={open} onOpenChange={setOpen}>
       <DropdownMenuTrigger
         className={cn(
-          'inline-flex items-center gap-1.5 rounded-md border px-2 py-1 text-xs whitespace-nowrap transition-colors cursor-pointer',
+          'inline-flex items-center gap-1.5 rounded-md border border-subtle px-2 py-1 text-12 whitespace-nowrap transition-colors cursor-pointer',
           isActive
-            ? 'border-primary/40 bg-primary/5 text-foreground'
-            : 'border-border bg-transparent text-foreground hover:bg-muted/50',
+            ? 'border-subtle bg-layer-2 text-primary'
+            : 'border-subtle bg-transparent text-primary hover:bg-layer-2-hover',
         )}
       >
         {/* Due date chip — visible when a date is set */}
         {formattedDate && (
           <span className="flex items-center gap-1">
-            <HugeiconsIcon
-              icon={Calendar01Icon}
-              strokeWidth={2}
-              className="size-3 text-muted-foreground"
+            <CalendarIcon
+              className="size-3 text-tertiary"
             />
             <span>{formattedDate}</span>
           </span>
         )}
-        <HugeiconsIcon
-          icon={MoreHorizontalIcon}
-          strokeWidth={2}
-          className="size-3.5"
-        />
+        <MoreHorizontal className="size-3.5" />
       </DropdownMenuTrigger>
 
       <DropdownMenuContent
@@ -76,10 +72,8 @@ export function MoreMenu({ dueDate, onDueDateChange }: MoreMenuProps) {
       >
         <DropdownMenuSub>
           <DropdownMenuSubTrigger>
-            <HugeiconsIcon
-              icon={Calendar01Icon}
-              strokeWidth={2}
-              className="size-3.5 text-muted-foreground"
+            <CalendarIcon
+              className="size-3.5 text-tertiary"
             />
             {dueDate ? 'Change due date' : 'Set due date'}
           </DropdownMenuSubTrigger>
@@ -92,7 +86,14 @@ export function MoreMenu({ dueDate, onDueDateChange }: MoreMenuProps) {
               mode="single"
               selected={selectedDate}
               onSelect={(date) => {
-                onDueDateChange(date ? date.toISOString().split('T')[0] : null)
+                if (date) {
+                  const year = date.getFullYear()
+                  const month = String(date.getMonth() + 1).padStart(2, '0')
+                  const day = String(date.getDate()).padStart(2, '0')
+                  onDueDateChange(`${year}-${month}-${day}`)
+                } else {
+                  onDueDateChange(null)
+                }
                 setOpen(false)
               }}
               initialFocus

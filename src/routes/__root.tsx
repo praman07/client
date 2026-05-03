@@ -12,6 +12,7 @@ import { NotFoundPage } from '@/pages/not-found'
 import ClerkProvider from '@/app/providers/clerk/provider'
 import TanStackQueryDevtools from '@/app/providers/tanstack-query/devtools'
 import { Toaster } from '@/shared/ui/primitives/sonner'
+import { ThemeProvider } from '@/app/providers/theme/theme-provider'
 import appCss from '@/app/styles/globals.css?url'
 import { env } from '@/shared/config/env'
 
@@ -32,7 +33,7 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
         content: 'width=device-width, initial-scale=1',
       },
       {
-        title: 'Collabify',
+        title: 'Collabifyy',
       },
     ],
     links: [
@@ -60,19 +61,21 @@ function RootComponent() {
       const t = l.createElement(r) as HTMLScriptElement
       t.async = true
       t.src = 'https://www.clarity.ms/tag/' + i
-      l.getElementsByTagName(r)[0]?.parentNode?.insertBefore(t, l.getElementsByTagName(r)[0])
+      l.head.appendChild(t)
     })(window, document, 'clarity', 'script', env.VITE_CLARITY_PROJECT_ID)
   }, [])
 
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
         <HeadContent />
       </head>
       <body>
         <ClerkProvider>
-          <Outlet />
-          <Toaster />
+          <ThemeProvider defaultTheme="dark" storageKey="collabify-theme">
+            <Outlet />
+            <Toaster />
+          </ThemeProvider>
             <TanStackDevtools
               config={{ position: 'bottom-right' }}
               plugins={[

@@ -1,27 +1,76 @@
+import { ShieldOff } from 'lucide-react'
 import { InviteButton } from '@/features/invite-member'
 import { MemberList } from '@/features/view-members'
+import { PendingInviteList } from '@/features/view-invites'
 import { useCurrentWorkspace } from '@/entities/workspace/hooks'
+import { useAuthorizationContext, usePermission } from '@/shared/lib/auth'
 
 export function MembersPage() {
   const currentWorkspace = useCurrentWorkspace()
+  const { isLoading } = useAuthorizationContext()
+  const canReadMembers = usePermission('workspace:member:read')
+  const canViewInvites = usePermission('workspace:invite:view')
+  const canInvite = usePermission('workspace:member:invite')
 
-  return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h2 className="text-2xl font-bold tracking-tight">Team Members</h2>
-          <p className="text-muted-foreground">
-            Manage who has access to this workspace.
+  if (!currentWorkspace) {
+    return (
+      <div className="rounded-xl border border-subtle p-10 text-center text-13 text-secondary">
+        Loading workspace…
+      </div>
+    )
+  }
+
+  // Wait for auth context before enforcing — prevents flash of forbidden for members
+  if (isLoading) return null
+
+  // Guard: users without workspace:member:read cannot see the member list
+  if (!canReadMembers) {
+    return (
+      <div className="flex flex-col items-center justify-center gap-4 py-20 text-center">
+        <div className="p-3 rounded-full bg-danger-subtle">
+          <ShieldOff className="h-7 w-7 text-danger-primary" />
+        </div>
+        <div className="space-y-1">
+          <h2 className="text-18 font-semibold text-primary">Access Restricted</h2>
+          <p className="text-14 text-secondary max-w-sm">
+            You don't have permission to view workspace members. Contact an Owner or Admin
+            to request access.
           </p>
         </div>
-        <InviteButton />
+      </div>
+    )
+  }
+
+  return (
+    <div className="space-y-10">
+      {/* Section: Team Members */}
+      <div className="space-y-6">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <h2 className="text-20 font-bold text-primary tracking-tight">Team Members</h2>
+            <p className="text-13 text-secondary mt-0.5">
+              Manage who has access to this workspace.
+            </p>
+          </div>
+          {canInvite && (
+            <div className="w-full sm:w-auto">
+              <InviteButton />
+            </div>
+          )}
+        </div>
+        <MemberList workspaceId={currentWorkspace.id} />
       </div>
 
-      {currentWorkspace ? (
-        <MemberList workspaceId={currentWorkspace.id} />
-      ) : (
-        <div className="rounded-md border p-8 text-center text-muted-foreground">
-          Loading workspace...
+      {/* Section: Pending Invitations — only visible to admins/owners */}
+      {canViewInvites && (
+        <div className="space-y-5">
+          <div>
+            <h2 className="text-18 font-bold text-primary tracking-tight">Pending Invitations</h2>
+            <p className="text-13 text-secondary mt-0.5">
+              Users who haven't accepted their invitation yet.
+            </p>
+          </div>
+          <PendingInviteList workspaceId={currentWorkspace.id} />
         </div>
       )}
     </div>

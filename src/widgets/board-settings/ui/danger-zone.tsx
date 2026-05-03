@@ -3,6 +3,7 @@ import { AlertTriangle, Archive, Trash2 } from 'lucide-react'
 import { useArchiveBoard } from '@/features/whiteboard/archive-board'
 import { useDeleteBoard } from '@/features/whiteboard/delete-board'
 import { Button } from '@/shared/ui/primitives/button'
+import { Guard } from '@/shared/lib/auth'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -41,59 +42,63 @@ export function DangerZone({ boardId, onDeleted }: DangerZoneProps) {
 
   return (
     <div className="space-y-6">
-      <div className="bg-destructive/10 border border-destructive/20 rounded-lg p-4 flex items-start gap-3">
-        <AlertTriangle className="h-5 w-5 text-destructive shrink-0 mt-0.5" />
-        <div className="text-sm">
-          <strong className="text-destructive">Danger Zone</strong>
-          <p className="text-muted-foreground mt-1">
+      <div className="bg-danger-subtle border border-danger-strong/20 rounded-lg p-4 flex items-start gap-3">
+        <AlertTriangle className="h-5 w-5 text-danger-primary shrink-0 mt-0.5" />
+        <div className="text-13">
+          <strong className="text-danger-primary">Danger Zone</strong>
+          <p className="text-secondary mt-1">
             These actions are irreversible. Please proceed with caution.
           </p>
         </div>
       </div>
 
       {/* Archive Board */}
-      <div className="border rounded-lg p-4">
+      <div className="border border-subtle rounded-lg p-4">
         <div className="flex items-start justify-between">
           <div className="space-y-1">
             <h4 className="font-medium flex items-center gap-2">
               <Archive className="h-4 w-4" />
               Archive Board
             </h4>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-13 text-secondary">
               Hide this board from your list. You can restore it later from
               archived boards.
             </p>
           </div>
 
-          <Button
-            variant="outline"
-            onClick={handleArchive}
-            disabled={archiveBoard.isPending}
-          >
-            {archiveBoard.isPending ? 'Archiving...' : 'Archive'}
-          </Button>
+          <Guard permission="whiteboard:delete">
+            <Button
+              variant="outline"
+              onClick={handleArchive}
+              disabled={archiveBoard.isPending}
+            >
+              {archiveBoard.isPending ? 'Archiving...' : 'Archive'}
+            </Button>
+          </Guard>
         </div>
       </div>
 
       {/* Delete Board */}
-      <div className="border border-destructive/20 rounded-lg p-4">
+      <div className="border border-danger-strong/20 rounded-lg p-4">
         <div className="flex items-start justify-between">
           <div className="space-y-1">
-            <h4 className="font-medium flex items-center gap-2 text-destructive">
+            <h4 className="font-medium flex items-center gap-2 text-danger-primary">
               <Trash2 className="h-4 w-4" />
               Delete Board Permanently
             </h4>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-13 text-secondary">
               Once deleted, this board and all its content cannot be recovered.
             </p>
           </div>
 
-          <Button
-            variant="destructive"
-            onClick={() => setShowDeleteDialog(true)}
-          >
-            Delete
-          </Button>
+          <Guard permission="whiteboard:delete">
+            <Button
+              variant="destructive"
+              onClick={() => setShowDeleteDialog(true)}
+            >
+              Delete
+            </Button>
+          </Guard>
         </div>
       </div>
 
@@ -111,7 +116,7 @@ export function DangerZone({ boardId, onDeleted }: DangerZoneProps) {
             <AlertDialogCancel>Cancel</AlertDialogCancel>
             <AlertDialogAction
               onClick={handleDelete}
-              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              className="bg-danger-primary text-on-color hover:bg-danger-primary/90"
             >
               {deleteBoard.isPending ? 'Deleting...' : 'Delete Permanently'}
             </AlertDialogAction>

@@ -3,8 +3,8 @@ import { Button, Spinner } from '@/shared/ui'
 
 export function ProjectLoadingState() {
   return (
-    <div className="flex bg-background h-screen w-full items-center justify-center">
-      <Spinner className="size-6 text-muted-foreground" />
+    <div className="flex bg-layer-transparent h-screen w-full items-center justify-center">
+      <Spinner className="size-6 text-tertiary" />
     </div>
   )
 }
@@ -15,12 +15,12 @@ interface ProjectErrorStateProps {
 
 export function ProjectErrorState({ workspaceSlug }: ProjectErrorStateProps) {
   return (
-    <div className="flex bg-background h-screen w-full flex-col items-center justify-center gap-4">
+    <div className="flex bg-layer-transparent h-screen w-full flex-col items-center justify-center gap-4">
       <div className="space-y-2 text-center">
-        <h1 className="text-xl font-semibold tracking-tight">
+        <h1 className="text-20 font-semibold text-primary tracking-tight">
           Project not found
         </h1>
-        <p className="text-muted-foreground text-sm max-w-[300px]">
+        <p className="text-13 text-secondary max-w-[300px]">
           The project you are looking for does not exist or you do not have
           permission to view it.
         </p>

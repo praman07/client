@@ -22,14 +22,13 @@
 import { useRef, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { toast } from 'sonner'
-import { HugeiconsIcon } from '@hugeicons/react'
 import {
-  ArrowExpandDiagonal01Icon,
-  ArrowShrink01Icon,
-  AttachmentIcon,
-  Cancel01Icon,
-  NoteIcon,
-} from '@hugeicons/core-free-icons'
+  FileText,
+  X,
+  Paperclip,
+  Maximize2,
+  Minimize2,
+} from 'lucide-react'
 import { useCreateIssue } from '../hooks/use-create-issue'
 import {
   isDescriptionEmpty,
@@ -155,17 +154,15 @@ export function CreateIssueForm({
   return (
     <form onSubmit={handleSubmit} className="flex flex-col h-full">
       {/* ── Header breadcrumb ─────────────────────────────────────────────────── */}
-      <div className="flex items-center gap-2 px-4 py-3 border-b border-border">
-        <HugeiconsIcon
-          icon={NoteIcon}
-          strokeWidth={2}
-          className="size-4 text-muted-foreground shrink-0"
+      <div className="flex items-center gap-2 px-4 py-3 border-b border-subtle">
+        <FileText
+          className="size-4 text-secondary shrink-0"
         />
-        <span className="text-xs text-muted-foreground font-medium">
+        <span className="text-11 text-secondary font-medium">
           {projectKey}
         </span>
-        <span className="text-xs text-muted-foreground">›</span>
-        <span className="text-xs text-foreground font-medium">New issue</span>
+        <span className="text-11 text-secondary">›</span>
+        <span className="text-11 text-primary font-medium">New issue</span>
 
         {/* Spacer */}
         <div className="ml-auto flex items-center gap-1">
@@ -177,11 +174,7 @@ export function CreateIssueForm({
             onClick={onToggleExpand}
             title={isExpanded ? 'Collapse' : 'Expand'}
           >
-            <HugeiconsIcon
-              icon={isExpanded ? ArrowShrink01Icon : ArrowExpandDiagonal01Icon}
-              strokeWidth={2}
-              className="size-4"
-            />
+            {isExpanded ? <Minimize2 className="size-4" /> : <Maximize2 className="size-4" />}
           </Button>
           <Button
             type="button"
@@ -191,9 +184,7 @@ export function CreateIssueForm({
             onClick={onCancel}
             title="Close"
           >
-            <HugeiconsIcon
-              icon={Cancel01Icon}
-              strokeWidth={2}
+            <X
               className="size-4"
             />
           </Button>
@@ -210,12 +201,13 @@ export function CreateIssueForm({
           placeholder="Issue title"
           disabled={isPending}
           autoFocus
-          className="border-none bg-transparent px-0 h-auto py-0 text-4xl md:text-2xl font-medium shadow-none focus-visible:ring-0 leading-snug placeholder:text-muted-foreground/50"
+          className="border-none bg-transparent px-0 h-auto py-0 text-40 md:text-24 font-medium shadow-none focus-visible:ring-0 leading-snug placeholder:text-placeholder"
         />
 
         {/* Description — BlockNote editor */}
         <div>
           <IssueDescriptionEditor
+            projectId={projectId}
             editorRef={editorRef}
             onChange={setDescriptionBlocks}
             editable={!isPending && !isUploading}
@@ -251,13 +243,11 @@ export function CreateIssueForm({
           type="button"
           variant="ghost"
           size="icon"
-          className="size-7 text-muted-foreground"
+          className="size-7 text-tertiary"
           title="Attach file"
           disabled
         >
-          <HugeiconsIcon
-            icon={AttachmentIcon}
-            strokeWidth={2}
+          <Paperclip
             className="size-4"
           />
         </Button>
@@ -273,7 +263,7 @@ export function CreateIssueForm({
             />
             <label
               htmlFor="create-more"
-              className="text-xs text-muted-foreground select-none cursor-pointer"
+              className="text-11 text-secondary select-none cursor-pointer"
             >
               Create more
             </label>

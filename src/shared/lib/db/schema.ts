@@ -32,7 +32,26 @@ export interface OutboxItem {
   conversationId: string
   dedupeId: string
   authorId: string
-  payload: unknown
+  payload: {
+    content: string
+    parentMessageId?: string
+    /**
+     * Optional Vault attachments.
+     * Files must be uploaded and confirmed BEFORE the outbox item is written.
+     * Only store fileId, name, mimeType, sizeBytes — NOT url (expires).
+     */
+    metadata?: {
+      attachments?: Array<{
+        fileId: string
+        name: string
+        mimeType: string
+        sizeBytes: number
+        /** Short-lived presigned GET URL. DO NOT persist — only for transit. */
+        url?: string
+      }>
+    }
+    [key: string]: unknown
+  }
   status: 'pending' | 'sending' | 'failed'
   retryCount?: number
   createdAt: number
@@ -58,6 +77,31 @@ export interface ProjectMeta {
   projectId: string
   workspaceId: string
   lastAccessedAt: number
+}
+
+// ============================================================================
+// MEDIA CACHE DOMAIN
+// ============================================================================
+
+/**
+ * Binary media blob cache — images and videos stored after first load/download.
+ *
+ * Architecture Decision: Why Blob not ArrayBuffer?
+ * - Blob carries its own mimeType, usable directly with URL.createObjectURL().
+ * - No encode/decode overhead (same pattern as WhiteboardOfflineUpdate Uint8Array).
+ *
+ * Eviction policy: LRU by cachedAt. Total cap: 200MB.
+ * Eviction is triggered on each cacheBlob() write via the useMediaCache hook.
+ *
+ * Cross-device: cache is per-browser. A new device/browser always needs to
+ * download the media again — there is no server-side blob cache.
+ */
+export interface MediaCacheEntry {
+  fileId: string       // PK — permanent Vault reference, never expires
+  blob: Blob
+  mimeType: string
+  sizeBytes: number    // for LRU eviction total-size calculation
+  cachedAt: number     // epoch ms — for LRU ordering
 }
 
 // ============================================================================
@@ -171,6 +215,9 @@ export class CollabifyDB extends Dexie {
   conversation_state!: EntityTable<ConversationState, 'conversationId'>
   project_meta!: EntityTable<ProjectMeta, 'projectId'>
 
+  // Media blob cache (images + videos)
+  media_cache!: EntityTable<MediaCacheEntry, 'fileId'>
+
   // Whiteboard tables
   whiteboardOfflineUpdates!: EntityTable<WhiteboardOfflineUpdate, 'id'>
   whiteboardBoardCache!: EntityTable<WhiteboardBoardCache, 'boardId'>
@@ -225,10 +272,26 @@ export class CollabifyDB extends Dexie {
       whiteboardThumbnails: 'boardId, generatedAt, sizeBytes',
     })
 
-    // v7: Pages offline queue (same binary blob pattern as whiteboard)
+      // v7: Pages offline queue (same binary blob pattern as whiteboard)
     this.version(7).stores({
       pageOfflineUpdates:
         '++id, pageId, status, dedupeId, mergedInto, [pageId+status], timestamp, createdAt, size',
+    })
+
+    // v8: Message ID index for O(1) parentMessageId lookup (inline reply resolution)
+    // The messages store PK is compound [projectId+conversationId+streamId];
+    // this adds a standalone secondary index on the server-assigned UUID so
+    // db.messages.where('id').equals(uuid) resolves parent messages correctly.
+    this.version(8).stores({
+      messages:
+        '[projectId+conversationId+streamId], [projectId+conversationId+sequence], id, dedupeId, projectId, conversationId, streamId, sequence',
+    })
+
+    // v9: Media blob cache (images + videos — cache-first rendering)
+    // fileId PK with mimeType/cachedAt/sizeBytes indexes for LRU eviction.
+    // Max total: 200MB; oldest entries evicted on exceed.
+    this.version(9).stores({
+      media_cache: 'fileId, mimeType, cachedAt, sizeBytes',
     })
   }
 }

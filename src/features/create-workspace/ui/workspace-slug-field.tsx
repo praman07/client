@@ -48,12 +48,12 @@ export function WorkspaceSlugField({ form }: Props) {
     >
       {(field) => (
         <div className="space-y-3">
-          <Label htmlFor={field.name} className="text-base font-medium">
+          <Label htmlFor={field.name} className="text-14 font-medium">
             Workspace URL
           </Label>
-          <div className="flex rounded-md shadow-sm">
-            <div className="flex items-center rounded-l-md border border-r-0 border-input bg-muted px-3 text-muted-foreground sm:text-sm h-12">
-              collabify.com/
+          <div className="flex rounded-md shadow-raised-100">
+            <div className="flex items-center rounded-l-md border border-r-0 border-subtle-1 bg-layer-2 px-3 text-12 text-secondary">
+              {typeof window !== 'undefined' ? `${window.location.origin}/workspace/` : '/workspace/'}
             </div>
             <div className="relative flex-1">
               <Input
@@ -71,17 +71,17 @@ export function WorkspaceSlugField({ form }: Props) {
                   )
                 }
                 placeholder="acme-corp"
-                className="h-12 rounded-l-none text-base px-4 pr-10"
+                className="h-10 rounded-l-none text-14 px-4 pr-10"
               />
               {field.state.meta.isValidating && (
                 <div className="absolute right-3 top-1/2 -translate-y-1/2">
-                  <Spinner className="h-4 w-4 text-muted-foreground" />
+                  <Spinner className="h-4 w-4 text-tertiary" />
                 </div>
               )}
             </div>
           </div>
           {field.state.meta.errors.length > 0 && (
-            <p className="text-sm text-destructive font-medium">
+            <p className="text-13 text-danger-primary font-medium">
               {field.state.meta.errors.join(', ')}
             </p>
           )}

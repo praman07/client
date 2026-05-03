@@ -98,7 +98,7 @@ export function VaultPage({ workspaceId, projectId }: VaultPageProps) {
 
   return (
     <SidebarProvider>
-      <div className="h-screen w-full flex overflow-hidden bg-background">
+      <div className="h-screen w-full flex overflow-hidden bg-surface-1">
         {/* Left: Sidebar — isolated so sidebar failure doesn't kill explorer */}
         <ErrorBoundary FallbackComponent={WidgetError}>
           <VaultSidebar projectId={projectId} />

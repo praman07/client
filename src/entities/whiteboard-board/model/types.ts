@@ -13,5 +13,3 @@ export interface Board {
   createdAt: string
   updatedAt: string
 }
-
-export type BoardStatus = 'active' | 'locked' | 'archived'

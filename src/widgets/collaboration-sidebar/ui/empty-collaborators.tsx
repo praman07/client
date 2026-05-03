@@ -12,14 +12,14 @@ export function EmptyCollaborators() {
       <div className="relative mb-4">
         <div className="absolute inset-0 bg-muted/30 rounded-full blur-xl" />
         <Users
-          className="relative h-12 w-12 text-muted-foreground/40"
+          className="relative h-12 w-12 text-tertiary/40"
           strokeWidth={1.5}
         />
       </div>
-      <p className="text-sm font-medium text-foreground mb-1">
+      <p className="text-14 font-medium text-primary mb-1">
         No collaborators yet
       </p>
-      <p className="text-xs text-muted-foreground max-w-[200px]">
+      <p className="text-12 text-tertiary max-w-[200px]">
         You're the only one on this board right now
       </p>
     </div>

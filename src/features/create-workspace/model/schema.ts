@@ -11,8 +11,8 @@ export const createWorkspaceSchema = z.object({
     .max(64, 'Workspace name must be less than 64 characters'),
   slug: z
     .string()
-    .min(8, 'Slug must be at least 8 characters')
-    .max(50, 'Slug must be less than 50 characters')
+    .min(3, 'Slug must be at least 3 characters')
+    .max(64, 'Slug must be at most 64 characters')
     .regex(
       /^(?![0-9]+$)[a-z0-9]+(?:-[a-z0-9]+)*$/,
       'Slug must be lowercase, alphanumeric.',
@@ -21,5 +21,4 @@ export const createWorkspaceSchema = z.object({
       message: 'This slug is reserved for system use',
     })
     .transform((s) => s.toLowerCase()),
-  teamSize: z.enum(['just_me', '1-10', '10-50', '50+']).default('just_me'),
 })

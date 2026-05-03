@@ -30,7 +30,7 @@ export function CollaboratorBar() {
         <CollaboratorAvatar key={collab.userId} collab={collab} />
       ))}
       {collaborators.length > 8 && (
-        <span className="text-xs text-muted-foreground ml-1">
+        <span className="text-11 text-secondary ml-1">
           +{collaborators.length - 8} more
         </span>
       )}
@@ -57,7 +57,7 @@ function CollaboratorAvatar({ collab }: { collab: PageCollaboratorPresence }) {
             <AvatarImage src={collab.avatarUrl} alt={collab.fullName} />
           )}
           <AvatarFallback
-            className="text-xs font-medium text-white"
+            className="text-11 font-medium text-on-color"
             style={{ backgroundColor: collab.color }}
           >
             {initials}
@@ -67,7 +67,7 @@ function CollaboratorAvatar({ collab }: { collab: PageCollaboratorPresence }) {
       <TooltipContent side="bottom">
         <span>{collab.fullName}</span>
         {collab.isIdle && (
-          <span className="ml-1 text-muted-foreground">(idle)</span>
+          <span className="ml-1 text-secondary">(idle)</span>
         )}
       </TooltipContent>
     </Tooltip>

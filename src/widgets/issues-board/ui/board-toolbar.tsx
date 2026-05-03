@@ -13,6 +13,7 @@ import { RefreshCw, Settings2, Tags } from 'lucide-react'
 import { Button } from '@/shared/ui/primitives/button'
 import { IssueFilterToolbar } from '@/features/issues/filter-issues'
 import { cn } from '@/shared/lib/utils'
+import { Guard } from '@/shared/lib/auth'
 
 interface BoardToolbarProps {
   projectMembers: Array<{ id: string; fullName: string; avatarUrl?: string }>
@@ -30,34 +31,38 @@ export function BoardToolbar({
   onManageLabels,
 }: BoardToolbarProps) {
   return (
-    <div className="flex items-center gap-2 border-b border-border/40 px-4 py-2">
+    <div className="flex items-center gap-2 border-b border-subtle px-4 py-2">
       {/* Filter chips */}
       <IssueFilterToolbar projectMembers={projectMembers} />
 
       <div className="ml-auto flex items-center gap-1">
-        <Button
-          variant="ghost"
-          size="sm"
-          className="h-8 gap-1.5 text-xs text-muted-foreground hover:text-foreground"
-          onClick={onManageStatuses}
-        >
-          <Settings2 className="h-3.5 w-3.5" />
-          Columns
-        </Button>
-        <Button
-          variant="ghost"
-          size="sm"
-          className="h-8 gap-1.5 text-xs text-muted-foreground hover:text-foreground"
-          onClick={onManageLabels}
-        >
-          <Tags className="h-3.5 w-3.5" />
-          Labels
-        </Button>
+        <Guard permission="issue:status:manage">
+          <Button
+            variant="ghost"
+            size="sm"
+            className="h-8 gap-1.5 text-12 text-secondary hover:text-primary"
+            onClick={onManageStatuses}
+          >
+            <Settings2 className="h-3.5 w-3.5" />
+            Columns
+          </Button>
+        </Guard>
+        <Guard permission="issue:label:manage">
+          <Button
+            variant="ghost"
+            size="sm"
+            className="h-8 gap-1.5 text-12 text-secondary hover:text-primary"
+            onClick={onManageLabels}
+          >
+            <Tags className="h-3.5 w-3.5" />
+            Labels
+          </Button>
+        </Guard>
         {/* Refresh — refetches all board queries without a full page reload */}
         <Button
           variant="ghost"
           size="sm"
-          className="h-8 w-8 p-0 text-muted-foreground hover:text-foreground"
+          className="h-8 w-8 p-0 text-secondary hover:text-primary"
           onClick={onRefresh}
           disabled={isRefreshing}
           title="Refresh board"

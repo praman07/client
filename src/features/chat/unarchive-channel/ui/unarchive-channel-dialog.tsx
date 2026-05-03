@@ -55,13 +55,13 @@ export function UnarchiveChannelDialog({
               <span className="font-semibold">#{channelName}</span>, it will be
               restored for everyone:
             </p>
-            <ul className="space-y-1.5 text-sm">
+            <ul className="space-y-1.5 text-14 text-secondary">
               <li>• The channel will reappear in the sidebar</li>
               <li>• Members can send messages again</li>
               <li>• All message history is already preserved</li>
               <li>• The channel will function normally</li>
             </ul>
-            <p className="text-sm">Would you like to unarchive this channel?</p>
+            <p className="text-14 text-secondary">Would you like to unarchive this channel?</p>
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
@@ -72,7 +72,7 @@ export function UnarchiveChannelDialog({
               handleUnarchive()
             }}
             disabled={isPending}
-            className="bg-green-600 hover:bg-green-700"
+            className="bg-success-primary hover:bg-success-primary-hover text-on-color"
           >
             {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
             Unarchive Channel

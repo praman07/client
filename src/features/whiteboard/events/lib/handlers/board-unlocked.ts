@@ -9,6 +9,8 @@ import { toast } from 'sonner'
 import type { BoardUnlockedPayload } from '@/shared/contracts/whiteboard/downstream'
 import type { WhiteboardEventHandlerContext } from '../../model'
 import { setConnectionStatus } from '@/entities/whiteboard-session'
+import { registerHandler } from '@/shared/ws/event-bus'
+import { WhiteboardDownstreamEvent } from '@/shared/contracts/whiteboard/events'
 import { createLogger } from '@/shared/lib/logger'
 
 const log = createLogger('whiteboard:board-unlocked')
@@ -32,4 +34,11 @@ export function handleBoardUnlocked(
 
   // Show toast notification
   toast.success('Board has been unlocked')
+}
+
+/** Registration wrapper — called by registerWhiteboardHandlers. */
+export function registerBoardUnlockedHandler(context: WhiteboardEventHandlerContext) {
+  return registerHandler(WhiteboardDownstreamEvent.BoardUnlocked, (event) => {
+    handleBoardUnlocked(event.payload as BoardUnlockedPayload, context)
+  })
 }

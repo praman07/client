@@ -1,117 +1,291 @@
 import { useState } from 'react'
-import { HugeiconsIcon } from '@hugeicons/react'
-import { Edit02Icon } from '@hugeicons/core-free-icons'
+import { Copy, Pencil, Globe, Lock } from 'lucide-react'
 import { useChannelSettings } from '../hooks'
 import type { Conversation, ConversationFieldsFragment } from '@/gql/graphql'
+import type { AppPermission } from '@/shared/lib/auth'
 import { Button } from '@/shared/ui/primitives/button'
-import { Label } from '@/shared/ui/primitives/label'
-import { Separator } from '@/shared/ui/primitives/separator'
-import {
-  RenameChannelForm,
-  extractChannelNames,
-} from '@/features/chat/rename-channel'
+import { Textarea } from '@/shared/ui/primitives/textarea'
+import { Guard } from '@/shared/lib/auth'
+import { RenameChannelForm, extractChannelNames } from '@/features/chat/rename-channel'
+import { useUpdateChannelDescription } from '@/features/chat/update-channel-description'
+import { useUpdateChannelVisibility } from '@/features/chat/update-channel-visibility'
 import { ConversationType, useUserConversations } from '@/entities/conversation'
+import { cn } from '@/shared/lib/utils'
 
 interface AboutTabProps {
   conversation: ConversationFieldsFragment
 }
 
+// ── Inline Edit Textarea ───────────────────────────────────────────────────────
+interface InlineTextAreaProps {
+  value: string
+  onChange: (v: string) => void
+  onSave: () => void
+  onCancel: () => void
+  isPending: boolean
+  placeholder?: string
+  maxLength?: number
+}
+
+function InlineTextArea({
+  value,
+  onChange,
+  onSave,
+  onCancel,
+  isPending,
+  placeholder,
+  maxLength = 280,
+}: InlineTextAreaProps) {
+  return (
+    <div className="mt-2 space-y-2">
+      <Textarea
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        placeholder={placeholder}
+        maxHeight="lg"
+        maxLength={maxLength}
+        autoFocus
+      />
+      <div className="flex items-center justify-between">
+        <span className="text-11 text-secondary">
+          {value.length}/{maxLength}
+        </span>
+        <div className="flex items-center gap-2">
+          <Button variant="ghost" size="sm" className="h-7 text-12" onClick={onCancel}>
+            Cancel
+          </Button>
+          <Button size="sm" className="h-7 text-12" onClick={onSave} disabled={isPending}>
+            {isPending ? 'Saving…' : 'Save'}
+          </Button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// ── Copy Button ────────────────────────────────────────────────────────────────
+function CopyButton({ value }: { value: string }) {
+  const [copied, setCopied] = useState(false)
+  const handleCopy = () => {
+    navigator.clipboard.writeText(value).then(() => {
+      setCopied(true)
+      setTimeout(() => setCopied(false), 1500)
+    })
+  }
+  return (
+    <button
+      onClick={handleCopy}
+      title={copied ? 'Copied!' : 'Copy channel ID'}
+      className={cn(
+        'inline-flex items-center transition-colors',
+        copied ? 'text-accent-primary' : 'text-secondary hover:text-primary',
+      )}
+    >
+      <Copy className="size-3.5" />
+    </button>
+  )
+}
+
+// ── Section Row ────────────────────────────────────────────────────────────────
+interface SectionRowProps {
+  title: string
+  editPermission?: AppPermission
+  onEdit?: () => void
+  children: React.ReactNode
+}
+
+function SectionRow({ title, editPermission, onEdit, children }: SectionRowProps) {
+  return (
+    <div className="flex items-start justify-between gap-4 px-4 py-3.5">
+      <div className="min-w-0 flex-1">
+        <p className="text-14 font-semibold text-primary">{title}</p>
+        <div className="mt-0.5">{children}</div>
+      </div>
+      {editPermission && onEdit && (
+        <Guard permission={editPermission}>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={onEdit}
+            className="shrink-0 h-7 text-11 text-primary hover:bg-layer-transparent-hover font-medium px-2"
+          >
+            <Pencil className="size-3 mr-1" />
+            Edit
+          </Button>
+        </Guard>
+      )}
+    </div>
+  )
+}
+
+// ── About Tab ──────────────────────────────────────────────────────────────────
 export function AboutTab({ conversation }: AboutTabProps) {
-  const [isEditing, setIsEditing] = useState(false)
+  const [isEditingName, setIsEditingName] = useState(false)
+  const [isEditingDesc, setIsEditingDesc] = useState(false)
+  const [descValue, setDescValue] = useState(conversation.topic ?? '')
   const { close } = useChannelSettings()
 
-  // Architecture: Reuse sidebar's channel query for validation without refetch
-  // Strategy: staleTime=Infinity prevents refetch on mutation invalidation
-  // Rationale: Validation list is static during modal session; backend validates as fallback
   const { data: channelsData } = useUserConversations(
     {
       workspaceId: conversation.workspaceId,
       projectId: conversation.projectId || undefined,
       type: ConversationType.Channel,
     },
-    {
-      staleTime: Infinity,
-      refetchOnWindowFocus: false,
-    },
+    { staleTime: Infinity, refetchOnWindowFocus: false },
   )
 
   const existingChannelNames = extractChannelNames(
     channelsData?.getUserConversations.edges as Array<Conversation>,
   )
 
-  const handleSuccess = () => {
-    setIsEditing(false)
+  const { mutate: updateDescription, isPending: savingDesc } = useUpdateChannelDescription()
+  const { mutate: updateVisibility, isPending: togglingVisibility } = useUpdateChannelVisibility()
+
+  const handleNameSuccess = () => {
+    setIsEditingName(false)
     close()
   }
 
+  const handleSaveDescription = () => {
+    updateDescription(
+      {
+        workspaceId: conversation.workspaceId,
+        channelId: conversation.id,
+        description: descValue || null,
+      },
+      { onSuccess: () => setIsEditingDesc(false) },
+    )
+  }
+
+  const handleCancelDesc = () => {
+    setIsEditingDesc(false)
+    setDescValue(conversation.topic ?? '')
+  }
+
+  const handleToggleVisibility = () => {
+    updateVisibility({
+      workspaceId: conversation.workspaceId,
+      channelId: conversation.id,
+      isPublic: !conversation.isPublic,
+    })
+  }
+
   return (
-    <div className="space-y-6 p-1">
-      {/* Channel Name Section */}
-      <div className="space-y-3">
-        <div className="flex items-center justify-between">
-          <Label>Channel Name</Label>
-          {!isEditing && (
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setIsEditing(true)}
-              className="h-8"
-            >
-              <HugeiconsIcon icon={Edit02Icon} className="size-4 mr-2" />
-              Edit
-            </Button>
+    <div className="space-y-4">
+
+      {/* ── Card group: Name + Description ── */}
+      <div className="rounded-lg border-subtle divide-y divide-subtle-1 bg-layer-1 overflow-hidden">
+
+        {/* Channel name row */}
+        <SectionRow
+          title="Channel name"
+          editPermission="chat:channel:update"
+          onEdit={isEditingName ? undefined : () => setIsEditingName(true)}
+        >
+          {isEditingName ? (
+            <div className="mt-2">
+              <RenameChannelForm
+                channelId={conversation.id}
+                currentName={conversation.name || ''}
+                existingNames={existingChannelNames}
+                onSuccess={handleNameSuccess}
+                onCancel={() => setIsEditingName(false)}
+              />
+            </div>
+          ) : (
+            <p className="text-14 text-secondary">
+              # {conversation.name}
+            </p>
           )}
+        </SectionRow>
+
+        {/* Topic row */}
+        <SectionRow
+          title="Topic"
+          editPermission="chat:channel:update"
+          onEdit={isEditingDesc ? undefined : () => setIsEditingDesc(true)}
+        >
+          {isEditingDesc ? (
+            <InlineTextArea
+              value={descValue}
+              onChange={setDescValue}
+              onSave={handleSaveDescription}
+              onCancel={handleCancelDesc}
+              isPending={savingDesc}
+              placeholder="What is this channel about?"
+              maxLength={280}
+            />
+          ) : (
+            <p className="text-14 text-secondary leading-relaxed break-words">
+              {conversation.topic || (
+                <span className="italic">Add a topic</span>
+              )}
+            </p>
+          )}
+        </SectionRow>
+
+        {/* Created by row */}
+        <div className="px-4 py-3.5">
+          <p className="text-14 font-semibold text-primary">Created</p>
+          <p className="text-14 text-secondary mt-0.5">
+            {new Date(conversation.createdAt).toLocaleDateString('en-US', {
+              month: 'long',
+              day: 'numeric',
+              year: 'numeric',
+            })}
+          </p>
         </div>
 
-        {isEditing ? (
-          <RenameChannelForm
-            channelId={conversation.id}
-            currentName={conversation.name || ''}
-            existingNames={existingChannelNames}
-            onSuccess={handleSuccess}
-            onCancel={() => setIsEditing(false)}
-          />
-        ) : (
-          <div className="text-sm font-mono bg-muted px-3 py-2 rounded-md">
-            #{conversation.name}
+      </div>
+
+      {/* ── Visibility card ── */}
+      <div className="flex items-start justify-between gap-4 px-4 py-3.5 rounded-lg border-subtle bg-layer-1">
+        <div className="flex items-start gap-3 min-w-0">
+          <div className="mt-0.5 shrink-0 p-1.5 rounded-md bg-layer-1-hover">
+            {conversation.isPublic ? <Globe className="size-4 text-secondary" /> : <Lock className="size-4 text-secondary" />}
           </div>
+          <div className="min-w-0">
+            <p className="text-14 font-semibold text-primary">
+              {conversation.isPublic ? 'Public channel' : 'Private channel'}
+            </p>
+            <p className="text-11 text-secondary mt-0.5 leading-relaxed">
+              {conversation.isPublic
+                ? 'Anyone in the workspace can join and view messages.'
+                : 'Only invited members can view this channel.'}
+            </p>
+          </div>
+        </div>
+        <Guard permission="chat:channel:update">
+          <Button
+            variant="outline"
+            size="sm"
+            className="shrink-0 h-7 text-11 border-subtle-1"
+            onClick={handleToggleVisibility}
+            disabled={togglingVisibility}
+          >
+            {togglingVisibility
+              ? 'Saving…'
+              : conversation.isPublic ? 'Make private' : 'Make public'}
+          </Button>
+        </Guard>
+      </div>
+
+      {/* ── Footer meta ── */}
+      <div className="space-y-1.5 px-1">
+        <div className="flex items-center gap-1.5">
+          <p className="text-11 text-secondary">
+            Channel ID:{' '}
+            <span className="font-mono">{conversation.id}</span>
+          </p>
+          <CopyButton value={conversation.id} />
+        </div>
+        {conversation.memberCount != null && (
+          <p className="text-11 text-secondary">
+            {conversation.memberCount} member{conversation.memberCount !== 1 ? 's' : ''}
+          </p>
         )}
       </div>
 
-      <Separator />
-
-      {/* Description Section */}
-      <div className="space-y-2">
-        <Label>Description</Label>
-        <p className="text-sm text-muted-foreground">
-          {conversation.description || 'No description'}
-        </p>
-      </div>
-
-      <Separator />
-
-      {/* Metadata */}
-      <div className="space-y-2">
-        <Label>Channel Details</Label>
-        <dl className="text-sm space-y-2">
-          <div className="flex justify-between">
-            <dt className="text-muted-foreground">Type:</dt>
-            <dd className="font-medium">
-              {conversation.isPublic ? 'Public' : 'Private'}
-            </dd>
-          </div>
-          <div className="flex justify-between">
-            <dt className="text-muted-foreground">Created:</dt>
-            <dd className="font-medium">
-              {new Date(conversation.createdAt).toLocaleDateString()}
-            </dd>
-          </div>
-          <div className="flex justify-between">
-            <dt className="text-muted-foreground">Members:</dt>
-            <dd className="font-medium">{conversation.memberCount || 0}</dd>
-          </div>
-        </dl>
-      </div>
     </div>
   )
 }

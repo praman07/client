@@ -46,4 +46,10 @@ export const conversationKeys = {
    * Single conversation by ID
    */
   detail: (conversationId: string) => ['conversation', conversationId] as const,
+
+  /**
+   * Conversation notification preference
+   */
+  notifPreference: (conversationId: string) =>
+    ['conversation', conversationId, 'notif'] as const,
 }

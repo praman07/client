@@ -64,22 +64,59 @@ export function useHistoryLoader() {
                 MessageRecoveryFieldsFragmentDoc,
                 maskedMsg,
               )
+
+              // Extract rich content from GraphQL JSON scalar.
+              // The server sends { text, mentions } as a JSON object which GraphQL
+              // serializes as a string over the wire. JSONResolver does NOT auto-parse
+              // back to JS object on the client, so we handle both shapes here.
+              const rawContent = msg.content
+              let safeContent = ''
+
+              log.debug('Processing message content:', {
+                messageId: msg.id,
+                contentType: typeof rawContent,
+                contentPreview: typeof rawContent === 'string'
+                  ? (rawContent.length > 100 ? rawContent.slice(0, 100) + '...' : rawContent)
+                  : JSON.stringify(rawContent),
+              })
+
+              if (typeof rawContent === 'string') {
+                // Shape A: JSON string (from GraphQL JSON scalar serialization)
+                try {
+                  const parsed = JSON.parse(rawContent)
+                  if (parsed && typeof parsed === 'object' && 'text' in parsed) {
+                    safeContent = parsed.text ?? ''
+                    // If mentions exist, keep full rich content — the renderer
+                    // (RichChatContent) expects the full { text, mentions } shape.
+                    if (Array.isArray(parsed.mentions) && parsed.mentions.length > 0) {
+                      safeContent = rawContent // preserve rich JSON for renderer
+                    }
+                  } else {
+                    safeContent = rawContent // plain string
+                  }
+                } catch {
+                  safeContent = rawContent // non-JSON plain text
+                }
+              } else if (rawContent && typeof rawContent === 'object') {
+                // Shape B: Already an object (unlikely but defensive)
+                safeContent = (rawContent as { text?: string }).text ?? JSON.stringify(rawContent)
+              } else {
+                safeContent = String(rawContent ?? '')
+              }
+
               return {
                 messageId: msg.id,
                 streamId: msg.streamId,
-                dedupeId: msg.streamId, // In history, streamId is the unique proof
+                dedupeId: msg.streamId,
                 conversationId: msg.conversationId,
                 authorId: msg.authorUserId,
-                // Extract text from content object or use raw string
-                content:
-                  typeof msg.content === 'string'
-                    ? msg.content
-                    : (msg.content?.text ?? JSON.stringify(msg.content)),
+                content: safeContent,
                 createdAt: msg.createdAt,
                 sequence: msg.sequence,
-                threadId: undefined, // TODO: Add thread support if needed
+                threadId: undefined,
               }
             })
+
           // CRITICAL: Use batch commit for single DB transaction
           // This triggers only ONE LiveQuery update, enabling scroll anchor preservation
           // Individual commits would cause N re-renders with delta=1 each

@@ -1,7 +1,7 @@
 import { Outlet, createFileRoute, redirect } from '@tanstack/react-router'
 import { Suspense } from 'react'
 import { ErrorBoundary } from 'react-error-boundary'
-import { PageSpinner, RouteError , ScrollArea  } from '@/shared/ui'
+import { PageSpinner, RouteError } from '@/shared/ui'
 import { ProjectSettingsTabs } from '@/widgets/project-settings-tabs'
 
 export const Route = createFileRoute(
@@ -25,19 +25,9 @@ function SettingsLayout() {
   const { workspaceSlug, projectSlug } = Route.useParams()
 
   return (
-    <ScrollArea className="h-full w-full">
-      <div className="max-w-4xl mx-auto px-6 py-8 min-h-full">
-        <div className="mb-6">
-          <h2 className="text-lg font-semibold">Settings</h2>
-          <p className="text-sm text-muted-foreground mt-0.5">
-            Manage this project's configuration and access.
-          </p>
-        </div>
-
-        <ProjectSettingsTabs
-          workspaceSlug={workspaceSlug}
-          projectSlug={projectSlug}
-        >
+    <main className="flex-1 overflow-auto">
+      <div className="mx-auto max-w-screen-2xl w-full px-(--padding-page) py-6 lg:py-8">
+        <ProjectSettingsTabs workspaceSlug={workspaceSlug} projectSlug={projectSlug}>
           <ErrorBoundary FallbackComponent={({ error, resetErrorBoundary }) => (
             <RouteError error={error} reset={resetErrorBoundary} />
           )}>
@@ -47,6 +37,6 @@ function SettingsLayout() {
           </ErrorBoundary>
         </ProjectSettingsTabs>
       </div>
-    </ScrollArea>
+    </main>
   )
 }

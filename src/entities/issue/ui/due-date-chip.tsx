@@ -29,8 +29,8 @@ export function DueDateChip({ dueDate, className }: DueDateChipProps) {
   return (
     <span
       className={cn(
-        'inline-flex items-center gap-1 text-xs',
-        overdue ? 'text-red-500' : 'text-muted-foreground',
+        'inline-flex items-center gap-1 text-11',
+        overdue ? 'text-danger-primary' : 'text-secondary',
         className,
       )}
     >

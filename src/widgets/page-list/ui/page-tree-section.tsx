@@ -1,5 +1,4 @@
-import { HugeiconsIcon } from '@hugeicons/react'
-import { PlusSignIcon } from '@hugeicons/core-free-icons'
+import { Plus } from 'lucide-react'
 import { PageTreeItem } from './page-tree-item'
 import type { PageTreeNode } from '../lib/types'
 import {
@@ -33,7 +32,7 @@ export function PageTreeSection({ pages }: PageTreeSectionProps) {
         title="New Page"
         onClick={() => open({ parentId: null })}
       >
-        <HugeiconsIcon icon={PlusSignIcon} />
+        <Plus className="size-4" />
         <span className="sr-only">New Page</span>
       </SidebarGroupAction>
       <SidebarGroupContent>
@@ -42,7 +41,7 @@ export function PageTreeSection({ pages }: PageTreeSectionProps) {
             <PageTreeItem key={node.page.id} node={node} />
           ))}
           {pages.length === 0 && (
-            <p className="px-2 py-4 text-xs text-muted-foreground text-center">
+            <p className="px-2 py-4 text-12 text-tertiary text-center">
               No pages yet.{' '}
               <button
                 className="underline underline-offset-2"

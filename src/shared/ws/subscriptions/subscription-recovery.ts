@@ -42,8 +42,6 @@ export async function resubscribeAll(
 
         emit(eventType, payload)
 
-        emit(eventType, payload)
-
         log.debug(`Restored: ${factory.domain}`)
       } catch (err) {
         log.error(`Failed to restore ${factory.domain}:`, err)

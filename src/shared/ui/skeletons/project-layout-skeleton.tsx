@@ -9,7 +9,7 @@ export function ProjectLayoutSkeleton() {
   return (
     <div className="flex h-full flex-col">
       {/* Tab bar */}
-      <div className="shrink-0 border-b bg-background px-6 h-12 flex items-center gap-6">
+      <div className="shrink-0 border-b bg-surface-1 px-6 h-12 flex items-center gap-6">
         {Array.from({ length: 6 }).map((_, i) => (
           <Skeleton key={i} className="h-4 w-16" />
         ))}

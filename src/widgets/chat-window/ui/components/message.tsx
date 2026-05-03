@@ -6,7 +6,7 @@ function MessageEvent({ className, ...props }: React.ComponentProps<'div'>) {
     <div
       data-slot="chat-event"
       className={cn(
-        'group relative flex w-full gap-3 px-4 py-1 transition-colors',
+        'group relative flex w-full gap-3 px-4 py-1.5 transition-colors',
         className,
       )}
       {...props}
@@ -37,7 +37,7 @@ function MessageEventBody({
   return (
     <div
       data-slot="chat-event-body"
-      className={cn('flex min-w-0 flex-1 flex-col gap-0.5', className)}
+      className={cn('flex min-w-0 flex-1 flex-col gap-1', className)}
       {...props}
     />
   )
@@ -50,7 +50,7 @@ function MessageEventTitle({
   return (
     <span
       data-slot="chat-event-title"
-      className={cn('text-sm font-semibold leading-tight', className)}
+      className={cn('text-14 font-semibold leading-tight', className)}
       {...props}
     />
   )
@@ -63,7 +63,7 @@ function MessageEventDescription({
   return (
     <span
       data-slot="chat-event-description"
-      className={cn('text-xs text-muted-foreground leading-tight', className)}
+      className={cn('text-11 text-secondary leading-tight', className)}
       {...props}
     />
   )
@@ -76,7 +76,7 @@ function MessageEventContent({
   return (
     <div
       data-slot="chat-event-content"
-      className={cn('text-sm leading-relaxed wrap-break-words', className)}
+      className={cn('text-14 leading-relaxed min-w-0 wrap-break-words', className)}
       {...props}
     />
   )

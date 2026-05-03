@@ -20,12 +20,17 @@
  * @layer Features
  */
 import '@blocknote/shadcn/style.css'
+import '@/app/styles/blocknote.css'
 import { useEffect, useRef } from 'react'
 import { useCreateBlockNote } from '@blocknote/react'
 import { BlockNoteView } from '@blocknote/shadcn'
+import { SuggestionMenuController } from '@blocknote/react'
+import { BlockNoteEmojiPicker } from '@/features/blocknote/emoji-picker'
+import { BlockNoteSlashMenu } from '@/features/blocknote/slash-menu'
 
 import { en } from '@blocknote/core/locales'
 import type { BlockNoteEditor } from '@blocknote/core'
+import { MentionMenuController, mentionSchema  } from '@/features/mention'
 
 interface IssueDescriptionEditorProps {
    
@@ -33,14 +38,18 @@ interface IssueDescriptionEditorProps {
    
   editorRef: React.MutableRefObject<BlockNoteEditor<any> | null>
   editable?: boolean
+  /** Project ID — used to load entity cache for @-mention suggestions */
+  projectId: string
 }
 
 export function IssueDescriptionEditor({
   onChange,
   editorRef,
   editable = true,
+  projectId,
 }: IssueDescriptionEditorProps) {
   const editor = useCreateBlockNote({
+    schema: mentionSchema,
     // ── Placeholder ────────────────────────────────────────────────────────────
     // Spread the default `en` dictionary then override only the one string.
     // A bare partial cast (`as any`) replaces the entire dictionary object,
@@ -67,7 +76,10 @@ export function IssueDescriptionEditor({
   // Expose the editor instance up to the parent form so it can read
   // editor.document synchronously on submit without going through state.
   useEffect(() => {
-    editorRef.current = editor
+    // Cast to `any` — the parent only calls .document on this ref, which is
+    // available regardless of the schema generic parameters.
+     
+    editorRef.current = editor as any
   }, [editor, editorRef])
 
   // Propagate content changes up so the parent can track whether
@@ -88,12 +100,18 @@ export function IssueDescriptionEditor({
       editor={editor}
       editable={editable}
       theme="light"
-      // Remove side menu (drag handle / add-block button) — keeps the UI
-      // clean inside the create modal and also eliminates the side gutter.
       sideMenu={false}
-      // Remove the floating formatting toolbar — issue descriptions are
-      // simple; full toolbar is available in the edit modal.
+      slashMenu={false}
       formattingToolbar={false}
-    />
+      emojiPicker={false}
+    >
+      <SuggestionMenuController
+        triggerCharacter="/"
+        suggestionMenuComponent={BlockNoteSlashMenu}
+      />
+      {/* @-mention suggestion menu — backed by TanStack entity cache */}
+      <MentionMenuController projectId={projectId} />
+      <BlockNoteEmojiPicker />
+    </BlockNoteView>
   )
 }

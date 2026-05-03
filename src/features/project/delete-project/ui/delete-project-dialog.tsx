@@ -58,19 +58,19 @@ export function DeleteProjectDialog({
         <AlertDialogHeader>
           {/* Warning icon + title row */}
           <div className="flex items-center gap-3">
-            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-destructive/10">
-              <TriangleAlert className="h-4 w-4 text-destructive" />
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-danger-subtle">
+              <TriangleAlert className="h-4 w-4 text-danger-primary" />
             </div>
-            <AlertDialogTitle className="text-base">
+            <AlertDialogTitle className="text-16">
               Delete Project
             </AlertDialogTitle>
           </div>
 
-          <AlertDialogDescription className="text-sm text-muted-foreground pt-1">
+          <AlertDialogDescription className="text-13 text-secondary pt-1">
             This will permanently delete{' '}
-            <span className="font-medium text-foreground">{projectName}</span>{' '}
+            <span className="font-medium text-primary">{projectName}</span>{' '}
             and all its issues, pages, boards, and data.{' '}
-            <span className="font-medium text-destructive">
+            <span className="font-medium text-danger-primary">
               This cannot be undone.
             </span>
           </AlertDialogDescription>
@@ -78,9 +78,9 @@ export function DeleteProjectDialog({
 
         {/* Confirmation input */}
         <div className="space-y-1.5 py-1">
-          <Label htmlFor="confirm-delete" className="text-sm">
+          <Label htmlFor="confirm-delete" className="text-14">
             Type{' '}
-            <code className="rounded bg-muted px-1 py-0.5 font-mono text-xs font-medium text-foreground">
+            <code className="rounded bg-layer-2 px-1 py-0.5 font-mono text-11 font-medium text-primary">
               {projectName}
             </code>{' '}
             to confirm
@@ -91,7 +91,7 @@ export function DeleteProjectDialog({
             onChange={(e) => setConfirmText(e.target.value)}
             placeholder={projectName}
             autoComplete="off"
-            className="font-mono text-sm"
+            className="font-mono text-14"
           />
         </div>
 
@@ -100,7 +100,7 @@ export function DeleteProjectDialog({
           <AlertDialogAction
             onClick={handleDelete}
             disabled={!isConfirmed || isPending}
-            className="bg-destructive text-white hover:bg-destructive/90 disabled:opacity-50"
+            className="bg-danger-primary hover:bg-danger-primary-hover text-on-color disabled:text-disabled disabled:pointer-events-none"
           >
             {isPending ? 'Deleting...' : 'Delete Project'}
           </AlertDialogAction>

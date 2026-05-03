@@ -29,7 +29,7 @@ export const Navbar = React.forwardRef<HTMLElement, NavbarProps>(
       <header
         ref={ref}
         className={cn(
-          'sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60',
+          'sticky top-0 z-[var(--z-sticky)] w-full border-b border-subtle bg-surface-1 backdrop-blur supports-backdrop-filter:bg-surface-1/80',
           className,
         )}
         {...props}
@@ -63,7 +63,7 @@ export const Navbar = React.forwardRef<HTMLElement, NavbarProps>(
                 render={
                   <Button
                     variant="ghost"
-                    className="px-0 text-base hover:bg-transparent focus-visible:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 md:hidden"
+                    className="px-0 text-16 hover:bg-transparent focus-visible:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 md:hidden"
                   >
                     <Menu className="h-5 w-5" />
                     <span className="sr-only">Toggle Menu</span>
@@ -81,7 +81,7 @@ export const Navbar = React.forwardRef<HTMLElement, NavbarProps>(
                     <Link
                       key={link.href}
                       to={link.href}
-                      className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                      className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-layer-transparent-hover hover:text-primary focus:bg-layer-transparent-hover focus:text-primary"
                       onClick={() => setIsOpen(false)}
                     >
                       {link.label}

@@ -61,11 +61,11 @@ export function PageLockButton({
 
   // State 3: locked by someone else — show indicator, no action
   if (isLockedByOther) {
-    return (
-      <div
-        className={`flex items-center gap-1.5 text-xs text-muted-foreground ${className ?? ''}`}
-        title="Page is locked by another editor"
-      >
+return (
+        <div
+          className={`flex items-center gap-1.5 text-11 text-secondary ${className ?? ''}`}
+          title="Page is locked by another editor"
+        >
         <Lock className="h-3.5 w-3.5" />
         <span>Locked</span>
       </div>

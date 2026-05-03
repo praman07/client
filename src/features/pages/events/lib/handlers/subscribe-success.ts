@@ -16,6 +16,8 @@ import {
   setPageLocked,
 } from '@/entities/page-session'
 import { setActivePageCollaborators } from '@/entities/page-presence'
+import { registerHandler } from '@/shared/ws/event-bus'
+import { PageDownstreamEvent } from '@/shared/contracts/pages'
 import { createLogger } from '@/shared/lib/logger'
 
 const log = createLogger('pages:subscribe-success')
@@ -55,4 +57,11 @@ export function handleSubscribeSuccess(
   // Flush offline queue — drain any edits made while disconnected
   // Note: flush() returns void and handles errors internally via flushImmediate
   pageOfflineQueue.flush(pageId)
+}
+
+/** Registration wrapper — called by registerPageHandlers. */
+export function registerPageSubscribeSuccessHandler(context: PageEventHandlerContext) {
+  return registerHandler(PageDownstreamEvent.SubscribeSuccess, (event) => {
+    handleSubscribeSuccess(event.payload as SubscribeSuccessPayload, context)
+  })
 }

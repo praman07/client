@@ -1,14 +1,16 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { toast } from 'sonner'
 import { UPDATE_MEMBER_ROLE, workspaceMemberKeys } from '../api'
 import { useAuth } from '@/shared/hooks'
 import { GqlClient } from '@/shared/api'
+import { authContextKeys } from '@/shared/lib/auth/query-keys'
 
 export function useUpdateMemberRole(workspaceId: string) {
   const queryClient = useQueryClient()
   const { getToken } = useAuth()
 
   return useMutation({
-    mutationFn: async (variables: { memberId: string; role: string }) => {
+    mutationFn: async (variables: { memberId: string; roleId: string }) => {
       const token = await getToken()
       const client = GqlClient(token)
       return client.request(UPDATE_MEMBER_ROLE, {
@@ -17,9 +19,19 @@ export function useUpdateMemberRole(workspaceId: string) {
       })
     },
     onSuccess: () => {
+      toast.success('Role updated successfully')
+      // Refresh member list
       queryClient.invalidateQueries({
         queryKey: workspaceMemberKeys.list(workspaceId),
       })
+      // Refresh auth context so Guard re-evaluates if current user's role changed
+      queryClient.invalidateQueries({
+        queryKey: authContextKeys.scope(workspaceId, undefined),
+      })
+    },
+    onError: (err: Error) => {
+      toast.error(err.message ?? 'Failed to update role')
     },
   })
 }
+

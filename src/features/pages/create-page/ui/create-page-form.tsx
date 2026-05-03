@@ -27,7 +27,7 @@ function FieldError({ field }: { field: any }) {
   if (!field.state.meta.isTouched || !field.state.meta.errors.length)
     return null
   return (
-    <p className="text-sm font-medium text-destructive">
+    <p className="text-13 font-medium text-danger-primary">
       {field.state.meta.errors.join(', ')}
     </p>
   )
@@ -92,7 +92,7 @@ export function CreatePageForm({
     >
       {/* Root error */}
       {rootError && (
-        <div className="rounded-md bg-destructive/15 p-3 text-sm font-medium text-destructive">
+        <div className="rounded-md bg-danger-subtle p-3 text-13 font-medium text-danger-primary">
           {rootError}
         </div>
       )}
@@ -136,7 +136,7 @@ export function CreatePageForm({
         {(field) => (
           <div className="space-y-2">
             <Label htmlFor={field.name}>
-              Icon <span className="text-muted-foreground">(optional)</span>
+              Icon <span className="text-secondary">(optional)</span>
             </Label>
             <Input
               id={field.name}
@@ -148,7 +148,7 @@ export function CreatePageForm({
               maxLength={10}
               disabled={isPending}
             />
-            <p className="text-[0.8rem] text-muted-foreground">
+            <p className="text-12 text-tertiary">
               Paste an emoji to set a page icon.
             </p>
             <FieldError field={field} />

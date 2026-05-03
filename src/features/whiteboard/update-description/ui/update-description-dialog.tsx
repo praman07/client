@@ -69,7 +69,7 @@ export function UpdateDescriptionDialog({
           className="space-y-4"
         >
           {rootError && (
-            <div className="rounded-md bg-destructive/15 p-3 text-sm text-destructive">
+            <div className="rounded-md bg-danger-subtle p-3 text-14 text-danger-primary">
               {rootError}
             </div>
           )}
@@ -97,13 +97,14 @@ export function UpdateDescriptionDialog({
                   placeholder="Describe what this board is for..."
                   disabled={isPending}
                   rows={5}
+                  maxHeight="xl"
                 />
                 {field.state.meta.errors.length > 0 && (
-                  <p className="text-sm text-destructive">
+                  <p className="text-14 text-danger-primary">
                     {field.state.meta.errors.join(', ')}
                   </p>
                 )}
-                <p className="text-sm text-muted-foreground">
+                <p className="text-14 text-secondary">
                   {field.state.value.length}/500 characters
                 </p>
               </div>

@@ -1,0 +1,5 @@
+.github/**
+.output/**
+.tanstack/**
+.node_modules/**
+.code-review-graphignore

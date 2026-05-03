@@ -18,15 +18,36 @@ export async function commitMessage(
     'rw',
     [db.messages, db.conversation_state],
     async () => {
+      // Strip url from attachments — presigned URLs are short-lived (1h TTL).
+      // Only fileId, name, mimeType, sizeBytes are safe to persist in IndexDB.
+      const safeMetadata = payload.metadata
+        ? {
+            ...payload.metadata,
+            attachments: payload.metadata.attachments?.map(
+               
+              ({ url: _url, ...rest }) => rest,
+            ),
+          }
+        : undefined
+
       await db.messages.put({
         ...payload,
+        metadata: safeMetadata,
         projectId, // Injected!
         id: payload.messageId,
         deliveryStatus: 'sent',
-        replyCount: 0,
         reactions: [],
-         
-        } as any)
+      } as any)
+
+      // DEBUG: Log what we're committing
+      log.debug('Committing message to Dexie:', {
+        messageId: payload.messageId,
+        contentType: typeof payload.content,
+        contentPreview: typeof payload.content === 'string'
+          ? (payload.content.length > 100 ? payload.content.slice(0, 100) + '...' : payload.content)
+          : JSON.stringify(payload.content),
+        hasMentions: typeof payload.content === 'string' && payload.content.includes('"mentions"'),
+      })
 
       await db.conversation_state.put({
         conversationId: state.conversationId,
@@ -67,16 +88,25 @@ export async function commitMessageBatch(
       [db.messages, db.conversation_state],
       async () => {
         // Batch insert all messages
-        const messagesToInsert = sorted.map((payload) => ({
-          ...payload,
-          projectId,
-          id: payload.messageId,
-          deliveryStatus: 'sent' as const,
-          replyCount: 0,
-          reactions: [],
-          attachments: [],
-        }))
-
+        const messagesToInsert = sorted.map((payload) => {
+          const safeMetadata = payload.metadata
+            ? {
+                ...payload.metadata,
+                attachments: payload.metadata.attachments?.map(
+                   
+                  ({ url: _url, ...rest }) => rest,
+                ),
+              }
+            : undefined
+          return {
+            ...payload,
+            metadata: safeMetadata,
+            projectId,
+            id: payload.messageId,
+            deliveryStatus: 'sent' as const,
+            reactions: [],
+          }
+        })
          
         await db.messages.bulkPut(messagesToInsert as any)
 
@@ -86,7 +116,11 @@ export async function commitMessageBatch(
       },
     )
 
-    log.debug(`Batch committed ${sorted.length} messages`)
+    log.debug(`Batch committed ${sorted.length} messages`, {
+      firstMessageId: sorted[0]?.messageId,
+      firstContentType: typeof sorted[0]?.content,
+      firstHasMentions: typeof sorted[0]?.content === 'string' && sorted[0]?.content.includes('"mentions"'),
+    })
   } catch (err) {
     log.error('Batch commit failed:', err)
     throw err
@@ -103,7 +137,7 @@ export async function commitMessageBatch(
 export async function getConversationCursor(
   conversationId: string,
   projectId?: string,
-): Promise<{ streamId: string | null; sequence: number }> {
+): Promise<{ streamId: string | null; sequence: number; lastOpenedAt?: number }> {
   try {
     let cursor: DBConversationState | undefined
 
@@ -154,6 +188,7 @@ export async function getConversationCursor(
     return {
       streamId,
       sequence,
+      lastOpenedAt: cursor?.lastOpenedAt,
     }
   } catch (e) {
     log.error('Failed to get cursor', e)

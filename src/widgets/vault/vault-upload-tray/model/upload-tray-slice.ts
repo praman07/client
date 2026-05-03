@@ -65,4 +65,6 @@ export const selectHasActiveUploads = (state: RootState) =>
     (s) => s.status === 'uploading' || s.status === 'confirming',
   )
 
+export const uploadTrayReducer = uploadTraySlice.reducer
+
 export default uploadTraySlice

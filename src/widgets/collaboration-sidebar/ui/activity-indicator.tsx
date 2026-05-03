@@ -6,7 +6,7 @@ export function ActivityIndicator({ isActive }: ActivityIndicatorProps) {
   if (!isActive) {
     return (
       <div
-        className="h-2 w-2 rounded-full bg-muted-foreground/30"
+        className="h-2 w-2 rounded-full bg-accent-primary/30"
         title="Inactive"
       />
     )
@@ -14,8 +14,8 @@ export function ActivityIndicator({ isActive }: ActivityIndicatorProps) {
 
   return (
     <div className="relative h-2 w-2" title="Active">
-      <div className="absolute inset-0 rounded-full bg-green-500 animate-ping opacity-75" />
-      <div className="relative h-2 w-2 rounded-full bg-green-500" />
+      <div className="absolute inset-0 rounded-full bg-success-subtle500 animate-pulse-subtle opacity-75" />
+      <div className="relative h-2 w-2 rounded-full bg-success-subtle500" />
     </div>
   )
 }

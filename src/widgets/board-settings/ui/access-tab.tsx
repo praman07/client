@@ -15,7 +15,8 @@ interface AccessTabProps {
  * Lock/unlock board (read-only mode)
  */
 export function AccessTab({ boardId }: AccessTabProps) {
-  const { data: board } = useBoard(boardId)
+  const { data } = useBoard(boardId)
+  const board = data?.getBoard
   const lockBoard = useLockBoard()
   const unlockBoard = useUnlockBoard()
 
@@ -32,20 +33,20 @@ export function AccessTab({ boardId }: AccessTabProps) {
   return (
     <div className="space-y-6">
       <div>
-        <h3 className="text-sm font-medium mb-4">Board Access</h3>
+        <h3 className="text-14 font-medium mb-4">Board Access</h3>
 
-        <div className="border rounded-lg p-4 space-y-4">
+        <div className="border border-subtle rounded-lg p-4 space-y-4">
           <div className="flex items-start justify-between">
             <div className="space-y-1">
               <Label className="flex items-center gap-2">
                 {board?.isLocked ? (
-                  <Lock className="h-4 w-4 text-destructive" />
+                  <Lock className="h-4 w-4 text-danger-primary" />
                 ) : (
-                  <Unlock className="h-4 w-4 text-green-600" />
+                  <Unlock className="h-4 w-4 text-success-primary" />
                 )}
                 {board?.isLocked ? 'Board is Locked' : 'Board is Unlocked'}
               </Label>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-13 text-secondary">
                 {board?.isLocked
                   ? 'Collaborators can view but not edit. Only you can unlock.'
                   : 'All collaborators can view and edit freely.'}
@@ -66,7 +67,7 @@ export function AccessTab({ boardId }: AccessTabProps) {
           </div>
 
           {board?.isLocked && (
-            <div className="bg-destructive/10 text-destructive text-xs p-3 rounded">
+            <div className="bg-danger-subtle text-danger-primary text-12 p-3 rounded-md">
               <strong>Note:</strong> Locking prevents all edits from
               collaborators. They can still view and navigate the board.
             </div>

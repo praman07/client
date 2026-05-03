@@ -11,6 +11,7 @@ export interface CursorState {
   lastSequence: number
   expectedStreamId: string | null
   epoch: number | null
+  lastOpenedAt?: number // epoch ms — used as mutation delta cursor on subscribe
 }
 
 /**

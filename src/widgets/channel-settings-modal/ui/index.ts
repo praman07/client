@@ -1,5 +1,5 @@
 export * from './channel-settings-modal'
-export * from './channel-settings-tabs'
+
 export * from './about-tab'
 export * from './members-tab'
 export * from './settings-tab'

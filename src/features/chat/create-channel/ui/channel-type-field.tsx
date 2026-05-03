@@ -11,7 +11,7 @@ export function ChannelTypeField({ form }: Props) {
     <form.Field name="type">
       {(field) => (
         <div className="space-y-3">
-          <Label className="text-base font-medium">Visibility</Label>
+          <Label className="text-14 font-medium">Visibility</Label>
           <RadioGroup
             value={field.state.value}
             onValueChange={(val) => field.handleChange(val as ChannelType)}

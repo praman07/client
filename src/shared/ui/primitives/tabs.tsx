@@ -25,12 +25,19 @@ function Tabs({
 }
 
 const tabsListVariants = cva(
-  'rounded-lg p-[3px] group-data-horizontal/tabs:h-9 data-[variant=line]:rounded-none group/tabs-list text-muted-foreground inline-flex w-fit items-center justify-center group-data-[orientation=vertical]/tabs:h-fit group-data-[orientation=vertical]/tabs:flex-col',
+  [
+    'inline-flex w-fit items-center justify-center',
+    'group/tabs-list text-secondary',
+    'group-data-[orientation=horizontal]/tabs:h-8',
+    'group-data-[orientation=vertical]/tabs:h-fit group-data-[orientation=vertical]/tabs:flex-col',
+  ],
   {
     variants: {
       variant: {
-        default: 'bg-muted',
-        line: 'gap-1 bg-transparent',
+        // Pill/capsule background style
+        default: 'bg-layer-1 rounded-lg p-0.5 gap-0.5 border border-subtle',
+        // Underline / border-bottom style
+        line: 'border-b border-subtle gap-1 rounded-none bg-transparent',
       },
     },
     defaultVariants: {
@@ -59,10 +66,34 @@ function TabsTrigger({ className, ...props }: TabsPrimitive.Tab.Props) {
     <TabsPrimitive.Tab
       data-slot="tabs-trigger"
       className={cn(
-        "gap-1.5 rounded-md border border-transparent px-2 py-1 text-sm font-medium group-data-[variant=default]/tabs-list:data-active:shadow-sm group-data-[variant=line]/tabs-list:data-active:shadow-none [&_svg:not([class*='size-'])]:size-4 focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:outline-ring text-foreground/60 hover:text-foreground dark:text-muted-foreground dark:hover:text-foreground relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-center whitespace-nowrap transition-all group-data-[orientation=vertical]/tabs:w-full group-data-[orientation=vertical]/tabs:justify-start focus-visible:ring-[3px] focus-visible:outline-1 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0",
-        'group-data-[variant=line]/tabs-list:bg-transparent group-data-[variant=line]/tabs-list:data-active:bg-transparent dark:group-data-[variant=line]/tabs-list:data-active:border-transparent dark:group-data-[variant=line]/tabs-list:data-active:bg-transparent',
-        'data-active:bg-background dark:data-active:text-foreground dark:data-active:border-input dark:data-active:bg-input/30 data-active:text-foreground',
-        'after:bg-foreground after:absolute after:opacity-0 after:transition-opacity group-data-[orientation=horizontal]/tabs:after:inset-x-0 group-data-[orientation=horizontal]/tabs:after:bottom-[-5px] group-data-[orientation=horizontal]/tabs:after:h-0.5 group-data-[orientation=vertical]/tabs:after:inset-y-0 group-data-[orientation=vertical]/tabs:after:-right-1 group-data-[orientation=vertical]/tabs:after:w-0.5 group-data-[variant=line]/tabs-list:data-active:after:opacity-100',
+        // Layout
+        'relative inline-flex flex-1 h-[calc(100%-2px)] items-center justify-center whitespace-nowrap',
+        'gap-1.5 rounded-md px-2.5 py-1 border border-transparent',
+        // Typography
+        'text-13 font-medium',
+        // Default (inactive) state
+        'text-secondary',
+        // Hover
+        'hover:text-primary hover:bg-layer-transparent-hover',
+        // Active / selected
+        'data-active:bg-surface-2 data-active:text-primary data-active:border-subtle data-active:shadow-raised-100',
+        // Line variant active — underline indicator
+        'group-data-[variant=line]/tabs-list:rounded-none group-data-[variant=line]/tabs-list:data-active:bg-transparent group-data-[variant=line]/tabs-list:data-active:border-transparent',
+        'group-data-[variant=line]/tabs-list:data-active:after:opacity-100',
+        // Line indicator pseudo-element
+        'after:absolute after:opacity-0 after:transition-opacity',
+        'group-data-[orientation=horizontal]/tabs:after:inset-x-0 group-data-[orientation=horizontal]/tabs:after:-bottom-px group-data-[orientation=horizontal]/tabs:after:h-0.5 group-data-[orientation=horizontal]/tabs:after:bg-accent-primary after:rounded-full',
+        'group-data-[orientation=vertical]/tabs:after:inset-y-0 group-data-[orientation=vertical]/tabs:after:-right-px group-data-[orientation=vertical]/tabs:after:w-0.5 group-data-[orientation=vertical]/tabs:after:bg-accent-primary',
+        // Sizing
+        'group-data-[orientation=vertical]/tabs:w-full group-data-[orientation=vertical]/tabs:justify-start',
+        // Transition + press
+        'hardware-accelerated active:scale-[0.98] transition-all duration-100',
+        // Focus
+        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-strong focus-visible:ring-offset-1',
+        // Disabled
+        'disabled:pointer-events-none disabled:text-disabled',
+        // Icons
+        "[&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",
         className,
       )}
       {...props}
@@ -74,7 +105,7 @@ function TabsContent({ className, ...props }: TabsPrimitive.Panel.Props) {
   return (
     <TabsPrimitive.Panel
       data-slot="tabs-content"
-      className={cn('text-sm flex-1 outline-none', className)}
+      className={cn('text-13 text-primary flex-1 outline-none', className)}
       {...props}
     />
   )

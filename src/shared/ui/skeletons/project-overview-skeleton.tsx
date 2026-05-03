@@ -13,7 +13,7 @@ export function ProjectOverviewSkeleton() {
       {/* Stats cards row */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {Array.from({ length: 4 }).map((_, i) => (
-          <div key={i} className="rounded-xl border p-4 flex flex-col gap-2">
+          <div key={i} className="rounded-xl border border-subtle p-4 flex flex-col gap-2">
             <Skeleton className="h-4 w-20" />
             <Skeleton className="h-8 w-12" />
             <Skeleton className="h-3 w-24" />

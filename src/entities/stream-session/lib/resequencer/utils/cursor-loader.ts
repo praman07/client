@@ -18,6 +18,7 @@ export interface LoadedCursor {
   lastSequence: number
   expectedStreamId: string
   isValid: boolean
+  lastOpenedAt?: number // epoch ms — forwarded from ConversationState
 }
 
 export function createCursorLoader<T>(
@@ -54,6 +55,7 @@ export function createCursorLoader<T>(
         lastSequence: cursor.lastSequence || 0,
         expectedStreamId: validStreamId || '0-0',
         isValid: true,
+        lastOpenedAt: cursor.lastOpenedAt,
       }
     } catch (e) {
       log.error('Failed to load cursor:', e)

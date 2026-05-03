@@ -14,8 +14,7 @@ import {
   setActivePageId, setConnectionStatus 
 } from '@/entities/page-session'
 import { useSendPageUpdate } from '@/features/pages/send-page-update'
-import { useAppDispatch, useAppSelector } from '@/shared/hooks'
-import { selectCurrentUser } from '@/entities/user'
+import { useAppDispatch, useAppSelector, useUser } from '@/shared/hooks'
 import { createLogger } from '@/shared/lib/logger'
 
 const log = createLogger('pages:phase4:network-sync')
@@ -49,7 +48,7 @@ export function useNetworkSync(
 ): void {
   const dispatch = useAppDispatch()
   const queryClient = useQueryClient()
-  const currentUser = useAppSelector(selectCurrentUser)
+  const { user: currentUser } = useUser()
   const connectionStatus = useAppSelector(selectPageConnectionStatus)
   const sendPageUpdate = useSendPageUpdate(pageId)
 

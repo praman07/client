@@ -13,6 +13,8 @@ import type { BoardDeletedPayload } from '@/shared/contracts/whiteboard/downstre
 import type { WhiteboardEventHandlerContext } from '../../model'
 import { boardKeys } from '@/entities/whiteboard-board'
 import { cleanBoardFromIndexedDB } from '@/features/whiteboard/delete-board'
+import { registerHandler } from '@/shared/ws/event-bus'
+import { WhiteboardDownstreamEvent } from '@/shared/contracts/whiteboard/events'
 import { createLogger } from '@/shared/lib/logger'
 
 const log = createLogger('whiteboard:board-deleted')
@@ -73,4 +75,11 @@ export function handleBoardDeleted(
       description: 'A board you have access to has been permanently deleted.',
     })
   }
+}
+
+/** Registration wrapper — called by registerWhiteboardHandlers. */
+export function registerBoardDeletedHandler(context: WhiteboardEventHandlerContext) {
+  return registerHandler(WhiteboardDownstreamEvent.BoardDeleted, (event) => {
+    handleBoardDeleted(event.payload as BoardDeletedPayload, context)
+  })
 }

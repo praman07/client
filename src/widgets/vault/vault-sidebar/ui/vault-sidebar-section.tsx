@@ -23,7 +23,7 @@ export function VaultSidebarSection({
     <div className="flex flex-col gap-0.5">
       <button
         onClick={() => setOpen((v) => !v)}
-        className="flex items-center gap-1 px-2 py-1.5 text-xs font-semibold uppercase tracking-wider text-muted-foreground hover:text-foreground transition-colors"
+        className="flex items-center gap-1 px-2 py-1.5 text-11 font-medium uppercase tracking-wide text-tertiary hover:text-primary transition-colors duration-100"
       >
         <ChevronRight
           className={cn(

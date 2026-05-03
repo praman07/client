@@ -10,6 +10,7 @@ import { DMList } from './dm-list'
 import type { DMItem, GroupItem } from '../model/types'
 import type { Conversation } from '@/entities/conversation'
 import { CreateChannelModal } from '@/features/chat/create-channel'
+import { useGetProjectDms } from '@/features/chat/get-project-dms'
 import { Sidebar, SidebarContent } from '@/shared/ui/primitives/sidebar'
 import { Separator } from '@/shared/ui/primitives/separator'
 import { ScrollArea } from '@/shared/ui'
@@ -44,10 +45,8 @@ export function ChatSidebar() {
       includeArchived: true,
     })
 
-  // Fetch DMs
-  const { data: dmsData, isLoading: dmsLoading } = useUserConversations({
-    type: ConversationType.Dm,
-  })
+  // Fetch DMs — uses getProjectDms which returns the other user's profile
+  const { data: dmsData, isLoading: dmsLoading } = useGetProjectDms()
 
   // Fetch group DMs
   const { data: groupsData, isLoading: groupsLoading } = useUserConversations({
@@ -87,11 +86,6 @@ export function ChatSidebar() {
     return filtered
   }, [archivedChannelsData])
 
-  const dms = useMemo(() => {
-    const edges = dmsData?.getUserConversations.edges ?? []
-    return sortConversations(edges as Array<Conversation>)
-  }, [dmsData])
-
   const groups = useMemo(() => {
     const edges = groupsData?.getUserConversations.edges ?? []
     return sortConversations(edges as Array<Conversation>)
@@ -111,7 +105,10 @@ export function ChatSidebar() {
     [archivedChannels],
   )
 
-  const dmItems = useMemo(() => mapDmsToItems(dms), [dms])
+  const dmItems = useMemo(
+    () => mapDmsToItems(dmsData?.getProjectDms ?? []),
+    [dmsData],
+  )
 
   const groupItems = useMemo(() => mapGroupsToItems(groups), [groups])
 
@@ -127,11 +124,11 @@ export function ChatSidebar() {
   return (
     <Sidebar
       collapsible="icon"
-      className="border-r inset-y-0 z-0 relative h-full"
+      className="border-r border-subtle inset-y-0 z-0 relative h-full"
     >
       <SidebarContent className="overflow-hidden">
         <ScrollArea className="h-full w-full">
-          <div className="flex flex-col gap-2 p-2">
+          <div className="flex flex-col gap-1 px-1 py-2 animate-fade-in">
             {isLoading ? (
               <ConversationListSkeleton />
             ) : (
@@ -156,13 +153,13 @@ function ConversationListSkeleton() {
   return (
     <div className="flex flex-col gap-1 px-2 py-2">
       <div className="flex items-center justify-between px-2 py-1.5">
-        <Skeleton className="h-4 w-16" />
-        <Skeleton className="h-4 w-4" />
+        <Skeleton className="h-4 w-16 animate-pulse-subtle" />
+        <Skeleton className="h-4 w-4 animate-pulse-subtle" />
       </div>
       {Array.from({ length: 5 }).map((_, i) => (
         <div key={i} className="flex items-center gap-2 px-2 py-1.5">
-          <Skeleton className="h-4 w-4" />
-          <Skeleton className="h-4 w-24" />
+          <Skeleton className="h-4 w-4 animate-pulse-subtle" />
+          <Skeleton className="h-4 w-24 animate-pulse-subtle" />
         </div>
       ))}
     </div>

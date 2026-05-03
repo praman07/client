@@ -62,18 +62,48 @@ export const RecoveryListener = () => {
           // TODO: @DesignChoice - ProjectID is derived from event payload.
           // This avoids coupling the listener to the global store, maintaining FSD compliance.
           const mappedMessages: Array<NewMessagePayload> = messages.map(
-            (msg: any) => ({
-              id: msg.id,
-              messageId: msg.id,
-              streamId: msg.streamId,
-              conversationId: msg.conversationId,
-              content: msg.content,
-              authorId: msg.authorUserId,
-              sequence: msg.sequence,
-              createdAt: msg.createdAt,
-              dedupeId: `recovery-${msg.id}`,
-              projectId: projectId,
-            }),
+            (msg: any) => {
+              // Extract rich content from GraphQL JSON scalar (same logic as use-history-loader).
+              // The server sends { text, mentions } as a JSON object which GraphQL
+              // serializes as a string over the wire. JSONResolver does NOT auto-parse
+              // back to JS object on the client, so we handle both shapes here.
+              const rawContent = msg.content
+              let safeContent = ''
+
+              if (typeof rawContent === 'string') {
+                try {
+                  const parsed = JSON.parse(rawContent)
+                  if (parsed && typeof parsed === 'object' && 'text' in parsed) {
+                    safeContent = parsed.text ?? ''
+                    // If mentions exist, keep full rich content for renderer
+                    if (Array.isArray(parsed.mentions) && parsed.mentions.length > 0) {
+                      safeContent = rawContent // preserve rich JSON for renderer
+                    }
+                  } else {
+                    safeContent = rawContent
+                  }
+                } catch {
+                  safeContent = rawContent
+                }
+              } else if (rawContent && typeof rawContent === 'object') {
+                safeContent = (rawContent as { text?: string }).text ?? JSON.stringify(rawContent)
+              } else {
+                safeContent = String(rawContent ?? '')
+              }
+
+              return {
+                id: msg.id,
+                messageId: msg.id,
+                streamId: msg.streamId,
+                conversationId: msg.conversationId,
+                content: safeContent,
+                authorId: msg.authorUserId,
+                sequence: msg.sequence,
+                createdAt: msg.createdAt,
+                dedupeId: `recovery-${msg.id}`,
+                projectId: projectId,
+              }
+            },
           )
 
           await resequencer.processRecoveryBatch(mappedMessages, projectId)

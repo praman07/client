@@ -61,8 +61,8 @@ function OptionRow({
       type="button"
       onClick={onToggle}
       className={cn(
-        'flex w-full items-center gap-2.5 rounded-sm px-2 py-1.5 text-sm transition hover:bg-muted/60',
-        checked && 'bg-muted/30',
+        'flex w-full items-center gap-2.5 rounded-sm px-2 py-1.5 text-13 transition hover:bg-layer-2',
+        checked && 'bg-layer-2',
       )}
     >
       <Checkbox
@@ -151,7 +151,7 @@ export function FilterSubMenu({
                 })
               }
             >
-              <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-muted text-[10px] font-medium uppercase">
+              <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-layer-2 text-[10px] font-medium uppercase">
                 {m.fullName[0]}
               </span>
               <span className="truncate">{m.fullName}</span>

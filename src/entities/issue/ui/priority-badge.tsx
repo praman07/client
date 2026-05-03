@@ -21,14 +21,14 @@ interface PriorityConfig {
 }
 
 const PRIORITY_CONFIG: Record<IssuePriority, PriorityConfig> = {
-  URGENT: { icon: AlertCircle, label: 'Urgent', className: 'text-red-500' },
-  HIGH: { icon: ArrowUp, label: 'High', className: 'text-orange-500' },
-  MEDIUM: { icon: Equal, label: 'Medium', className: 'text-yellow-500' },
-  LOW: { icon: ArrowDown, label: 'Low', className: 'text-slate-400' },
+  URGENT: { icon: AlertCircle, label: 'Urgent', className: 'text-danger-primary' },
+  HIGH: { icon: ArrowUp, label: 'High', className: 'text-warning-primary' },
+  MEDIUM: { icon: Equal, label: 'Medium', className: 'text-warning-primary' },
+  LOW: { icon: ArrowDown, label: 'Low', className: 'text-secondary' },
   NO_PRIORITY: {
     icon: Minus,
     label: 'No Priority',
-    className: 'text-muted-foreground',
+    className: 'text-tertiary',
   },
 }
 
@@ -58,7 +58,7 @@ export function PriorityBadge({
       )}
     >
       <Icon style={{ width: size, height: size }} />
-      {showLabel && <span className="text-xs font-medium">{label}</span>}
+      {showLabel && <span className="text-11 font-medium">{label}</span>}
     </span>
   )
 }

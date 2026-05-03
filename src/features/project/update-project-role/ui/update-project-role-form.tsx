@@ -18,7 +18,7 @@ function FieldError({ field }: { field: any }) {
   if (!field.state.meta.isTouched || !field.state.meta.errors.length)
     return null
   return (
-    <p className="text-sm font-medium text-destructive">
+    <p className="text-13 font-medium text-danger-primary">
       {field.state.meta.errors.join(', ')}
     </p>
   )
@@ -90,7 +90,14 @@ export function UpdateProjectRoleForm({
               max={99}
               value={field.state.value ?? ''}
               onBlur={field.handleBlur}
-              onChange={(e) => field.handleChange(Number(e.target.value))}
+              onChange={(e) => {
+                const val = e.target.value
+                if (val === '') {
+                  field.handleChange(undefined)
+                } else {
+                  field.handleChange(Number(val))
+                }
+              }}
             />
             <FieldError field={field} />
           </div>
@@ -111,6 +118,7 @@ export function UpdateProjectRoleForm({
               onBlur={field.handleBlur}
               onChange={(e) => field.handleChange(e.target.value)}
               rows={2}
+              maxHeight="xl"
             />
             <FieldError field={field} />
           </div>

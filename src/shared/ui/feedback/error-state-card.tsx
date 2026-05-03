@@ -26,18 +26,18 @@ export function ErrorStateCard({
   return (
     <Card
       className={cn(
-        'w-full max-w-md border-destructive/20 shadow-sm',
+        'w-full max-w-md border-danger-strong shadow-raised-100',
         className,
       )}
     >
       <CardHeader className="text-center pb-2">
-        <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-destructive/10 ring-4 ring-destructive/5">
-          <Icon className="h-6 w-6 text-destructive" />
+        <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-danger-subtle">
+          <Icon className="h-6 w-6 text-danger-primary" />
         </div>
-        <h3 className="text-xl font-semibold tracking-tight">{title}</h3>
+        <h3 className="text-18 font-semibold tracking-tight">{title}</h3>
       </CardHeader>
       <CardContent className="text-center pb-6">
-        <p className="text-sm text-muted-foreground leading-relaxed max-w-[90%] mx-auto">
+        <p className="text-13 text-secondary leading-relaxed max-w-[90%] mx-auto">
           {description}
         </p>
       </CardContent>

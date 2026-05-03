@@ -35,6 +35,7 @@ export function useChatScroll({
   // State Machine
   const [mode, setMode] = useState<ScrollMode>('LOCKED_BOTTOM')
   const [showScrollButton, setShowScrollButton] = useState(false)
+  const [newMessagesCount, setNewMessagesCount] = useState(0)
 
   // Virtualizer
   // eslint-disable-next-line react-hooks/incompatible-library
@@ -42,7 +43,10 @@ export function useChatScroll({
     count,
     getScrollElement: () => parentRef.current,
     estimateSize,
-    overscan: 25,
+    // overscan:5 renders 5 rows above and below the viewport (10 total off-screen).
+    // Previous value of 25 (50 off-screen rows) caused a massive I/O burst on load:
+    // each row fires IndexDB cache reads, useLiveQuery parent lookups, and URL hooks.
+    overscan: 5,
     getItemKey,
   })
 
@@ -67,6 +71,9 @@ export function useChatScroll({
 
   // EDGE CASE: Track if user scrolled during load (if so, don't adjust)
   const userScrolledDuringLoadRef = useRef(false)
+
+  // Track if new messages arrived while user was away from bottom
+  const hasNewMessagesWhileAwayRef = useRef(false)
 
   // 1. Scroll Sensor (The Input)
   const onScroll = useCallback(
@@ -99,15 +106,17 @@ export function useChatScroll({
       // State Transitions
       if (mode === 'LOCKED_BOTTOM') {
         if (distanceFromBottom > EXIT_BOTTOM_THRESHOLD) {
-          // DEBUG: console.log('[useChatScroll] Mode: LOCKED_BOTTOM → FREE_SCROLL')
+          // User scrolled away to read history - just update mode, no button
           setMode('FREE_SCROLL')
-          setShowScrollButton(true)
+          // Do NOT set showScrollButton(true) here - only show for new messages
         }
       } else if (mode === 'FREE_SCROLL') {
         if (distanceFromBottom <= ENTER_BOTTOM_THRESHOLD) {
           // DEBUG: console.log('[useChatScroll] Mode: FREE_SCROLL → LOCKED_BOTTOM')
           setMode('LOCKED_BOTTOM')
           setShowScrollButton(false)
+          setNewMessagesCount(0)
+          hasNewMessagesWhileAwayRef.current = false
         } else if (
           scrollTop <= TOP_THRESHOLD &&
           !isFetchingRef.current &&
@@ -167,6 +176,10 @@ export function useChatScroll({
       })
 
       if (mode === 'LOCKED_BOTTOM') {
+        // Reset new messages count on append (auto-scroll to bottom)
+        setNewMessagesCount(0)
+        hasNewMessagesWhileAwayRef.current = false
+
         // Append Case - scroll to bottom
         rowVirtualizer.scrollToIndex(count - 1, {
           align: 'end',
@@ -196,6 +209,14 @@ export function useChatScroll({
         userScrolledDuringLoadRef.current = false
         setMode('FREE_SCROLL')
       } else if (mode === 'FREE_SCROLL') {
+        // NEW BEHAVIOR: Show scroll button ONLY when new messages arrive
+        // while user is away from bottom
+        if (delta > 0) {
+          hasNewMessagesWhileAwayRef.current = true
+          setNewMessagesCount((prev) => prev + delta)
+          setShowScrollButton(true)
+        }
+
         // Fallback: Detect prepend via anchor index shift (edge cases)
         if (anchorRef.current !== null) {
           const { key: oldKey, index: oldIndex } = anchorRef.current
@@ -239,6 +260,8 @@ export function useChatScroll({
   const scrollToBottom = useCallback(() => {
     setMode('LOCKED_BOTTOM')
     setShowScrollButton(false)
+    setNewMessagesCount(0)
+    hasNewMessagesWhileAwayRef.current = false
     if (parentRef.current) {
       rowVirtualizer.scrollToIndex(count - 1, {
         align: 'end',
@@ -253,6 +276,7 @@ export function useChatScroll({
     onScroll,
     scrollToBottom,
     showScrollButton,
+    newMessagesCount,
     isAtBottom: mode === 'LOCKED_BOTTOM',
   }
 }

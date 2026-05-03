@@ -5,6 +5,7 @@
 
 import { ChatUpstreamEvent } from './events'
 import type { UpstreamContract } from '../types'
+import type { ChatAttachment } from './message'
 
 // Re-export event enum for convenience
 export { ChatUpstreamEvent }
@@ -17,7 +18,15 @@ export interface SendMessagePayload {
   conversationId: string
   content: string
   dedupeId: string
-  replyToId?: string
+  parentMessageId?: string
+  /**
+   * Optional Vault attachments sent with this message.
+   * Must be uploaded and confirmed via Vault pipeline BEFORE calling sendMessage.
+   * Server stores in ChatMessage.metadata (Json?) — propagated through stream-worker.
+   */
+  metadata?: {
+    attachments?: Array<ChatAttachment>
+  }
 }
 
 export interface EditMessagePayload {

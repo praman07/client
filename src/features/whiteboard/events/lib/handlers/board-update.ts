@@ -9,6 +9,8 @@ import {
 import { YjsOrigin } from '@/shared/lib/yjs/constants'
 import { createLogger } from '@/shared/lib/logger'
 import { safeApplyUpdate } from '@/shared/lib/yjs/safe-apply-update'
+import { registerHandler } from '@/shared/ws/event-bus'
+import { WhiteboardDownstreamEvent } from '@/shared/contracts/whiteboard/events'
 
 const log = createLogger('whiteboard:board-update')
 
@@ -133,5 +135,14 @@ export function handleBoardUpdate(
     boardId,
     streamId,
     elementsDelta: result.elementsDelta,
+  })
+}
+
+/** Registration wrapper — called by registerWhiteboardHandlers. */
+export function registerBoardUpdateHandler(context: WhiteboardEventHandlerContext) {
+  return registerHandler(WhiteboardDownstreamEvent.BoardUpdate, (event) => {
+    // Backend sends { type, data: { boardId, update, ... } } — extract nested data
+    const payload = (event.payload as any).data || event.payload
+    handleBoardUpdate(payload as BoardUpdatePayload, context)
   })
 }

@@ -19,7 +19,7 @@ export function VaultStorageBar({ projectId }: VaultStorageBarProps) {
   if (isLoading || !data) {
     return (
       <div className="px-3 py-2">
-        <div className="h-1.5 w-full rounded-full bg-muted animate-pulse" />
+        <div className="h-1.5 w-full rounded-full bg-layer-2 animate-pulse-subtle" />
       </div>
     )
   }
@@ -31,15 +31,15 @@ export function VaultStorageBar({ projectId }: VaultStorageBarProps) {
 
   const barColor =
     percentUsed >= 90
-      ? 'bg-destructive'
+      ? 'bg-danger-primary'
       : percentUsed >= 80
-        ? 'bg-amber-500'
-        : 'bg-primary'
+        ? 'bg-warning-primary'
+        : 'bg-accent-primary'
 
   return (
     <div className="px-3 py-2 space-y-1.5">
       {/* Fill bar */}
-      <div className="h-1.5 w-full rounded-full bg-muted overflow-hidden">
+      <div className="h-1.5 w-full rounded-full bg-layer-2 overflow-hidden">
         <div
           className={`h-full rounded-full transition-all duration-500 ${barColor}`}
           style={{ width: `${Math.min(percentUsed, 100)}%` }}
@@ -47,7 +47,7 @@ export function VaultStorageBar({ projectId }: VaultStorageBarProps) {
       </div>
 
       {/* Label */}
-      <p className="text-[11px] text-muted-foreground leading-none">
+      <p className="text-11 text-secondary leading-none">
         {formatBytes(projectUsedBytes)} of {formatBytes(projectLimitBytes)} used
       </p>
     </div>

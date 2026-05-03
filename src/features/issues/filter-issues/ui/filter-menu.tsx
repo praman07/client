@@ -91,9 +91,9 @@ export function FilterMenu({
     <Popover open={open} onOpenChange={handleOpenChange}>
       <PopoverTrigger
         className={cn(
-          'inline-flex h-7 items-center gap-1.5 rounded-md border px-2 text-xs font-medium transition',
-          'border-border/40 bg-transparent text-muted-foreground hover:bg-muted/40 hover:text-foreground',
-          hasActiveFilters && 'border-primary/50 text-primary',
+          'inline-flex h-7 items-center gap-1.5 rounded-md border px-2 text-11 font-medium transition',
+          'border-subtle bg-transparent text-secondary hover:bg-layer-transparent-hover hover:text-primary',
+          hasActiveFilters && 'border-accent-subtle text-primary',
         )}
       >
         <SlidersHorizontal className="h-3.5 w-3.5" />
@@ -113,7 +113,7 @@ export function FilterMenu({
             <Button
               variant="ghost"
               size="sm"
-              className="h-8 w-full justify-start gap-1.5 rounded-none px-2 text-xs text-muted-foreground"
+              className="h-8 w-full justify-start gap-1.5 rounded-none px-2 text-11 text-secondary"
               onClick={() => setActiveCategory(null)}
             >
               <ChevronLeft className="h-3.5 w-3.5" />
@@ -143,16 +143,16 @@ export function FilterMenu({
                   type="button"
                   onClick={() => setActiveCategory(key)}
                   className={cn(
-                    'flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-sm transition hover:bg-muted/60',
+                    'flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-13 transition hover:bg-layer-2',
                     active && 'text-primary',
                   )}
                 >
-                  <Icon className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
-                  <span className="flex-1 text-left text-xs">{label}</span>
+                  <Icon className="h-3.5 w-3.5 shrink-0 text-secondary" />
+                  <span className="flex-1 text-left text-11">{label}</span>
                   {active && (
-                    <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
+                    <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-accent-primary" />
                   )}
-                  <ChevronRight className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
+                  <ChevronRight className="h-3.5 w-3.5 shrink-0 text-secondary" />
                 </button>
               )
             })}

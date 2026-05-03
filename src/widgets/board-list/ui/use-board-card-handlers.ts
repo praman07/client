@@ -37,8 +37,10 @@ export function useBoardCardHandlers({
   const [showDeleteDialog, setShowDeleteDialog] = useState(false)
   const [showArchiveDialog, setShowArchiveDialog] = useState(false)
   const [showUnarchiveDialog, setShowUnarchiveDialog] = useState(false)
-  const [showAddCollaboratorsDialog, setShowAddCollaboratorsDialog] =
-    useState(false)
+  const [showSettingsModal, setShowSettingsModal] = useState(false)
+  const [settingsDefaultTab, setSettingsDefaultTab] = useState<
+    'general' | 'members' | 'settings'
+  >('general')
 
   // Handler: Rename Board
   const handleRename = (e?: React.MouseEvent) => {
@@ -89,18 +91,20 @@ export function useBoardCardHandlers({
     unlockBoard.mutate(board.id)
   }
 
-  // Handler: Manage Collaborators
+  // Handler: Manage Collaborators — opens settings modal at Members tab
   const handleManageCollaborators = (e?: React.MouseEvent) => {
     e?.preventDefault()
     e?.stopPropagation()
-    setShowAddCollaboratorsDialog(true)
+    setSettingsDefaultTab('members')
+    setShowSettingsModal(true)
   }
 
-  // Handler: Board Settings
+  // Handler: Board Settings — opens settings modal at General tab
   const handleSettings = (e?: React.MouseEvent) => {
     e?.preventDefault()
     e?.stopPropagation()
-    toast.info('Settings feature coming soon')
+    setSettingsDefaultTab('general')
+    setShowSettingsModal(true)
   }
 
   // Handler: Archive/Unarchive
@@ -164,8 +168,9 @@ export function useBoardCardHandlers({
       setShowArchiveDialog,
       showUnarchiveDialog,
       setShowUnarchiveDialog,
-      showAddCollaboratorsDialog,
-      setShowAddCollaboratorsDialog,
+      showSettingsModal,
+      setShowSettingsModal,
+      settingsDefaultTab,
     },
     mutations: {
       deleteBoard,

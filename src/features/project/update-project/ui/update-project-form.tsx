@@ -18,7 +18,7 @@ function FieldError({ field }: { field: any }) {
   if (!field.state.meta.isTouched || !field.state.meta.errors.length)
     return null
   return (
-    <p className="text-sm font-medium text-destructive">
+    <p className="text-13 font-medium text-danger-primary">
       {field.state.meta.errors.join(', ')}
     </p>
   )
@@ -87,11 +87,11 @@ export function UpdateProjectForm({
               placeholder="What is this project about?"
               rows={3}
               maxLength={500}
-              className="resize-none max-h-32"
+              maxHeight="lg"
             />
             <div className="flex items-center justify-between">
               <FieldError field={field} />
-              <span className="text-xs text-muted-foreground ml-auto">
+              <span className="text-11 text-secondary ml-auto">
                 {(field.state.value ?? '').length}/500
               </span>
             </div>

@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { toast } from 'sonner'
 import { REMOVE_MEMBER, workspaceMemberKeys } from '../api'
 import { useAuth } from '@/shared/hooks'
 import { GqlClient } from '@/shared/api'
@@ -17,9 +18,13 @@ export function useRemoveMember(workspaceId: string) {
       })
     },
     onSuccess: () => {
+      toast.success('Member removed')
       queryClient.invalidateQueries({
         queryKey: workspaceMemberKeys.list(workspaceId),
       })
+    },
+    onError: (err: Error) => {
+      toast.error(err.message ?? 'Failed to remove member')
     },
   })
 }

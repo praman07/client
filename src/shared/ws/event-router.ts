@@ -79,12 +79,14 @@ export const eventRouter = {
     }
 
     // 3. Bridge to EventBus for backward compatibility
-    // This allows handlers using registerHandler() to receive WebSocket events
+    // This allows handlers using registerHandler() to receive WebSocket events.
+    // Some events arrive as { type, success, data } (ServerMessage wire format).
+    // Others may arrive as { type, payload } (DownstreamContract shape from relays).
+    // We normalise both: prefer data, fall back to payload.
     try {
       const appEvent = {
         type: envelope.type,
-         
-        payload: envelope.data ?? {},
+        payload: (envelope as any).data ?? (envelope as any).payload ?? {},
       }
       dispatchEvent(appEvent as any)
     } catch (error) {

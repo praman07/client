@@ -34,7 +34,7 @@ export function CollaboratorAvatar({
       }}
     >
       <AvatarImage src={avatarUrl ?? undefined} alt={userName} />
-      <AvatarFallback style={{ backgroundColor: color }} className="text-white">
+      <AvatarFallback style={{ backgroundColor: color }} className="text-on-color">
         {initials}
       </AvatarFallback>
     </Avatar>

@@ -11,8 +11,10 @@
  * @layer Features
  */
 import { useState } from 'react'
-import { HugeiconsIcon } from '@hugeicons/react'
-import { Tag01Icon, Tick02Icon } from '@hugeicons/core-free-icons'
+import {
+  Tag,
+  Check,
+} from 'lucide-react'
 import type { IssueLabel } from '@/entities/issue-label'
 import { cn } from '@/shared/lib/utils'
 import {
@@ -49,10 +51,10 @@ export function LabelPicker({ labels, value, onToggle }: LabelPickerProps) {
     <DropdownMenu open={open} onOpenChange={handleOpenChange}>
       <DropdownMenuTrigger
         className={cn(
-          'inline-flex items-center gap-1.5 rounded-md border px-2 py-1 text-xs whitespace-nowrap transition-colors cursor-pointer',
+          'inline-flex items-center gap-1.5 rounded-md border border-subtle px-2 py-1 text-12 whitespace-nowrap transition-colors cursor-pointer',
           isActive
-            ? 'border-primary/40 bg-primary/5 text-foreground'
-            : 'border-border bg-transparent text-foreground hover:bg-muted/50',
+            ? 'border-subtle bg-layer-2 text-primary'
+            : 'border-subtle bg-transparent text-primary hover:bg-layer-2-hover',
         )}
       >
         {isActive ? (
@@ -71,11 +73,7 @@ export function LabelPicker({ labels, value, onToggle }: LabelPickerProps) {
           </>
         ) : (
           <>
-            <HugeiconsIcon
-              icon={Tag01Icon}
-              strokeWidth={2}
-              className="size-3"
-            />
+            <Tag className="size-3" />
             <span>Labels</span>
           </>
         )}
@@ -90,7 +88,7 @@ export function LabelPicker({ labels, value, onToggle }: LabelPickerProps) {
         {/* Search input */}
         <div className="p-1.5 pb-0">
           <input
-            className="w-full rounded-sm bg-muted/30 px-2 py-1 text-xs outline-none placeholder:text-muted-foreground"
+            className="w-full rounded-sm bg-layer-2 px-2 py-1 text-12 outline-none placeholder:text-tertiary"
             placeholder="Search labels…"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
@@ -120,10 +118,7 @@ export function LabelPicker({ labels, value, onToggle }: LabelPickerProps) {
                   style={{ backgroundColor: label.color }}
                 />
                 <span>{label.name}</span>
-                <HugeiconsIcon
-                  icon={Tick02Icon}
-                  strokeWidth={2}
-                  className={cn(
+                <Check className={cn(
                     'ml-auto size-3.5 transition-opacity',
                     checked ? 'opacity-100' : 'opacity-0',
                   )}
@@ -133,7 +128,7 @@ export function LabelPicker({ labels, value, onToggle }: LabelPickerProps) {
           })}
 
           {filtered.length === 0 && (
-            <p className="px-2 py-3 text-center text-xs text-muted-foreground">
+            <p className="px-2 py-3 text-center text-12 text-tertiary">
               No labels found
             </p>
           )}

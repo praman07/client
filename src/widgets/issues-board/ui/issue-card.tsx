@@ -53,12 +53,12 @@ function CardContent({
   return (
     <>
       {/* Row 1: issue number — hidden by default, fades in on card hover */}
-      <p className="mb-1 text-[10px] text-muted-foreground opacity-0 transition-opacity group-hover:opacity-60 select-none">
+      <p className="mb-1 text-10 text-secondary opacity-0 transition-opacity group-hover:opacity-60 select-none">
         <IssueNumber projectKey={projectKey} number={issue.number} />
       </p>
 
       {/* Row 2: title — 2-line clamp, CSS ellipsis */}
-      <p className="line-clamp-2 text-sm font-medium leading-snug text-foreground">
+      <p className="line-clamp-2 text-14 font-medium leading-snug text-primary">
         {issue.title}
       </p>
 
@@ -69,7 +69,7 @@ function CardContent({
             <LabelPill key={label.id} label={label} />
           ))}
           {overflow > 0 && (
-            <span className="text-[10px] text-muted-foreground">
+            <span className="text-10 text-secondary">
               +{overflow}
             </span>
           )}
@@ -134,9 +134,8 @@ export function IssueCard({ issue, projectKey, onClick }: IssueCardProps) {
         tabIndex={0}
         onKeyDown={(e) => e.key === 'Enter' && onClick()}
         className={cn(
-          'group select-none rounded-lg border border-border/50 bg-card p-3 shadow-sm',
-          'cursor-grab transition-all hover:border-border hover:shadow-md',
-          'focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-1',
+          'group select-none rounded-lg border border-subtle-1 bg-layer-1 p-3 shadow-raised-100',
+          'cursor-grab transition-all hover:border-subtle hover:shadow-raised-200',
           isDragging && 'pointer-events-none cursor-grabbing opacity-30',
         )}
       >
@@ -148,7 +147,7 @@ export function IssueCard({ issue, projectKey, onClick }: IssueCardProps) {
         <t.In>
           <div
             className={cn(
-              'w-72 cursor-grabbing rounded-lg border-2 border-primary bg-card p-3 shadow-2xl',
+              'w-72 cursor-grabbing rounded-lg border-2 border-accent-strong bg-layer-1 p-3 shadow-overlay-200',
               'rotate-1 scale-[1.03]',
             )}
           >
