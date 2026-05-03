@@ -8,10 +8,7 @@ import { env } from '@/shared/config/env'
  * @returns GraphQLClient instance with auth headers
  */
 export const GqlClient = (token?: string | null) => {
-  const baseUrl =
-    env.VITE_SERVER_URL ||
-    (typeof window !== 'undefined' ? window.location.origin : '')
-  const endpoint = `${baseUrl}/graphql`
+  const endpoint = `${env.VITE_SERVER_URL}/graphql`
 
   const headers: Record<string, string> = {}
   if (token) {

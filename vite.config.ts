@@ -55,7 +55,21 @@ function manualChunks(id: string): string | undefined {
 const config = defineConfig({
   plugins: [
     devtools(),
-    nitro(),
+    nitro({
+      routeRules: {
+        // Static assets have content-hashed filenames — safe to cache forever
+        '/_build/assets/**': {
+          headers: { 'cache-control': 'public, max-age=31536000, immutable' },
+        },
+        '/favicon.png': {
+          headers: { 'cache-control': 'public, max-age=86400' },
+        },
+        // SSR HTML responses must never be cached
+        '/**': {
+          headers: { 'cache-control': 'no-store' },
+        },
+      },
+    }),
     viteTsConfigPaths({
       projects: ['./tsconfig.json'],
     }),
@@ -73,6 +87,12 @@ const config = defineConfig({
     // are intentionally large and can't be split further without dynamic import
     chunkSizeWarningLimit: 600,
 
+    // Merge all CSS into one file — prevents per-route CSS flash on client navigation
+    cssCodeSplit: false,
+
+    // No source maps in production — keeps bundle lean and avoids leaking source paths
+    sourcemap: false,
+
     rollupOptions: {
       output: {
         manualChunks,
@@ -80,14 +100,6 @@ const config = defineConfig({
     },
   },
 
-  server: {
-    proxy: {
-      '/graphql': {
-        target: 'http://localhost:3001',
-        changeOrigin: true,
-      },
-    },
-  },
 })
 
 export default config

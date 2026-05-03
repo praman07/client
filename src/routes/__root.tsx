@@ -68,6 +68,8 @@ function RootComponent() {
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        {/* Render CSS link directly — ensures it's in the SSR HTML, not deferred post-hydration */}
+        <link rel="stylesheet" href={appCss} />
         <HeadContent />
       </head>
       <body>

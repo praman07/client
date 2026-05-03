@@ -2,42 +2,24 @@ import { createEnv } from '@t3-oss/env-core'
 import { z } from 'zod'
 
 export const env = createEnv({
-  server: {
-    SERVER_URL: z.string().url().optional(),
-  },
-
-  /**
-   * The prefix that client-side variables must have. This is enforced both at
-   * a type-level and at runtime.
-   */
   clientPrefix: 'VITE_',
 
   client: {
-    VITE_APP_TITLE: z.string().min(1).optional(),
-    VITE_SERVER_URL: z.string().url().optional(),
-    VITE_WS_URL: z.string().url().optional(),
+    /** Base URL of the API server (e.g. https://api.collabifyy.com) */
+    VITE_SERVER_URL: z.string().url(),
+    /** WebSocket URL of the API server (e.g. wss://api.collabifyy.com/ws) */
+    VITE_WS_URL: z.string().url(),
+    /** Clerk publishable key for authentication */
     VITE_CLERK_PUBLISHABLE_KEY: z.string().min(1),
+    /** Microsoft Clarity project ID for session recordings (optional) */
     VITE_CLARITY_PROJECT_ID: z.string().min(1).optional(),
   },
 
-  /**
-   * What object holds the environment variables at runtime. This is usually
-   * `process.env` or `import.meta.env`.
-   */
   runtimeEnv: import.meta.env,
 
   /**
-   * By default, this library will feed the environment variables directly to
-   * the Zod validator.
-   *
-   * This means that if you have an empty string for a value that is supposed
-   * to be a number (e.g. `PORT=` in a ".env" file), Zod will incorrectly flag
-   * it as a type mismatch violation. Additionally, if you have an empty string
-   * for a value that is supposed to be a string with a default value (e.g.
-   * `DOMAIN=` in an ".env" file), the default value will never be applied.
-   *
-   * In order to solve these issues, we recommend that all new projects
-   * explicitly specify this option as true.
+   * Treat empty strings as undefined so Zod defaults and optional checks
+   * work correctly when a variable is set but left blank in .env files.
    */
   emptyStringAsUndefined: true,
 })
