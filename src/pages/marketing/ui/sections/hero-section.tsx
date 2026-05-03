@@ -26,12 +26,12 @@ export function HeroSection() {
           </Link>
 
           {/* Secondary */}
-          <Link
-            to="/"
+          <a
+            href="mailto:contact@collabifyy.com"
             className="inline-flex h-11 min-w-[220px] items-center justify-center rounded border border-subtle px-6 text-14 font-medium text-secondary transition-colors duration-150 hover:border-strong hover:text-primary"
           >
-            Explore the product
-          </Link>
+            Contact us
+          </a>
         </div>
 
         {/* ── Supporting line ── */}

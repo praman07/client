@@ -10,7 +10,7 @@ export function MarketingPage() {
     <div className="bg-surface-1 w-full flex flex-col items-center justify-start">
       <HeroSection />
       <ProductOverviewSection />
-      <ReferencesSection />
+      {/* <ReferencesSection /> */}
       <WhyBuiltSection />
       <CtaSection />
       <FooterSection />
