@@ -8,11 +8,13 @@
    Using @import url() here is render-blocking — it prevents ALL styles in this file
    from applying until Google Fonts responds. HTML link tags load in parallel. */
 
-@import 'tailwindcss' source('./');
+@import 'tailwindcss';
 @import 'tw-animate-css';
 
+/* Scan source files from project root (Tailwind v4 auto-detects, this ensures coverage) */
+@source "../../../src";
 /* Scan BlockNote shadcn for Tailwind utility class generation */
-@source "../../node_modules/@blocknote/shadcn";
+@source "../../../node_modules/@blocknote/shadcn";
 
 /* ── Import order matters:
    1. BlockNote base styles (foundation)
