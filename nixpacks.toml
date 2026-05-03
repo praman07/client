@@ -1,0 +1,24 @@
+# Nixpacks build configuration for Collabify frontend (TanStack Start / Nitro)
+# Docs: https://nixpacks.com/docs/configuration/file
+
+[phases.setup]
+nixPkgs = ['nodejs_22']
+
+[phases.install]
+cmds = [
+  'npm install -g pnpm@10',
+  'pnpm install --frozen-lockfile'
+]
+
+[phases.build]
+cmds = [
+  # Clear stale Vite cache — prevents CSS hash mismatches across builds
+  'rm -rf node_modules/.vite',
+  # Cap heap to 3072 MB (well under VPS limit; swap handles overflow)
+  'NODE_OPTIONS=--max-old-space-size=3072 pnpm vite build'
+]
+dependsOn = ['install']
+
+[start]
+# Nitro self-contained server — handles SSR, routing, and static assets
+cmd = 'node .output/server/index.mjs'
