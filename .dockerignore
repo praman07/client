@@ -2,6 +2,10 @@ node_modules
 .git
 .gitignore
 *.md
-.env*
+# Exclude local dev env (has dev secrets) but NOT .env.production
+# .env.production has VITE_* build-time vars — safe to include (no secrets, all public)
+.env
+.env.local
+.env.development
 dist
 .output

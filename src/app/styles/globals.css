@@ -4,9 +4,9 @@
    blocknote.css is untouched — edit it for BlockNote overrides only.
    ============================================================ */
 
-/* ── Google Fonts ── */
-@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap');
+/* Google Fonts are loaded via <link> tags in the HTML <head> (see __root.tsx)
+   Using @import url() here is render-blocking — it prevents ALL styles in this file
+   from applying until Google Fonts responds. HTML link tags load in parallel. */
 
 @import 'tailwindcss';
 @import 'tw-animate-css';

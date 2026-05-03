@@ -37,15 +37,21 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
       },
     ],
     links: [
+      // Google Fonts — loaded as HTML links so they don't block CSS application
+      // (CSS @import url() is render-blocking; HTML link tags are non-blocking)
+      { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
+      { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossOrigin: 'anonymous' },
       {
         rel: 'stylesheet',
-        href: appCss,
+        href: 'https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap',
       },
       {
-        rel: 'icon',
-        href: '/favicon.png',
-        type: 'image/png',
+        rel: 'stylesheet',
+        href: 'https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap',
       },
+      // App CSS — ?url gives the hashed path that TanStack Start SSR puts in the initial HTML
+      { rel: 'stylesheet', href: appCss },
+      { rel: 'icon', href: '/favicon.png', type: 'image/png' },
     ],
   }),
   component: RootComponent,
@@ -68,8 +74,6 @@ function RootComponent() {
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        {/* Render CSS link directly — ensures it's in the SSR HTML, not deferred post-hydration */}
-        <link rel="stylesheet" href={appCss} />
         <HeadContent />
       </head>
       <body>
