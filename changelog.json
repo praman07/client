@@ -1,0 +1,4550 @@
+{
+  "entries": [
+    {
+      "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+      "date": "2026-05-02",
+      "version": "v0.5.0",
+      "title": "Modular workspace foundation",
+      "summary": "Initial public early-access release. Core workspace, project, and channel infrastructure is live.",
+      "items": [
+        {
+          "type": "new",
+          "text": "Workspace creation with role-based permission model"
+        },
+        {
+          "type": "new",
+          "text": "Project management with issues, labels, and priorities"
+        },
+        {
+          "type": "new",
+          "text": "Team chat \u2014 channels, threads, and direct messages"
+        },
+        {
+          "type": "new",
+          "text": "BlockNote-powered page editor with slash commands"
+        },
+        {
+          "type": "new",
+          "text": "File Vault with per-workspace storage"
+        },
+        {
+          "type": "new",
+          "text": "Real-time presence via WebSocket"
+        }
+      ]
+    },
+    {
+      "id": "84d0df60-ca64-493b-826b-912c8191173e",
+      "date": "2026-05-01",
+      "version": "v0.0.001",
+      "title": "Update Ui Color Variables",
+      "summary": "7 changes shipped on 2026-05-01.",
+      "items": [
+        {
+          "type": "improvement",
+          "text": "update UI color variables and standardize main container backgrounds"
+        },
+        {
+          "type": "improvement",
+          "text": "update UI styling, redirect workspace index to projects, and remove user localization profile fields"
+        },
+        {
+          "type": "improvement",
+          "text": "standardize UI theme colors, fix layout overflow issues, and update animation classes across the client application."
+        },
+        {
+          "type": "improvement",
+          "text": "migrate all UI components and widgets to use updated design system patterns"
+        },
+        {
+          "type": "improvement",
+          "text": "migrate icon library from Hugeicons to Lucide React across the codebase"
+        },
+        {
+          "type": "new",
+          "text": "implement theme provider with dark mode support and toggle component"
+        },
+        {
+          "type": "new",
+          "text": "implement and integrate custom BlockNoteSlashMenu across issue editors and page editor"
+        }
+      ]
+    },
+    {
+      "id": "ee64cac1-a02c-4e93-8d0b-bc8f6ef69f8e",
+      "date": "2026-04-30",
+      "version": "v0.0.002",
+      "title": "Revert \"Refactor: Update Ui",
+      "summary": "3 changes shipped on 2026-04-30.",
+      "items": [
+        {
+          "type": "new",
+          "text": "Revert \"refactor: update UI primitive components and integrate shadcn/ui theme providers\""
+        },
+        {
+          "type": "improvement",
+          "text": "update UI primitive components and integrate shadcn/ui theme providers"
+        },
+        {
+          "type": "new",
+          "text": "move SidebarTrigger from home header to user layout for consistent sidebar navigation"
+        }
+      ]
+    },
+    {
+      "id": "ef6505d7-44f3-4058-821a-3f83ed0087e2",
+      "date": "2026-04-28",
+      "version": "v0.0.003",
+      "title": "Implement Getpageshome Query To",
+      "summary": "3 changes shipped on 2026-04-28.",
+      "items": [
+        {
+          "type": "new",
+          "text": "implement getPagesHome query to fetch recently updated pages for authenticated users"
+        },
+        {
+          "type": "new",
+          "text": "replace default BlockNote emoji picker with custom Emoji Mart implementation"
+        },
+        {
+          "type": "new",
+          "text": "implement pages home dashboard with GraphQL query and associated feature hooks"
+        }
+      ]
+    },
+    {
+      "id": "bd9f1cad-1d3f-408d-852b-8f12a7312f2f",
+      "date": "2026-04-27",
+      "version": "v0.0.004",
+      "title": "Invalidate Channel Member Redis",
+      "summary": "24 changes shipped on 2026-04-27.",
+      "items": [
+        {
+          "type": "fix",
+          "text": "invalidate channel member Redis cache after adding new members to ensure consistency"
+        },
+        {
+          "type": "improvement",
+          "text": "standardize ChatChannelMemberRemoved event payload schema and naming convention"
+        },
+        {
+          "type": "improvement",
+          "text": "remove copy link functionality from board card context menu"
+        },
+        {
+          "type": "fix",
+          "text": "improve whiteboard settings UI and ensure description updates invalidate board lists"
+        },
+        {
+          "type": "improvement",
+          "text": "remove search functionality and duplicate board option from board list widget"
+        },
+        {
+          "type": "improvement",
+          "text": "pass projectId to onOpenProfile callback in MemberRow component"
+        },
+        {
+          "type": "new",
+          "text": "add ScrollArea to member and collaborator lists for improved overflow handling"
+        },
+        {
+          "type": "new",
+          "text": "remove emoji picker lazy loading and add configurable animation/mounting to popover component"
+        },
+        {
+          "type": "improvement",
+          "text": "update reply previews to use RichChatContent for consistent message rendering"
+        },
+        {
+          "type": "new",
+          "text": "implement global EditModeContext to support clicking outside to cancel active message edits"
+        }
+      ]
+    },
+    {
+      "id": "448a0e43-84e1-4aa7-9e63-52bc1e983d2d",
+      "date": "2026-04-26",
+      "version": "v0.0.005",
+      "title": "Implement Modular User Profile",
+      "summary": "1 change shipped on 2026-04-26.",
+      "items": [
+        {
+          "type": "new",
+          "text": "implement modular User Profile Panel with tabbed navigation and project-aware actions"
+        }
+      ]
+    },
+    {
+      "id": "9ffb9df9-35f5-4459-aa21-0f0d6367df21",
+      "date": "2026-04-25",
+      "version": "v0.0.006",
+      "title": "Implement Decline Workspace Invite",
+      "summary": "16 changes shipped on 2026-04-25.",
+      "items": [
+        {
+          "type": "new",
+          "text": "implement decline workspace invite mutation and migrate workspace logo field to S3 key"
+        },
+        {
+          "type": "fix",
+          "text": "compute correct mention offsets by scanning text for display patterns in chat queries"
+        },
+        {
+          "type": "new",
+          "text": "implement mention eager loading for chat messages and add getMentionsBySourceIds query"
+        },
+        {
+          "type": "new",
+          "text": "add logoUrl field to workspace overview query with S3 presigned URL resolution"
+        },
+        {
+          "type": "improvement",
+          "text": "standardize slug validation logic and introduce length constants with new test coverage"
+        },
+        {
+          "type": "improvement",
+          "text": "decouple email delivery from workspace invite flow to ensure best-effort asynchronous notification success"
+        },
+        {
+          "type": "fix",
+          "text": "implement robust JSON parsing for rich text content across chat history and recovery flows"
+        },
+        {
+          "type": "new",
+          "text": "implement user home dashboard with pending workspace invite management and custom role selection dropdown"
+        },
+        {
+          "type": "new",
+          "text": "add getMentionsBySourceIds query and MentionResult type to schema"
+        },
+        {
+          "type": "new",
+          "text": "display new message count on the scroll-to-bottom button when away from bottom"
+        }
+      ]
+    },
+    {
+      "id": "fbfcecfd-2cd2-463c-a28c-5eb3323f27ca",
+      "date": "2026-04-24",
+      "version": "v0.0.007",
+      "title": "Remove Role Selection Ui",
+      "summary": "5 changes shipped on 2026-04-24.",
+      "items": [
+        {
+          "type": "improvement",
+          "text": "remove role selection UI and schema validation, defaulting invites to the MEMBER role"
+        },
+        {
+          "type": "improvement",
+          "text": "remove team size field and validation from workspace creation flow"
+        },
+        {
+          "type": "new",
+          "text": "replace static project icons with dynamic project logos using Avatar component"
+        },
+        {
+          "type": "improvement",
+          "text": "comment out notification bell button in dashboard header"
+        },
+        {
+          "type": "improvement",
+          "text": "update navigation dropdowns to use programmatic navigation and styled components, and adjust layout padding/backgrounds"
+        }
+      ]
+    },
+    {
+      "id": "9f5d2af2-3f9a-4074-a2b8-31fc8f8666c7",
+      "date": "2026-04-23",
+      "version": "v0.0.008",
+      "title": "Replace Logourl With Logos3Key",
+      "summary": "14 changes shipped on 2026-04-23.",
+      "items": [
+        {
+          "type": "improvement",
+          "text": "replace logoUrl with logoS3Key in workspace and project models with on-the-fly presigned URL generation"
+        },
+        {
+          "type": "improvement",
+          "text": "update webhook router import path to target index file explicitly"
+        },
+        {
+          "type": "improvement",
+          "text": "update workspaces page description text for conciseness"
+        },
+        {
+          "type": "improvement",
+          "text": "simplify user sidebar layout and prune unused navigation elements"
+        },
+        {
+          "type": "new",
+          "text": "add configurable maxHeight prop to Textarea component and update usage across UI forms"
+        },
+        {
+          "type": "improvement",
+          "text": "improve update profile form initialization, data binding, and save button visibility logic"
+        },
+        {
+          "type": "improvement",
+          "text": "standardize UI components with updated spacing, refined typography, and improved interactive effects"
+        },
+        {
+          "type": "improvement",
+          "text": "use fragment data helpers for project and workspace detail queries"
+        },
+        {
+          "type": "improvement",
+          "text": "comment out ActivityFeedStubs component in home page layout"
+        },
+        {
+          "type": "new",
+          "text": "add logo upload support to workspace creation flow"
+        }
+      ]
+    },
+    {
+      "id": "176edc20-0d64-4343-b1fe-54df50126200",
+      "date": "2026-04-21",
+      "version": "v0.0.009",
+      "title": "Implement Scalable Webhook Architecture",
+      "summary": "1 change shipped on 2026-04-21.",
+      "items": [
+        {
+          "type": "improvement",
+          "text": "implement scalable webhook architecture with provider-specific handlers for Clerk events"
+        }
+      ]
+    },
+    {
+      "id": "564b3a00-4238-492f-afa8-ac6cef1738e8",
+      "date": "2026-04-20",
+      "version": "v0.0.010",
+      "title": "Relocate Stream-Worker Module To",
+      "summary": "1 change shipped on 2026-04-20.",
+      "items": [
+        {
+          "type": "improvement",
+          "text": "relocate stream-worker module to chat-specific infrastructure and initialize core configuration and types"
+        }
+      ]
+    },
+    {
+      "id": "148bfdd8-5301-42c2-b805-7f6506a6931f",
+      "date": "2026-04-19",
+      "version": "v0.0.011",
+      "title": "Integrate Turbo For Build",
+      "summary": "4 changes shipped on 2026-04-19.",
+      "items": [
+        {
+          "type": "new",
+          "text": "integrate Turbo for build task management"
+        },
+        {
+          "type": "improvement",
+          "text": "rename kanban route to issues to better reflect feature scope"
+        },
+        {
+          "type": "improvement",
+          "text": "update UI components across the client to use a unified design system and consistent error handling patterns"
+        },
+        {
+          "type": "improvement",
+          "text": "update UI primitives and component implementations across the client codebase"
+        }
+      ]
+    },
+    {
+      "id": "1789c166-31ca-48a6-8b04-2c361a48d9c8",
+      "date": "2026-04-17",
+      "version": "v0.0.012",
+      "title": "Implement Comprehensive Mention And",
+      "summary": "3 changes shipped on 2026-04-17.",
+      "items": [
+        {
+          "type": "new",
+          "text": "implement comprehensive mention and backlink management system with associated database schema and GraphQL API."
+        },
+        {
+          "type": "improvement",
+          "text": "replace string-based path building with type-safe TanStack Router navigation hook for entity mentions"
+        },
+        {
+          "type": "new",
+          "text": "implement comprehensive mention system with entity tagging, search, and navigation support"
+        }
+      ]
+    },
+    {
+      "id": "729623b7-69d9-4f05-aba2-f8dff73670db",
+      "date": "2026-04-15",
+      "version": "v0.0.013",
+      "title": "Streamline Chat Notification Payloads",
+      "summary": "2 changes shipped on 2026-04-15.",
+      "items": [
+        {
+          "type": "improvement",
+          "text": "streamline chat notification payloads by removing redundant fields and restricting delivery channels to IN_APP and REALT"
+        },
+        {
+          "type": "new",
+          "text": "implement conversation notification modes and add toast notification system"
+        }
+      ]
+    },
+    {
+      "id": "6b2c8aaf-1fe7-4e88-97ef-26450ccc3d03",
+      "date": "2026-04-14",
+      "version": "v0.0.014",
+      "title": "Integrate Notification Outbox Events",
+      "summary": "3 changes shipped on 2026-04-14.",
+      "items": [
+        {
+          "type": "new",
+          "text": "integrate notification outbox events across core service handlers for resource lifecycle and collaboration updates"
+        },
+        {
+          "type": "new",
+          "text": "implement comprehensive notification event handling system with modular event-specific handlers and registration logic"
+        },
+        {
+          "type": "new",
+          "text": "implement notification preference management system with global and conversation-level settings"
+        }
+      ]
+    },
+    {
+      "id": "a4dc77f1-d4a0-412c-98cc-cce9b4d81b4b",
+      "date": "2026-04-12",
+      "version": "v0.0.015",
+      "title": "Overhaul Notification System Architecture",
+      "summary": "1 change shipped on 2026-04-12.",
+      "items": [
+        {
+          "type": "improvement",
+          "text": "overhaul notification system architecture by implementing a modular event-driven handler framework and consolidating not"
+        }
+      ]
+    },
+    {
+      "id": "2af359a0-d890-4826-b3f8-15209668dcec",
+      "date": "2026-04-10",
+      "version": "v0.0.016",
+      "title": "Implement Updatepagedetails Mutation To",
+      "summary": "2 changes shipped on 2026-04-10.",
+      "items": [
+        {
+          "type": "new",
+          "text": "implement updatePageDetails mutation to modify page emoji and cover image with real-time broadcast"
+        },
+        {
+          "type": "new",
+          "text": "implement page details update functionality including icon and cover image management"
+        }
+      ]
+    },
+    {
+      "id": "d2a64895-f176-468d-9433-5118876c4170",
+      "date": "2026-04-09",
+      "version": "v0.0.017",
+      "title": "Add And Subsequently Remove",
+      "summary": "2 changes shipped on 2026-04-09.",
+      "items": [
+        {
+          "type": "new",
+          "text": "add and subsequently remove whiteboard visibility and edit permission columns and associated enums"
+        },
+        {
+          "type": "new",
+          "text": "implement board settings modal with tabs, add \"New Board\" button to header, and optimize thumbnail memory management."
+        }
+      ]
+    },
+    {
+      "id": "385729d8-87fd-4283-aabe-df7cb0fdf9c2",
+      "date": "2026-04-08",
+      "version": "v0.0.018",
+      "title": "Replace Chat Member Roles",
+      "summary": "2 changes shipped on 2026-04-08.",
+      "items": [
+        {
+          "type": "improvement",
+          "text": "replace chat member roles with conversation-level isPublic flag and project-scoped RBAC"
+        },
+        {
+          "type": "new",
+          "text": "implement user profile panel and enhance channel management features with new update hooks and UI components"
+        }
+      ]
+    },
+    {
+      "id": "954cfc2f-5776-41a4-bb6c-5835a7e550ec",
+      "date": "2026-04-07",
+      "version": "v0.0.019",
+      "title": "Expand Project Overview With",
+      "summary": "4 changes shipped on 2026-04-07.",
+      "items": [
+        {
+          "type": "new",
+          "text": "expand project overview with detailed metrics and add project contributor stats query"
+        },
+        {
+          "type": "new",
+          "text": "add roleId to ProjectMember GQL type and implement cache invalidation for project member operations"
+        },
+        {
+          "type": "new",
+          "text": "implement comprehensive project overview dashboard with modular widgets and updated GraphQL schema"
+        },
+        {
+          "type": "improvement",
+          "text": "reorganize workspace and member management features and add developer configuration files"
+        }
+      ]
+    },
+    {
+      "id": "c53f100d-451c-4826-8d77-d1da6ea835b7",
+      "date": "2026-04-06",
+      "version": "v0.0.020",
+      "title": "Add Project Logo Upload",
+      "summary": "5 changes shipped on 2026-04-06.",
+      "items": [
+        {
+          "type": "new",
+          "text": "add project logo upload service and support for updating project logo and key fields"
+        },
+        {
+          "type": "new",
+          "text": "implement project-level permission management and scope-aware role assignment guards"
+        },
+        {
+          "type": "new",
+          "text": "implement project logo upload functionality with presigned S3 URLs and validation"
+        },
+        {
+          "type": "fix",
+          "text": "adjust project roles panel layout constraints and scroll area height"
+        },
+        {
+          "type": "new",
+          "text": "implement project-scoped permissions catalog and add project roles management widgets"
+        }
+      ]
+    },
+    {
+      "id": "32cca492-837b-4df4-b94a-647b372b10d0",
+      "date": "2026-04-05",
+      "version": "v0.0.021",
+      "title": "Implement Workspace Logo Upload,",
+      "summary": "2 changes shipped on 2026-04-05.",
+      "items": [
+        {
+          "type": "new",
+          "text": "implement workspace logo upload, slug renaming, and permission retrieval services with expanded RBAC diagnostic and main"
+        },
+        {
+          "type": "new",
+          "text": "implement comprehensive workspace settings management including profile, slug, and role-based permissions modules"
+        }
+      ]
+    },
+    {
+      "id": "c99a5dc6-a1b6-4ab7-a228-d2fe0af8b8fb",
+      "date": "2026-04-04",
+      "version": "v0.0.022",
+      "title": "Implement Role Hierarchy Guards",
+      "summary": "2 changes shipped on 2026-04-04.",
+      "items": [
+        {
+          "type": "new",
+          "text": "implement role hierarchy guards and update workspace member role mutation to use roleId instead of role name"
+        },
+        {
+          "type": "new",
+          "text": "implement workspace member management and invite handling features with role-based access control"
+        }
+      ]
+    },
+    {
+      "id": "f924503c-a8d2-4098-9fc5-7161508d034b",
+      "date": "2026-04-03",
+      "version": "v0.0.023",
+      "title": "Invalidate User Cache On",
+      "summary": "4 changes shipped on 2026-04-03.",
+      "items": [
+        {
+          "type": "new",
+          "text": "invalidate user cache on profile update and include member roles in workspace queries"
+        },
+        {
+          "type": "new",
+          "text": "redesign project cards with dynamic branding, member avatars, and relative timestamps, and update projects page with imp"
+        },
+        {
+          "type": "improvement",
+          "text": "centralize invite-member modal state and implement workspace overview dashboard widgets"
+        },
+        {
+          "type": "new",
+          "text": "implement user profile update feature and refactor UI primitives with enhanced animations"
+        }
+      ]
+    },
+    {
+      "id": "2d876d1b-efa3-4bd5-8132-84a3a6268f65",
+      "date": "2026-04-02",
+      "version": "v0.0.024",
+      "title": "Implement User Home Query",
+      "summary": "2 changes shipped on 2026-04-02.",
+      "items": [
+        {
+          "type": "new",
+          "text": "implement user home query and extend user profile with bio, timezone, and language fields"
+        },
+        {
+          "type": "new",
+          "text": "implement user dashboard and settings pages, refactor user profile management, and update onboarding flow."
+        }
+      ]
+    },
+    {
+      "id": "0204d91e-6906-4d16-8bbe-b52a55670398",
+      "date": "2026-04-01",
+      "version": "v0.0.025",
+      "title": "Modularize Chat Service Operations",
+      "summary": "2 changes shipped on 2026-04-01.",
+      "items": [
+        {
+          "type": "improvement",
+          "text": "modularize chat service operations and implement project plugin management system"
+        },
+        {
+          "type": "new",
+          "text": "implement project plugin toggling with associated API, hooks, and UI synchronization logic"
+        }
+      ]
+    },
+    {
+      "id": "112ac2b6-c266-4126-bc1f-6644af553dda",
+      "date": "2026-03-31",
+      "version": "v0.0.026",
+      "title": "Implement Dynamic Feature Flag",
+      "summary": "4 changes shipped on 2026-03-31.",
+      "items": [
+        {
+          "type": "new",
+          "text": "implement dynamic feature flag system with database support and authorization integration"
+        },
+        {
+          "type": "new",
+          "text": "add whiteboard support to vault cleanup by persisting snapshot S3 keys and updating reference scanning logic."
+        },
+        {
+          "type": "new",
+          "text": "implement authorization system with role-based access control, feature flags, and active context management"
+        },
+        {
+          "type": "new",
+          "text": "implement whiteboard media lifecycle garbage collection and refactor BlockNote URL management"
+        }
+      ]
+    },
+    {
+      "id": "17486681-7d77-406a-b19c-e65484183db3",
+      "date": "2026-03-30",
+      "version": "v0.0.027",
+      "title": "Implement Vault Unreferenced File",
+      "summary": "2 changes shipped on 2026-03-30.",
+      "items": [
+        {
+          "type": "new",
+          "text": "implement vault unreferenced file tracking and cleanup lifecycle with grace period support"
+        },
+        {
+          "type": "new",
+          "text": "integrate BlockNote vault upload adapter and implement unreferenced file tracking for issue descriptions"
+        }
+      ]
+    },
+    {
+      "id": "e3315595-b789-430a-bbc3-c8aa43c95e2b",
+      "date": "2026-03-29",
+      "version": "v0.0.028",
+      "title": "Implement Vault External File",
+      "summary": "8 changes shipped on 2026-03-29.",
+      "items": [
+        {
+          "type": "new",
+          "text": "implement Vault external file registration, batch download queries, and automated storage cleanup jobs with unique folde"
+        },
+        {
+          "type": "new",
+          "text": "add getProjectDms query, optimize DM lookup with dmHash, and update conversation schema."
+        },
+        {
+          "type": "new",
+          "text": "prevent adding reactions to deleted messages by validating deletedAt status"
+        },
+        {
+          "type": "new",
+          "text": "increment reply count in database when persisting inline messages"
+        },
+        {
+          "type": "new",
+          "text": "add chat attachment support with Vault integration, local media caching, and UI preview components"
+        },
+        {
+          "type": "new",
+          "text": "implement project DM list and creation modal with associated GraphQL queries and state management"
+        },
+        {
+          "type": "new",
+          "text": "implement message reactions with optimistic UI, Dexie persistence, and real-time synchronization"
+        },
+        {
+          "type": "new",
+          "text": "implement threaded reply support with message highlighting and navigation context"
+        }
+      ]
+    },
+    {
+      "id": "0e42c839-067b-4a8b-a1ab-8979ba73c4db",
+      "date": "2026-03-28",
+      "version": "v0.0.029",
+      "title": "Implement Offline Gap Sync",
+      "summary": "5 changes shipped on 2026-03-28.",
+      "items": [
+        {
+          "type": "new",
+          "text": "implement offline gap sync for message edits and deletions with database indexes and optimized Redis operations."
+        },
+        {
+          "type": "improvement",
+          "text": "decouple message edit/delete persistence into dedicated queues and update content schema handling"
+        },
+        {
+          "type": "improvement",
+          "text": "implement coordinator-based board assignment, improve reaction checksums, and add worker heartbeat/pruning logic."
+        },
+        {
+          "type": "new",
+          "text": "implement message deletion functionality and include lastOpenedAt in stream subscription state"
+        },
+        {
+          "type": "new",
+          "text": "implement message editing functionality with real-time IndexedDB synchronization and UI support"
+        }
+      ]
+    },
+    {
+      "id": "46389f49-0d4e-4894-ab16-c78d5c5c412e",
+      "date": "2026-03-23",
+      "version": "v0.0.030",
+      "title": "Add Resend As A",
+      "summary": "2 changes shipped on 2026-03-23.",
+      "items": [
+        {
+          "type": "new",
+          "text": "Add Resend as a new email provider and introduce a seed script to repair role permissions."
+        },
+        {
+          "type": "new",
+          "text": "Rework marketing pages and components, introducing new UI primitives and a generic marketing page structure."
+        }
+      ]
+    },
+    {
+      "id": "80297cf4-9081-4dd7-af24-28ba726347c7",
+      "date": "2026-03-20",
+      "version": "v0.0.031",
+      "title": "Refactor Whiteboard Stream Worker",
+      "summary": "1 change shipped on 2026-03-20.",
+      "items": [
+        {
+          "type": "new",
+          "text": "Refactor whiteboard stream worker for efficiency, improve snapshot retrieval, and streamline email provider usage."
+        }
+      ]
+    },
+    {
+      "id": "f850e6dd-8bad-4ce0-a1cb-35c8a46c1545",
+      "date": "2026-03-19",
+      "version": "v0.0.032",
+      "title": "Introduce Prometheus Metrics For",
+      "summary": "4 changes shipped on 2026-03-19.",
+      "items": [
+        {
+          "type": "new",
+          "text": "Introduce Prometheus metrics for HTTP requests and WebSocket activity, exposed via a new /metrics endpoint."
+        },
+        {
+          "type": "fix",
+          "text": "pm2 deploy uses delete+start instead of flawed restart-or-start"
+        },
+        {
+          "type": "new",
+          "text": "Add Microsoft Clarity tracking integration."
+        },
+        {
+          "type": "new",
+          "text": "Migrate frontend deployment from Docker to a PM2 and Rsync-based workflow, and remove a redundant CSS preload link."
+        }
+      ]
+    },
+    {
+      "id": "d1f7c1fa-7d4e-40f8-9aab-7d795197a407",
+      "date": "2026-03-18",
+      "version": "v0.0.033",
+      "title": "Force-Recreate Container On Every",
+      "summary": "15 changes shipped on 2026-03-18.",
+      "items": [
+        {
+          "type": "fix",
+          "text": "force-recreate container on every deploy"
+        },
+        {
+          "type": "fix",
+          "text": "use pg Pool ssl config for RDS, remove sslmode from URL"
+        },
+        {
+          "type": "fix",
+          "text": "disable RDS cert verification in production (Alpine missing Amazon CA)"
+        },
+        {
+          "type": "new",
+          "text": "Introduce Redis Lua scripts for atomic reaction addition and removal, updating script loading paths."
+        },
+        {
+          "type": "fix",
+          "text": "Correct Bun lockfile name from `bun.lockb` to `bun.lock` in Dockerfile."
+        },
+        {
+          "type": "new",
+          "text": "Add automated production deployment workflow, Docker health checks, and a server health endpoint."
+        },
+        {
+          "type": "fix",
+          "text": "delete Vite cache before build to prevent CSS hash mismatch"
+        },
+        {
+          "type": "fix",
+          "text": "use vite build --force to prevent stale CSS hash mismatch in Docker"
+        },
+        {
+          "type": "improvement",
+          "text": "restore nitro() plugin \u2014 required for .output/ generation"
+        },
+        {
+          "type": "fix",
+          "text": "remove standalone nitro() plugin \u2014 tanstackStart() includes Nitro internally, having both caused CSS hash mismatch and p"
+        }
+      ]
+    },
+    {
+      "id": "720a7858-c961-4eab-960a-1ef19a5ca298",
+      "date": "2026-03-17",
+      "version": "v0.0.034",
+      "title": "Improve Stream Worker Robustness",
+      "summary": "2 changes shipped on 2026-03-17.",
+      "items": [
+        {
+          "type": "new",
+          "text": "Improve stream worker robustness with self-healing rebalance and standardized messages, and enhance channel creation to "
+        },
+        {
+          "type": "new",
+          "text": "Introduce new page update functionality, add multiple skeleton UIs, and enhance various features across issues, pages, w"
+        }
+      ]
+    },
+    {
+      "id": "d7224e03-fa74-43ab-b95a-d1fc278edff7",
+      "date": "2026-03-16",
+      "version": "v0.0.035",
+      "title": "Seed Default Resources For",
+      "summary": "2 changes shipped on 2026-03-16.",
+      "items": [
+        {
+          "type": "new",
+          "text": "Seed default resources for new projects and enable filtering user boards by project ID."
+        },
+        {
+          "type": "new",
+          "text": "Allow filtering user boards by project and implement project member role update functionality."
+        }
+      ]
+    },
+    {
+      "id": "b378ce80-bb08-4489-ba28-fb43181a7816",
+      "date": "2026-03-15",
+      "version": "v0.0.036",
+      "title": "Add Query To Fetch",
+      "summary": "2 changes shipped on 2026-03-15.",
+      "items": [
+        {
+          "type": "new",
+          "text": "Add query to fetch project-level permissions and implement a guard preventing the last project manager from leaving."
+        },
+        {
+          "type": "new",
+          "text": "Implement comprehensive project management features including member and role management, project settings, and project "
+        }
+      ]
+    },
+    {
+      "id": "2d56d84f-ab68-4267-9bd9-6ec2da5fd89f",
+      "date": "2026-03-14",
+      "version": "v0.0.037",
+      "title": "Implement Project-Scoped Roles And",
+      "summary": "1 change shipped on 2026-03-14.",
+      "items": [
+        {
+          "type": "new",
+          "text": "Implement project-scoped roles and enhance workspace role and permission management."
+        }
+      ]
+    },
+    {
+      "id": "04e909aa-d2f5-4787-93b3-ceb55702580a",
+      "date": "2026-03-13",
+      "version": "v0.0.038",
+      "title": "Implement Cascading Deletion Of",
+      "summary": "2 changes shipped on 2026-03-13.",
+      "items": [
+        {
+          "type": "new",
+          "text": "Implement cascading deletion of project memberships when a workspace member is removed or leaves, and allow workspace ad"
+        },
+        {
+          "type": "new",
+          "text": "Implement and refactor numerous chat queries, introducing new endpoints and a step-based architecture for enhanced data "
+        }
+      ]
+    },
+    {
+      "id": "61c2d273-ec27-4675-8b8e-d1ea6f35cfe6",
+      "date": "2026-03-12",
+      "version": "v0.0.039",
+      "title": "Implement `Get-Channel-Members` Query With",
+      "summary": "2 changes shipped on 2026-03-12.",
+      "items": [
+        {
+          "type": "new",
+          "text": "Implement `get-channel-members` query with handler, schema, tests, and documentation, while adding new test scripts and "
+        },
+        {
+          "type": "new",
+          "text": "Implement a new authorization system, integrating it across modules and replacing previous permission checks."
+        }
+      ]
+    },
+    {
+      "id": "56965585-9ee6-4217-a422-dff08f4c381a",
+      "date": "2026-03-06",
+      "version": "v0.0.040",
+      "title": "Introduce Comprehensive Lifecycle,",
+      "summary": "1 change shipped on 2026-03-06.",
+      "items": [
+        {
+          "type": "new",
+          "text": "introduce comprehensive lifecycle, membership, and role management for workspaces, projects, and users."
+        }
+      ]
+    },
+    {
+      "id": "75d54894-fb64-49a0-bc25-e935f4ea526f",
+      "date": "2026-03-05",
+      "version": "v0.0.041",
+      "title": "Decompose Various Service Handlers",
+      "summary": "1 change shipped on 2026-03-05.",
+      "items": [
+        {
+          "type": "improvement",
+          "text": "Decompose various service handlers into granular steps and introduce new functionalities across workspace, project, and "
+        }
+      ]
+    },
+    {
+      "id": "67ecd3d8-92b8-460d-bf95-830440e1328c",
+      "date": "2026-03-04",
+      "version": "v0.0.042",
+      "title": "Enhance Project Member Loader",
+      "summary": "3 changes shipped on 2026-03-04.",
+      "items": [
+        {
+          "type": "new",
+          "text": "Enhance project member loader to include user data, update issue schemas for UUID and flexible due dates, and add Nginx "
+        },
+        {
+          "type": "new",
+          "text": "Integrate rich text editor for issue descriptions in the edit modal and refine toolbar component styling."
+        },
+        {
+          "type": "new",
+          "text": "Add rich text description editor and comprehensive toolbar with attribute pickers to issue creation."
+        }
+      ]
+    },
+    {
+      "id": "46821330-8f97-4049-b990-783915ed3b4f",
+      "date": "2026-03-03",
+      "version": "v0.0.043",
+      "title": "Implement Advisory Locking For",
+      "summary": "2 changes shipped on 2026-03-03.",
+      "items": [
+        {
+          "type": "new",
+          "text": "Implement advisory locking for concurrent issue number generation and refine issue schema fields to accept nullish value"
+        },
+        {
+          "type": "new",
+          "text": "Implement a comprehensive Kanban board for issue management, including issue filtering, editing, drag-and-drop, and stat"
+        }
+      ]
+    },
+    {
+      "id": "d6668752-04d0-446c-85f4-4aa582b042c6",
+      "date": "2026-03-02",
+      "version": "v0.0.044",
+      "title": "Implement Comprehensive Issue Management",
+      "summary": "1 change shipped on 2026-03-02.",
+      "items": [
+        {
+          "type": "new",
+          "text": "Implement comprehensive issue management functionality including issues, labels, and statuses."
+        }
+      ]
+    },
+    {
+      "id": "e3a8bdb3-8c04-46cb-9eb6-3327feb2d394",
+      "date": "2026-03-01",
+      "version": "v0.0.045",
+      "title": "Add Vault Folder Ancestors",
+      "summary": "5 changes shipped on 2026-03-01.",
+      "items": [
+        {
+          "type": "new",
+          "text": "Add vault folder ancestors query and split vault usage records by project and workspace."
+        },
+        {
+          "type": "new",
+          "text": "implement vault module for comprehensive file and folder management, including S3 integration and GraphQL API."
+        },
+        {
+          "type": "new",
+          "text": "add new UI components for Gantt chart, Kanban board, and list views."
+        },
+        {
+          "type": "improvement",
+          "text": "comment out the 'Meet' navigation link in the shared configuration."
+        },
+        {
+          "type": "new",
+          "text": "introduce vault feature with comprehensive file and folder management."
+        }
+      ]
+    },
+    {
+      "id": "4b68999c-7e76-4630-ac41-9a68cb3ed361",
+      "date": "2026-02-28",
+      "version": "v0.0.046",
+      "title": "Implement Hierarchical Page Mapping",
+      "summary": "5 changes shipped on 2026-02-28.",
+      "items": [
+        {
+          "type": "new",
+          "text": "Implement hierarchical page mapping for `getProjectPages` using `toGraphQLPageTree` and relax `collaboratorIds` schema t"
+        },
+        {
+          "type": "new",
+          "text": "Filter project pages by collaborator and remove CUID validation for user IDs in collaborator schemas."
+        },
+        {
+          "type": "new",
+          "text": "Implement unlimited nesting depth and auto-expansion for active descendants in `PageTreeItem`."
+        },
+        {
+          "type": "new",
+          "text": "Register and unregister page awareness provider for remote cursors and set cursor labels to activity."
+        },
+        {
+          "type": "new",
+          "text": "Enable adding collaborators during page creation and managing them for existing pages."
+        }
+      ]
+    },
+    {
+      "id": "2aa8901d-edf0-487a-98f5-b6cb0a0f0d18",
+      "date": "2026-02-27",
+      "version": "v0.0.047",
+      "title": "Register Page Websocket Routes,",
+      "summary": "2 changes shipped on 2026-02-27.",
+      "items": [
+        {
+          "type": "new",
+          "text": "Register page WebSocket routes, standardize awareness update messages, and update Redis eval return types and dev enviro"
+        },
+        {
+          "type": "new",
+          "text": "Introduce real-time collaborative page editor and list with synchronization logic and UI components."
+        }
+      ]
+    },
+    {
+      "id": "6dd6e05c-6b2e-4cb7-9a61-b503521f30c3",
+      "date": "2026-02-24",
+      "version": "v0.0.048",
+      "title": "Implement Core Page Management",
+      "summary": "1 change shipped on 2026-02-24.",
+      "items": [
+        {
+          "type": "new",
+          "text": "Implement core page management functionalities including CRUD, collaboration, and real-time synchronization."
+        }
+      ]
+    },
+    {
+      "id": "c35eedaa-3f93-4fac-8af8-a397fa60878c",
+      "date": "2026-02-21",
+      "version": "v0.0.049",
+      "title": "Add Non-Null Assertion To",
+      "summary": "3 changes shipped on 2026-02-21.",
+      "items": [
+        {
+          "type": "fix",
+          "text": "Add non-null assertion to unarchivePage result page."
+        },
+        {
+          "type": "new",
+          "text": "Implement comprehensive page management services including locking, collaboration, archiving, renaming, and reordering, "
+        },
+        {
+          "type": "new",
+          "text": "implement structured WebSocket event handling for page subscribe, update, unsubscribe, and awareness."
+        }
+      ]
+    },
+    {
+      "id": "1112f9e8-e940-49cf-b7cc-183d424fee90",
+      "date": "2026-02-20",
+      "version": "v0.0.050",
+      "title": "Implement A Comprehensive `Get-Page-Snapshot`",
+      "summary": "4 changes shipped on 2026-02-20.",
+      "items": [
+        {
+          "type": "new",
+          "text": "Implement a comprehensive `get-page-snapshot` query with Yjs-based real-time synchronization, including access validatio"
+        },
+        {
+          "type": "new",
+          "text": "implement page creation service with distinct steps for access validation, collaborator processing, content initializati"
+        },
+        {
+          "type": "new",
+          "text": "implement atomic page update Lua script, S3 snapshot saving, and add page collaborators and snapshot fields to schema"
+        },
+        {
+          "type": "new",
+          "text": "introduce pages module for content management and real-time collaboration capabilities."
+        }
+      ]
+    },
+    {
+      "id": "dfbd8763-64fb-4d18-b4bd-bdb2f6fcd206",
+      "date": "2026-02-18",
+      "version": "v0.0.051",
+      "title": "Implement Comprehensive Whiteboard Resource",
+      "summary": "3 changes shipped on 2026-02-18.",
+      "items": [
+        {
+          "type": "new",
+          "text": "Implement comprehensive whiteboard resource cleanup for Redis keys and S3 snapshots, and refine stream worker error hand"
+        },
+        {
+          "type": "new",
+          "text": "Implement board thumbnail generation, caching, and display with stale-while-revalidate logic for board list views."
+        },
+        {
+          "type": "new",
+          "text": "Implement real-time board deletion event handling, including local state cleanup, user feedback, and creator-only delete"
+        }
+      ]
+    },
+    {
+      "id": "39d228ea-0467-4f6b-b631-a632f9af40e3",
+      "date": "2026-02-17",
+      "version": "v0.0.052",
+      "title": "Add Validation To Prevent",
+      "summary": "5 changes shipped on 2026-02-17.",
+      "items": [
+        {
+          "type": "new",
+          "text": "Add validation to prevent redundant whiteboard archive/unarchive operations and disable stream worker shutdown handlers."
+        },
+        {
+          "type": "fix",
+          "text": "remove CUID validation for user IDs in addBoardCollaboratorsSchema."
+        },
+        {
+          "type": "new",
+          "text": "implement atomic Redis snapshot updates and stream trimming using Lua scripts, and refactor whiteboard stream worker sca"
+        },
+        {
+          "type": "improvement",
+          "text": "Refactor delete board dialog to be presentational, remove subscribe board feature, and enhance archive/unarchive query i"
+        },
+        {
+          "type": "new",
+          "text": "Introduce board list grid/list views with context menu, rename/delete dialogs, and enhance board collaborator management"
+        }
+      ]
+    },
+    {
+      "id": "15435c8e-c78d-4b12-b1ce-4cc595da9e33",
+      "date": "2026-02-16",
+      "version": "v0.0.053",
+      "title": "Migrate Whiteboard Stream Worker",
+      "summary": "4 changes shipped on 2026-02-16.",
+      "items": [
+        {
+          "type": "improvement",
+          "text": "migrate whiteboard stream worker to a stateless V2 architecture, removing in-memory Y.Doc caching and simplifying shutdo"
+        },
+        {
+          "type": "new",
+          "text": "introduce memory-efficient stateless stream worker v2 for whiteboard updates."
+        },
+        {
+          "type": "improvement",
+          "text": "Reimplement whiteboard synchronization using a new multi-phase hook architecture."
+        },
+        {
+          "type": "new",
+          "text": "introduce `WhiteboardCanvasV2` with new Y.js synchronization hooks and a centralized Y.Doc creation factory."
+        }
+      ]
+    },
+    {
+      "id": "f97fad92-09a3-4945-a87b-c180a0e6b21e",
+      "date": "2026-02-15",
+      "version": "v0.0.054",
+      "title": "Implement Y.Js State Vector",
+      "summary": "2 changes shipped on 2026-02-15.",
+      "items": [
+        {
+          "type": "new",
+          "text": "implement Y.js state vector synchronization and echo prevention for whiteboard collaboration"
+        },
+        {
+          "type": "new",
+          "text": "Implement `WhiteboardCanvasV2` utilizing Y.js and IndexedDB for offline-first whiteboard collaboration."
+        }
+      ]
+    },
+    {
+      "id": "5f9ceddf-b3f0-4e2e-8398-038794ef9248",
+      "date": "2026-02-14",
+      "version": "v0.0.055",
+      "title": "Implement Robust Offline-First",
+      "summary": "1 change shipped on 2026-02-14.",
+      "items": [
+        {
+          "type": "new",
+          "text": "Implement robust offline-first synchronization with Y.js, board caching, and an offline queue."
+        }
+      ]
+    },
+    {
+      "id": "e0d070e2-1d68-4afc-aaba-23ab820d4cfe",
+      "date": "2026-02-13",
+      "version": "v0.0.056",
+      "title": "Reimplement Whiteboard Stream Worker",
+      "summary": "4 changes shipped on 2026-02-13.",
+      "items": [
+        {
+          "type": "new",
+          "text": "reimplement whiteboard stream worker with dedicated worker loops and improved state management"
+        },
+        {
+          "type": "improvement",
+          "text": "replace shared logger with a new structured logging library and introduce debug flags."
+        },
+        {
+          "type": "new",
+          "text": "Implement Y.Doc structure validation and loop prevention for whiteboard updates, ensuring correct `y-excalidraw` compati"
+        },
+        {
+          "type": "new",
+          "text": "Implement core whiteboard functionality including canvas, collaboration, board listing, and settings."
+        }
+      ]
+    },
+    {
+      "id": "0ea291fd-d169-4976-af2d-f8b05e53beb1",
+      "date": "2026-02-12",
+      "version": "v0.0.057",
+      "title": "Remove Get-Project-Boards Query And",
+      "summary": "2 changes shipped on 2026-02-12.",
+      "items": [
+        {
+          "type": "new",
+          "text": "remove get-project-boards query and implement Redis-backed active collaborator presence tracking."
+        },
+        {
+          "type": "new",
+          "text": "standardize board and snapshot fetching to use `getBoard` and `getBoardSnapshot` queries and introduce `activeCollaborat"
+        }
+      ]
+    },
+    {
+      "id": "5b7166e1-bf6f-40e2-a898-f49ab030c126",
+      "date": "2026-02-11",
+      "version": "v0.0.058",
+      "title": "Rename Whiteboard Queries To",
+      "summary": "2 changes shipped on 2026-02-11.",
+      "items": [
+        {
+          "type": "new",
+          "text": "rename whiteboard queries to `getBoard` and `getBoardSnapshot` and update their arguments, along with dependency updates"
+        },
+        {
+          "type": "new",
+          "text": "Implement comprehensive whiteboard management, collaboration, and real-time event features."
+        }
+      ]
+    },
+    {
+      "id": "f64550c0-8ec8-4ad8-b174-ae8ba5a1130d",
+      "date": "2026-02-10",
+      "version": "v0.0.059",
+      "title": "Bundle `Cookie` Package For",
+      "summary": "3 changes shipped on 2026-02-10.",
+      "items": [
+        {
+          "type": "new",
+          "text": "Bundle `cookie` package for HTTP cookie parsing and serialization."
+        },
+        {
+          "type": "new",
+          "text": "Implement whiteboard collaboration with session management, user presence, and board entities."
+        },
+        {
+          "type": "new",
+          "text": "implement whiteboard upstream contracts and extend local database schema for whiteboard offline support."
+        }
+      ]
+    },
+    {
+      "id": "47a39174-fe07-482a-ba55-beeab9a23210",
+      "date": "2026-02-09",
+      "version": "v0.0.060",
+      "title": "Implement Y.Js State Vector",
+      "summary": "1 change shipped on 2026-02-09.",
+      "items": [
+        {
+          "type": "new",
+          "text": "implement Y.js state vector diffing and S3 snapshot management for whiteboard stream workers"
+        }
+      ]
+    },
+    {
+      "id": "780acb5f-5e68-4d48-b59b-e00cd6f74248",
+      "date": "2026-02-08",
+      "version": "v0.0.061",
+      "title": "Implement Atomic Whiteboard Update",
+      "summary": "5 changes shipped on 2026-02-08.",
+      "items": [
+        {
+          "type": "new",
+          "text": "Implement atomic whiteboard update processing using a Redis Lua script, Yjs update validation, and new error codes."
+        },
+        {
+          "type": "new",
+          "text": "Implement whiteboard creation with S3 snapshot upload, collaborator management, and initial Excalidraw Y.Doc state."
+        },
+        {
+          "type": "new",
+          "text": "Implement real-time collaborative whiteboard module with WebSocket communication, board state management, and snapshot p"
+        },
+        {
+          "type": "new",
+          "text": "Implement a new whiteboard module with GraphQL queries, mutations, and data loaders."
+        },
+        {
+          "type": "new",
+          "text": "introduce Whiteboard V4 schema with new fields and a dedicated collaborators table, and refactor WebSocket context type."
+        }
+      ]
+    },
+    {
+      "id": "b2020648-0def-4bb2-9810-071cd850805c",
+      "date": "2026-02-07",
+      "version": "v0.0.062",
+      "title": "Remove Redundant Json.Stringify Call",
+      "summary": "4 changes shipped on 2026-02-07.",
+      "items": [
+        {
+          "type": "improvement",
+          "text": "Remove redundant JSON.stringify call from subscribe-conversation success frame."
+        },
+        {
+          "type": "improvement",
+          "text": "Rename `SubscribeAck` to `SubscribeSuccess` and enhance server message validation to include a `success` boolean field."
+        },
+        {
+          "type": "improvement",
+          "text": "simplify project ID resolution by directly using context"
+        },
+        {
+          "type": "new",
+          "text": "Initialize `DomainRegistry` with direct `projectId` in project route and prioritize `projectId` from chat message payloa"
+        }
+      ]
+    },
+    {
+      "id": "33d594d5-04ef-42c1-b0c0-594da2cb1d13",
+      "date": "2026-02-06",
+      "version": "v0.0.063",
+      "title": "Introduce New Domain-Specific Contracts",
+      "summary": "5 changes shipped on 2026-02-06.",
+      "items": [
+        {
+          "type": "new",
+          "text": "introduce new domain-specific contracts and registry for WebSocket events, deprecating the legacy protocol.ts."
+        },
+        {
+          "type": "improvement",
+          "text": "centralize WebSocket event definitions into domain-specific contracts and remove the event bridge."
+        },
+        {
+          "type": "improvement",
+          "text": "decouple WebSocket core from Chat domain (Phase 1 & 2)"
+        },
+        {
+          "type": "new",
+          "text": "Introduce a centralized logging utility and replace direct console calls with it across the codebase."
+        },
+        {
+          "type": "new",
+          "text": "Implement conversation-based subscriptions with history replay and batch message commit, standardizing chat message cont"
+        }
+      ]
+    },
+    {
+      "id": "ee2fe464-8591-4f53-b4bf-547b2621dc6f",
+      "date": "2026-02-05",
+      "version": "v0.0.064",
+      "title": "Implement `Getusersbyids` Graphql Query",
+      "summary": "2 changes shipped on 2026-02-05.",
+      "items": [
+        {
+          "type": "new",
+          "text": "Implement `getUsersByIds` GraphQL query to retrieve basic user data by ID."
+        },
+        {
+          "type": "new",
+          "text": "Display message author avatars and names by introducing a user caching system and a new GraphQL query for fetching user "
+        }
+      ]
+    },
+    {
+      "id": "8772ce5a-0580-4a8e-bb19-bc62c17bfd02",
+      "date": "2026-02-04",
+      "version": "v0.0.065",
+      "title": "Implement Dedicated `Isarchived` Field",
+      "summary": "2 changes shipped on 2026-02-04.",
+      "items": [
+        {
+          "type": "new",
+          "text": "Implement dedicated `isArchived` field for chat channels, update archiving logic to set `deletedAt`, and remove channel "
+        },
+        {
+          "type": "new",
+          "text": "Implement functionality to archive, unarchive, and delete chat channels with corresponding UI and API integrations."
+        }
+      ]
+    },
+    {
+      "id": "ab22bc5c-a08d-4d14-937c-8bfb29389252",
+      "date": "2026-02-03",
+      "version": "v0.0.066",
+      "title": "Update Channel Members Dataloader",
+      "summary": "2 changes shipped on 2026-02-03.",
+      "items": [
+        {
+          "type": "new",
+          "text": "Update channel members DataLoader to fetch user details and explicitly map to GraphQL ConversationMember."
+        },
+        {
+          "type": "new",
+          "text": "Implement channel renaming functionality and a channel settings modal, updating chat routes to use conversation IDs."
+        }
+      ]
+    },
+    {
+      "id": "67bed651-d876-43d6-8665-322f2088e80f",
+      "date": "2026-02-02",
+      "version": "v0.0.067",
+      "title": "Refactor Chat Conversation Schema",
+      "summary": "5 changes shipped on 2026-02-02.",
+      "items": [
+        {
+          "type": "new",
+          "text": "Refactor chat conversation schema to flatten `ConversationEdge` into `Conversation` and implement field-level resolution"
+        },
+        {
+          "type": "improvement",
+          "text": "Remove `schema.graphql` and introduce `closedAt` field for chat conversation models."
+        },
+        {
+          "type": "new",
+          "text": "Enhance chat module with reactions, threads, direct messages, typing indicators, and performance improvements."
+        },
+        {
+          "type": "new",
+          "text": "Invalidate conversation queries by workspace and project after channel creation, replacing channel-specific query key in"
+        },
+        {
+          "type": "improvement",
+          "text": "Replaced `channel` and `presence` entities with a new `conversation` entity, migrating associated logic and UI."
+        }
+      ]
+    },
+    {
+      "id": "6e4f99f5-d902-42ea-9457-9e597a4ffa92",
+      "date": "2026-01-31",
+      "version": "v0.0.068",
+      "title": "Reimplement Message Rendering By",
+      "summary": "1 change shipped on 2026-01-31.",
+      "items": [
+        {
+          "type": "improvement",
+          "text": "Reimplement message rendering by migrating message list and components into the chat window."
+        }
+      ]
+    },
+    {
+      "id": "9a394637-fef4-4662-a59a-d0662a07d1cb",
+      "date": "2026-01-30",
+      "version": "v0.0.069",
+      "title": "Replace `Customevent` Based Chat",
+      "summary": "2 changes shipped on 2026-01-30.",
+      "items": [
+        {
+          "type": "new",
+          "text": "Replace `CustomEvent` based chat recovery trigger with `dispatchEvent` from shared event bus."
+        },
+        {
+          "type": "new",
+          "text": "Reimplement chat resequencing with a new generic stream resequencer and overhaul the WebSocket client infrastructure.**"
+        }
+      ]
+    },
+    {
+      "id": "8541e059-bfb8-42a7-9aa9-09ccf8aa6021",
+      "date": "2026-01-29",
+      "version": "v0.0.070",
+      "title": "Add Chat Message History",
+      "summary": "2 changes shipped on 2026-01-29.",
+      "items": [
+        {
+          "type": "new",
+          "text": "Add chat message history GraphQL query and implement WebSocket sync-on-connect with message replay and improved message "
+        },
+        {
+          "type": "improvement",
+          "text": "Reimplement the chat message list with virtualized scrolling, enhanced resequencing, and improved sync handling."
+        }
+      ]
+    },
+    {
+      "id": "53de2a8f-68e0-438e-9ef3-7b2f0b9868bd",
+      "date": "2026-01-28",
+      "version": "v0.0.071",
+      "title": "Implement Dual Sequencing For",
+      "summary": "2 changes shipped on 2026-01-28.",
+      "items": [
+        {
+          "type": "new",
+          "text": "Implement dual sequencing for chat messages with `sequence` and `lastSequence` fields, new `messagesDelta` query, and Re"
+        },
+        {
+          "type": "new",
+          "text": "Implement sequence-based chat message recovery and overhaul message input UI"
+        }
+      ]
+    },
+    {
+      "id": "dcdbe4ce-41c2-4e21-8eb1-5a856ac24d9b",
+      "date": "2026-01-27",
+      "version": "v0.0.072",
+      "title": "Add `Messagesdelta` Graphql Query",
+      "summary": "5 changes shipped on 2026-01-27.",
+      "items": [
+        {
+          "type": "new",
+          "text": "Add `messagesDelta` GraphQL query for incremental chat message fetching by `streamId`."
+        },
+        {
+          "type": "new",
+          "text": "integrate Clerk token validation for WebSocket connections, add author existence check to chat message persistence, and "
+        },
+        {
+          "type": "new",
+          "text": "Implement chat session recovery with `projectId` and refactor chat window UI with new primitives."
+        },
+        {
+          "type": "new",
+          "text": "Implement Conversation model with CHANNEL, DM, and GROUP_DM types, and introduce new chat event and layout UI primitives"
+        },
+        {
+          "type": "new",
+          "text": "Implement reliable chat message delivery with an outbox, resequencer, and local persistence for ordering and acknowledgm"
+        }
+      ]
+    },
+    {
+      "id": "fe590a22-eb6c-480c-b286-2901d7653182",
+      "date": "2026-01-26",
+      "version": "v0.0.073",
+      "title": "Add `Ping` Websocket Event",
+      "summary": "4 changes shipped on 2026-01-26.",
+      "items": [
+        {
+          "type": "new",
+          "text": "Add `ping` WebSocket event and `getChannelById` query, and update chat ID validation from UUID to non-empty string in sc"
+        },
+        {
+          "type": "improvement",
+          "text": "Rename ChatChannel to Conversation and update all related fields, types, and queries."
+        },
+        {
+          "type": "improvement",
+          "text": "Replaced monolithic WebSocket gateway with a modular infrastructure for chat events and introduced new chat-related jobs"
+        },
+        {
+          "type": "new",
+          "text": "Rearchitect WebSocket communication, introduce new chat and notification contracts, and rename channels to conversations"
+        }
+      ]
+    },
+    {
+      "id": "da3926e7-3a5b-4ed7-9524-f921f6039f1c",
+      "date": "2026-01-23",
+      "version": "v0.0.074",
+      "title": "Add Updated_At To Chat_Channels",
+      "summary": "8 changes shipped on 2026-01-23.",
+      "items": [
+        {
+          "type": "new",
+          "text": "add updated_at to chat_channels and scope channels by project"
+        },
+        {
+          "type": "new",
+          "text": "fixed create channel services and formated mostly"
+        },
+        {
+          "type": "new",
+          "text": "implemented reusable distributed lockign and key generator factory"
+        },
+        {
+          "type": "new",
+          "text": "refactored disbributed locking service and make it reusable"
+        },
+        {
+          "type": "new",
+          "text": "refactor(schema): condense formatting and add projectId to getUserChannels"
+        },
+        {
+          "type": "new",
+          "text": "implemented create channel feature"
+        },
+        {
+          "type": "new",
+          "text": "will look after these entities"
+        },
+        {
+          "type": "new",
+          "text": "feat(chat): implement chat window and full-height sticky layout"
+        }
+      ]
+    },
+    {
+      "id": "6084a7d4-27e0-4ffd-aac0-bf21e44df7fe",
+      "date": "2026-01-22",
+      "version": "v0.0.075",
+      "title": "Refactor `Getuserchannels` To Filter",
+      "summary": "4 changes shipped on 2026-01-22.",
+      "items": [
+        {
+          "type": "new",
+          "text": "Refactor `getUserChannels` to filter by workspace, add authorization, and support pagination."
+        },
+        {
+          "type": "new",
+          "text": "Introduce a comprehensive chat module including queries, services, data loaders, and GraphQL integration."
+        },
+        {
+          "type": "new",
+          "text": "Implement core chat functionality including WebSocket integration, session management, channel creation, and message dis"
+        },
+        {
+          "type": "new",
+          "text": "implement chat messaging system with channels, messages, members, and presence management"
+        }
+      ]
+    },
+    {
+      "id": "590b5fa1-3dd4-49a9-b60a-223c360a469f",
+      "date": "2026-01-21",
+      "version": "v0.0.076",
+      "title": "Implement Core Chat Functionality",
+      "summary": "1 change shipped on 2026-01-21.",
+      "items": [
+        {
+          "type": "new",
+          "text": "implement core chat functionality with WebSocket gateway, Prisma schema, and idempotency middleware."
+        }
+      ]
+    },
+    {
+      "id": "d945cc5b-9496-40fe-9312-4cf749ed11ca",
+      "date": "2026-01-19",
+      "version": "v0.0.077",
+      "title": "Add .Js Extension To",
+      "summary": "1 change shipped on 2026-01-19.",
+      "items": [
+        {
+          "type": "fix",
+          "text": "add .js extension to notification engine bootstrap dynamic import."
+        }
+      ]
+    },
+    {
+      "id": "c311da31-3209-44c9-9eff-99ab3c7fb165",
+      "date": "2026-01-18",
+      "version": "v0.0.078",
+      "title": "Directly Query Projects By",
+      "summary": "1 change shipped on 2026-01-18.",
+      "items": [
+        {
+          "type": "improvement",
+          "text": "Directly query projects by workspace ID and validate workspace membership, removing project member lookup and DataLoader"
+        }
+      ]
+    },
+    {
+      "id": "270280f0-3801-4dae-b087-58fe1bda65a6",
+      "date": "2026-01-17",
+      "version": "v0.0.079",
+      "title": "Re-Generate Graphql Types And",
+      "summary": "8 changes shipped on 2026-01-17.",
+      "items": [
+        {
+          "type": "improvement",
+          "text": "Re-generate GraphQL types and update the `gen` script to include schema synchronization."
+        },
+        {
+          "type": "improvement",
+          "text": "modularize user, workspace, project, and notification modules using services, queries, and GraphQL definitions."
+        },
+        {
+          "type": "improvement",
+          "text": "Consolidate user identification by making the user's primary ID directly equivalent to their Clerk ID and removing the s"
+        },
+        {
+          "type": "new",
+          "text": "Add project module with GraphQL API for creation, retrieval, and member management."
+        },
+        {
+          "type": "improvement",
+          "text": "Reformat GraphQL schema and generated client files, and add generated files to .prettierignore."
+        },
+        {
+          "type": "improvement",
+          "text": "Reorganize GraphQL schema definitions, types, and fields for better structure."
+        },
+        {
+          "type": "new",
+          "text": "Add explicit user synchronization before accepting a workspace invite to prevent race conditions."
+        },
+        {
+          "type": "new",
+          "text": "Introduce project entity with creation flow, slug-based routing, and updated GraphQL schema."
+        }
+      ]
+    },
+    {
+      "id": "14e2f78e-0e24-4544-a344-4976b916c9d0",
+      "date": "2026-01-14",
+      "version": "v0.0.080",
+      "title": "Added Workspace Join Service",
+      "summary": "8 changes shipped on 2026-01-14.",
+      "items": [
+        {
+          "type": "new",
+          "text": "added workspace join service and members service"
+        },
+        {
+          "type": "improvement",
+          "text": "public api refactor some components imported via public api"
+        },
+        {
+          "type": "new",
+          "text": "Merge branch 'refactor'"
+        },
+        {
+          "type": "new",
+          "text": "short"
+        },
+        {
+          "type": "improvement",
+          "text": "refactor complete"
+        },
+        {
+          "type": "improvement",
+          "text": "refactored and used public apis"
+        },
+        {
+          "type": "improvement",
+          "text": "shared layer refactor & rename createGqlclient to Gqlclient"
+        },
+        {
+          "type": "improvement",
+          "text": "features refactor complete"
+        }
+      ]
+    },
+    {
+      "id": "42b50437-45e9-46df-a721-571d78fce273",
+      "date": "2026-01-13",
+      "version": "v0.0.081",
+      "title": "Added Invite To Workspace",
+      "summary": "1 change shipped on 2026-01-13.",
+      "items": [
+        {
+          "type": "new",
+          "text": "added invite to workspace feature and join workspace"
+        }
+      ]
+    },
+    {
+      "id": "da3c4493-ecc0-4cf3-9723-f379a0eeee76",
+      "date": "2026-01-11",
+      "version": "v0.0.082",
+      "title": "Add Eslint-Plugin-Boundaries And Dependencies",
+      "summary": "2 changes shipped on 2026-01-11.",
+      "items": [
+        {
+          "type": "new",
+          "text": "add eslint-plugin-boundaries and dependencies"
+        },
+        {
+          "type": "new",
+          "text": "implemented notitication service"
+        }
+      ]
+    },
+    {
+      "id": "a86600e7-00a1-4204-a73d-9262c4decf75",
+      "date": "2026-01-09",
+      "version": "v0.0.083",
+      "title": "Asdfasdf",
+      "summary": "4 changes shipped on 2026-01-09.",
+      "items": [
+        {
+          "type": "new",
+          "text": "asdfasdf"
+        },
+        {
+          "type": "new",
+          "text": "early mistake solved"
+        },
+        {
+          "type": "improvement",
+          "text": "lua script optomisation and error handeling"
+        },
+        {
+          "type": "improvement",
+          "text": "update  workspace form API"
+        }
+      ]
+    },
+    {
+      "id": "2a36ed14-e7a6-4f16-b7a0-42835351ab47",
+      "date": "2026-01-08",
+      "version": "v0.0.084",
+      "title": "Refactor : Refactored File",
+      "summary": "3 changes shipped on 2026-01-08.",
+      "items": [
+        {
+          "type": "new",
+          "text": "refactor : refactored file names and small fix"
+        },
+        {
+          "type": "new",
+          "text": "implemented workspace creation  feature"
+        },
+        {
+          "type": "improvement",
+          "text": "enforce architectural boundaries and relocate GraphQL generated files"
+        }
+      ]
+    },
+    {
+      "id": "8206b790-7ea7-4976-8f33-76541ae96a9c",
+      "date": "2026-01-07",
+      "version": "v0.0.085",
+      "title": "Implement Email Verification For",
+      "summary": "4 changes shipped on 2026-01-07.",
+      "items": [
+        {
+          "type": "new",
+          "text": "Implement email verification for user sync, enhance input validation with XSS and URL checks, and add comprehensive user"
+        },
+        {
+          "type": "new",
+          "text": "Implement robust workspace slug management, creation, and onboarding with new utilities and error codes."
+        },
+        {
+          "type": "improvement",
+          "text": "Reorganize component imports and file structure across widgets, shared UI, and pages."
+        },
+        {
+          "type": "new",
+          "text": "implement new onboarding wizard with dedicated routes, API hooks, and idempotency support."
+        }
+      ]
+    },
+    {
+      "id": "adf59478-825f-4cfc-86c9-42b54e0d7bd4",
+      "date": "2026-01-06",
+      "version": "v0.0.086",
+      "title": "Implement Idempotency With Redis",
+      "summary": "1 change shipped on 2026-01-06.",
+      "items": [
+        {
+          "type": "new",
+          "text": "implement idempotency with Redis Lua scripts and a new middleware"
+        }
+      ]
+    },
+    {
+      "id": "29fe8231-bf44-4692-aa86-738b3da3a367",
+      "date": "2026-01-05",
+      "version": "v0.0.087",
+      "title": "Implement Quota Management, Workspace",
+      "summary": "2 changes shipped on 2026-01-05.",
+      "items": [
+        {
+          "type": "new",
+          "text": "implement quota management, workspace creation logic, and slug validation with Redis caching"
+        },
+        {
+          "type": "improvement",
+          "text": "Apply consistent formatting to generated GraphQL client files."
+        }
+      ]
+    },
+    {
+      "id": "1feb27b6-561d-43aa-9fa1-e45743acb6e2",
+      "date": "2026-01-04",
+      "version": "v0.0.088",
+      "title": "Introduce `Workspacebyslug` Query, Integrate",
+      "summary": "7 changes shipped on 2026-01-04.",
+      "items": [
+        {
+          "type": "new",
+          "text": "Introduce `workspaceBySlug` query, integrate user dataloaders, and improve workspace slug generation."
+        },
+        {
+          "type": "new",
+          "text": "Add route and widget error handling using `react-error-boundary` and new dedicated error components."
+        },
+        {
+          "type": "new",
+          "text": "Implement Redux-based session management for current user and workspace context."
+        },
+        {
+          "type": "new",
+          "text": "Implement Clerk user profile page and update user settings route to a splat route."
+        },
+        {
+          "type": "new",
+          "text": "Introduce new project features (pages, whiteboard, kanban, meet, settings), refactor navigation components, and update s"
+        },
+        {
+          "type": "new",
+          "text": "enhance auth split layout with detailed branding and update generated `_auth` route naming."
+        },
+        {
+          "type": "new",
+          "text": "implement new marketing page structure with dedicated widgets and a shared navbar, and update the favicon."
+        }
+      ]
+    },
+    {
+      "id": "db554f1a-f368-4cfc-a62a-ea4c93f69e8c",
+      "date": "2026-01-03",
+      "version": "v0.0.089",
+      "title": "Introduce Dataloaders For User",
+      "summary": "8 changes shipped on 2026-01-03.",
+      "items": [
+        {
+          "type": "new",
+          "text": "Introduce Dataloaders for User and Workspace, implement Zod validation for service inputs, and apply soft-delete checks "
+        },
+        {
+          "type": "new",
+          "text": "Implement workspace management module with GraphQL API, onboarding, and user synchronization updates."
+        },
+        {
+          "type": "new",
+          "text": "Implement Clerk webhooks for user data synchronization and update the user schema with a `clerkId`."
+        },
+        {
+          "type": "new",
+          "text": "Implement comprehensive database schema including users, workspaces, projects, tasks, chat, and AI features."
+        },
+        {
+          "type": "new",
+          "text": "Introduce user authentication and management, centralized error handling, and logging."
+        },
+        {
+          "type": "new",
+          "text": "Implement onboarding flow with GraphQL API, user syncing, workspace creation, and project modal."
+        },
+        {
+          "type": "new",
+          "text": "Add customizable stroke width for spinner, and refactor project linking and resizable component imports."
+        },
+        {
+          "type": "new",
+          "text": "Implement new authentication pages with dedicated sign-in/sign-up forms and a split layout, alongside dynamic routing im"
+        }
+      ]
+    },
+    {
+      "id": "83d9e4b0-5954-49d6-874a-622ee8f88393",
+      "date": "2026-01-02",
+      "version": "v0.0.090",
+      "title": "Introduce Docker Compose For",
+      "summary": "5 changes shipped on 2026-01-02.",
+      "items": [
+        {
+          "type": "new",
+          "text": "Introduce Docker Compose for local Postgres and Redis, update environment variables, and adjust server port."
+        },
+        {
+          "type": "improvement",
+          "text": "make GraphQL route handler async"
+        },
+        {
+          "type": "new",
+          "text": "establish new file-based routing with dedicated layouts for app, auth, and marketing, and detailed project views."
+        },
+        {
+          "type": "new",
+          "text": "Introduce new shared UI components, remove deprecated demo routes and components, and update project configurations."
+        },
+        {
+          "type": "new",
+          "text": "2nd repository 5th folder try"
+        }
+      ]
+    },
+    {
+      "id": "82155983-5609-458d-8613-8aa3ee3b2025",
+      "date": "2026-01-01",
+      "version": "v0.0.091",
+      "title": "Introduce Initial Comprehensive Database",
+      "summary": "2 changes shipped on 2026-01-01.",
+      "items": [
+        {
+          "type": "new",
+          "text": "Introduce initial comprehensive database schema and Prisma setup for PostgreSQL."
+        },
+        {
+          "type": "new",
+          "text": "Initialize server with Hono, GraphQL Yoga, Prisma, and Bun for initial project setup."
+        }
+      ]
+    },
+    {
+      "id": "3380f14a-135f-42f8-8543-bfdb8c1cbfbe",
+      "date": "2025-12-25",
+      "version": "v0.0.092",
+      "title": "Initial Commit",
+      "summary": "1 change shipped on 2025-12-25.",
+      "items": [
+        {
+          "type": "new",
+          "text": "Initial commit"
+        }
+      ]
+    },
+    {
+      "id": "77e19ef5-fe71-4e56-3bc0-a48a60f769d7",
+      "date": "2026-05-01",
+      "version": "v0.1.001",
+      "title": "Update Ui Color Variables",
+      "summary": "7 changes committed on 2026-05-01.",
+      "items": [
+        {
+          "type": "improvement",
+          "text": "update UI color variables and standardize main container backgrounds"
+        },
+        {
+          "type": "improvement",
+          "text": "update UI styling, redirect workspace index to projects, and remove user localization profile fields"
+        },
+        {
+          "type": "improvement",
+          "text": "standardize UI theme colors, fix layout overflow issues, and update animation classes across the ..."
+        },
+        {
+          "type": "improvement",
+          "text": "migrate all UI components and widgets to use updated design system patterns"
+        },
+        {
+          "type": "improvement",
+          "text": "migrate icon library from Hugeicons to Lucide React across the codebase"
+        },
+        {
+          "type": "new",
+          "text": "implement theme provider with dark mode support and toggle component"
+        },
+        {
+          "type": "new",
+          "text": "implement and integrate custom BlockNoteSlashMenu across issue editors and page editor"
+        }
+      ]
+    },
+    {
+      "id": "6cb0efdb-01b5-4206-6f1d-cb0ec5ccb76c",
+      "date": "2026-04-30",
+      "version": "v0.1.002",
+      "title": "Update Ui Primitive Components",
+      "summary": "2 changes committed on 2026-04-30.",
+      "items": [
+        {
+          "type": "improvement",
+          "text": "update UI primitive components and integrate shadcn/ui theme providers"
+        },
+        {
+          "type": "new",
+          "text": "move SidebarTrigger from home header to user layout for consistent sidebar navigation"
+        }
+      ]
+    },
+    {
+      "id": "b7cb9293-602b-468e-eb2f-a822d4f93d3c",
+      "date": "2026-04-28",
+      "version": "v0.1.003",
+      "title": "Implement Getpageshome Query To",
+      "summary": "3 changes committed on 2026-04-28.",
+      "items": [
+        {
+          "type": "new",
+          "text": "implement getPagesHome query to fetch recently updated pages for authenticated users"
+        },
+        {
+          "type": "new",
+          "text": "replace default BlockNote emoji picker with custom Emoji Mart implementation"
+        },
+        {
+          "type": "new",
+          "text": "implement pages home dashboard with GraphQL query and associated feature hooks"
+        }
+      ]
+    },
+    {
+      "id": "71e13b52-a7d5-4b98-d6af-5178d0da3b79",
+      "date": "2026-04-27",
+      "version": "v0.1.004",
+      "title": "Invalidate Channel Member Redis",
+      "summary": "22 changes committed on 2026-04-27.",
+      "items": [
+        {
+          "type": "fix",
+          "text": "invalidate channel member Redis cache after adding new members to ensure consistency"
+        },
+        {
+          "type": "improvement",
+          "text": "standardize ChatChannelMemberRemoved event payload schema and naming convention"
+        },
+        {
+          "type": "improvement",
+          "text": "remove copy link functionality from board card context menu"
+        },
+        {
+          "type": "fix",
+          "text": "improve whiteboard settings UI and ensure description updates invalidate board lists"
+        },
+        {
+          "type": "improvement",
+          "text": "remove search functionality and duplicate board option from board list widget"
+        },
+        {
+          "type": "improvement",
+          "text": "pass projectId to onOpenProfile callback in MemberRow component"
+        },
+        {
+          "type": "new",
+          "text": "add ScrollArea to member and collaborator lists for improved overflow handling"
+        },
+        {
+          "type": "new",
+          "text": "remove emoji picker lazy loading and add configurable animation/mounting to popover component"
+        }
+      ]
+    },
+    {
+      "id": "4074f1b0-4e31-4043-98a5-c5b24978c0fc",
+      "date": "2026-04-26",
+      "version": "v0.1.005",
+      "title": "Implement Modular User Profile",
+      "summary": "1 change committed on 2026-04-26.",
+      "items": [
+        {
+          "type": "new",
+          "text": "implement modular User Profile Panel with tabbed navigation and project-aware actions"
+        }
+      ]
+    },
+    {
+      "id": "e60d8383-f472-426a-8a05-93c5bef593dc",
+      "date": "2026-04-25",
+      "version": "v0.1.006",
+      "title": "Implement Decline Workspace Invite",
+      "summary": "16 changes committed on 2026-04-25.",
+      "items": [
+        {
+          "type": "new",
+          "text": "implement decline workspace invite mutation and migrate workspace logo field to S3 key"
+        },
+        {
+          "type": "fix",
+          "text": "compute correct mention offsets by scanning text for display patterns in chat queries"
+        },
+        {
+          "type": "new",
+          "text": "implement mention eager loading for chat messages and add getMentionsBySourceIds query"
+        },
+        {
+          "type": "new",
+          "text": "add logoUrl field to workspace overview query with S3 presigned URL resolution"
+        },
+        {
+          "type": "improvement",
+          "text": "standardize slug validation logic and introduce length constants with new test coverage"
+        },
+        {
+          "type": "improvement",
+          "text": "decouple email delivery from workspace invite flow to ensure best-effort asynchronous notificatio..."
+        },
+        {
+          "type": "fix",
+          "text": "implement robust JSON parsing for rich text content across chat history and recovery flows"
+        },
+        {
+          "type": "new",
+          "text": "implement user home dashboard with pending workspace invite management and custom role selection ..."
+        }
+      ]
+    },
+    {
+      "id": "56616422-a7cf-4259-6c73-574146362b75",
+      "date": "2026-04-24",
+      "version": "v0.1.007",
+      "title": "Remove Role Selection Ui",
+      "summary": "5 changes committed on 2026-04-24.",
+      "items": [
+        {
+          "type": "improvement",
+          "text": "remove role selection UI and schema validation, defaulting invites to the MEMBER role"
+        },
+        {
+          "type": "improvement",
+          "text": "remove team size field and validation from workspace creation flow"
+        },
+        {
+          "type": "new",
+          "text": "replace static project icons with dynamic project logos using Avatar component"
+        },
+        {
+          "type": "improvement",
+          "text": "comment out notification bell button in dashboard header"
+        },
+        {
+          "type": "improvement",
+          "text": "update navigation dropdowns to use programmatic navigation and styled components, and adjust layo..."
+        }
+      ]
+    },
+    {
+      "id": "91a4f8cc-28a7-42fd-77d7-59a9f734a5c5",
+      "date": "2026-04-23",
+      "version": "v0.1.008",
+      "title": "Replace Logourl With Logos3Key",
+      "summary": "14 changes committed on 2026-04-23.",
+      "items": [
+        {
+          "type": "improvement",
+          "text": "replace logoUrl with logoS3Key in workspace and project models with on-the-fly presigned URL gene..."
+        },
+        {
+          "type": "improvement",
+          "text": "update webhook router import path to target index file explicitly"
+        },
+        {
+          "type": "improvement",
+          "text": "update workspaces page description text for conciseness"
+        },
+        {
+          "type": "improvement",
+          "text": "simplify user sidebar layout and prune unused navigation elements"
+        },
+        {
+          "type": "new",
+          "text": "add configurable maxHeight prop to Textarea component and update usage across UI forms"
+        },
+        {
+          "type": "improvement",
+          "text": "improve update profile form initialization, data binding, and save button visibility logic"
+        },
+        {
+          "type": "improvement",
+          "text": "standardize UI components with updated spacing, refined typography, and improved interactive effects"
+        },
+        {
+          "type": "improvement",
+          "text": "use fragment data helpers for project and workspace detail queries"
+        }
+      ]
+    },
+    {
+      "id": "8945a728-0188-4c94-d8f9-4a0df6e2cab9",
+      "date": "2026-04-21",
+      "version": "v0.1.009",
+      "title": "Implement Scalable Webhook Architecture",
+      "summary": "1 change committed on 2026-04-21.",
+      "items": [
+        {
+          "type": "improvement",
+          "text": "implement scalable webhook architecture with provider-specific handlers for Clerk events"
+        }
+      ]
+    },
+    {
+      "id": "b75a8bec-df6f-4cae-5607-893bba1e7fa9",
+      "date": "2026-04-20",
+      "version": "v0.1.010",
+      "title": "Relocate Stream-Worker Module To",
+      "summary": "1 change committed on 2026-04-20.",
+      "items": [
+        {
+          "type": "improvement",
+          "text": "relocate stream-worker module to chat-specific infrastructure and initialize core configuration a..."
+        }
+      ]
+    },
+    {
+      "id": "0a366213-5ee5-44d8-bebd-b8808003e17b",
+      "date": "2026-04-19",
+      "version": "v0.1.011",
+      "title": "Integrate Turbo For Build",
+      "summary": "4 changes committed on 2026-04-19.",
+      "items": [
+        {
+          "type": "new",
+          "text": "integrate Turbo for build task management"
+        },
+        {
+          "type": "improvement",
+          "text": "rename kanban route to issues to better reflect feature scope"
+        },
+        {
+          "type": "improvement",
+          "text": "update UI components across the client to use a unified design system and consistent error handli..."
+        },
+        {
+          "type": "improvement",
+          "text": "update UI primitives and component implementations across the client codebase"
+        }
+      ]
+    },
+    {
+      "id": "6230fc25-d64c-4206-2fcd-c250f7957cf7",
+      "date": "2026-04-17",
+      "version": "v0.1.012",
+      "title": "Implement Comprehensive Mention And",
+      "summary": "3 changes committed on 2026-04-17.",
+      "items": [
+        {
+          "type": "new",
+          "text": "implement comprehensive mention and backlink management system with associated database schema an..."
+        },
+        {
+          "type": "improvement",
+          "text": "replace string-based path building with type-safe TanStack Router navigation hook for entity ment..."
+        },
+        {
+          "type": "new",
+          "text": "implement comprehensive mention system with entity tagging, search, and navigation support"
+        }
+      ]
+    },
+    {
+      "id": "55fc03b8-be2a-42a7-1375-88bbe8da4c9e",
+      "date": "2026-04-15",
+      "version": "v0.1.013",
+      "title": "Streamline Chat Notification Payloads",
+      "summary": "2 changes committed on 2026-04-15.",
+      "items": [
+        {
+          "type": "improvement",
+          "text": "streamline chat notification payloads by removing redundant fields and restricting delivery chann..."
+        },
+        {
+          "type": "new",
+          "text": "implement conversation notification modes and add toast notification system"
+        }
+      ]
+    },
+    {
+      "id": "41eabf27-4f5f-482a-4594-8b4518a8c609",
+      "date": "2026-04-14",
+      "version": "v0.1.014",
+      "title": "Integrate Notification Outbox Events",
+      "summary": "3 changes committed on 2026-04-14.",
+      "items": [
+        {
+          "type": "new",
+          "text": "integrate notification outbox events across core service handlers for resource lifecycle and coll..."
+        },
+        {
+          "type": "new",
+          "text": "implement comprehensive notification event handling system with modular event-specific handlers a..."
+        },
+        {
+          "type": "new",
+          "text": "implement notification preference management system with global and conversation-level settings"
+        }
+      ]
+    },
+    {
+      "id": "eb2ba6bf-dd39-46b5-6af7-dc4b60a20670",
+      "date": "2026-04-12",
+      "version": "v0.1.015",
+      "title": "Overhaul Notification System Architecture",
+      "summary": "1 change committed on 2026-04-12.",
+      "items": [
+        {
+          "type": "improvement",
+          "text": "overhaul notification system architecture by implementing a modular event-driven handler framewor..."
+        }
+      ]
+    },
+    {
+      "id": "f7c6c147-e4ca-475e-b3d3-7d2fb47b1a0e",
+      "date": "2026-04-10",
+      "version": "v0.1.016",
+      "title": "Implement Updatepagedetails Mutation To",
+      "summary": "2 changes committed on 2026-04-10.",
+      "items": [
+        {
+          "type": "new",
+          "text": "implement updatePageDetails mutation to modify page emoji and cover image with real-time broadcast"
+        },
+        {
+          "type": "new",
+          "text": "implement page details update functionality including icon and cover image management"
+        }
+      ]
+    },
+    {
+      "id": "9a9a6b98-dbfc-489a-82dc-de7524ca8077",
+      "date": "2026-04-09",
+      "version": "v0.1.017",
+      "title": "Add And Subsequently Remove",
+      "summary": "2 changes committed on 2026-04-09.",
+      "items": [
+        {
+          "type": "new",
+          "text": "add and subsequently remove whiteboard visibility and edit permission columns and associated enums"
+        },
+        {
+          "type": "new",
+          "text": "implement board settings modal with tabs, add \"New Board\" button to header, and optimize thumbnai..."
+        }
+      ]
+    },
+    {
+      "id": "ec7fb421-4ed8-4517-0dd0-5011704bee8c",
+      "date": "2026-04-08",
+      "version": "v0.1.018",
+      "title": "Replace Chat Member Roles",
+      "summary": "2 changes committed on 2026-04-08.",
+      "items": [
+        {
+          "type": "improvement",
+          "text": "replace chat member roles with conversation-level isPublic flag and project-scoped RBAC"
+        },
+        {
+          "type": "new",
+          "text": "implement user profile panel and enhance channel management features with new update hooks and UI..."
+        }
+      ]
+    },
+    {
+      "id": "5eedb895-91d4-4268-dcae-00f39c55f091",
+      "date": "2026-04-07",
+      "version": "v0.1.019",
+      "title": "Expand Project Overview With",
+      "summary": "4 changes committed on 2026-04-07.",
+      "items": [
+        {
+          "type": "new",
+          "text": "expand project overview with detailed metrics and add project contributor stats query"
+        },
+        {
+          "type": "new",
+          "text": "add roleId to ProjectMember GQL type and implement cache invalidation for project member operations"
+        },
+        {
+          "type": "new",
+          "text": "implement comprehensive project overview dashboard with modular widgets and updated GraphQL schema"
+        },
+        {
+          "type": "improvement",
+          "text": "reorganize workspace and member management features and add developer configuration files"
+        }
+      ]
+    },
+    {
+      "id": "1ba0b7cd-3e8d-4971-50fb-f79bb6074c1c",
+      "date": "2026-04-06",
+      "version": "v0.1.020",
+      "title": "Add Project Logo Upload",
+      "summary": "5 changes committed on 2026-04-06.",
+      "items": [
+        {
+          "type": "new",
+          "text": "add project logo upload service and support for updating project logo and key fields"
+        },
+        {
+          "type": "new",
+          "text": "implement project-level permission management and scope-aware role assignment guards"
+        },
+        {
+          "type": "new",
+          "text": "implement project logo upload functionality with presigned S3 URLs and validation"
+        },
+        {
+          "type": "fix",
+          "text": "adjust project roles panel layout constraints and scroll area height"
+        },
+        {
+          "type": "new",
+          "text": "implement project-scoped permissions catalog and add project roles management widgets"
+        }
+      ]
+    },
+    {
+      "id": "8a384827-b374-4a85-ca62-9b57679a48c4",
+      "date": "2026-04-05",
+      "version": "v0.1.021",
+      "title": "Implement Workspace Logo Upload,",
+      "summary": "2 changes committed on 2026-04-05.",
+      "items": [
+        {
+          "type": "new",
+          "text": "implement workspace logo upload, slug renaming, and permission retrieval services with expanded R..."
+        },
+        {
+          "type": "new",
+          "text": "implement comprehensive workspace settings management including profile, slug, and role-based per..."
+        }
+      ]
+    },
+    {
+      "id": "99701b30-a614-455e-bc34-39284987da01",
+      "date": "2026-04-04",
+      "version": "v0.1.022",
+      "title": "Implement Role Hierarchy Guards",
+      "summary": "2 changes committed on 2026-04-04.",
+      "items": [
+        {
+          "type": "new",
+          "text": "implement role hierarchy guards and update workspace member role mutation to use roleId instead o..."
+        },
+        {
+          "type": "new",
+          "text": "implement workspace member management and invite handling features with role-based access control"
+        }
+      ]
+    },
+    {
+      "id": "e4141153-9f05-49c9-5f81-4806748900e8",
+      "date": "2026-04-03",
+      "version": "v0.1.023",
+      "title": "Invalidate User Cache On",
+      "summary": "4 changes committed on 2026-04-03.",
+      "items": [
+        {
+          "type": "new",
+          "text": "invalidate user cache on profile update and include member roles in workspace queries"
+        },
+        {
+          "type": "new",
+          "text": "redesign project cards with dynamic branding, member avatars, and relative timestamps, and update..."
+        },
+        {
+          "type": "improvement",
+          "text": "centralize invite-member modal state and implement workspace overview dashboard widgets"
+        },
+        {
+          "type": "new",
+          "text": "implement user profile update feature and refactor UI primitives with enhanced animations"
+        }
+      ]
+    },
+    {
+      "id": "4103543f-619f-4ab1-ee1f-e9f178718ee6",
+      "date": "2026-04-02",
+      "version": "v0.1.024",
+      "title": "Implement User Home Query",
+      "summary": "2 changes committed on 2026-04-02.",
+      "items": [
+        {
+          "type": "new",
+          "text": "implement user home query and extend user profile with bio, timezone, and language fields"
+        },
+        {
+          "type": "new",
+          "text": "implement user dashboard and settings pages, refactor user profile management, and update onboard..."
+        }
+      ]
+    },
+    {
+      "id": "08590be6-3cf5-4724-3d67-582c7bc946e6",
+      "date": "2026-04-01",
+      "version": "v0.1.025",
+      "title": "Modularize Chat Service Operations",
+      "summary": "2 changes committed on 2026-04-01.",
+      "items": [
+        {
+          "type": "improvement",
+          "text": "modularize chat service operations and implement project plugin management system"
+        },
+        {
+          "type": "new",
+          "text": "implement project plugin toggling with associated API, hooks, and UI synchronization logic"
+        }
+      ]
+    },
+    {
+      "id": "5f086ac5-d10e-4be1-ae14-cadcf450faa0",
+      "date": "2026-03-31",
+      "version": "v0.1.026",
+      "title": "Implement Dynamic Feature Flag",
+      "summary": "4 changes committed on 2026-03-31.",
+      "items": [
+        {
+          "type": "new",
+          "text": "implement dynamic feature flag system with database support and authorization integration"
+        },
+        {
+          "type": "new",
+          "text": "add whiteboard support to vault cleanup by persisting snapshot S3 keys and updating reference sca..."
+        },
+        {
+          "type": "new",
+          "text": "implement authorization system with role-based access control, feature flags, and active context ..."
+        },
+        {
+          "type": "new",
+          "text": "implement whiteboard media lifecycle garbage collection and refactor BlockNote URL management"
+        }
+      ]
+    },
+    {
+      "id": "3f2b197d-238e-414f-1104-55046193e90d",
+      "date": "2026-03-30",
+      "version": "v0.1.027",
+      "title": "Implement Vault Unreferenced File",
+      "summary": "2 changes committed on 2026-03-30.",
+      "items": [
+        {
+          "type": "new",
+          "text": "implement vault unreferenced file tracking and cleanup lifecycle with grace period support"
+        },
+        {
+          "type": "new",
+          "text": "integrate BlockNote vault upload adapter and implement unreferenced file tracking for issue descr..."
+        }
+      ]
+    },
+    {
+      "id": "0b969786-fae4-4eff-5919-bae89d1bfda1",
+      "date": "2026-03-29",
+      "version": "v0.1.028",
+      "title": "Implement Vault External File",
+      "summary": "8 changes committed on 2026-03-29.",
+      "items": [
+        {
+          "type": "new",
+          "text": "implement Vault external file registration, batch download queries, and automated storage cleanup..."
+        },
+        {
+          "type": "new",
+          "text": "add getProjectDms query, optimize DM lookup with dmHash, and update conversation schema."
+        },
+        {
+          "type": "new",
+          "text": "prevent adding reactions to deleted messages by validating deletedAt status"
+        },
+        {
+          "type": "new",
+          "text": "increment reply count in database when persisting inline messages"
+        },
+        {
+          "type": "new",
+          "text": "add chat attachment support with Vault integration, local media caching, and UI preview components"
+        },
+        {
+          "type": "new",
+          "text": "implement project DM list and creation modal with associated GraphQL queries and state management"
+        },
+        {
+          "type": "new",
+          "text": "implement message reactions with optimistic UI, Dexie persistence, and real-time synchronization"
+        },
+        {
+          "type": "new",
+          "text": "implement threaded reply support with message highlighting and navigation context"
+        }
+      ]
+    },
+    {
+      "id": "8f9c8cd6-cbba-4e8c-462f-c183dd77a80b",
+      "date": "2026-03-28",
+      "version": "v0.1.029",
+      "title": "Implement Offline Gap Sync",
+      "summary": "5 changes committed on 2026-03-28.",
+      "items": [
+        {
+          "type": "new",
+          "text": "implement offline gap sync for message edits and deletions with database indexes and optimized Re..."
+        },
+        {
+          "type": "improvement",
+          "text": "decouple message edit/delete persistence into dedicated queues and update content schema handling"
+        },
+        {
+          "type": "improvement",
+          "text": "implement coordinator-based board assignment, improve reaction checksums, and add worker heartbea..."
+        },
+        {
+          "type": "new",
+          "text": "implement message deletion functionality and include lastOpenedAt in stream subscription state"
+        },
+        {
+          "type": "new",
+          "text": "implement message editing functionality with real-time IndexedDB synchronization and UI support"
+        }
+      ]
+    },
+    {
+      "id": "206d529c-5ed8-416e-0208-a2771bce5e4e",
+      "date": "2026-03-23",
+      "version": "v0.1.030",
+      "title": "Add Resend As A",
+      "summary": "2 changes committed on 2026-03-23.",
+      "items": [
+        {
+          "type": "new",
+          "text": "Add Resend as a new email provider and introduce a seed script to repair role permissions."
+        },
+        {
+          "type": "new",
+          "text": "Rework marketing pages and components, introducing new UI primitives and a generic marketing page..."
+        }
+      ]
+    },
+    {
+      "id": "22741f2f-9968-4e72-ba33-06a0896a1d19",
+      "date": "2026-03-20",
+      "version": "v0.1.031",
+      "title": "Refactor Whiteboard Stream Worker",
+      "summary": "1 change committed on 2026-03-20.",
+      "items": [
+        {
+          "type": "new",
+          "text": "Refactor whiteboard stream worker for efficiency, improve snapshot retrieval, and streamline emai..."
+        }
+      ]
+    },
+    {
+      "id": "481937d2-601d-4f08-b40e-5b3b60a4e342",
+      "date": "2026-03-19",
+      "version": "v0.1.032",
+      "title": "Introduce Prometheus Metrics For",
+      "summary": "4 changes committed on 2026-03-19.",
+      "items": [
+        {
+          "type": "new",
+          "text": "Introduce Prometheus metrics for HTTP requests and WebSocket activity, exposed via a new /metrics..."
+        },
+        {
+          "type": "fix",
+          "text": "pm2 deploy uses delete+start instead of flawed restart-or-start"
+        },
+        {
+          "type": "new",
+          "text": "Add Microsoft Clarity tracking integration."
+        },
+        {
+          "type": "new",
+          "text": "Migrate frontend deployment from Docker to a PM2 and Rsync-based workflow, and remove a redundant..."
+        }
+      ]
+    },
+    {
+      "id": "a3861523-6407-4c2c-6110-5fb276b1ae0a",
+      "date": "2026-03-18",
+      "version": "v0.1.033",
+      "title": "Force-Recreate Container On Every",
+      "summary": "14 changes committed on 2026-03-18.",
+      "items": [
+        {
+          "type": "fix",
+          "text": "force-recreate container on every deploy"
+        },
+        {
+          "type": "fix",
+          "text": "use pg Pool ssl config for RDS, remove sslmode from URL"
+        },
+        {
+          "type": "fix",
+          "text": "disable RDS cert verification in production (Alpine missing Amazon CA)"
+        },
+        {
+          "type": "new",
+          "text": "Introduce Redis Lua scripts for atomic reaction addition and removal, updating script loading paths."
+        },
+        {
+          "type": "fix",
+          "text": "Correct Bun lockfile name from `bun.lockb` to `bun.lock` in Dockerfile."
+        },
+        {
+          "type": "new",
+          "text": "Add automated production deployment workflow, Docker health checks, and a server health endpoint."
+        },
+        {
+          "type": "fix",
+          "text": "delete Vite cache before build to prevent CSS hash mismatch"
+        },
+        {
+          "type": "fix",
+          "text": "use vite build --force to prevent stale CSS hash mismatch in Docker"
+        }
+      ]
+    },
+    {
+      "id": "da091d78-5705-40ed-de36-49c0308793cd",
+      "date": "2026-03-17",
+      "version": "v0.1.034",
+      "title": "Improve Stream Worker Robustness",
+      "summary": "2 changes committed on 2026-03-17.",
+      "items": [
+        {
+          "type": "new",
+          "text": "Improve stream worker robustness with self-healing rebalance and standardized messages, and enhan..."
+        },
+        {
+          "type": "new",
+          "text": "Introduce new page update functionality, add multiple skeleton UIs, and enhance various features ..."
+        }
+      ]
+    },
+    {
+      "id": "d3e87e13-dcc9-4620-7e07-29a967a9522a",
+      "date": "2026-03-16",
+      "version": "v0.1.035",
+      "title": "Seed Default Resources For",
+      "summary": "2 changes committed on 2026-03-16.",
+      "items": [
+        {
+          "type": "new",
+          "text": "Seed default resources for new projects and enable filtering user boards by project ID."
+        },
+        {
+          "type": "new",
+          "text": "Allow filtering user boards by project and implement project member role update functionality."
+        }
+      ]
+    },
+    {
+      "id": "e94580a2-4790-4f43-7633-85ef79b0fe2e",
+      "date": "2026-03-15",
+      "version": "v0.1.036",
+      "title": "Add Query To Fetch",
+      "summary": "2 changes committed on 2026-03-15.",
+      "items": [
+        {
+          "type": "new",
+          "text": "Add query to fetch project-level permissions and implement a guard preventing the last project ma..."
+        },
+        {
+          "type": "new",
+          "text": "Implement comprehensive project management features including member and role management, project..."
+        }
+      ]
+    },
+    {
+      "id": "c9b19c81-2d2e-414b-0108-7f9965ad4b7a",
+      "date": "2026-03-14",
+      "version": "v0.1.037",
+      "title": "Implement Project-Scoped Roles And",
+      "summary": "1 change committed on 2026-03-14.",
+      "items": [
+        {
+          "type": "new",
+          "text": "Implement project-scoped roles and enhance workspace role and permission management."
+        }
+      ]
+    },
+    {
+      "id": "4ae08fa7-be9d-432b-67c7-3f418828efad",
+      "date": "2026-03-13",
+      "version": "v0.1.038",
+      "title": "Implement Cascading Deletion Of",
+      "summary": "2 changes committed on 2026-03-13.",
+      "items": [
+        {
+          "type": "new",
+          "text": "Implement cascading deletion of project memberships when a workspace member is removed or leaves,..."
+        },
+        {
+          "type": "new",
+          "text": "Implement and refactor numerous chat queries, introducing new endpoints and a step-based architec..."
+        }
+      ]
+    },
+    {
+      "id": "845bb34f-16d2-4732-1817-6e286be755b8",
+      "date": "2026-03-12",
+      "version": "v0.1.039",
+      "title": "Implement `Get-Channel-Members` Query With",
+      "summary": "2 changes committed on 2026-03-12.",
+      "items": [
+        {
+          "type": "new",
+          "text": "Implement `get-channel-members` query with handler, schema, tests, and documentation, while addin..."
+        },
+        {
+          "type": "new",
+          "text": "Implement a new authorization system, integrating it across modules and replacing previous permis..."
+        }
+      ]
+    },
+    {
+      "id": "4eb9e6b8-9194-40fa-5954-a74a63ab917e",
+      "date": "2026-03-06",
+      "version": "v0.1.040",
+      "title": "Introduce Comprehensive Lifecycle, Membership,",
+      "summary": "1 change committed on 2026-03-06.",
+      "items": [
+        {
+          "type": "new",
+          "text": "introduce comprehensive lifecycle, membership, and role management for workspaces, projects, and ..."
+        }
+      ]
+    },
+    {
+      "id": "2b848824-7671-46e0-a139-c6291b1f3c0d",
+      "date": "2026-03-05",
+      "version": "v0.1.041",
+      "title": "Decompose Various Service Handlers",
+      "summary": "1 change committed on 2026-03-05.",
+      "items": [
+        {
+          "type": "improvement",
+          "text": "Decompose various service handlers into granular steps and introduce new functionalities across w..."
+        }
+      ]
+    },
+    {
+      "id": "5e4444cc-e994-42a7-20e1-a60a9ed2877f",
+      "date": "2026-03-04",
+      "version": "v0.1.042",
+      "title": "Enhance Project Member Loader",
+      "summary": "3 changes committed on 2026-03-04.",
+      "items": [
+        {
+          "type": "new",
+          "text": "Enhance project member loader to include user data, update issue schemas for UUID and flexible du..."
+        },
+        {
+          "type": "new",
+          "text": "Integrate rich text editor for issue descriptions in the edit modal and refine toolbar component ..."
+        },
+        {
+          "type": "new",
+          "text": "Add rich text description editor and comprehensive toolbar with attribute pickers to issue creation."
+        }
+      ]
+    },
+    {
+      "id": "46efdaa0-713c-4d2a-19db-205608aeaae5",
+      "date": "2026-03-03",
+      "version": "v0.1.043",
+      "title": "Implement Advisory Locking For",
+      "summary": "2 changes committed on 2026-03-03.",
+      "items": [
+        {
+          "type": "new",
+          "text": "Implement advisory locking for concurrent issue number generation and refine issue schema fields ..."
+        },
+        {
+          "type": "new",
+          "text": "Implement a comprehensive Kanban board for issue management, including issue filtering, editing, ..."
+        }
+      ]
+    },
+    {
+      "id": "3df9bc50-ce98-492a-a61c-ef97af904e9c",
+      "date": "2026-03-02",
+      "version": "v0.1.044",
+      "title": "Implement Comprehensive Issue Management",
+      "summary": "1 change committed on 2026-03-02.",
+      "items": [
+        {
+          "type": "new",
+          "text": "Implement comprehensive issue management functionality including issues, labels, and statuses."
+        }
+      ]
+    },
+    {
+      "id": "cc83192e-35b8-42ee-25e0-9838ea68f73c",
+      "date": "2026-03-01",
+      "version": "v0.1.045",
+      "title": "Add Vault Folder Ancestors",
+      "summary": "5 changes committed on 2026-03-01.",
+      "items": [
+        {
+          "type": "new",
+          "text": "Add vault folder ancestors query and split vault usage records by project and workspace."
+        },
+        {
+          "type": "new",
+          "text": "implement vault module for comprehensive file and folder management, including S3 integration and..."
+        },
+        {
+          "type": "new",
+          "text": "add new UI components for Gantt chart, Kanban board, and list views."
+        },
+        {
+          "type": "improvement",
+          "text": "comment out the 'Meet' navigation link in the shared configuration."
+        },
+        {
+          "type": "new",
+          "text": "introduce vault feature with comprehensive file and folder management."
+        }
+      ]
+    },
+    {
+      "id": "6b5ba742-ebc5-4412-ead4-6c10f75bad8a",
+      "date": "2026-02-28",
+      "version": "v0.1.046",
+      "title": "Implement Hierarchical Page Mapping",
+      "summary": "5 changes committed on 2026-02-28.",
+      "items": [
+        {
+          "type": "new",
+          "text": "Implement hierarchical page mapping for `getProjectPages` using `toGraphQLPageTree` and relax `co..."
+        },
+        {
+          "type": "new",
+          "text": "Filter project pages by collaborator and remove CUID validation for user IDs in collaborator sche..."
+        },
+        {
+          "type": "new",
+          "text": "Implement unlimited nesting depth and auto-expansion for active descendants in `PageTreeItem`."
+        },
+        {
+          "type": "new",
+          "text": "Register and unregister page awareness provider for remote cursors and set cursor labels to activ..."
+        },
+        {
+          "type": "new",
+          "text": "Enable adding collaborators during page creation and managing them for existing pages."
+        }
+      ]
+    },
+    {
+      "id": "ca4a9a99-85b0-4023-105a-21560a711ef4",
+      "date": "2026-02-27",
+      "version": "v0.1.047",
+      "title": "Register Page Websocket Routes,",
+      "summary": "2 changes committed on 2026-02-27.",
+      "items": [
+        {
+          "type": "new",
+          "text": "Register page WebSocket routes, standardize awareness update messages, and update Redis eval retu..."
+        },
+        {
+          "type": "new",
+          "text": "Introduce real-time collaborative page editor and list with synchronization logic and UI components."
+        }
+      ]
+    },
+    {
+      "id": "443477c6-bb62-4833-864e-e9763024923a",
+      "date": "2026-02-24",
+      "version": "v0.1.048",
+      "title": "Implement Core Page Management",
+      "summary": "1 change committed on 2026-02-24.",
+      "items": [
+        {
+          "type": "new",
+          "text": "Implement core page management functionalities including CRUD, collaboration, and real-time synch..."
+        }
+      ]
+    },
+    {
+      "id": "2637eadf-ab36-4958-4bc4-094b2a5aba4e",
+      "date": "2026-02-21",
+      "version": "v0.1.049",
+      "title": "Add Non-Null Assertion To",
+      "summary": "3 changes committed on 2026-02-21.",
+      "items": [
+        {
+          "type": "fix",
+          "text": "Add non-null assertion to unarchivePage result page."
+        },
+        {
+          "type": "new",
+          "text": "Implement comprehensive page management services including locking, collaboration, archiving, ren..."
+        },
+        {
+          "type": "new",
+          "text": "implement structured WebSocket event handling for page subscribe, update, unsubscribe, and awaren..."
+        }
+      ]
+    },
+    {
+      "id": "b25d0fd0-ea84-4e9f-3e13-d1912720948a",
+      "date": "2026-02-20",
+      "version": "v0.1.050",
+      "title": "Implement A Comprehensive `Get-Page-Snapshot`",
+      "summary": "4 changes committed on 2026-02-20.",
+      "items": [
+        {
+          "type": "new",
+          "text": "Implement a comprehensive `get-page-snapshot` query with Yjs-based real-time synchronization, inc..."
+        },
+        {
+          "type": "new",
+          "text": "implement page creation service with distinct steps for access validation, collaborator processin..."
+        },
+        {
+          "type": "new",
+          "text": "implement atomic page update Lua script, S3 snapshot saving, and add page collaborators and snaps..."
+        },
+        {
+          "type": "new",
+          "text": "introduce pages module for content management and real-time collaboration capabilities."
+        }
+      ]
+    },
+    {
+      "id": "07d66064-043f-4f8e-445e-ad494bf75a3e",
+      "date": "2026-02-18",
+      "version": "v0.1.051",
+      "title": "Implement Comprehensive Whiteboard Resource",
+      "summary": "3 changes committed on 2026-02-18.",
+      "items": [
+        {
+          "type": "new",
+          "text": "Implement comprehensive whiteboard resource cleanup for Redis keys and S3 snapshots, and refine s..."
+        },
+        {
+          "type": "new",
+          "text": "Implement board thumbnail generation, caching, and display with stale-while-revalidate logic for ..."
+        },
+        {
+          "type": "new",
+          "text": "Implement real-time board deletion event handling, including local state cleanup, user feedback, ..."
+        }
+      ]
+    },
+    {
+      "id": "c37ff0b0-275d-4bac-1ed7-b7c8426b73b7",
+      "date": "2026-02-17",
+      "version": "v0.1.052",
+      "title": "Add Validation To Prevent",
+      "summary": "5 changes committed on 2026-02-17.",
+      "items": [
+        {
+          "type": "new",
+          "text": "Add validation to prevent redundant whiteboard archive/unarchive operations and disable stream wo..."
+        },
+        {
+          "type": "fix",
+          "text": "remove CUID validation for user IDs in addBoardCollaboratorsSchema."
+        },
+        {
+          "type": "new",
+          "text": "implement atomic Redis snapshot updates and stream trimming using Lua scripts, and refactor white..."
+        },
+        {
+          "type": "improvement",
+          "text": "Refactor delete board dialog to be presentational, remove subscribe board feature, and enhance ar..."
+        },
+        {
+          "type": "new",
+          "text": "Introduce board list grid/list views with context menu, rename/delete dialogs, and enhance board ..."
+        }
+      ]
+    },
+    {
+      "id": "32f267be-7a25-46de-64f4-5094aa58bd35",
+      "date": "2026-02-16",
+      "version": "v0.1.053",
+      "title": "Migrate Whiteboard Stream Worker",
+      "summary": "4 changes committed on 2026-02-16.",
+      "items": [
+        {
+          "type": "improvement",
+          "text": "migrate whiteboard stream worker to a stateless V2 architecture, removing in-memory Y.Doc caching..."
+        },
+        {
+          "type": "new",
+          "text": "introduce memory-efficient stateless stream worker v2 for whiteboard updates."
+        },
+        {
+          "type": "improvement",
+          "text": "Reimplement whiteboard synchronization using a new multi-phase hook architecture."
+        },
+        {
+          "type": "new",
+          "text": "introduce `WhiteboardCanvasV2` with new Y.js synchronization hooks and a centralized Y.Doc creati..."
+        }
+      ]
+    },
+    {
+      "id": "c13fbf4f-a9cf-4fb8-d6d4-540ec0ac2a58",
+      "date": "2026-02-15",
+      "version": "v0.1.054",
+      "title": "Implement Y.Js State Vector",
+      "summary": "2 changes committed on 2026-02-15.",
+      "items": [
+        {
+          "type": "new",
+          "text": "implement Y.js state vector synchronization and echo prevention for whiteboard collaboration"
+        },
+        {
+          "type": "new",
+          "text": "Implement `WhiteboardCanvasV2` utilizing Y.js and IndexedDB for offline-first whiteboard collabor..."
+        }
+      ]
+    },
+    {
+      "id": "770d1d3d-f880-4aae-477c-781f6772e0bd",
+      "date": "2026-02-14",
+      "version": "v0.1.055",
+      "title": "Implement Robust Offline-First Synchronization",
+      "summary": "1 change committed on 2026-02-14.",
+      "items": [
+        {
+          "type": "new",
+          "text": "Implement robust offline-first synchronization with Y.js, board caching, and an offline queue."
+        }
+      ]
+    },
+    {
+      "id": "1f256a1c-d209-4ebe-ed34-03986440a62f",
+      "date": "2026-02-13",
+      "version": "v0.1.056",
+      "title": "Reimplement Whiteboard Stream Worker",
+      "summary": "4 changes committed on 2026-02-13.",
+      "items": [
+        {
+          "type": "new",
+          "text": "reimplement whiteboard stream worker with dedicated worker loops and improved state management"
+        },
+        {
+          "type": "improvement",
+          "text": "replace shared logger with a new structured logging library and introduce debug flags."
+        },
+        {
+          "type": "new",
+          "text": "Implement Y.Doc structure validation and loop prevention for whiteboard updates, ensuring correct..."
+        },
+        {
+          "type": "new",
+          "text": "Implement core whiteboard functionality including canvas, collaboration, board listing, and setti..."
+        }
+      ]
+    },
+    {
+      "id": "f82d83b5-e7cb-42eb-afb6-8337dc658f0d",
+      "date": "2026-02-12",
+      "version": "v0.1.057",
+      "title": "Remove Get-Project-Boards Query And",
+      "summary": "2 changes committed on 2026-02-12.",
+      "items": [
+        {
+          "type": "new",
+          "text": "remove get-project-boards query and implement Redis-backed active collaborator presence tracking."
+        },
+        {
+          "type": "new",
+          "text": "standardize board and snapshot fetching to use `getBoard` and `getBoardSnapshot` queries and intr..."
+        }
+      ]
+    },
+    {
+      "id": "ece4531d-d20a-471d-4dd6-76405a9a5b88",
+      "date": "2026-02-11",
+      "version": "v0.1.058",
+      "title": "Rename Whiteboard Queries To",
+      "summary": "2 changes committed on 2026-02-11.",
+      "items": [
+        {
+          "type": "new",
+          "text": "rename whiteboard queries to `getBoard` and `getBoardSnapshot` and update their arguments, along ..."
+        },
+        {
+          "type": "new",
+          "text": "Implement comprehensive whiteboard management, collaboration, and real-time event features."
+        }
+      ]
+    },
+    {
+      "id": "d3a46f64-3e3f-4979-4621-06a1c2b3dba2",
+      "date": "2026-02-10",
+      "version": "v0.1.059",
+      "title": "Bundle `Cookie` Package For",
+      "summary": "3 changes committed on 2026-02-10.",
+      "items": [
+        {
+          "type": "new",
+          "text": "Bundle `cookie` package for HTTP cookie parsing and serialization."
+        },
+        {
+          "type": "new",
+          "text": "Implement whiteboard collaboration with session management, user presence, and board entities."
+        },
+        {
+          "type": "new",
+          "text": "implement whiteboard upstream contracts and extend local database schema for whiteboard offline s..."
+        }
+      ]
+    },
+    {
+      "id": "1d759011-df99-4abd-8d2d-b379c613bbc6",
+      "date": "2026-02-09",
+      "version": "v0.1.060",
+      "title": "Implement Y.Js State Vector",
+      "summary": "1 change committed on 2026-02-09.",
+      "items": [
+        {
+          "type": "new",
+          "text": "implement Y.js state vector diffing and S3 snapshot management for whiteboard stream workers"
+        }
+      ]
+    },
+    {
+      "id": "93368a34-a792-453b-6090-833adf451b06",
+      "date": "2026-02-08",
+      "version": "v0.1.061",
+      "title": "Implement Atomic Whiteboard Update",
+      "summary": "5 changes committed on 2026-02-08.",
+      "items": [
+        {
+          "type": "new",
+          "text": "Implement atomic whiteboard update processing using a Redis Lua script, Yjs update validation, an..."
+        },
+        {
+          "type": "new",
+          "text": "Implement whiteboard creation with S3 snapshot upload, collaborator management, and initial Excal..."
+        },
+        {
+          "type": "new",
+          "text": "Implement real-time collaborative whiteboard module with WebSocket communication, board state man..."
+        },
+        {
+          "type": "new",
+          "text": "Implement a new whiteboard module with GraphQL queries, mutations, and data loaders."
+        },
+        {
+          "type": "new",
+          "text": "introduce Whiteboard V4 schema with new fields and a dedicated collaborators table, and refactor ..."
+        }
+      ]
+    },
+    {
+      "id": "d50dab66-f9a8-477f-99b7-f8c018fe755c",
+      "date": "2026-02-07",
+      "version": "v0.1.062",
+      "title": "Remove Redundant Json.Stringify Call",
+      "summary": "4 changes committed on 2026-02-07.",
+      "items": [
+        {
+          "type": "improvement",
+          "text": "Remove redundant JSON.stringify call from subscribe-conversation success frame."
+        },
+        {
+          "type": "improvement",
+          "text": "Rename `SubscribeAck` to `SubscribeSuccess` and enhance server message validation to include a `s..."
+        },
+        {
+          "type": "improvement",
+          "text": "simplify project ID resolution by directly using context"
+        },
+        {
+          "type": "new",
+          "text": "Initialize `DomainRegistry` with direct `projectId` in project route and prioritize `projectId` f..."
+        }
+      ]
+    },
+    {
+      "id": "30ba2a8e-6eaa-42cf-1dd3-1be18036b91b",
+      "date": "2026-02-06",
+      "version": "v0.1.063",
+      "title": "Introduce New Domain-Specific Contracts",
+      "summary": "5 changes committed on 2026-02-06.",
+      "items": [
+        {
+          "type": "new",
+          "text": "introduce new domain-specific contracts and registry for WebSocket events, deprecating the legacy..."
+        },
+        {
+          "type": "improvement",
+          "text": "centralize WebSocket event definitions into domain-specific contracts and remove the event bridge."
+        },
+        {
+          "type": "improvement",
+          "text": "decouple WebSocket core from Chat domain (Phase 1 & 2)"
+        },
+        {
+          "type": "new",
+          "text": "Introduce a centralized logging utility and replace direct console calls with it across the codeb..."
+        },
+        {
+          "type": "new",
+          "text": "Implement conversation-based subscriptions with history replay and batch message commit, standard..."
+        }
+      ]
+    },
+    {
+      "id": "e15cd8e4-b1bf-4f0c-15e7-2e29ad8f6006",
+      "date": "2026-02-05",
+      "version": "v0.1.064",
+      "title": "Implement `Getusersbyids` Graphql Query",
+      "summary": "2 changes committed on 2026-02-05.",
+      "items": [
+        {
+          "type": "new",
+          "text": "Implement `getUsersByIds` GraphQL query to retrieve basic user data by ID."
+        },
+        {
+          "type": "new",
+          "text": "Display message author avatars and names by introducing a user caching system and a new GraphQL q..."
+        }
+      ]
+    },
+    {
+      "id": "05f12f84-dfe6-43ee-a16f-d1abc746b3b1",
+      "date": "2026-02-04",
+      "version": "v0.1.065",
+      "title": "Implement Dedicated `Isarchived` Field",
+      "summary": "2 changes committed on 2026-02-04.",
+      "items": [
+        {
+          "type": "new",
+          "text": "Implement dedicated `isArchived` field for chat channels, update archiving logic to set `deletedA..."
+        },
+        {
+          "type": "new",
+          "text": "Implement functionality to archive, unarchive, and delete chat channels with corresponding UI and..."
+        }
+      ]
+    },
+    {
+      "id": "5fd065ce-e6d3-4948-37fc-bc9e6b867e46",
+      "date": "2026-02-03",
+      "version": "v0.1.066",
+      "title": "Update Channel Members Dataloader",
+      "summary": "2 changes committed on 2026-02-03.",
+      "items": [
+        {
+          "type": "new",
+          "text": "Update channel members DataLoader to fetch user details and explicitly map to GraphQL Conversatio..."
+        },
+        {
+          "type": "new",
+          "text": "Implement channel renaming functionality and a channel settings modal, updating chat routes to us..."
+        }
+      ]
+    },
+    {
+      "id": "93a030f9-3bfc-433d-8a05-5d41349d5d95",
+      "date": "2026-02-02",
+      "version": "v0.1.067",
+      "title": "Refactor Chat Conversation Schema",
+      "summary": "5 changes committed on 2026-02-02.",
+      "items": [
+        {
+          "type": "new",
+          "text": "Refactor chat conversation schema to flatten `ConversationEdge` into `Conversation` and implement..."
+        },
+        {
+          "type": "improvement",
+          "text": "Remove `schema.graphql` and introduce `closedAt` field for chat conversation models."
+        },
+        {
+          "type": "new",
+          "text": "Enhance chat module with reactions, threads, direct messages, typing indicators, and performance ..."
+        },
+        {
+          "type": "new",
+          "text": "Invalidate conversation queries by workspace and project after channel creation, replacing channe..."
+        },
+        {
+          "type": "improvement",
+          "text": "Replaced `channel` and `presence` entities with a new `conversation` entity, migrating associated..."
+        }
+      ]
+    },
+    {
+      "id": "bb276324-19d3-4c75-47e2-d9e560080bef",
+      "date": "2026-01-31",
+      "version": "v0.1.068",
+      "title": "Reimplement Message Rendering By",
+      "summary": "1 change committed on 2026-01-31.",
+      "items": [
+        {
+          "type": "improvement",
+          "text": "Reimplement message rendering by migrating message list and components into the chat window."
+        }
+      ]
+    },
+    {
+      "id": "07a27e88-4f57-40f8-bfbb-d863b09be622",
+      "date": "2026-01-30",
+      "version": "v0.1.069",
+      "title": "Reimplement Chat Resequencing With",
+      "summary": "1 change committed on 2026-01-30.",
+      "items": [
+        {
+          "type": "new",
+          "text": "Reimplement chat resequencing with a new generic stream resequencer and overhaul the WebSocket cl..."
+        }
+      ]
+    },
+    {
+      "id": "c493a6fb-7245-4e2a-8fb0-5939a1666c9e",
+      "date": "2026-01-29",
+      "version": "v0.1.070",
+      "title": "Add Chat Message History",
+      "summary": "2 changes committed on 2026-01-29.",
+      "items": [
+        {
+          "type": "new",
+          "text": "Add chat message history GraphQL query and implement WebSocket sync-on-connect with message repla..."
+        },
+        {
+          "type": "improvement",
+          "text": "Reimplement the chat message list with virtualized scrolling, enhanced resequencing, and improved..."
+        }
+      ]
+    },
+    {
+      "id": "b956a792-bfab-47ec-784e-4cbb9897a4eb",
+      "date": "2026-01-28",
+      "version": "v0.1.071",
+      "title": "Implement Dual Sequencing For",
+      "summary": "2 changes committed on 2026-01-28.",
+      "items": [
+        {
+          "type": "new",
+          "text": "Implement dual sequencing for chat messages with `sequence` and `lastSequence` fields, new `messa..."
+        },
+        {
+          "type": "new",
+          "text": "Implement sequence-based chat message recovery and overhaul message input UI"
+        }
+      ]
+    },
+    {
+      "id": "f6c3fa54-dc1f-4e3a-70d3-86ce9f5f523a",
+      "date": "2026-01-27",
+      "version": "v0.1.072",
+      "title": "Add `Messagesdelta` Graphql Query",
+      "summary": "5 changes committed on 2026-01-27.",
+      "items": [
+        {
+          "type": "new",
+          "text": "Add `messagesDelta` GraphQL query for incremental chat message fetching by `streamId`."
+        },
+        {
+          "type": "new",
+          "text": "integrate Clerk token validation for WebSocket connections, add author existence check to chat me..."
+        },
+        {
+          "type": "new",
+          "text": "Implement chat session recovery with `projectId` and refactor chat window UI with new primitives."
+        },
+        {
+          "type": "new",
+          "text": "Implement Conversation model with CHANNEL, DM, and GROUP_DM types, and introduce new chat event a..."
+        },
+        {
+          "type": "new",
+          "text": "Implement reliable chat message delivery with an outbox, resequencer, and local persistence for o..."
+        }
+      ]
+    },
+    {
+      "id": "7c6a75ce-a5d6-4c8d-0bb6-d790491445e6",
+      "date": "2026-01-26",
+      "version": "v0.1.073",
+      "title": "Add `Ping` Websocket Event",
+      "summary": "4 changes committed on 2026-01-26.",
+      "items": [
+        {
+          "type": "new",
+          "text": "Add `ping` WebSocket event and `getChannelById` query, and update chat ID validation from UUID to..."
+        },
+        {
+          "type": "improvement",
+          "text": "Rename ChatChannel to Conversation and update all related fields, types, and queries."
+        },
+        {
+          "type": "improvement",
+          "text": "Replaced monolithic WebSocket gateway with a modular infrastructure for chat events and introduce..."
+        },
+        {
+          "type": "new",
+          "text": "Rearchitect WebSocket communication, introduce new chat and notification contracts, and rename ch..."
+        }
+      ]
+    },
+    {
+      "id": "9e6b01fb-0065-4ca8-c5f3-56b242b65a76",
+      "date": "2026-01-23",
+      "version": "v0.1.074",
+      "title": "Add Updated_At To Chat_Channels",
+      "summary": "6 changes committed on 2026-01-23.",
+      "items": [
+        {
+          "type": "new",
+          "text": "add updated_at to chat_channels and scope channels by project"
+        },
+        {
+          "type": "new",
+          "text": "fixed create channel services and formated mostly"
+        },
+        {
+          "type": "new",
+          "text": "implemented reusable distributed lockign and key generator factory"
+        },
+        {
+          "type": "new",
+          "text": "refactored disbributed locking service and make it reusable"
+        },
+        {
+          "type": "new",
+          "text": "implemented create channel feature"
+        },
+        {
+          "type": "new",
+          "text": "will look after these entities"
+        }
+      ]
+    },
+    {
+      "id": "27905103-9d65-4853-a077-6c59524fbba8",
+      "date": "2026-01-22",
+      "version": "v0.1.075",
+      "title": "Refactor `Getuserchannels` To Filter",
+      "summary": "4 changes committed on 2026-01-22.",
+      "items": [
+        {
+          "type": "new",
+          "text": "Refactor `getUserChannels` to filter by workspace, add authorization, and support pagination."
+        },
+        {
+          "type": "new",
+          "text": "Introduce a comprehensive chat module including queries, services, data loaders, and GraphQL inte..."
+        },
+        {
+          "type": "new",
+          "text": "Implement core chat functionality including WebSocket integration, session management, channel cr..."
+        },
+        {
+          "type": "new",
+          "text": "implement chat messaging system with channels, messages, members, and presence management"
+        }
+      ]
+    },
+    {
+      "id": "28803a29-081d-4791-7ee8-dffdce365b88",
+      "date": "2026-01-21",
+      "version": "v0.1.076",
+      "title": "Implement Core Chat Functionality",
+      "summary": "1 change committed on 2026-01-21.",
+      "items": [
+        {
+          "type": "new",
+          "text": "implement core chat functionality with WebSocket gateway, Prisma schema, and idempotency middleware."
+        }
+      ]
+    },
+    {
+      "id": "a4fef295-898f-4fba-640d-d53b46655a36",
+      "date": "2026-01-19",
+      "version": "v0.1.077",
+      "title": "Add .Js Extension To",
+      "summary": "1 change committed on 2026-01-19.",
+      "items": [
+        {
+          "type": "fix",
+          "text": "add .js extension to notification engine bootstrap dynamic import."
+        }
+      ]
+    },
+    {
+      "id": "f93b00a8-423e-41a9-0dff-e38ec3f6330f",
+      "date": "2026-01-18",
+      "version": "v0.1.078",
+      "title": "Directly Query Projects By",
+      "summary": "1 change committed on 2026-01-18.",
+      "items": [
+        {
+          "type": "improvement",
+          "text": "Directly query projects by workspace ID and validate workspace membership, removing project membe..."
+        }
+      ]
+    },
+    {
+      "id": "575a0836-2596-4f22-31ed-ece193540ccb",
+      "date": "2026-01-17",
+      "version": "v0.1.079",
+      "title": "Re-Generate Graphql Types And",
+      "summary": "8 changes committed on 2026-01-17.",
+      "items": [
+        {
+          "type": "improvement",
+          "text": "Re-generate GraphQL types and update the `gen` script to include schema synchronization."
+        },
+        {
+          "type": "improvement",
+          "text": "modularize user, workspace, project, and notification modules using services, queries, and GraphQ..."
+        },
+        {
+          "type": "improvement",
+          "text": "Consolidate user identification by making the user's primary ID directly equivalent to their Cler..."
+        },
+        {
+          "type": "new",
+          "text": "Add project module with GraphQL API for creation, retrieval, and member management."
+        },
+        {
+          "type": "improvement",
+          "text": "Reformat GraphQL schema and generated client files, and add generated files to .prettierignore."
+        },
+        {
+          "type": "improvement",
+          "text": "Reorganize GraphQL schema definitions, types, and fields for better structure."
+        },
+        {
+          "type": "new",
+          "text": "Add explicit user synchronization before accepting a workspace invite to prevent race conditions."
+        },
+        {
+          "type": "new",
+          "text": "Introduce project entity with creation flow, slug-based routing, and updated GraphQL schema."
+        }
+      ]
+    },
+    {
+      "id": "086c3d58-1a5e-4124-59eb-20a6c2dfef29",
+      "date": "2026-01-14",
+      "version": "v0.1.080",
+      "title": "Added Workspace Join Service",
+      "summary": "6 changes committed on 2026-01-14.",
+      "items": [
+        {
+          "type": "new",
+          "text": "added workspace join service and members service"
+        },
+        {
+          "type": "improvement",
+          "text": "public api refactor some components imported via public api"
+        },
+        {
+          "type": "improvement",
+          "text": "refactor complete"
+        },
+        {
+          "type": "improvement",
+          "text": "refactored and used public apis"
+        },
+        {
+          "type": "improvement",
+          "text": "shared layer refactor & rename createGqlclient to Gqlclient"
+        },
+        {
+          "type": "improvement",
+          "text": "features refactor complete"
+        }
+      ]
+    },
+    {
+      "id": "b3643cb8-0e92-49d6-f066-c3bd5496e1e7",
+      "date": "2026-01-13",
+      "version": "v0.1.081",
+      "title": "Added Invite To Workspace",
+      "summary": "1 change committed on 2026-01-13.",
+      "items": [
+        {
+          "type": "new",
+          "text": "added invite to workspace feature and join workspace"
+        }
+      ]
+    },
+    {
+      "id": "e5635c8e-323d-4f04-8df0-1cec0b83a732",
+      "date": "2026-01-11",
+      "version": "v0.1.082",
+      "title": "Add Eslint-Plugin-Boundaries And Dependencies",
+      "summary": "2 changes committed on 2026-01-11.",
+      "items": [
+        {
+          "type": "new",
+          "text": "add eslint-plugin-boundaries and dependencies"
+        },
+        {
+          "type": "new",
+          "text": "implemented notitication service"
+        }
+      ]
+    },
+    {
+      "id": "fcaec916-bd79-49b0-1551-0d85b18ffb30",
+      "date": "2026-01-09",
+      "version": "v0.1.083",
+      "title": "Lua Script Optomisation And",
+      "summary": "2 changes committed on 2026-01-09.",
+      "items": [
+        {
+          "type": "improvement",
+          "text": "lua script optomisation and error handeling"
+        },
+        {
+          "type": "improvement",
+          "text": "update  workspace form API"
+        }
+      ]
+    },
+    {
+      "id": "505a3654-31fa-4166-7dbd-a0f96fa8c963",
+      "date": "2026-01-08",
+      "version": "v0.1.084",
+      "title": ": Refactored File Names",
+      "summary": "3 changes committed on 2026-01-08.",
+      "items": [
+        {
+          "type": "improvement",
+          "text": ": refactored file names and small fix"
+        },
+        {
+          "type": "new",
+          "text": "implemented workspace creation  feature"
+        },
+        {
+          "type": "improvement",
+          "text": "enforce architectural boundaries and relocate GraphQL generated files"
+        }
+      ]
+    },
+    {
+      "id": "4893f3d3-70d6-45e0-e67a-47e616e7b4ab",
+      "date": "2026-01-07",
+      "version": "v0.1.085",
+      "title": "Implement Email Verification For",
+      "summary": "4 changes committed on 2026-01-07.",
+      "items": [
+        {
+          "type": "new",
+          "text": "Implement email verification for user sync, enhance input validation with XSS and URL checks, and..."
+        },
+        {
+          "type": "new",
+          "text": "Implement robust workspace slug management, creation, and onboarding with new utilities and error..."
+        },
+        {
+          "type": "improvement",
+          "text": "Reorganize component imports and file structure across widgets, shared UI, and pages."
+        },
+        {
+          "type": "new",
+          "text": "implement new onboarding wizard with dedicated routes, API hooks, and idempotency support."
+        }
+      ]
+    },
+    {
+      "id": "ce24e40b-2478-423f-fe64-85a4cf790e92",
+      "date": "2026-01-06",
+      "version": "v0.1.086",
+      "title": "Implement Idempotency With Redis",
+      "summary": "1 change committed on 2026-01-06.",
+      "items": [
+        {
+          "type": "new",
+          "text": "implement idempotency with Redis Lua scripts and a new middleware"
+        }
+      ]
+    },
+    {
+      "id": "ccd53f7a-dfac-48fe-04f4-63835771157d",
+      "date": "2026-01-05",
+      "version": "v0.1.087",
+      "title": "Implement Quota Management, Workspace",
+      "summary": "2 changes committed on 2026-01-05.",
+      "items": [
+        {
+          "type": "new",
+          "text": "implement quota management, workspace creation logic, and slug validation with Redis caching"
+        },
+        {
+          "type": "improvement",
+          "text": "Apply consistent formatting to generated GraphQL client files."
+        }
+      ]
+    },
+    {
+      "id": "3e509300-2e50-441a-ed95-13d18c270280",
+      "date": "2026-01-04",
+      "version": "v0.1.088",
+      "title": "Introduce `Workspacebyslug` Query, Integrate",
+      "summary": "7 changes committed on 2026-01-04.",
+      "items": [
+        {
+          "type": "new",
+          "text": "Introduce `workspaceBySlug` query, integrate user dataloaders, and improve workspace slug generat..."
+        },
+        {
+          "type": "new",
+          "text": "Add route and widget error handling using `react-error-boundary` and new dedicated error components."
+        },
+        {
+          "type": "new",
+          "text": "Implement Redux-based session management for current user and workspace context."
+        },
+        {
+          "type": "new",
+          "text": "Implement Clerk user profile page and update user settings route to a splat route."
+        },
+        {
+          "type": "new",
+          "text": "Introduce new project features (pages, whiteboard, kanban, meet, settings), refactor navigation c..."
+        },
+        {
+          "type": "new",
+          "text": "enhance auth split layout with detailed branding and update generated `_auth` route naming."
+        },
+        {
+          "type": "new",
+          "text": "implement new marketing page structure with dedicated widgets and a shared navbar, and update the..."
+        }
+      ]
+    },
+    {
+      "id": "af226406-f7c9-4355-b2a0-4491aad8519a",
+      "date": "2026-01-03",
+      "version": "v0.1.089",
+      "title": "Introduce Dataloaders For User",
+      "summary": "8 changes committed on 2026-01-03.",
+      "items": [
+        {
+          "type": "new",
+          "text": "Introduce Dataloaders for User and Workspace, implement Zod validation for service inputs, and ap..."
+        },
+        {
+          "type": "new",
+          "text": "Implement workspace management module with GraphQL API, onboarding, and user synchronization upda..."
+        },
+        {
+          "type": "new",
+          "text": "Implement Clerk webhooks for user data synchronization and update the user schema with a `clerkId`."
+        },
+        {
+          "type": "new",
+          "text": "Implement comprehensive database schema including users, workspaces, projects, tasks, chat, and A..."
+        },
+        {
+          "type": "new",
+          "text": "Introduce user authentication and management, centralized error handling, and logging."
+        },
+        {
+          "type": "new",
+          "text": "Implement onboarding flow with GraphQL API, user syncing, workspace creation, and project modal."
+        },
+        {
+          "type": "new",
+          "text": "Add customizable stroke width for spinner, and refactor project linking and resizable component i..."
+        },
+        {
+          "type": "new",
+          "text": "Implement new authentication pages with dedicated sign-in/sign-up forms and a split layout, along..."
+        }
+      ]
+    },
+    {
+      "id": "16cd0b9a-2181-4167-2450-c0865dc74d69",
+      "date": "2026-01-02",
+      "version": "v0.1.090",
+      "title": "Introduce Docker Compose For",
+      "summary": "4 changes committed on 2026-01-02.",
+      "items": [
+        {
+          "type": "new",
+          "text": "Introduce Docker Compose for local Postgres and Redis, update environment variables, and adjust s..."
+        },
+        {
+          "type": "improvement",
+          "text": "make GraphQL route handler async"
+        },
+        {
+          "type": "new",
+          "text": "establish new file-based routing with dedicated layouts for app, auth, and marketing, and detaile..."
+        },
+        {
+          "type": "new",
+          "text": "Introduce new shared UI components, remove deprecated demo routes and components, and update proj..."
+        }
+      ]
+    },
+    {
+      "id": "61fb87e4-6b88-4575-994b-272e9d5666c9",
+      "date": "2026-01-01",
+      "version": "v0.1.091",
+      "title": "Introduce Initial Comprehensive Database",
+      "summary": "2 changes committed on 2026-01-01.",
+      "items": [
+        {
+          "type": "new",
+          "text": "Introduce initial comprehensive database schema and Prisma setup for PostgreSQL."
+        },
+        {
+          "type": "new",
+          "text": "Initialize server with Hono, GraphQL Yoga, Prisma, and Bun for initial project setup."
+        }
+      ]
+    },
+    {
+      "id": "b2c3d4e5-f6a7-8901-bcde-f12345678901",
+      "date": "2026-04-18",
+      "version": "v0.4.0",
+      "title": "Auth & permissions overhaul",
+      "summary": "Unified authorization layer across all GraphQL mutations and WebSocket events.",
+      "items": [
+        {
+          "type": "improvement",
+          "text": "Single permission model shared by all modules"
+        },
+        {
+          "type": "improvement",
+          "text": "Clerk integration with workspace-level roles"
+        },
+        {
+          "type": "fix",
+          "text": "Session tokens no longer expire mid-WebSocket connection"
+        },
+        {
+          "type": "fix",
+          "text": "Project invite links respect workspace membership"
+        }
+      ]
+    },
+    {
+      "id": "c3d4e5f6-a7b8-9012-cdef-123456789012",
+      "date": "2026-04-04",
+      "version": "v0.3.0",
+      "title": "Chat & real-time infrastructure",
+      "summary": "Replaced polling with a full WebSocket event pipeline across all collaborative features.",
+      "items": [
+        {
+          "type": "new",
+          "text": "WebSocket event bus \u2014 subscribe to any entity change"
+        },
+        {
+          "type": "new",
+          "text": "Typing indicators in channels and DMs"
+        },
+        {
+          "type": "improvement",
+          "text": "Message reactions with optimistic UI"
+        },
+        {
+          "type": "fix",
+          "text": "Channel unread counts now sync correctly across tabs"
+        }
+      ]
+    },
+    {
+      "id": "d4e5f6a7-b8c9-0123-defa-234567890123",
+      "date": "2026-03-21",
+      "version": "v0.2.0",
+      "title": "Page editor & File Vault",
+      "summary": "Collaborative document editing and a centralised file management layer.",
+      "items": [
+        {
+          "type": "new",
+          "text": "BlockNote editor \u2014 slash commands, embeds, image blocks"
+        },
+        {
+          "type": "new",
+          "text": "File Vault with drag-and-drop upload"
+        },
+        {
+          "type": "improvement",
+          "text": "Page tree with drag-to-reorder"
+        },
+        {
+          "type": "fix",
+          "text": "Editor content persisted correctly on slow connections"
+        }
+      ]
+    },
+    {
+      "id": "f5a6b7c8-d9e0-1234-5678-90abcdef1234",
+      "date": "2026-03-15",
+      "version": "v0.1.14",
+      "title": "Whiteboard collaboration",
+      "summary": "Real-time collaborative whiteboard with Y.js synchronization and Excalidraw integration.",
+      "items": [
+        {
+          "type": "new",
+          "text": "Y.js state vector synchronization"
+        },
+        {
+          "type": "new",
+          "text": "Excalidraw canvas with real-time cursors"
+        },
+        {
+          "type": "new",
+          "text": "Whiteboard snapshot persistence to S3"
+        },
+        {
+          "type": "new",
+          "text": "Board thumbnail generation and caching"
+        },
+        {
+          "type": "improvement",
+          "text": "Stateless stream worker v2 architecture"
+        },
+        {
+          "type": "fix",
+          "text": "Y.Doc loop prevention for whiteboard updates"
+        }
+      ]
+    },
+    {
+      "id": "f5a6b7c8-d9e0-1234-5678-90abcdef1235",
+      "date": "2026-03-08",
+      "version": "v0.1.13",
+      "title": "Real-time board management",
+      "summary": "Collaborative whiteboard boards with real-time deletion and archiving events.",
+      "items": [
+        {
+          "type": "new",
+          "text": "Board list with grid and list views"
+        },
+        {
+          "type": "new",
+          "text": "Real-time board deletion event handling"
+        },
+        {
+          "type": "new",
+          "text": "Board collaborator management"
+        },
+        {
+          "type": "improvement",
+          "text": "Stale-while-revalidate thumbnail caching"
+        }
+      ]
+    },
+    {
+      "id": "f5a6b7c8-d9e0-1234-5678-90abcdef1236",
+      "date": "2026-03-01",
+      "version": "v0.1.12",
+      "title": "Vault & issue management",
+      "summary": "Comprehensive file management with Vault and rich text issue descriptions.",
+      "items": [
+        {
+          "type": "new",
+          "text": "Vault module for file and folder management"
+        },
+        {
+          "type": "new",
+          "text": "S3 integration for file storage"
+        },
+        {
+          "type": "new",
+          "text": "Kanban board with drag-and-drop"
+        },
+        {
+          "type": "new",
+          "text": "Rich text editor for issue descriptions"
+        },
+        {
+          "type": "new",
+          "text": "Gantt chart view component"
+        }
+      ]
+    },
+    {
+      "id": "f5a6b7c8-d9e0-1234-5678-90abcdef1237",
+      "date": "2026-02-22",
+      "version": "v0.1.11",
+      "title": "WebSocket event system",
+      "summary": "Domain-specific WebSocket contracts and centralized logging infrastructure.",
+      "items": [
+        {
+          "type": "new",
+          "text": "Domain registry for WebSocket events"
+        },
+        {
+          "type": "new",
+          "text": "Centralized logging utility"
+        },
+        {
+          "type": "new",
+          "text": "Conversation-based subscriptions with history replay"
+        },
+        {
+          "type": "improvement",
+          "text": "WebSocket core decoupled from Chat domain"
+        },
+        {
+          "type": "fix",
+          "text": "Project ID resolution from context"
+        }
+      ]
+    },
+    {
+      "id": "f5a6b7c8-d9e0-1234-5678-90abcdef1238",
+      "date": "2026-02-15",
+      "version": "v0.1.10",
+      "title": "Whiteboard foundation",
+      "summary": "Initial whiteboard module with GraphQL queries and board entity management.",
+      "items": [
+        {
+          "type": "new",
+          "text": "Whiteboard module with GraphQL queries"
+        },
+        {
+          "type": "new",
+          "text": "Board creation with S3 snapshot upload"
+        },
+        {
+          "type": "new",
+          "text": "Redis Lua script for atomic updates"
+        },
+        {
+          "type": "new",
+          "text": "Active collaborator presence tracking"
+        },
+        {
+          "type": "improvement",
+          "text": "Whiteboard V4 schema with collaborators table"
+        }
+      ]
+    },
+    {
+      "id": "f5a6b7c8-d9e0-1234-5678-90abcdef1239",
+      "date": "2026-02-08",
+      "version": "v0.1.9",
+      "title": "Chat message features",
+      "summary": "Message history, archiving, reactions, and user avatar display system.",
+      "items": [
+        {
+          "type": "new",
+          "text": "Chat message history GraphQL query"
+        },
+        {
+          "type": "new",
+          "text": "Channel archiving and unarchiving"
+        },
+        {
+          "type": "new",
+          "text": "Message reactions with atomic Redis operations"
+        },
+        {
+          "type": "new",
+          "text": "User avatar and name display"
+        },
+        {
+          "type": "improvement",
+          "text": "Channel rename and settings modal"
+        }
+      ]
+    },
+    {
+      "id": "f5a6b7c8-d9e0-1234-5678-90abcdef1240",
+      "date": "2026-02-01",
+      "version": "v0.1.8",
+      "title": "Chat module foundation",
+      "summary": "WebSocket gateway with channel creation, message display, and presence management.",
+      "items": [
+        {
+          "type": "new",
+          "text": "WebSocket gateway with modular infrastructure"
+        },
+        {
+          "type": "new",
+          "text": "Channel creation with project member auto-add"
+        },
+        {
+          "type": "new",
+          "text": "Message display with virtualized scrolling"
+        },
+        {
+          "type": "new",
+          "text": "Presence management and cursor tracking"
+        },
+        {
+          "type": "new",
+          "text": "Chat message resequencer"
+        },
+        {
+          "type": "new",
+          "text": "Clerk token validation for WebSocket"
+        }
+      ]
+    },
+    {
+      "id": "f5a6b7c8-d9e0-1234-5678-90abcdef1241",
+      "date": "2026-01-25",
+      "version": "v0.1.7",
+      "title": "Project & workspace modules",
+      "summary": "Project creation, member management, and workspace invite system.",
+      "items": [
+        {
+          "type": "new",
+          "text": "Project module with GraphQL API"
+        },
+        {
+          "type": "new",
+          "text": "Project member creation and retrieval"
+        },
+        {
+          "type": "new",
+          "text": "Workspace join service and members"
+        },
+        {
+          "type": "new",
+          "text": "Workspace invite functionality"
+        },
+        {
+          "type": "improvement",
+          "text": "Project by workspace ID direct query"
+        }
+      ]
+    },
+    {
+      "id": "f5a6b7c8-d9e0-1234-5678-90abcdef1242",
+      "date": "2026-01-18",
+      "version": "v0.1.6",
+      "title": "Notification service",
+      "summary": "Notification engine with WebSocket delivery and engine bootstrap.",
+      "items": [
+        {
+          "type": "new",
+          "text": "Notification service implementation"
+        },
+        {
+          "type": "new",
+          "text": "Notification engine bootstrap"
+        },
+        {
+          "type": "improvement",
+          "text": "Distributed locking service refactor"
+        }
+      ]
+    },
+    {
+      "id": "f5a6b7c8-d9e0-1234-5678-90abcdef1243",
+      "date": "2026-01-11",
+      "version": "v0.1.5",
+      "title": "Workspace onboarding",
+      "summary": "Robust workspace slug management, creation, and user onboarding flow.",
+      "items": [
+        {
+          "type": "new",
+          "text": "Workspace slug management and validation"
+        },
+        {
+          "type": "new",
+          "text": "Workspace creation with quotas"
+        },
+        {
+          "type": "new",
+          "text": "Redis caching for slug validation"
+        },
+        {
+          "type": "new",
+          "text": "Idempotency with Redis Lua scripts"
+        },
+        {
+          "type": "improvement",
+          "text": "Onboarding wizard with API hooks"
+        },
+        {
+          "type": "improvement",
+          "text": "Workspace form API refactor"
+        }
+      ]
+    },
+    {
+      "id": "f5a6b7c8-d9e0-1234-5678-90abcdef1244",
+      "date": "2026-01-04",
+      "version": "v0.1.4",
+      "title": "Authentication system",
+      "summary": "User authentication with Clerk, email verification, and session management.",
+      "items": [
+        {
+          "type": "new",
+          "text": "User authentication and management"
+        },
+        {
+          "type": "new",
+          "text": "Clerk user profile page"
+        },
+        {
+          "type": "new",
+          "text": "Redux-based session management"
+        },
+        {
+          "type": "new",
+          "text": "Email verification for user sync"
+        },
+        {
+          "type": "improvement",
+          "text": "XSS and URL input validation"
+        }
+      ]
+    },
+    {
+      "id": "f5a6b7c8-d9e0-1234-5678-90abcdef1245",
+      "date": "2025-12-28",
+      "version": "v0.1.3",
+      "title": "Frontend architecture",
+      "summary": "File-based routing, auth pages, and project feature scaffolding.",
+      "items": [
+        {
+          "type": "new",
+          "text": "File-based routing with layouts"
+        },
+        {
+          "type": "new",
+          "text": "Sign-in and sign-up authentication forms"
+        },
+        {
+          "type": "new",
+          "text": "Project features scaffold (pages, whiteboard, kanban)"
+        },
+        {
+          "type": "new",
+          "text": "Shared UI component library"
+        },
+        {
+          "type": "new",
+          "text": "Marketing page with widgets and navbar"
+        },
+        {
+          "type": "improvement",
+          "text": "Route and widget error handling"
+        }
+      ]
+    },
+    {
+      "id": "f5a6b7c8-d9e0-1234-5678-90abcdef1246",
+      "date": "2025-12-27",
+      "version": "v0.1.2",
+      "title": "Backend server foundation",
+      "summary": "Server initialization with Hono, GraphQL Yoga, Prisma, and comprehensive database schema.",
+      "items": [
+        {
+          "type": "new",
+          "text": "Server with Hono, GraphQL Yoga, Prisma, Bun"
+        },
+        {
+          "type": "new",
+          "text": "PostgreSQL database schema (users, workspaces, projects)"
+        },
+        {
+          "type": "new",
+          "text": "User dataloaders for efficient queries"
+        },
+        {
+          "type": "new",
+          "text": "Workspace management GraphQL API"
+        },
+        {
+          "type": "new",
+          "text": "Clerk webhooks for user synchronization"
+        },
+        {
+          "type": "improvement",
+          "text": "Zod validation for service inputs"
+        }
+      ]
+    },
+    {
+      "id": "f5a6b7c8-d9e0-1234-5678-90abcdef1247",
+      "date": "2025-12-27",
+      "version": "v0.1.1",
+      "title": "Infrastructure setup",
+      "summary": "Docker Compose for Postgres and Redis, async GraphQL route handler.",
+      "items": [
+        {
+          "type": "new",
+          "text": "Docker Compose with Postgres and Redis"
+        },
+        {
+          "type": "new",
+          "text": "Async GraphQL route handler"
+        },
+        {
+          "type": "new",
+          "text": "Environment configuration for server"
+        }
+      ]
+    },
+    {
+      "id": "e9f1a2b3-c4d5-6789-0123-4567890abcde",
+      "date": "2025-12-27",
+      "version": "v0.0.1",
+      "title": "Project foundation",
+      "summary": "Initial repository setup with monorepo structure for client and server.",
+      "items": [
+        {
+          "type": "new",
+          "text": "Monorepo with client and server directories"
+        },
+        {
+          "type": "new",
+          "text": "Initial commit with project scaffold"
+        }
+      ]
+    }
+  ]
+}

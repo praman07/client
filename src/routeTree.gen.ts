@@ -14,6 +14,8 @@ import { Route as UnauthorizedRouteRouteImport } from './routes/unauthorized/rou
 import { Route as MarketingRouteRouteImport } from './routes/_marketing/route'
 import { Route as AuthRouteRouteImport } from './routes/_auth/route'
 import { Route as AppRouteRouteImport } from './routes/_app/route'
+import { Route as MarketingIndexRouteImport } from './routes/_marketing/index'
+import { Route as MarketingChangelogRouteImport } from './routes/_marketing/changelog'
 import { Route as AuthSsoCallbackRouteImport } from './routes/_auth/sso-callback'
 import { Route as AuthSignUpRouteImport } from './routes/_auth/sign-up'
 import { Route as AuthSignInRouteImport } from './routes/_auth/sign-in'
@@ -77,6 +79,16 @@ const AuthRouteRoute = AuthRouteRouteImport.update({
 const AppRouteRoute = AppRouteRouteImport.update({
   id: '/_app',
   getParentRoute: () => rootRouteImport,
+} as any)
+const MarketingIndexRoute = MarketingIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => MarketingRouteRoute,
+} as any)
+const MarketingChangelogRoute = MarketingChangelogRouteImport.update({
+  id: '/changelog',
+  path: '/changelog',
+  getParentRoute: () => MarketingRouteRoute,
 } as any)
 const AuthSsoCallbackRoute = AuthSsoCallbackRouteImport.update({
   id: '/sso-callback',
@@ -328,13 +340,14 @@ const AppWorkspaceWorkspaceSlugProjectProjectSlugChatConversationIdRoute =
   )
 
 export interface FileRoutesByFullPath {
-  '/': typeof AppUserLayerRouteRouteWithChildren
+  '/': typeof MarketingIndexRoute
   '/unauthorized': typeof UnauthorizedRouteRoute
   '/$': typeof SplatRoute
   '/onboarding': typeof AppOnboardingRoute
   '/sign-in': typeof AuthSignInRoute
   '/sign-up': typeof AuthSignUpRoute
   '/sso-callback': typeof AuthSsoCallbackRoute
+  '/changelog': typeof MarketingChangelogRoute
   '/user': typeof AppUserLayerUserRouteRouteWithChildren
   '/workspace/$workspaceSlug': typeof AppWorkspaceWorkspaceSlugMainRouteRouteWithChildren
   '/home': typeof AppUserLayerHomeRoute
@@ -372,13 +385,14 @@ export interface FileRoutesByFullPath {
   '/workspace/$workspaceSlug/project/$projectSlug/whiteboard/': typeof AppWorkspaceWorkspaceSlugProjectProjectSlugWhiteboardIndexRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof AppUserLayerRouteRouteWithChildren
+  '/': typeof MarketingIndexRoute
   '/unauthorized': typeof UnauthorizedRouteRoute
   '/$': typeof SplatRoute
   '/onboarding': typeof AppOnboardingRoute
   '/sign-in': typeof AuthSignInRoute
   '/sign-up': typeof AuthSignUpRoute
   '/sso-callback': typeof AuthSsoCallbackRoute
+  '/changelog': typeof MarketingChangelogRoute
   '/user': typeof AppUserLayerUserRouteRouteWithChildren
   '/workspace/$workspaceSlug': typeof AppWorkspaceWorkspaceSlugMainIndexRoute
   '/home': typeof AppUserLayerHomeRoute
@@ -411,7 +425,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/_app': typeof AppRouteRouteWithChildren
   '/_auth': typeof AuthRouteRouteWithChildren
-  '/_marketing': typeof MarketingRouteRoute
+  '/_marketing': typeof MarketingRouteRouteWithChildren
   '/unauthorized': typeof UnauthorizedRouteRoute
   '/$': typeof SplatRoute
   '/_app/_user-layer': typeof AppUserLayerRouteRouteWithChildren
@@ -419,6 +433,8 @@ export interface FileRoutesById {
   '/_auth/sign-in': typeof AuthSignInRoute
   '/_auth/sign-up': typeof AuthSignUpRoute
   '/_auth/sso-callback': typeof AuthSsoCallbackRoute
+  '/_marketing/changelog': typeof MarketingChangelogRoute
+  '/_marketing/': typeof MarketingIndexRoute
   '/_app/_user-layer/user': typeof AppUserLayerUserRouteRouteWithChildren
   '/_app/workspace/$workspaceSlug': typeof AppWorkspaceWorkspaceSlugRouteRouteWithChildren
   '/_app/_user-layer/home': typeof AppUserLayerHomeRoute
@@ -466,6 +482,7 @@ export interface FileRouteTypes {
     | '/sign-in'
     | '/sign-up'
     | '/sso-callback'
+    | '/changelog'
     | '/user'
     | '/workspace/$workspaceSlug'
     | '/home'
@@ -510,6 +527,7 @@ export interface FileRouteTypes {
     | '/sign-in'
     | '/sign-up'
     | '/sso-callback'
+    | '/changelog'
     | '/user'
     | '/workspace/$workspaceSlug'
     | '/home'
@@ -549,6 +567,8 @@ export interface FileRouteTypes {
     | '/_auth/sign-in'
     | '/_auth/sign-up'
     | '/_auth/sso-callback'
+    | '/_marketing/changelog'
+    | '/_marketing/'
     | '/_app/_user-layer/user'
     | '/_app/workspace/$workspaceSlug'
     | '/_app/_user-layer/home'
@@ -590,7 +610,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   AppRouteRoute: typeof AppRouteRouteWithChildren
   AuthRouteRoute: typeof AuthRouteRouteWithChildren
-  MarketingRouteRoute: typeof MarketingRouteRoute
+  MarketingRouteRoute: typeof MarketingRouteRouteWithChildren
   UnauthorizedRouteRoute: typeof UnauthorizedRouteRoute
   SplatRoute: typeof SplatRoute
 }
@@ -631,6 +651,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/'
       preLoaderRoute: typeof AppRouteRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/_marketing/': {
+      id: '/_marketing/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof MarketingIndexRouteImport
+      parentRoute: typeof MarketingRouteRoute
+    }
+    '/_marketing/changelog': {
+      id: '/_marketing/changelog'
+      path: '/changelog'
+      fullPath: '/changelog'
+      preLoaderRoute: typeof MarketingChangelogRouteImport
+      parentRoute: typeof MarketingRouteRoute
     }
     '/_auth/sso-callback': {
       id: '/_auth/sso-callback'
@@ -1192,10 +1226,24 @@ const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
   AuthRouteRouteChildren,
 )
 
+interface MarketingRouteRouteChildren {
+  MarketingChangelogRoute: typeof MarketingChangelogRoute
+  MarketingIndexRoute: typeof MarketingIndexRoute
+}
+
+const MarketingRouteRouteChildren: MarketingRouteRouteChildren = {
+  MarketingChangelogRoute: MarketingChangelogRoute,
+  MarketingIndexRoute: MarketingIndexRoute,
+}
+
+const MarketingRouteRouteWithChildren = MarketingRouteRoute._addFileChildren(
+  MarketingRouteRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   AppRouteRoute: AppRouteRouteWithChildren,
   AuthRouteRoute: AuthRouteRouteWithChildren,
-  MarketingRouteRoute: MarketingRouteRoute,
+  MarketingRouteRoute: MarketingRouteRouteWithChildren,
   UnauthorizedRouteRoute: UnauthorizedRouteRoute,
   SplatRoute: SplatRoute,
 }
