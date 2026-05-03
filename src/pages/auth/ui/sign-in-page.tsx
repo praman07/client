@@ -5,6 +5,7 @@ import { Button } from '@/shared/ui/primitives/button'
 import { Input } from '@/shared/ui/primitives/input'
 import { Label } from '@/shared/ui/primitives/label'
 import { Separator } from '@/shared/ui/primitives/separator'
+import { AuthSplitLayout } from './auth-layout'
 
 export function SignInPage() {
   const { isLoaded, signIn, setActive } = useSignIn()
@@ -43,13 +44,13 @@ export function SignInPage() {
   }
 
   return (
-    <div className="flex min-h-svh flex-col items-center justify-center bg-surface-1 p-6">
-      <div className="w-full max-w-sm space-y-6">
-        {/* Logo */}
-        <div className="flex flex-col items-center gap-2 text-center">
+    <AuthSplitLayout>
+      <div className="w-full space-y-6">
+        {/* Header */}
+        <div className="flex flex-col items-center gap-1.5 text-center">
           <img src="/logo2.png" alt="Collabify" className="h-10 w-10 rounded-xl object-contain" />
           <h1 className="text-20 font-semibold tracking-tight text-primary">Welcome back</h1>
-          <p className="text-13 text-secondary">Sign in to your Collabify account</p>
+          <p className="text-13 text-secondary">Sign in to your account</p>
         </div>
 
         {/* SSO Buttons */}
@@ -126,11 +127,11 @@ export function SignInPage() {
 
         <p className="text-center text-13 text-secondary">
           Don't have an account?{' '}
-          <a href="/sign-up" className="font-medium text-primary underline underline-offset-4 hover:text-accent-primary">
+          <a href="/sign-up" className="font-medium text-accent-primary hover:underline underline-offset-4">
             Sign up
           </a>
         </p>
       </div>
-    </div>
+    </AuthSplitLayout>
   )
 }

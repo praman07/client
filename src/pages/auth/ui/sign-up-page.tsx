@@ -5,6 +5,7 @@ import { Input } from '@/shared/ui/primitives/input'
 import { InputOTP, InputOTPGroup, InputOTPSlot } from '@/shared/ui/primitives/input-otp'
 import { Label } from '@/shared/ui/primitives/label'
 import { Separator } from '@/shared/ui/primitives/separator'
+import { AuthSplitLayout } from './auth-layout'
 
 type Step = 'credentials' | 'verify'
 
@@ -63,10 +64,10 @@ export function SignUpPage() {
   }
 
   return (
-    <div className="flex min-h-svh flex-col items-center justify-center bg-surface-1 p-6">
-      <div className="w-full max-w-sm space-y-6">
-        {/* Logo */}
-        <div className="flex flex-col items-center gap-2 text-center">
+    <AuthSplitLayout>
+      <div className="w-full space-y-6">
+        {/* Header */}
+        <div className="flex flex-col items-center gap-1.5 text-center">
           <img src="/logo2.png" alt="Collabify" className="h-10 w-10 rounded-xl object-contain" />
           <h1 className="text-20 font-semibold tracking-tight text-primary">
             {step === 'credentials' ? 'Create your account' : 'Check your email'}
@@ -74,7 +75,7 @@ export function SignUpPage() {
           <p className="text-13 text-secondary">
             {step === 'credentials'
               ? 'Start collaborating with your team'
-              : `We sent a 6-digit code to ${email}`}
+              : `We sent a code to ${email}`}
           </p>
         </div>
 
@@ -146,9 +147,9 @@ export function SignUpPage() {
           /* Step 2: OTP Verification */
           <form onSubmit={handleVerify} className="space-y-6">
             {error && (
-<p className="rounded-lg border border-danger-strong bg-danger-subtle px-3 py-2 text-13 text-danger-primary">
-                  {error}
-                </p>
+              <p className="rounded-lg border border-danger-strong bg-danger-subtle px-3 py-2 text-13 text-danger-primary">
+                {error}
+              </p>
             )}
             <div className="flex justify-center">
               <InputOTP maxLength={6} value={code} onChange={setCode}>
@@ -179,12 +180,12 @@ export function SignUpPage() {
         {step === 'credentials' && (
           <p className="text-center text-13 text-secondary">
             Already have an account?{' '}
-            <a href="/sign-in" className="font-medium text-primary underline underline-offset-4 hover:text-accent-primary">
+            <a href="/sign-in" className="font-medium text-accent-primary hover:underline underline-offset-4">
               Sign in
             </a>
           </p>
         )}
       </div>
-    </div>
+    </AuthSplitLayout>
   )
 }
