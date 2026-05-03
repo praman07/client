@@ -74,6 +74,10 @@ function RootComponent() {
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        {/* Critical CSS — inlined so dark bg is instant, before external CSS loads */}
+        <style dangerouslySetInnerHTML={{ __html: 'html,body{background-color:oklch(0.1689 0.0021 230.81);color:oklch(0.9235 0.001733 230.6853)}' }} />
+        {/* Direct link — bypasses HeadContent SSR timing issues (TanStack Router #5812) */}
+        <link rel="stylesheet" href={appCss} />
         <HeadContent />
       </head>
       <body>
