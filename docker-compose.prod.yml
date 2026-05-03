@@ -1,0 +1,18 @@
+services:
+  frontend:
+    # Pre-built image from GitHub Container Registry.
+    # Built by GitHub Actions (7GB RAM) — never built on the VPS.
+    # To update: push to main → GH Actions builds → pushes here → Coolify pulls.
+    image: ghcr.io/chill-czar/collabify-frontend:latest
+    restart: unless-stopped
+    ports:
+      - "${PORT:-3000}:3000"
+    environment:
+      - PORT=3000
+      - NODE_ENV=production
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:3000/"]
+      interval: 30s
+      timeout: 15s
+      start-period: 40s
+      retries: 3
