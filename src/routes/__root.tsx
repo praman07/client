@@ -13,7 +13,7 @@ import ClerkProvider from '@/app/providers/clerk/provider'
 import TanStackQueryDevtools from '@/app/providers/tanstack-query/devtools'
 import { Toaster } from '@/shared/ui/primitives/sonner'
 import { ThemeProvider } from '@/app/providers/theme/theme-provider'
-import appCss from '@/app/styles/globals.css?url'
+import '@/app/styles/globals.css'
 import { env } from '@/shared/config/env'
 
 
@@ -37,10 +37,6 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
       },
     ],
     links: [
-      {
-        rel: 'stylesheet',
-        href: appCss,
-      },
       {
         rel: 'icon',
         href: '/favicon.png',
@@ -68,8 +64,6 @@ function RootComponent() {
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        {/* Render CSS link directly — ensures it's in the SSR HTML, not deferred post-hydration */}
-        <link rel="stylesheet" href={appCss} />
         <HeadContent />
       </head>
       <body>
