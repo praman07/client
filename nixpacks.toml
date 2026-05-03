@@ -1,21 +1,29 @@
 # Nixpacks build configuration for Collabify frontend (TanStack Start / Nitro)
-# Docs: https://nixpacks.com/docs/configuration/file
+# Docs: https://nixpacks.com/docs/providers/node
 
+# Node version — Nixpacks reads this automatically
+# Can also be set via NIXPACKS_NODE_VERSION env var in Coolify
 [phases.setup]
-nixPkgs = ['nodejs_22']
+# Pin a Nixpkgs commit that includes Node 23.8.0
+# nixpkgsArchive = '5ef6c425980847c78a80d759abc476e941a9bf42'
 
-[phases.install]
-cmds = [
-  'corepack enable',
-  'pnpm install --frozen-lockfile'
-]
+[variables]
+NIXPACKS_NODE_VERSION = "24"
+# Prevent Nixpacks from detecting vite+react as a static SPA and serving via Caddy.
+# This app is a full SSR app — Nitro handles all serving.
+NIXPACKS_SPA_CADDY = "false"
+
+# NO [phases.install] — Nixpacks auto-detects pnpm from:
+#   1. pnpm-lock.yaml (lockfile detection)
+#   2. "packageManager": "pnpm@10.30.0" in package.json (corepack)
+# Manually installing pnpm fights the build system and causes PATH issues.
 
 [phases.build]
 cmds = [
   # Clear stale Vite cache — prevents CSS hash mismatches across builds
   'rm -rf node_modules/.vite',
-  # Cap heap to 3072 MB (well under VPS limit; swap handles overflow)
-  'NODE_OPTIONS=--max-old-space-size=3072 pnpm vite build'
+  # Cap heap to 6144 MB; swap handles any overflow
+  'NODE_OPTIONS=--max-old-space-size=6144 pnpm vite build'
 ]
 dependsOn = ['install']
 
