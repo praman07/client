@@ -98,7 +98,7 @@ export function WhiteboardCanvas({
       <Excalidraw
         excalidrawAPI={setApi}
         theme="dark"
-        name="Collabify Whiteboard"
+        name="Collabifyy Whiteboard"
         isCollaborating={!!binding}
         viewModeEnabled={isReadOnly}
         generateIdForFile={isReadOnly ? undefined : handleGenerateIdForFile}

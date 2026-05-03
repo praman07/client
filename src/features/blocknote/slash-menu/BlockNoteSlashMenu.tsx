@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react'
 import type {DefaultReactSuggestionItem, SuggestionMenuProps} from '@blocknote/react';
 
 /**
- * BlockNoteSlashMenu — custom slash-command menu styled to the Collabify design system.
+ * BlockNoteSlashMenu — custom slash-command menu styled to the Collabifyy design system.
  *
  * Layout: [28px icon box] [title · subtext?]  [badge]
  * Grouped by `item.group` with a section label per group.

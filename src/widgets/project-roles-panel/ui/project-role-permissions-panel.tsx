@@ -419,7 +419,7 @@ export function ProjectRolePermissionsPanel({
 
         {role.isSystem && (
           <p className="pl-0 sm:pl-10 mt-3 sm:mt-2 text-12 text-secondary italic">
-            System roles are managed by Collabify and cannot be modified.
+            System roles are managed by Collabifyy and cannot be modified.
           </p>
         )}
       </CardHeader>

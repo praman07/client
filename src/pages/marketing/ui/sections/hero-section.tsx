@@ -12,7 +12,7 @@ export function HeroSection() {
 
         {/* ── Subtext ── */}
         <p className="mb-10 max-w-[560px] text-18 leading-relaxed text-secondary">
-          Collabify brings everything your team uses into a single system, where conversations, work, and context stay linked instead of scattered across tools.
+          Collabifyy brings everything your team uses into a single system, where conversations, work, and context stay linked instead of scattered across tools.
         </p>
 
         {/* ── CTA group ── */}
@@ -22,7 +22,7 @@ export function HeroSection() {
             to="/sign-up"
             className="inline-flex h-11 min-w-[180px] items-center justify-center rounded bg-accent-primary px-6 text-14 font-semibold text-on-color transition-opacity duration-150 hover:opacity-90"
           >
-            Try Collabify
+            Try Collabifyy
           </Link>
 
           {/* Secondary */}

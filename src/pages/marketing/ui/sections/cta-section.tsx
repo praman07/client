@@ -12,7 +12,7 @@ export function CtaSection() {
 
         {/* Supporting text */}
         <p className="text-16 text-secondary leading-relaxed mt-6 max-w-[580px] mx-auto">
-          Collabify is live and usable today. Some parts are still rough, and that's expected.
+          Collabifyy is live and usable today. Some parts are still rough, and that's expected.
         </p>
         <p className="text-16 text-secondary leading-relaxed mt-4 max-w-[580px] mx-auto">
           If something doesn't work the way you expect or feels like it should exist but doesn't that's exactly what helps shape what comes next.
@@ -24,7 +24,7 @@ export function CtaSection() {
             to="/sign-up"
             className="inline-flex h-11 items-center justify-center rounded bg-accent-primary px-6 text-14 font-semibold text-on-color transition-opacity duration-150 hover:opacity-90"
           >
-            Start using Collabify
+            Start using Collabifyy
           </Link>
         </div>
 

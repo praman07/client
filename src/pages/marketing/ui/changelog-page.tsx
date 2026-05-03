@@ -271,7 +271,7 @@ export function ChangelogPage() {
       {/* Page header */}
       <div className="mb-14">
         <p className="mb-3 font-code text-13 font-medium uppercase tracking-wide text-tertiary">
-          Collabify
+          Collabifyy
         </p>
         <h1 className="mb-4 font-heading text-32 font-semibold leading-tight text-primary">
           Changelog

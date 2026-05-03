@@ -59,7 +59,7 @@ export function UserBillingPage() {
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Zap className="h-5 w-5 text-accent-primary" />
-            <h3 className="font-semibold text-primary">Collabify Pro</h3>
+            <h3 className="font-semibold text-primary">Collabifyy Pro</h3>
           </div>
           <div className="text-right">
             <p className="text-18 font-bold text-primary">$12<span className="text-13 font-normal text-secondary">/mo</span></p>

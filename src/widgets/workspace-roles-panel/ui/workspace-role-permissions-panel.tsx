@@ -206,7 +206,7 @@ function PermissionGroup({
         <span className="text-12 font-semibold uppercase tracking-wider text-secondary">
           {groupName}
         </span>
-          <Badge variant="secondary" className="text-10 h-4 px-1.5">
+          <Badge variant="default" className="text-10 h-4 px-1.5">
             {grantedCount}/{permissions.length}
           </Badge>
         </div>
@@ -374,7 +374,7 @@ export function WorkspaceRolePermissionsPanel({
                   className="font-semibold text-16"
                 />
               {role.isSystem && (
-                <Badge variant="secondary" className="text-10 h-4 px-1.5 uppercase tracking-wide shrink-0">
+                <Badge variant="default" className="text-10 h-4 px-1.5 uppercase tracking-wide shrink-0">
                   System
                 </Badge>
               )}
@@ -464,7 +464,7 @@ export function WorkspaceRolePermissionsPanel({
 
 {role.isSystem && (
             <p className="pl-0 sm:pl-10 mt-3 sm:mt-2 text-12 text-secondary italic">
-              System roles are managed by Collabify and cannot be modified.
+              System roles are managed by Collabifyy and cannot be modified.
             </p>
           )}
         </CardHeader>

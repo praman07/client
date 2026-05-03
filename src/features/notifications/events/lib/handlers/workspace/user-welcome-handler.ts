@@ -16,7 +16,7 @@ export function registerUserWelcomeHandler(context: NotificationEventHandlerCont
       context.dispatch(addNotification({
         id: `welcome-${payload.userId}`,
         type: NotificationDownstreamEvent.UserWelcome,
-        title: `Welcome to Collabify, ${payload.userName}!`,
+        title: `Welcome to Collabifyy, ${payload.userName}!`,
         body: `You've joined ${payload.workspaceName}`,
         read: false,
         createdAt: new Date().toISOString(),

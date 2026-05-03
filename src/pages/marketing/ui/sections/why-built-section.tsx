@@ -5,7 +5,7 @@ export function WhyBuiltSection() {
 
         {/* Heading */}
         <h2 className="text-28 font-heading font-semibold text-primary tracking-tight mb-12">
-          Why I built Collabify
+          Why I built Collabifyy
         </h2>
 
         {/* Problem */}
@@ -28,7 +28,7 @@ export function WhyBuiltSection() {
         {/* What this is */}
         <div className="mb-10">
           <p className="text-16 text-secondary leading-relaxed">
-            Collabify is an attempt at building that system.
+            Collabifyy is an attempt at building that system.
           </p>
           <p className="text-16 text-secondary leading-relaxed mt-4">
             It's still evolving, but the core pieces are already usable today.

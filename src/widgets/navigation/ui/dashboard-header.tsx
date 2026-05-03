@@ -23,17 +23,7 @@ export function DashboardHeader({ children }: { children?: React.ReactNode }) {
   return (
     <header className="sticky top-0 z-[var(--z-sticky)] w-full border-b border-subtle bg-surface-1">
       <div className="flex h-14 items-center gap-4 px-[var(--padding-page)]">
-        {/* Left: Logo & Context */}
         <div className="flex items-center gap-4 mr-auto">
-          {/* <Avatar className="h-8 w-8 rounded-lg">
-            <AvatarImage
-              src="/logo2.png"
-              alt="Collabify"
-              className="rounded-lg object-contain"
-            />
-            <AvatarFallback className="rounded-lg">C</AvatarFallback>
-          </Avatar> */}
-
           <div className="flex items-center gap-2 text-13">
             {breadcrumbs.map((crumb, index) => {
               const Component = crumb.component

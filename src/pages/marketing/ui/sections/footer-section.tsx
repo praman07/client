@@ -20,12 +20,12 @@ export function FooterSection() {
 
           {/* Left — Branding */}
           <div className="flex flex-col gap-1">
-            <span className="text-16 font-semibold text-primary">Collabify</span>
+            <span className="text-16 font-semibold text-primary">Collabifyy</span>
             <p className="text-13 text-secondary">
               Team collaboration without the tab switching.
             </p>
             <p className="text-13 text-tertiary mt-2">
-              © 2026 Collabify
+              © 2026 Collabifyy
             </p>
             <p className="text-13 text-tertiary">
               Built and maintained by Sarthak
@@ -66,7 +66,7 @@ export function FooterSection() {
 
           {/* Right — Nav links */}
           <div className="flex flex-col gap-2 text-right sm:items-end">
-            <FooterLink to="/sign-up">Try Collabify</FooterLink>
+            <FooterLink to="/sign-up">Try Collabifyy</FooterLink>
             <a
               href="mailto:contact@collabifyy.com"
               className="text-13 text-secondary hover:text-primary transition-colors duration-150"

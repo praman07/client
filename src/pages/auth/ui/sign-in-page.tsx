@@ -48,7 +48,9 @@ export function SignInPage() {
       <div className="w-full space-y-6">
         {/* Header */}
         <div className="flex flex-col items-center gap-1.5 text-center">
-          <img src="/logo2.png" alt="Collabify" className="h-10 w-10 rounded-xl object-contain" />
+          <span className="h-10 w-10 rounded-xl bg-accent-primary flex items-center justify-center">
+            <span className="text-on-color text-16 font-bold">C</span>
+          </span>
           <h1 className="text-20 font-semibold tracking-tight text-primary">Welcome back</h1>
           <p className="text-13 text-secondary">Sign in to your account</p>
         </div>

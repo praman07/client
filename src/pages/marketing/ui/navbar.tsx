@@ -39,7 +39,7 @@ export function MarketingNavbar() {
           <span className="flex h-7 w-7 items-center justify-center rounded-md bg-accent-primary text-13 font-bold text-on-color tracking-tight">
             C
           </span>
-          <span className="tracking-tight">Collabify</span>
+          <span className="tracking-tight">Collabifyy</span>
         </Link>
 
         {/* ── Desktop nav links ── */}

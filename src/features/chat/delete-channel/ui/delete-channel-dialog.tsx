@@ -68,7 +68,7 @@ export function DeleteChannelDialog({
             <p>
               When you delete{' '}
               <span className="font-semibold">#{channelName}</span>, all
-              messages from this channel will be removed from Collabify
+              messages from this channel will be removed from Collabifyy
               immediately. This can't be undone.
             </p>
             <div className="text-14">

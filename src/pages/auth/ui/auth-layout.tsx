@@ -11,8 +11,10 @@ export function AuthSplitLayout({ children }: AuthSplitLayoutProps) {
       <div className="relative hidden h-full flex-col bg-surface-1 p-10 lg:flex">
         {/* Logo */}
         <div className="relative z-20 flex items-center text-18 font-bold tracking-tight text-primary">
-          <img src="/logo.png" alt="Collabify" className="mr-2 h-8 w-8" />
-          Collabify
+          <span className="mr-2 h-8 w-8 rounded-lg bg-accent-primary flex items-center justify-center">
+            <span className="text-on-color text-14 font-bold">C</span>
+          </span>
+          Collabifyy
         </div>
 
         {/* Content */}
