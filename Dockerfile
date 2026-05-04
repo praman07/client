@@ -15,10 +15,12 @@ COPY . .
 ARG VITE_SERVER_URL
 ARG VITE_WS_URL
 ARG VITE_CLERK_PUBLISHABLE_KEY
+ARG VITE_CLARITY_PROJECT_ID
 # Expose ARGs as ENV so Vite can read them via process.env during build
 ENV VITE_SERVER_URL=$VITE_SERVER_URL
 ENV VITE_WS_URL=$VITE_WS_URL
 ENV VITE_CLERK_PUBLISHABLE_KEY=$VITE_CLERK_PUBLISHABLE_KEY
+ENV VITE_CLARITY_PROJECT_ID=$VITE_CLARITY_PROJECT_ID
 # Delete Vite cache before build — prevents stale cached hashes causing CSS mismatch
 RUN rm -rf node_modules/.vite && pnpm build
 
