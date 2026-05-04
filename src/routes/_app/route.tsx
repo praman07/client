@@ -36,8 +36,13 @@ function AppLayout() {
   // Not signed in — redirect is in-flight
   if (!isAuthenticated) return null
 
-  // Signed in but DB row not ready yet (sync in-flight or first fetch)
-  if (!isDbUserReady || isSyncing) return null
+  // DB row not ready — redirect if not authenticated, otherwise show loading
+  if (!isDbUserReady || isSyncing) {
+    if (!isAuthenticated) {
+      void navigate({ to: '/sign-in', replace: true })
+    }
+    return null
+  }
 
   return (
     <AuthorizationProvider>
