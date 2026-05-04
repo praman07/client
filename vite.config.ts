@@ -61,10 +61,13 @@ const config = defineConfig({
       // show unstyled content while the request is in-flight.
       // See: https://github.com/TanStack/router/issues/3023#issuecomment-2559735249
       routeRules: {
+        // globals.css has no hash (stable name) — must-revalidate so browsers check for updates
+        '/assets/globals.css': {
+          headers: { 'cache-control': 'public, max-age=0, must-revalidate' },
+        },
+        // All other hashed assets can be cached forever
         '/assets/**': {
-          headers: {
-            'cache-control': 'public, max-age=31536000, immutable',
-          },
+          headers: { 'cache-control': 'public, max-age=31536000, immutable' },
         },
       },
     }),
@@ -87,6 +90,15 @@ const config = defineConfig({
     rollupOptions: {
       output: {
         manualChunks,
+        // globals.css is processed twice during build (once via ?url import for SSR manifest,
+        // once as a transitive dep of @blocknote/shadcn) producing two different hashes.
+        // A stable filename ensures the SSR manifest URL always matches the deployed file.
+        assetFileNames: (assetInfo) => {
+          if (assetInfo.name === 'globals.css') {
+            return 'assets/globals.css'
+          }
+          return 'assets/[name]-[hash][extname]'
+        },
       },
     },
   },
