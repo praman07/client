@@ -10,9 +10,5 @@ services:
     environment:
       - PORT=3000
       - NODE_ENV=production
-    healthcheck:
-      test: ["CMD", "wget", "-qO-", "http://localhost:3000/"]
-      interval: 30s
-      timeout: 15s
-      start_period: 40s
-      retries: 3
+    # Healthcheck is defined in the Dockerfile (uses curl, which is installed).
+    # Defining it here would override the Dockerfile version — so we omit it.
