@@ -32,8 +32,8 @@ export function AuthSplitLayout({ children }: AuthSplitLayoutProps) {
           <div className="space-y-4">
             {[
               'Real-time collaboration across all modules',
-              'Built for engineering and product teams',
-              'Your data, your infrastructure',
+              'Streamline workflows and boost team productivity',
+              'Designed for modern, fast-moving teams',
             ].map((item) => (
               <div key={item} className="flex items-start gap-2.5">
                 <span className="mt-0.5 shrink-0 text-accent-primary text-14">•</span>
