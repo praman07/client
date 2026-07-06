@@ -109,9 +109,9 @@ export function WorkspaceRolesPanel() {
   const roleToConfirmDelete = roles.find((r: any) => r.id === roleToDelete)
 
   return (
-    <div className="flex flex-col lg:flex-row gap-6 h-full min-h-0 lg:min-h-[600px]">
+    <div className="flex flex-col lg:flex-row gap-4 lg:gap-6 h-full min-h-0">
       {/* List Sidebar */}
-      <div className="w-full lg:w-60 shrink-0">
+      <div className="w-full lg:w-56 xl:w-60 shrink-0">
         <WorkspaceRoleList
           roles={roles.map((r: any) => ({
             id: r.id,
@@ -127,7 +127,7 @@ export function WorkspaceRolesPanel() {
       </div>
 
       {/* Detail Editor */}
-      <div className="flex-1 min-w-0">
+      <div className="flex-1 min-w-0 w-full">
         {roleForPanel ? (
           <WorkspaceRolePermissionsPanel
             key={roleForPanel.id} // VITAL: resets all local state on role switch

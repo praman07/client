@@ -81,6 +81,7 @@ function RootComponent() {
         <HeadContent />
       </head>
       <body>
+        <div className="bg-canvas min-h-screen">
         <ClerkProvider>
           <ThemeProvider defaultTheme="dark" storageKey="collabify-theme">
             <Outlet />
@@ -97,6 +98,7 @@ function RootComponent() {
               ]}
             />
         </ClerkProvider>
+        </div>
         <Scripts />
       </body>
     </html>

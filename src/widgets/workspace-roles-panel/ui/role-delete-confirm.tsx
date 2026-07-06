@@ -32,7 +32,7 @@ export function RoleDeleteConfirm({
           <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
           <AlertDialogDescription>
             This will permanently delete the <span className="font-semibold text-primary">"{roleName}"</span> role. 
-            Members currently assigned to this role will lose its associated permissions.
+            Workspace members currently assigned to this role will lose its associated permissions.
             This action cannot be undone.
           </AlertDialogDescription>
         </AlertDialogHeader>

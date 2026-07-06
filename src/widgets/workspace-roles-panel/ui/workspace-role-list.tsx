@@ -38,7 +38,7 @@ export function WorkspaceRoleList({
     <div className="flex flex-col border border-subtle rounded-lg bg-layer-1 overflow-hidden">
       {/* Header */}
       <div className="px-4 py-3 border-b border-subtle bg-layer-2 flex items-center gap-2">
-        <Shield className="h-4 w-4 text-accent-primary shrink-0" />
+        <Shield className="h-4 w-4 text-primary shrink-0" />
         <h3 className="text-14 font-semibold flex-1">Roles</h3>
       </div>
 
@@ -48,7 +48,7 @@ export function WorkspaceRoleList({
           <Button
             size="sm"
             variant="outline"
-            className="w-full justify-start gap-2 h-8 text-12 font-medium border-dashed border-subtle hover:border-accent-subtle hover:text-accent-primary"
+            className="w-full justify-start gap-2 h-8 text-12 font-medium border-dashed hover:border-primary/50 hover:text-primary"
             onClick={openCreateModal}
           >
             <Plus className="h-3.5 w-3.5" />
@@ -74,8 +74,8 @@ className={cn(
         <span className="text-14 font-medium truncate">{role.name}</span>
               {role.isSystem && (
                 <Badge
-                  variant="default"
-                  className="text-10 h-4 px-1.5 py-0 uppercase tracking-wider opacity-60 shrink-0"
+                  variant="outline"
+                  className="text-[9px] h-4 px-1.5 py-0 uppercase tracking-wider opacity-60 shrink-0"
                 >
                   System
                 </Badge>

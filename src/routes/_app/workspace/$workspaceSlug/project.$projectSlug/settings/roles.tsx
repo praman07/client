@@ -9,14 +9,14 @@ import { ProjectRolesPanel } from '@/widgets/project-roles-panel'
 export const Route = createFileRoute(
   '/_app/workspace/$workspaceSlug/project/$projectSlug/settings/roles',
 )({
-  component: RolesSettingsPage,
+  component: ProjectRolesSettingsPage,
   pendingComponent: PageSpinner,
   errorComponent: ({ error, reset }) => (
     <RouteError error={error} reset={reset} />
   ),
 })
 
-function RolesSettingsPage() {
+function ProjectRolesSettingsPage() {
   const project = useAppSelector(selectCurrentProject)
   const workspace = useAppSelector(selectCurrentWorkspace)
 

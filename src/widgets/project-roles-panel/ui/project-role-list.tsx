@@ -66,15 +66,15 @@ export function ProjectRoleList({
             className={cn(
               'w-full flex flex-col items-start gap-0.5 px-3 py-2.5 rounded-md text-left transition-all group',
               selectedRoleId === role.id
-                ? 'bg-primary/10 text-primary ring-1 ring-primary/20'
-                : 'hover:bg-layer-2 text-secondary hover:text-primary'
+                ? 'bg-accent-subtle text-accent-primary ring-1 ring-accent-subtle'
+                : 'hover:bg-layer-1 text-secondary hover:text-primary'
             )}
           >
             <div className="flex items-center justify-between w-full gap-2">
               <span className="text-14 font-medium truncate">{role.name}</span>
               {role.isSystem && (
                 <Badge
-                  variant="secondary"
+                  variant="outline"
                   className="text-[9px] h-4 px-1.5 py-0 uppercase tracking-wider opacity-60 shrink-0"
                 >
                   System

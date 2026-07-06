@@ -16,7 +16,7 @@ export function WorkspaceLayout({ workspaceSlug }: WorkspaceLayoutProps) {
   const { data, isLoading, error } = useSyncWorkspaceContext(workspaceSlug)
 
   return (
-    <div className="h-screen w-full bg-surface-1 flex flex-col overflow-hidden">
+    <div className="h-screen w-full flex flex-col overflow-hidden">
       {/* TIER 1: GLOBAL HEADER */}
       <div className="shrink-0">
         <DashboardHeader />

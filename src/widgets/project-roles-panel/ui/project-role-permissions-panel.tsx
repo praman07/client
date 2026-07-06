@@ -41,15 +41,20 @@ interface ProjectRolePermissionsPanelProps {
 }
 
 // ── Permission grouping ────────────────────────────────────────────────────────
-// Groups are derived purely from the resource field, second segment.
-// resource="project:member", action="add" → group "Member"
-// resource="project", action="read"       → group "Project"
+const PROJECT_RESOURCE_GROUP_LABELS: Record<string, string> = {
+  member: 'Members',
+  task: 'Tasks',
+  comment: 'Comments',
+  attachment: 'Attachments',
+  role: 'Roles',
+  settings: 'Settings',
+  invite: 'Invites',
+}
 
 function getGroupLabel(resource: string): string {
   const parts = resource.split(':')
-  // Second segment (e.g. "member" from "project:member"), fallback first segment
-  const key = parts[1] ?? parts[0]
-  return key.charAt(0).toUpperCase() + key.slice(1).replace(/-/g, ' ')
+  const key = parts[1]
+  return key ? (PROJECT_RESOURCE_GROUP_LABELS[key] ?? key.charAt(0).toUpperCase() + key.slice(1)) : 'Project'
 }
 
 function groupPermissions(permissions: Array<AvailablePermission>) {
@@ -105,7 +110,7 @@ function EditableText({ value, onCommit, disabled, placeholder, multiline, class
         ) : (
           <Input {...sharedProps} onKeyDown={(e) => { if (e.key === 'Enter') commit(); if (e.key === 'Escape') cancel() }} />
         )}
-        <button onClick={commit} className="mt-1 p-1 rounded text-primary hover:bg-primary/10 shrink-0" type="button" title="Save">
+        <button onClick={commit} className="mt-1 p-1 rounded text-primary hover:bg-layer-2 shrink-0" type="button" title="Save">
           <Check className="h-3.5 w-3.5" />
         </button>
         <button onClick={cancel} className="mt-1 p-1 rounded text-secondary hover:bg-layer-2 shrink-0" type="button" title="Cancel">
@@ -160,7 +165,7 @@ function PermissionGroup({
         className="w-full flex items-center justify-between px-4 py-2.5 bg-layer-2 hover:bg-layer-2-hover transition-colors"
       >
         <div className="flex items-center gap-2">
-          <span className="text-12 font-semibold uppercase tracking-wider text-secondary">
+          <span className="text-[11px] font-semibold uppercase tracking-wider text-secondary">
             {groupName}
           </span>
           <Badge variant="default" className="text-[9px] h-4 px-1.5">
@@ -171,13 +176,13 @@ function PermissionGroup({
       </button>
 
       {open && (
-        <div className="divide-y">
+        <div className="divide-y divide-subtle">
           {permissions.map((perm) => (
             <div
               key={perm.id}
               className={cn(
                 'flex items-center justify-between px-4 py-3 transition-colors',
-                !disabled && 'hover:bg-layer-2'
+                !disabled && 'hover:bg-layer-1-hover'
               )}
             >
               <div className="space-y-0.5 flex-1 min-w-0 pr-4">
@@ -310,12 +315,12 @@ export function ProjectRolePermissionsPanel({
   )
 
   return (
-    <Card className="flex flex-col h-full shadow-raised-100 border border-subtle">
+    <Card className="flex flex-col h-full shadow-raised-100 border border-subtle min-w-[500px] w-full">
       {/* ── Header ── */}
-      <CardHeader className="pb-3 border-b space-y-0">
+      <CardHeader className="pb-3 px-3 lg:px-4 space-y-0">
         <div className="flex flex-col sm:flex-row sm:items-center gap-4 min-w-0">
           <div className="flex items-center gap-3 min-w-0 w-full sm:w-auto">
-            <div className="p-1.5 rounded-lg bg-accent-subtle shrink-0">
+            <div className="p-1.5 rounded-lg bg-layer-2 shrink-0">
               <Shield className="h-4 w-4 text-primary" />
             </div>
 
@@ -329,7 +334,7 @@ export function ProjectRolePermissionsPanel({
                 className="font-semibold text-16"
               />
               {role.isSystem && (
-                <Badge variant="default" className="text-[9px] h-4 px-1.5 uppercase tracking-wide shrink-0">
+                <Badge variant="outline" className="text-[9px] h-4 px-1.5 uppercase tracking-wide shrink-0">
                   System
                 </Badge>
               )}
@@ -425,14 +430,15 @@ export function ProjectRolePermissionsPanel({
       </CardHeader>
 
       {/* ── Permissions Matrix ── */}
-      <CardContent className="flex-1 overflow-y-auto py-5 space-y-3">
-        <p className="text-12 font-semibold uppercase tracking-wider text-secondary mb-4">
+      <CardContent className="flex-1 overflow-y-auto py-4 lg:py-5 px-3 lg:px-4 space-y-3">
+        <p className="text-[11px] font-semibold uppercase tracking-wider text-secondary mb-4">
           Permissions
         </p>
 
         {availablePermissions.length === 0 ? (
-          <div className="flex items-center justify-center h-32 text-14 text-secondary border-2 border-dashed rounded-lg">
-            No project permissions available
+          <div className="flex flex-col items-center justify-center py-12 text-center">
+            <Shield className="h-10 w-10 text-secondary opacity-30 mb-3" />
+            <p className="text-14 text-secondary">No project permissions available</p>
           </div>
         ) : (
           Array.from(groupedPermissions.entries()).map(([groupName, perms]) => (
