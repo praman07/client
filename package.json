@@ -5,8 +5,8 @@
   "scripts": {
     "gen": "graphql-codegen",
     "schema:sync": "cd ../server && bun run scripts/sync-schema.ts",
-    "dev": "vite dev --port 3000",
-    "build": "NODE_OPTIONS='--max-old-space-size=6144' vite build",
+    "dev": "node api.js && vite dev --port 3000",
+    "build": "node api.js && NODE_OPTIONS='--max-old-space-size=6144' vite build",
     "preview": "vite preview",
     "test": "vitest run",
     "lint": "eslint",
